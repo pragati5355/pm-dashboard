@@ -60,7 +60,7 @@ export class FileManagerMockApi
                 const path = [];
 
                 // Prepare the current folder
-                let currentFolder = null;
+                let currentFolder: any = null;
 
                 // Get the current folder and add it as the first entry
                 if ( folderId )

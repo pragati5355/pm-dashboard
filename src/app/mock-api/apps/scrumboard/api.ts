@@ -46,7 +46,7 @@ export class ScrumboardMockApi
                 // Go through the boards and inject the members
                 boards = boards.map(board => ({
                     ...board,
-                    members: board.members.map(boardMember => this._members.find(member => boardMember === member.id))
+                    members: board.members.map((boardMember: any) => this._members.find(member => boardMember === member.id))
                 }));
 
                 return [
@@ -76,12 +76,12 @@ export class ScrumboardMockApi
                 cards = cards.map(card => (
                     {
                         ...card,
-                        labels: card.labels.map(cardLabelId => this._labels.find(label => label.id === cardLabelId))
+                        labels: card.labels.map((cardLabelId: any) => this._labels.find(label => label.id === cardLabelId))
                     }
                 ));
 
                 // Attach the board cards into corresponding lists
-                board.lists.forEach((list, index, array) => {
+                board.lists.forEach((list: { id: any; }, index: string | number, array: { [x: string]: { cards: any[]; }; }) => {
                     array[index].cards = cards.filter(item => item.boardId === id && item.listId === list.id).sort((a, b) => a.position - b.position);
                 });
 
@@ -159,10 +159,10 @@ export class ScrumboardMockApi
                 const lists = cloneDeep(request.body.lists);
 
                 // Prepare the updated lists
-                const updatedLists = [];
+                const updatedLists: any[] = [];
 
                 // Go through the lists
-                lists.forEach((item) => {
+                lists.forEach((item: { id: any; }) => {
 
                     // Find the list
                     const index = this._lists.findIndex(list => item.id === list.id);
@@ -237,10 +237,10 @@ export class ScrumboardMockApi
                 const card = cloneDeep(request.body.card);
 
                 // Prepare the updated card
-                let updatedCard = null;
+                let updatedCard: any = null;
 
                 // Go through the labels and leave only ids of them
-                card.labels = card.labels.map(itemLabel => itemLabel.id);
+                card.labels = card.labels.map((itemLabel: { id: any; }) => itemLabel.id);
 
                 // Find the card and update it
                 this._cards.forEach((item, index, cards) => {
@@ -256,7 +256,7 @@ export class ScrumboardMockApi
                 });
 
                 // Attach the labels of the card
-                updatedCard.labels = updatedCard.labels.map(cardLabelId => this._labels.find(label => label.id === cardLabelId));
+                updatedCard.labels = updatedCard.labels.map((cardLabelId: any) => this._labels.find(label => label.id === cardLabelId));
 
                 return [
                     200,
@@ -275,22 +275,22 @@ export class ScrumboardMockApi
                 const cards = cloneDeep(request.body.cards);
 
                 // Prepare the updated cards
-                const updatedCards = [];
+                const updatedCards: any = [];
 
                 // Go through the cards
-                cards.forEach((item) => {
+                cards.forEach((item: { id: any; labels: any[]; }) => {
 
                     // Find the card
                     const index = this._cards.findIndex(card => item.id === card.id);
 
                     // Go through the labels and leave only ids of them
-                    item.labels = item.labels.map(itemLabel => itemLabel.id);
+                    item.labels = item.labels.map((itemLabel: { id: any; }) => itemLabel.id);
 
                     // Update the card
                     this._cards[index] = assign({}, this._cards[index], item);
 
                     // Attach the labels of the card
-                    item.labels = item.labels.map(cardLabelId => this._labels.find(label => label.id === cardLabelId));
+                    item.labels = item.labels.map((cardLabelId: any) => this._labels.find(label => label.id === cardLabelId));
 
                     // Store in the updated cards
                     updatedCards.push(item);
@@ -337,7 +337,7 @@ export class ScrumboardMockApi
 
                     // Find this card's index within the cards array that comes with the request
                     // and assign that index as the new position number for the card
-                    card.position = cards.findIndex(item => item.id === card.id && item.listId === card.listId && item.boardId === card.boardId);
+                    card.position = cards.findIndex((item: { id: any; listId: any; boardId: any; }) => item.id === card.id && item.listId === card.listId && item.boardId === card.boardId);
                 });
 
                 // Clone the cards

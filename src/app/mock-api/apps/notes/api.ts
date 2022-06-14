@@ -107,7 +107,7 @@ export class NotesMockApi
                 // Go through notes and delete the label
                 this._notes = this._notes.map(note => ({
                     ...note,
-                    labels: note.labels.filter(item => item !== id)
+                    labels: note.labels.filter((item: string | null) => item !== id)
                 }));
 
                 return [
@@ -175,7 +175,7 @@ export class NotesMockApi
                 notes = notes.map(note => (
                     {
                         ...note,
-                        labels: note.labels.map(labelId => labels.find(label => label.id === labelId))
+                        labels: note.labels.map((labelId: any) => labels.find(label => label.id === labelId))
                     }
                 ));
 

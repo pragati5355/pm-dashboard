@@ -1,7 +1,8 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
-  "compilerOptions": {
+  "compilerOptions": { 
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
     "paths": {
       "@angular/*": ["./node_modules/@angular/*"],
