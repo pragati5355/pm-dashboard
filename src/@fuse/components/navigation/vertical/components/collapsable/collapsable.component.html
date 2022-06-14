@@ -1,7 +1,7 @@
 <div
     class="fuse-vertical-navigation-item-wrapper"
     [class.fuse-vertical-navigation-item-has-subtitle]="!!item.subtitle"
-    [ngClass]="item.classes?.wrapper">
+    [ngClass]="item.classes?.wrapper!">
 
     <div
         class="fuse-vertical-navigation-item"
@@ -13,20 +13,20 @@
         <ng-container *ngIf="item.icon">
             <mat-icon
                 class="fuse-vertical-navigation-item-icon"
-                [ngClass]="item.classes?.icon"
+                [ngClass]="item.classes?.icon!"
                 [svgIcon]="item.icon"></mat-icon>
         </ng-container>
 
         <!-- Title & Subtitle -->
         <div class="fuse-vertical-navigation-item-title-wrapper">
             <div class="fuse-vertical-navigation-item-title">
-                <span [ngClass]="item.classes?.title">
+                <span [ngClass]="item.classes?.title!">
                     {{item.title}}
                 </span>
             </div>
             <ng-container *ngIf="item.subtitle">
                 <div class="fuse-vertical-navigation-item-subtitle">
-                    <span [ngClass]="item.classes?.subtitle">
+                    <span [ngClass]="item.classes?.subtitle!">
                         {{item.subtitle}}
                     </span>
                 </div>
@@ -38,7 +38,7 @@
             <div class="fuse-vertical-navigation-item-badge">
                 <div
                     class="fuse-vertical-navigation-item-badge-content"
-                    [ngClass]="item.badge.classes">
+                    [ngClass]="item.badge?.classes!">
                     {{item.badge.title}}
                 </div>
             </div>

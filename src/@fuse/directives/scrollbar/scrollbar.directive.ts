@@ -21,11 +21,12 @@ export class FuseScrollbarDirective implements OnChanges, OnInit, OnDestroy
     /* eslint-enable @typescript-eslint/naming-convention */
 
     @Input() fuseScrollbar: boolean = true;
-    @Input() fuseScrollbarOptions: PerfectScrollbar.Options;
+    @Input()
+    fuseScrollbarOptions!: PerfectScrollbar.Options;
 
-    private _animation: number;
-    private _options: PerfectScrollbar.Options;
-    private _ps: PerfectScrollbar;
+    private _animation!: any;
+    private _options!: PerfectScrollbar.Options;
+    private _ps!: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -74,7 +75,7 @@ export class FuseScrollbarDirective implements OnChanges, OnInit, OnDestroy
         if ( 'fuseScrollbar' in changes )
         {
             // Interpret empty string as 'true'
-            this.fuseScrollbar = coerceBooleanProperty(changes.fuseScrollbar.currentValue);
+            this.fuseScrollbar = coerceBooleanProperty(changes['fuseScrollbar'].currentValue);
 
             // If enabled, init the directive
             if ( this.fuseScrollbar )
@@ -92,7 +93,7 @@ export class FuseScrollbarDirective implements OnChanges, OnInit, OnDestroy
         if ( 'fuseScrollbarOptions' in changes )
         {
             // Merge the options
-            this._options = merge({}, this._options, changes.fuseScrollbarOptions.currentValue);
+            this._options = merge({}, this._options, changes['fuseScrollbarOptions'].currentValue);
 
             // Return if not initialized
             if ( !this._ps )

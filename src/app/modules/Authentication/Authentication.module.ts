@@ -2,15 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from "@angular/router";
 import { SharedModule } from "../../core/shared.module";
-import { AuthServiceService } from '../../core/services/AuthService/AuthService.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-// import { FuseCardModule } from '@fuse/components/card';
-// import { FuseAlertModule } from '@fuse/components/alert';
 import { LoginComponent } from './login/login.component';
 import { AuthenticationHomeComponent } from './authentication-home/authentication-home.component';
 import {IconsModule} from '../../core/icons/icons.module'
@@ -54,8 +51,6 @@ const routes: Routes = [
     MatInputModule,
     MatProgressSpinnerModule,
     IconsModule
-    // FuseCardModule,
-    // FuseAlertModule
   ],
   providers: [
     

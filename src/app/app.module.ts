@@ -4,8 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-// import { FuseModule } from '@fuse';
-// import {FuseMasonryModule} from '@fuse/components/masonry'
+import { FuseModule } from '@fuse';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthServiceService } from './core/services/AuthService/AuthService.service';
 import { environment } from "../environments/environment";
@@ -31,8 +30,7 @@ const googleLoginOptions = {
     BrowserAnimationsModule,
     HttpClientModule,
       SocialLoginModule,
-    // FuseModule
-    // FuseMasonryModule
+    FuseModule
   ],
   providers: [
     AuthServiceService,

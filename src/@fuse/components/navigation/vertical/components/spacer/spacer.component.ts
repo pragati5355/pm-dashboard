@@ -11,10 +11,10 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
 })
 export class FuseVerticalNavigationSpacerItemComponent implements OnInit, OnDestroy
 {
-    @Input() item: FuseNavigationItem;
-    @Input() name: string;
+    @Input() item!: FuseNavigationItem;
+    @Input() name!: string;
 
-    private _fuseVerticalNavigationComponent: FuseVerticalNavigationComponent;
+    private _fuseVerticalNavigationComponent!: FuseVerticalNavigationComponent;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
