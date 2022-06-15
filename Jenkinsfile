@@ -26,7 +26,7 @@ pipeline{
    agent{
        docker{
            image 'mindbowser/node-ng-awscli:v4-gcp-aws'
-           label 'docker'
+           label 'spot'
        }
    }
    stages{
