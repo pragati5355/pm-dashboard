@@ -1,22 +1,22 @@
-//slack 
-slack_channel='metrics_cicd'
+//slack
+slack_channel='test_cicd'
 slack_teamDomain= 'mindbowser'
 slack_token_cred_id ='slack-Integration-Token-Credential-ID'
 
-dev_bucket_name= 'dev-metrics-pm-dashboard-web'
-dev_cloudfront_id= 'E2ZLV8YVD6JQLJ'
-dev_portal_url= 'https://d3bgpakr7kt571.cloudfront.net'
-dev_bucket_region= 'us-east-1'
+dev_bucket_name= 'dev.dashboard.metrics.com'
+dev_cloudfront_id= 'E3THFBQ0TPMRHQ'
+dev_portal_url= 'https://dljmungqb9yx1.cloudfront.net'
+dev_bucket_region= 'ap-south-1'
 
-stage_bucket_name= ''
-stage_cloudfront_id= ''
-stage_portal_url= ''
-stage_bucket_region= ''
+stage_bucket_name= 'staging.dashboard.metrics.com'
+stage_cloudfront_id= 'E15JF2C54J5DGX'
+stage_portal_url= 'https://d1usw3ci0562fl.cloudfront.net'
+stage_bucket_region= 'ap-south-1'
 
-prod_bucket_name= ''
-prod_cloudfront_id= ''
-prod_portal_url= ''
-prod_bucket_region= ''
+prod_bucket_name= 'dashboard.metrics.com'
+prod_cloudfront_id= 'EMUTLD1CK2B71'
+prod_portal_url= 'https://d14bwrywig6z9e.cloudfront.net	'
+prod_bucket_region= 'ap-south-1'
 
 
 build_directory= 'dist/pm-dashboard'
@@ -74,7 +74,7 @@ pipeline{
 
        stage('Development'){
             when{
-                  branch 'development'
+                  branch 'devops'
            }//when
                steps{
                    slack_send("Development: Building :coding: ")
