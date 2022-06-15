@@ -25,7 +25,7 @@ def randomIndex = (new Random()).nextInt(icons.size())
 pipeline{
    agent{
        docker{
-           image 'mindbowser/node-ng-awscli:latest'
+           image 'mindbowser/node-ng-awscli:v4-gcp-aws'
            label 'docker'
        }
    }
@@ -80,7 +80,7 @@ pipeline{
                    slack_send("Development: Building :coding: ")
                    sh 'ng build'
                    slack_send("Development: Uploading build to S3. :s3: ")
-                   withAWS(credentials: 'aws-key', region: "${development_bucket_region}" ) {
+                   withAWS(credentials: 'aws-key', region: "${dev_bucket_region}" ) {
                    s3Upload(bucket:"${development_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400')
                    s3Upload(bucket:"${development_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400')
                    slack_send("Development: Invalidating  Cloudfront. :cloudfront: ")
@@ -116,7 +116,7 @@ pipeline{
                    slack_send("Production: Building :coding:")
                    sh 'ng build --configuration=production'
                     slack_send("Production: Uploading build to S3. :s3: ")
-                   withAWS(credentials: 'aws-key', region: "${uat_bucket_region}" ) {
+                   withAWS(credentials: 'aws-key', region: "${prod_bucket_region}" ) {
                    s3Upload(bucket:"${production_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400', acl:'PublicRead')
                    s3Upload(bucket:"${production_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400', acl:'PublicRead')
                    slack_send("Production: Invalidating  Cloudfront. :cloudfront: ")
