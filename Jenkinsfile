@@ -84,8 +84,8 @@ pipeline{
                    s3Upload(bucket:"${dev_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400')
                   //  s3Upload(bucket:"${dev_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400')
                    slack_send("Development: Invalidating  Cloudfront. :cloudfront: ")
-                   cfInvalidate(distribution:"${development_cloudfront_ID}", paths:['/*'], waitForCompletion: true)
-                   slack_send("Development: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${development_URL}")
+                   cfInvalidate(distribution:"${dev_cloudfront_id}", paths:['/*'], waitForCompletion: true)
+                   slack_send("Development: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${dev_portal_url}")
                    }
                }
        }//development build
@@ -103,7 +103,7 @@ pipeline{
                    s3Upload(bucket:"${stage_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400', acl:'PublicRead')
                    slack_send("Staging: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${stage_cloudfront_ID}", paths:['/*'], waitForCompletion: true)
-                   slack_send("Staging: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${stage_URL}")
+                   slack_send("Staging: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${stage_portal_url}")
                    }
                }
        }//stage build
