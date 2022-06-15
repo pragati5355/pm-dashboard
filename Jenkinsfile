@@ -15,18 +15,18 @@ stage_bucket_region= 'ap-south-1'
 
 prod_bucket_name= 'dashboard.metrics.com'
 prod_cloudfront_id= 'EMUTLD1CK2B71'
-prod_portal_url= 'https://d14bwrywig6z9e.cloudfront.net	'
+prod_portal_url= 'https://d14bwrywig6z9e.cloudfront.net'
 prod_bucket_region= 'ap-south-1'
 
 
-build_directory= 'dist/pm-dashboard'
+build_directory= 'dist/metrics'
 def icons = [":heavy_check_mark:",":star-struck:",":tada:",":heart_eyes_cat:",":man_dancing:",":dancer:",":beer:"]
 def randomIndex = (new Random()).nextInt(icons.size())
 pipeline{
    agent{
        docker{
            image 'mindbowser/node-ng-awscli:v4-gcp-aws'
-           label 'spot'
+           label 'docker'
        }
    }
    stages{
