@@ -81,8 +81,8 @@ pipeline{
                    sh 'ng build'
                    slack_send("Development: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${dev_bucket_region}" ) {
-                   s3Upload(bucket:"${development_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400')
-                   s3Upload(bucket:"${development_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400')
+                   s3Upload(bucket:"${dev_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400')
+                   s3Upload(bucket:"${dev_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400')
                    slack_send("Development: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${development_cloudfront_ID}", paths:['/*'], waitForCompletion: true)
                    slack_send("Development: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${development_URL}")
