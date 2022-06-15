@@ -1,5 +1,5 @@
 //slack
-slack_channel='test_cicd'
+slack_channel='metrics_cicd'
 slack_teamDomain= 'mindbowser'
 slack_token_cred_id ='slack-Integration-Token-Credential-ID'
 
@@ -74,7 +74,7 @@ pipeline{
 
        stage('Development'){
             when{
-                  branch 'devops'
+                  branch 'development'
            }//when
                steps{
                    slack_send("Development: Building :coding: ")
