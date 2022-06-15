@@ -162,14 +162,14 @@ export class LayoutComponent implements OnInit, OnDestroy
         // Also, this will allow overriding the layout in any time so we
         // can have different layouts for different routes.
         const paths = route.pathFromRoot;
-        paths.forEach((path) => {
+        paths.forEach((path: any) => {
 
             // Check if there is a 'layout' data
-            // if ( path.routeConfig && path.routeConfig.data && path.routeConfig.data.layout )
-            // {
-            //     // Set the layout
-            //     this.layout = path.routeConfig.data.layout;
-            // }
+            if ( path.routeConfig && path.routeConfig.data && path.routeConfig.data.layout )
+            {
+                // Set the layout
+                this.layout = path.routeConfig.data.layout;
+            }
         });
     }
 

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthServiceService } from './core/services/AuthService/AuthService.service';
@@ -35,6 +36,7 @@ const routerConfig: ExtraOptions = {
   imports: [
     BrowserModule,
     FormsModule,
+    CoreModule,
     AppRoutingModule,
     RouterModule.forRoot(appRoutes, routerConfig),
     BrowserAnimationsModule,
