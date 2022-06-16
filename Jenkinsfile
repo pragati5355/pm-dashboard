@@ -19,7 +19,7 @@ prod_portal_url= 'https://d14bwrywig6z9e.cloudfront.net'
 prod_bucket_region= 'ap-south-1'
 
 
-build_directory= 'dist/metrics'
+build_directory= 'dist/metrics-pm-dashboard-web'
 def icons = [":heavy_check_mark:",":star-struck:",":tada:",":heart_eyes_cat:",":man_dancing:",":dancer:",":beer:"]
 def randomIndex = (new Random()).nextInt(icons.size())
 pipeline{
