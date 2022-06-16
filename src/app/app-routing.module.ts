@@ -6,29 +6,26 @@ import { InitialDataResolver } from 'app/app.resolvers';
 import { LayoutComponent } from './layout/layout.component';
 export const appRoutes: Routes = [
   {
-    path: "auth",
+    path: "sign-in",
     loadChildren: () =>
-      import("./modules/Authentication/Authentication.module").then(
-        m => m.AuthenticationModule
+      import("./modules/auth/sign-in/sign-in.module").then(
+        m => m.AuthSignInModule
       ),
     // canActivate: [IsUserUnAuthenticated]
   },
-  // {
-  //   path: "dashboard",
-  //   loadChildren: () =>
-  //     import("./modules/AppContainer/AppContainer.module").then(
-  //       m => m.AppContainerModule
-  //     ),
-  //   // canActivate: [IsUserAuthenticated]
-  // },
-  // {
-  //   path: "dashboard",
-  //   loadChildren: () =>
-  //     import("./modules/admin/dashboard/dashboard.module").then(
-  //       m => m.DashboardModule
-  //     ),
-  //   // canActivate: [IsUserAuthenticated]
-  // },
+      // Auth routes for guests
+    //    {
+    //     path: '',
+    //     // canActivate: [NoAuthGuard],
+    //     // canActivateChild: [NoAuthGuard],
+    //     component: LayoutComponent,
+    //     data: {
+    //         layout: 'empty'
+    //     },
+    //     children: [
+    //         {path: 'sign-in', loadChildren: () => import('app/modules/auth/sign-in/sign-in.module').then(m => m.AuthSignInModule)},
+    //     ]
+    // },
      // Admin routes
      {
       path       : 'dashboard',
@@ -44,12 +41,12 @@ export const appRoutes: Routes = [
   },
   {
     path: "",
-    redirectTo: "auth",
+    redirectTo: "sign-in",
     pathMatch: "full"
   },
   {
     path: "**",
-    redirectTo: "auth",
+    redirectTo: "sign-in",
     pathMatch: "full"
   }
 ];

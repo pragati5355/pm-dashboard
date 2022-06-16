@@ -14,10 +14,6 @@ import { AppConstants } from '../../constacts/constacts';
   providedIn: 'root'
 })
 export class AuthServiceService {
-  private authorizeEndPoint  = '/oauth2/authorization/google'
-  private tokenEndPoint = '/login/oauth2/code/google'
-  private baseUrl = "https://90ab-103-127-166-119.in.ngrok.io/"
-   private tokenKey = 'token';
 
   constructor(private http: HttpClient) {
 
