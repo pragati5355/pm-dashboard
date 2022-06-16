@@ -24,7 +24,7 @@ export class AuthServiceService {
    }
 
   login(loginObject: any) {
-return this.http.post("https://463b-2402-8100-384b-f6fa-b0ab-7be7-8661-2ecd.in.ngrok.io/user", loginObject);
+return this.http.post("https://11vi8vyl44.execute-api.ap-south-1.amazonaws.com/signin", loginObject);
   }
 }
 

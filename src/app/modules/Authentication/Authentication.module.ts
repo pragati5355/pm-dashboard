@@ -7,6 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { FuseAlertModule } from '@fuse/components/alert';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoginComponent } from './login/login.component';
 import { AuthenticationHomeComponent } from './authentication-home/authentication-home.component';
@@ -50,7 +51,8 @@ const routes: Routes = [
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    IconsModule
+    IconsModule,
+    FuseAlertModule
   ],
   providers: [
     

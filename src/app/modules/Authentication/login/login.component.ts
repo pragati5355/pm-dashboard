@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import { AuthServiceService } from '../../../core/services/AuthService/AuthService.service';
 import { fuseAnimations } from '@fuse/animations';
+import { FuseAlertType } from '@fuse/components/alert';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,12 +14,12 @@ import { fuseAnimations } from '@fuse/animations';
 })
 
 export class LoginComponent implements OnInit {
-  public constants: Object = {};
-  isLoggedIn = false;
-  data: any
- subscribe: any
-//  user!: SocialUser;
- isLogin!: boolean; // 
+
+  alert: { type: FuseAlertType; message: string } = {
+    type   : 'success',
+    message: ''
+};
+showAlert: boolean = false;
  socialUser!: SocialUser;
  isLoggedin?: boolean;
 
@@ -27,38 +28,54 @@ export class LoginComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.constants = AppConstants;
     this.socialAuthService.authState.subscribe((user) => {
       this.socialUser = user;
       this.isLoggedin = user != null;
-      console.log(this.socialUser);
     });
-    ///
   }
   loginWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then(d => {
-        this._authService.login(JSON.stringify(d)).subscribe(
-          (res:any)=>{
-            if (res.status_code === 200 || res.status_code === 201) {
-                 console.log(res)
-                 this.router.navigate(['dashboard'])
-            }else{
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
+    .then(res => {
+        this.showAlert = false;
+        this._authService.login(JSON.stringify(res)).subscribe(
+            (res:any)=>{
+              if (res.status_code === 200 || res.status_code === 201) {
+                   console.log(res)
+                   this.router.navigate(['dashboard']) 
+               
+              }else{
+                this.alert = {
+                    type   : 'error',
+                    message: 'Wrong email or password'
+                };
 
+                // Show the alert
+                this.showAlert = true;
+              }
+            },
+            error =>{
+                this.alert = {
+                    type   : 'error',
+                    message: 'Something went wrong'
+                };
+
+                // Show the alert
+                this.showAlert = true;
+               
             }
-          },
-          error =>{
+          )
+    }) 
+    .catch(error => {
+        this.alert = {
+            type   : 'error',
+            message: error
+        };
 
-          }
-        )
-        this.router.navigate(['dashboard']) 
-      }
-      
-      )
-      .catch(error => {
-        console.log(error);
+        // Show the alert
+        this.showAlert = true;
       });
-  }
+}
+
 
   logOut(): void {
     this.socialAuthService.signOut().then(() => this.router.navigate(['login']));
