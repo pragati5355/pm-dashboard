@@ -61,7 +61,6 @@ export class AuthSignInComponent implements OnInit
   
                   // Show the alert
                   this.showAlert = true;
-                  this.router.navigate(['dashboard']) 
                  
               }
             )
@@ -69,7 +68,7 @@ export class AuthSignInComponent implements OnInit
       .catch(error => {
           this.alert = {
               type   : 'error',
-              message: error
+              message: 'Something went wrong'
           };
   
           // Show the alert
