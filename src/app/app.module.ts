@@ -26,7 +26,7 @@ const googleLoginOptions = {
 
 const routerConfig: ExtraOptions = {
   preloadingStrategy       : PreloadAllModules,
-  scrollPositionRestoration: 'enabled'
+  scrollPositionRestoration: 'enabled',
 };
 @NgModule({
   declarations: [
