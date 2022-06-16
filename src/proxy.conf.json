@@ -1,0 +1,7 @@
+{
+    "/api/*": {
+        "target": "https://3ede-103-127-166-119.in.ngrok.io",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}
