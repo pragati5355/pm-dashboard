@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient   } from '@angular/common/http';
+import { LocalStorageService } from "angular-web-storage";
 // import { HttpHeaders                   } from '@angular/common/http';
 import { AppConstants } from '../../constacts/constacts';
 // import { map, Observable, observable, tap } from 'rxjs';
@@ -15,12 +16,37 @@ import { AppConstants } from '../../constacts/constacts';
 })
 export class AuthServiceService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private storage: LocalStorageService) {
 
    }
 
   login(loginObject: any) {
 return this.http.post("https://11vi8vyl44.execute-api.ap-south-1.amazonaws.com/signin", loginObject);
+  }
+
+  setToken(accessToken: any) {
+    this.storage.set("accessToken", accessToken);
+  }
+
+  setRefreshToken(refreshToken: any) {
+    this.storage.set("refreshToken", refreshToken);
+  }
+
+  getRefreshToken() {
+    this.storage.get("refreshToken");
+  }
+
+  deleteToken() {
+    this.storage.remove("accessToken");
+    this.storage.remove("refreshToken");
+  }
+
+  getToken() {
+    return this.storage.get("accessToken");
+  }
+  
+  clearStorage() {
+    this.storage.clear();
   }
 }
 
