@@ -44,6 +44,7 @@ export class AuthSignInComponent implements OnInit
                      this.router.navigate(['dashboard']) 
                  
                 }else{
+                    console.log(res);
                   this.alert = {
                       type   : 'error',
                       message: 'Wrong email or password'
@@ -56,7 +57,7 @@ export class AuthSignInComponent implements OnInit
               error =>{
                   this.alert = {
                       type   : 'error',
-                      message: 'Something went wrong'
+                      message: 'Server network issue'
                   };
   
                   // Show the alert
