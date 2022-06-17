@@ -41,7 +41,7 @@ export class AuthSignInComponent implements OnInit
               (res:any)=>{
                 if (res.status_code === 200 || res.status_code === 201) {
                      console.log(res)
-                     this.router.navigate(['dashboard']) 
+                     this.router.navigate(['/dashboard']) 
                  
                 }else{
                     console.log(res);
