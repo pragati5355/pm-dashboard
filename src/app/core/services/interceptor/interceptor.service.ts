@@ -37,7 +37,15 @@ export class InterceptorService implements HttpInterceptor {
         () => {},
         (err: any) => {
           if (err instanceof HttpErrorResponse) {
-            console.log(err);
+            if (err.status === 403) {
+             
+            } else if (err.status === 401) {
+             
+            }
+            else
+            {
+
+            }
           }
         }
       )

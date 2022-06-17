@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Route, Routes } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,8 +11,13 @@ import { FuseCardModule } from '@fuse/components/card';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { SharedModule } from 'app/shared/shared.module';
 import { AuthSignInComponent } from 'app/modules/auth/sign-in/sign-in.component';
-import { authSignInRoutes } from 'app/modules/auth/sign-in/sign-in.routing';
-
+// import { authSignInRoutes } from 'app/modules/auth/sign-in/sign-in.routing';
+export const authSignInRoutes: Routes= [
+    {
+        path     : '',
+        component: AuthSignInComponent
+    }
+];
 @NgModule({
     declarations: [
         AuthSignInComponent

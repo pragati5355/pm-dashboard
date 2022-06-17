@@ -4,10 +4,10 @@
 <!-- Navigation -->
 <fuse-vertical-navigation
     class="dark bg-gray-900 print:hidden"
-    [mode]="isScreenSmall ? 'over' : 'side'"
+    [mode]="isScreenSmall ? 'side' : 'over'"
     [name]="'mainNavigation'"
     [navigation]="navigation.default"
-    [opened]="!isScreenSmall">
+    [opened]="isScreenSmall">
     <!-- Navigation header hook -->
     <ng-container fuseVerticalNavigationContentHeader>
         <div class="flex items-center w-full p-4 pl-6">

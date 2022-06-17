@@ -1,6 +1,6 @@
-import { Component, OnInit,ViewEncapsulation } from '@angular/core';
-import { AppConstants } from "../../../core/constacts/constacts";
-import { Router } from "@angular/router";
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleLoginProvider, SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import { AuthServiceService } from '../../../core/services/AuthService/AuthService.service';
 import { fuseAnimations } from '@fuse/animations';
@@ -9,8 +9,8 @@ import { FuseAlertType } from '@fuse/components/alert';
     selector     : 'auth-sign-in',
     templateUrl  : './sign-in.component.html',
       styleUrls: ['./sign-in.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+      encapsulation: ViewEncapsulation.None,
+      animations   : fuseAnimations
 })
 export class AuthSignInComponent implements OnInit
 {
