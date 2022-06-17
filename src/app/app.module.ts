@@ -15,8 +15,8 @@ import { FuseMockApiModule } from '@fuse/lib/mock-api';
 import { appConfig } from 'app/core/config/app.config';
 import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
-import { SocialLoginModule, SocialAuthServiceConfig,  } from 'angularx-social-login';
-import { GoogleLoginProvider } from "angularx-social-login";
+import { SocialLoginModule, SocialAuthServiceConfig,  } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
 
 import { appRoutes } from 'app/app-routing.module';
 const GoogleClientId = environment.GoogleClientId;

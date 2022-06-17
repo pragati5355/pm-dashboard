@@ -1,7 +1,7 @@
 import { Component, OnInit,ViewEncapsulation } from '@angular/core';
 import { AppConstants } from "../../../core/constacts/constacts";
 import { Router } from "@angular/router";
-import { GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
+import { GoogleLoginProvider, SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import { AuthServiceService } from '../../../core/services/AuthService/AuthService.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
@@ -37,6 +37,7 @@ export class AuthSignInComponent implements OnInit
       this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
       .then(res => {
           this.showAlert = false;
+          console.log(res);
           this._authService.login(JSON.stringify(res)).subscribe(
               (res:any)=>{
                 if (res.status_code === 200 || res.status_code === 201) {
