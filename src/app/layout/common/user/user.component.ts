@@ -4,7 +4,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
-
+import { SocialAuthService} from 'angularx-social-login';
 @Component({
     selector       : 'user',
     templateUrl    : './user.component.html',
@@ -29,7 +29,8 @@ export class UserComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
-        private _userService: UserService
+        private _userService: UserService,
+        private socialAuthService: SocialAuthService
     )
     {
     }
@@ -92,7 +93,8 @@ export class UserComponent implements OnInit, OnDestroy
      * Sign out
      */
     signOut(): void
-    {
-        this._router.navigate(['/sign-out']);
+    {        
+       this.socialAuthService.signOut();
+        this._router.navigate(['/sign-in']);
     }
 }
