@@ -36,7 +36,7 @@ export const appRoutes: Routes = [
           initialData: InitialDataResolver,
       },
       children   : [
-          {path: 'example', loadChildren: () => import('app/modules/admin/dashboard/dashboard.module').then(m => m.DashboardModule)},
+          {path: 'dashdboard', loadChildren: () => import('app/modules/admin/dashboard/dashboard.module').then(m => m.DashboardModule)},
       ]
   },
   {
