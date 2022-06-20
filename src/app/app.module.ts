@@ -27,6 +27,7 @@ const googleLoginOptions = {
 const routerConfig: ExtraOptions = {
   preloadingStrategy       : PreloadAllModules,
   scrollPositionRestoration: 'enabled',
+  enableTracing: true
 };
 @NgModule({
   declarations: [
@@ -38,7 +39,6 @@ const routerConfig: ExtraOptions = {
     FormsModule,
     CoreModule,
     AppRoutingModule,
-    RouterModule.forRoot(appRoutes, routerConfig),
     BrowserAnimationsModule,
     HttpClientModule,
       SocialLoginModule,
@@ -46,7 +46,8 @@ const routerConfig: ExtraOptions = {
      FuseModule,
      FuseConfigModule.forRoot(appConfig),
      FuseMockApiModule.forRoot(mockApiServices),
-     LayoutModule
+     LayoutModule,
+     MarkdownModule.forRoot({})
   ],
   providers: [
     AuthServiceService,
