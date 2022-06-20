@@ -21,7 +21,7 @@ export class AuthServiceService {
    }
 
   login(loginObject: any) {
-return this.http.post("https://11vi8vyl44.execute-api.ap-south-1.amazonaws.com/signin", loginObject);
+return this.http.post(AppConstants['AUTH_USER_API'], loginObject);
   }
 
   setToken(accessToken: any) {
@@ -44,7 +44,7 @@ return this.http.post("https://11vi8vyl44.execute-api.ap-south-1.amazonaws.com/s
   getToken() {
     return this.storage.get("accessToken");
   }
-  
+
   clearStorage() {
     this.storage.clear();
   }
