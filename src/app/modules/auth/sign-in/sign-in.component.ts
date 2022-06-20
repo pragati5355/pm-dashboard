@@ -40,20 +40,9 @@ export class AuthSignInComponent implements OnInit
           console.log(res);
           this._authService.login(JSON.stringify(res)).subscribe(
               (res:any)=>{
-                if (res.status_code === 200 || res.status_code === 201) {
                      console.log(res)
                      this.router.navigate(['/dashboard']) 
-                 
-                }else{
-                    console.log(res);
-                  this.alert = {
-                      type   : 'error',
-                      message: 'Wrong email or password'
-                  };
-  
-                  // Show the alert
-                  this.showAlert = true;
-                }
+                
               },
               error =>{
                   this.alert = {
