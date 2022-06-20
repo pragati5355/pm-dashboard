@@ -5,27 +5,24 @@ import { SharedModule } from "./core/shared.module";
 import { InitialDataResolver } from 'app/app.resolvers';
 import { LayoutComponent } from './layout/layout.component';
 export const appRoutes: Routes = [
-  {
-    path: "sign-in",
-    loadChildren: () =>
-      import("./modules/auth/sign-in/sign-in.module").then(
-        m => m.AuthSignInModule
-      ),
-    // canActivate: [IsUserUnAuthenticated]
-  },
+
+  {path: '', pathMatch : 'full', redirectTo: 'sign-in'},
+
+  {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'sign-in'},
       // Auth routes for guests
-       {
-        path: '',
-        // canActivate: [NoAuthGuard],
-        // canActivateChild: [NoAuthGuard],
-        component: LayoutComponent,
-        data: {
-            layout: 'empty'
-        },
-        children: [
-            {path: 'sign-in', loadChildren: () => import('app/modules/auth/sign-in/sign-in.module').then(m => m.AuthSignInModule)},
-        ]
-    },
+      {
+          path: "",
+          // canActivate: [NoAuthGuard],
+          // canActivateChild: [NoAuthGuard],
+          component: LayoutComponent,
+          data: {
+              layout: 'empty'
+          },
+          children: [
+              
+              {path: 'sign-in', loadChildren: () => import('./modules/auth/sign-in/sign-in.module').then(m => m.AuthSignInModule)},
+          ]
+      },
      // Admin routes
      {
       path       : "",
@@ -38,11 +35,6 @@ export const appRoutes: Routes = [
       children   : [
           {path: 'dashboard', loadChildren: () => import('./modules/admin/dashboard/dashboard.module').then(m => m.DashboardModule)},
       ]
-  },
-  {
-    path: "",
-    redirectTo: "sign-in",
-    pathMatch: "full"
   },
   {
     path: "**",
