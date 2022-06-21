@@ -21,7 +21,8 @@ import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
 import { appRoutes } from 'app/app-routing.module';
 const GoogleClientId = environment.GoogleClientId;
 const googleLoginOptions = {
-  scope: 'profile email'
+  scope: 'email',
+  plugin_name: 'streamy'
 };
 
 const routerConfig: ExtraOptions = {
@@ -59,7 +60,8 @@ const routerConfig: ExtraOptions = {
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              GoogleClientId
+              GoogleClientId,
+              googleLoginOptions
             )
           }
         ],
