@@ -5,17 +5,17 @@ slack_token_cred_id ='slack-Integration-Token-Credential-ID'
 
 dev_bucket_name= 'dev.dashboard.metrics.com'
 dev_cloudfront_id= 'E3THFBQ0TPMRHQ'
-dev_portal_url= 'https://dljmungqb9yx1.cloudfront.net'
+dev_portal_url= 'https://dashboard.dev.mindbowser.com/'
 dev_bucket_region= 'ap-south-1'
 
 stage_bucket_name= 'staging.dashboard.metrics.com'
 stage_cloudfront_id= 'E15JF2C54J5DGX'
-stage_portal_url= 'https://d1usw3ci0562fl.cloudfront.net'
+stage_portal_url= 'https://dashboard.stage.mindbowser.com/'
 stage_bucket_region= 'ap-south-1'
 
 prod_bucket_name= 'dashboard.metrics.com'
 prod_cloudfront_id= 'EMUTLD1CK2B71'
-prod_portal_url= 'https://d14bwrywig6z9e.cloudfront.net'
+prod_portal_url= 'https://dashboard.mindbowser.com/'
 prod_bucket_region= 'ap-south-1'
 
 
