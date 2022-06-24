@@ -6,7 +6,7 @@ import {
   HttpEvent,
   HttpErrorResponse
 } from "@angular/common/http";
-import { AuthServiceService } from "../AuthService/AuthService.service";
+import { AuthService } from "../auth/auth.service";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
@@ -16,7 +16,7 @@ import { tap } from "rxjs/operators";
 })
 export class InterceptorService implements HttpInterceptor {
   constructor(
-    private authServiceService: AuthServiceService,
+    private authService: AuthService,
     private router: Router,
   ) {
   }
@@ -27,7 +27,7 @@ export class InterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     request = request.clone({
       setHeaders: {
-        Authorization: "Bearer " + this.authServiceService.getToken()
+        Authorization: "Bearer " + this.authService.getToken()
       }
     });
     return next.handle(request).pipe(

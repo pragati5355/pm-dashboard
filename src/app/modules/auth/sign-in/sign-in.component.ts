@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleLoginProvider, SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
-import { AuthServiceService } from '../../../core/services/AuthService/AuthService.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 @Component({
@@ -23,7 +23,7 @@ export class AuthSignInComponent implements OnInit
    socialUser!: SocialUser;
    isLoggedin?: boolean;
   
-    constructor(private _authService: AuthServiceService,private authService: SocialAuthService,
+    constructor(private _authService: AuthService,private authService: SocialAuthService,
       private socialAuthService: SocialAuthService,
       private router: Router) { }
   

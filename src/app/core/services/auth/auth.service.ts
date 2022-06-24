@@ -1,20 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient   } from '@angular/common/http';
 import { LocalStorageService } from "angular-web-storage";
-// import { HttpHeaders                   } from '@angular/common/http';
 import { AppConstants } from '../../constacts/constacts';
-// import { map, Observable, observable, tap } from 'rxjs';
-// const httpOptions = {
-//   headers: new HttpHeaders({ 'Content-Type': 'application/json',
-//   'Access-Control-Allow-Origin': '*',
-//   'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT',
-//   'Access-Control-Allow-Headers': 'Origin, Authorization, Accept', 
-// })
-// };
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AuthService{
 
   constructor(private http: HttpClient,private storage: LocalStorageService) {
 
@@ -50,9 +41,7 @@ return this.http.post(AppConstants['AUTH_USER_API'], loginObject);
   getUser() {
     return this.storage.get("user");
   }
-  clearStorage() {
-    this.storage.clear();
-  }
+
 }
 
 

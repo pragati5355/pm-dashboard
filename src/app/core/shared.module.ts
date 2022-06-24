@@ -3,8 +3,8 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { InterceptorService } from "./services/interceptor/interceptor.service";
-import { AuthServiceService } from "./services/AuthService/AuthService.service";
+import { InterceptorService } from "./services/interceptor/httpInterceptor";
+import { AuthService } from "./services/auth/auth.service";
 import {MatIconModule} from '@angular/material/icon';
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatIconModule
   ],
   providers: [
-    AuthServiceService,
+    AuthService,
     HttpClientModule,
     {
       provide: HTTP_INTERCEPTORS,

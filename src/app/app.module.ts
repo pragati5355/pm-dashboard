@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthServiceService } from './core/services/AuthService/AuthService.service';
+import { AuthService } from './core/services/auth/auth.service';
 import { environment } from "../environments/environment";
 import { FuseModule } from '@fuse';
 import { FuseConfigModule } from '@fuse/services/config';
@@ -51,7 +51,7 @@ const routerConfig: ExtraOptions = {
      MarkdownModule.forRoot({})
   ],
   providers: [
-    AuthServiceService,
+    AuthService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
