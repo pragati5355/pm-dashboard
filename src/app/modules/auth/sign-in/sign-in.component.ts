@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleLoginProvider, SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
-import { AuthServiceService } from '../../../core/services/AuthService/AuthService.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 @Component({
@@ -23,7 +23,7 @@ export class AuthSignInComponent implements OnInit
    socialUser!: SocialUser;
    isLoggedin?: boolean;
   
-    constructor(private _authService: AuthServiceService,private authService: SocialAuthService,
+    constructor(private _authService: AuthService,private authService: SocialAuthService,
       private socialAuthService: SocialAuthService,
       private router: Router) { }
   
@@ -40,8 +40,20 @@ export class AuthSignInComponent implements OnInit
           console.log(res);
           this._authService.login(JSON.stringify(res)).subscribe(
               (res:any)=>{
-                     console.log(res)
-                     this.router.navigate(['/dashboard']) 
+                if(res.data.user == null){
+                  this.alert = {
+                    type   : 'error',
+                    message:  'This account does not exist. Contact Admin at vish.s@mindbowser.com'
+                };
+
+                // Show the alert
+                this.showAlert = true;
+                }else{
+                  console.log(res)
+                  this._authService.setToken(res.data.user.jwtAccessToken);
+                  this._authService.setUser(res.data.user);
+                  this.router.navigate(['/dashboard']) 
+                }          
                 
               },
               error =>{
