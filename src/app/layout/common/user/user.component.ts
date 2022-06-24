@@ -35,6 +35,7 @@ export class UserComponent implements OnInit, OnDestroy
         private socialAuthService: SocialAuthService,
         private authService: AuthService,
         private sessionService: SessionService,
+        private router: Router
     )
     {
     }
@@ -58,6 +59,9 @@ export class UserComponent implements OnInit, OnDestroy
                 this._changeDetectorRef.markForCheck();
             });
             this.userData = this.authService.getUser();
+            if(!this.authService.getUser()){
+                this.router.navigate(['/sign-in']) 
+            }
     }
 
     /**

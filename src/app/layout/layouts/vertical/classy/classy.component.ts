@@ -31,7 +31,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _userService: UserService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
-        private authService: AuthService
+        private authService: AuthService,
+        private router: Router
     )
     {
     }
@@ -80,6 +81,9 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
                 this.isScreenSmall = !matchingAliases.includes('md');
             });
             this.userData = this.authService.getUser();
+            if(!this.userData){
+                this.router.navigate(['/sign-in']) 
+            }
     }
 
     /**
