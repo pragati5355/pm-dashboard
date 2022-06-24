@@ -27,6 +27,9 @@ return this.http.post(AppConstants['AUTH_USER_API'], loginObject);
   setToken(accessToken: any) {
     this.storage.set("accessToken", accessToken);
   }
+  setUser(user: any) {
+    this.storage.set("user", user);
+  }
 
   setRefreshToken(refreshToken: any) {
     this.storage.set("refreshToken", refreshToken);
@@ -44,7 +47,9 @@ return this.http.post(AppConstants['AUTH_USER_API'], loginObject);
   getToken() {
     return this.storage.get("accessToken");
   }
-
+  getUser() {
+    return this.storage.get("user");
+  }
   clearStorage() {
     this.storage.clear();
   }

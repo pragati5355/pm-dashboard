@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthServiceService } from "@services/AuthService/AuthService.service";
 import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
@@ -17,7 +18,7 @@ export class UserComponent implements OnInit, OnDestroy
     /* eslint-disable @typescript-eslint/naming-convention */
     static ngAcceptInputType_showAvatar: BooleanInput;
     /* eslint-enable @typescript-eslint/naming-convention */
-
+    getUser: any;
     @Input() showAvatar: boolean = true;
     user!: User;
 
@@ -30,7 +31,8 @@ export class UserComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _userService: UserService,
-        private socialAuthService: SocialAuthService
+        private socialAuthService: SocialAuthService,
+        private authService: AuthServiceService,
     )
     {
     }
@@ -53,6 +55,7 @@ export class UserComponent implements OnInit, OnDestroy
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+            this.getUser = this.authService.getUser();
     }
 
     /**
@@ -92,9 +95,10 @@ export class UserComponent implements OnInit, OnDestroy
     /**
      * Sign out
      */
-    signOut(): void
+    signout(): void
     {        
-       this.socialAuthService.signOut();
+        this.socialAuthService.signOut();
+        this.authService.clearStorage();
         this._router.navigate(['/sign-in']);
     }
 }

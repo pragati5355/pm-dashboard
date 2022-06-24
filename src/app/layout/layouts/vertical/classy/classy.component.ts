@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthServiceService } from "@services/AuthService/AuthService.service";
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Navigation } from 'app/core/navigation/navigation.types';
@@ -19,7 +20,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     navigation!: Navigation;
     user!: User;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+    getUser: any;
     /**
      * Constructor
      */
@@ -29,7 +30,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _navigationService: NavigationService,
         private _userService: UserService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _fuseNavigationService: FuseNavigationService
+        private _fuseNavigationService: FuseNavigationService,
+        private authService: AuthServiceService
     )
     {
     }
@@ -77,6 +79,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
                 // Check if the screen is small
                 this.isScreenSmall = !matchingAliases.includes('md');
             });
+            this.getUser = this.authService.getUser();
     }
 
     /**

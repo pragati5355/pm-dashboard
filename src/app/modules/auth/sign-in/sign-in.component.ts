@@ -40,8 +40,20 @@ export class AuthSignInComponent implements OnInit
           console.log(res);
           this._authService.login(JSON.stringify(res)).subscribe(
               (res:any)=>{
-                     console.log(res)
-                     this.router.navigate(['/dashboard']) 
+                if(res.data.user == null){
+                  this.alert = {
+                    type   : 'error',
+                    message:  'This account does not exist. Contact Admin at vish.s@mindbowser.com'
+                };
+
+                // Show the alert
+                this.showAlert = true;
+                }else{
+                  console.log(res)
+                  this._authService.setToken(res.data.user.jwtAccessToken);
+                  this._authService.setUser(res.data.user);
+                  this.router.navigate(['/dashboard']) 
+                }          
                 
               },
               error =>{
