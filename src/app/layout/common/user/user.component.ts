@@ -72,6 +72,7 @@ export class UserComponent implements OnInit, OnDestroy
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
+        this.sessionService.clearStorage();
     }
 
     // -----------------------------------------------------------------------------------------------------
