@@ -1,3 +1,4 @@
+
 *{
     font-family: 'Inter var';
     font-weight: 100 900;
@@ -7,4 +8,23 @@
 }
 .ml--4{
     margin-left: -4px !important;
+}
+
+.mat-simple-snackbar {
+  font-size: 16px !important;
+  align-items: normal !important;
+}
+.mat-snack-bar-container {
+  color: white !important;
+  background: #4f46e5 !important;
+  margin: 30px 40px 0px 0px !important;
+  padding: 16px !important;
+}
+
+.red-snackbar {
+  background: #de3b3b !important;
+}
+.mat-simple-snackbar-action {
+  color: white !important;
+  font-size: 16px !important;
 }

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from "./core/shared.module";
-
+import { AuthGuard } from '@services/auth/guards/auth.guard';
+import { NoAuthGuard } from '@services/auth/guards/noAuth.guard';
 import { InitialDataResolver } from 'app/app.resolvers';
 import { LayoutComponent } from './layout/layout.component';
 export const appRoutes: Routes = [
@@ -12,7 +13,7 @@ export const appRoutes: Routes = [
       // Auth routes for guests
       {
           path: "",
-          // canActivate: [NoAuthGuard],
+          canActivate: [NoAuthGuard],
           // canActivateChild: [NoAuthGuard],
           component: LayoutComponent,
           data: {
@@ -26,7 +27,7 @@ export const appRoutes: Routes = [
      // Admin routes
      {
       path       : "",
-      // canActivate: [AuthGuard],
+      canActivate: [AuthGuard],
       // canActivateChild: [AuthGuard],
       component  : LayoutComponent,
       resolve    : {

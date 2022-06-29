@@ -81,9 +81,6 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
                 this.isScreenSmall = !matchingAliases.includes('md');
             });
             this.userData = this.authService.getUser();
-            if(!this.userData){
-                this.router.navigate(['/sign-in']) 
-            }
     }
 
     /**

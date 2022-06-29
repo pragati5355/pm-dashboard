@@ -59,9 +59,6 @@ export class UserComponent implements OnInit, OnDestroy
                 this._changeDetectorRef.markForCheck();
             });
             this.userData = this.authService.getUser();
-            if(!this.authService.getUser()){
-                this.router.navigate(['/sign-in']) 
-            }
     }
 
     /**
@@ -72,7 +69,6 @@ export class UserComponent implements OnInit, OnDestroy
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
-        this.sessionService.clearStorage();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -107,5 +103,6 @@ export class UserComponent implements OnInit, OnDestroy
         this.socialAuthService.signOut();
         this._router.navigate(['/sign-in']);
         this.sessionService.clearStorage();
+        this.authService.setAuthenticated(false);
     }
 }
