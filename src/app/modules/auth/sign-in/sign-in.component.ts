@@ -40,6 +40,7 @@ export class AuthSignInComponent implements OnInit
           console.log(res);
           this._authService.login(JSON.stringify(res)).subscribe(
               (res:any)=>{
+                console.log(res);
                 if(res.data.user == null){
                   this.alert = {
                     type   : 'error',
@@ -50,13 +51,15 @@ export class AuthSignInComponent implements OnInit
                 this.showAlert = true;
                 }else{
                   console.log(res)
-                  this._authService.setToken(res.data.user.jwtAccessToken);
+                  this._authService.setToken(res.data.token.accessToken);
+                  this._authService.setAuthenticated(true);
                   this._authService.setUser(res.data.user);
                   this.router.navigate(['/dashboard']) 
                 }          
                 
               },
               error =>{
+                console.log(error)
                   this.alert = {
                       type   : 'error',
                       message: 'Server network issue'

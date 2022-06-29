@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { InterceptorService } from "./services/interceptor/httpInterceptor";
 import { AuthService } from "./services/auth/auth.service";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import {MatIconModule} from '@angular/material/icon';
 @NgModule({
   declarations: [
@@ -15,12 +16,14 @@ import {MatIconModule} from '@angular/material/icon';
     HttpClientModule,
     // AngularWebStorageModule,
     RouterModule,
+    MatSnackBarModule,
     MatIconModule
   ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers: [
     AuthService,
