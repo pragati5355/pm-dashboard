@@ -35,11 +35,13 @@ export class InterceptorService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    if (this.authService.getToken()) {
     request = request.clone({
       setHeaders: {
         Authorization: "Bearer " + this.authService.getToken()
       }
     });
+  }
     return next.handle(request).pipe(
       tap(
         () => {},
