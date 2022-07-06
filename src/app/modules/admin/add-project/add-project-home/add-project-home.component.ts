@@ -49,16 +49,6 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
     ];
     teamMemberList: any = [];
     filteredStates!: Observable<any[]> | undefined;
-    /**
-     * Constructor
-     * 
-     */
-     /**
-   * Constructor
-   *
-   */
-     verticalStepperForm!: FormGroup;
-  stateCtrl!: FormControl;
      get projectDetailsForm(): { [key: string]: AbstractControl } {
       return this.projectDetials.controls;
     }
@@ -106,12 +96,6 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
         this.snackBarConfig.duration = 5000;
         this.snackBarConfig.horizontalPosition = "right";
         this.snackBarConfig.verticalPosition = "bottom";
-        this.stateCtrl = new FormControl();
-        this.filteredStates = this.stateCtrl.valueChanges
-          .pipe(
-            startWith(''),
-            map(state => state ? this.filterStates(state) : this.states.slice())
-          );
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -212,13 +196,10 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
       }else if(this.selectedIndex == 3){
         this.showStep = 4
       }
-    // this.selectedIndex = $event.selectedIndex;
     }
     public selectionChange($event: any): void {
       console.log('stepper.selectedIndex: ' + this.selectedIndex 
           + '; $event.selectedIndex: ' + $event.selectedIndex);
-  
-      // if ($event.selectedIndex == 0) return; // First step is still selected
       if($event.selectedIndex == 0){
           this.showStep = 1
         }else if($event.selectedIndex == 1){
@@ -374,6 +355,7 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
         this.projectTeam.reset();
         this.teamMemberList = []
         this.settingProjectName = ""
+        this.router.navigate(['/projects/project-list']) 
         }
         else{
           this.snackBarConfig.panelClass = ["red-snackbar"];
