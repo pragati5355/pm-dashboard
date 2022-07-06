@@ -35,7 +35,8 @@ export class InterceptorService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (this.authService.getToken()) {
+    const isApiUrl = request.url.endsWith('signin')
+    if (!isApiUrl) {
     request = request.clone({
       setHeaders: {
         Authorization: "Bearer " + this.authService.getToken()
