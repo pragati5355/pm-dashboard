@@ -1,12 +1,111 @@
-<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto">
 
     <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b ng-tns-c216-1974  bg-card dark:bg-transparent"><!----><div class="text-4xl font-extrabold tracking-tight ng-tns-c216-1974">Projects</div>
     <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c216-1974">
     <button mat-flat-button="" (click)="gotoAddProject()" class="mat-focus-indicator ml-4 ng-tns-c216-1974 mat-flat-button mat-button-base mat-primary"><span class="mat-button-wrapper"><mat-icon role="img" class="mat-icon notranslate mat-icon-no-color" aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="plus" data-mat-icon-namespace="heroicons_outline"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
     </svg></mat-icon><span class="ml-2 mr-1">Add New Project</span></span><span matripple="" class="mat-ripple mat-button-ripple"></span><span class="mat-button-focus-overlay"></span></button></div>
-</div>
-<div class="items-center justify-center text-center mt-8">
-    No projects
-</div>
+    </div>
+
+    <!-- main div -->
+    <div class="flex flex-col items-center pt-12 sm:pt-18 pb-8 sm:pb-20 px-6  bg-gray-50 dark:bg-gray-800">
+        <div class="w-full max-w-7xl">
+         <!-- full width -->
+         <div><div class="text-4xl font-extrabold tracking-tight leading-tight"> Frequently asked questions </div><div class="max-w-xl mt-2 text-xl text-secondary"> Here are the most frequently asked questions you may check before getting started </div></div>
+         <!-- card -->
+         <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:gap-x-16 w-full mt-12 sm:mt-16">
+             <div>
+                <fuse-card class="flex flex-col md:flex-row max-w-80 md:max-w-160 w-full filter-testimonial">
+                    <div class="flex-0 w-80 md:w-32">
+                        <img
+                            class="w-full h-full object-cover"
+                            src="assets/images/cards/avatar-400x400.jpg"
+                            alt="Card cover image">
+                    </div>
+                    <div class="flex flex-col flex-auto m-8">
+                        <div class="text-lg italic leading-relaxed">
+                            Puzzles coffee shop is one of the finest coffee shops in central downtown in New York.
+                            It's quiet; far away from busy streets and never ending constructions.
+                        </div>
+                        <div class="text-md font-medium text-primary mt-4">
+                            &#8212; Melissa Morillo, Comtent
+                        </div>
+                    </div>
+                </fuse-card>
+             </div>
+             <div>
+                <fuse-card
+                class="flex flex-col max-w-140 w-full filter-post filter-interactive"
+                #expandableCard02="fuseCard">
+                <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
+                 
+                    <div class="flex flex-col">
+                        <span class="font-semibold leading-none">Caroline Lundu</span>
+                        <span class="text-sm text-secondary leading-none mt-1">29 minutes ago</span>
+                    </div>
+                    <!-- <button
+                        class="ml-auto -mr-4"
+                        mat-icon-button
+                        [matMenuTriggerFor]="postCardMenu02">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                    </button> -->
+                    <span  class="ml-auto -mr-4">jdsjfalkjk</span>
+                </div>
+                <div class="mx-6 sm:mx-8 mt-2 mb-6">
+                    Look at that sky! I so want to be there.. Can we arrange a trip? Is that a possibility? Please!!!
+                </div>
+
+                <div class="flex items-center my-2">
+                    <div class="max-w-12 w-full whitespace-nowrap">5 star</div>
+                    <mat-progress-bar
+                        class="my-2"
+                        [value]="87"></mat-progress-bar>
+                    <div class="max-w-10 w-full text-right">87%</div>
+                </div>
+                <hr class="border-b mx-6 sm:mx-8 mt-4 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center mx-6 sm:mx-8 mb-4 sm:mb-6">
+                    <div class="flex items-center">
+                        <img
+                            class="w-6 h-6 m-0.5 rounded-full text-card ring-2 ring-bg-card"
+                            src="assets/images/avatars/female-02.jpg"
+                            alt="Card cover image">
+                        <img
+                            class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                            src="assets/images/avatars/female-04.jpg"
+                            alt="Card cover image">
+                        <img
+                            class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                            src="assets/images/avatars/male-09.jpg"
+                            alt="Card cover image">
+                        <img
+                            class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                            src="assets/images/avatars/male-07.jpg"
+                            alt="Card cover image">
+                        <div class="text-md tracking-tight ml-3">You and 24 more liked this</div>
+                    </div>
+                    <div class="hidden sm:flex flex-auto"></div>
+                    <div class="flex items-center mt-4 sm:mt-0">
+                        <button
+                            class="px-3 mr-1 -ml-2 sm:ml-0"
+                            mat-button>
+                            4 shares
+                        </button>
+                        <button
+                            class="px-3 sm:-mr-4"
+                            mat-button
+                            >
+                            <span class="mr-1">Comments</span>
+                        </button>
+                    </div>
+                </div>
+
+   
+            </fuse-card>
+             </div>
+         </div>
+
+        </div>
+    </div>
 </div>

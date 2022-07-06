@@ -17,6 +17,9 @@ import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-p
 export class State {
   constructor(public name: string, public id: string) { }
 }
+export class JiraUser {
+  constructor(public name: string, public id: string) { }
+}
 @Component({
   selector: 'app-add-project-home',
   templateUrl: './add-project-home.component.html',
@@ -49,6 +52,7 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
     ];
     teamMemberList: any = [];
     filteredStates!: Observable<any[]> | undefined;
+    filteredJiraUsers!: Observable<any[]> | undefined;
      get projectDetailsForm(): { [key: string]: AbstractControl } {
       return this.projectDetials.controls;
     }
@@ -62,6 +66,28 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
       return this.projectTeam.controls;
     }
     states: State[] =  [
+      {
+        name: 'Sanskriti',
+        id: '2',
+    
+      },
+      {
+        name: 'Suraj',
+        id: '39',
+       
+      },
+      {
+        name: 'Vishvajit',
+        id: '20',
+       
+      },
+      {
+        name: 'Rushikesh',
+        id: '27',
+        
+      }
+    ];
+    jiraUsers: JiraUser[] =  [
       {
         name: 'Sanskriti',
         id: '2',
@@ -139,7 +165,8 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
           team_member: ['',[
             Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
           select_role: [''],
-          jira_user: [''],
+          jira_user: ['',[Validators.required,
+            Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
           
         });
         // Subscribe to media changes
@@ -164,13 +191,21 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
         startWith(''),
         map(state => state ? this.filterStates(state) : this.states.slice())
       );
+      this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges
+      .pipe(
+        startWith(''),
+        map(jiraUser => jiraUser ? this.filterJiraUsers(jiraUser) : this.jiraUsers.slice())
+      );
             // console.log(this.stepper.steps)
     }
     filterStates(name: string) {
       return this.states.filter((state: any) =>
         state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
     }
-
+    filterJiraUsers(name: string) {
+      return this.jiraUsers.filter((JiraUser: any) =>
+        JiraUser.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    }
     /**
      * On destroy
      */

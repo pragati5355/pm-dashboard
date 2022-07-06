@@ -485,21 +485,27 @@
                                           
                                                 <mat-form-field   [floatLabel]="'always'" class="w-full">
                                                     <mat-label>Jira User</mat-label>
-                                                    <mat-select
-                                                        formControlName="jira_user"
-                                                      
-                                                        type="text"
-                                                        placeholder="Jira User Name"
-                                                        required>
-                                                        <mat-option value="Admin">Sanskriti</mat-option>
-                                                        <mat-option value="Developer">Vishvajit</mat-option>
-                                                        <mat-option value="QA">surja</mat-option>
-                                                    </mat-select>
+                                                    <input 
+                                                    matInput
+                                                    type="text"
+                                                    placeholder="Jira User Name"
+                                                    maxlength="50"
+                                                    aria-label="State" [matAutocomplete]="auto"
+                                                    
+                                                    formControlName="jira_user"
+                                                    >
                                                     <mat-error *ngIf="projectTeamForm['jira_user'].errors &&
                                                     projectTeamForm['jira_user']?.invalid &&
                                                     projectTeamForm['jira_user']?.touched ">
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name is mandatory</div>
+                                                    <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
                                                     </mat-error>
+                                                    <mat-autocomplete #auto="matAutocomplete">
+                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async" [value]="jiraUser.name">
+                                                         
+                                                          <span>{{ jiraUser.name }}</span> 
+                                                        </mat-option>
+                                                      </mat-autocomplete>
                                                 </mat-form-field>
                                             </div>   
                                 </div>
