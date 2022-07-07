@@ -26,23 +26,23 @@
                 [linear]="true"
                 #verticalStepper  [selectedIndex]="this.selectedIndex" 
                 (selectionChange)="selectionChange($event)">
-                <mat-step 
+                <mat-step label="Project Details" [completed]="!projectDetials.invalid"
                   >
-                    <ng-template  matStepLabel>Project Details</ng-template>
+                  
                 </mat-step>
             
-                <mat-step
+                <mat-step label="Client Details" [completed]="!clientDetials.invalid"
                     >
-                    <ng-template matStepLabel>Client Details</ng-template>
+                 
                 </mat-step>
             
-                <mat-step
+                <mat-step label="PM Tool Settings" [completed]="!projectSetting.invalid"
                     >
-                    <ng-template matStepLabel>PM Tool Settings</ng-template>
+                   
                 </mat-step>
             
-                <mat-step>
-                    <ng-template matStepLabel>Team</ng-template>
+                <mat-step label="Team"> 
+                   
                 </mat-step>
                  </mat-vertical-stepper>
             
