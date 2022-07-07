@@ -26,18 +26,14 @@ export class JiraUser {
   templateUrl: './add-project-home.component.html',
   styleUrls: ['./add-project-home.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  host: {'window:beforeunload':'doSomething'}
 })
 export class AddProjectHomeComponent implements OnInit, OnDestroy {
-  // @HostListener("window:beforeunload", ["$event"])
-  // public onPageUnload($event: BeforeUnloadEvent) {
-  //   if (!this.canExit()) {
-  //     $event.returnValue = true;
-  //   }
-  // }
-  
+
   snackBarConfig = new MatSnackBarConfig();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
+    isAddTeam = true
     selectedIndex = 0;
     showStep = 1
     submitInProcess: boolean = false;
@@ -410,6 +406,14 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
               {
                 firstName: this.clientDetials.value.firstName,
                 lastName: this.clientDetials.value.lastName
+              },
+              {
+                firstName: this.clientDetials.value.firstName2,
+                lastName: this.clientDetials.value.lastName2
+              },
+              {
+                firstName: this.clientDetials.value.firstName3,
+                lastName: this.clientDetials.value.lastName3
               }
             ],
             baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
@@ -425,9 +429,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
             (res:any)=>{
               this.submitInProcess = false;
               console.log(res);    
-              this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
-                "sync successfully",
+                "Jira sync successfully",
                 "x",
                 this.snackBarConfig
               );     
@@ -445,7 +448,11 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
           this.ProjectService.workLog(payload2).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              console.log(res);         
+              this._snackBar.open(
+                "Work log updated successfully",
+                "x",
+                this.snackBarConfig
+              );       
             }, 
             error => {
               this.submitInProcess = false;
@@ -467,22 +474,19 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         this.router.navigate(['/projects/project-list']) 
         }
         else{
+          this.isAddTeam = false
+          console.log(this.isAddTeam)
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
             "Add team member and role",
             "x",
             this.snackBarConfig
           );
+          
         }
       }
-    }
+    }   
     goToList(){
       this.router.navigate(['/projects/project-list']) 
     }
-    // canExit(): boolean {
-    //   if (!this.projectDetials.pristine) {
-    //     return false;
-    //   }
-    //   return true;
-    // }
 }
