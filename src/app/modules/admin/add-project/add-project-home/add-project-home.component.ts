@@ -360,40 +360,11 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     createProject(){
       if (!this.projectTeam.invalid) {
         if(this.teamMemberList.length > 0){
-        let payload ={
-          projectDetails:{
-            projectName: this.projectDetials.value.projectName,
-            projectDesc: this.projectDetials.value.projectDescription
-          },
-          clientDetails: [
-            {
-              firstName: this.clientDetials.value.firstName,
-              lastName: this.clientDetials.value.lastName
-            },
-            {
-              firstName: this.clientDetials.value.firstName2,
-              lastName: this.clientDetials.value.lastName2
-            },
-            {
-              firstName: this.clientDetials.value.firstName3,
-              lastName: this.clientDetials.value.lastName3
-            }
-          ],
-          baseUrl:"https://"+ this.projectSetting.value.url+".atlassian.net",
-          adminEmail: this.projectSetting.value.email,
-          apiKey: this.projectSetting.value.token,
-          orgId: 1,
-          addedBy: 2,
-          jiraProjectKey: this.projectSetting.value.project,  
-          teamDetails:[
-            this.teamMemberList
-          ]   
-        }
-        let payload2 = 
+        let payload = 
           {
             projectDetails: {
                 
-              key: this.projectSetting.value.token,
+              key: this.projectSetting.value.project,
               name: this.projectDetials.value.projectName,
               entityId: null,
               uuid: null,
@@ -421,19 +392,40 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
             adminEmail: this.projectSetting.value.email,
             orgId: 1,
             addedBy: this.userData.userId,
-            jiraProjectKey: "MT",
+            jiraProjectKey: this.projectSetting.value.project,
             teamDetails: this.teamMemberList
           }
           this.submitInProcess = true;
-          this.ProjectService.syncJira(payload2).subscribe(
+          this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              console.log(res);    
+              console.log(res);  
+              this.snackBarConfig.panelClass = ["success-snackbar"];  
               this._snackBar.open(
                 "Jira sync successfully",
                 "x",
                 this.snackBarConfig
-              );     
+              );   
+              this.ProjectService.workLog(payload).subscribe(
+                (res:any)=>{
+                  this.submitInProcess = false;
+                  this.snackBarConfig.panelClass = ["success-snackbar"];
+                  this._snackBar.open(
+                    "Work log updated successfully",
+                    "x",
+                    this.snackBarConfig
+                  );       
+                }, 
+                error => {
+                  this.submitInProcess = false;
+                  this.snackBarConfig.panelClass = ["red-snackbar"];
+                  this._snackBar.open(
+                    "server error",
+                    "x",
+                    this.snackBarConfig
+                  );
+                }
+              )  
             }, 
             error => {
               this.submitInProcess = false;
@@ -445,26 +437,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
               );
             }
           )
-          this.ProjectService.workLog(payload2).subscribe(
-            (res:any)=>{
-              this.submitInProcess = false;
-              this._snackBar.open(
-                "Work log updated successfully",
-                "x",
-                this.snackBarConfig
-              );       
-            }, 
-            error => {
-              this.submitInProcess = false;
-              this.snackBarConfig.panelClass = ["red-snackbar"];
-              this._snackBar.open(
-                "server error",
-                "x",
-                this.snackBarConfig
-              );
-            }
-          )
-        console.log(payload)
         this.projectDetials.reset();
         this.clientDetials.reset();
         this.projectSetting.reset();
