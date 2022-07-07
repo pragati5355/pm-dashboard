@@ -19,6 +19,7 @@ export class AuthSignInComponent implements OnInit
       type   : 'success',
       message: ''
   };
+  submitInProcess: boolean = false;
   showAlert: boolean = false;
    socialUser!: SocialUser;
    isLoggedin?: boolean;
@@ -34,13 +35,15 @@ export class AuthSignInComponent implements OnInit
       });
     }
     loginWithGoogle(): void {
+      this.submitInProcess = true;
       this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
       .then(res => {
           this.showAlert = false;
           console.log(res);
           this._authService.login(JSON.stringify(res)).subscribe(
               (res:any)=>{
-                console.log(res);
+                console.log("signresponsive",res);
+                this.submitInProcess = false;
                 if(res.data.user == null){
                   this.alert = {
                     type   : 'error',
@@ -59,13 +62,12 @@ export class AuthSignInComponent implements OnInit
                 
               },
               error =>{
-                console.log(error)
+                this.submitInProcess = false;
+                console.log(error.message)
                   this.alert = {
                       type   : 'error',
                       message: 'Server network issue'
                   };
-  
-                  // Show the alert
                   this.showAlert = true;
                  
               }

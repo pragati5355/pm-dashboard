@@ -1,0 +1,55 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Choose project </div>
+        <!-- <button
+            mat-icon-button
+            (click)="saveAndClose()"
+            [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button> -->
+    </div>
+
+    <!-- Compose form -->
+    <form [formGroup]="connectJiraForm"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+        <!-- <section class="example-section" >
+            <mat-label>Project Name</mat-label>
+            <p *ngFor="let item of list"><mat-checkbox  [checked]="getSelection(item)" [color]="'primary'" (change)="changeHandler(item)" >{{item.name}}</mat-checkbox></p>
+          </section> -->
+             <!-- <div class="flex flex-col mt-8 gt-sm:mt-0 gt-sm:ml-16"> -->
+                        <span class="font-semibold mb-2">Below is the list of projects found under your Jira account. Choose a project from this list. </span>
+                        <mat-radio-group
+                        
+                            class="flex flex-col"
+                            [color]="'primary'"
+                            [(ngModel)]="project_name"
+                            formControlName="name"
+                           >
+                            <mat-radio-button
+                                class="mb-2"
+                                *ngFor="let item of list" 
+                                [value]="item.key"  >
+                                {{item.name}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    <!-- </div> -->
+          <div class="flex items-center ml-auto mt-4 sm:mt-0">
+            <!-- Send -->
+            <button
+            mat-stroked-button
+            type="button" (click)="close()">
+            Close
+        </button>
+            <button
+                class="order-first sm:order-last ml-4"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="save()">
+                Select
+            </button>
+        </div>
+    </form>
+</div>

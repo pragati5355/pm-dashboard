@@ -35,6 +35,7 @@ export const appRoutes: Routes = [
       },
       children   : [
           {path: 'dashboard', loadChildren: () => import('./modules/admin/dashboard/dashboard.module').then(m => m.DashboardModule)},
+          {path: 'projects', loadChildren: () => import('./modules/admin/project/project.module').then(m => m.ProjectModule)},
       ]
   },
   {

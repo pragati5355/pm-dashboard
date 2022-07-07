@@ -35,11 +35,14 @@ export class InterceptorService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const isApiUrl = request.url.endsWith('signin')
+    // if (!isApiUrl) {
     request = request.clone({
       setHeaders: {
         Authorization: "Bearer " + this.authService.getToken()
       }
     });
+  // }
     return next.handle(request).pipe(
       tap(
         () => {},
@@ -47,6 +50,7 @@ export class InterceptorService implements HttpInterceptor {
           if (err instanceof HttpErrorResponse) {
             console.log(err);
             if (err.status === 401) {
+              this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
                 "Token is invalid or expired.",
@@ -91,6 +95,7 @@ export class InterceptorService implements HttpInterceptor {
               );
               this.router.navigate(['/sign-in']) 
             }else if(err.status === 502){
+              this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
                 err.error.message,
@@ -106,6 +111,7 @@ export class InterceptorService implements HttpInterceptor {
                 "X",
                 this.snackBarConfig
               );
+              this.router.navigate(['/sign-in']) 
             }
           }
         }

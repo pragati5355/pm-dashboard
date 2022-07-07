@@ -69,14 +69,15 @@
                 mat-flat-button
                 [color]="'primary'"
                 (click)="loginWithGoogle()">
-                <img class="img-width" src="/assets/mbicons/google.png" alt="">
-                <span class="white-color">
+                <img  *ngIf="!submitInProcess" class="img-width" src="/assets/mbicons/google.png" alt="">
+                <span class="white-color"  *ngIf="!submitInProcess">
                     Signin with Google
                 </span>
-                <!-- <mat-progress-spinner
-                    *ngIf="signInForm.disabled"
-                    [diameter]="24"
-                    [mode]="'indeterminate'"></mat-progress-spinner> -->
+                <mat-progress-spinner
+                *ngIf="submitInProcess"
+                [diameter]="24"
+                [mode]="'indeterminate'"></mat-progress-spinner>
+
             </button>
         </div>
         </div>

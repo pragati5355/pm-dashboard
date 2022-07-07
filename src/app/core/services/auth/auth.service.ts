@@ -15,7 +15,9 @@ export class AuthService{
   login(loginObject: any) {
    return this.http.post(AppConstants['AUTH_USER_API'], loginObject);
   }
-
+  connectJira(obj: any) {
+    return this.http.post(AppConstants['CONNECT_PROJECT'], obj);
+   }
 
   setToken(accessToken: any) {
     this.storage.set("accessToken", accessToken);

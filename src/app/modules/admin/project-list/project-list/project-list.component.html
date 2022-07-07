@@ -1,0 +1,288 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+
+    <div class="relative flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
+
+        <!-- Title -->
+        <div>
+            <div class="text-4xl font-extrabold tracking-tight leading-none">Projects</div>
+ 
+        </div>
+
+        <!-- Main actions -->
+        <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+            <!-- Search -->
+            <div class="flex-auto">
+                <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                    <mat-icon
+                        class="icon-size-5"
+                        matPrefix
+                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input
+                        matInput
+                        
+                        [autocomplete]="'off'"
+                        [placeholder]="'Search by project name.. etc'">
+                </mat-form-field>
+            </div>
+            <!-- toggle button -->
+            <div class="flex items-center ml-4 p-0.5 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
+                <button
+                    class="px-6"
+                    [ngClass]="{'bg-card pointer-events-none shadow': cardList,
+                                'bg-transparent': !cardList}"
+                    mat-flat-button
+                    (click)="cardList = true"
+                    disableRipple>
+                    <mat-icon role="img" class="mat-icon notranslate icon-size-6 mat-icon-no-color" aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="view-grid" data-mat-icon-namespace="heroicons_outline"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                    </svg></mat-icon>
+                   <span class="ml-2">Card</span>
+                </button>
+                <button
+                    class="px-6"
+                    [ngClass]="{'bg-card pointer-events-none shadow': !cardList,
+                                'bg-transparent': cardList}"
+                    mat-flat-button
+                    (click)="cardList = false"
+                    disableRipple>
+                    <mat-icon role="img" class="mat-icon notranslate icon-size-6 mat-icon-no-color" aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="table" data-mat-icon-namespace="heroicons_outline"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg></mat-icon>
+                    <span class="ml-2">List</span>
+                </button>
+            </div>
+            <!-- Add contact button -->
+            <button
+                class="ml-4"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="gotoAddProject()"
+                >
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Add New Project</span>
+            </button>
+        </div>
+    </div>
+    <!-- main div -->
+
+    <div class="flex flex-col items-center  pb-8 sm:pb-20 px-6  bg-gray-50 dark:bg-gray-800 overflow-y-auto">
+        <div class="w-full max-w-7xl">
+         <!-- full width -->
+
+         <!-- card -->
+         <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:gap-x-16 w-full mt-12 sm:mt-16">
+             <div>
+                <fuse-card
+                class="flex flex-col max-w-140 w-full filter-post filter-interactive"
+                #expandableCard02="fuseCard">
+                <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
+                 
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold leading-none">Survivance Design</span>
+                    </div>
+                    <span class=" ml-auto -mr-4 inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase bg-red-200 text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500 ">
+                        <span class="leading-relaxed whitespace-nowrap">On Track</span>
+                    </span>
+                    <!-- <span  class="ml-auto -mr-4 bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary">At Risk</span> -->
+                </div>
+                <div class="mx-6 sm:mx-8 mt-2 mb-6">
+                    <span class="text-sm text-secondary leading-none mt-1">Description</span>
+                   <p>Here there will be a brief about the project, explaining for the understanding of the project.</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center mx-6 sm:mx-8  sm:mb-6">
+                    
+                    <div class="flex flex-col">
+                        <span class="text-sm text-secondary leading-none">Start Date</span>
+                        <span class=" mt-1 leading-none">Jan 21, 2022</span>
+                    </div>
+                    <div class="hidden sm:flex flex-auto"></div>
+                    <div class="flex flex-col items-center mt-4 sm:mt-0">
+                        <span class="text-sm text-secondary leading-none">Assigned to</span>
+                        <div class="flex items-center mt-1">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/female-02.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/female-04.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/male-09.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/male-07.jpg"
+                                alt="Card cover image">
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-b mx-6 sm:mx-8 mt-4 ">
+                <div class="flex flex-col mx-6 sm:mx-8 mb-6">
+                    <span class="text-sm text-secondary leading-none">Progress</span>
+                    <div class="mt-2 flex items-center ">
+                        <mat-progress-bar
+                            class="my-2"
+                            [value]="50"></mat-progress-bar>
+                        <div class="max-w-10 w-full text-right">50%</div>
+                    </div>
+                </div>
+
+
+
+   
+                </fuse-card>
+             </div>
+             <div>
+                <fuse-card
+                class="flex flex-col max-w-140 w-full filter-post filter-interactive"
+                #expandableCard02="fuseCard">
+                <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
+                 
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold leading-none">Survivance Design</span>
+                    </div>
+                    <span class=" ml-auto -mr-4 inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500">
+                        <span class="leading-relaxed whitespace-nowrap">At Risk</span>
+                    </span>
+                    <!-- <span  class="ml-auto -mr-4 bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary">At Risk</span> -->
+                </div>
+                <div class="mx-6 sm:mx-8 mt-2 mb-6">
+                    <span class="text-sm text-secondary leading-none mt-1">Description</span>
+                   <p>Here there will be a brief about the project, explaining for the understanding of the project.</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center mx-6 sm:mx-8  sm:mb-6">
+                    
+                    <div class="flex flex-col">
+                        <span class="text-sm text-secondary leading-none">Start Date</span>
+                        <span class=" mt-1 leading-none">Jan 21, 2022</span>
+                    </div>
+                    <div class="hidden sm:flex flex-auto"></div>
+                    <div class="flex flex-col items-center mt-4 sm:mt-0">
+                        <span class="text-sm text-secondary leading-none">Assigned to</span>
+                        <div class="flex items-center mt-1">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/female-02.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/female-04.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/male-09.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/male-07.jpg"
+                                alt="Card cover image">
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-b mx-6 sm:mx-8 mt-4 ">
+                <div class="flex flex-col mx-6 sm:mx-8 mb-6">
+                    <span class="text-sm text-secondary leading-none">Progress</span>
+                    <div class="mt-2 flex items-center ">
+                        <mat-progress-bar
+                            class="my-2"
+                            [value]="87"></mat-progress-bar>
+                        <div class="max-w-10 w-full text-right">87%</div>
+                    </div>
+                </div>
+                </fuse-card>
+             </div>
+             <div>
+                <fuse-card
+                class="flex flex-col max-w-140 w-full filter-post filter-interactive"
+                #expandableCard02="fuseCard">
+                <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
+                 
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold leading-none">Survivance Design</span>
+                    </div>
+                    <span class=" ml-auto -mr-4 inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500">
+                        <span class="leading-relaxed whitespace-nowrap">Off Track</span>
+                    </span>
+                    <!-- <span  class="ml-auto -mr-4 bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary">At Risk</span> -->
+                </div>
+                <div class="mx-6 sm:mx-8 mt-2 mb-6">
+                    <span class="text-sm text-secondary leading-none mt-1">Description</span>
+                   <p>Here there will be a brief about the project, explaining for the understanding of the project.</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center mx-6 sm:mx-8  sm:mb-6">
+                    
+                    <div class="flex flex-col">
+                        <span class="text-sm text-secondary leading-none">Start Date</span>
+                        <span class=" mt-1 leading-none">Jan 21, 2022</span>
+                    </div>
+                    <div class="hidden sm:flex flex-auto"></div>
+                    <div class="flex flex-col items-center mt-4 sm:mt-0">
+                        <span class="text-sm text-secondary leading-none">Assigned to</span>
+                        <div class="flex items-center mt-1">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/female-02.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/female-04.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/male-09.jpg"
+                                alt="Card cover image">
+                            <img
+                                class="w-6 h-6 m-0.5 rounded-full -ml-3 text-card ring-2 ring-bg-card"
+                                src="assets/images/avatars/male-07.jpg"
+                                alt="Card cover image">
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-b mx-6 sm:mx-8 mt-4 ">
+                <div class="flex flex-col mx-6 sm:mx-8 mb-6">
+                    <span class="text-sm text-secondary leading-none">Progress</span>
+                    <div class="mt-2 flex items-center ">
+                        <mat-progress-bar
+                            class="my-2"
+                            [value]="87"></mat-progress-bar>
+                        <div class="max-w-10 w-full text-right">87%</div>
+                    </div>
+                </div>
+                </fuse-card>
+             </div>
+             <div>
+                <fuse-card
+                class="min-h-362 flex flex-col max-w-140 w-full filter-post filter-interactive"
+                #expandableCard02="fuseCard">
+                <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
+                 
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold leading-none">Survivance Design</span>
+                    </div>
+                    <span class=" ml-auto -mr-4 inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                        <span class="leading-relaxed whitespace-nowrap">Sync In Progress</span>
+                    </span>
+                    <!-- <span  class="ml-auto -mr-4 bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary">At Risk</span> -->
+                </div>
+                <div class="mx-6 sm:mx-8 mt-2 mb-6">
+                    <span class="text-sm text-secondary leading-none mt-1">Description</span>
+                   <p>Here there will be a brief about the project, explaining for the understanding of the project.</p>
+                </div>
+                <hr class="border-b mx-6 sm:mx-8 mt-4 ">
+                <div class="mx-6 sm:mx-8 mt-2 mb-6 text-secondary text-primary dark:text-primary-500">
+                    Sync with Jira is in progress. Project details will appear here when the sync is complete.
+                </div>
+   
+                </fuse-card>
+             </div>
+         </div>
+
+        </div>
+    </div>
+</div>
