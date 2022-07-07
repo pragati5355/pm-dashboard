@@ -12,6 +12,7 @@ export const AppConstants: ConstantsInterface = {
     CONNECT_PROJECT: `${jiraBaseUrl}/project`,
     JIRA_SYNC: `${jiraBaseUrl}/issue`,
     WORK_LOG: `${jiraBaseUrl}/work-log`,
+    GET_JIRA_USER: `${jiraBaseUrl}/jira-user`,
   };
   export const ValidationConstants = {
     EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

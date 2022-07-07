@@ -15,4 +15,7 @@ export class CreateProjecteService {
    workLog(obj: any) {
     return this.http.post(AppConstants['WORK_LOG'], obj);
    }
+   getJiraUser(obj: any) {
+    return this.http.post(AppConstants['GET_JIRA_USER'], obj);
+   }
 }

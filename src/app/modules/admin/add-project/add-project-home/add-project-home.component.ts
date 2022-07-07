@@ -19,7 +19,7 @@ export class TeamMember {
   constructor(public name: string, public id: string) { }
 }
 export class JiraUser {
-  constructor(public name: string, public id: string) { }
+  constructor(public name: string, public id: string, public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
 }
 @Component({
   selector: 'app-add-project-home',
@@ -90,28 +90,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         
       }
     ];
-    jiraUsers: JiraUser[] =  [
-      {
-        name: 'Sanskriti',
-        id: '2',
-    
-      },
-      {
-        name: 'Suraj',
-        id: '39',
-       
-      },
-      {
-        name: 'Vishvajit',
-        id: '20',
-       
-      },
-      {
-        name: 'Rushikesh',
-        id: '27',
-        
-      }
-    ];
+    jiraUsers: JiraUser[] = []
     userData: any;
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,private _matStepperIntl: MatStepperIntl,
       private _formBuilder: FormBuilder,
@@ -208,9 +187,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       return this.teamMembers.filter((teamMember: any) =>
       teamMember.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
     }
-    filterJiraUsers(name: string) {
+    filterJiraUsers(displayName: string) {
       return this.jiraUsers.filter((JiraUser: any) =>
-        JiraUser.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+        JiraUser.displayName.toLowerCase().indexOf(displayName.toLowerCase()) === 0);
     }
     /**
      * On destroy
@@ -293,6 +272,34 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
               });
             }
           });
+        }else{
+          this.submitInProcess = false;
+          this.snackBarConfig.panelClass = ["red-snackbar"];
+          this._snackBar.open(
+            "Token is invalid or expired.",
+            "x",
+            this.snackBarConfig
+          );
+        }
+          
+        }, 
+        error => {
+          this.submitInProcess = false;
+          this.snackBarConfig.panelClass = ["red-snackbar"];
+          this._snackBar.open(
+            "Server error",
+            "x",
+            this.snackBarConfig
+          );
+        }
+      )
+      this.ProjectService.getJiraUser(payload).subscribe(
+        (res:any)=>{
+          this.submitInProcess = false;
+          console.log("jiraUser",res);
+          if(res.data.length>0){
+           this.jiraUsers = res.data
+
         }else{
           this.submitInProcess = false;
           this.snackBarConfig.panelClass = ["red-snackbar"];

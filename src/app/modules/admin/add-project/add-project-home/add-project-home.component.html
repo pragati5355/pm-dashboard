@@ -502,9 +502,9 @@
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
                                                     </mat-error>
                                                     <mat-autocomplete #autojiraUser="matAutocomplete">
-                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async" [value]="jiraUser.name">
+                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async" [value]="jiraUser.displayName">
                                                          
-                                                          <span>{{ jiraUser.name }}</span> 
+                                                          <span>{{ jiraUser.displayName }}</span> 
                                                         </mat-option>
                                                       </mat-autocomplete>
                                                 </mat-form-field>
