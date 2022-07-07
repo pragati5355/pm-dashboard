@@ -390,6 +390,7 @@
                                         type="text"
                                         formControlName="project"
                                         placeholder="Project Name"
+                                        (click)="send()"
                                         >
                                     </mat-form-field>
                                 <!-- </div> -->
@@ -490,7 +491,7 @@
                                                     type="text"
                                                     placeholder="Jira User Name"
                                                     maxlength="50"
-                                                    aria-label="State" [matAutocomplete]="auto"
+                                                    aria-label="JiraUser" [matAutocomplete]="autojiraUser"
                                                     
                                                     formControlName="jira_user"
                                                     >
@@ -500,7 +501,7 @@
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name is mandatory</div>
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
                                                     </mat-error>
-                                                    <mat-autocomplete #auto="matAutocomplete">
+                                                    <mat-autocomplete #autojiraUser="matAutocomplete">
                                                         <mat-option *ngFor="let jiraUser of filteredJiraUsers | async" [value]="jiraUser.name">
                                                          
                                                           <span>{{ jiraUser.name }}</span> 
@@ -520,7 +521,7 @@
                                                 type="text"
                                                 placeholder="Team Member"
                                                 maxlength="50"
-                                                aria-label="State" [matAutocomplete]="auto"
+                                                aria-label="teamMember" [matAutocomplete]="auto"
                                                 
                                                 formControlName="team_member"
                                                 >
@@ -531,9 +532,9 @@
                                                 <div *ngIf="projectTeamForm['team_member'].errors['pattern']">Enter valid team manager name</div>
                                                 </mat-error>
                                                 <mat-autocomplete #auto="matAutocomplete">
-                                                    <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+                                                    <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.name">
                                                      
-                                                      <span>{{ state.name }}</span> 
+                                                      <span>{{ teamMember.name }}</span> 
                                                     </mat-option>
                                                   </mat-autocomplete>
                                             </mat-form-field>
@@ -549,8 +550,9 @@
                                                         type="text"
                                                         placeholder="Select Role"
                                                         >
-                                                        <mat-option value="Admin">Admin</mat-option>
-                                                        <mat-option value="Developer">Developer</mat-option>
+                                                        <mat-option value="PROJECT_LEAD">Project Lead</mat-option>
+                                                        <mat-option value="FRONTEND_DEVELOPER">Frontend Developer</mat-option>
+                                                        <mat-option value="BACKEND_DEVELOPER">Backend Developer</mat-option>
                                                         <mat-option value="QA">QA</mat-option>
                                                     </mat-select>
                                                     <mat-error *ngIf="projectTeamForm['select_role'].errors &&

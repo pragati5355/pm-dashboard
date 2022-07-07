@@ -14,7 +14,7 @@ export class ProjectListComponent implements OnInit {
   @ViewChildren(FuseCardComponent, { read: ElementRef })
   private _fuseCards!: QueryList<ElementRef>;
   constructor( private router: Router) { }
-
+  cardList: boolean = true;
   ngOnInit(): void {
   }
    gotoAddProject(){

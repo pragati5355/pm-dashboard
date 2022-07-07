@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation, Injectable } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
@@ -12,9 +12,10 @@ import {startWith} from 'rxjs';
 import {map} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
+import { CreateProjecteService } from '@services/create-projecte.service';
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
-export class State {
+export class TeamMember {
   constructor(public name: string, public id: string) { }
 }
 export class JiraUser {
@@ -26,8 +27,14 @@ export class JiraUser {
   styleUrls: ['./add-project-home.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AddProjectHomeComponent implements OnInit , OnDestroy
-{   
+export class AddProjectHomeComponent implements OnInit, OnDestroy {
+  // @HostListener("window:beforeunload", ["$event"])
+  // public onPageUnload($event: BeforeUnloadEvent) {
+  //   if (!this.canExit()) {
+  //     $event.returnValue = true;
+  //   }
+  // }
+  
   snackBarConfig = new MatSnackBarConfig();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
@@ -51,7 +58,7 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
     selection = [
     ];
     teamMemberList: any = [];
-    filteredStates!: Observable<any[]> | undefined;
+    filteredTeamMembers!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;
      get projectDetailsForm(): { [key: string]: AbstractControl } {
       return this.projectDetials.controls;
@@ -65,7 +72,7 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
     get projectTeamForm(): { [key: string]: AbstractControl } {
       return this.projectTeam.controls;
     }
-    states: State[] =  [
+    teamMembers: TeamMember[] =  [
       {
         name: 'Sanskriti',
         id: '2',
@@ -109,12 +116,14 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
         
       }
     ];
+    userData: any;
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,private _matStepperIntl: MatStepperIntl,
       private _formBuilder: FormBuilder,
       private _authService: AuthService,
       private dialog: MatDialog,
       private _snackBar: MatSnackBar,
-      private router: Router
+      private router: Router,
+      private ProjectService:CreateProjecteService
       
       )
     {
@@ -133,6 +142,7 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
      */
     ngOnInit(): void
     {
+      this.userData = this._authService.getUser();
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required,
         Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
@@ -186,10 +196,10 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
                     this.drawerOpened = false;
                 }
             });
-                this.filteredStates = this.projectTeam.get('team_member')?.valueChanges
+                this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
       .pipe(
         startWith(''),
-        map(state => state ? this.filterStates(state) : this.states.slice())
+        map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.teamMembers.slice())
       );
       this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges
       .pipe(
@@ -198,9 +208,9 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
       );
             // console.log(this.stepper.steps)
     }
-    filterStates(name: string) {
-      return this.states.filter((state: any) =>
-        state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    filterTeamMembers(name: string) {
+      return this.teamMembers.filter((teamMember: any) =>
+      teamMember.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
     }
     filterJiraUsers(name: string) {
       return this.jiraUsers.filter((JiraUser: any) =>
@@ -302,7 +312,7 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
           this.submitInProcess = false;
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
-            "server error",
+            "Server error",
             "x",
             this.snackBarConfig
           );
@@ -383,6 +393,70 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
             this.teamMemberList
           ]   
         }
+        let payload2 = 
+          {
+            projectDetails: {
+                
+              key: this.projectSetting.value.token,
+              name: this.projectDetials.value.projectName,
+              entityId: null,
+              uuid: null,
+              orgId: null,
+              private: false,
+              id: "10000"
+                  
+            },
+            clientDetails: [
+              {
+                firstName: this.clientDetials.value.firstName,
+                lastName: this.clientDetials.value.lastName
+              }
+            ],
+            baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
+            apiKey:  this.projectSetting.value.token,
+            adminEmail: this.projectSetting.value.email,
+            orgId: 1,
+            addedBy: this.userData.userId,
+            jiraProjectKey: "MT",
+            teamDetails: this.teamMemberList
+          }
+          this.submitInProcess = true;
+          this.ProjectService.syncJira(payload2).subscribe(
+            (res:any)=>{
+              this.submitInProcess = false;
+              console.log(res);    
+              this.snackBarConfig.panelClass = ["red-snackbar"];
+              this._snackBar.open(
+                "sync successfully",
+                "x",
+                this.snackBarConfig
+              );     
+            }, 
+            error => {
+              this.submitInProcess = false;
+              this.snackBarConfig.panelClass = ["red-snackbar"];
+              this._snackBar.open(
+                "server error",
+                "x",
+                this.snackBarConfig
+              );
+            }
+          )
+          this.ProjectService.workLog(payload2).subscribe(
+            (res:any)=>{
+              this.submitInProcess = false;
+              console.log(res);         
+            }, 
+            error => {
+              this.submitInProcess = false;
+              this.snackBarConfig.panelClass = ["red-snackbar"];
+              this._snackBar.open(
+                "server error",
+                "x",
+                this.snackBarConfig
+              );
+            }
+          )
         console.log(payload)
         this.projectDetials.reset();
         this.clientDetials.reset();
@@ -405,4 +479,10 @@ export class AddProjectHomeComponent implements OnInit , OnDestroy
     goToList(){
       this.router.navigate(['/projects/project-list']) 
     }
+    // canExit(): boolean {
+    //   if (!this.projectDetials.pristine) {
+    //     return false;
+    //   }
+    //   return true;
+    // }
 }
