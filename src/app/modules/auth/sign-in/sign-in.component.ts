@@ -57,7 +57,7 @@ export class AuthSignInComponent implements OnInit
                   this._authService.setToken(res.data.token.accessToken);
                   this._authService.setAuthenticated(true);
                   this._authService.setUser(res.data.user);
-                  this.router.navigate(['/dashboard']) 
+                  this.router.navigate(['/projects']) 
                 }          
                 
               },
