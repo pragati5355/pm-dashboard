@@ -26,23 +26,23 @@
                 [linear]="true"
                 #verticalStepper  [selectedIndex]="this.selectedIndex" 
                 (selectionChange)="selectionChange($event)">
-                <mat-step 
+                <mat-step label="Project Details" [completed]="!projectDetials.invalid"
                   >
-                    <ng-template  matStepLabel>Project Details</ng-template>
+                  
                 </mat-step>
             
-                <mat-step
+                <mat-step label="Client Details" [completed]="!clientDetials.invalid"
                     >
-                    <ng-template matStepLabel>Client Details</ng-template>
+                 
                 </mat-step>
             
-                <mat-step
+                <mat-step label="PM Tool Settings" [completed]="!projectSetting.invalid"
                     >
-                    <ng-template matStepLabel>PM Tool Settings</ng-template>
+                   
                 </mat-step>
             
-                <mat-step>
-                    <ng-template matStepLabel>Team</ng-template>
+                <mat-step label="Team"> 
+                   
                 </mat-step>
                  </mat-vertical-stepper>
             
@@ -502,9 +502,9 @@
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
                                                     </mat-error>
                                                     <mat-autocomplete #autojiraUser="matAutocomplete">
-                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async" [value]="jiraUser.name">
+                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async" [value]="jiraUser.displayName">
                                                          
-                                                          <span>{{ jiraUser.name }}</span> 
+                                                          <span>{{ jiraUser.displayName }}</span> 
                                                         </mat-option>
                                                       </mat-autocomplete>
                                                 </mat-form-field>
@@ -538,7 +538,6 @@
                                                     </mat-option>
                                                   </mat-autocomplete>
                                             </mat-form-field>
-                                     
                                         </div>
                                         <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
                                           

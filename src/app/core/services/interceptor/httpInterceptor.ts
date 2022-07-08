@@ -28,7 +28,7 @@ export class InterceptorService implements HttpInterceptor {
         // // material snackbar config
         this.snackBarConfig.duration = 5000;
         this.snackBarConfig.horizontalPosition = "right";
-        this.snackBarConfig.verticalPosition = "top";
+        this.snackBarConfig.verticalPosition = "bottom";
   }
 
   intercept(
