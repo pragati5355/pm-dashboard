@@ -53,6 +53,12 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     settingProjectName = ""
     selection = [
     ];
+    selectRoleList= [
+      {value: 'PROJECT_LEAD', viewValue: 'Project Lead'},
+      {value: 'FRONTEND_DEVELOPER', viewValue: 'Frontend Developer'},
+      {value: 'BACKEND_DEVELOPER', viewValue: 'Beckend Developer'},
+      {value: 'QUALITY_ASSURANCE', viewValue: 'Quality assurance'}
+    ];
     teamMemberList: any = [];
     filteredTeamMembers!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;

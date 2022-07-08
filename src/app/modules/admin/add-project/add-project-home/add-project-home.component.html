@@ -549,10 +549,9 @@
                                                         type="text"
                                                         placeholder="Select Role"
                                                         >
-                                                        <mat-option value="PROJECT_LEAD">Project Lead</mat-option>
-                                                        <mat-option value="FRONTEND_DEVELOPER">Frontend Developer</mat-option>
-                                                        <mat-option value="BACKEND_DEVELOPER">Backend Developer</mat-option>
-                                                        <mat-option value="QA">QA</mat-option>
+                                                        <mat-option *ngFor="let role of selectRoleList" [value]="role.value" >
+                                                            {{ role.viewValue }}
+                                                        </mat-option>
                                                     </mat-select>
                                                     <mat-error *ngIf="projectTeamForm['select_role'].errors &&
                                                     projectTeamForm['select_role']?.invalid &&
@@ -602,7 +601,11 @@
 
                                                             <!-- Name -->
                                                             <div class="truncate">
-                                                                {{teamMember.select_role}}
+                                                                <div *ngFor="let role of selectRoleList" >
+                                                                    <div *ngIf="role.value == teamMember.select_role">
+                                                                            {{role.viewValue}}
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
 
