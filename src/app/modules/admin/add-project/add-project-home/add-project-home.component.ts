@@ -18,6 +18,9 @@ import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-p
 export class TeamMember {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public technology: any ) { }
 }
+export class ManagerList {
+  constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public technology: any ) { }
+}
 export class JiraUser {
   constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
 }
@@ -66,6 +69,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     ];
     teamMemberList: any = [];
     filteredTeamMembers!: Observable<any[]> | undefined;
+    filteredManagerLists!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;
     filteredTeamJiraUsers!: Observable<any[]> | undefined;
      get projectDetailsForm(): { [key: string]: AbstractControl } {
@@ -81,6 +85,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       return this.projectTeam.controls;
     }
     teamMembers: TeamMember[] =  [];
+    managerLists: TeamMember[] =  [];
     selectedJiraUser: any =[]
     jiraUsers: JiraUser[] = []
     jiraTeamUsers: JiraTeamUser[] = []
@@ -168,12 +173,17 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
                     this.drawerOpened = false;
                 }
             });
-                this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
+        this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
       .pipe(
         startWith(''),
         map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.teamMembers.slice())
       );
-      this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges 
+      this.filteredManagerLists = this.projectTeam.get('team_member')?.valueChanges
+      .pipe(
+        startWith(''),
+        map(managerList => managerList ? this.filterManagerLists(managerList) : this.managerLists.slice())
+      );
+      this.filteredJiraUsers = this.projectTeam.get('project_manager')?.valueChanges 
       .pipe(
         startWith(''),
         map(jiraUser => jiraUser ? this.filterJiraUsers(jiraUser) : this.filterJiraUsersSlice())
@@ -187,6 +197,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     filterTeamMembers(email: string) {
       return this.teamMembers.filter((teamMember: any) =>
       teamMember.email.toLowerCase().indexOf(email.toLowerCase()) === 0);
+    }
+    filterManagerLists(name: string) {
+      return this.managerLists.filter((ManagerList: any) =>
+      ManagerList.email.toLowerCase().indexOf(name.toLowerCase()) === 0);
     }
     filterJiraUsers(displayName: string) {
       return this.jiraUsers.filter((JiraUser: any) =>
@@ -531,6 +545,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
                 this.submitInProcess = false;
                 console.log("teamMember",res);
                 this.teamMembers = res.data.memeberList
+                this.managerLists = res.data.memeberList
                 // this.selectedJiraUser = [  ...this.selectedJiraUser, selectedValue]
               //   if(res.data.length > 0){
               //   //  this.teamMemberList = res.data

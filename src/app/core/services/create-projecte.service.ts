@@ -19,6 +19,6 @@ export class CreateProjecteService {
     return this.http.post(AppConstants['GET_JIRA_USER'], obj);
    }
    getTeamMember(obj: any) {
-    return this.http.post('https://cu1azpqty2.execute-api.ap-south-1.amazonaws.com/get-team-member', obj);
+    return this.http.post(AppConstants['GET_TEAM_MEMBER_LIST'], obj);
    }
 }

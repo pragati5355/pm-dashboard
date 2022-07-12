@@ -466,6 +466,7 @@
                                                 type="text"
                                                 placeholder="Project Lead/Manager"
                                                 formControlName="project_manager"
+                                                aria-label="managerList" [matAutocomplete]="autoManagerList"
                                                 maxlength="50"
                                                 matInput
                                                     >
@@ -475,6 +476,12 @@
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['required']">Poject manager name is mandatory</div>
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['pattern']">Enter valid project manager name</div>
                                                     </mat-error>
+                                                    <mat-autocomplete #autoManagerList="matAutocomplete" >
+                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async" [value]="managerList.firstName">
+            
+                                                        <span>{{ managerList.firstName }}</span> 
+                                                        </mat-option>
+                                                        </mat-autocomplete>
                                                 </mat-form-field>
                                             </div>
                                             <div class=" w-full sm:w-90 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">                                         
