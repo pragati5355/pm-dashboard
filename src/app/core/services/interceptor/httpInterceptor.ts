@@ -86,14 +86,12 @@ export class InterceptorService implements HttpInterceptor {
               );
               this.router.navigate(['/sign-in']) 
             }else if(err.status === 500){
-              this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
-                err.error.message,
+                "Internal Server Error",
                 "X",
                 this.snackBarConfig
               );
-              this.router.navigate(['/sign-in']) 
             }else if(err.status === 502){
               this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];

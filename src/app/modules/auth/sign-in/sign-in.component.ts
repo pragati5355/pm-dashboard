@@ -55,6 +55,7 @@ export class AuthSignInComponent implements OnInit
                 }else{
                   console.log(res)
                   this._authService.setToken(res.data.token.accessToken);
+                  this._authService.setRefreshToken(res.data.token.refreshToken);
                   this._authService.setAuthenticated(true);
                   this._authService.setUser(res.data.user);
                   this.router.navigate(['/projects']) 
