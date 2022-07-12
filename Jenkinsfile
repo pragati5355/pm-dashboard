@@ -5,17 +5,17 @@ slack_token_cred_id ='slack-Integration-Token-Credential-ID'
 
 dev_bucket_name= 'dev.dashboard.metrics.com'
 dev_cloudfront_id= 'E3THFBQ0TPMRHQ'
-dev_portal_url= 'https://dljmungqb9yx1.cloudfront.net'
+dev_portal_url= 'https://dashboard.dev.mindbowser.com/'
 dev_bucket_region= 'ap-south-1'
 
 stage_bucket_name= 'staging.dashboard.metrics.com'
 stage_cloudfront_id= 'E15JF2C54J5DGX'
-stage_portal_url= 'https://d1usw3ci0562fl.cloudfront.net'
+stage_portal_url= 'https://dashboard.stage.mindbowser.com/'
 stage_bucket_region= 'ap-south-1'
 
 prod_bucket_name= 'dashboard.metrics.com'
 prod_cloudfront_id= 'EMUTLD1CK2B71'
-prod_portal_url= 'https://d14bwrywig6z9e.cloudfront.net'
+prod_portal_url= 'https://dashboard.mindbowser.com/'
 prod_bucket_region= 'ap-south-1'
 
 
@@ -82,7 +82,7 @@ pipeline{
                    slack_send("Development: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${dev_bucket_region}" ) {
                    s3Upload(bucket:"${dev_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400')
-                  //  s3Upload(bucket:"${dev_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400')
+                   s3Upload(bucket:"${dev_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/jpeg', cacheControl:'public,max-age=86400')
                    slack_send("Development: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${dev_cloudfront_id}", paths:['/*'], waitForCompletion: true)
                    slack_send("Development: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${dev_portal_url}")
@@ -100,7 +100,7 @@ pipeline{
                    slack_send("Staging: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${stage_bucket_region}" ) {
                    s3Upload(bucket:"${stage_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400', acl:'PublicRead')
-                   s3Upload(bucket:"${stage_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400', acl:'PublicRead')
+                   s3Upload(bucket:"${stage_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/jpeg', cacheControl:'public,max-age=86400', acl:'PublicRead')
                    slack_send("Staging: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${stage_cloudfront_ID}", paths:['/*'], waitForCompletion: true)
                    slack_send("Staging: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${stage_portal_url}")
@@ -118,7 +118,7 @@ pipeline{
                     slack_send("Production: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${prod_bucket_region}" ) {
                    s3Upload(bucket:"${production_bucket_name}", includePathPattern:'**/*', workingDir:"${build_directory}",excludePathPattern:'**/*.svg,**/*.jpg', cacheControl:'public,max-age=86400', acl:'PublicRead')
-                   s3Upload(bucket:"${production_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/svg+xml', cacheControl:'public,max-age=86400', acl:'PublicRead')
+                   s3Upload(bucket:"${production_bucket_name}", includePathPattern:'**/*.svg,**/*.jpg', workingDir:"${build_directory}", contentType:'image/jpeg', cacheControl:'public,max-age=86400', acl:'PublicRead')
                    slack_send("Production: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${production_cloudfront_ID}", paths:['/*'], waitForCompletion: true)
                    slack_send("Production: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${production_URL}")
