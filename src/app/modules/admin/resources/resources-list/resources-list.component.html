@@ -34,13 +34,6 @@
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Add Resource</span>
             </button>
-            <!-- <button
-            mat-icon-button
-            [matMenuTriggerFor]="listCard07Menu">
-            <mat-icon
-                class="icon-size-5"
-                [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-        </button> -->
         <mat-menu #listCard07Menu="matMenu">
             <button (click)="gotoAddResources()" mat-menu-item>Single Upload</button>
             <button mat-menu-item>CSV Upload</button>
@@ -53,7 +46,6 @@
 
         <!-- Products list -->
         <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
-            <!-- <ng-container *ngIf="(resources | async) as resources"> -->
                 <ng-container *ngIf="resources.length > 0; else noProducts">
                     <div class="grid" *ngIf="resources.length > 0">
                         <!-- Header -->
@@ -84,7 +76,6 @@
                             </div>
                         </div>
                         <!-- Rows -->
-                        <!-- <ng-container *ngIf="(resources | async) as resources"> -->
                             <ng-container *ngFor="let resources of resources">
                                 <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
@@ -111,22 +102,13 @@
 
                                     <!-- Active -->
                                     <div class="hidden sm:block">
-                                        <!-- <ng-container *ngIf="product.active">
-                                            <mat-icon
-                                                class="text-green-400 icon-size-5"
-                                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
-                                        </ng-container> -->
-                                        <!-- <ng-container *ngIf="!product.active"> -->
                                                 <mat-icon class="text-gray-400 icon-size-5" svgIcon="heroicons_outline:pencil"></mat-icon>
                                                 <mat-icon class="ml-4 text-gray-400 icon-size-5" svgIcon="heroicons_outline:trash"></mat-icon>
-                                        <!-- </ng-container> -->
                                     </div>
                                 </div>    
                             </ng-container>
-                        <!-- </ng-container> -->
                     </div>
                 </ng-container>
-            <!-- </ng-container> -->
 
 
             <ng-template #noProducts>
