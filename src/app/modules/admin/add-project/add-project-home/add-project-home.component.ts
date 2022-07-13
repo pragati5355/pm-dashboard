@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation, HostListene
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
+import { StaticData } from "../../../../core/constacts/static";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import {MatStepper} from '@angular/material/stepper';
@@ -16,10 +17,10 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
 export class TeamMember {
-  constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public technology: any ) { }
+  constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
 export class ManagerList {
-  constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public technology: any ) { }
+  constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
 export class JiraUser {
   constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
@@ -40,6 +41,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
     selectJiraUser = ""
+    selectManager= ""
     teamJiraUser=false
     isAddTeam = true
     selectedIndex = 0;
@@ -61,12 +63,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     settingProjectName = ""
     selection = [
     ];
-    selectRoleList= [
-      {value: 'PROJECT_LEAD', viewValue: 'Project Lead'},
-      {value: 'FRONTEND_DEVELOPER', viewValue: 'Frontend Developer'},
-      {value: 'BACKEND_DEVELOPER', viewValue: 'Beckend Developer'},
-      {value: 'QUALITY_ASSURANCE', viewValue: 'Quality assurance'}
-    ];
+    selectRoleList= StaticData.ROLE_LIST
     teamMemberList: any = [];
     filteredTeamMembers!: Observable<any[]> | undefined;
     filteredManagerLists!: Observable<any[]> | undefined;
@@ -85,8 +82,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       return this.projectTeam.controls;
     }
     teamMembers: TeamMember[] =  [];
-    managerLists: TeamMember[] =  [];
+    managerLists: ManagerList[] =  [];
     selectedJiraUser: any =[]
+    selectedTeamMember: any = []
     jiraUsers: JiraUser[] = []
     jiraTeamUsers: JiraTeamUser[] = []
     userData: any;
@@ -176,14 +174,14 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
       .pipe(
         startWith(''),
-        map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.teamMembers.slice())
+        map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
       );
-      this.filteredManagerLists = this.projectTeam.get('team_member')?.valueChanges
+      this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
       .pipe(
         startWith(''),
-        map(managerList => managerList ? this.filterManagerLists(managerList) : this.managerLists.slice())
+        map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
       );
-      this.filteredJiraUsers = this.projectTeam.get('project_manager')?.valueChanges 
+      this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges 
       .pipe(
         startWith(''),
         map(jiraUser => jiraUser ? this.filterJiraUsers(jiraUser) : this.filterJiraUsersSlice())
@@ -194,13 +192,21 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         map(jiraTeamUser => jiraTeamUser ? this.filterTeamJiraUsers(jiraTeamUser) : this.filterTeamJiraUsersSlice())
       );
     }
-    filterTeamMembers(email: string) {
+    filterTeamMembers(firstName: string) {
       return this.teamMembers.filter((teamMember: any) =>
-      teamMember.email.toLowerCase().indexOf(email.toLowerCase()) === 0);
+      teamMember.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.firstName) &&  teamMember.firstName !== this.projectTeam.value.project_manager);
     }
-    filterManagerLists(name: string) {
+    filterTeamMemberSlice() {
+      console.log(this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  TeamMember.firstName !== this.projectTeam.value.project_manager))
+      return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  TeamMember.firstName !== this.projectTeam.value.project_manager)
+    }
+    filterManagerLists(firstName: string) {
       return this.managerLists.filter((ManagerList: any) =>
-      ManagerList.email.toLowerCase().indexOf(name.toLowerCase()) === 0);
+      ManagerList.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager);
+    }
+    filterManagerListsSlice() {
+      console.log(this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName) && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager))
+      return this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName) && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager)
     }
     filterJiraUsers(displayName: string) {
       return this.jiraUsers.filter((JiraUser: any) =>
@@ -305,44 +311,52 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
                 this.jiraTeamUsers = res.data
             }else{
               this.submitInProcess = false;
+              if(res.data.error){
+                this.snackBarConfig.panelClass = ["red-snackbar"];
+                this._snackBar.open(
+                  res.data.error,
+                  "x",
+                  this.snackBarConfig
+                );
+              }
+             else{
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
                 "Jira user not found",
                 "x",
                 this.snackBarConfig
               );
+             }
             }
               
             }, 
             error => {
               this.submitInProcess = false;
-              this.snackBarConfig.panelClass = ["red-snackbar"];
-              this._snackBar.open(
-                "Server error",
-                "x",
-                this.snackBarConfig
-              );
             }
           )
         }else{
           this.submitInProcess = false;
+          if(res.data.error){
+            this.snackBarConfig.panelClass = ["red-snackbar"];
+            this._snackBar.open(
+              res.data.error,
+              "x",
+              this.snackBarConfig
+            );
+          }
+         else{
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
             "Jira user not found",
             "x",
             this.snackBarConfig
           );
+         }
         }
           
         }, 
         error => {
           this.submitInProcess = false;
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Server error",
-            "x",
-            this.snackBarConfig
-          );
         }
       )
 
@@ -373,7 +387,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
           }
         ];
         this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user]
-        console.log(this.selectedJiraUser)
+        this.selectedTeamMember = [  ...this.selectedTeamMember, this.projectTeam.value.team_member]
+        console.log(this.selectedTeamMember)
         this.projectTeam.controls["team_member"].reset();
         this.projectTeam.controls["select_role"].reset();
         this.projectTeam.controls["team_jira_user"].reset();
@@ -429,7 +444,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       console.log(this.teamMemberList);
       if (!this.projectTeam.invalid) {
         if(this.teamMemberList.length > 0){
-          let payload2 = 
+          let payload = 
           {
             projectDetails: {
               name: this.projectDetials.value.projectName,
@@ -450,44 +465,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
             jiraProjectKey: this.projectSetting.value.project,
             teamDetails: this.teamMemberList
           }
-          console.log(payload2)
-        let payload = 
-          {
-            projectDetails: {
-                
-              key: this.projectSetting.value.project,
-              name: this.projectDetials.value.projectName,
-              entityId: null,
-              uuid: null,
-              orgId: null,
-              private: false,
-              id: "10000"
-                  
-            },
-            clientDetails: [
-              {
-                firstName: this.clientDetials.value.firstName,
-                lastName: this.clientDetials.value.lastName
-              },
-              // {
-              //   firstName: this.clientDetials.value.firstName2,
-              //   lastName: this.clientDetials.value.lastName2
-              // },
-              // {
-              //   firstName: this.clientDetials.value.firstName3,
-              //   lastName: this.clientDetials.value.lastName3
-              // }
-            ],
-            baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
-            apiKey:  this.projectSetting.value.token,
-            adminEmail: this.projectSetting.value.email,
-            orgId: 1,
-            addedBy: this.userData.userId,
-            jiraProjectKey: this.projectSetting.value.project,
-            teamDetails: this.teamMemberList
-          }
+          console.log(payload)
           this.submitInProcess = true;
-          this.ProjectService.syncJira(payload2).subscribe(
+          this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
               console.log(res);  
@@ -533,32 +513,12 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       this.router.navigate(['/projects/project-list']) 
     }
     getTeamMember(){
-      let payload = {
-        "perPageData":1,
-        "totalPerPageData":4,
-        "technlogyName":"",
-        "firstName":"",
-        "lastName":""}
-            // console.log(this.stepper.steps)
-            this.ProjectService.getTeamMember(payload).subscribe(
+            this.ProjectService.getTeamMember().subscribe(
               (res:any)=>{
                 this.submitInProcess = false;
                 console.log("teamMember",res);
-                this.teamMembers = res.data.memeberList
-                this.managerLists = res.data.memeberList
-                // this.selectedJiraUser = [  ...this.selectedJiraUser, selectedValue]
-              //   if(res.data.length > 0){
-              //   //  this.teamMemberList = res.data
-      
-              // }else{
-              //   this.submitInProcess = false;
-              //   this.snackBarConfig.panelClass = ["red-snackbar"];
-              //   this._snackBar.open(
-              //     "Token is invalid or expired.",
-              //     "x",
-              //     this.snackBarConfig
-              //   );
-              // }
+                this.teamMembers = res.data
+                this.managerLists = res.data
                 
               }, 
               error => {
@@ -573,12 +533,26 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
             )
     }
     
-selectedOption(event: any) {
+selectedJiraUserOption(event: any) {
   const selectedValue = event.option.value;
       this.filteredTeamJiraUsers = this.projectTeam.get('team_jira_user')?.valueChanges
       .pipe(
         startWith(''),
         map(jiraTeamUser => jiraTeamUser ? this.filterTeamJiraUsers(jiraTeamUser) : this.filterTeamJiraUsersSlice())
       );
+   }
+   selectedManagerOption(event: any){
+     console.log("hello")
+     const selectedValue = event.option.value;
+     this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
+     .pipe(
+       startWith(''),
+       map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
+     );
+     this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
+     .pipe(
+       startWith(''),
+       map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
+     );
    }
 }

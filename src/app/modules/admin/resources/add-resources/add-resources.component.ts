@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
+import { StaticData } from "../../../../core/constacts/static";
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
@@ -17,12 +18,7 @@ export class AddResourcesComponent implements OnInit {
   get resourcesValidForm(): { [key: string]: AbstractControl } {
     return this.resourcesForm.controls;
   }
-  selectTeamList= [
-    {value: 'PROJECT_LEAD', viewValue: 'Project Lead'},
-    {value: 'FRONTEND_DEVELOPER', viewValue: 'Frontend Developer'},
-    {value: 'BACKEND_DEVELOPER', viewValue: 'Beckend Developer'},
-    {value: 'QUALITY_ASSURANCE', viewValue: 'Quality assurance'}
-  ];
+  selectTeamList= StaticData.ROLE_LIST
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
   technologyCtrl = new FormControl('');

@@ -11,6 +11,7 @@ import {SessionService} from "@services/auth/session.service"
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
+import { ErrorMessage } from '../../constacts/constacts';
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { LocalStorageService } from "angular-web-storage";
 @Injectable({
@@ -88,7 +89,7 @@ export class InterceptorService implements HttpInterceptor {
             }else if(err.status === 500){
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
-                "Internal Server Error",
+                ErrorMessage['ERROR_FIVE_HUNDRED'],
                 "X",
                 this.snackBarConfig
               );

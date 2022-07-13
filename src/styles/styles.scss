@@ -1,88 +1,29 @@
-
+@import "styles/overidefuse.scss";
 *{
-    font-family: 'Inter var';
-    font-weight: 100 900;
-    font-display: swap;
-    font-style: normal;
-    font-named-instance: 'Regular';
+  font-family: 'Inter var';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  font-named-instance: 'Regular';
 }
 .min-h-362{
-  min-height: 362px;
+min-height: 362px;
 }
 .min-h-313{
-  min-height: 313px;
+min-height: 313px;
 }
 .ml--4{
-    margin-left: -4px !important;
+  margin-left: -4px !important;
 }
 .mt-25p{
-  margin-top: 25px;
+margin-top: 25px;
 }
 .mt--3{
-  margin-top: -3px !important;
+margin-top: -3px !important;
 }
 .mt-8p{
-  margin-top: 8px;
+margin-top: 8px;
 }
 .lh-2{
-  line-height: 2 !important;
-}
-.mat-simple-snackbar {
-  font-size: 16px !important;
-  align-items: normal !important;
-}
-.mat-snack-bar-container {
-  color: white !important;
-  background: #4f46e5 !important;
-  margin: 0px 40px 30px 0px !important;
-  padding: 16px !important;
-}
-
-.red-snackbar {
-  background: #de3b3b !important;
-}
-.success-snackbar {
-  background: #4f46e5 !important;
-}
-.mat-simple-snackbar-action {
-  color: white !important;
-  font-size: 16px !important;
-}
-.cursor-pointer{
-  cursor: pointer;
-}
-.pr-sidebar{
-    .mat-vertical-content{
-        padding: 0!important;
-    }
-    .mat-step-icon-selected{
-        background-color: #64748b !important;
-    }
-    .mat-step-icon-state-edit{
-        background-color: #64748b !important;
-    }
-    .mat-step-header .mat-step-icon-selected{
-        // background-color: $primary;
-        // background-color: #64748b !important;
-        color: white;
-        +.mat-step-label{
-          color: #4f46e5  !important;
-        }
-      }
-
-      .mat-step-header .cdk-program-foucused, .mat-step-header:hover:not([aria-disabled]){
-        background-color: transparent !important;
-      }
-      .mat-step-header:focus{
-        background-color: transparent !important;
-      }
-
-}
-.mat-input-element:disabled{
-  color: black !important;
-}
-.chip-input{
-  .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix{
-    display: grid !important;
-  }
+line-height: 2 !important;
 }

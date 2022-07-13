@@ -476,8 +476,8 @@
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['required']">Poject manager name is mandatory</div>
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['pattern']">Enter valid project manager name</div>
                                                     </mat-error>
-                                                    <mat-autocomplete #autoManagerList="matAutocomplete" >
-                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async" [value]="managerList.firstName">
+                                                    <mat-autocomplete #autoManagerList="matAutocomplete" (optionSelected)="selectedManagerOption($event)">
+                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList.firstName">
             
                                                         <span>{{ managerList.firstName }}</span> 
                                                         </mat-option>
@@ -502,7 +502,7 @@
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name is mandatory</div>
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
                                                     </mat-error>
-                                                    <mat-autocomplete #autojiraUser="matAutocomplete" (optionSelected)="selectedOption($event)">
+                                                    <mat-autocomplete #autojiraUser="matAutocomplete" (optionSelected)="selectedJiraUserOption($event)">
                                                         <mat-option *ngFor="let jiraUser of filteredJiraUsers | async, let i=index" [value]="jiraUser.displayName">
                                                          
                                                           <span>{{ jiraUser.displayName }}</span> 
@@ -586,9 +586,6 @@
                                             </mat-option>
                                             </mat-autocomplete>
                                             </mat-form-field>
-                                            <!-- <div class="text-sm mat-error ng-tns-c115-16 ng-star-inserted" *ngIf="teamJiraUser">
-                                                <div class="ng-star-inserted">Jira User name is mandatory</div>
-                                            </div>   -->
                                             </div> 
                                         </div>    
                                             <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
