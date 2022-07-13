@@ -1,4 +1,4 @@
-import { environment } from "../../../environments/environment";
+
   export const StaticData = {
     ROLE_LIST: [
         {value: 'PROJECT_LEAD', viewValue: 'Project Lead'},
