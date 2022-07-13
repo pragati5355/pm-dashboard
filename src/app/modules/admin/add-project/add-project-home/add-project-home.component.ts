@@ -114,6 +114,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void
     {
+      this.getTeamMember()
       this.userData = this._authService.getUser();
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required,
