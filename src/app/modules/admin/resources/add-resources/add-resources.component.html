@@ -116,13 +116,14 @@
                                         type="text"
                                         placeholder="Year"
                                         formControlName="year"
-                                        maxlength="50"
+                                        maxlength="2"
                                         matInput
                                             >
                                             <mat-error *ngIf="resourcesValidForm['year'].errors &&
                                             resourcesValidForm['year']?.invalid &&
                                             resourcesValidForm['year']?.touched ">
                                             <div *ngIf="resourcesValidForm['year'].errors['required']">Year is mandatory</div>
+                                            <div *ngIf="resourcesValidForm['year'].errors['pattern']">Enter valid Year </div>
                                             </mat-error>
                                         </mat-form-field>
                                     </div>  
@@ -135,13 +136,14 @@
                                             type="text"
                                             placeholder="Month"
                                             formControlName="month"
-                                            maxlength="50"
+                                            maxlength="2"
                                             matInput
                                                 >
                                                 <mat-error *ngIf="resourcesValidForm['month'].errors &&
                                                 resourcesValidForm['month']?.invalid &&
                                                 resourcesValidForm['month']?.touched ">
                                                 <div *ngIf="resourcesValidForm['month'].errors['required']">Month is mandatory</div>
+                                                <div *ngIf="resourcesValidForm['month'].errors['pattern']">Enter valid month </div>
                                                 </mat-error>
                                             </mat-form-field>
                                         </div>  

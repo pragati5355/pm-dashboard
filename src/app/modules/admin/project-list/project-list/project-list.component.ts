@@ -28,8 +28,14 @@ export class ProjectListComponent implements OnInit {
     this.router.navigate(['/projects/add-project']) 
    }
    getProject(){
+   let payload = {
+      "perPageData":1,
+      "totalPerPageData":4,
+      "projectKey":"",
+      "projectName":""
+      }
     this.initialLoading = true;
-    this.ProjectService.getProjectDetails().subscribe(
+    this.ProjectService.getProjectDetails(payload).subscribe(
       (res:any)=>{
         this.initialLoading = false;
         console.log(res);

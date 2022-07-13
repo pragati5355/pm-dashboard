@@ -42,7 +42,7 @@ export class ConnectJiraPopupComponent implements OnInit
     {
         // Create the form
         this.connectJiraForm = this._formBuilder.group({
-          name: ['BL',[Validators.required]],
+          name: ['',[Validators.required]],
         });
         this.list = this.data.projectList
         this.project_name = this.data.settingProjectName
@@ -110,11 +110,12 @@ export class ConnectJiraPopupComponent implements OnInit
   
     save() {
       // this.matDialogRef.close();
-     
+      if (!this.connectJiraForm.invalid) {
       console.log( this.connectJiraForm.value.name);
       this.matDialogRef.close({
         project: this.connectJiraForm.value.name
       });
+    }
       console.log(this.project_name);
     }
     close(){

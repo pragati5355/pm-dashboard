@@ -21,6 +21,7 @@ export const AppConstants: ConstantsInterface = {
   export const ValidationConstants = {
     EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     NAME_VALIDATION: "^[a-zA-Z-',]+(s{0,1}[a-zA-Z-', ]){0,30}([a-zA-Z, ]){1,30}$",
+    YEAR_VALIDATION: "^[0-9]",
   };
   export const ErrorMessage = {
     ERROR_FIVE_HUNDRED: "Internal Server Error"

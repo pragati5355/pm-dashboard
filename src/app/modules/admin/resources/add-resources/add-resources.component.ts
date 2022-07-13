@@ -48,8 +48,8 @@ export class AddResourcesComponent implements OnInit {
           Validators.pattern(ValidationConstants.EMAIL_VALIDATION)]],
       team: ['',[
         Validators.required]],
-      year: [''],
-      month: [''],
+      year: ['',[Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
+      month: ['',[Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
       technologyCtrl: ['',[Validators.required,
         Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
       
