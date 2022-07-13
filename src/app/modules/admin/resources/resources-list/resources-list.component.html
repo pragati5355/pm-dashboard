@@ -34,6 +34,7 @@
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Add Resource</span>
             </button>
+
         <mat-menu #listCard07Menu="matMenu">
             <button (click)="gotoAddResources()" mat-menu-item>Single Upload</button>
             <button mat-menu-item>CSV Upload</button>
@@ -46,6 +47,7 @@
 
         <!-- Products list -->
         <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <!-- <ng-container *ngIf="(resources | async) as resources"> -->
                 <ng-container *ngIf="resources.length > 0; else noProducts">
                     <div class="grid" *ngIf="resources.length > 0">
                         <!-- Header -->
@@ -76,6 +78,7 @@
                             </div>
                         </div>
                         <!-- Rows -->
+                        <!-- <ng-container *ngIf="(resources | async) as resources"> -->
                             <ng-container *ngFor="let resources of resources">
                                 <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
@@ -109,6 +112,7 @@
                             </ng-container>
                     </div>
                 </ng-container>
+            <!-- </ng-container> -->
 
 
             <ng-template #noProducts>
