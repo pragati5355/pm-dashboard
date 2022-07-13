@@ -82,7 +82,8 @@ pipeline{
                    slack_send("Development: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${dev_bucket_region}" ) {
                    sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*.svg' --exclude '*.jpg' --cache-control 'public,max-age=86400'"
-                   sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*' --include '*.svg' --include '*.jpg' --content-type 'image/svg+xml' --cache-control 'public,max-age=86400'"
+                   sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*' --include '*.jpg' --content-type 'image/jpeg' --cache-control 'public,max-age=86400'"
+                   sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*' --include '*.svg' --content-type 'image/svg+xml' --cache-control 'public,max-age=86400'"
                    slack_send("Development: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${dev_cloudfront_id}", paths:['/*'], waitForCompletion: true)
                    slack_send("Development: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${dev_portal_url}")
@@ -100,7 +101,8 @@ pipeline{
                    slack_send("Staging: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${stage_bucket_region}" ) {
                    sh "aws s3 sync ${build_directory} s3://${stage_bucket_name}  --delete --exclude '*.svg' --exclude '*.jpg' --cache-control 'public,max-age=86400'"
-                   sh "aws s3 sync ${build_directory} s3://${stage_bucket_name}  --delete --exclude '*' --include '*.svg' --include '*.jpg' --content-type 'image/svg+xml' --cache-control 'public,max-age=86400'"
+                   sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*' --include '*.jpg' --content-type 'image/jpeg' --cache-control 'public,max-age=86400'"
+                   sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*' --include '*.svg' --content-type 'image/svg+xml' --cache-control 'public,max-age=86400'"
                    slack_send("Staging: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${stage_cloudfront_ID}", paths:['/*'], waitForCompletion: true)
                    slack_send("Staging: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${stage_portal_url}")
@@ -118,7 +120,8 @@ pipeline{
                     slack_send("Production: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${prod_bucket_region}" ) {
                    sh "aws s3 sync ${build_directory} s3://${prod_bucket_region}  --delete --exclude '*.svg' --exclude '*.jpg' --cache-control 'public,max-age=86400'"
-                   sh "aws s3 sync ${build_directory} s3://${prod_bucket_region}  --delete --exclude '*' --include '*.svg' --include '*.jpg' --content-type 'image/svg+xml' --cache-control 'public,max-age=86400'"
+                   sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*' --include '*.jpg' --content-type 'image/jpeg' --cache-control 'public,max-age=86400'"
+                   sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*' --include '*.svg' --content-type 'image/svg+xml' --cache-control 'public,max-age=86400'"
                    slack_send("Production: Invalidating  Cloudfront. :cloudfront: ")
                    cfInvalidate(distribution:"${prod_cloudfront_ID}", paths:['/*'], waitForCompletion: true)
                    slack_send("Production: Deployed sucessfully. :heavy_check_mark: \nWeb URL: ${prod_portal_url}")
