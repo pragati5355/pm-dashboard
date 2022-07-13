@@ -11,6 +11,7 @@ import {SessionService} from "@services/auth/session.service"
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
+import { ErrorMessage } from '../../constacts/constacts';
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { LocalStorageService } from "angular-web-storage";
 @Injectable({
@@ -86,14 +87,12 @@ export class InterceptorService implements HttpInterceptor {
               );
               this.router.navigate(['/sign-in']) 
             }else if(err.status === 500){
-              this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
-                err.error.message,
+                ErrorMessage['ERROR_FIVE_HUNDRED'],
                 "X",
                 this.snackBarConfig
               );
-              this.router.navigate(['/sign-in']) 
             }else if(err.status === 502){
               this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];

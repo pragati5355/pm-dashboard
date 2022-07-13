@@ -1,11 +1,6 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
     <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
         <!-- Loader -->
-        <!-- <div
-            class="absolute inset-x-0 bottom-0"
-            *ngIf="isLoading">
-            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
-        </div> -->
         <!-- Title -->
         <div class="text-4xl font-extrabold tracking-tight">Add New Project</div>
     
@@ -70,7 +65,7 @@
                     <!-- Header -->
                     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     
-                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+                        <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
                             <form  [formGroup]="projectDetials" 
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
                             >
@@ -149,7 +144,7 @@
                         
                         <!-- main section -->
                     
-                        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+                        <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
                             <form [formGroup]="clientDetials"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
                     
                                 <!-- Section -->
@@ -451,7 +446,7 @@
                      
                      <!-- main section -->
                 
-                     <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
                         <form [formGroup]="projectTeam" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
                 
                             <!-- Section -->
@@ -459,9 +454,9 @@
                                 <h2 class="text-3xl font-semibold tracking-tight leading-8">Team</h2>
                             </div>
                             <!-- <div class="grid grid-cols-4 gap-6 w-full "> -->
-                                <div class=" flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
                     
-                                        <div class=" w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                                        <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
                                             <mat-form-field class="w-full  "
                                           
                                             [floatLabel]="'always'"
@@ -471,6 +466,7 @@
                                                 type="text"
                                                 placeholder="Project Lead/Manager"
                                                 formControlName="project_manager"
+                                                aria-label="managerList" [matAutocomplete]="autoManagerList"
                                                 maxlength="50"
                                                 matInput
                                                     >
@@ -480,19 +476,24 @@
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['required']">Poject manager name is mandatory</div>
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['pattern']">Enter valid project manager name</div>
                                                     </mat-error>
+                                                    <mat-autocomplete #autoManagerList="matAutocomplete" (optionSelected)="selectedManagerOption($event)">
+                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList.firstName">
+            
+                                                        <span>{{ managerList.firstName }}</span> 
+                                                        </mat-option>
+                                                        </mat-autocomplete>
                                                 </mat-form-field>
                                             </div>
-                                            <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
-                                          
+                                            <div class=" w-full sm:w-90 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">                                         
                                                 <mat-form-field   [floatLabel]="'always'" class="w-full">
-                                                    <mat-label>Jira User</mat-label>
+                                                    <mat-label>Map Jira Username</mat-label>
                                                     <input 
                                                     matInput
                                                     type="text"
                                                     placeholder="Jira User Name"
                                                     maxlength="50"
-                                                    aria-label="JiraUser" [matAutocomplete]="autojiraUser"
                                                     
+                                                    aria-label="JiraUser" [matAutocomplete]="autojiraUser"
                                                     formControlName="jira_user"
                                                     >
                                                     <mat-error *ngIf="projectTeamForm['jira_user'].errors &&
@@ -501,8 +502,8 @@
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name is mandatory</div>
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
                                                     </mat-error>
-                                                    <mat-autocomplete #autojiraUser="matAutocomplete">
-                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async" [value]="jiraUser.displayName">
+                                                    <mat-autocomplete #autojiraUser="matAutocomplete" (optionSelected)="selectedJiraUserOption($event)">
+                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async, let i=index" [value]="jiraUser.displayName">
                                                          
                                                           <span>{{ jiraUser.displayName }}</span> 
                                                         </mat-option>
@@ -510,57 +511,83 @@
                                                 </mat-form-field>
                                             </div>   
                                 </div>
-                                <div class=" flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-                            
-                                    <div class=" w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                                        <mat-form-field class="w-full"
-                                        [floatLabel]="'always'">
+                                <div class="  flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                        <div class="sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                            <div class=" w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                                            <mat-form-field class="w-full"
+                                            [floatLabel]="'always'">
                                             <mat-label>Team Member</mat-label>
                                             <input 
-                                                matInput
-                                                type="text"
-                                                placeholder="Team Member"
-                                                maxlength="50"
-                                                aria-label="teamMember" [matAutocomplete]="auto"
-                                                
-                                                formControlName="team_member"
-                                                >
-                                                <mat-error *ngIf="projectTeamForm['team_member'].errors &&
-                                                projectTeamForm['team_member']?.invalid &&
-                                                projectTeamForm['team_member']?.touched ">
-                                                <div *ngIf="projectTeamForm['team_member'].errors['required']">Team manager name is mandatory</div>
-                                                <div *ngIf="projectTeamForm['team_member'].errors['pattern']">Enter valid team manager name</div>
-                                                </mat-error>
-                                                <mat-autocomplete #auto="matAutocomplete">
-                                                    <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.name">
-                                                     
-                                                      <span>{{ teamMember.name }}</span> 
-                                                    </mat-option>
-                                                  </mat-autocomplete>
+                                            matInput
+                                            type="text"
+                                            placeholder="Team Member"
+                                            maxlength="50"
+                                            aria-label="teamMember" [matAutocomplete]="auto"
+                                            formControlName="team_member"
+                                            >
+                                            <mat-error *ngIf="projectTeamForm['team_member'].errors &&
+                                            projectTeamForm['team_member']?.invalid &&
+                                            projectTeamForm['team_member']?.touched ">
+                                            <div *ngIf="projectTeamForm['team_member'].errors['required']">Team manager name is mandatory</div>
+                                            <div *ngIf="projectTeamForm['team_member'].errors['pattern']">Enter valid team manager name</div>
+                                            </mat-error>
+                                            <mat-autocomplete #auto="matAutocomplete" >
+                                            <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.firstName">
+
+                                            <span>{{ teamMember.firstName }}</span> 
+                                            </mat-option>
+                                            </mat-autocomplete>
                                             </mat-form-field>
-                                        </div>
-                                        <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
-                                          
-                                                <mat-form-field   [floatLabel]="'always'" class="w-full">
-                                                    <mat-label>Select Role</mat-label>
-                                                    <mat-select
-                                                        formControlName="select_role"
-                                                      
-                                                        type="text"
-                                                        placeholder="Select Role"
-                                                        >
-                                                        <mat-option value="PROJECT_LEAD">Project Lead</mat-option>
-                                                        <mat-option value="FRONTEND_DEVELOPER">Frontend Developer</mat-option>
-                                                        <mat-option value="BACKEND_DEVELOPER">Backend Developer</mat-option>
-                                                        <mat-option value="QA">QA</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="projectTeamForm['select_role'].errors &&
-                                                    projectTeamForm['select_role']?.invalid &&
-                                                    projectTeamForm['select_role']?.touched ">
-                                                    <div *ngIf="projectTeamForm['select_role'].errors['required']">Role is mandatory</div>
-                                                    </mat-error>
-                                                </mat-form-field>
                                             </div>
+                                            <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+
+                                            <mat-form-field   [floatLabel]="'always'" class="w-full">
+                                            <mat-label>Select Role</mat-label>
+                                            <mat-select
+                                            formControlName="select_role"
+
+                                            type="text"
+                                            placeholder="Select Role"
+                                            >
+                                            <mat-option *ngFor="let role of selectRoleList" [value]="role.value" >
+                                            {{ role.viewValue }}
+                                            </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="projectTeamForm['select_role'].errors &&
+                                            projectTeamForm['select_role']?.invalid &&
+                                            projectTeamForm['select_role']?.touched ">
+                                            <div *ngIf="projectTeamForm['select_role'].errors['required']">Role is mandatory</div>
+                                            </mat-error>
+                                            </mat-form-field>
+                                            </div>
+                                            <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">                                         
+                                            <mat-form-field   [floatLabel]="'always'" class="w-full">
+                                            <mat-label>Map Jira Username</mat-label>
+                                            <input 
+                                            matInput
+                                            type="text"
+                                            placeholder="Jira User Name"
+                                            maxlength="50"
+                                            aria-label="JiraTeamUser" [matAutocomplete]="autojiraTeamUser"
+
+                                            formControlName="team_jira_user"
+                                            >
+                                            <mat-error *ngIf="projectTeamForm['team_jira_user'].errors &&
+                                            projectTeamForm['team_jira_user']?.invalid &&
+                                            projectTeamForm['team_jira_user']?.touched ">
+                                            <div *ngIf="projectTeamForm['team_jira_user'].errors['required']">Jira User name is mandatory</div>
+                                            <div *ngIf="projectTeamForm['team_jira_user'].errors['pattern']">Enter valid user name</div>
+                                            </mat-error>  
+                                            
+                                            <mat-autocomplete #autojiraTeamUser="matAutocomplete" >
+                                            <mat-option *ngFor="let jiraTeamUser of filteredTeamJiraUsers | async" [value]="jiraTeamUser.displayName">
+
+                                            <span>{{ jiraTeamUser.displayName }}</span> 
+                                            </mat-option>
+                                            </mat-autocomplete>
+                                            </mat-form-field>
+                                            </div> 
+                                        </div>    
                                             <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
                                               <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">Add</span>
                                              </div>
@@ -582,6 +609,7 @@
                                                         Team Member
                                                     </div>
                                                     <div>Role</div>
+                                                    <div>Jira Username</div>
                                                     <div
                                                         >
                                                         Active
@@ -597,15 +625,21 @@
                                                             <!-- <div class="flex flex-col sm:flex-row flex-0 col-span-3 sm:col-span-3 sm:items-center sm:justify-between"> -->
                                                             <!-- SKU -->
                                                             <div class="hidden md:block truncate">
-                                                                {{teamMember.team_member}}
+                                                                {{teamMember.name}}
                                                             </div>
 
                                                             <!-- Name -->
                                                             <div class="truncate">
-                                                                {{teamMember.select_role}}
+                                                                <div *ngFor="let role of selectRoleList" >
+                                                                    <div *ngIf="role.value == teamMember.role">
+                                                                            {{role.viewValue}}
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
-
+                                                            <div class="hidden md:block truncate">
+                                                                {{teamMember.jiraUser}}
+                                                            </div>
                                                             <!-- Active -->
                                                             <div class="hidden lg:block">
                                                                 <ng-container >

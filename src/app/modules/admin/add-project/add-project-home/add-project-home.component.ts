@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation, HostListene
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
+import { StaticData } from "../../../../core/constacts/static";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import {MatStepper} from '@angular/material/stepper';
@@ -16,10 +17,16 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
 export class TeamMember {
-  constructor(public name: string, public id: string) { }
+  constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
+}
+export class ManagerList {
+  constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
 export class JiraUser {
-  constructor(public name: string, public id: string, public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
+  constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
+}
+export class JiraTeamUser {
+  constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
 }
 @Component({
   selector: 'app-add-project-home',
@@ -33,6 +40,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
   snackBarConfig = new MatSnackBarConfig();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
+    selectJiraUser = ""
+    selectManager= ""
+    teamJiraUser=false
     isAddTeam = true
     selectedIndex = 0;
     showStep = 1
@@ -53,9 +63,12 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     settingProjectName = ""
     selection = [
     ];
+    selectRoleList= StaticData.ROLE_LIST
     teamMemberList: any = [];
     filteredTeamMembers!: Observable<any[]> | undefined;
+    filteredManagerLists!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;
+    filteredTeamJiraUsers!: Observable<any[]> | undefined;
      get projectDetailsForm(): { [key: string]: AbstractControl } {
       return this.projectDetials.controls;
     }
@@ -68,30 +81,14 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     get projectTeamForm(): { [key: string]: AbstractControl } {
       return this.projectTeam.controls;
     }
-    teamMembers: TeamMember[] =  [
-      {
-        name: 'Sanskriti',
-        id: '2',
-    
-      },
-      {
-        name: 'Suraj',
-        id: '39',
-       
-      },
-      {
-        name: 'Vishvajit',
-        id: '20',
-       
-      },
-      {
-        name: 'Rushikesh',
-        id: '27',
-        
-      }
-    ];
+    teamMembers: TeamMember[] =  [];
+    managerLists: ManagerList[] =  [];
+    selectedJiraUser: any =[]
+    selectedTeamMember: any = []
     jiraUsers: JiraUser[] = []
+    jiraTeamUsers: JiraTeamUser[] = []
     userData: any;
+    clientDtailsList: any = []
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,private _matStepperIntl: MatStepperIntl,
       private _formBuilder: FormBuilder,
       private _authService: AuthService,
@@ -117,6 +114,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void
     {
+      this.getTeamMember()
       this.userData = this._authService.getUser();
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required,
@@ -147,10 +145,12 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         this.projectTeam = this._formBuilder.group({
           project_manager: ['',[Validators.required,
             Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
+            jira_user: ['',[Validators.required,
+              Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
           team_member: ['',[
             Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
           select_role: [''],
-          jira_user: ['',[Validators.required,
+          team_jira_user: ['',[
             Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
           
         });
@@ -171,26 +171,59 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
                     this.drawerOpened = false;
                 }
             });
-                this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
+        this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
       .pipe(
         startWith(''),
-        map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.teamMembers.slice())
+        map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
       );
-      this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges
+      this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
       .pipe(
         startWith(''),
-        map(jiraUser => jiraUser ? this.filterJiraUsers(jiraUser) : this.jiraUsers.slice())
+        map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
       );
-            // console.log(this.stepper.steps)
+      this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges 
+      .pipe(
+        startWith(''),
+        map(jiraUser => jiraUser ? this.filterJiraUsers(jiraUser) : this.filterJiraUsersSlice())
+      );
+      this.filteredTeamJiraUsers = this.projectTeam.get('team_jira_user')?.valueChanges
+      .pipe(
+        startWith(''),
+        map(jiraTeamUser => jiraTeamUser ? this.filterTeamJiraUsers(jiraTeamUser) : this.filterTeamJiraUsersSlice())
+      );
     }
-    filterTeamMembers(name: string) {
+    filterTeamMembers(firstName: string) {
       return this.teamMembers.filter((teamMember: any) =>
-      teamMember.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+      teamMember.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.firstName) &&  teamMember.firstName !== this.projectTeam.value.project_manager);
+    }
+    filterTeamMemberSlice() {
+      console.log(this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  TeamMember.firstName !== this.projectTeam.value.project_manager))
+      return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  TeamMember.firstName !== this.projectTeam.value.project_manager)
+    }
+    filterManagerLists(firstName: string) {
+      return this.managerLists.filter((ManagerList: any) =>
+      ManagerList.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager);
+    }
+    filterManagerListsSlice() {
+      console.log(this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName) && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager))
+      return this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName) && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager)
     }
     filterJiraUsers(displayName: string) {
       return this.jiraUsers.filter((JiraUser: any) =>
-        JiraUser.displayName.toLowerCase().indexOf(displayName.toLowerCase()) === 0);
+        JiraUser.displayName.toLowerCase().indexOf(displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.displayName));
     }
+    filterJiraUsersSlice() {
+      return this.jiraUsers.filter(JiraUser => !this.selectedJiraUser.includes(JiraUser.displayName) && !this.selectedJiraUser.includes(JiraUser.displayName))
+    }
+    filterTeamJiraUsers(displayName: string) {
+
+      return this.jiraTeamUsers.filter((JiraTeamUser: any) =>
+        JiraTeamUser.displayName.toLowerCase().indexOf(displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user);
+    }
+    filterTeamJiraUsersSlice() {
+      return this.jiraTeamUsers.filter(JiraTeamUser => !this.selectedJiraUser.includes(JiraTeamUser.displayName) && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user)
+    }
+    /*
     /**
      * On destroy
      */
@@ -214,12 +247,11 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       }else if(this.selectedIndex == 2){
         this.showStep = 3
       }else if(this.selectedIndex == 3){
+        this.getTeamMember()
         this.showStep = 4
       }
     }
     public selectionChange($event: any): void {
-      console.log('stepper.selectedIndex: ' + this.selectedIndex 
-          + '; $event.selectedIndex: ' + $event.selectedIndex);
       if($event.selectedIndex == 0){
           this.showStep = 1
         }else if($event.selectedIndex == 1){
@@ -227,13 +259,12 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         }else if($event.selectedIndex == 2){
           this.showStep = 3
         }else if($event.selectedIndex == 3){
+          this.getTeamMember()
           this.showStep = 4
         }
       this.selectedIndex = $event.selectedIndex;
     }
     public goto(index: number): void {
-      console.log('stepper.selectedIndex: ' + this.selectedIndex 
-          + '; goto index: ' + index);
       if (index == 0) return; // First step is not selected anymore -ok
       
       this.selectedIndex = index;
@@ -252,9 +283,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       
       this._authService.connectJira(payload).subscribe(
         (res:any)=>{
-          this.submitInProcess = false;
+          // this.submitInProcess = false;
           console.log(res);
-          if(res.data.length>0){
+        if(res.data.length>0){
           const dialogRef = this.dialog.open(ConnectJiraPopupComponent, {
             disableClose: true,
             panelClass:"warn-dialog-content",
@@ -272,74 +303,95 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
               });
             }
           });
+          this.ProjectService.getJiraUser(payload).subscribe(
+            (res:any)=>{
+              this.submitInProcess = false;
+              if(res.data.length>0){
+               this.jiraUsers = res.data
+                this.jiraTeamUsers = res.data
+            }else{
+              this.submitInProcess = false;
+              if(res.data.error){
+                this.snackBarConfig.panelClass = ["red-snackbar"];
+                this._snackBar.open(
+                  res.data.error,
+                  "x",
+                  this.snackBarConfig
+                );
+              }
+             else{
+              this.snackBarConfig.panelClass = ["red-snackbar"];
+              this._snackBar.open(
+                "Jira user not found",
+                "x",
+                this.snackBarConfig
+              );
+             }
+            }
+              
+            }, 
+            error => {
+              this.submitInProcess = false;
+            }
+          )
         }else{
           this.submitInProcess = false;
+          if(res.data.error){
+            this.snackBarConfig.panelClass = ["red-snackbar"];
+            this._snackBar.open(
+              res.data.error,
+              "x",
+              this.snackBarConfig
+            );
+          }
+         else{
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
-            "Token is invalid or expired.",
+            "Jira user not found",
             "x",
             this.snackBarConfig
           );
+         }
         }
           
         }, 
         error => {
           this.submitInProcess = false;
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Server error",
-            "x",
-            this.snackBarConfig
-          );
         }
       )
-      this.ProjectService.getJiraUser(payload).subscribe(
-        (res:any)=>{
-          this.submitInProcess = false;
-          console.log("jiraUser",res);
-          if(res.data.length>0){
-           this.jiraUsers = res.data
 
-        }else{
-          this.submitInProcess = false;
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Token is invalid or expired.",
-            "x",
-            this.snackBarConfig
-          );
-        }
-          
-        }, 
-        error => {
-          this.submitInProcess = false;
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Server error",
-            "x",
-            this.snackBarConfig
-          );
-        }
-      )
       }
 
     }
     addTeamMember() {
       console.log( this.projectTeam.value.team_member)
       if (
+        !this.projectTeam.value.team_jira_user
+      ) {
+
+        this.teamJiraUser =true
+      }
+      if (
         this.projectTeam.value.team_member &&
-        this.projectTeam.value.select_role
+        this.projectTeam.value.select_role &&
+        this.projectTeam.value.team_jira_user
       ) {
         this.teamMemberList = [
           ...this.teamMemberList,
           {
-            team_member: this.projectTeam.value
+            name: this.projectTeam.value
               .team_member,
-            select_role: this.projectTeam.value.select_role
+            role: this.projectTeam.value.select_role,
+            jiraUser: this.projectTeam.value.team_jira_user,
+            isManager: false
           }
         ];
+        this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user]
+        this.selectedTeamMember = [  ...this.selectedTeamMember, this.projectTeam.value.team_member]
+        console.log(this.selectedTeamMember)
         this.projectTeam.controls["team_member"].reset();
         this.projectTeam.controls["select_role"].reset();
+        this.projectTeam.controls["team_jira_user"].reset();
         console.log(this.teamMemberList)
       }
     }
@@ -356,6 +408,21 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     submitProjectClientDetails(){
       if (!this.clientDetials.invalid) {
                this.selectedIndex = 2
+               this.clientDtailsList  = [
+                {
+                  firstName: this.clientDetials.value.firstName,
+                  lastName: this.clientDetials.value.lastName
+                },
+                {
+                  firstName: this.clientDetials.value.firstName2,
+                  lastName: this.clientDetials.value.lastName2
+                },
+                {
+                  firstName: this.clientDetials.value.firstName3,
+                  lastName: this.clientDetials.value.lastName3
+                }
+              ]
+              this.clientDtailsList = this.clientDtailsList.filter((item: any) => item.firstName !== '' || item.lastName !== '' )
       }
     }
     submitProjectSetting(){
@@ -365,35 +432,31 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       console.log(this.projectSetting.value.project)
     }
     createProject(){
+      this.teamMemberList = [
+        ...this.teamMemberList,
+        {
+          name: this.projectTeam.value.project_manager ,
+          role: "MANAGER",
+          jiraUser: this.projectTeam.value.jira_user,
+          isManager: true
+        }
+      ];
+      console.log(this.teamMemberList);
       if (!this.projectTeam.invalid) {
         if(this.teamMemberList.length > 0){
-        let payload = 
+          let payload = 
           {
             projectDetails: {
-                
-              key: this.projectSetting.value.project,
               name: this.projectDetials.value.projectName,
+              description: this.projectDetials.value.projectDescription,
+              key: this.projectSetting.value.project,
               entityId: null,
               uuid: null,
               orgId: null,
               private: false,
               id: "10000"
-                  
             },
-            clientDetails: [
-              {
-                firstName: this.clientDetials.value.firstName,
-                lastName: this.clientDetials.value.lastName
-              },
-              {
-                firstName: this.clientDetials.value.firstName2,
-                lastName: this.clientDetials.value.lastName2
-              },
-              {
-                firstName: this.clientDetials.value.firstName3,
-                lastName: this.clientDetials.value.lastName3
-              }
-            ],
+            clientDetails: this.clientDtailsList,
             baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
             apiKey:  this.projectSetting.value.token,
             adminEmail: this.projectSetting.value.email,
@@ -402,6 +465,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
             jiraProjectKey: this.projectSetting.value.project,
             teamDetails: this.teamMemberList
           }
+          console.log(payload)
           this.submitInProcess = true;
           this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
@@ -412,27 +476,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
                 "Jira sync successfully",
                 "x",
                 this.snackBarConfig
-              );   
-              this.ProjectService.workLog(payload).subscribe(
-                (res:any)=>{
-                  this.submitInProcess = false;
-                  this.snackBarConfig.panelClass = ["success-snackbar"];
-                  this._snackBar.open(
-                    "Work log updated successfully",
-                    "x",
-                    this.snackBarConfig
-                  );       
-                }, 
-                error => {
-                  this.submitInProcess = false;
-                  this.snackBarConfig.panelClass = ["red-snackbar"];
-                  this._snackBar.open(
-                    "server error",
-                    "x",
-                    this.snackBarConfig
-                  );
-                }
-              )  
+              );    
             }, 
             error => {
               this.submitInProcess = false;
@@ -468,4 +512,47 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     goToList(){
       this.router.navigate(['/projects/project-list']) 
     }
+    getTeamMember(){
+            this.ProjectService.getTeamMember().subscribe(
+              (res:any)=>{
+                this.submitInProcess = false;
+                console.log("teamMember",res);
+                this.teamMembers = res.data
+                this.managerLists = res.data
+                
+              }, 
+              error => {
+                this.submitInProcess = false;
+                this.snackBarConfig.panelClass = ["red-snackbar"];
+                this._snackBar.open(
+                  "Server error",
+                  "x",
+                  this.snackBarConfig
+                );
+              }
+            )
+    }
+    
+selectedJiraUserOption(event: any) {
+  const selectedValue = event.option.value;
+      this.filteredTeamJiraUsers = this.projectTeam.get('team_jira_user')?.valueChanges
+      .pipe(
+        startWith(''),
+        map(jiraTeamUser => jiraTeamUser ? this.filterTeamJiraUsers(jiraTeamUser) : this.filterTeamJiraUsersSlice())
+      );
+   }
+   selectedManagerOption(event: any){
+     console.log("hello")
+     const selectedValue = event.option.value;
+     this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
+     .pipe(
+       startWith(''),
+       map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
+     );
+     this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
+     .pipe(
+       startWith(''),
+       map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
+     );
+   }
 }
