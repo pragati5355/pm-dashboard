@@ -16,7 +16,7 @@ export class ResourcesListComponent implements OnInit {
 
   technologyLIst: string[] = ['ALL','JAVA', 'Angular', 'Python', 'HTML'];
   expriences: string[] = [
-    '0 t0 1',
+    '0 - 1',
     '1+',
     '2+',
     '3+',
