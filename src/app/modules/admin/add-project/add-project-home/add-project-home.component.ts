@@ -473,7 +473,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
               console.log(res);  
               this.snackBarConfig.panelClass = ["success-snackbar"];  
               this._snackBar.open(
-                "Jira sync successfully",
+                "Project created successfully",
                 "x",
                 this.snackBarConfig
               );    

@@ -21,7 +21,7 @@ export class CreateProjecteService {
    getTeamMember() {
     return this.http.get(AppConstants['GET_TEAM_MEMBER_LIST']);
    }
-   getProjectDetails() {
-    return this.http.get(AppConstants['GET_PROJECTS']);
+   getProjectDetails(obj:any) {
+    return this.http.post(AppConstants['GET_PROJECTS'], obj);
    }
 }

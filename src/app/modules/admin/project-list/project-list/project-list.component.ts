@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AfterViewInit, ChangeDetectionStrategy, ElementRef, QueryList, Renderer2, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { FuseCardComponent } from '@fuse/components/card';
+import { SessionService } from "@services/auth/session.service";
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
@@ -17,7 +18,8 @@ export class ProjectListComponent implements OnInit {
   initialLoading = false;
   private _fuseCards!: QueryList<ElementRef>;
   constructor( private router: Router, private _authService: AuthService,
-    private ProjectService:CreateProjecteService) { }
+    private ProjectService:CreateProjecteService,
+    private sessionService: SessionService,) { }
   cardList: boolean = true;
   ngOnInit(
     
@@ -28,8 +30,14 @@ export class ProjectListComponent implements OnInit {
     this.router.navigate(['/projects/add-project']) 
    }
    getProject(){
+   let payload = {
+      "perPageData":1,
+      "totalPerPageData":4,
+      "projectKey":"",
+      "projectName":""
+      }
     this.initialLoading = true;
-    this.ProjectService.getProjectDetails().subscribe(
+    this.ProjectService.getProjectDetails(payload).subscribe(
       (res:any)=>{
         this.initialLoading = false;
         console.log(res);
@@ -37,12 +45,6 @@ export class ProjectListComponent implements OnInit {
       }, 
       error => {
         this.initialLoading = false;
-        // this.snackBarConfig.panelClass = ["red-snackbar"];
-        // this._snackBar.open(
-        //   "Server error",
-        //   "x",
-        //   this.snackBarConfig
-        // );
       }
     )
    }

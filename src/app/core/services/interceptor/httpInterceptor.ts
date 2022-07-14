@@ -37,6 +37,14 @@ export class InterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const isApiUrl = request.url.endsWith('signin')
+    const isupdateUrl = request.url.endsWith('get-access-token')
+    if(isupdateUrl){
+      request = request.clone({
+        setHeaders: {
+          Authorization: "Bearer " + this.authService.getRefreshToken()
+        }
+      });
+    }else{
     // if (!isApiUrl) {
     request = request.clone({
       setHeaders: {
@@ -44,6 +52,7 @@ export class InterceptorService implements HttpInterceptor {
       }
     });
   // }
+    }
     return next.handle(request).pipe(
       tap(
         () => {},

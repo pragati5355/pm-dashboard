@@ -1,7 +1,7 @@
 <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
 
     <!-- Header -->
-    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+    <div class="relative flex flex-col sm:flex-row md:flex-col  justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
         <!-- Loader -->
         <div
             class="absolute inset-x-0 bottom-0"
@@ -9,21 +9,43 @@
             <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
         </div>
         <!-- Title -->
-        <div class="text-4xl font-extrabold tracking-tight">Resources</div>
+        <div class="text-4xl font-extrabold tracking-tight leading-none">Resources</div>
         <!-- Actions -->
-        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+        <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
             <!-- Search -->
-            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
-                <mat-icon
-                    class="icon-size-5"
-                    matPrefix
-                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                <input
-                    matInput
-                   
-                    [autocomplete]="'off'"
-                    [placeholder]="'Search for resources'">
-            </mat-form-field>
+            <div class="flex-auto">
+                <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                    <mat-icon
+                        class="icon-size-5"
+                        matPrefix
+                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input
+                        matInput
+                        
+                        [autocomplete]="'off'"
+                        [placeholder]="'Search for resources'">
+                </mat-form-field>
+            </div>
+            <!-- toggle button -->
+                <mat-form-field class=" ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                    <mat-select [formControl]="technologys" [placeholder]="'Choose technology'" multiple>
+                      <mat-select-trigger>
+
+                        {{technologys.value?.[0] || ''}}
+                        <span *ngIf="(technologys.value?.length || 0) > 1" class="example-additional-selection">
+                          (+{{(technologys.value?.length || 0) - 1}} {{technologys.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let technology of technologyLIst" [value]="technology">{{technology}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <!-- experience -->
+                  <mat-form-field  class=" ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-50">
+                    <mat-select [placeholder]="'Choose expriences'">
+                      <!-- <mat-option>None</mat-option> -->
+                      <mat-option *ngFor="let expriences of expriences" [value]="expriences">{{expriences}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
             <!-- Add product button -->
             <button
                 class="ml-4"
@@ -34,6 +56,7 @@
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Add Resource</span>
             </button>
+
         <mat-menu #listCard07Menu="matMenu">
             <button (click)="gotoAddResources()" mat-menu-item>Single Upload</button>
             <button mat-menu-item>CSV Upload</button>
@@ -46,6 +69,7 @@
 
         <!-- Products list -->
         <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <!-- <ng-container *ngIf="(resources | async) as resources"> -->
                 <ng-container *ngIf="resources.length > 0; else noProducts">
                     <div class="grid" *ngIf="resources.length > 0">
                         <!-- Header -->
@@ -53,12 +77,13 @@
                             class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                             
                             matSortDisableClear>
+                            <div></div>
                             <div
                                 class="hidden md:block"
                                 >
                                 Name
                             </div>
-                            <div >Email</div>
+                            <div >Technology</div>
                             <div
                                 class="hidden sm:block"
                                 >
@@ -76,18 +101,40 @@
                             </div>
                         </div>
                         <!-- Rows -->
+                        <!-- <ng-container *ngIf="(resources | async) as resources"> -->
                             <ng-container *ngFor="let resources of resources">
                                 <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
-
+                                           <!-- Image -->
+                                           <div class="flex items-center">
+                                            <div class="relative flex flex-0 items-center  justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border">
+                                                <!-- <img
+                                                    class="w-8"
+                                                   
+                                                    src="assets/images/avatars/male-07.jpg"> -->
+                                                    <!-- <div class="rounded-full"> -->
+                                                    <img
+                                                    class="object-cover w-full h-full rounded-full"
+                                                    [src]="resources.image"
+                                                    alt="Contact avatar"/>
+                                                    <!-- </div> -->
+                                                <!-- <div
+                                                    class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
+                                                    *ngIf="!product.thumbnail">
+                                                    NO THUMB
+                                                </div> -->
+                                            </div>
+                                        </div>
+    
                                     <!-- SKU -->
                                     <div class="hidden md:block truncate">
-                                        {{resources.name}}
+                                        <div class="font-medium leading-5 truncate">{{resources.name}}</div>
+                                         <div class="leading-5 truncate text-secondary"> {{resources.email}}</div>
                                     </div>
 
                                     <!-- Name -->
                                     <div class="truncate">
-                                        {{resources.email}}
+                                        {{resources.technology}}
                                     </div>
 
                                     <!-- Price -->
@@ -109,6 +156,7 @@
                             </ng-container>
                     </div>
                 </ng-container>
+            <!-- </ng-container> -->
 
 
             <ng-template #noProducts>

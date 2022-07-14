@@ -7,6 +7,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -49,6 +50,7 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     MatButtonToggleModule,
     MatTooltipModule,
+    InfiniteScrollModule,
     FuseCardModule
   ]
 })
