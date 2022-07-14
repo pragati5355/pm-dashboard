@@ -14,7 +14,7 @@ animations     : fuseAnimations
 export class ResourcesListComponent implements OnInit {
   technologys = new FormControl('');
 
-  technologyLIst: string[] = ['ALL','JAVA', 'Angular', 'Python', 'HTML'];
+  technologyLIst: string[] = ['JAVA', 'Angular', 'Python', 'HTML'];
   expriences: string[] = [
     '0 - 1',
     '1+',
