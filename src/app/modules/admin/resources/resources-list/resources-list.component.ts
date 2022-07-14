@@ -1,5 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { StaticData } from "../../../../core/constacts/static";
+import {FormControl} from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 @Component({
   selector: 'app-resources-list',
@@ -10,29 +12,17 @@ changeDetection: ChangeDetectionStrategy.OnPush,
 animations     : fuseAnimations
 })
 export class ResourcesListComponent implements OnInit {
-  resources: any = [
-    {
-      name: "Sanskriti Gupta",
-      email: "sanskriti.gupta@mindbowser.com",
-      team: "develop",
-      experience: "1 Year",
-      technology: "angular"
-    },
-    {
-      name: "Surja",
-      email: "surja@mindbowser.com",
-      team: "develop",
-      experience: "2 Year",
-      technology: "java"
-    },
-    {
-      name: "sans",
-      email: "sans@mindbowser.com",
-      team: "develop",
-      experience: "1 Year",
-      technology: "java"
-    }
-  ]
+  technologys = new FormControl('');
+
+  technologyLIst: string[] = ['ALL','JAVA', 'Angular', 'Python', 'HTML'];
+  expriences: string[] = [
+    '0 t0 1',
+    '1+',
+    '2+',
+    '3+',
+    '4+'
+  ];
+  resources: any = StaticData.RESOURCES_lIST
   isLoading: boolean = false;
   constructor(
     private router: Router,
