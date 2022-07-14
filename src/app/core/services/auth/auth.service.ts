@@ -31,7 +31,7 @@ export class AuthService{
   }
 
   getRefreshToken() {
-    this.storage.get("refreshToken");
+    return this.storage.get("refreshToken");
   }
 
   deleteToken() {

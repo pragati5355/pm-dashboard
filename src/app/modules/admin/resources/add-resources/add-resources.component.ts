@@ -21,7 +21,7 @@ export class AddResourcesComponent implements OnInit {
   selectTeamList= StaticData.ROLE_LIST
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  technologyCtrl = new FormControl('');
+  technology = new FormControl('');
   filteredtechnologys: Observable<string[]>;
   technologys: string[] = [];
   alltechnologys: string[] = ['Angular', 'JaVa', 'Python', 'HTML'];
@@ -32,7 +32,7 @@ export class AddResourcesComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private router: Router,
   ) { 
-    this.filteredtechnologys = this.technologyCtrl.valueChanges.pipe(
+    this.filteredtechnologys = this.technology.valueChanges.pipe(
       startWith(null),
       map((technology: string | null) => (technology ? this._filter(technology) : this.alltechnologys.slice())),
     );
@@ -50,7 +50,7 @@ export class AddResourcesComponent implements OnInit {
         Validators.required]],
       year: ['',[Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
       month: ['',[Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
-      technologyCtrl: ['',[Validators.required,
+      technology: ['',[Validators.required,
         Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
       
     });
@@ -66,7 +66,7 @@ export class AddResourcesComponent implements OnInit {
     // Clear the input value
     event.chipInput!.clear();
 
-    this.technologyCtrl.setValue(null);
+    this.technology.setValue(null);
   }
 
   remove(technology: string): void {
@@ -80,7 +80,7 @@ export class AddResourcesComponent implements OnInit {
   selected(event: MatAutocompleteSelectedEvent): void {
     this.technologys.push(event.option.viewValue);
     this.technologyInput.nativeElement.value = '';
-    this.technologyCtrl.setValue(null);
+    this.technology.setValue(null);
   }
 
   private _filter(value: string): string[] {
@@ -94,4 +94,25 @@ export class AddResourcesComponent implements OnInit {
   gotoBack(){
     this.router.navigate(['/resources/resources-list']) 
    }
+       /**
+     * Upload avatar
+     *
+     * @param fileList
+     */
+        uploadAvatar(): void
+        {
+            // Return if canceled
+         
+            // Upload the avatar
+            // this._contactsService.uploadAvatar(this.contact.id, file).subscribe();
+        }
+    
+        /**
+         * Remove the avatar
+         */
+        removeAvatar(): void
+        {
+        
+        }
+    
 }
