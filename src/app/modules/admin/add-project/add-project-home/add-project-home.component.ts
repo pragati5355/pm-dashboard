@@ -194,19 +194,19 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     }
     filterTeamMembers(firstName: string) {
       return this.teamMembers.filter((teamMember: any) =>
-      teamMember.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.firstName) &&  teamMember.firstName !== this.projectTeam.value.project_manager);
+      teamMember.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.firstName+" "+teamMember.lastName) && ( teamMember.firstName+" "+teamMember.lastName )!== this.projectTeam.value.project_manager);
     }
     filterTeamMemberSlice() {
-      console.log(this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  TeamMember.firstName !== this.projectTeam.value.project_manager))
-      return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  TeamMember.firstName !== this.projectTeam.value.project_manager)
+      console.log(this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  (TeamMember.firstName+ " "+TeamMember.lastName) !== this.projectTeam.value.project_manager))
+      return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes (TeamMember.firstName+ " "+TeamMember.lastName) &&  (TeamMember.firstName+ " "+TeamMember.lastName)!== this.projectTeam.value.project_manager)
     }
     filterManagerLists(firstName: string) {
       return this.managerLists.filter((ManagerList: any) =>
-      ManagerList.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager);
+      ManagerList.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) &&  (ManagerList.firstName+" "+ManagerList.lastName) !== this.projectTeam.value.project_manager);
     }
     filterManagerListsSlice() {
       console.log(this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName) && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager))
-      return this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName) && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager)
+      return this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) && !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) && ( ManagerList.firstName+" "+ManagerList.lastName) !== this.projectTeam.value.project_manager)
     }
     filterJiraUsers(displayName: string) {
       return this.jiraUsers.filter((JiraUser: any) =>
@@ -513,12 +513,18 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       this.router.navigate(['/projects/project-list']) 
     }
     getTeamMember(){
-            this.ProjectService.getTeamMember().subscribe(
+      let payload = {
+        "technology": null,
+        "experience":"",
+        "perPageData":0,
+        "totalPerPageData":0
+      }
+            this.ProjectService.getTeamMember(payload).subscribe(
               (res:any)=>{
                 this.submitInProcess = false;
                 console.log("teamMember",res);
-                this.teamMembers = res.data
-                this.managerLists = res.data
+                this.teamMembers = res.data.teamMember
+                this.managerLists = res.data.teamMember
                 
               }, 
               error => {

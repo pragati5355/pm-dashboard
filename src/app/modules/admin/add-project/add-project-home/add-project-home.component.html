@@ -477,9 +477,9 @@
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['pattern']">Enter valid project manager name</div>
                                                     </mat-error>
                                                     <mat-autocomplete #autoManagerList="matAutocomplete" (optionSelected)="selectedManagerOption($event)">
-                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList.firstName">
+                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList.firstName+' '+managerList.lastName">
             
-                                                        <span>{{ managerList.firstName }}</span> 
+                                                        <span>{{ managerList.firstName +" "+managerList.lastName }}</span> 
                                                         </mat-option>
                                                         </mat-autocomplete>
                                                 </mat-form-field>
@@ -532,9 +532,9 @@
                                             <div *ngIf="projectTeamForm['team_member'].errors['pattern']">Enter valid team manager name</div>
                                             </mat-error>
                                             <mat-autocomplete #auto="matAutocomplete" >
-                                            <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.firstName">
+                                            <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.firstName +' '+ teamMember.lastName">
 
-                                            <span>{{ teamMember.firstName }}</span> 
+                                            <span>{{ teamMember.firstName +" "+teamMember.lastName}} </span> 
                                             </mat-option>
                                             </mat-autocomplete>
                                             </mat-form-field>

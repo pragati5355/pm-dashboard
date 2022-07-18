@@ -28,7 +28,7 @@
             </div>
             <!-- toggle button -->
                 <mat-form-field class=" ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
-                    <mat-select [formControl]="technologys" [placeholder]="'Choose technology'" multiple>
+                    <mat-select [formControl]="technologys" panelClass="multiple-select-style" [disableOptionCentering]="true" [placeholder]="'Choose technology'" multiple>
                       <mat-select-trigger>
 
                         {{technologys.value?.[0] || ''}}
@@ -41,7 +41,7 @@
                   </mat-form-field>
                   <!-- experience -->
                   <mat-form-field  class=" ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-50">
-                    <mat-select [placeholder]="'Choose expriences'">
+                    <mat-select [placeholder]="'Choose expriences'" [disableOptionCentering]="true">
                       <!-- <mat-option>None</mat-option> -->
                       <mat-option *ngFor="let expriences of expriences" [value]="expriences">{{expriences}}</mat-option>
                     </mat-select>

@@ -27,6 +27,7 @@
 .lh-2{
   line-height: 2 !important;
 }
+//mat snackbar
 .mat-simple-snackbar {
   font-size: 16px !important;
   align-items: normal !important;
@@ -63,7 +64,6 @@
     }
     .mat-step-header .mat-step-icon-selected{
         // background-color: $primary;
-        // background-color: #64748b !important;
         color: white;
         +.mat-step-label{
           color: #4f46e5  !important;
@@ -86,3 +86,13 @@
     display: grid !important;
   }
 }
+//mat-select
+.mat-select-panel {
+    position: absolute;
+    top: 40px;
+    min-width: calc(100% + 42px) !important;
+    max-height: max-content !important;
+  }
+  .multiple-select-style{
+     left: 20px;
+  }

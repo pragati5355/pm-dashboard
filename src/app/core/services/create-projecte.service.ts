@@ -18,8 +18,8 @@ export class CreateProjecteService {
    getJiraUser(obj: any) {
     return this.http.post(AppConstants['GET_JIRA_USER'], obj);
    }
-   getTeamMember() {
-    return this.http.get(AppConstants['GET_TEAM_MEMBER_LIST']);
+   getTeamMember(obj: any) {
+    return this.http.post(AppConstants['GET_TEAM_MEMBER_LIST'], obj);
    }
    getProjectDetails(obj:any) {
     return this.http.post(AppConstants['GET_PROJECTS'], obj);
