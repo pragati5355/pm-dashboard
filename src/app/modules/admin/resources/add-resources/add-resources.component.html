@@ -1,267 +1,182 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
-    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
-        <div class="text-4xl font-extrabold tracking-tight">Add Resource</div>
-    
-    </div>
-    <div class="flex flex-col flex-auto w-full overflow-y-auto">
-        <!-- Header -->
-     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-    
-         <!-- Title and action buttons -->
-     
-         
-         <!-- main section -->
-    
-         <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
-             <div class="w-full max-w-3xl">
-                 <form [formGroup]="resourcesForm" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
-                    <div class="w-full">
-                        <h2 class="text-3xl font-semibold tracking-tight leading-8">Resource details</h2>
-                    </div>
-                   <!-- <div class="relative w-full h-16 bg-accent-100 dark:bg-accent-700"></div> -->
+  <div
+    class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
+    <div class="text-4xl font-extrabold tracking-tight">Add Resource</div>
 
-                      <!-- add image -->
-                      <div class="flex flex-auto items-end mb-6">
-                        <div class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
-                            <!-- Upload / Remove avatar -->
-                            <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
-                            <div class="absolute inset-0 flex items-center justify-center z-20">
-                                <div>
-                                    <input
-                                        id="avatar-file-input"
-                                        class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
-                                        type="file"
-                                        [multiple]="false"
-                                        [accept]="'image/jpeg, image/png'"
-                                        (change)="uploadAvatar()"
-                                        #avatarFileInput>
-                                    <label
-                                        class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
-                                        for="avatar-file-input"
-                                        matRipple>
-                                        <mat-icon
-                                            class="text-white"
-                                            [svgIcon]="'heroicons_outline:photograph'"></mat-icon>
-                                    </label>
-                                </div>
-                                <div>
-                                    <!-- <button
-                                        mat-icon-button
-                                        (click)="removeAvatar()">
-                                        <mat-icon
-                                            class="text-white"
-                                            [svgIcon]="'heroicons_outline:trash'"></mat-icon>
-                                    </button> -->
-                                </div>
-                            </div>
-                            <!-- Image/Letter -->
-                            <!-- <img
-                                class="object-cover w-full h-full"
-                                *ngIf="contact.avatar"
-                                [src]="contact.avatar"> -->
-                            <div
-                                class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                >
-                                <!-- {{contact.name.charAt(0)}} -->
-                            </div>
-                        </div>
-                    </div>
-                <!-- Section -->
-              
-                <!-- <div class="grid grid-cols-4 gap-6 w-full "> -->
-                    <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-        
-                            <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                                <mat-form-field class="w-full  "
-                              
-                                [floatLabel]="'always'"
-                                >
-                                    <mat-label>First Name</mat-label>
-                                    <input 
-                                    type="text"
-                                    placeholder="First Name"
-                                    formControlName="firstName"
-                                    maxlength="50"
-                                    matInput
-                                        >
-                                        <mat-error *ngIf="resourcesValidForm['firstName'].errors &&
-                                        resourcesValidForm['firstName']?.invalid &&
-                                        resourcesValidForm['firstName']?.touched ">
-                                        <div *ngIf="resourcesValidForm['firstName'].errors['required']">First name is mandatory</div>
-                                        <div *ngIf="resourcesValidForm['firstName'].errors['pattern']">Enter valid first name</div>
-                                        </mat-error>
-                                    </mat-form-field>
-                                </div>
-                                <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
-                                    <mat-form-field class="w-full  "
-                                  
-                                    [floatLabel]="'always'"
-                                    >
-                                        <mat-label>Last Name</mat-label>
-                                        <input 
-                                        type="text"
-                                        placeholder="Last Name"
-                                        formControlName="lastName"
-                                        maxlength="50"
-                                        matInput
-                                            >
-                                            <mat-error *ngIf="resourcesValidForm['lastName'].errors &&
-                                            resourcesValidForm['lastName']?.invalid &&
-                                            resourcesValidForm['lastName']?.touched ">
-                                            <div *ngIf="resourcesValidForm['lastName'].errors['required']">Last name is mandatory</div>
-                                            <div *ngIf="resourcesValidForm['lastName'].errors['pattern']">Enter valid last name</div>
-                                            </mat-error>
-                                        </mat-form-field>
-                                    </div>  
-                    </div>
-                    <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-                            <div class=" w-full  mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                                <mat-form-field class="w-full  "
-                              
-                                [floatLabel]="'always'"
-                                >
-                                    <mat-label>Email</mat-label>
-                                    <input 
-                                    type="text"
-                                    placeholder="Email"
-                                    formControlName="email"
-                                    maxlength="50"
-                                    matInput
-                                        >
-                                        <mat-error *ngIf="resourcesValidForm['email'].errors &&
-                                        resourcesValidForm['email']?.invalid &&
-                                        resourcesValidForm['email']?.touched ">
-                                        <div *ngIf="resourcesValidForm['email'].errors['required']">Email is mandatory</div>
-                                        <div *ngIf="resourcesValidForm['email'].errors['pattern']">Enter valid email</div>
-                                        </mat-error>
-                                    </mat-form-field>
-                                </div>  
-                    </div>
-                    <div class="  flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-                            <div class="sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-                                <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859 ">
+  </div>
+  <div class="flex flex-col flex-auto w-full overflow-y-auto">
+    <!-- Header -->
+    <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
 
-                                <mat-form-field   [floatLabel]="'always'" class="w-full">
-                                <mat-label>Team</mat-label>
-                                <mat-select
-                                formControlName="team"
+      <!-- Title and action buttons -->
 
-                                type="text"
-                                placeholder="Select Team"
-                                >
-                                <mat-option *ngFor="let role of selectTeamList" [value]="role.value" >
-                                {{ role.viewValue }}
-                                </mat-option>
-                                </mat-select>
-                                </mat-form-field>
-                                </div>
-                                <div class=" w-full sm:w-60   mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
-                                    <mat-form-field class="w-full  "
-                                  
-                                    [floatLabel]="'always'"
-                                    >
-                                        <mat-label>Experience</mat-label>
-                                        <input 
-                                        type="text"
-                                        placeholder="Year"
-                                        formControlName="year"
-                                        maxlength="2"
-                                        matInput
-                                            >
-                                            <mat-error *ngIf="resourcesValidForm['year'].errors &&
-                                            resourcesValidForm['year']?.invalid &&
-                                            resourcesValidForm['year']?.touched ">
-                                            <div *ngIf="resourcesValidForm['year'].errors['required']">Year is mandatory</div>
-                                            <div *ngIf="resourcesValidForm['year'].errors['pattern']">Enter valid Year </div>
-                                            </mat-error>
-                                        </mat-form-field>
-                                    </div>  
-                                    <div class=" w-full sm:w-60 mb-2 mt-6 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
-                                        <mat-form-field class="w-full"
-                                      
-                                        [floatLabel]="'always'"
-                                        >
-                                            <input  class=""
-                                            type="text"
-                                            placeholder="Month"
-                                            formControlName="month"
-                                            maxlength="2"
-                                            matInput
-                                                >
-                                                <mat-error *ngIf="resourcesValidForm['month'].errors &&
-                                                resourcesValidForm['month']?.invalid &&
-                                                resourcesValidForm['month']?.touched ">
-                                                <div *ngIf="resourcesValidForm['month'].errors['required']">Month is mandatory</div>
-                                                <div *ngIf="resourcesValidForm['month'].errors['pattern']">Enter valid month </div>
-                                                </mat-error>
-                                            </mat-form-field>
-                                        </div>  
-                            </div>    
-                    </div>
-                <!-- </div> -->
-                <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-                    <div class="chip-input w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                    <mat-form-field class="example-chip-list w-full flex-0 mb-2"   [floatLabel]="'always'"  appearance="fill">
-                        <mat-label>Technology</mat-label>
-                        <mat-chip-list #chipList aria-label="Technology selection">
-                          <input
-                          class="w-full  "
-                            placeholder="New technology..."
-                            #technologyInput
-                            formControlName="technology"
-                            [matAutocomplete]="auto"
-                            [matChipInputFor]="chipList"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                            (matChipInputTokenEnd)="add($event)">
-                        </mat-chip-list>
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                          <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology">
-                            {{technology}}
-                          </mat-option>
-                        </mat-autocomplete>
-                        <mat-chip-list>
-                            <mat-chip
-                              *ngFor="let technology of technologys"
-                              (removed)="remove(technology)">
-                              {{technology}}
-                              <button matChipRemove>
-                                <mat-icon class="mt--3">cancel</mat-icon>
-                              </button>
-                              <br />
-                            </mat-chip>
-                          </mat-chip-list>
-                      </mat-form-field>
-                      </div>
+
+      <!-- main section -->
+
+      <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+        <div class="w-full max-w-3xl">
+          <form [formGroup]="resourcesForm" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
+            <div class="w-full">
+              <h2 class="text-3xl font-semibold tracking-tight leading-8">Resource details</h2>
             </div>
-                <!-- Actions -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
-    
-                <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                    <!-- Send -->
-                    <button
-                    mat-stroked-button
-                    type="button"
-                    (click)="gotoBack()"
-                    >
-                    Back
+            <!-- <div class="relative w-full h-16 bg-accent-100 dark:bg-accent-700"></div> -->
+
+            <!-- add image -->
+            <div class="flex flex-auto items-end mb-6">
+              <div
+                class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
+                <!-- Upload / Remove avatar -->
+                <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-20">
+                  <div>
+
+                    <input #avatarFileInput (change)="uploadAvatar()" [accept]="'image/jpeg, image/png'"
+                      [multiple]="false" class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                      id="avatar-file-input" type="file">
+                    <label class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                      for="avatar-file-input" matRipple>
+                      <mat-icon [svgIcon]="'heroicons_outline:photograph'" class="text-white"></mat-icon>
+                    </label>
+                  </div>
+                  <div>
+                    <!-- <button
+                        mat-icon-button
+                        (click)="removeAvatar()">
+                        <mat-icon
+                            class="text-white"
+                            [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                    </button> -->
+                  </div>
+                </div>
+                <!-- Image/Letter -->
+                <!-- <img
+                    class="object-cover w-full h-full"
+                    *ngIf="contact.avatar"
+                    [src]="contact.avatar"> -->
+                <div
+                  class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                  {{ firstName.charAt(0) }}
+                </div>
+              </div>
+            </div>
+            <!-- Section -->
+
+            <!-- <div class="grid grid-cols-4 gap-6 w-full "> -->
+            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+              <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                  <mat-label>First Name</mat-label>
+                  <input [(ngModel)]="firstName" formControlName="firstName" matInput maxlength="50"
+                    placeholder="First Name" type="text">
+                  <mat-error
+                    *ngIf="resourcesValidForm['firstName'].errors && resourcesValidForm['firstName']?.invalid && resourcesValidForm['firstName']?.touched ">
+                    <div *ngIf="resourcesValidForm['firstName'].errors['required']">First name is mandatory</div>
+                    <div *ngIf="resourcesValidForm['firstName'].errors['pattern']">Enter valid first name</div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                  <mat-label>Last Name</mat-label>
+                  <input formControlName="lastName" matInput maxlength="50" placeholder="Last Name" type="text">
+                  <mat-error
+                    *ngIf="resourcesValidForm['lastName'].errors && resourcesValidForm['lastName']?.invalid && resourcesValidForm['lastName']?.touched ">
+                    <div *ngIf="resourcesValidForm['lastName'].errors['required']">Last name is mandatory</div>
+                    <div *ngIf="resourcesValidForm['lastName'].errors['pattern']">Enter valid last name</div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+              <div class=" w-full  mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                <mat-form-field [floatLabel]="'always'" class="w-full  ">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" matInput maxlength="50" placeholder="Email" type="text">
+                  <mat-error
+                    *ngIf="resourcesValidForm['email'].errors && resourcesValidForm['email']?.invalid && resourcesValidForm['email']?.touched ">
+                    <div *ngIf="resourcesValidForm['email'].errors['required']">Email is mandatory</div>
+                    <div *ngIf="resourcesValidForm['email'].errors['pattern']">Enter valid email</div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="  flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+              <div class="sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859 ">
+                  <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <mat-label>Team</mat-label>
+                    <mat-select formControlName="team" placeholder="Select Team" type="text">
+                      <mat-option *ngFor="let role of selectTeamList" [value]="role.value">
+                        {{ role.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class=" w-full sm:w-60   mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
+                  <mat-form-field [floatLabel]="'always'" class="w-full  ">
+                    <mat-label>Experience</mat-label>
+                    <input formControlName="year" matInput maxlength="2" placeholder="Year" type="text">
+                    <mat-error
+                      *ngIf="resourcesValidForm['year'].errors && resourcesValidForm['year']?.invalid && resourcesValidForm['year']?.touched ">
+                      <div *ngIf="resourcesValidForm['year'].errors['required']">Year is mandatory</div>
+                      <div *ngIf="resourcesValidForm['year'].errors['pattern']">Enter valid Year</div>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class=" w-full sm:w-60 mb-2 mt-6 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
+                  <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <input class="" formControlName="month" matInput maxlength="2" placeholder="Month" type="text">
+                    <mat-error
+                      *ngIf="resourcesValidForm['month'].errors && resourcesValidForm['month']?.invalid && resourcesValidForm['month']?.touched ">
+                      <div *ngIf="resourcesValidForm['month'].errors['required']">Month is mandatory</div>
+                      <div *ngIf="resourcesValidForm['month'].errors['pattern']">Enter valid month</div>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <!-- </div> -->
+            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+              <div class="chip-input w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                <mat-form-field [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
+                  <mat-label>Technology</mat-label>
+                  <mat-chip-list #chipList aria-label="Technology selection">
+                    <input #technologyInput (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto"
+                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-full  "
+                      formControlName="technology" placeholder="New technology...">
+                  </mat-chip-list>
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology">
+                      {{technology}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-chip-list>
+                    <mat-chip (removed)="remove(technology)" *ngFor="let technology of technologys">
+                      {{technology}}
+                      <button matChipRemove>
+                        <mat-icon class="mt--3">cancel</mat-icon>
+                      </button>
+                      <br />
+                    </mat-chip>
+                  </mat-chip-list>
+                </mat-form-field>
+              </div>
+            </div>
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+              <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                <!-- Send -->
+                <button (click)="gotoBack()" mat-stroked-button type="button">
+                  Back
                 </button>
-                    <button
-                        class="order-first sm:order-last ml-4"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="save()"
-                        >
-                        Save
-                    </button>
-                </div>
-                </div>
-            </form>
+                <button (click)="save()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
+                  Save
+                </button>
+              </div>
             </div>
-        
-         </div>
-    
-     </div>
-    
+          </form>
+        </div>
+      </div>
     </div>
-
+  </div>
 </div>
