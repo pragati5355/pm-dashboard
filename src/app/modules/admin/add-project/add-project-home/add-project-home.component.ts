@@ -96,7 +96,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       private _snackBar: MatSnackBar,
       private router: Router,
       private ProjectService:CreateProjecteService
-      
+
       )
     {
         // // material snackbar config
@@ -152,7 +152,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
           select_role: [''],
           team_jira_user: ['',[
             Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
-          
+
         });
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
@@ -181,7 +181,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         startWith(''),
         map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
       );
-      this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges 
+      this.filteredJiraUsers = this.projectTeam.get('jira_user')?.valueChanges
       .pipe(
         startWith(''),
         map(jiraUser => jiraUser ? this.filterJiraUsers(jiraUser) : this.filterJiraUsersSlice())
@@ -266,21 +266,21 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     }
     public goto(index: number): void {
       if (index == 0) return; // First step is not selected anymore -ok
-      
+
       this.selectedIndex = index;
     }
     send(): void
-    { 
-      
+    {
+
       if (!this.projectSetting.invalid) {
       let payload ={
         url:"https://"+ this.projectSetting.value.url+".atlassian.net",
         email: this.projectSetting.value.email,
-        password: this.projectSetting.value.token     
+        password: this.projectSetting.value.token
       }
       this.submitInProcess = true;
       console.log(payload)
-      
+
       this._authService.connectJira(payload).subscribe(
         (res:any)=>{
           // this.submitInProcess = false;
@@ -328,8 +328,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
               );
              }
             }
-              
-            }, 
+
+            },
             error => {
               this.submitInProcess = false;
             }
@@ -353,8 +353,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
           );
          }
         }
-          
-        }, 
+
+        },
         error => {
           this.submitInProcess = false;
         }
@@ -444,7 +444,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       console.log(this.teamMemberList);
       if (!this.projectTeam.invalid) {
         if(this.teamMemberList.length > 0){
-          let payload = 
+          let payload =
           {
             projectDetails: {
               name: this.projectDetials.value.projectName,
@@ -470,14 +470,14 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
           this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              console.log(res);  
-              this.snackBarConfig.panelClass = ["success-snackbar"];  
+              console.log(res);
+              this.snackBarConfig.panelClass = ["success-snackbar"];
               this._snackBar.open(
                 "Project created successfully",
                 "x",
                 this.snackBarConfig
-              );    
-            }, 
+              );
+            },
             error => {
               this.submitInProcess = false;
               this.snackBarConfig.panelClass = ["red-snackbar"];
@@ -494,7 +494,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         this.projectTeam.reset();
         this.teamMemberList = []
         this.settingProjectName = ""
-        this.router.navigate(['/projects/project-list']) 
+        this.router.navigate(['/projects/project-list'])
         }
         else{
           this.isAddTeam = false
@@ -505,22 +505,28 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
             "x",
             this.snackBarConfig
           );
-          
+
         }
       }
-    }   
+    }
     goToList(){
-      this.router.navigate(['/projects/project-list']) 
+      this.router.navigate(['/projects/project-list'])
     }
     getTeamMember(){
-            this.ProjectService.getTeamMember().subscribe(
+      let payload = {
+        "technology": null,
+        "experience": "",
+        "perPageData": 0,
+        "totalPerPageData": 0
+      }
+            this.ProjectService.getTeamMember(payload).subscribe(
               (res:any)=>{
                 this.submitInProcess = false;
                 console.log("teamMember",res);
                 this.teamMembers = res.data
                 this.managerLists = res.data
-                
-              }, 
+
+              },
               error => {
                 this.submitInProcess = false;
                 this.snackBarConfig.panelClass = ["red-snackbar"];
@@ -532,7 +538,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
               }
             )
     }
-    
+
 selectedJiraUserOption(event: any) {
   const selectedValue = event.option.value;
       this.filteredTeamJiraUsers = this.projectTeam.get('team_jira_user')?.valueChanges
