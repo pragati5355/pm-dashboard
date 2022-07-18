@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {LocalStorageService} from "angular-web-storage";
-import {AppConstants} from '../constacts/constacts';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { LocalStorageService } from "angular-web-storage";
+import { AppConstants } from '../constacts/constacts';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,6 @@ export class CreateProjecteService {
     return this.http.post(AppConstants['GET_PROJECTS'], obj);
   }
   getResourceMember(obj: any) {
-    return this.http.post(AppConstants['GET_RESOURCE_LIST'],obj);
+    return this.http.post(AppConstants['GET_RESOURCE_LIST'], obj);
   }
 }

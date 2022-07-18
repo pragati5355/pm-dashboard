@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatRadioModule } from '@angular/material/radio';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
@@ -25,15 +25,15 @@ import { SharedModule } from 'app/core/shared.module';
 import { ResourcesHomeComponent } from './resources-home/resources-home.component';
 import { ResourcesListComponent } from './resources-list/resources-list.component';
 import { AddResourcesComponent } from './add-resources/add-resources.component';
-import {InfiniteScrollModule} from "ngx-infinite-scroll";
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 const routes: Routes = [
   {
     path: "",
     component: ResourcesHomeComponent,
-    children   : [
-      {path: 'add-resources', component: AddResourcesComponent},
-      {path: 'resources-list', component: ResourcesListComponent},
+    children: [
+      { path: 'add-resources', component: AddResourcesComponent },
+      { path: 'resources-list', component: ResourcesListComponent },
       {
         path: "",
         redirectTo: "resources-list",
@@ -43,7 +43,7 @@ const routes: Routes = [
         path: "**",
         redirectTo: "resources-list"
       }
-  ]
+    ]
   }
 ];
 

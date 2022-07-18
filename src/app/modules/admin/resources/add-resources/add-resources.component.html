@@ -31,10 +31,10 @@
                   <div>
 
                     <input #avatarFileInput (change)="uploadAvatar()" [accept]="'image/jpeg, image/png'"
-                           [multiple]="false" class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
-                           id="avatar-file-input" type="file">
+                      [multiple]="false" class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                      id="avatar-file-input" type="file">
                     <label class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
-                           for="avatar-file-input" matRipple>
+                      for="avatar-file-input" matRipple>
                       <mat-icon [svgIcon]="'heroicons_outline:photograph'" class="text-white"></mat-icon>
                     </label>
                   </div>
@@ -55,7 +55,7 @@
                     [src]="contact.avatar"> -->
                 <div
                   class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                  {{  firstName.charAt(0) }}
+                  {{ firstName.charAt(0) }}
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@
                 <mat-form-field [floatLabel]="'always'" class="w-full">
                   <mat-label>First Name</mat-label>
                   <input [(ngModel)]="firstName" formControlName="firstName" matInput maxlength="50"
-                         placeholder="First Name" type="text">
+                    placeholder="First Name" type="text">
                   <mat-error
                     *ngIf="resourcesValidForm['firstName'].errors && resourcesValidForm['firstName']?.invalid && resourcesValidForm['firstName']?.touched ">
                     <div *ngIf="resourcesValidForm['firstName'].errors['required']">First name is mandatory</div>
@@ -142,8 +142,8 @@
                   <mat-label>Technology</mat-label>
                   <mat-chip-list #chipList aria-label="Technology selection">
                     <input #technologyInput (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto"
-                           [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                           class="w-full  " formControlName="technology" placeholder="New technology...">
+                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-full  "
+                      formControlName="technology" placeholder="New technology...">
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
                     <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology">
@@ -156,7 +156,7 @@
                       <button matChipRemove>
                         <mat-icon class="mt--3">cancel</mat-icon>
                       </button>
-                      <br/>
+                      <br />
                     </mat-chip>
                   </mat-chip-list>
                 </mat-form-field>
@@ -180,4 +180,3 @@
     </div>
   </div>
 </div>
-

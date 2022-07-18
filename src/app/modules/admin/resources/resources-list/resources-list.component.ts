@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {Router} from '@angular/router';
-import {FormControl} from '@angular/forms';
-import {fuseAnimations} from '@fuse/animations';
-import {CreateProjecteService} from "@services/create-projecte.service";
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { fuseAnimations } from '@fuse/animations';
+import { CreateProjecteService } from "@services/create-projecte.service";
 
 @Component({
   selector: 'app-resources-list',
@@ -60,4 +60,4 @@ export class ResourcesListComponent implements OnInit {
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
     });
   }
- }
+}

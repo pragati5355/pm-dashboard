@@ -21,57 +21,7 @@ export const StaticData = {
     { value: 'UI/UX', viewValue: 'UI/UX' },
     { value: 'QA', viewValue: 'QA' }
   ],
-
-  RESOURCES_lIST: [
-    {
-      "id": 1,
-      "firstName": "Naynesh",
-      "lastName": "Rathod",
-      "email": "naynesh.rathod@mindbowser.com",
-      "team": "front end",
-      "month": "9",
-      "year": "1",
-      "addedBy": 3,
-      "technologyCtrl": ["Angular", "Node js", "Express", "Python"],
-      "image": 'assets/images/avatars/male-07.jpg'
-    },
-    {
-      "id": 2,
-      "firstName": "Khumesh",
-      "lastName": "Lohar",
-      "email": "khumeshlohar@gmail.com",
-      "team": "front end",
-      "month": "1",
-      "year": "5",
-      "addedBy": 3,
-      "technologyCtrl": ["python", "java"],
-      "image": 'assets/images/avatars/male-07.jpg'
-    },
-    {
-      "id": 3,
-      "firstName": "Ravi",
-      "lastName": "patel",
-      "email": "Ravi@gmail.com",
-      "team": "front end",
-      "month": "1",
-      "year": "5",
-      "addedBy": 3,
-      "technologyCtrl": ["python", "java"],
-      "image": 'assets/images/avatars/female-02.jpg'
-    },
-    {
-      "id": 4,
-      "firstName": "suraj",
-      "lastName": "jaiswal",
-      "email": "suraj@gmail.com",
-      "team": "Java developer",
-      "month": "6",
-      "year": "1",
-      "addedBy": 3,
-      "technologyCtrl": ["spring boot", "java", "microservices"],
-      "image": 'assets/images/avatars/male-07.jpg'
-    },
-  ]
+ 
 };
 
 

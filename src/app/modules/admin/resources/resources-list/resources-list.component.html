@@ -53,8 +53,8 @@
   <div class="flex flex-auto overflow-hidden">
 
     <!-- Products list -->
-    <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-         (scrolled)="handleResourcesScroll()">
+    <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto" infiniteScroll
+      [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="handleResourcesScroll()">
       <!-- <ng-container *ngIf="(resources | async) as resources"> -->
       <ng-container *ngIf=" totalRecored > 0; else noProducts">
         <div *ngIf="resources.length > 0" class="grid">
@@ -91,7 +91,7 @@
 
                       src="assets/images/avatars/male-07.jpg"> -->
                   <!-- <div class="rounded-full"> -->
-                  <img [src]="resources.image" alt="Contact avatar" class="object-cover w-full h-full rounded-full"/>
+                  <img [src]="resources.image" alt="Contact avatar" class="object-cover w-full h-full rounded-full" />
                   <!-- </div> -->
                   <!-- <div
                       class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
@@ -119,8 +119,9 @@
 
               <!-- Stock -->
               <div class="hidden lg:flex items-center">
-                <div
-                  class="min-w-4">{{resources.year > "1" ? resources.year + " Years" : resources.year + " Year" }} {{resources.month > "1" ? ", " + resources.month + " Months" : ", " + resources.month + " Month"}}</div>
+                <div class="min-w-4">{{resources.year > "1" ? resources.year + " Years" : resources.year + " Year" }}
+                  {{resources.month > "1" ? ", " + resources.month + " Months" : ", " + resources.month + " Month"}}
+                </div>
               </div>
 
               <!-- Active -->
