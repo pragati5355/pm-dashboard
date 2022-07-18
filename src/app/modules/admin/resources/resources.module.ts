@@ -25,6 +25,7 @@ import { SharedModule } from 'app/core/shared.module';
 import { ResourcesHomeComponent } from './resources-home/resources-home.component';
 import { ResourcesListComponent } from './resources-list/resources-list.component';
 import { AddResourcesComponent } from './add-resources/add-resources.component';
+import {InfiniteScrollModule} from "ngx-infinite-scroll";
 
 const routes: Routes = [
   {
@@ -75,7 +76,8 @@ const routes: Routes = [
     FuseFindByKeyPipeModule,
     FuseNavigationModule,
     FuseScrollbarModule,
-    FuseScrollResetModule
+    FuseScrollResetModule,
+    InfiniteScrollModule
   ]
 })
 export class ResourcesModule { }

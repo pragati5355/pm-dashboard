@@ -53,9 +53,10 @@
   <div class="flex flex-auto overflow-hidden">
 
     <!-- Products list -->
-    <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+    <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+         (scrolled)="handleResourcesScroll()">
       <!-- <ng-container *ngIf="(resources | async) as resources"> -->
-      <ng-container *ngIf="resources.length > 0; else noProducts">
+      <ng-container *ngIf=" totalRecored > 0; else noProducts">
         <div *ngIf="resources.length > 0" class="grid">
           <!-- Header -->
           <div

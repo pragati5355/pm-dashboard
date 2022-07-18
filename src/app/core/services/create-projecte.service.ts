@@ -30,8 +30,7 @@ export class CreateProjecteService {
   getProjectDetails(obj: any) {
     return this.http.post(AppConstants['GET_PROJECTS'], obj);
   }
-
-  getResourceMember() {
-    return this.http.get(AppConstants['GET_RESOURCE_LIST']);
+  getResourceMember(obj: any) {
+    return this.http.post(AppConstants['GET_RESOURCE_LIST'],obj);
   }
 }
