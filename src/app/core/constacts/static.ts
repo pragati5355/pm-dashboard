@@ -21,6 +21,12 @@ export const StaticData = {
     { value: 'UI/UX', viewValue: 'UI/UX' },
     { value: 'QA', viewValue: 'QA' }
   ],
+  TEAM_MEMBER_ROLE: [
+    {value: 'Frontend Dev', viewValue: 'Frontend Dev'},
+    {value: 'Backend Dev', viewValue: 'Backend Dev'},
+    {value: 'DevOps', viewValue: 'DevOps'},
+    {value: 'Designer', viewValue: 'Designer'}
+  ],
   PER_PAGE_DATA:4,
 };
 

@@ -96,12 +96,14 @@
                                     matInput
                                     required
                                     maxlength="150"
+                                    trim="blur" 
                                     formControlName="projectDescription"
                                     [placeholder]="'Add project description here...'"></textarea>
                                     <mat-error *ngIf="projectDetailsForm['projectDescription'].errors &&
                                     projectDetailsForm['projectDescription']?.invalid &&
                                     projectDetailsForm['projectDescription']?.touched ">
                                     <div *ngIf="projectDetailsForm['projectDescription'].errors['required']">Project Description is mandatory</div>
+                                    <div *ngIf="projectDetailsForm['projectDescription'].invalid">Enter valid project Description</div>
                                 </mat-error>
                                 </mat-form-field>
                             
@@ -424,7 +426,13 @@
                                 [color]="'primary'"
                                 (click)="submitProjectSetting()"
                                 >
-                                Next Step
+                                <span *ngIf="!submitInProcess">
+                                    Next Step
+                                </span>
+                                <mat-progress-spinner
+                                *ngIf="submitInProcess"
+                                [diameter]="24"
+                                [mode]="'indeterminate'"></mat-progress-spinner>
                             </button>
                             </div>
                         </div>
@@ -477,9 +485,9 @@
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['pattern']">Enter valid project manager name</div>
                                                     </mat-error>
                                                     <mat-autocomplete #autoManagerList="matAutocomplete" (optionSelected)="selectedManagerOption($event)">
-                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList.firstName">
+                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList.firstName+' '+managerList.lastName">
             
-                                                        <span>{{ managerList.firstName }}</span> 
+                                                        <span>{{ managerList.firstName +" "+managerList.lastName }}</span> 
                                                         </mat-option>
                                                         </mat-autocomplete>
                                                 </mat-form-field>
@@ -532,9 +540,9 @@
                                             <div *ngIf="projectTeamForm['team_member'].errors['pattern']">Enter valid team manager name</div>
                                             </mat-error>
                                             <mat-autocomplete #auto="matAutocomplete" >
-                                            <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.firstName">
+                                            <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.firstName +' '+ teamMember.lastName">
 
-                                            <span>{{ teamMember.firstName }}</span> 
+                                            <span>{{ teamMember.firstName +" "+teamMember.lastName}} </span> 
                                             </mat-option>
                                             </mat-autocomplete>
                                             </mat-form-field>
@@ -548,6 +556,7 @@
 
                                             type="text"
                                             placeholder="Select Role"
+                                            [disableOptionCentering]="true"
                                             >
                                             <mat-option *ngFor="let role of selectRoleList" [value]="role.value" >
                                             {{ role.viewValue }}
@@ -625,7 +634,7 @@
                                                             <!-- <div class="flex flex-col sm:flex-row flex-0 col-span-3 sm:col-span-3 sm:items-center sm:justify-between"> -->
                                                             <!-- SKU -->
                                                             <div class="hidden md:block truncate">
-                                                                {{teamMember.name}}
+                                                                {{teamMember.name | titlecase}}
                                                             </div>
 
                                                             <!-- Name -->
@@ -638,7 +647,7 @@
                                                             </div>
 
                                                             <div class="hidden md:block truncate">
-                                                                {{teamMember.jiraUser}}
+                                                                {{teamMember.jiraUser | titlecase}}
                                                             </div>
                                                             <!-- Active -->
                                                             <div class="hidden lg:block">

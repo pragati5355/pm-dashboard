@@ -19,7 +19,6 @@
             <div class="w-full">
               <h2 class="text-3xl font-semibold tracking-tight leading-8">Resource details</h2>
             </div>
-            <!-- <div class="relative w-full h-16 bg-accent-100 dark:bg-accent-700"></div> -->
 
             <!-- add image -->
             <div class="flex flex-auto items-end mb-6">
@@ -39,20 +38,8 @@
                     </label>
                   </div>
                   <div>
-                    <!-- <button
-                        mat-icon-button
-                        (click)="removeAvatar()">
-                        <mat-icon
-                            class="text-white"
-                            [svgIcon]="'heroicons_outline:trash'"></mat-icon>
-                    </button> -->
                   </div>
                 </div>
-                <!-- Image/Letter -->
-                <!-- <img
-                    class="object-cover w-full h-full"
-                    *ngIf="contact.avatar"
-                    [src]="contact.avatar"> -->
                 <div
                   class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
                   {{ firstName.charAt(0) }}
@@ -105,7 +92,7 @@
                 <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859 ">
                   <mat-form-field [floatLabel]="'always'" class="w-full">
                     <mat-label>Team</mat-label>
-                    <mat-select formControlName="team" placeholder="Select Team" type="text">
+                    <mat-select formControlName="team" placeholder="Select Team" type="text" [disableOptionCentering]="true">
                       <mat-option *ngFor="let role of selectTeamList" [value]="role.value">
                         {{ role.viewValue }}
                       </mat-option>
@@ -115,7 +102,7 @@
                 <div class=" w-full sm:w-60   mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
                   <mat-form-field [floatLabel]="'always'" class="w-full  ">
                     <mat-label>Experience</mat-label>
-                    <input formControlName="year" matInput maxlength="2" placeholder="Year" type="text">
+                    <input formControlName="year" matInput placeholder="Year" type="text">
                     <mat-error
                       *ngIf="resourcesValidForm['year'].errors && resourcesValidForm['year']?.invalid && resourcesValidForm['year']?.touched ">
                       <div *ngIf="resourcesValidForm['year'].errors['required']">Year is mandatory</div>
@@ -125,11 +112,11 @@
                 </div>
                 <div class=" w-full sm:w-60 mb-2 mt-6 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
                   <mat-form-field [floatLabel]="'always'" class="w-full">
-                    <input class="" formControlName="month" matInput maxlength="2" placeholder="Month" type="text">
+                    <input class="" formControlName="month" matInput  placeholder="Month" type="text">
                     <mat-error
                       *ngIf="resourcesValidForm['month'].errors && resourcesValidForm['month']?.invalid && resourcesValidForm['month']?.touched ">
                       <div *ngIf="resourcesValidForm['month'].errors['required']">Month is mandatory</div>
-                      <div *ngIf="resourcesValidForm['month'].errors['pattern']">Enter valid month</div>
+                      <div *ngIf="resourcesValidForm['month'].errors['pattern'] || resourcesValidForm['month'].errors">Enter valid month</div>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -169,7 +156,7 @@
                 <button (click)="gotoBack()" mat-stroked-button type="button">
                   Back
                 </button>
-                <button (click)="save()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
+                <button (click)="submit()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
                   Save
                 </button>
               </div>
