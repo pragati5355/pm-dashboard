@@ -21,7 +21,7 @@ export const StaticData = {
     { value: 'UI/UX', viewValue: 'UI/UX' },
     { value: 'QA', viewValue: 'QA' }
   ],
- 
+  PER_PAGE_DATA:4,
 };
 
 

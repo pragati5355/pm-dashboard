@@ -28,7 +28,7 @@
           <input
             [autocomplete]="'off'"
             [placeholder]="'Search for resources'"
-            matInput
+            matInput (input)="inputSearch($event)"
           />
         </mat-form-field>
       </div>
@@ -130,7 +130,7 @@
             >
               <!-- Image -->
               <div class="flex items-center">
-                <div
+              <!--  <div
                   class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border"
                 >
                   <img
@@ -138,9 +138,19 @@
                     alt="Contact avatar"
                     class="object-cover w-full h-full rounded-full"
                   />
+                </div>-->
+              <ng-container *ngIf="resources.image">
+                <img
+                  class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover w-full h-full rounded-full"
+                  [src]="resources.image"
+                  alt="Contact avatar"/>
+              </ng-container>
+              <ng-container *ngIf="!resources.image">
+                <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                  {{resources.firstName.charAt(0)}}
                 </div>
-              </div>
-
+              </ng-container>
+            </div>
               <!-- SKU -->
               <div>
                 <div class="truncate">
@@ -166,16 +176,14 @@
                     resources.year > "1"
                       ? resources.year + " Years,"
                       : resources.year == "1"
-                      ? resources.year + "
-                  Year,"
+                      ? resources.year + " Year,"
                       : ""
                   }}
                   {{
                     resources.month > "1"
-                      ? +resources.month + " Months"
+                      ? resources.month + " Months"
                       : resources.month == "1"
-                      ? resources.month + "
-                  Month"
+                      ? resources.month + " Month"
                       : ""
                   }}
                 </div>

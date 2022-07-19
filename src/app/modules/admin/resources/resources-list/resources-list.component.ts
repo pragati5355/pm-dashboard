@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
-import { fuseAnimations } from '@fuse/animations';
-import { CreateProjecteService } from "@services/create-projecte.service";
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {FormControl} from '@angular/forms';
+import {fuseAnimations} from '@fuse/animations';
+import {CreateProjecteService} from "@services/create-projecte.service";
+import {StaticData} from 'app/core/constacts/static';
 
 @Component({
   selector: 'app-resources-list',
@@ -17,11 +18,12 @@ export class ResourcesListComponent implements OnInit {
   pageNo = 1;
   pagination = false;
   searchValue = "";
-  count = 0;
+  count = 3;
   resources: any = null;
   isLoading: boolean = false;
-  totalRecored: any = 46;
+  totalRecored: any;
   selectedExpriencesFromArray: any;
+  totalPerPageData = StaticData.PER_PAGE_DATA;
 
   constructor(private ProjectService: CreateProjecteService, private router: Router,) {
   }
@@ -31,8 +33,8 @@ export class ResourcesListComponent implements OnInit {
     let payload = {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
       "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
-      "perPageData": 0,
-      "totalPerPageData": 0
+      "perPageData": this.count,
+      "totalPerPageData": this.totalPerPageData
     }
     this.getList(payload);
   }
@@ -53,34 +55,52 @@ export class ResourcesListComponent implements OnInit {
     // this.isLoading = false;
   }
 
+  /*******************************************************************
+   * @description Handle Scroll pagination in Resource List
+   *
+   * @author- Naynesh Rathod
+   * @created_date - 19/07/2022
+   *
+   ******************************************************************/
+
   handleScroll() {
     if (!this.pagination) {
-      this.count = this.count + 20;
+      this.count = this.count + 3;
       let payload = {
-        "perPageData": this.count - 9,
-        "totalPerPageData": this.count,
+        "perPageData": this.count,
+        "totalPerPageData": this.totalPerPageData,
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
         "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
       };
       this.pagination = true;
       this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
-        this.pagination = false;
+        this.pagination = this.count > this.totalPerPageData ? !this.pagination : this.pagination;
         if (res) {
           this.resources = [...this.resources, ...res.data.teamMember];
         }
       }, (err: any) => {
         this.pagination = false;
       });
+      console.log('this.pagination', this.pagination)
     }
   }
 
+  /*******************************************************************
+   * @description Filter Serach in Resource List
+   *
+   * @author- Naynesh Rathod
+   * @created_date - 19/07/2022
+   *
+   ******************************************************************/
+
   selectChange() {
     this.isLoading = true;
+    this.count = 3;
     let payload = {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
       "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
-      "perPageData": 0,
-      "totalPerPageData": 0
+      "perPageData": this.count,
+      "totalPerPageData": this.totalPerPageData
     }
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
       this.totalRecored = res.data.totalRecored
@@ -90,5 +110,29 @@ export class ResourcesListComponent implements OnInit {
       this.isLoading = false;
     });
   }
-}
 
+
+  /*******************************************************************
+   * @description Input Serach in Resource List
+   *
+   * @author- Naynesh Rathod
+   * @created_date - 19/07/2022
+   *
+   ******************************************************************/
+
+
+  inputSearch(event: any) {
+    this.count = 4;
+    if (this.searchValue !== event.target.value.trim()) {
+      this.searchValue = event.target.value.trim();
+      let payload = {
+        "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
+        "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
+        "perPageData": this.count,
+        "totalPerPageData": this.totalPerPageData,
+        "search": this.searchValue
+      };
+      this.getList(payload);
+    }
+  }
+}
