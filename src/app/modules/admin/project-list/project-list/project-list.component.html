@@ -88,9 +88,7 @@
                             <div class="flex flex-col">
                                 <span class="text-lg font-semibold leading-none" *ngIf="project.name">{{project.name | titlecase}}</span>
                             </div>
-                            <!-- <span class=" ml-auto -mr-4 inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase bg-red-200 text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500 ">
-                                <span class="leading-relaxed whitespace-nowrap">On Track</span>
-                            </span> -->
+                         
                             <span *ngIf="project.status" class=" ml-auto -mr-4 inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase"
                             [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50 bg-red-200 ':project.status == 'Sync In Progress',
                             'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500':project.status == 'On Track',
@@ -108,7 +106,7 @@
                             
                             <div class="flex flex-col"  *ngIf="project.startDate">
                                 <span class="text-sm text-secondary leading-none">Start Date</span>
-                                <span class=" mt-1 leading-none">{{project.startDate}}</span>
+                                <span class=" mt-1 leading-none">{{project.startDate | date}}</span>
                             </div>
                             <div class="hidden sm:flex flex-auto" ></div>
                             <div class="flex flex-col mt-4 sm:mt-0" *ngIf="project.teamModel.length > 0">
@@ -124,7 +122,7 @@
                                         [src]="team.image"
                                         alt="Card cover image">
                                         <div
-                                        class="rounded-full text-center uppercase text-2xl  mt-0.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                        class="rounded-full text-center uppercase text-1xl  mt-1.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
                                         *ngIf="!team.image">
                                         {{team.name.charAt(0)}}
                                         </div>
@@ -152,11 +150,11 @@
                     </div>
                 </ng-container>
             </ng-container>
-            <ng-container *ngIf="projectList.length == 0">
-                   No Project
-            </ng-container>
+         
          </div>
-
+         <ng-container *ngIf="projectList.length == 0">
+            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no Projects</div>
+        </ng-container>
         </div>
     </div>
 </div>

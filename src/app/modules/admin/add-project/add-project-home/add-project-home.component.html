@@ -96,12 +96,14 @@
                                     matInput
                                     required
                                     maxlength="150"
+                                    trim="blur" 
                                     formControlName="projectDescription"
                                     [placeholder]="'Add project description here...'"></textarea>
                                     <mat-error *ngIf="projectDetailsForm['projectDescription'].errors &&
                                     projectDetailsForm['projectDescription']?.invalid &&
                                     projectDetailsForm['projectDescription']?.touched ">
                                     <div *ngIf="projectDetailsForm['projectDescription'].errors['required']">Project Description is mandatory</div>
+                                    <div *ngIf="projectDetailsForm['projectDescription'].invalid">Enter valid project Description</div>
                                 </mat-error>
                                 </mat-form-field>
                             
@@ -548,6 +550,7 @@
 
                                             type="text"
                                             placeholder="Select Role"
+                                            [disableOptionCentering]="true"
                                             >
                                             <mat-option *ngFor="let role of selectRoleList" [value]="role.value" >
                                             {{ role.viewValue }}

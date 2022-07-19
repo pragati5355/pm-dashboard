@@ -21,6 +21,8 @@ export class ProjectListComponent implements OnInit {
   searchValue = "";
   projectList: any=[]
   count = 1;
+  totalPageData = 2
+  totalProject = 0;
   private _fuseCards!: QueryList<ElementRef>;
   constructor( private router: Router, private _authService: AuthService,
     private ProjectService:CreateProjecteService,
@@ -30,7 +32,7 @@ export class ProjectListComponent implements OnInit {
     console.log(this.count)
     let payload = {
       perPageData: this.count,
-      totalPerPageData:2,
+      totalPerPageData:this.totalPageData,
       projectKey:"",
       projectName:this.searchValue
     }
@@ -46,6 +48,7 @@ export class ProjectListComponent implements OnInit {
          this.initialLoading = false;
          console.log(res);
          this.projectList = res.data.projects;
+         this.totalProject  = res.data.totalRecored
        },
        error => {
          this.initialLoading = false;
@@ -63,12 +66,14 @@ export class ProjectListComponent implements OnInit {
   }  
    handleScroll() {
      console.log('scrolled');
-    if (!this.pagination) {
-      this.count = this.count + 1; 
+     let totalcount = this.count * this.totalPageData
+     console.log("projectlength",this.projectList.length)
+    if (!this.pagination && this.projectList.length < this.totalProject) {
+      this.count = this.count + this.totalPageData; 
       console.log(this.count)
      let payload = {
         perPageData: this.count,
-        totalPerPageData:2,
+        totalPerPageData:this.totalPageData,
         projectKey:"",
         projectName:this.searchValue
       };

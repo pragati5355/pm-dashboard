@@ -11,6 +11,8 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import {Observable} from 'rxjs';
 import {startWith} from 'rxjs';
 import {map} from 'rxjs';
+import { IDeactivateComponent } from "@services/deactivate-service/decativate.guard";
+import {TextRegexValidator, RegexConstants,noWhitespaceValidator } from "../../../../core/utils/Validations";
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { CreateProjecteService } from '@services/create-projecte.service';
@@ -35,8 +37,13 @@ export class JiraTeamUser {
   encapsulation: ViewEncapsulation.None,
   host: {'window:beforeunload':'doSomething'}
 })
-export class AddProjectHomeComponent implements OnInit, OnDestroy {
-
+export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateComponent {
+  @HostListener("window:beforeunload", ["$event"])
+  public onPageUnload($event: BeforeUnloadEvent) {
+    if (!this.canExit()) {
+      $event.returnValue = true;
+    }
+  }
   snackBarConfig = new MatSnackBarConfig();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
@@ -63,7 +70,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
     settingProjectName = ""
     selection = [
     ];
-    selectRoleList= StaticData.ROLE_LIST
+    selectRoleList= StaticData.TEAM_MEMBER_ROLE
     teamMemberList: any = [];
     filteredTeamMembers!: Observable<any[]> | undefined;
     filteredManagerLists!: Observable<any[]> | undefined;
@@ -119,7 +126,12 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required,
         Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
-      projectDescription: ['',[Validators.required]]
+      projectDescription: ['',[Validators.required,
+        TextRegexValidator(RegexConstants.Text_Area)]]
+      },{
+        validator: [
+        noWhitespaceValidator("projectDescription"),
+      ]
       });
       this.clientDetials = this._formBuilder.group({
         firstName: ['',[Validators.required,
@@ -197,7 +209,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       teamMember.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.firstName+" "+teamMember.lastName) && ( teamMember.firstName+" "+teamMember.lastName )!== this.projectTeam.value.project_manager);
     }
     filterTeamMemberSlice() {
-      console.log(this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes(TeamMember.firstName)  &&  (TeamMember.firstName+ " "+TeamMember.lastName) !== this.projectTeam.value.project_manager))
       return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes (TeamMember.firstName+ " "+TeamMember.lastName) &&  (TeamMember.firstName+ " "+TeamMember.lastName)!== this.projectTeam.value.project_manager)
     }
     filterManagerLists(firstName: string) {
@@ -205,7 +216,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
       ManagerList.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) &&  (ManagerList.firstName+" "+ManagerList.lastName) !== this.projectTeam.value.project_manager);
     }
     filterManagerListsSlice() {
-      console.log(this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName) && !this.selectedTeamMember.includes(ManagerList.firstName) &&  ManagerList.firstName !== this.projectTeam.value.project_manager))
       return this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) && !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) && ( ManagerList.firstName+" "+ManagerList.lastName) !== this.projectTeam.value.project_manager)
     }
     filterJiraUsers(displayName: string) {
@@ -279,12 +289,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
         password: this.projectSetting.value.token     
       }
       this.submitInProcess = true;
-      console.log(payload)
-      
       this._authService.connectJira(payload).subscribe(
         (res:any)=>{
-          // this.submitInProcess = false;
-          console.log(res);
         if(res.data.length>0){
           const dialogRef = this.dialog.open(ConnectJiraPopupComponent, {
             disableClose: true,
@@ -470,13 +476,23 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy {
           this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              console.log(res);  
-              this.snackBarConfig.panelClass = ["success-snackbar"];  
-              this._snackBar.open(
-                "Project created successfully",
-                "x",
-                this.snackBarConfig
-              );    
+              console.log(res.data.message);  
+              if(res.data.message = "Project alreday exiest"){
+                this.snackBarConfig.panelClass = ["red-snackbar"];  
+                this._snackBar.open(
+                  res.data.message,
+                  "x",
+                  this.snackBarConfig
+                ); 
+              }else{
+                this.snackBarConfig.panelClass = ["success-snackbar"];  
+                this._snackBar.open(
+                  "Project created Successfully",
+                  "x",
+                  this.snackBarConfig
+                ); 
+              }
+            
             }, 
             error => {
               this.submitInProcess = false;
@@ -557,8 +573,14 @@ selectedJiraUserOption(event: any) {
      );
      this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
      .pipe(
-       startWith(''),
+       startWith(''), 
        map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
      );
    }
+   canExit(): boolean {
+    if (!this.projectDetials.pristine) {
+      return false;
+    }
+    return true;
+  }
 }
