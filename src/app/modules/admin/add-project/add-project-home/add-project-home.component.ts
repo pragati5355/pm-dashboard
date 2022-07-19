@@ -121,7 +121,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
      */
     ngOnInit(): void
     {
-      this.getTeamMember()
+ 
       this.userData = this._authService.getUser();
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required,
@@ -434,6 +434,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     submitProjectSetting(){
       if (!this.projectSetting.invalid) {
               this.selectedIndex = 3
+              // this.getTeamMember()
       }
       console.log(this.projectSetting.value.project)
     }
@@ -534,7 +535,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         "experience":"",
         "perPageData":0,
         "totalPerPageData":0
-      }
+      } 
+        this.submitInProcess = true;
             this.ProjectService.getTeamMember(payload).subscribe(
               (res:any)=>{
                 this.submitInProcess = false;

@@ -34,4 +34,7 @@ export class CreateProjecteService {
   addresources(obj: any){
     return this.http.post(AppConstants['ADD_RESOURCE_LIST'], obj);
   }
+  getTechnology() {
+    return this.http.get(AppConstants['GET_TECHNOLOGY']);
+   }
 }

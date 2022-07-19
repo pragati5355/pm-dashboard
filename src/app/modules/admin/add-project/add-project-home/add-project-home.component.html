@@ -426,7 +426,13 @@
                                 [color]="'primary'"
                                 (click)="submitProjectSetting()"
                                 >
-                                Next Step
+                                <span *ngIf="!submitInProcess">
+                                    Next Step
+                                </span>
+                                <mat-progress-spinner
+                                *ngIf="submitInProcess"
+                                [diameter]="24"
+                                [mode]="'indeterminate'"></mat-progress-spinner>
                             </button>
                             </div>
                         </div>
