@@ -104,9 +104,9 @@ export class AddResourcesComponent implements OnInit {
         firstName: this.resourcesForm.value.firstName,
         lastName:this.resourcesForm.value.lastName,
         email: this.resourcesForm.value.email,
-        year:1,
+        year:  this.resourcesForm.value.year,
         team:this.resourcesForm.value.team,
-        month:2,
+        month:this.resourcesForm.value.month,
         technologyCtrl: this.technologys
       };
       this.submitInProcess = true;
