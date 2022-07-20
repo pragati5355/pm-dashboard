@@ -14,7 +14,7 @@ import {StaticData} from 'app/core/constacts/static';
 export class ResourcesListComponent implements OnInit {
   technologys = new FormControl('');
   technologyLIst: string[] = ["Angular", "HTML", "Java", "Python"];
-  expriences: string[] = ['0 to 1', '1+', '2+', '3+', '4+'];
+  expriences: string[] = ['0 - 1', '1+', '2+', '3+', '4+'];
   pagination = false;
   searchValue = "";
   techList: string[] = []
@@ -77,7 +77,7 @@ export class ResourcesListComponent implements OnInit {
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
       this.allResources = res.data.teamMember;
        this.allResources.map((item:any)=>{
-         this.techList =this.techList.concat.apply(this.techList, item.technologyCtrl);
+         this.techList =this.techList.concat.apply(this.techList, item.technologys);
          this.techList =  [...new Set(this.techList )]
          this.technologyLIst = this.techList;
        })
