@@ -59,7 +59,7 @@ export class ProjectListComponent implements OnInit {
   handleSearchInput(event: any) {
     this.count = 1;
     if (this.searchValue !== event.target.value.trim()) {
-      this.searchValue = event.target.value.charAt(0).toUpperCase() + event.target.value.slice(1);
+      this.searchValue = event.target.value.trim();
       let payload = {
         perPageData: this.count,
         totalPerPageData: this.totalPageData,
