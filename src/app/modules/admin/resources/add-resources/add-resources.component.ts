@@ -11,7 +11,11 @@ import {MonthValdation} from "../../../../core/utils/Validations";
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { map, startWith } from 'rxjs/operators';
 import { CreateProjecteService } from '@services/create-projecte.service';
+import { AuthService } from '@services/auth/auth.service';
 import {SnackBar} from '../../../../core/utils/snackBar'
+export class Technology {
+  constructor( public id: number, public name: string) { }
+}
 @Component({
   selector: 'app-add-resources',
   templateUrl: './add-resources.component.html',
@@ -22,19 +26,41 @@ export class AddResourcesComponent implements OnInit {
   resourcesForm!: FormGroup;
   firstName = '';
   selectTeamList = StaticData.ROLE_LIST
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = false;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  technology = new FormControl('');
-  filteredtechnologys: Observable<string[]>;
-  technologys: string[] = [];
-  alltechnologys: string[] = ['Angular', 'JaVa', 'Python', 'HTML'];
-  @ViewChild('technologyInput') technologyInput!: ElementRef<HTMLInputElement>;
+  technology = new FormControl();
+  filteredtechnologys: Observable<any[]> | undefined;
+  technologys: any = [];
+  alltechnologys: Technology[] = [
+    {
+      id: 1,
+      name: 'Apple'
+    },
+    {
+      id: 2,
+      name: 'Orange'
+    },
+    {
+      id: 3,
+      name: 'Banana'
+    },
+    {
+      id: 4,
+      name: 'Malta'
+    }
+  ];
+
+  @ViewChild('technologyInput')
+  technologyInput!: ElementRef;
   snackBarConfig = new MatSnackBarConfig();
   constructor(private _formBuilder: FormBuilder, private router: Router,
     private ProjectService:CreateProjecteService,
     private _snackBar: MatSnackBar,
+    private _authService: AuthService,
     ) {
-    this.filteredtechnologys = this.technology.valueChanges.pipe(startWith(null), map((technology: string | null) => (technology ? this._filter(technology) : this.alltechnologys.slice())),);
-      // // material snackbar config
       this.snackBarConfig.duration = 5000;
       this.snackBarConfig.horizontalPosition = "right";
       this.snackBarConfig.verticalPosition = "bottom";
@@ -57,49 +83,20 @@ export class AddResourcesComponent implements OnInit {
       team: ['', [Validators.required]],
       year: ['', [Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
       month: ['', [Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
-      technology: ['', [Validators.required, Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
+      technology: [''],
 
     },{
       validator: [
         MonthValdation("month"),
     ]
     });
+    this.getTechnology();
   }
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our technology
-    if (value) {
-      this.technologys.push(value);
-    }
-
-    // Clear the input value
-    event.chipInput!.clear();
-
-    this.technology.setValue(null);
-  }
-
-  remove(technology: string): void {
-    const index = this.technologys.indexOf(technology);
-
-    if (index >= 0) {
-      this.technologys.splice(index, 1);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.technologys.push(event.option.viewValue);
-    this.technologyInput.nativeElement.value = '';
-    this.technology.setValue(null);
-  }
-
-  save() {
-    console.log(this.resourcesForm.value)
-  }
   submit() {
     console.log(this.technologys)
-    if (!this.resourcesForm.invalid) {
+    console.log(this.resourcesForm.invalid)
+    if (!this.resourcesForm.invalid && this.technologys.length>0) {
       let payload = {
         firstName: this.resourcesForm.value.firstName,
         lastName:this.resourcesForm.value.lastName,
@@ -109,6 +106,7 @@ export class AddResourcesComponent implements OnInit {
         month:this.resourcesForm.value.month,
         technologyCtrl: this.technologys
       };
+      console.log(payload)
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
         (res: any) => {
@@ -142,12 +140,89 @@ export class AddResourcesComponent implements OnInit {
           );
         }
       );
+    }else{
+      this.submitInProcess = false;
+      this.snackBarConfig.panelClass = ["red-snackbar"];
+      this._snackBar.open(
+        "Choose technology",
+        "x",
+        this.snackBarConfig
+      );
     }
   }
   gotoBack() {
     this.router.navigate(['/resources/resources-list'])
   }
+  getTechnology(){
+    this.ProjectService.getTechnology().subscribe(
+      (res: any) => {
+        this.submitInProcess = false;
+        console.log(res)
+        this.alltechnologys = res.data
+       console.log(this.alltechnologys)
+       this.filteredtechnologys = this.resourcesForm.get('technology')?.valueChanges
+       .pipe(
+         startWith(''),
+         map((technology: any |null) => technology ?  this._filter(technology) : this._filterslice()));
+         console.log(this.technology.valueChanges)
+         if(res.data.error){
+          this._authService.updateToken().subscribe(
+            (res: any) => {
+              console.log(res.data.accessToken)
+              this._authService.setToken(res.data.accessToken);
+            })
+         }
+      },
+      error => {
+        this.submitInProcess = false;
+        this.snackBarConfig.panelClass = ["red-snackbar"];
+        this._snackBar.open(
+          "Server error",
+          "x",
+          this.snackBarConfig
+        );
+      }
+    );
+  }
+  _filter(value: any) {
+    return this.alltechnologys.filter((alltechnologys: any) =>
+    alltechnologys.name.toLowerCase().indexOf(value) === 0  && !this.technologys.includes(alltechnologys.name));
+  }
+  _filterslice() {
+    return this.alltechnologys.filter(alltechnologys =>  !this.technologys.includes(alltechnologys.name))
+  }
+  add(event: MatChipInputEvent): void {
+    debugger
+    const input = event.input;
+    const value = event.value;
+    // Add our technology
+    if ((value || '').trim()) {
+      this.technologys.push({
+        id:Math.random(),
+        name:value.trim()
+      });
+    }
 
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.technology.setValue('');
+    this.resourcesForm.get('technology')?.setValue('');
+  }
+
+  remove(technology: any, indx: any): void {
+    this.technologys.splice(indx, 1);
+    this.resourcesForm.get('technology')?.setValue('');
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.technologys.push(event.option.value);
+    this.technologyInput.nativeElement.value = '';
+    this.technology.setValue('');
+    this.resourcesForm.get('technology')?.setValue('');
+  }
   /**
    * Upload avatar
    *
@@ -155,9 +230,6 @@ export class AddResourcesComponent implements OnInit {
    */
   uploadAvatar(): void {
     // Return if canceled
-
-    // Upload the avatar
-    // this._contactsService.uploadAvatar(this.contact.id, file).subscribe();
   }
 
   /**
@@ -165,12 +237,6 @@ export class AddResourcesComponent implements OnInit {
    */
   removeAvatar(): void {
 
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.alltechnologys.filter(technology => technology.toLowerCase().includes(filterValue));
   }
 
 }

@@ -14,7 +14,7 @@
       <!-- main section -->
 
       <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
-        <div class="w-full max-w-3xl">
+        <div class="">
           <form [formGroup]="resourcesForm" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
             <div class="w-full">
               <h2 class="text-3xl font-semibold tracking-tight leading-8">Resource details</h2>
@@ -125,25 +125,25 @@
             <!-- </div> -->
             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
               <div class="chip-input w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                <mat-form-field [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
+                <mat-form-field  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
                   <mat-label>Technology</mat-label>
-                  <mat-chip-list #chipList aria-label="Technology selection">
-                    <input #technologyInput (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto"
-                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-full  "
-                      formControlName="technology" placeholder="New technology...">
+                  <mat-chip-list #chipList>
+                    <input placeholder="New technology..." #technologyInput [formControl]="technology"  formControlName="technology" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)" class="w-full">
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology">
-                      {{technology}}
+                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology.name">
+                      {{technology.name}}
                     </mat-option>
                   </mat-autocomplete>
-                  <mat-chip-list>
-                    <mat-chip (removed)="remove(technology)" *ngFor="let technology of technologys">
-                      {{technology}}
-                      <button matChipRemove>
-                        <mat-icon class="mt--3">cancel</mat-icon>
-                      </button>
-                      <br />
+                  <mat-chip-list #chipList class="mb-2">
+                    <mat-chip *ngFor="let technology of technologys;let indx=index;" [selectable]="selectable" [removable]="removable" (removed)="remove(technology,indx)">
+                      <div *ngFor="let technologyi of alltechnologys ">
+                        <div *ngIf="technologyi.name == technology">
+                          {{technologyi.name}}
+                        </div>
+                      </div>
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>
                 </mat-form-field>
