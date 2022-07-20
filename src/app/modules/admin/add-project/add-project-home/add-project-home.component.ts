@@ -430,7 +430,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     submitProjectSetting(){
       if (!this.projectSetting.invalid) {
               this.selectedIndex = 3
-              
+              // this.getTeamMember()
       }
     }
     createProject(){
@@ -467,12 +467,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             jiraProjectKey: this.projectSetting.value.project,
             teamDetails: this.teamMemberList
           }
-          console.log(payload)
           this.submitInProcess = true;
           this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              console.log(res.data.message);  
               if(res.data.message = "Project alreday exiest"){
                 this.snackBarConfig.panelClass = ["red-snackbar"];  
                 this._snackBar.open(
@@ -510,7 +508,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         }
         else{
           this.isAddTeam = false
-          console.log(this.isAddTeam)
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
             "Add team member and role",
@@ -528,8 +525,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       let payload = {
         "technology": null,
         "experience":"",
-        "perPageData":0,
-        "totalPerPageData":0
+        "perPageData":1,
+        "totalPerPageData":20,
+        "name": ""
       } 
         this.submitInProcess = true;
             this.ProjectService.getTeamMember(payload).subscribe(
@@ -538,6 +536,16 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 console.log("teamMember",res);
                 this.teamMembers = res.data.teamMember
                 this.managerLists = res.data.teamMember
+                this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
+                .pipe(
+                  startWith(''),
+                  map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
+                );
+                this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
+                .pipe(
+                  startWith(''),
+                  map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
+                );
               }, 
               error => {
                 this.submitInProcess = false;
