@@ -33,6 +33,7 @@ const routes: Routes = [
     component: ResourcesHomeComponent,
     children: [
       { path: 'add-resources', component: AddResourcesComponent },
+      { path: 'edit-resources', component: AddResourcesComponent },
       { path: 'resources-list', component: ResourcesListComponent },
       {
         path: "",

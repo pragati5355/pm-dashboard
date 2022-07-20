@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
 import { StaticData } from "../../../../core/constacts/static";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -22,6 +22,8 @@ export class Technology {
   styleUrls: ['./add-resources.component.scss']
 })
 export class AddResourcesComponent implements OnInit {
+  formTypeAdd = true
+  pageTitle = ""
   submitInProcess: boolean = false;
   resourcesForm!: FormGroup;
   firstName = '';
@@ -30,29 +32,13 @@ export class AddResourcesComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = false;
+  initialLoading = false;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   technology = new FormControl();
   filteredtechnologys: Observable<any[]> | undefined;
   technologys: any = [];
-  alltechnologys: Technology[] = [
-    {
-      id: 1,
-      name: 'Apple'
-    },
-    {
-      id: 2,
-      name: 'Orange'
-    },
-    {
-      id: 3,
-      name: 'Banana'
-    },
-    {
-      id: 4,
-      name: 'Malta'
-    }
-  ];
-
+  alltechnologys: Technology[] = [];
+  routeSubscribe: any;
   @ViewChild('technologyInput')
   technologyInput!: ElementRef;
   snackBarConfig = new MatSnackBarConfig();
@@ -60,6 +46,7 @@ export class AddResourcesComponent implements OnInit {
     private ProjectService:CreateProjecteService,
     private _snackBar: MatSnackBar,
     private _authService: AuthService,
+    private _route: ActivatedRoute
     ) {
       this.snackBarConfig.duration = 5000;
       this.snackBarConfig.horizontalPosition = "right";
@@ -90,6 +77,27 @@ export class AddResourcesComponent implements OnInit {
         MonthValdation("month"),
     ]
     });
+    this.routeSubscribe = this._route.queryParams.subscribe(q => {
+      if (q['id']) {
+        console.log("q",q)
+        this.resourcesForm.patchValue({
+          firstName:"Sanskriti",
+          lastName:"Gupta",
+          email:"sanskriti@yopmail.com",
+          team:'Backend Dev',
+          year: 1,
+          month:2,
+        });
+        this.firstName="sankriti"
+        this.technologys = ['HTML','Java']
+        this.pageTitle = "Edit Resource"
+        this.formTypeAdd = false
+      }else{
+        this.pageTitle = "Add Resource"
+        this.formTypeAdd = true
+      }
+    });
+  
     this.getTechnology();
   }
 
@@ -154,6 +162,7 @@ export class AddResourcesComponent implements OnInit {
     this.router.navigate(['/resources/resources-list'])
   }
   getTechnology(){
+    this.initialLoading = true;
     this.ProjectService.getTechnology().subscribe(
       (res: any) => {
         this.submitInProcess = false;
@@ -165,6 +174,7 @@ export class AddResourcesComponent implements OnInit {
          startWith(''),
          map((technology: any |null) => technology ?  this._filter(technology) : this._filterslice()));
          console.log(this.technology.valueChanges)
+         this.initialLoading = false;
          if(res.data.error){
           this._authService.updateToken().subscribe(
             (res: any) => {

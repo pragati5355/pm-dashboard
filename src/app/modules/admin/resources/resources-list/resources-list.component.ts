@@ -4,7 +4,8 @@ import {FormControl} from '@angular/forms';
 import {fuseAnimations} from '@fuse/animations';
 import {CreateProjecteService} from "@services/create-projecte.service";
 import {StaticData} from 'app/core/constacts/static';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'app-resources-list',
   templateUrl: './resources-list.component.html',
@@ -12,6 +13,7 @@ import {StaticData} from 'app/core/constacts/static';
   animations: fuseAnimations
 })
 export class ResourcesListComponent implements OnInit {
+  configForm!: FormGroup;
   technologys = new FormControl('');
   technologyLIst: string[] = ["Angular", "HTML", "Java", "Python"];
   expriences: string[] = ['0 to 1', '1+', '2+', '3+', '4+'];
@@ -25,7 +27,8 @@ export class ResourcesListComponent implements OnInit {
   selectedExpriencesFromArray: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
 
-  constructor(private ProjectService: CreateProjecteService, private router: Router,) {
+  constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
+    private _fuseConfirmationService: FuseConfirmationService) {
   }
 
   ngOnInit(): void {
@@ -37,6 +40,28 @@ export class ResourcesListComponent implements OnInit {
       "totalPerPageData": this.totalPerPageData
     }
     this.getList(payload);
+      // Build the config form
+      this.configForm = this._formBuilder.group({
+        title      : 'Delete Resource',
+        message    : 'Are you sure you want to delete this resource? <span class="font-medium">This action cannot be undone!</span>',
+        icon       : this._formBuilder.group({
+            show : true,
+            name : 'heroicons_outline:exclamation',
+            color: 'warn'
+        }),
+        actions    : this._formBuilder.group({
+            confirm: this._formBuilder.group({
+                show : true,
+                label: 'Delete',
+                color: 'warn'
+            }),
+            cancel : this._formBuilder.group({
+                show : true,
+                label: 'Cancel'
+            })
+        }),
+        dismissible: false
+    });
   }
 
   gotoAddResources() {
@@ -134,5 +159,21 @@ export class ResourcesListComponent implements OnInit {
       };
       this.getList(payload);
     }
+  }
+  deleteResource(id: number): void
+  { console.log(id)
+      // Open the dialog and save the reference of it
+      const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+
+      // Subscribe to afterClosed from the dialog reference
+      dialogRef.afterClosed().subscribe((result) => {
+          console.log(result);
+      });
+  }
+  edit(id: number){
+    this.router.navigate(
+      [`/resources/edit-resources`],
+      { queryParams: { id: id } }
+    );
   }
 }
