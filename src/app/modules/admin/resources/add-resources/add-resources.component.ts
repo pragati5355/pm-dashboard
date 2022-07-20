@@ -112,7 +112,7 @@ export class AddResourcesComponent implements OnInit {
         year:  this.resourcesForm.value.year,
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month,
-        technologyCtrl: this.technologys
+        technologys: this.technologys
       };
       console.log(payload)
       this.submitInProcess = true;
