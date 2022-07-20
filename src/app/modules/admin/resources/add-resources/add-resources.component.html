@@ -1,7 +1,7 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
   <div
     class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
-    <div class="text-4xl font-extrabold tracking-tight">Add Resource</div>
+    <div class="text-4xl font-extrabold tracking-tight">{{pageTitle}}</div>
 
   </div>
   <div class="flex flex-col flex-auto w-full overflow-y-auto">
@@ -14,8 +14,8 @@
       <!-- main section -->
 
       <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
-        <div class="w-full max-w-3xl">
-          <form [formGroup]="resourcesForm" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
+        <div class="">
+          <form [formGroup]="resourcesForm" *ngIf="!initialLoading" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
             <div class="w-full">
               <h2 class="text-3xl font-semibold tracking-tight leading-8">Resource details</h2>
             </div>
@@ -53,7 +53,7 @@
               <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
                 <mat-form-field [floatLabel]="'always'" class="w-full">
                   <mat-label>First Name</mat-label>
-                  <input [(ngModel)]="firstName" formControlName="firstName" matInput maxlength="50"
+                  <input  formControlName="firstName" [(ngModel)]="firstName" matInput maxlength="50"
                     placeholder="First Name" type="text">
                   <mat-error
                     *ngIf="resourcesValidForm['firstName'].errors && resourcesValidForm['firstName']?.invalid && resourcesValidForm['firstName']?.touched ">
@@ -125,25 +125,25 @@
             <!-- </div> -->
             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
               <div class="chip-input w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                <mat-form-field [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
+                <mat-form-field  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
                   <mat-label>Technology</mat-label>
-                  <mat-chip-list #chipList aria-label="Technology selection">
-                    <input #technologyInput (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto"
-                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-full  "
-                      formControlName="technology" placeholder="New technology...">
+                  <mat-chip-list #chipList>
+                    <input placeholder="New technology..." #technologyInput [formControl]="technology"  formControlName="technology" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)" class="w-full">
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology">
-                      {{technology}}
+                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology.name">
+                      {{technology.name}}
                     </mat-option>
                   </mat-autocomplete>
-                  <mat-chip-list>
-                    <mat-chip (removed)="remove(technology)" *ngFor="let technology of technologys">
-                      {{technology}}
-                      <button matChipRemove>
-                        <mat-icon class="mt--3">cancel</mat-icon>
-                      </button>
-                      <br />
+                  <mat-chip-list #chipList class="mb-2">
+                    <mat-chip *ngFor="let technology of technologys;let indx=index;" [selectable]="selectable" [removable]="removable" (removed)="remove(technology,indx)">
+                      <div *ngFor="let technologyi of alltechnologys ">
+                        <div *ngIf="technologyi.name == technology">
+                          {{technologyi.name}}
+                        </div>
+                      </div>
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>
                 </mat-form-field>
@@ -156,8 +156,11 @@
                 <button (click)="gotoBack()" mat-stroked-button type="button">
                   Back
                 </button>
-                <button (click)="submit()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
+                <button *ngIf="formTypeAdd" (click)="submit()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
                   Save
+                </button>
+                <button *ngIf="!formTypeAdd" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
+                  Update
                 </button>
               </div>
             </div>
