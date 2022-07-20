@@ -58,7 +58,6 @@ export class AddResourcesComponent implements OnInit {
   }
 
   getAvtarInit() {
-    console.log(' charAt(0) - ', this.resourcesForm.value.firstName.charAt(0))
     this.resourcesForm.value.firstName.charAt(0)
   }
 
@@ -119,8 +118,7 @@ export class AddResourcesComponent implements OnInit {
       this.ProjectService.addresources(payload).subscribe(
         (res: any) => {
           this.submitInProcess = false;
-          console.log(res)
-        if(res.data.error){
+         if(res.data.error){
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
             res.data.error,
@@ -135,7 +133,7 @@ export class AddResourcesComponent implements OnInit {
             this.snackBarConfig
           );
           this.resourcesForm.reset();
-          this.router.navigate(['/resources/resources-list']) 
+          this.router.navigate(['/resources/resources-list'])
         }
         },
         error => {

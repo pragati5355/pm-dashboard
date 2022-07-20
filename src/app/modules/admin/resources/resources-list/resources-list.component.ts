@@ -16,16 +16,17 @@ export class ResourcesListComponent implements OnInit {
   configForm!: FormGroup;
   technologys = new FormControl('');
   technologyLIst: string[] = ["Angular", "HTML", "Java", "Python"];
-  expriences: string[] = ['0 to 1', '1+', '2+', '3+', '4+'];
-  pageNo = 1;
+  expriences: string[] = ['0 - 1', '1+', '2+', '3+', '4+'];
   pagination = false;
   searchValue = "";
-  count = 3;
+  techList: string[] = []
+  count = 1;
   resources: any = null;
   isLoading: boolean = false;
   totalRecored: any;
   selectedExpriencesFromArray: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
+  allResources: any;
 
   constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
     private _fuseConfirmationService: FuseConfirmationService) {
@@ -37,7 +38,8 @@ export class ResourcesListComponent implements OnInit {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
       "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
       "perPageData": this.count,
-      "totalPerPageData": this.totalPerPageData
+      "totalPerPageData": this.totalPerPageData,
+      "name": this.searchValue
     }
     this.getList(payload);
       // Build the config form
@@ -79,34 +81,63 @@ export class ResourcesListComponent implements OnInit {
     })
     // this.isLoading = false;
   }
-
   /*******************************************************************
-   * @description Handle Scroll pagination in Resource List
+   * @description Getting a list of technology in Resource List and pass to technologyLIst
    *
    * @author- Naynesh Rathod
    * @created_date - 19/07/2022
    *
    ******************************************************************/
 
+  getListtechList() {
+    this.isLoading = true;
+    let payload = {
+      totalPerPageData : 0,
+      technology : null,
+      perPageData : 0,
+      experience : "",
+      name : ""
+    }
+    this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
+      this.allResources = res.data.teamMember;
+       this.allResources.map((item:any)=>{
+         this.techList =this.techList.concat.apply(this.techList, item.technologys);
+         this.techList =  [...new Set(this.techList )]
+         this.technologyLIst = this.techList;
+       })
+      this.isLoading = false;
+    }, error => {
+      this.isLoading = false;
+    })
+  }
+
+  /*******************************************************************
+   * @description Handle Scroll pagination in Resource List
+   *
+   * @author- Naynesh Rathod
+   * @created_date - 18/07/2022
+   *
+   ******************************************************************/
+
   handleScroll() {
     if (!this.pagination) {
-      this.count = this.count + 3;
+      this.count = this.count + this.totalPerPageData;
       let payload = {
         "perPageData": this.count,
         "totalPerPageData": this.totalPerPageData,
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
         "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
+        "name": this.searchValue
       };
       this.pagination = true;
       this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
-        this.pagination = this.count > this.totalPerPageData ? !this.pagination : this.pagination;
+        this.pagination = false
         if (res) {
           this.resources = [...this.resources, ...res.data.teamMember];
         }
       }, (err: any) => {
         this.pagination = false;
       });
-      console.log('this.pagination', this.pagination)
     }
   }
 
@@ -120,12 +151,14 @@ export class ResourcesListComponent implements OnInit {
 
   selectChange() {
     this.isLoading = true;
-    this.count = 3;
+    this.count = 1
+    this.pagination = false
     let payload = {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
       "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
       "perPageData": this.count,
-      "totalPerPageData": this.totalPerPageData
+      "totalPerPageData": this.totalPerPageData,
+      "name": this.searchValue
     }
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
       this.totalRecored = res.data.totalRecored
@@ -147,7 +180,8 @@ export class ResourcesListComponent implements OnInit {
 
 
   inputSearch(event: any) {
-    this.count = 4;
+    this.count = 1;
+    this.pagination = false
     if (this.searchValue !== event.target.value.trim()) {
       this.searchValue = event.target.value.trim();
       let payload = {
@@ -155,7 +189,7 @@ export class ResourcesListComponent implements OnInit {
         "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
         "perPageData": this.count,
         "totalPerPageData": this.totalPerPageData,
-        "search": this.searchValue
+        "name": this.searchValue
       };
       this.getList(payload);
     }
