@@ -26,7 +26,7 @@ export class AddResourcesComponent implements OnInit {
   technology = new FormControl('');
   filteredtechnologys: Observable<string[]>;
   technologys: string[] = [];
-  alltechnologys: string[] = ['Angular', 'JaVa', 'Python', 'HTML'];
+  alltechnologys: string[] = ['Angular', 'Java', 'Python', 'HTML'];
   @ViewChild('technologyInput') technologyInput!: ElementRef<HTMLInputElement>;
   snackBarConfig = new MatSnackBarConfig();
   constructor(private _formBuilder: FormBuilder, private router: Router,
@@ -45,7 +45,6 @@ export class AddResourcesComponent implements OnInit {
   }
 
   getAvtarInit() {
-    console.log(' charAt(0) - ', this.resourcesForm.value.firstName.charAt(0))
     this.resourcesForm.value.firstName.charAt(0)
   }
 
@@ -94,12 +93,8 @@ export class AddResourcesComponent implements OnInit {
     this.technology.setValue(null);
   }
 
-  save() {
-    console.log(this.resourcesForm.value)
-  }
   submit() {
-    console.log(this.technologys)
-    if (!this.resourcesForm.invalid) {
+     if (!this.resourcesForm.invalid) {
       let payload = {
         firstName: this.resourcesForm.value.firstName,
         lastName:this.resourcesForm.value.lastName,
@@ -107,14 +102,13 @@ export class AddResourcesComponent implements OnInit {
         year:  this.resourcesForm.value.year,
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month,
-        technologyCtrl: this.technologys
+        technologys: this.technologys
       };
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
         (res: any) => {
           this.submitInProcess = false;
-          console.log(res)
-        if(res.data.error){
+         if(res.data.error){
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
             res.data.error,
@@ -129,7 +123,7 @@ export class AddResourcesComponent implements OnInit {
             this.snackBarConfig
           );
           this.resourcesForm.reset();
-          this.router.navigate(['/resources/resources-list']) 
+          this.router.navigate(['/resources/resources-list'])
         }
         },
         error => {
@@ -172,5 +166,4 @@ export class AddResourcesComponent implements OnInit {
 
     return this.alltechnologys.filter(technology => technology.toLowerCase().includes(filterValue));
   }
-
 }
