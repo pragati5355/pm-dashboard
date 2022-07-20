@@ -76,9 +76,8 @@ export class AddResourcesComponent implements OnInit {
         MonthValdation("month"),
     ]
     });
-    this.routeSubscribe = this._route.queryParams.subscribe(q => {
-      if (q['id']) {
-        console.log("q",q)
+    this.routeSubscribe = this._route.queryParams.subscribe(checkformtype => {
+      if (checkformtype['id']) {
         this.resourcesForm.patchValue({
           firstName:"Sanskriti",
           lastName:"Gupta",
@@ -101,8 +100,6 @@ export class AddResourcesComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.technologys)
-    console.log(this.resourcesForm.invalid)
     if (!this.resourcesForm.invalid && this.technologys.length>0) {
       let payload = {
         firstName: this.resourcesForm.value.firstName,
@@ -113,7 +110,6 @@ export class AddResourcesComponent implements OnInit {
         month:this.resourcesForm.value.month,
         technologys: this.technologys
       };
-      console.log(payload)
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
         (res: any) => {
@@ -164,19 +160,15 @@ export class AddResourcesComponent implements OnInit {
     this.ProjectService.getTechnology().subscribe(
       (res: any) => {
         this.submitInProcess = false;
-        console.log(res)
         this.alltechnologys = res.data
-       console.log(this.alltechnologys)
        this.filteredtechnologys = this.resourcesForm.get('technology')?.valueChanges
        .pipe(
          startWith(''),
          map((technology: any |null) => technology ?  this._filter(technology) : this._filterslice()));
-         console.log(this.technology.valueChanges)
          this.initialLoading = false;
          if(res.data.error){
           this._authService.updateToken().subscribe(
             (res: any) => {
-              console.log(res.data.accessToken)
               this._authService.setToken(res.data.accessToken);
             })
          }
@@ -220,8 +212,8 @@ export class AddResourcesComponent implements OnInit {
     this.resourcesForm.get('technology')?.setValue('');
   }
 
-  remove(technology: any, indx: any): void {
-    this.technologys.splice(indx, 1);
+  remove(technology: any, selectIndex: any): void {
+    this.technologys.splice(selectIndex, 1);
     this.resourcesForm.get('technology')?.setValue('');
   }
 
