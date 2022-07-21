@@ -13,13 +13,14 @@ export const AppConstants: ConstantsInterface = {
   UPDATE_ACCESS_TOKEN: `${baseUrl}/get-access-token`,
   CONNECT_PROJECT: `${jiraBaseUrl}/jira-project`,
   JIRA_SYNC: `${jiraBaseUrl}/connect-jira`,
-  WORK_LOG: `${jiraBaseUrl}/work-log`,
   GET_JIRA_USER: `${jiraBaseUrl}/jira-user`,
   GET_TEAM_MEMBER_LIST: `${projectBaseUrl}/get-team-member`,
   GET_RESOURCE_LIST: `${projectBaseUrl}/get-team-member`,
   ADD_RESOURCE_LIST: `${projectBaseUrl}/team-member`,
   GET_PROJECTS: `${projectBaseUrl}/project`,
   GET_TECHNOLOGY: `${projectBaseUrl}/technology`,
+  GET_RESOURCE: `${projectBaseUrl}/get-resource-by-id`,
+  UPDATE_DELETE_RESOURCE: `${projectBaseUrl}/update-delete`,
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

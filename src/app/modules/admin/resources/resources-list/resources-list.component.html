@@ -192,12 +192,14 @@
               <!-- Active -->
               <div class="sm:block">
                 <mat-icon
-                  class="text-gray-400 icon-size-5"
+                  class="text-gray-400 icon-size-5 cursor-pointer"
                   svgIcon="heroicons_outline:pencil"
+                  (click)="edit(resources.id)"
                 ></mat-icon>
                 <mat-icon
-                  class="ml-4 text-gray-400 icon-size-5"
+                  class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
                   svgIcon="heroicons_outline:trash"
+                  (click)="deleteResource(resources.id)"
                 ></mat-icon>
               </div>
             </div>

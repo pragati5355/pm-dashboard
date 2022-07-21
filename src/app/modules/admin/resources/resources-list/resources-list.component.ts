@@ -4,7 +4,9 @@ import {FormControl} from '@angular/forms';
 import {fuseAnimations} from '@fuse/animations';
 import {CreateProjecteService} from "@services/create-projecte.service";
 import {StaticData} from 'app/core/constacts/static';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'app-resources-list',
   templateUrl: './resources-list.component.html',
@@ -12,6 +14,7 @@ import {StaticData} from 'app/core/constacts/static';
   animations: fuseAnimations
 })
 export class ResourcesListComponent implements OnInit {
+  configForm!: FormGroup;
   technologys = new FormControl('');
   technologyLIst: string[] = ["Angular", "HTML", "Java", "Python"];
   expriences: string[] = ['0 - 1', '1+', '2+', '3+', '4+'];
@@ -25,8 +28,12 @@ export class ResourcesListComponent implements OnInit {
   selectedExpriencesFromArray: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   allResources: any;
-
-  constructor(private ProjectService: CreateProjecteService, private router: Router,) {
+  updateDeleteObj: any=[]
+  snackBarConfig = new MatSnackBarConfig();
+  deleteObject: any
+  constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
+    private _fuseConfirmationService: FuseConfirmationService,
+    private _snackBar: MatSnackBar,) {
   }
 
   ngOnInit(): void {
@@ -39,7 +46,28 @@ export class ResourcesListComponent implements OnInit {
       "name": this.searchValue
     }
     this.getList(payload);
-    this.getListtechList();
+      // Build the config form
+      this.configForm = this._formBuilder.group({
+        title      : 'Delete Resource',
+        message    : 'Are you sure you want to delete this resource? <span class="font-medium">This action cannot be undone!</span>',
+        icon       : this._formBuilder.group({
+            show : true,
+            name : 'heroicons_outline:exclamation',
+            color: 'warn'
+        }),
+        actions    : this._formBuilder.group({
+            confirm: this._formBuilder.group({
+                show : true,
+                label: 'Delete',
+                color: 'warn'
+            }),
+            cancel : this._formBuilder.group({
+                show : true,
+                label: 'Cancel'
+            })
+        }),
+        dismissible: false
+    });
   }
 
   gotoAddResources() {
@@ -169,5 +197,71 @@ export class ResourcesListComponent implements OnInit {
       };
       this.getList(payload);
     }
+  }
+  deleteResource(id: number): void
+  { 
+    let payload = {
+      id: id
+    }
+      // Open the dialog and save the reference of it
+      this.ProjectService.getresource(payload).subscribe(
+        (res: any) => {
+        //  console.log(res);
+         this.updateDeleteObj.push(res.data.resource)
+         this.updateDeleteObj.forEach((item: any) => {
+         this.deleteObject = {
+          id: id,
+          createdAt: null,
+          lastModifiedAt: null,
+          isDeleted: true,
+          firstName: item.firstName?item.firstName: "",
+          lastName:item.lastName?item.lastName: "",
+          email: item.email?item.email: "",
+          team: item.team?item.team: "",
+          month: item.month?item.month: 0,
+          year: item.year?item.year: 0,
+          technologys: item.technologys?item.technologys: []
+         }
+         console.log(payload)
+       
+         })
+         const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+
+         // Subscribe to afterClosed from the dialog reference
+         dialogRef.afterClosed().subscribe((result) => {
+             console.log(result);
+             if(result == "confirmed"){
+              this.ProjectService.updateDeleteResource(this.deleteObject).subscribe(
+                (res: any) => {
+                 console.log(res);
+                 this.snackBarConfig.panelClass = ["success-snackbar"];
+                 this._snackBar.open(
+                   res.data.Message,
+                   "x",
+                   this.snackBarConfig
+                 );
+                },
+                error => {
+                  this.snackBarConfig.panelClass = ["red-snackbar"];
+                  this._snackBar.open(
+                    "Server error",
+                    "x",
+                    this.snackBarConfig
+                  );
+                })
+             }
+         });
+        },
+        error => {
+   
+        }
+      );
+
+  }
+  edit(id: number){
+    this.router.navigate(
+      [`/resources/edit-resources`],
+      { queryParams: { id: id } }
+    );
   }
 }

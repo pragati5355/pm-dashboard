@@ -14,11 +14,6 @@ export class CreateProjecteService {
   syncJira(obj: any) {
     return this.http.post(AppConstants['JIRA_SYNC'], obj);
   }
-
-  workLog(obj: any) {
-    return this.http.post(AppConstants['WORK_LOG'], obj);
-  }
-
   getJiraUser(obj: any) {
     return this.http.post(AppConstants['GET_JIRA_USER'], obj);
    }
@@ -36,5 +31,11 @@ export class CreateProjecteService {
   }
   getTechnology() {
     return this.http.get(AppConstants['GET_TECHNOLOGY']);
+   }
+   getresource(obj: any) {
+    return this.http.post(AppConstants['GET_RESOURCE'],obj);
+   }
+   updateDeleteResource(obj: any) {
+    return this.http.post(AppConstants['UPDATE_DELETE_RESOURCE'],obj);
    }
 }

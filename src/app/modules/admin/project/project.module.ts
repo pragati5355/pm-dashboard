@@ -43,11 +43,6 @@ const routes: Routes = [
         loadChildren: () =>
           import("../add-project/add-project.module").then(m => m.AddProjectModule)
       },
-      // {
-      //   path: "add-project",
-      //   component: CreateProjectComponent,
-      // },
- 
  
  
       {

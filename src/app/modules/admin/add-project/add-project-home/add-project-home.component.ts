@@ -124,8 +124,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
  
       this.userData = this._authService.getUser();
       this.projectDetials = this._formBuilder.group({
-      projectName: ['',[Validators.required,
-        Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
+      projectName: ['',[Validators.required]],
       projectDescription: ['',[Validators.required,
         TextRegexValidator(RegexConstants.Text_Area)]]
       },{
@@ -370,7 +369,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
 
     }
     addTeamMember() {
-      console.log( this.projectTeam.value.team_member)
       if (
         !this.projectTeam.value.team_jira_user
       ) {
@@ -394,11 +392,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         ];
         this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user]
         this.selectedTeamMember = [  ...this.selectedTeamMember, this.projectTeam.value.team_member]
-        console.log(this.selectedTeamMember)
         this.projectTeam.controls["team_member"].reset();
         this.projectTeam.controls["select_role"].reset();
         this.projectTeam.controls["team_jira_user"].reset();
-        console.log(this.teamMemberList)
       }
     }
     deleteTeamMember(index: any) {
@@ -436,21 +432,20 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               this.selectedIndex = 3
               // this.getTeamMember()
       }
-      console.log(this.projectSetting.value.project)
     }
     createProject(){
-      this.teamMemberList = [
-        ...this.teamMemberList,
-        {
-          name: this.projectTeam.value.project_manager ,
-          role: "MANAGER",
-          jiraUser: this.projectTeam.value.jira_user,
-          isManager: true
-        }
-      ];
-      console.log(this.teamMemberList);
+
       if (!this.projectTeam.invalid) {
         if(this.teamMemberList.length > 0){
+          this.teamMemberList = [
+            ...this.teamMemberList,
+            {
+              name: this.projectTeam.value.project_manager ,
+              role: "MANAGER",
+              jiraUser: this.projectTeam.value.jira_user,
+              isManager: true
+            }
+          ];
           let payload = 
           {
             projectDetails: {
@@ -472,12 +467,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             jiraProjectKey: this.projectSetting.value.project,
             teamDetails: this.teamMemberList
           }
-          console.log(payload)
           this.submitInProcess = true;
           this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              console.log(res.data.message);  
               if(res.data.message = "Project alreday exiest"){
                 this.snackBarConfig.panelClass = ["red-snackbar"];  
                 this._snackBar.open(
@@ -515,7 +508,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         }
         else{
           this.isAddTeam = false
-          console.log(this.isAddTeam)
           this.snackBarConfig.panelClass = ["red-snackbar"];
           this._snackBar.open(
             "Add team member and role",
@@ -533,8 +525,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       let payload = {
         "technology": null,
         "experience":"",
-        "perPageData":0,
-        "totalPerPageData":0
+        "perPageData":1,
+        "totalPerPageData":20,
+        "name": ""
       } 
         this.submitInProcess = true;
             this.ProjectService.getTeamMember(payload).subscribe(
@@ -543,7 +536,16 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 console.log("teamMember",res);
                 this.teamMembers = res.data.teamMember
                 this.managerLists = res.data.teamMember
-                
+                this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
+                .pipe(
+                  startWith(''),
+                  map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
+                );
+                this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
+                .pipe(
+                  startWith(''),
+                  map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
+                );
               }, 
               error => {
                 this.submitInProcess = false;
@@ -566,7 +568,6 @@ selectedJiraUserOption(event: any) {
       );
    }
    selectedManagerOption(event: any){
-     console.log("hello")
      const selectedValue = event.option.value;
      this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
      .pipe(
