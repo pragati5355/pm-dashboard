@@ -5,6 +5,7 @@ import {fuseAnimations} from '@fuse/animations';
 import {CreateProjecteService} from "@services/create-projecte.service";
 import {StaticData} from 'app/core/constacts/static';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'app-resources-list',
@@ -27,9 +28,12 @@ export class ResourcesListComponent implements OnInit {
   selectedExpriencesFromArray: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   allResources: any;
-
+  updateDeleteObj: any=[]
+  snackBarConfig = new MatSnackBarConfig();
+  deleteObject: any
   constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
-    private _fuseConfirmationService: FuseConfirmationService) {
+    private _fuseConfirmationService: FuseConfirmationService,
+    private _snackBar: MatSnackBar,) {
   }
 
   ngOnInit(): void {
@@ -195,14 +199,64 @@ export class ResourcesListComponent implements OnInit {
     }
   }
   deleteResource(id: number): void
-  { console.log(id)
+  { 
+    let payload = {
+      id: id
+    }
       // Open the dialog and save the reference of it
-      const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+      this.ProjectService.getresource(payload).subscribe(
+        (res: any) => {
+        //  console.log(res);
+         this.updateDeleteObj.push(res.data.resource)
+         this.updateDeleteObj.forEach((item: any) => {
+         this.deleteObject = {
+          id: id,
+          createdAt: null,
+          lastModifiedAt: null,
+          isDeleted: true,
+          firstName: item.firstName?item.firstName: "",
+          lastName:item.lastName?item.lastName: "",
+          email: item.email?item.email: "",
+          team: item.team?item.team: "",
+          month: item.month?item.month: 0,
+          year: item.year?item.year: 0,
+          technologys: item.technologys?item.technologys: []
+         }
+         console.log(payload)
+       
+         })
+         const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
 
-      // Subscribe to afterClosed from the dialog reference
-      dialogRef.afterClosed().subscribe((result) => {
-          console.log(result);
-      });
+         // Subscribe to afterClosed from the dialog reference
+         dialogRef.afterClosed().subscribe((result) => {
+             console.log(result);
+             if(result == "confirmed"){
+              this.ProjectService.updateDeleteResource(this.deleteObject).subscribe(
+                (res: any) => {
+                 console.log(res);
+                 this.snackBarConfig.panelClass = ["success-snackbar"];
+                 this._snackBar.open(
+                   res.data.Message,
+                   "x",
+                   this.snackBarConfig
+                 );
+                },
+                error => {
+                  this.snackBarConfig.panelClass = ["red-snackbar"];
+                  this._snackBar.open(
+                    "Server error",
+                    "x",
+                    this.snackBarConfig
+                  );
+                })
+             }
+         });
+        },
+        error => {
+   
+        }
+      );
+
   }
   edit(id: number){
     this.router.navigate(

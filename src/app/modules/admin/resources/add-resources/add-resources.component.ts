@@ -23,6 +23,7 @@ export class Technology {
 })
 export class AddResourcesComponent implements OnInit {
   formTypeAdd = true
+  editFormId = 0
   pageTitle = ""
   submitInProcess: boolean = false;
   resourcesForm!: FormGroup;
@@ -39,6 +40,7 @@ export class AddResourcesComponent implements OnInit {
   technologys: any = [];
   alltechnologys: Technology[] = [];
   routeSubscribe: any;
+  updateDeleteObj: any=[]
   @ViewChild('technologyInput')
   technologyInput!: ElementRef;
   snackBarConfig = new MatSnackBarConfig();
@@ -78,16 +80,8 @@ export class AddResourcesComponent implements OnInit {
     });
     this.routeSubscribe = this._route.queryParams.subscribe(checkformtype => {
       if (checkformtype['id']) {
-        this.resourcesForm.patchValue({
-          firstName:"Sanskriti",
-          lastName:"Gupta",
-          email:"sanskriti@yopmail.com",
-          team:'Backend Dev',
-          year: 1,
-          month:2,
-        });
-        this.firstName="sankriti"
-        this.technologys = ['HTML','Java']
+          this.fetchEditdata(checkformtype['id'])
+          this.editFormId = checkformtype['id']
         this.pageTitle = "Edit Resource"
         this.formTypeAdd = false
       }else{
@@ -100,14 +94,15 @@ export class AddResourcesComponent implements OnInit {
   }
 
   submit() {
-    if (!this.resourcesForm.invalid && this.technologys.length>0) {
+    if (!this.resourcesForm.invalid) {
+      if(this.technologys.length>0){
       let payload = {
         firstName: this.resourcesForm.value.firstName,
         lastName:this.resourcesForm.value.lastName,
         email: this.resourcesForm.value.email,
-        year:  this.resourcesForm.value.year,
+        year:  this.resourcesForm.value.year? this.resourcesForm.value.year: 0,
         team:this.resourcesForm.value.team,
-        month:this.resourcesForm.value.month,
+        month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technologys: this.technologys
       };
       this.submitInProcess = true;
@@ -142,14 +137,16 @@ export class AddResourcesComponent implements OnInit {
           );
         }
       );
-    }else{
-      this.submitInProcess = false;
-      this.snackBarConfig.panelClass = ["red-snackbar"];
-      this._snackBar.open(
-        "Choose technology",
-        "x",
-        this.snackBarConfig
-      );
+    }
+      else{
+        this.submitInProcess = false;
+        this.snackBarConfig.panelClass = ["red-snackbar"];
+        this._snackBar.open(
+          "Choose technology",
+          "x",
+          this.snackBarConfig
+        );
+      }
     }
   }
   gotoBack() {
@@ -238,5 +235,100 @@ export class AddResourcesComponent implements OnInit {
   removeAvatar(): void {
 
   }
-
+  fetchEditdata(id: number){
+    let payload={id: id}
+    this.ProjectService.getresource(payload).subscribe(
+      (res: any) => {
+        this.updateDeleteObj.push(res.data.resource)
+        this.updateDeleteObj.forEach((item: any) => {
+        // this.deleteObject = {
+        //  id: id,
+        //  createdAt: null,
+        //  lastModifiedAt: null,
+        //  isDeleted: true,
+        //  firstName: item.firstName?item.firstName: "",
+        //  lastName:item.lastName?item.lastName: "",
+        //  email: item.email?item.email: "",
+        //  team: item.team?item.team: "",
+        //  month: item.month?item.month: 0,
+        //  year: item.year?item.year: 0,
+        //  technologys: item.technologys?item.technologys: []
+        // }
+        this.resourcesForm.patchValue({
+          firstName:item.firstName?item.firstName: "",
+          lastName:item.lastName?item.lastName: "",
+          email: item.email?item.email: "",
+          team:item.team?item.team: "",
+          year: item.month?item.month: 0,
+          month: item.year?item.year: 0,
+        });
+        this.firstName=item.firstName?item.firstName: ""
+        this.technologys =item.technologys?item.technologys: []
+      })
+      },
+      error => {
+ 
+      }
+    );
+  }
+  editresource(){
+    if (!this.resourcesForm.invalid) {
+      if(this.technologys.length>0){
+      let payload = {
+        id: this.editFormId,
+        createdAt: null,
+        lastModifiedAt: null,
+        isDeleted: false,
+        firstName: this.resourcesForm.value.firstName,
+        lastName:this.resourcesForm.value.lastName,
+        email: this.resourcesForm.value.email,
+        year:  this.resourcesForm.value.year? this.resourcesForm.value.year: 0,
+        team:this.resourcesForm.value.team,
+        month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
+        technologys: this.technologys
+      };
+      this.submitInProcess = true;
+      this.ProjectService.updateDeleteResource(payload).subscribe(
+        (res: any) => {
+          this.submitInProcess = false;
+         if(res.data.error){
+          this.snackBarConfig.panelClass = ["red-snackbar"];
+          this._snackBar.open(
+            res.data.error,
+            "x",
+            this.snackBarConfig
+          );
+        }else{
+          this.snackBarConfig.panelClass = ["success-snackbar"];
+          this._snackBar.open(
+            "Updated successfully",
+            "x",
+            this.snackBarConfig
+          );
+          this.resourcesForm.reset();
+          this.router.navigate(['/resources/resources-list'])
+        }
+        },
+        error => {
+          this.submitInProcess = false;
+          this.snackBarConfig.panelClass = ["red-snackbar"];
+          this._snackBar.open(
+            "Server error",
+            "x",
+            this.snackBarConfig
+          );
+        }
+      );
+    }
+      else{
+        this.submitInProcess = false;
+        this.snackBarConfig.panelClass = ["red-snackbar"];
+        this._snackBar.open(
+          "Choose technology",
+          "x",
+          this.snackBarConfig
+        );
+      }
+    }
+  }
 }
