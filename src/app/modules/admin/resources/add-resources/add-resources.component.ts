@@ -23,6 +23,7 @@ export class Technology {
 })
 export class AddResourcesComponent implements OnInit {
   formTypeAdd = true
+  editFormId = 0
   pageTitle = ""
   submitInProcess: boolean = false;
   resourcesForm!: FormGroup;
@@ -80,6 +81,7 @@ export class AddResourcesComponent implements OnInit {
     this.routeSubscribe = this._route.queryParams.subscribe(checkformtype => {
       if (checkformtype['id']) {
           this.fetchEditdata(checkformtype['id'])
+          this.editFormId = checkformtype['id']
         this.pageTitle = "Edit Resource"
         this.formTypeAdd = false
       }else{
@@ -269,5 +271,64 @@ export class AddResourcesComponent implements OnInit {
       }
     );
   }
-
+  editresource(){
+    if (!this.resourcesForm.invalid) {
+      if(this.technologys.length>0){
+      let payload = {
+        id: this.editFormId,
+        createdAt: null,
+        lastModifiedAt: null,
+        isDeleted: false,
+        firstName: this.resourcesForm.value.firstName,
+        lastName:this.resourcesForm.value.lastName,
+        email: this.resourcesForm.value.email,
+        year:  this.resourcesForm.value.year? this.resourcesForm.value.year: 0,
+        team:this.resourcesForm.value.team,
+        month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
+        technologys: this.technologys
+      };
+      this.submitInProcess = true;
+      this.ProjectService.updateDeleteResource(payload).subscribe(
+        (res: any) => {
+          this.submitInProcess = false;
+         if(res.data.error){
+          this.snackBarConfig.panelClass = ["red-snackbar"];
+          this._snackBar.open(
+            res.data.error,
+            "x",
+            this.snackBarConfig
+          );
+        }else{
+          this.snackBarConfig.panelClass = ["success-snackbar"];
+          this._snackBar.open(
+            "Updated successfully",
+            "x",
+            this.snackBarConfig
+          );
+          this.resourcesForm.reset();
+          this.router.navigate(['/resources/resources-list'])
+        }
+        },
+        error => {
+          this.submitInProcess = false;
+          this.snackBarConfig.panelClass = ["red-snackbar"];
+          this._snackBar.open(
+            "Server error",
+            "x",
+            this.snackBarConfig
+          );
+        }
+      );
+    }
+      else{
+        this.submitInProcess = false;
+        this.snackBarConfig.panelClass = ["red-snackbar"];
+        this._snackBar.open(
+          "Choose technology",
+          "x",
+          this.snackBarConfig
+        );
+      }
+    }
+  }
 }

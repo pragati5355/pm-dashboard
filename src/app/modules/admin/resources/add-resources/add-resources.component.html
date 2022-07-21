@@ -163,7 +163,7 @@
                 <button *ngIf="formTypeAdd" (click)="submit()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
                   Save
                 </button>
-                <button *ngIf="!formTypeAdd" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
+                <button *ngIf="!formTypeAdd" (click)="editresource()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
                   Update
                 </button>
               </div>
