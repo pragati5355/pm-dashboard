@@ -100,14 +100,15 @@ export class AddResourcesComponent implements OnInit {
   }
 
   submit() {
-    if (!this.resourcesForm.invalid && this.technologys.length>0) {
+    if (!this.resourcesForm.invalid) {
+      if(this.technologys.length>0){
       let payload = {
         firstName: this.resourcesForm.value.firstName,
         lastName:this.resourcesForm.value.lastName,
         email: this.resourcesForm.value.email,
-        year:  this.resourcesForm.value.year,
+        year:  this.resourcesForm.value.year? this.resourcesForm.value.year: 0,
         team:this.resourcesForm.value.team,
-        month:this.resourcesForm.value.month,
+        month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technologys: this.technologys
       };
       this.submitInProcess = true;
@@ -142,14 +143,16 @@ export class AddResourcesComponent implements OnInit {
           );
         }
       );
-    }else{
-      this.submitInProcess = false;
-      this.snackBarConfig.panelClass = ["red-snackbar"];
-      this._snackBar.open(
-        "Choose technology",
-        "x",
-        this.snackBarConfig
-      );
+    }
+      else{
+        this.submitInProcess = false;
+        this.snackBarConfig.panelClass = ["red-snackbar"];
+        this._snackBar.open(
+          "Choose technology",
+          "x",
+          this.snackBarConfig
+        );
+      }
     }
   }
   gotoBack() {
