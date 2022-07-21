@@ -1,12 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {FormControl} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {fuseAnimations} from '@fuse/animations';
 import {CreateProjecteService} from "@services/create-projecte.service";
 import {StaticData} from 'app/core/constacts/static';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import {FuseConfirmationService} from '@fuse/services/confirmation';
+
 @Component({
   selector: 'app-resources-list',
   templateUrl: './resources-list.component.html',
@@ -16,7 +15,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 export class ResourcesListComponent implements OnInit {
   configForm!: FormGroup;
   technologys = new FormControl('');
-  technologyLIst: string[] = ["Angular", "HTML", "Java", "Python"];
+  technologyLIst: string[] = [];
   expriences: string[] = ['0 - 1', '1+', '2+', '3+', '4+'];
   pagination = false;
   searchValue = "";
@@ -28,12 +27,8 @@ export class ResourcesListComponent implements OnInit {
   selectedExpriencesFromArray: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   allResources: any;
-  updateDeleteObj: any=[]
-  snackBarConfig = new MatSnackBarConfig();
-  deleteObject: any
-  constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
-    private _fuseConfirmationService: FuseConfirmationService,
-    private _snackBar: MatSnackBar,) {
+
+  constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder, private _fuseConfirmationService: FuseConfirmationService) {
   }
 
   ngOnInit(): void {
@@ -46,27 +41,28 @@ export class ResourcesListComponent implements OnInit {
       "name": this.searchValue
     }
     this.getList(payload);
-      // Build the config form
-      this.configForm = this._formBuilder.group({
-        title      : 'Delete Resource',
-        message    : 'Are you sure you want to delete this resource? <span class="font-medium">This action cannot be undone!</span>',
-        icon       : this._formBuilder.group({
-            show : true,
-            name : 'heroicons_outline:exclamation',
-            color: 'warn'
+    this.getListtechList();
+    // Build the config form
+    this.configForm = this._formBuilder.group({
+      title: 'Delete Resource',
+      message: 'Are you sure you want to delete this resource? <span class="font-medium">This action cannot be undone!</span>',
+      icon: this._formBuilder.group({
+        show: true,
+        name: 'heroicons_outline:exclamation',
+        color: 'warn'
+      }),
+      actions: this._formBuilder.group({
+        confirm: this._formBuilder.group({
+          show: true,
+          label: 'Delete',
+          color: 'warn'
         }),
-        actions    : this._formBuilder.group({
-            confirm: this._formBuilder.group({
-                show : true,
-                label: 'Delete',
-                color: 'warn'
-            }),
-            cancel : this._formBuilder.group({
-                show : true,
-                label: 'Cancel'
-            })
-        }),
-        dismissible: false
+        cancel: this._formBuilder.group({
+          show: true,
+          label: 'Cancel'
+        })
+      }),
+      dismissible: false
     });
   }
 
@@ -85,6 +81,7 @@ export class ResourcesListComponent implements OnInit {
     })
     // this.isLoading = false;
   }
+
   /*******************************************************************
    * @description Getting a list of technology in Resource List and pass to technologyLIst
    *
@@ -95,20 +92,11 @@ export class ResourcesListComponent implements OnInit {
 
   getListtechList() {
     this.isLoading = true;
-    let payload = {
-      totalPerPageData : 0,
-      technology : null,
-      perPageData : 0,
-      experience : "",
-      name : ""
-    }
-    this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
-      this.allResources = res.data.teamMember;
-       this.allResources.map((item:any)=>{
-         this.techList =this.techList.concat.apply(this.techList, item.technologys);
-         this.techList =  [...new Set(this.techList )]
-         this.technologyLIst = this.techList;
-       })
+    this.ProjectService.getTechnology().subscribe((res: any) => {
+      let technologyLIst = res.data;
+      technologyLIst.map((item: any) => {
+        this.technologyLIst.push(item.name)
+      })
       this.isLoading = false;
     }, error => {
       this.isLoading = false;
@@ -198,70 +186,16 @@ export class ResourcesListComponent implements OnInit {
       this.getList(payload);
     }
   }
-  deleteResource(id: number): void
-  { 
-    let payload = {
-      id: id
-    }
-      // Open the dialog and save the reference of it
-      this.ProjectService.getresource(payload).subscribe(
-        (res: any) => {
-        //  console.log(res);
-         this.updateDeleteObj.push(res.data.resource)
-         this.updateDeleteObj.forEach((item: any) => {
-         this.deleteObject = {
-          id: id,
-          createdAt: null,
-          lastModifiedAt: null,
-          isDeleted: true,
-          firstName: item.firstName?item.firstName: "",
-          lastName:item.lastName?item.lastName: "",
-          email: item.email?item.email: "",
-          team: item.team?item.team: "",
-          month: item.month?item.month: 0,
-          year: item.year?item.year: 0,
-          technologys: item.technologys?item.technologys: []
-         }
-         console.log(payload)
-       
-         })
-         const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
 
-         // Subscribe to afterClosed from the dialog reference
-         dialogRef.afterClosed().subscribe((result) => {
-             console.log(result);
-             if(result == "confirmed"){
-              this.ProjectService.updateDeleteResource(this.deleteObject).subscribe(
-                (res: any) => {
-                 console.log(res);
-                 this.snackBarConfig.panelClass = ["success-snackbar"];
-                 this._snackBar.open(
-                   res.data.Message,
-                   "x",
-                   this.snackBarConfig
-                 );
-                },
-                error => {
-                  this.snackBarConfig.panelClass = ["red-snackbar"];
-                  this._snackBar.open(
-                    "Server error",
-                    "x",
-                    this.snackBarConfig
-                  );
-                })
-             }
-         });
-        },
-        error => {
-   
-        }
-      );
-
+  deleteResource(id: number): void {
+    // Open the dialog and save the reference of it
+    const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+    // Subscribe to afterClosed from the dialog reference
+    dialogRef.afterClosed().subscribe((result) => {
+    });
   }
-  edit(id: number){
-    this.router.navigate(
-      [`/resources/edit-resources`],
-      { queryParams: { id: id } }
-    );
+
+  edit(id: number) {
+    this.router.navigate([`/resources/edit-resources`], {queryParams: {id: id}});
   }
 }

@@ -5,35 +5,42 @@ import { Route, RouterModule, Routes } from '@angular/router';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { SprintsListComponent } from './sprints-list/sprints-list.component';
 import { ProjectMembersListComponent } from './project-members-list/project-members-list.component';
+import {MatIconModule} from "@angular/material/icon";
+import {InfiniteScrollModule} from "ngx-infinite-scroll";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule} from "@angular/material/button";
 
 
 const routes: Routes = [
-  {
-    path: "",
-    component: ProjectDetailsComponent,
-  },
-  {
-    path: "",
-    redirectTo: "",
-    pathMatch: "full"
-  },
-  {
-    path: "**",
-    redirectTo: ""
-  }
+  // {    path: "",   component: ProjectDetailsComponent,  },
+  // {   path: "",    redirectTo: "",    pathMatch: "full"  },
+  // {    path: "**",    redirectTo: ""  }
 ];
 
 
 @NgModule({
   declarations: [
-    ProjectDetailsComponent,
     SprintsListComponent,
+    ProjectDetailsComponent,
     ProjectMembersListComponent,
   ],
   imports: [
-    CommonModule,
+    FormsModule,
     SharedModule,
-    RouterModule.forChild(routes),
+    CommonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    InfiniteScrollModule,
+    MatProgressBarModule,
+    RouterModule.forChild(routes)
   ],
   exports: [
     ProjectDetailsComponent,

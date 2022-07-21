@@ -60,6 +60,7 @@ export class ProjectListComponent implements OnInit {
     this.count = 1;
     if (this.searchValue !== event.target.value.trim()) {
       this.searchValue = event.target.value.trim();
+      this.pagination = false;
       let payload = {
         perPageData: this.count,
         totalPerPageData: this.totalPageData,
