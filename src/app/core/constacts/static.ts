@@ -27,7 +27,7 @@ export const StaticData = {
     {value: 'DevOps', viewValue: 'DevOps'},
     {value: 'Designer', viewValue: 'Designer'}
   ],
-  PER_PAGE_DATA:4,
+  PER_PAGE_DATA:10,
 };
 
 
