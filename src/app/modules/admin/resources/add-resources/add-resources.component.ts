@@ -39,6 +39,7 @@ export class AddResourcesComponent implements OnInit {
   technologys: any = [];
   alltechnologys: Technology[] = [];
   routeSubscribe: any;
+  updateDeleteObj: any=[]
   @ViewChild('technologyInput')
   technologyInput!: ElementRef;
   snackBarConfig = new MatSnackBarConfig();
@@ -78,16 +79,7 @@ export class AddResourcesComponent implements OnInit {
     });
     this.routeSubscribe = this._route.queryParams.subscribe(checkformtype => {
       if (checkformtype['id']) {
-        this.resourcesForm.patchValue({
-          firstName:"Sanskriti",
-          lastName:"Gupta",
-          email:"sanskriti@yopmail.com",
-          team:'Backend Dev',
-          year: 1,
-          month:2,
-        });
-        this.firstName="sankriti"
-        this.technologys = ['HTML','Java']
+          this.fetchEditdata(checkformtype['id'])
         this.pageTitle = "Edit Resource"
         this.formTypeAdd = false
       }else{
@@ -240,6 +232,42 @@ export class AddResourcesComponent implements OnInit {
    */
   removeAvatar(): void {
 
+  }
+  fetchEditdata(id: number){
+    let payload={id: id}
+    this.ProjectService.getresource(payload).subscribe(
+      (res: any) => {
+        this.updateDeleteObj.push(res.data.resource)
+        this.updateDeleteObj.forEach((item: any) => {
+        // this.deleteObject = {
+        //  id: id,
+        //  createdAt: null,
+        //  lastModifiedAt: null,
+        //  isDeleted: true,
+        //  firstName: item.firstName?item.firstName: "",
+        //  lastName:item.lastName?item.lastName: "",
+        //  email: item.email?item.email: "",
+        //  team: item.team?item.team: "",
+        //  month: item.month?item.month: 0,
+        //  year: item.year?item.year: 0,
+        //  technologys: item.technologys?item.technologys: []
+        // }
+        this.resourcesForm.patchValue({
+          firstName:item.firstName?item.firstName: "",
+          lastName:item.lastName?item.lastName: "",
+          email: item.email?item.email: "",
+          team:item.team?item.team: "",
+          year: item.month?item.month: 0,
+          month: item.year?item.year: 0,
+        });
+        this.firstName=item.firstName?item.firstName: ""
+        this.technologys =item.technologys?item.technologys: []
+      })
+      },
+      error => {
+ 
+      }
+    );
   }
 
 }
