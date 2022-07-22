@@ -21,6 +21,7 @@ export const AppConstants: ConstantsInterface = {
   GET_TECHNOLOGY: `${projectBaseUrl}/technology`,
   GET_RESOURCE: `${projectBaseUrl}/get-resource-by-id`,
   UPDATE_DELETE_RESOURCE: `${projectBaseUrl}/update-delete`,
+  GET_SPRINT_LIST: `${projectBaseUrl}/sprint`,
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

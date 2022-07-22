@@ -27,13 +27,6 @@ export const StaticData = {
     {value: 'DevOps', viewValue: 'DevOps'},
     {value: 'Designer', viewValue: 'Designer'}
   ],
-  SPRINTS_LIST: [
-    {sprintName: 'Sprint Name 1', start_date: '21 Jan, 2022', end_date: '21 Feb, 2022', flag: true},
-    {sprintName: 'Sprint Name 2', start_date: '22 Feb, 2022', end_date: '22 March, 2022', flag: false},
-    {sprintName: 'Sprint Name 3', start_date: '23 March, 2022', end_date: '23 April, 2022', flag: true},
-    {sprintName: 'Sprint Name 4', start_date: '24 April, 2022', end_date: '24 May, 2022', flag: false},
-    {sprintName: 'Sprint Name 5', start_date: '25 May, 2022', end_date: '25 June, 2022', flag: true},
-  ],
 
   TEAM_MEMBER_LIST: [
     {image: 'assets/images/avatars/male-01.jpg', name: 'Naynesh Rathod', start_date: 'Jan 21,2021', email: 'nayneshrathod@gmail.com', role: 'Developer'},
