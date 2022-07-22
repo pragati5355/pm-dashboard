@@ -1,9 +1,6 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
 import {StaticData} from "../../../../../core/constacts/static";
 import {CreateProjecteService} from "@services/create-projecte.service";
-import {Router} from "@angular/router";
-import {FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 
 @Component({
   selector: 'app-sprints-list',
@@ -17,7 +14,7 @@ export class SprintsListComponent implements OnInit {
   totalPerPageData = StaticData.PER_PAGE_DATA;
   sprintList: any = [];
 
-  constructor(private ProjectService: CreateProjecteService ) {
+  constructor(private ProjectService: CreateProjecteService) {
   }
 
   ngOnInit(): void {
