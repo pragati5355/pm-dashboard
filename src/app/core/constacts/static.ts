@@ -19,7 +19,8 @@ export const StaticData = {
     { value: 'Python', viewValue: 'Python' },
     { value: 'React Native', viewValue: 'React Native' },
     { value: 'UI/UX', viewValue: 'UI/UX' },
-    { value: 'QA', viewValue: 'QA' }
+    { value: 'QA', viewValue: 'QA' },
+    { value: 'FE developer', viewValue: 'FE developer' }
   ],
   TEAM_MEMBER_ROLE: [
     {value: 'Frontend Dev', viewValue: 'Frontend Dev'},

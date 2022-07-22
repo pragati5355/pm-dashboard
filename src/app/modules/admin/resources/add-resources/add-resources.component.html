@@ -136,18 +136,18 @@
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)" class="w-full">
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology.name">
+                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology.id">
                       {{technology.name}}
                     </mat-option>
                   </mat-autocomplete>
                   <mat-chip-list #chipList class="mb-2">
                     <mat-chip *ngFor="let technology of technologys;let selectIndex=index;" [selectable]="selectable" [removable]="removable" (removed)="remove(technology,selectIndex)">
-                      {{technology}}
-                      <!-- <div *ngFor="let technologyi of alltechnologys ">
-                        <div *ngIf="technologyi.name == technology">
+                      <!-- {{technology}} -->
+                      <div *ngFor="let technologyi of alltechnologys ">
+                        <div *ngIf="technologyi.id == technology">
                           {{technologyi.name}}
                         </div>
-                      </div> -->
+                      </div>
                       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>

@@ -47,3 +47,42 @@ export function TextRegexValidator(reg: RegexConstants): ValidatorFn {
     return null;
   };
 }
+
+export function ExprienceValidation(
+    controlName: string,
+    matchingControlName: string
+  ) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+      if (
+        matchingControl.errors &&
+        !matchingControl.errors['InvalidError'] &&
+        control.errors &&
+        !control.errors['InvalidCode']
+      ) {
+        return;
+      }
+      if (!control.value && !matchingControl.value) {
+        control.setErrors(null);
+        matchingControl.setErrors(null);
+      } else if (control.value.length > 0 && matchingControl.value.length === 0) {
+        matchingControl.setErrors({ InvalidCode: true });
+      } else if (control.value.length === 0 && matchingControl.value.length > 0) {
+        control.setErrors({ InvalidCode: true });
+      } else if (matchingControl.value.length === 2) {
+        control.setErrors(null);
+        matchingControl.setErrors(null);
+      }else if (control.value.length === 2) {
+        control.setErrors(null);
+        matchingControl.setErrors(null);
+      }else if (control.value.length < 0 ) {
+        control.setErrors({ InvalidCode: true });
+      } else if (control.value < matchingControl.value) {
+        control.setErrors(null);
+        matchingControl.setErrors(null);
+      } else if (control.value > matchingControl.value) {
+        control.setErrors({ InvalidCode: true });
+      } 
+    };
+  }
