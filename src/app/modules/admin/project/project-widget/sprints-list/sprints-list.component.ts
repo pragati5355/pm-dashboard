@@ -9,23 +9,20 @@ import {FuseConfirmationService} from "../../../../../../@fuse/services/confirma
   selector: 'app-sprints-list',
   templateUrl: './sprints-list.component.html',
   styleUrls: ['./sprints-list.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-
 })
 export class SprintsListComponent implements OnInit {
-  pagination = false;
   count = 1;
   isLoading: boolean = false;
   totalRecored = 0;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   sprintList: any = [];
 
-  constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
-              private _fuseConfirmationService: FuseConfirmationService) {
+  constructor(private ProjectService: CreateProjecteService ) {
   }
 
   ngOnInit(): void {
     this.isLoading = true;
+    // id pass only temporary after implementing router pass query by id
     let payload = {
       "id": 29
     }
