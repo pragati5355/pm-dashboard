@@ -3,12 +3,11 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
 import { StaticData } from "../../../../core/constacts/static";
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { C, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import {MonthValdation} from "../../../../core/utils/Validations";
-import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { map, startWith } from 'rxjs/operators';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { AuthService } from '@services/auth/auth.service';
@@ -43,16 +42,12 @@ export class AddResourcesComponent implements OnInit {
   updateDeleteObj: any=[]
   @ViewChild('technologyInput')
   technologyInput!: ElementRef;
-  snackBarConfig = new MatSnackBarConfig();
   constructor(private _formBuilder: FormBuilder, private router: Router,
     private ProjectService:CreateProjecteService,
-    private _snackBar: MatSnackBar,
     private _authService: AuthService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private snackBar: SnackBar
     ) {
-      this.snackBarConfig.duration = 5000;
-      this.snackBarConfig.horizontalPosition = "right";
-      this.snackBarConfig.verticalPosition = "bottom";
   }
 
   get resourcesValidForm(): { [key: string]: AbstractControl } {
@@ -110,42 +105,22 @@ export class AddResourcesComponent implements OnInit {
         (res: any) => {
           this.submitInProcess = false;
          if(res.data.error){
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            res.data.error,
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.errorSnackBar(res.data.error)
         }else{
-          this.snackBarConfig.panelClass = ["success-snackbar"];
-          this._snackBar.open(
-            "Successfully Added",
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.successSnackBar("Successfully Added")
           this.resourcesForm.reset();
           this.router.navigate(['/resources/resources-list'])
         }
         },
         error => {
           this.submitInProcess = false;
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Server error",
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.errorSnackBar( "Server error")
         }
       );
     }
       else{
         this.submitInProcess = false;
-        this.snackBarConfig.panelClass = ["red-snackbar"];
-        this._snackBar.open(
-          "Choose technology",
-          "x",
-          this.snackBarConfig
-        );
+        this.snackBar.errorSnackBar( "Choose technology")
       }
     }
   }
@@ -172,12 +147,7 @@ export class AddResourcesComponent implements OnInit {
       },
       error => {
         this.submitInProcess = false;
-        this.snackBarConfig.panelClass = ["red-snackbar"];
-        this._snackBar.open(
-          "Server error",
-          "x",
-          this.snackBarConfig
-        );
+        this.snackBar.errorSnackBar("Server error")
       }
     );
   }
@@ -241,19 +211,6 @@ export class AddResourcesComponent implements OnInit {
       (res: any) => {
         this.updateDeleteObj.push(res.data.resource)
         this.updateDeleteObj.forEach((item: any) => {
-        // this.deleteObject = {
-        //  id: id,
-        //  createdAt: null,
-        //  lastModifiedAt: null,
-        //  isDeleted: true,
-        //  firstName: item.firstName?item.firstName: "",
-        //  lastName:item.lastName?item.lastName: "",
-        //  email: item.email?item.email: "",
-        //  team: item.team?item.team: "",
-        //  month: item.month?item.month: 0,
-        //  year: item.year?item.year: 0,
-        //  technologys: item.technologys?item.technologys: []
-        // }
         this.resourcesForm.patchValue({
           firstName:item.firstName?item.firstName: "",
           lastName:item.lastName?item.lastName: "",
@@ -263,7 +220,8 @@ export class AddResourcesComponent implements OnInit {
           month: item.year?item.year: 0,
         });
         this.firstName=item.firstName?item.firstName: ""
-        this.technologys =item.technologys?item.technologys: []
+        this.technologys =item.technologys
+        console.log(item.technologys)
       })
       },
       error => {
@@ -292,42 +250,22 @@ export class AddResourcesComponent implements OnInit {
         (res: any) => {
           this.submitInProcess = false;
          if(res.data.error){
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            res.data.error,
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.errorSnackBar(res.data.error);
         }else{
-          this.snackBarConfig.panelClass = ["success-snackbar"];
-          this._snackBar.open(
-            "Updated successfully",
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.successSnackBar("Updated successfully");
           this.resourcesForm.reset();
           this.router.navigate(['/resources/resources-list'])
         }
         },
         error => {
           this.submitInProcess = false;
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Server error",
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.errorSnackBar("Server error");
         }
       );
     }
       else{
         this.submitInProcess = false;
-        this.snackBarConfig.panelClass = ["red-snackbar"];
-        this._snackBar.open(
-          "Choose technology",
-          "x",
-          this.snackBarConfig
-        );
+        this.snackBar.errorSnackBar("Choose technology");
       }
     }
   }

@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormControl} from '@angular/forms';
 import {fuseAnimations} from '@fuse/animations';
 import {CreateProjecteService} from "@services/create-projecte.service";
 import {StaticData} from 'app/core/constacts/static';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { MatMenuTrigger } from '@angular/material/menu';
+import {SnackBar} from '../../../../core/utils/snackBar'
 @Component({
   selector: 'app-resources-list',
   templateUrl: './resources-list.component.html',
@@ -14,6 +15,8 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
   animations: fuseAnimations
 })
 export class ResourcesListComponent implements OnInit {
+  startExprience: any
+  endExprience: any
   configForm!: FormGroup;
   technologys = new FormControl('');
   technologyLIst: string[] = ["Angular", "HTML", "Java", "Python"];
@@ -29,11 +32,11 @@ export class ResourcesListComponent implements OnInit {
   totalPerPageData = StaticData.PER_PAGE_DATA;
   allResources: any;
   updateDeleteObj: any=[]
-  snackBarConfig = new MatSnackBarConfig();
   deleteObject: any
+  @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
   constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
     private _fuseConfirmationService: FuseConfirmationService,
-    private _snackBar: MatSnackBar,) {
+    private snackBar: SnackBar,) {
   }
 
   ngOnInit(): void {
@@ -234,20 +237,18 @@ export class ResourcesListComponent implements OnInit {
               this.ProjectService.updateDeleteResource(this.deleteObject).subscribe(
                 (res: any) => {
                  console.log(res);
-                 this.snackBarConfig.panelClass = ["success-snackbar"];
-                 this._snackBar.open(
-                   res.data.Message,
-                   "x",
-                   this.snackBarConfig
-                 );
+                 this.snackBar.successSnackBar( res.data.Message)
+                 let payload = {
+                  "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
+                  "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
+                  "perPageData": this.count,
+                  "totalPerPageData": this.totalPerPageData,
+                  "name": this.searchValue
+                }
+                this.getList(payload);
                 },
                 error => {
-                  this.snackBarConfig.panelClass = ["red-snackbar"];
-                  this._snackBar.open(
-                    "Server error",
-                    "x",
-                    this.snackBarConfig
-                  );
+                  this.snackBar.errorSnackBar("Server error")
                 })
              }
          });
@@ -263,5 +264,8 @@ export class ResourcesListComponent implements OnInit {
       [`/resources/edit-resources`],
       { queryParams: { id: id } }
     );
+  }
+  getExprience() {
+   console.log(this.startExprience,this.endExprience)
   }
 }
