@@ -45,7 +45,7 @@
           panelClass="multiple-select-style"
         >
           <mat-select-trigger>
-            {{technologys.value?.[0] || ''}}
+            {{ techName || ''}}
             <span
               *ngIf="(technologys.value?.length || 0) > 1"
               class="example-additional-selection"
@@ -56,8 +56,8 @@
           </mat-select-trigger>
           <mat-option
             *ngFor="let technology of technologyLIst"
-            [value]="technology"
-            >{{ technology }}</mat-option
+            [value]="technology.id"
+            >{{ technology.name }}</mat-option
           >
         </mat-select>
       </mat-form-field>
@@ -89,7 +89,7 @@
               [autocomplete]="'off'"
               [placeholder]="'start'"
               [(ngModel)]="startExprience"
-              matInput 
+              matInput
             />
           </mat-form-field>
           <span class="px-2 ">To</span>
@@ -100,7 +100,7 @@
               [autocomplete]="'off'"
               [placeholder]="'end'"
               [(ngModel)]="endExprience"
-              matInput 
+              matInput
             />
           </mat-form-field>
           <button
