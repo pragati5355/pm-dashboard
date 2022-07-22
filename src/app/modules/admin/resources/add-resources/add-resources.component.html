@@ -142,11 +142,12 @@
                   </mat-autocomplete>
                   <mat-chip-list #chipList class="mb-2">
                     <mat-chip *ngFor="let technology of technologys;let selectIndex=index;" [selectable]="selectable" [removable]="removable" (removed)="remove(technology,selectIndex)">
-                      <div *ngFor="let technologyi of alltechnologys ">
+                      {{technology}}
+                      <!-- <div *ngFor="let technologyi of alltechnologys ">
                         <div *ngIf="technologyi.name == technology">
                           {{technologyi.name}}
                         </div>
-                      </div>
+                      </div> -->
                       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>

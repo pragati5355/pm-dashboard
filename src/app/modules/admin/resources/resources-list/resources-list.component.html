@@ -45,7 +45,7 @@
           panelClass="multiple-select-style"
         >
           <mat-select-trigger>
-            {{technologys.value?.[0] || ''}}
+            {{ techName || ''}}
             <span
               *ngIf="(technologys.value?.length || 0) > 1"
               class="example-additional-selection"
@@ -56,8 +56,8 @@
           </mat-select-trigger>
           <mat-option
             *ngFor="let technology of technologyLIst"
-            [value]="technology"
-            >{{ technology }}</mat-option
+            [value]="technology.id"
+            >{{ technology.name }}</mat-option
           >
         </mat-select>
       </mat-form-field>
@@ -78,6 +78,42 @@
           >
         </mat-select>
       </mat-form-field>
+       <!-- experience Menu for future design-->
+       <!-- <button class="ml-4" mat-stroked-button [matMenuTriggerFor]="beforeMenu">Choose expriences <div class="mat-select-arrow-wrapper ng-tns-c179-6"><div class="mat-select-arrow ng-tns-c179-6"></div></div></button>
+        <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
+         <div class="flex items-center min-w-50 px-3 py-2">
+            <mat-form-field
+            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+            (click)="$event.stopPropagation()" >
+            <input
+              [autocomplete]="'off'"
+              [placeholder]="'start'"
+              [(ngModel)]="startExprience"
+              matInput
+            />
+          </mat-form-field>
+          <span class="px-2 ">To</span>
+          <mat-form-field
+            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+            (click)="$event.stopPropagation()" >
+            <input
+              [autocomplete]="'off'"
+              [placeholder]="'end'"
+              [(ngModel)]="endExprience"
+              matInput
+            />
+          </mat-form-field>
+          <button
+          [color]="'primary'"
+          class="ml-4 rounded"
+          mat-flat-button
+          (click)="getExprience()"
+        >
+          <mat-icon [svgIcon]="'heroicons_outline:filter'"></mat-icon>
+          <span class="ml-2 mr-1">Apply</span>
+        </button>
+         </div>
+        </mat-menu> -->
       <!-- Add Resources button -->
       <button
         [color]="'primary'"
