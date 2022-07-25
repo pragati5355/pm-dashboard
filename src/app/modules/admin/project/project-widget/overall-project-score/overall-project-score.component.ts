@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit, ElementRef } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import {GraphStaticData} from 'app/core/constacts/graphStatic';
 @Component({
   selector: 'app-overall-project-score',
   templateUrl: './overall-project-score.component.html',
@@ -13,15 +13,7 @@ export class OverallProjectScoreComponent implements OnInit {
   name = 'Angular';
 
   public graph = {
-    data: [{
-      values: [16, 15, 12, 6, 5, 4, 42],
-      labels: ['US', 'China', 'European Union', 'Russian Federation', 'Brazil', 'India', 'Rest of World' ],
-      domain: {column: 0},
-      name: 'GHG Emissions',
-      hoverinfo: 'label+percent+name',
-      hole: .4,
-      type: 'pie'
-    }],
+    data: GraphStaticData.PIE_CHART,
     layout: {
       title: 'Global Emissions 1990-2011',
       annotations: [
@@ -43,7 +35,6 @@ export class OverallProjectScoreComponent implements OnInit {
 };
 
   ngOnInit() {
-
   }
 
 }
