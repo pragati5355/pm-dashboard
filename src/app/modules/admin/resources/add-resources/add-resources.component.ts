@@ -98,7 +98,7 @@ export class AddResourcesComponent implements OnInit {
         year:  this.resourcesForm.value.year? this.resourcesForm.value.year: 0,
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
-        technologys: this.technologys
+        technology: this.technologys
       };
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
@@ -153,10 +153,10 @@ export class AddResourcesComponent implements OnInit {
   }
   _filter(value: any) {
     return this.alltechnologys.filter((alltechnologys: any) =>
-    alltechnologys.name.toLowerCase().indexOf(value) === 0  && !this.technologys.includes(alltechnologys.name));
+    alltechnologys.name.toLowerCase().indexOf(value) === 0  && !this.technologys.includes(alltechnologys.id));
   }
   _filterslice() {
-    return this.alltechnologys.filter(alltechnologys =>  !this.technologys.includes(alltechnologys.name))
+    return this.alltechnologys.filter(alltechnologys =>  !this.technologys.includes(alltechnologys.id))
   }
   add(event: MatChipInputEvent): void {
     debugger
@@ -220,8 +220,12 @@ export class AddResourcesComponent implements OnInit {
           month: item.year?item.year: 0,
         });
         this.firstName=item.firstName?item.firstName: ""
-        this.technologys =item.technologys
-        console.log(item.technologys)
+        this.technologys =item.technology
+        this.filteredtechnologys = this.resourcesForm.get('technology')?.valueChanges
+        .pipe(
+          startWith(''),
+          map((technology: any |null) => technology ?  this._filter(technology) : this._filterslice()));
+        console.log(item.team)
       })
       },
       error => {
@@ -243,7 +247,7 @@ export class AddResourcesComponent implements OnInit {
         year:  this.resourcesForm.value.year? this.resourcesForm.value.year: 0,
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
-        technologys: this.technologys
+        technology: this.technologys
       };
       this.submitInProcess = true;
       this.ProjectService.updateDeleteResource(payload).subscribe(
