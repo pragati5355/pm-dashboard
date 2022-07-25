@@ -38,4 +38,13 @@ export class CreateProjecteService {
    updateDeleteResource(obj: any) {
     return this.http.post(AppConstants['UPDATE_DELETE_RESOURCE'],obj);
    }
+/******************************************************
+ * @description Getting a Details about Sprint
+ *
+ * @author  Naynesh Rathod
+ * @created_Date  22-july-2022
+ ******************************************************/
+   getSprintList(obj: any) {
+    return this.http.post(AppConstants['GET_SPRINT_LIST'],obj);
+   }
 }
