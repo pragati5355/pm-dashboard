@@ -50,8 +50,8 @@ export class ResourcesListComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     this.exprienceForm = this._formBuilder.group({
-      minExprience: ['', [Validators.required, Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
-      maxExprience: ['', [Validators.required, Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
+      minExprience: ['', [ Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
+      maxExprience: ['', [ Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
 
     },{
       validator: [
@@ -303,7 +303,8 @@ export class ResourcesListComponent implements OnInit {
   }
 
   getExprience(event: Event) {
-  
+    this.count = 1
+    this.pagination = false
     if (!this.exprienceForm.invalid) {
       let expriencePayload = [
         parseInt(this.exprienceForm.value.minExprience),
