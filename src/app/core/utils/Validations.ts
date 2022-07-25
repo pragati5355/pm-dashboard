@@ -83,6 +83,8 @@ export function ExprienceValidation(
         matchingControl.setErrors(null);
       } else if (control.value > matchingControl.value) {
         control.setErrors({ InvalidCode: true });
+      }  else if (control.value === matchingControl.value) {
+        matchingControl.setErrors({ InvalidCode: true });
       } 
     };
   }

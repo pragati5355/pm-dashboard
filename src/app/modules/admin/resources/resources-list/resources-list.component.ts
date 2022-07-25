@@ -1,6 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup,Validators} from '@angular/forms';
+import { ValidationConstants } from "../../../../core/constacts/constacts";
+import {ExprienceValidation} from "../../../../core/utils/Validations";
 import {fuseAnimations} from '@fuse/animations';
 import {CreateProjecteService} from "@services/create-projecte.service";
 import {StaticData} from 'app/core/constacts/static';
@@ -15,6 +17,8 @@ import {SnackBar} from '../../../../core/utils/snackBar'
   animations: fuseAnimations
 })
 export class ResourcesListComponent implements OnInit {
+
+  exprienceForm!: FormGroup;
   startExprience: any
   endExprience: any
   configForm!: FormGroup;
@@ -40,12 +44,27 @@ export class ResourcesListComponent implements OnInit {
               private _fuseConfirmationService: FuseConfirmationService,
               private snackBar: SnackBar,) {
   }
-
+  get exprienceValidForm(): { [key: string]: AbstractControl } {
+    return this.exprienceForm.controls;
+  }
   ngOnInit(): void {
     this.isLoading = true;
+    this.exprienceForm = this._formBuilder.group({
+      minExprience: ['', [Validators.required, Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
+      maxExprience: ['', [Validators.required, Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
+
+    },{
+      validator: [
+        ExprienceValidation("minExprience","maxExprience"),
+    ]
+    });
+    let expriencePayload = [
+      parseInt(this.exprienceForm.value.minExprience),
+      parseInt(this.exprienceForm.value.maxExprience)
+    ];
     let payload = {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
-      "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : null,
+      "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0) ? expriencePayload : null,
       "perPageData": this.count,
       "totalPerPageData": this.totalPerPageData,
       "name": this.searchValue
@@ -74,6 +93,7 @@ export class ResourcesListComponent implements OnInit {
       }),
       dismissible: false
     });
+ 
   }
 
   gotoAddResources() {
@@ -122,11 +142,15 @@ export class ResourcesListComponent implements OnInit {
   handleScroll() {
     if (!this.pagination) {
       this.count = this.count + this.totalPerPageData;
+      let expriencePayload = [
+        parseInt(this.exprienceForm.value.minExprience),
+        parseInt(this.exprienceForm.value.maxExprience)
+      ];
       let payload = {
         "perPageData": this.count,
         "totalPerPageData": this.totalPerPageData,
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
-        "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : null,
+        "experience": (this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0) ? expriencePayload : null,
         "name": this.searchValue
       };
       this.pagination = true;
@@ -159,9 +183,13 @@ export class ResourcesListComponent implements OnInit {
         this.techName = this.technologyLIst[i].name;
       }
     }
+    let expriencePayload = [
+      parseInt(this.exprienceForm.value.minExprience),
+      parseInt(this.exprienceForm.value.maxExprience)
+    ];
     let payload = {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
-      "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : null,
+      "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
       "perPageData": this.count,
       "totalPerPageData": this.totalPerPageData,
       "name": this.searchValue
@@ -188,11 +216,15 @@ export class ResourcesListComponent implements OnInit {
   inputSearch(event: any) {
     this.count = 1;
     this.pagination = false
+    let expriencePayload = [
+      parseInt(this.exprienceForm.value.minExprience),
+      parseInt(this.exprienceForm.value.maxExprience)
+    ];
     if (this.searchValue !== event.target.value.trim()) {
       this.searchValue = event.target.value.trim();
       let payload = {
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
-        "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : null,
+        "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0) ? expriencePayload : null,
         "perPageData": this.count,
         "totalPerPageData": this.totalPerPageData,
         "name": this.searchValue
@@ -237,9 +269,13 @@ export class ResourcesListComponent implements OnInit {
               (res: any) => {
                 console.log(res);
                 this.snackBar.successSnackBar(res.data.Message)
+                let expriencePayload = [
+                  parseInt(this.exprienceForm.value.minExprience),
+                  parseInt(this.exprienceForm.value.maxExprience)
+                ];
                 let payload = {
                   "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
-                  "experience": this.selectedExpriencesFromArray ? this.selectedExpriencesFromArray : "",
+                  "experience": (this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
                   "perPageData": this.count,
                   "totalPerPageData": this.totalPerPageData,
                   "name": this.searchValue
@@ -266,7 +302,31 @@ export class ResourcesListComponent implements OnInit {
     );
   }
 
-  getExprience() {
-    console.log(this.startExprience, this.endExprience)
+  getExprience(event: Event) {
+  
+    if (!this.exprienceForm.invalid) {
+      let expriencePayload = [
+        parseInt(this.exprienceForm.value.minExprience),
+        parseInt(this.exprienceForm.value.maxExprience)
+      ];
+      let payload = {
+        "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
+        "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
+        "perPageData": this.count,
+        "totalPerPageData": this.totalPerPageData,
+        "name": this.searchValue
+      }
+      this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
+        this.totalRecored = res.data.totalRecored
+        this.resources = res.data.teamMember;
+        this.isLoading = false;
+      }, error => {
+        this.isLoading = false;
+      });
+      console.log(payload)
+    }else{
+      event.stopPropagation();
+    }
   }
+  
 }

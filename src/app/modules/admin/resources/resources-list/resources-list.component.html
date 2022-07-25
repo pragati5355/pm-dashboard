@@ -62,7 +62,7 @@
         </mat-select>
       </mat-form-field>
       <!-- experience -->
-      <mat-form-field
+      <!-- <mat-form-field
         class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-50"
       >
         <mat-select
@@ -77,43 +77,54 @@
             >{{ expriences }}</mat-option
           >
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
        <!-- experience Menu for future design-->
-       <!-- <button class="ml-4" mat-stroked-button [matMenuTriggerFor]="beforeMenu">Choose expriences <div class="mat-select-arrow-wrapper ng-tns-c179-6"><div class="mat-select-arrow ng-tns-c179-6"></div></div></button>
+       <button class="ml-4" mat-stroked-button [matMenuTriggerFor]="beforeMenu">Choose expriences <div class="mat-select-arrow-wrapper ng-tns-c179-6"><div class="mat-select-arrow ng-tns-c179-6"></div></div></button>
         <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
-         <div class="flex items-center min-w-50 px-3 py-2">
+        <form [formGroup]="exprienceForm">
+            <div class="flex items-center min-w-50 px-3 py-2">
+                <mat-form-field
+                class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+                (click)="$event.stopPropagation()" >
+                <input
+                [autocomplete]="'off'"
+                [placeholder]="'Min'"
+                formControlName="minExprience" 
+                matInput
+                />
+                <mat-error
+                *ngIf="exprienceValidForm['minExprience'].errors && exprienceValidForm['minExprience']?.invalid && exprienceValidForm['minExprience']?.touched ">
+                <div *ngIf="exprienceValidForm['minExprience'].errors['required']">First name is mandatory</div>
+                <div *ngIf="exprienceValidForm['minExprience'].errors['pattern']">Enter valid first name</div>
+              </mat-error>
+            </mat-form-field>
+            <span class="px-2 ">to</span>
             <mat-form-field
-            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
-            (click)="$event.stopPropagation()" >
-            <input
-              [autocomplete]="'off'"
-              [placeholder]="'start'"
-              [(ngModel)]="startExprience"
-              matInput
-            />
-          </mat-form-field>
-          <span class="px-2 ">To</span>
-          <mat-form-field
-            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
-            (click)="$event.stopPropagation()" >
-            <input
-              [autocomplete]="'off'"
-              [placeholder]="'end'"
-              [(ngModel)]="endExprience"
-              matInput
-            />
-          </mat-form-field>
-          <button
-          [color]="'primary'"
-          class="ml-4 rounded"
-          mat-flat-button
-          (click)="getExprience()"
-        >
-          <mat-icon [svgIcon]="'heroicons_outline:filter'"></mat-icon>
-          <span class="ml-2 mr-1">Apply</span>
-        </button>
-         </div>
-        </mat-menu> -->
+                class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+                (click)="$event.stopPropagation()" >
+                <input
+                [autocomplete]="'off'"
+                [placeholder]="'Max'"
+                formControlName="maxExprience" 
+                matInput
+                />
+                <mat-error
+                *ngIf="exprienceValidForm['maxExprience'].errors && exprienceValidForm['maxExprience']?.invalid && exprienceValidForm['maxExprience']?.touched ">
+                <div *ngIf="exprienceValidForm['maxExprience'].errors['required']">First name is mandatory</div>
+                <div *ngIf="exprienceValidForm['maxExprience'].errors['pattern']">Enter valid first name</div>
+              </mat-error>
+            </mat-form-field>
+            <button
+            [color]="'primary'"
+            class="ml-4 rounded"
+            mat-flat-button
+            (click)="getExprience($event)"
+            >
+            <span class="ml-2 mr-1">Apply</span>
+            </button>
+            </div>
+         </form>
+        </mat-menu>
       <!-- Add Resources button -->
       <button
         [color]="'primary'"
