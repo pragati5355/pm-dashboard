@@ -254,7 +254,7 @@ export class ResourcesListComponent implements OnInit {
             team: item.team ? item.team : "",
             month: item.month ? item.month : 0,
             year: item.year ? item.year : 0,
-            technology: item.technologys ? item.technologys : []
+            technology: item.technology ? item.technology : null
           }
           console.log(payload)
 
