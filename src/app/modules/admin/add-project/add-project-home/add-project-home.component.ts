@@ -524,9 +524,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     getTeamMember(){
       let payload = {
         "technology": null,
-        "experience":"",
-        "perPageData":1,
-        "totalPerPageData":20,
+        "experience":null,
+        "perPageData":0,
+        "totalPerPageData":0,
         "name": ""
       } 
         this.submitInProcess = true;
@@ -534,8 +534,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               (res:any)=>{
                 this.submitInProcess = false;
                 console.log("teamMember",res);
-                this.teamMembers = res.data.teamMember
-                this.managerLists = res.data.teamMember
+                this.teamMembers = res.data
+                this.managerLists = res.data
                 this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
                 .pipe(
                   startWith(''),
