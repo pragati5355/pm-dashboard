@@ -47,4 +47,14 @@ export class CreateProjecteService {
    getSprintList(obj: any) {
     return this.http.post(AppConstants['GET_SPRINT_LIST'],obj);
    }
+
+/******************************************************
+ * @description Getting a Details about Team Member
+ *
+ * @author  Naynesh Rathod
+ * @created_Date  22-july-2022
+ ******************************************************/
+ getTeamMemberList(obj: any) {
+  return this.http.post(AppConstants['GET_PROJECT_TEAM_LIST'],obj);
+ }
 }
