@@ -14,12 +14,9 @@ import {MatSelectModule} from "@angular/material/select";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
-import * as PlotlyJS from 'plotly.js-dist-min';
-import { PlotlyModule } from 'angular-plotly.js';
 import { OverallProjectScoreComponent } from './overall-project-score/overall-project-score.component';
 
 
-PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
     SprintsListComponent,
@@ -31,7 +28,6 @@ PlotlyModule.plotlyjs = PlotlyJS;
     FormsModule,
     SharedModule,
     CommonModule,
-    PlotlyModule,
     MatIconModule,
     MatMenuModule,
     MatInputModule,
