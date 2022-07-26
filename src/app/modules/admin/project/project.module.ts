@@ -43,11 +43,6 @@ const routes: Routes = [
         loadChildren: () =>
           import("../add-project/add-project.module").then(m => m.AddProjectModule)
       },
-      {
-        path: "project-details",
-        loadChildren: () =>
-          import("../project/project-widget/project-widget.module").then(m => m.ProjectWidgetModule)
-      },
  
       {
         path: "",

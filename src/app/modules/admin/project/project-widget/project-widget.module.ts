@@ -14,12 +14,15 @@ import {MatSelectModule} from "@angular/material/select";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
+import { OverallProjectScoreComponent } from './overall-project-score/overall-project-score.component';
+
 
 @NgModule({
   declarations: [
     SprintsListComponent,
     ProjectDetailsComponent,
     ProjectMembersListComponent,
+    OverallProjectScoreComponent,
   ],
   imports: [
     FormsModule,

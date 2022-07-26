@@ -207,9 +207,11 @@ export class AddResourcesComponent implements OnInit {
   }
   fetchEditdata(id: number){
     let payload={id: id}
+    this.initialLoading = true;
     this.ProjectService.getresource(payload).subscribe(
       (res: any) => {
-        this.updateDeleteObj.push(res.data.resource)
+        this.initialLoading = false;
+        this.updateDeleteObj.push(res.data)
         this.updateDeleteObj.forEach((item: any) => {
         this.resourcesForm.patchValue({
           firstName:item.firstName?item.firstName: "",
@@ -229,7 +231,7 @@ export class AddResourcesComponent implements OnInit {
       })
       },
       error => {
- 
+        this.initialLoading = false;
       }
     );
   }
