@@ -18,13 +18,6 @@ import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
 import { OverallProjectScoreComponent } from './overall-project-score/overall-project-score.component';
 
-const routes: Routes = [
-  {
-    path: "",
-    component: ProjectDetailsComponent,
-
-  }
-];
 
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
@@ -38,7 +31,6 @@ PlotlyModule.plotlyjs = PlotlyJS;
     FormsModule,
     SharedModule,
     CommonModule,
-    RouterModule.forChild(routes),
     PlotlyModule,
     MatIconModule,
     MatMenuModule,

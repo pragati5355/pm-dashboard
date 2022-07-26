@@ -471,7 +471,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           this.ProjectService.syncJira(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              if(res.data.message = "Project alreday exiest"){
+              if(res.data.message = "Project already exists"){
                 this.snackBarConfig.panelClass = ["red-snackbar"];  
                 this._snackBar.open(
                   res.data.message,
@@ -534,8 +534,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               (res:any)=>{
                 this.submitInProcess = false;
                 console.log("teamMember",res);
-                this.teamMembers = res.data
-                this.managerLists = res.data
+                this.teamMembers = res.data.teamMember
+                this.managerLists = res.data.teamMember
                 this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
                 .pipe(
                   startWith(''),

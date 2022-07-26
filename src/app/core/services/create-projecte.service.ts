@@ -47,4 +47,7 @@ export class CreateProjecteService {
    getSprintList(obj: any) {
     return this.http.post(AppConstants['GET_SPRINT_LIST'],obj);
    }
+   getTeamMemberList(obj: any) {
+    return this.http.post(AppConstants['GET_PROJECT_TEAM_LIST'],obj);
+   }
 }
