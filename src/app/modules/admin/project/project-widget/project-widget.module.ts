@@ -8,12 +8,13 @@ import { ProjectMembersListComponent } from './project-members-list/project-memb
 import { MatIconModule } from "@angular/material/icon";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { FuseCardModule } from '@fuse/components/card';
-import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatMenuModule } from "@angular/material/menu";
-import { MatButtonModule } from "@angular/material/button";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule} from "@angular/material/button";
+import { OverallProjectScoreComponent } from './overall-project-score/overall-project-score.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 
@@ -22,6 +23,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     SprintsListComponent,
     ProjectDetailsComponent,
     ProjectMembersListComponent,
+    OverallProjectScoreComponent,
   ],
   imports: [
     FormsModule,

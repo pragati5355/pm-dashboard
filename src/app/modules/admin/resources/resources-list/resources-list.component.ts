@@ -103,9 +103,14 @@ export class ResourcesListComponent implements OnInit {
   getList(payload: any) {
     this.isLoading = true;
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
+     if(res.data){
       this.totalRecored = res.data.totalRecored
       this.resources = res.data.teamMember;
       this.isLoading = false;
+     }else{
+      this.totalRecored = 0
+      this.isLoading = false;
+     }
     }, error => {
       this.isLoading = false;
     })
@@ -241,7 +246,7 @@ export class ResourcesListComponent implements OnInit {
     this.ProjectService.getresource(payload).subscribe(
       (res: any) => {
         //  console.log(res);
-        this.updateDeleteObj.push(res.data.resource)
+        this.updateDeleteObj.push(res.data)
         this.updateDeleteObj.forEach((item: any) => {
           this.deleteObject = {
             id: id,

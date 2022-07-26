@@ -91,4 +91,10 @@ export class ProjectListComponent implements OnInit {
         });
     }
   }
+  goToProject(id: number) {
+    this.router.navigate(
+      [`/projects/project-details`],
+      {queryParams: {id: id}}
+    );
+  }
 }
