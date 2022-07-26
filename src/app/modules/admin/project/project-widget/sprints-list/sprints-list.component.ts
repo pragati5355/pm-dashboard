@@ -28,7 +28,7 @@ export class SprintsListComponent implements OnInit {
 
   getSprintList(paylaod: any) {
     this.ProjectService.getSprintList(paylaod).subscribe((res: any) => {
-      this.sprintList = res.data.sprints;
+      this.sprintList = res.data;
       this.totalRecored = this.sprintList.length ? this.sprintList.length : 0;
       this.isLoading = false;
     }, error => {
