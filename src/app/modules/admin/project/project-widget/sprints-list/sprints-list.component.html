@@ -14,7 +14,7 @@
         <div *ngIf="totalRecored > 0" class="grid">
           <!-- Header -->
           <div
-            class="inventory-grid z-10  sticky top-0 grid gap-4 py-4   md:px-8 shadow text-md font-semibold text-black bg-gray-50 dark:bg-black dark:bg-opacity-5"
+            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
             matSortDisableClear>
             <div class="primary-900">Sprints</div>
             <div class="hidden md:block">Start Date</div>
@@ -33,12 +33,12 @@
 
               <!-- Start Date -->
               <div class="hidden md:block truncate">
-                {{ sprint.startDate ? (sprint.startDate | date) : '-'  }}
+                {{ sprint.startDate ? (sprint.startDate | date) : '-' }}
               </div>
 
               <!-- End Date -->
               <div class="hidden sm:block">
-                {{sprint.endDate ? (sprint.endDate| date) : '-'  }}
+                {{sprint.endDate ? (sprint.endDate| date) : '-' }}
               </div>
 
               <!-- Lorem Ipsum -->
