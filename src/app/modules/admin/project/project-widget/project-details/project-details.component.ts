@@ -1,5 +1,6 @@
-import {Component, ElementRef, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {FuseCardComponent} from '@fuse/components/card';
+import { members } from './../../../../../mock-api/apps/scrumboard/data';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { FuseCardComponent } from '@fuse/components/card';
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.component.html',
@@ -7,15 +8,15 @@ import {FuseCardComponent} from '@fuse/components/card';
   encapsulation: ViewEncapsulation.None,
 })
 export class ProjectDetailsComponent implements OnInit {
-  projectList=[{
-    name: "Survivance Design",
-    status: "On Track",
-    progres: 45
-  }]
+  project_name = "This is a Project name";
+  project_status = "On Track";
+  project_progres = 45;
+  members=true;
+  sprints=true;
   constructor() { }
   private _fuseCards!: QueryList<ElementRef>;
   ngOnInit(): void {
-    console.log('app-project-details' )
+    console.log('app-project-details')
   }
 
 }
