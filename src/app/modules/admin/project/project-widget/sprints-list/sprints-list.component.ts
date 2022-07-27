@@ -21,7 +21,7 @@ export class SprintsListComponent implements OnInit {
     this.isLoading = true;
     // id pass only temporary after implementing router pass query by id
     let payload = {
-      "id": 20
+      "id": 29
     }
     this.getSprintList(payload);
   }
