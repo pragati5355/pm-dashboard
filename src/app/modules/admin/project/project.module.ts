@@ -1,9 +1,10 @@
+import { ProjectListModule } from './../project-list/project-list.module';
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {CdkStepperModule} from '@angular/cdk/stepper';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +28,7 @@ import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { ProjectHomeComponent } from './project-home/project-home.component';
 import { SharedModule } from 'app/core/shared.module';
 import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-popup.component';
-
+import { ProjectWidgetModule } from "@modules/admin/project/project-widget/project-widget.module";
 const routes: Routes = [
   {
     path: "",
@@ -43,7 +44,13 @@ const routes: Routes = [
         loadChildren: () =>
           import("../add-project/add-project.module").then(m => m.AddProjectModule)
       },
- 
+
+      {
+        path: "project",
+        loadChildren: () =>
+          import("../project/project-widget/project-widget.module").then(m => m.ProjectWidgetModule)
+      },
+
       {
         path: "",
         redirectTo: "project-list",
@@ -62,10 +69,11 @@ const routes: Routes = [
     ProjectHomeComponent,
     ConnectJiraPopupComponent,
   ],
-  exports:[    CdkStepperModule,
+  exports: [CdkStepperModule,
     MatStepperModule,],
   imports: [
     CommonModule,
+    ProjectWidgetModule,
     SharedModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
