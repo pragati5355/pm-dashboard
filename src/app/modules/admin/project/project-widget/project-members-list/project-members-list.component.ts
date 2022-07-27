@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from "@angular/forms";
 import { StaticData } from "../../../../../core/constacts/static";
 import { CreateProjecteService } from "@services/create-projecte.service";
 import { Router } from "@angular/router";
-import { FuseConfirmationService } from "../../../../../../@fuse/services/confirmation";
 
 @Component({
   selector: 'app-project-members-list',
@@ -25,7 +23,7 @@ export class ProjectMembersListComponent implements OnInit {
     this.isLoading = true;
     // id pass only temporary after implementing router pass query by id
     let payload = {
-      "id": 15
+      "id": 29
     }
     this.getTeamMemberList(payload);
   }
@@ -55,7 +53,7 @@ export class ProjectMembersListComponent implements OnInit {
 
   getTeamMemberList(payload: any) {
     this.ProjectService.getTeamMemberList(payload).subscribe((res: any) => {
-      this.teamMember = res.data; 
+      this.teamMember = res.data;
       this.totalRecored = this.teamMember.length ? this.teamMember.length : 0;
       this.isLoading = false;
     }, error => {

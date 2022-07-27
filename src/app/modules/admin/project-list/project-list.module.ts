@@ -1,57 +1,53 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {CdkStepperModule} from '@angular/cdk/stepper';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatStepperModule } from '@angular/material/stepper';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from 'app/core/shared.module';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule, Routes } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
+import { FuseCardModule } from '@fuse/components/card';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { FuseCardModule } from '@fuse/components/card';
-import { SharedModule } from 'app/core/shared.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProjectListComponent } from './project-list/project-list.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-const routes: Routes = [
-  {
-    path: "",
-    component: ProjectListComponent,
-  }]
+const routes: Routes = [{ path: "", component: ProjectListComponent, }]
 
 @NgModule({
   declarations: [
     ProjectListComponent
   ],
   imports: [
-    CommonModule,
     SharedModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    CdkStepperModule,
-    MatStepperModule,
+    CommonModule,
+    MatMenuModule,
+    MatIconModule,
+    FuseCardModule,
+    MatInputModule,
     MatButtonModule,
     MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
+    MatTooltipModule,
+    MatStepperModule,
+    CdkStepperModule,
     MatCheckboxModule,
     MatFormFieldModule,
-    MatInputModule,
+    ReactiveFormsModule,
+    MatProgressBarModule,
+    InfiniteScrollModule,
+    MatButtonToggleModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    MatButtonToggleModule,
-    MatTooltipModule,
-    InfiniteScrollModule,
-    FuseCardModule
+    RouterModule.forChild(routes),
   ]
 })
 export class ProjectListModule { }
