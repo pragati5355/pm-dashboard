@@ -218,8 +218,8 @@ export class AddResourcesComponent implements OnInit {
           lastName:item.lastName?item.lastName: "",
           email: item.email?item.email: "",
           team:item.team?item.team: "",
-          year: item.month?item.month: 0,
-          month: item.year?item.year: 0,
+          year: item.year?item.year: 0,
+          month: item.month?item.month: 0,
         });
         this.firstName=item.firstName?item.firstName: ""
         this.technologys =item.technology
