@@ -26,10 +26,10 @@ export class ManagerList {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
 export class JiraUser {
-  constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
+  constructor( public displayName: string, public accountType: string, public active: boolean, public avatarUrl: any, public accountId: string, public orgId:any) { }
 }
 export class JiraTeamUser {
-  constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
+  constructor( public displayName: string, public accountType: string, public active: boolean, public avatarUrl: any, public accountId: string, public orgId:any) { }
 }
 @Component({
   selector: 'app-add-project-home',
@@ -122,7 +122,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
      */
     ngOnInit(): void
     {
-    
+      
       this.userData = this._authService.getUser();
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required]],
@@ -172,13 +172,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         });
         this.routeSubscribe = this._route.queryParams.subscribe(projecteditId => {
           if (projecteditId['id']) {
-              // this.fetchEditdata(checkformtype['id'])
-              // this.editFormId = projecteditId['id']
+              this.fetchEditproject(projecteditId['id'])
             this.pageTitle = "edit"
-            // this.formTypeAdd = false
           }else{
             this.pageTitle = "add"
-            // this.formTypeAdd = true
           }
         });
       
@@ -235,11 +232,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     filterTeamMemberSlice() {
       return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes (TeamMember.id) &&  (TeamMember.id)!== this.projectTeam.value.project_manager.id)
     }
-    // filterManagerLists(firstName: any) {
-    //   console.log(firstName)
-    //   return this.managerLists.filter((ManagerList: any) =>
-    //   ManagerList.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) &&  (ManagerList.firstName+" "+ManagerList.lastName) !== this.projectTeam.value.project_manager);
-    // }
     filterManagerLists(value: any) {
       if(typeof(value) == "object"){
       return this.managerLists.filter((ManagerList: any) =>
@@ -255,26 +247,26 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     filterJiraUsers(value: any) {
       if(typeof(value) == "object"){
       return this.jiraUsers.filter((JiraUser: any) =>
-        JiraUser.displayName.toLowerCase().indexOf(value.displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.accountId));
+        JiraUser.displayName.toLowerCase().indexOf(value.displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.displayName));
       }else{
         return this.jiraUsers.filter((JiraUser: any) =>
-        JiraUser.displayName.toLowerCase().indexOf(value.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.accountId));
+        JiraUser.displayName.toLowerCase().indexOf(value.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.displayName));
       }
     }
     filterJiraUsersSlice() {
-      return this.jiraUsers.filter(JiraUser => !this.selectedJiraUser.includes(JiraUser.accountId) && !this.selectedJiraUser.includes(JiraUser.accountId))
+      return this.jiraUsers.filter(JiraUser => !this.selectedJiraUser.includes(JiraUser.displayName) && !this.selectedJiraUser.includes(JiraUser.displayName))
     }
     filterTeamJiraUsers(value: any) {
       if(typeof(value) == "object"){
       return this.jiraTeamUsers.filter((JiraTeamUser: any) =>
-        JiraTeamUser.displayName.toLowerCase().indexOf(value.displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.accountId) &&  JiraTeamUser.accountId !== this.projectTeam.value.jira_user.accountId);
+        JiraTeamUser.displayName.toLowerCase().indexOf(value.displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user.displayName);
       }else{
         return this.jiraTeamUsers.filter((JiraTeamUser: any) =>
-        JiraTeamUser.displayName.toLowerCase().indexOf(value.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.accountId) &&  JiraTeamUser.accountId !== this.projectTeam.value.jira_user.accountId);
+        JiraTeamUser.displayName.toLowerCase().indexOf(value.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user.displayName);
       }
     }
     filterTeamJiraUsersSlice() {
-      return this.jiraTeamUsers.filter(JiraTeamUser => !this.selectedJiraUser.includes(JiraTeamUser.accountId) && !this.selectedJiraUser.includes(JiraTeamUser.accountId) &&  JiraTeamUser.accountId !== this.projectTeam.value.jira_user.accountId)
+      return this.jiraTeamUsers.filter(JiraTeamUser => !this.selectedJiraUser.includes(JiraTeamUser.displayName) && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user.displayName)
     }
     /*
     /**
@@ -416,7 +408,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             isManager: false
           }
         ];
-        this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user.accountId]
+        this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user.displayName]
         this.selectedTeamMember = [  ...this.selectedTeamMember, this.projectTeam.value.team_member.id]
         this.projectTeam.controls["team_member"].reset();
         this.projectTeam.controls["select_role"].reset();
@@ -583,6 +575,11 @@ selectedJiraUserOption(event: any) {
     }
     return true;
   }
+  isEmptyStr(val: any) {
+    return val === undefined || val === null || val === "+" || val.length <= 0 || val.trim().length === 0
+      ? null
+      : val.trim();
+  }
   displayFn(user?: ManagerList): string | any {
     return user ? user.firstName+" "+user.lastName : null;
   }
@@ -594,5 +591,40 @@ selectedJiraUserOption(event: any) {
   }
   displayFnJiraTeam(user?: JiraUser): string | any {
     return user ? user.displayName : null;
+  }
+  fetchEditproject(id: number){
+    let res = StaticData.PROJECT_DETAILS
+    let pojectdata = [res.data.project]
+    let clientData =[res.data.clientModels]
+    let projectsetting = [] ;
+    projectsetting.push(res.data.authUser) 
+    pojectdata.forEach((item: any) => {
+      this.projectDetials.patchValue({
+        projectName: item.name?item.name:"",
+        projectDescription: item.description?item.description:"",
+      });
+      this.settingProjectName =item.key?item.key:""
+    })
+    clientData.forEach((item: any)=>{
+      console.log(item)
+      this.clientDetials.patchValue({
+        firstName:item.length > 0 ? (item[0].firstName?item[0].firstName:""):null ,
+        lastName: item.length > 0 ?(item[0].lastName?item[0].lastName:""):null,
+        firstName2: item.length > 1 ?(item[1].firstName?item[1].firstName:""):null,
+        lastName2: item.length > 1 ?(item[1].lastName?item[1].lastName:""):null,
+        firstName3:  item.length > 2 ?(item[2].firstName?item[2].firstName:""):null,
+        lastName3: item.length > 2 ?(item[2].lastName?item[2].lastName:""):null,
+      })
+    })
+    projectsetting.forEach((item:any)=>{
+      this.projectSetting.patchValue({
+        url:item.baseUrl?(item.baseUrl.slice(8)).slice(0,-14):null,
+        email:item.email?item.email:"",
+        token:item.apiKey?item.apiKey:"",
+        project: this.settingProjectName
+      })
+    })
+
+    
   }
 }

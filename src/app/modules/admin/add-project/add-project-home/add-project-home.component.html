@@ -49,7 +49,6 @@
         <mat-drawer-content class="flex flex-col overflow-y-auto">
 
             <!-- Main -->
-            <!-- <div class="flex flex-auto overflow-hidden"> -->
                 <!-- Sidebar toggle button -->
                 <button
                 mat-icon-button class="hidden"
@@ -282,7 +281,6 @@
                                                     </mat-form-field>
                                                 </div>
                                     </div>
-                                <!-- </div> -->
                         
                                 <!-- Actions -->
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
@@ -337,7 +335,7 @@
                             <input
                                 matInput
                                 formControlName="url"
-                                placeholder="Base Url">
+                                placeholder="Base Url" >
                                 <span matPrefix>https://</span>
                                 <span matSuffix>.atlassian.net</span>
                                 <mat-error *ngIf="projectSettingsForm['url'].errors &&
@@ -379,7 +377,6 @@
                              </div>
                         </div>
                         <div *ngIf="settingProjectName" class=" flex flex-col mb-2 sm:flex-row flex-0 sm:items-center ">
-                            <!-- <div class=" w-full font-extrabold tracking-tight ng-tns-c274-3859"> -->
                                 <mat-form-field class="w-full sm:w-100 mt-4 sm:mt-0 "  [floatLabel]="'always'">
                                     <mat-label>Project Name</mat-label>
                                     <input 
@@ -602,7 +599,6 @@
                                               <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">Add</span>
                                              </div>
                                 </div>
-                            <!-- </div> -->
                           <!-- Products list -->
                               <div class=" w-full sm:w-140 mt-8">
                                 <div class="flex flex-col flex-auto  sm:mb-18 overflow-hidden sm:overflow-y-auto">
@@ -613,7 +609,6 @@
                                                 <div
                                                     class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                                 >
-                                                    <!-- <div class="flex flex-col sm:flex-row flex-0 col-span-3 sm:col-span-3 sm:items-center sm:justify-between"> -->
                                                     <div
                                                         >
                                                         Team Member
@@ -624,15 +619,11 @@
                                                         >
                                                         Active
                                                     </div>
-                                                    <!-- </div> -->
                                                 </div>
                                                 <!-- Rows -->
                                                 <ng-container >
                                                     <ng-container *ngFor="let teamMember of teamMemberList;index as i">
                                                         <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-
-                                
-                                                            <!-- <div class="flex flex-col sm:flex-row flex-0 col-span-3 sm:col-span-3 sm:items-center sm:justify-between"> -->
                                                             <!-- SKU -->
                                                             <div class="hidden md:block truncate">
                                                                 <ng-container *ngFor="let member of teamMembers">
@@ -660,7 +651,6 @@
                                                                         [svgIcon]="'heroicons_solid:x'"></mat-icon>
                                                                 </ng-container>
                                                             </div>
-                                                            <!-- </div> -->
                                                             <!-- Details button -->
                                                         
                                                         </div>
