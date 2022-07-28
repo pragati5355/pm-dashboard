@@ -45,6 +45,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       $event.returnValue = true;
     }
   }
+  pageTitle ="Add"
   project_manager = new FormControl();
   // team_member = new FormControl();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
@@ -98,14 +99,15 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     jiraTeamUsers: JiraTeamUser[] = []
     userData: any;
     clientDtailsList: any = []
+    routeSubscribe: any;
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,private _matStepperIntl: MatStepperIntl,
       private _formBuilder: FormBuilder,
       private _authService: AuthService,
       private dialog: MatDialog,
       private router: Router,
       private ProjectService:CreateProjecteService,
-      private snackBar: SnackBar
-      
+      private snackBar: SnackBar,
+      private _route: ActivatedRoute,
       )
     {
     
@@ -168,6 +170,18 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
 
         ]
         });
+        this.routeSubscribe = this._route.queryParams.subscribe(projecteditId => {
+          if (projecteditId['id']) {
+              // this.fetchEditdata(checkformtype['id'])
+              // this.editFormId = projecteditId['id']
+            this.pageTitle = "edit"
+            // this.formTypeAdd = false
+          }else{
+            this.pageTitle = "add"
+            // this.formTypeAdd = true
+          }
+        });
+      
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
