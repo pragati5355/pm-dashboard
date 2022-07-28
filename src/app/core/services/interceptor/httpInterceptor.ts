@@ -55,7 +55,16 @@ export class InterceptorService implements HttpInterceptor {
     }
     return next.handle(request).pipe(
       tap(
-        () => {},
+        (res: any) => {
+          if (res.status === 200) {
+            // future changes
+                // console.log(res);
+              // this.authService.updateToken().subscribe(
+              //   (res: any) => {
+              //     this.authService.setToken(res.data.accessToken);
+              //   })
+          }
+        },
         (err: any) => {
           if (err instanceof HttpErrorResponse) {
             console.log(err);

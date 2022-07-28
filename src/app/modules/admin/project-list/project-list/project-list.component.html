@@ -82,27 +82,35 @@
                     <div>
                         <fuse-card
                         class="min-h-313 flex flex-col max-w-140 w-full filter-post filter-interactive"
-                        #expandableCard02="fuseCard" (click)="goToProject(project.id)">
+                        #expandableCard02="fuseCard"  >
                         <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
 
                             <div class="flex flex-col">
                                 <span class="text-lg font-semibold leading-none" *ngIf="project.name">{{project.name | titlecase}}</span>
                             </div>
-
-                            <span *ngIf="project.status" class=" ml-auto -mr-4 inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase"
+                           <!-- future changes -->
+                            <!-- <span *ngIf="project.status" class=" ml-auto  inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase"
                             [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50 bg-red-200 ':project.status == 'Sync In Progress',
                             'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500':project.status == 'On Track',
                             'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500':project.status == 'At Risk',
                             'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500':project.status == 'Off Track'}">
                                 <span class="leading-relaxed whitespace-nowrap">{{project.status}}</span>
-                            </span>
+                            </span> -->
+                            <button
+                            class=" ml-auto  inline-flex items-center"
+                            mat-flat-button
+                            [color]="'primary'"
+                            (click)="snycproject($event,project.id)"
+                            >
+                            <span class="ml-2 mr-1">Sync Know</span>
+                        </button>
                         </div>
-                        <div class="mx-6 sm:mx-8 mt-2 mb-6" *ngIf="project.description">
+                        <div class="mx-6 sm:mx-8 mt-2 mb-6" (click)="goToProject(project.id)" *ngIf="project.description">
                             <span class="text-sm text-secondary leading-none mt-1">Description</span>
                         <p>{{project.description}}</p>
                         </div>
 
-                        <div class="flex flex-col sm:flex-row sm:items-center mx-6 sm:mx-8  sm:mb-6">
+                        <div (click)="goToProject(project.id)" class="flex flex-col sm:flex-row sm:items-center mx-6 sm:mx-8  sm:mb-6">
 
                             <div class="flex flex-col"  *ngIf="project.startDate">
                                 <span class="text-sm text-secondary leading-none">Start Date</span>
@@ -145,7 +153,6 @@
                         <div  *ngIf="project.teamModel.length === 0 && !project.progres" class="mx-6 sm:mx-8 mt-2 mb-6 text-secondary text-primary dark:text-primary-500">
                             Sync with Jira is in progress. Project details will appear here when the sync is complete.
                         </div>
-
                         </fuse-card>
                     </div>
                 </ng-container>

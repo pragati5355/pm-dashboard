@@ -16,7 +16,8 @@ import {TextRegexValidator, RegexConstants,noWhitespaceValidator } from "../../.
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { CreateProjecteService } from '@services/create-projecte.service';
-import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
+import {SnackBar} from '../../../../core/utils/snackBar'
+import {ObjectValidation} from "../../../../core/utils/Validations";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
 export class TeamMember {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
@@ -46,7 +47,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
   }
   project_manager = new FormControl();
   // team_member = new FormControl();
-  snackBarConfig = new MatSnackBarConfig();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
     selectJiraUser = ""
@@ -102,16 +102,13 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       private _formBuilder: FormBuilder,
       private _authService: AuthService,
       private dialog: MatDialog,
-      private _snackBar: MatSnackBar,
       private router: Router,
-      private ProjectService:CreateProjecteService
+      private ProjectService:CreateProjecteService,
+      private snackBar: SnackBar
       
       )
     {
-        // // material snackbar config
-        this.snackBarConfig.duration = 5000;
-        this.snackBarConfig.horizontalPosition = "right";
-        this.snackBarConfig.verticalPosition = "bottom";
+    
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -162,6 +159,14 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           select_role: [''],
           team_jira_user: [''],
           
+        },{
+          validator: [
+            ObjectValidation("project_manager"),
+            ObjectValidation("jira_user"),
+            ObjectValidation("team_member"),
+            ObjectValidation("team_jira_user")
+
+        ]
         });
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
@@ -342,20 +347,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             }else{
               this.submitInProcess = false;
               if(res.data.error){
-                this.snackBarConfig.panelClass = ["red-snackbar"];
-                this._snackBar.open(
-                  res.data.error,
-                  "x",
-                  this.snackBarConfig
-                );
+                this.snackBar.errorSnackBar(res.data.error)
               }
              else{
-              this.snackBarConfig.panelClass = ["red-snackbar"];
-              this._snackBar.open(
-                "Jira user not found",
-                "x",
-                this.snackBarConfig
-              );
+              this.snackBar.errorSnackBar("Jira user not found")
              }
             }
               
@@ -367,20 +362,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         }else{
           this.submitInProcess = false;
           if(res.data.error){
-            this.snackBarConfig.panelClass = ["red-snackbar"];
-            this._snackBar.open(
-              res.data.error,
-              "x",
-              this.snackBarConfig
-            );
+            this.snackBar.errorSnackBar(res.data.error)
           }
          else{
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Jira user not found",
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.errorSnackBar("Jira user not found")
          }
         }
           
@@ -501,36 +486,22 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           }
           console.log(payload)
           this.submitInProcess = true;
-          // this.ProjectService.syncJira(payload).subscribe(
-          //   (res:any)=>{
-          //     this.submitInProcess = false;
-          //     if(res.data.message = "Project already exists"){
-          //       this.snackBarConfig.panelClass = ["red-snackbar"];  
-          //       this._snackBar.open(
-          //         res.data.message,
-          //         "x",
-          //         this.snackBarConfig
-          //       ); 
-          //     }else{
-          //       this.snackBarConfig.panelClass = ["success-snackbar"];  
-          //       this._snackBar.open(
-          //         "Project created Successfully",
-          //         "x",
-          //         this.snackBarConfig
-          //       ); 
-          //     }
+          this.ProjectService.createProject(payload).subscribe(
+            (res:any)=>{
+              this.submitInProcess = false;
+              if(res.data.error == false){
+                this.snackBar.successSnackBar("Project created successFully");
+              }else{
+                this.snackBar.errorSnackBar(res.data.Message)
+              }
             
-          //   }, 
-          //   error => {
-          //     this.submitInProcess = false;
-          //     this.snackBarConfig.panelClass = ["red-snackbar"];
-          //     this._snackBar.open(
-          //       "server error",
-          //       "x",
-          //       this.snackBarConfig
-          //     );
-          //   }
-          // )
+            }, 
+            error => {
+              this.submitInProcess = false;
+
+              this.snackBar.errorSnackBar("server error")
+            }
+          )
         this.projectDetials.reset();
         this.clientDetials.reset();
         this.projectSetting.reset();
@@ -541,13 +512,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         }
         else{
           this.isAddTeam = false
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Add team member and role",
-            "x",
-            this.snackBarConfig
-          );
-          
+          this.snackBar.errorSnackBar("Add team member and role")
         }
       }
     }   
@@ -572,12 +537,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               }, 
               error => {
                 this.submitInProcess = false;
-                this.snackBarConfig.panelClass = ["red-snackbar"];
-                this._snackBar.open(
-                  "Server error",
-                  "x",
-                  this.snackBarConfig
-                );
+                this.snackBar.errorSnackBar("Server error")
               }
             )
     }

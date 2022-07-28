@@ -476,14 +476,13 @@
                                                 formControlName="project_manager"
                                                 aria-label="managerList" [matAutocomplete]="autoManagerList"
                                                 maxlength="50"
-                                                [formControl]="project_manager"
                                                 matInput
                                                     >
                                                     <mat-error *ngIf="projectTeamForm['project_manager'].errors &&
                                                     projectTeamForm['project_manager']?.invalid &&
                                                     projectTeamForm['project_manager']?.touched ">
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['required']">Poject manager name is mandatory</div>
-                                                    <div *ngIf="projectTeamForm['project_manager'].errors['pattern']">Enter valid project manager name</div>
+                                                    <div *ngIf="projectTeamForm['project_manager'].invalid && !projectTeamForm['project_manager'].errors['required']">Choose valid project manager name</div>
                                                     </mat-error>
                                                     <mat-autocomplete #autoManagerList="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectedManagerOption($event)">
                                                         <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList">
@@ -509,7 +508,7 @@
                                                     projectTeamForm['jira_user']?.invalid &&
                                                     projectTeamForm['jira_user']?.touched ">
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name is mandatory</div>
-                                                    <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
+                                                    <div *ngIf="projectTeamForm['jira_user'].invalid && !projectTeamForm['jira_user'].errors['required']">Choose valid user name</div>
                                                     </mat-error>
                                                     <mat-autocomplete #autojiraUser="matAutocomplete" [displayWith]="displayFnJiraManager" (optionSelected)="selectedJiraUserOption($event)">
                                                         <mat-option *ngFor="let jiraUser of filteredJiraUsers | async, let i=index" [value]="jiraUser">
@@ -537,8 +536,8 @@
                                             <mat-error *ngIf="projectTeamForm['team_member'].errors &&
                                             projectTeamForm['team_member']?.invalid &&
                                             projectTeamForm['team_member']?.touched ">
-                                            <div *ngIf="projectTeamForm['team_member'].errors['required']">Team manager name is mandatory</div>
-                                            <div *ngIf="projectTeamForm['team_member'].errors['pattern']">Enter valid team manager name</div>
+                                            <div *ngIf="projectTeamForm['team_member'].errors['required']">Team maember name is mandatory</div>
+                                            <div *ngIf="projectTeamForm['team_member'].invalid">Choose valid team member name</div>
                                             </mat-error>
                                             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnTeam">
                                             <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember">
@@ -586,7 +585,8 @@
                                             projectTeamForm['team_jira_user']?.invalid &&
                                             projectTeamForm['team_jira_user']?.touched ">
                                             <div *ngIf="projectTeamForm['team_jira_user'].errors['required']">Jira User name is mandatory</div>
-                                            <div *ngIf="projectTeamForm['team_jira_user'].errors['pattern']">Enter valid user name</div>
+                                            <div *ngIf="projectTeamForm['team_jira_user'].invalid">Choose valid user name</div>
+
                                             </mat-error>  
                                             
                                             <mat-autocomplete #autojiraTeamUser="matAutocomplete"  [displayWith]="displayFnJiraTeam">
