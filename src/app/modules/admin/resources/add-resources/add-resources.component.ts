@@ -242,7 +242,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     );
   }
   ngOnDestroy(): void{
-    this.routeSubscribe.Unsubscribe();
+    this.routeSubscribe.unsubscribe();
   }
   canExit(): boolean {
     if (!this.resourcesForm.pristine) {
