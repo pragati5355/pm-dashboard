@@ -34,8 +34,107 @@ export const StaticData = {
     {image: 'assets/images/avatars/male-03.jpg', name: 'John Wicks', start_date: 'May 25,2021', email: 'johnwicks@gmail.com', role: 'Tester'},
   ],
   PER_PAGE_DATA: 10,
+  PROJECT_DETAILS: {
+    "message": "Success",
+    "data": {
+        "clientModelsTotalRecored": 2,
+        "clientModels": [
+            {
+                "id": 523,
+                "createdAt": 1658898118420,
+                "lastModifiedAt": 1658898118420,
+                "isDeleted": false,
+                "firstName": "AbcClient",
+                "lastName": "AbcClient",
+                "userId": 4,
+                "proectId": 52
+            },
+            {
+                "id": 524,
+                "createdAt": 1658898118426,
+                "lastModifiedAt": 1658898118426,
+                "isDeleted": false,
+                "firstName": "adf",
+                "lastName": "asdf",
+                "userId": 4,
+                "proectId": 52
+            }
+        ],
+        "project": {
+            "id": 52,
+            "createdAt": 1658898118189,
+            "lastModifiedAt": 1658898118189,
+            "isDeleted": false,
+            "projectId": "10000",
+            "key": "MT",
+            "description": "Metrcs",
+            "name": "Metrics",
+            "isPrivate": false,
+            "entityId": null,
+            "uuid": null,
+            "orgId": null,
+            "userId": 4,
+            "private": false
+        },
+        "teamModelTotalRecored": 3,
+        "teamModel": [
+            {
+                "id": 258,
+                "createdAt": 1658898118398,
+                "lastModifiedAt": 1658898118398,
+                "isDeleted": false,
+                "name": null,
+                "role": "Frontend Dev",
+                "jiraUser": "Microsoft Teams for Jira Cloud",
+                "isManager": false,
+                "userId": 4,
+                "projectId": 52,
+                "email": null,
+                "teamMemberId": null
+            },
+            {
+                "id": 259,
+                "createdAt": 1658898118404,
+                "lastModifiedAt": 1658898118404,
+                "isDeleted": false,
+                "name": null,
+                "role": "Backend Dev",
+                "jiraUser": "Slack",
+                "isManager": false,
+                "userId": 4,
+                "projectId": 52,
+                "email": null,
+                "teamMemberId": null
+            },
+            {
+                "id": 260,
+                "createdAt": 1658898118410,
+                "lastModifiedAt": 1658898118410,
+                "isDeleted": false,
+                "name": null,
+                "role": "MANAGER",
+                "jiraUser": "Atlassian Assist",
+                "isManager": true,
+                "userId": 4,
+                "projectId": 52,
+                "email": null,
+                "teamMemberId": null
+            }
+        ],
+        "authUser": {
+            "id": 1,
+            "createdAt": null,
+            "lastModifiedAt": 1658898051264,
+            "isDeleted": false,
+            "email": "suraj.jaiswal@mindbowser.com",
+            "apiKey": "qXAmmUTZEG7TBee6JoebB512",
+            "baseUrl": "https://mindbowser-pm.atlassian.net",
+            "userId": 4
+        }
+    },
+    "error": false
+}
 };
-
 
 export interface StaticInterface {
   [key: string]: string;

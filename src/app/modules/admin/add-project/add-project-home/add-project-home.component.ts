@@ -16,7 +16,8 @@ import {TextRegexValidator, RegexConstants,noWhitespaceValidator } from "../../.
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { CreateProjecteService } from '@services/create-projecte.service';
-import { MatSnackBar, MatSnackBarConfig } from "@angular/material/snack-bar";
+import {SnackBar} from '../../../../core/utils/snackBar'
+import {ObjectValidation} from "../../../../core/utils/Validations";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
 export class TeamMember {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
@@ -25,17 +26,17 @@ export class ManagerList {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
 export class JiraUser {
-  constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
+  constructor( public displayName: string, public accountType: string, public active: boolean, public avatarUrl: any, public accountId: string, public orgId:any) { }
 }
 export class JiraTeamUser {
-  constructor( public accountId: string, public accountType: string, public active: boolean, public avatarUrl: any, public displayName: string, public orgId:any) { }
+  constructor( public displayName: string, public accountType: string, public active: boolean, public avatarUrl: any, public accountId: string, public orgId:any) { }
 }
 @Component({
   selector: 'app-add-project-home',
   templateUrl: './add-project-home.component.html',
   styleUrls: ['./add-project-home.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  host: {'window:beforeunload':'doSomething'}
+  host: {'window:beforeunload':'doSomething'},
 })
 export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateComponent {
   @HostListener("window:beforeunload", ["$event"])
@@ -44,7 +45,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       $event.returnValue = true;
     }
   }
-  snackBarConfig = new MatSnackBarConfig();
+  pageTitle ="Add"
+  project_manager = new FormControl();
+  // team_member = new FormControl();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
     selectJiraUser = ""
@@ -96,20 +99,18 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     jiraTeamUsers: JiraTeamUser[] = []
     userData: any;
     clientDtailsList: any = []
+    routeSubscribe: any;
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,private _matStepperIntl: MatStepperIntl,
       private _formBuilder: FormBuilder,
       private _authService: AuthService,
       private dialog: MatDialog,
-      private _snackBar: MatSnackBar,
       private router: Router,
-      private ProjectService:CreateProjecteService
-      
+      private ProjectService:CreateProjecteService,
+      private snackBar: SnackBar,
+      private _route: ActivatedRoute,
       )
     {
-        // // material snackbar config
-        this.snackBarConfig.duration = 5000;
-        this.snackBarConfig.horizontalPosition = "right";
-        this.snackBarConfig.verticalPosition = "bottom";
+    
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -121,7 +122,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
      */
     ngOnInit(): void
     {
- 
+      
       this.userData = this._authService.getUser();
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required]],
@@ -154,17 +155,30 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           project: [''],
         });
         this.projectTeam = this._formBuilder.group({
-          project_manager: ['',[Validators.required,
-            Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
-            jira_user: ['',[Validators.required,
-              Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
-          team_member: ['',[
-            Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
+          project_manager: ['',[Validators.required]],
+            jira_user: ['',[Validators.required]],
+          team_member: [''],
           select_role: [''],
-          team_jira_user: ['',[
-            Validators.pattern(ValidationConstants.NAME_VALIDATION)]],
+          team_jira_user: [''],
           
+        },{
+          validator: [
+            ObjectValidation("project_manager"),
+            ObjectValidation("jira_user"),
+            ObjectValidation("team_member"),
+            ObjectValidation("team_jira_user")
+
+        ]
         });
+        this.routeSubscribe = this._route.queryParams.subscribe(projecteditId => {
+          if (projecteditId['id']) {
+              this.fetchEditproject(projecteditId['id'])
+            this.pageTitle = "edit"
+          }else{
+            this.pageTitle = "add"
+          }
+        });
+      
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -182,7 +196,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                     this.drawerOpened = false;
                 }
             });
-        this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
+       this.filterFunctions();
+    }
+    filterFunctions(){
+      this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
       .pipe(
         startWith(''),
         map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
@@ -203,34 +220,53 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         map(jiraTeamUser => jiraTeamUser ? this.filterTeamJiraUsers(jiraTeamUser) : this.filterTeamJiraUsersSlice())
       );
     }
-    filterTeamMembers(firstName: string) {
+    filterTeamMembers(value: any) {
+      if(typeof(value) == "object"){
+        return this.teamMembers.filter((teamMember: any) =>
+        teamMember.firstName.toLowerCase().indexOf(value.firstName.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.id) && ( teamMember.id )!== this.projectTeam.value.project_manager.id);
+      }else{
       return this.teamMembers.filter((teamMember: any) =>
-      teamMember.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.firstName+" "+teamMember.lastName) && ( teamMember.firstName+" "+teamMember.lastName )!== this.projectTeam.value.project_manager);
+      teamMember.firstName.toLowerCase().indexOf(value.toLowerCase()) === 0 && !this.selectedTeamMember.includes(teamMember.id) && ( teamMember.id )!== this.projectTeam.value.project_manager.id);
+      }
     }
     filterTeamMemberSlice() {
-      return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes (TeamMember.firstName+ " "+TeamMember.lastName) &&  (TeamMember.firstName+ " "+TeamMember.lastName)!== this.projectTeam.value.project_manager)
+      return this.teamMembers.filter(TeamMember => !this.selectedTeamMember.includes (TeamMember.id) &&  (TeamMember.id)!== this.projectTeam.value.project_manager.id)
     }
-    filterManagerLists(firstName: string) {
+    filterManagerLists(value: any) {
+      if(typeof(value) == "object"){
       return this.managerLists.filter((ManagerList: any) =>
-      ManagerList.firstName.toLowerCase().indexOf(firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) &&  (ManagerList.firstName+" "+ManagerList.lastName) !== this.projectTeam.value.project_manager);
+      ManagerList.firstName.toLowerCase().indexOf(value.firstName.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.id) &&  (ManagerList.id) !== this.projectTeam.value.project_manager.id);
+      }else{
+        return this.managerLists.filter((ManagerList: any) =>
+      ManagerList.firstName.toLowerCase().indexOf(value.toLowerCase()) === 0  && !this.selectedTeamMember.includes(ManagerList.id) &&  (ManagerList.id) !== this.projectTeam.value.project_manager.id);
+      }
     }
     filterManagerListsSlice() {
-      return this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) && !this.selectedTeamMember.includes(ManagerList.firstName+" "+ManagerList.lastName) && ( ManagerList.firstName+" "+ManagerList.lastName) !== this.projectTeam.value.project_manager)
+      return this.managerLists.filter(ManagerList => !this.selectedTeamMember.includes(ManagerList.id) && !this.selectedTeamMember.includes(ManagerList.id) && ( ManagerList.id) !== this.projectTeam.value.project_manager.id)
     }
-    filterJiraUsers(displayName: string) {
+    filterJiraUsers(value: any) {
+      if(typeof(value) == "object"){
       return this.jiraUsers.filter((JiraUser: any) =>
-        JiraUser.displayName.toLowerCase().indexOf(displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.displayName));
+        JiraUser.displayName.toLowerCase().indexOf(value.displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.displayName));
+      }else{
+        return this.jiraUsers.filter((JiraUser: any) =>
+        JiraUser.displayName.toLowerCase().indexOf(value.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraUser.displayName));
+      }
     }
     filterJiraUsersSlice() {
       return this.jiraUsers.filter(JiraUser => !this.selectedJiraUser.includes(JiraUser.displayName) && !this.selectedJiraUser.includes(JiraUser.displayName))
     }
-    filterTeamJiraUsers(displayName: string) {
-
+    filterTeamJiraUsers(value: any) {
+      if(typeof(value) == "object"){
       return this.jiraTeamUsers.filter((JiraTeamUser: any) =>
-        JiraTeamUser.displayName.toLowerCase().indexOf(displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user);
+        JiraTeamUser.displayName.toLowerCase().indexOf(value.displayName.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user.displayName);
+      }else{
+        return this.jiraTeamUsers.filter((JiraTeamUser: any) =>
+        JiraTeamUser.displayName.toLowerCase().indexOf(value.toLowerCase()) === 0 && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user.displayName);
+      }
     }
     filterTeamJiraUsersSlice() {
-      return this.jiraTeamUsers.filter(JiraTeamUser => !this.selectedJiraUser.includes(JiraTeamUser.displayName) && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user)
+      return this.jiraTeamUsers.filter(JiraTeamUser => !this.selectedJiraUser.includes(JiraTeamUser.displayName) && !this.selectedJiraUser.includes(JiraTeamUser.displayName) &&  JiraTeamUser.displayName !== this.projectTeam.value.jira_user.displayName)
     }
     /*
     /**
@@ -317,20 +353,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             }else{
               this.submitInProcess = false;
               if(res.data.error){
-                this.snackBarConfig.panelClass = ["red-snackbar"];
-                this._snackBar.open(
-                  res.data.error,
-                  "x",
-                  this.snackBarConfig
-                );
+                this.snackBar.errorSnackBar(res.data.error)
               }
              else{
-              this.snackBarConfig.panelClass = ["red-snackbar"];
-              this._snackBar.open(
-                "Jira user not found",
-                "x",
-                this.snackBarConfig
-              );
+              this.snackBar.errorSnackBar("Jira user not found")
              }
             }
               
@@ -342,20 +368,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         }else{
           this.submitInProcess = false;
           if(res.data.error){
-            this.snackBarConfig.panelClass = ["red-snackbar"];
-            this._snackBar.open(
-              res.data.error,
-              "x",
-              this.snackBarConfig
-            );
+            this.snackBar.errorSnackBar(res.data.error)
           }
          else{
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Jira user not found",
-            "x",
-            this.snackBarConfig
-          );
+          this.snackBar.errorSnackBar("Jira user not found")
          }
         }
           
@@ -383,24 +399,30 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         this.teamMemberList = [
           ...this.teamMemberList,
           {
-            name: this.projectTeam.value
-              .team_member,
+            // name: this.projectTeam.value
+            //   .team_member,
+              teamMemberId:this.projectTeam.value
+              .team_member.id,
             role: this.projectTeam.value.select_role,
-            jiraUser: this.projectTeam.value.team_jira_user,
+            jiraUser: this.projectTeam.value.team_jira_user.displayName,
             isManager: false
           }
         ];
-        this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user]
-        this.selectedTeamMember = [  ...this.selectedTeamMember, this.projectTeam.value.team_member]
+        this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user.displayName]
+        this.selectedTeamMember = [  ...this.selectedTeamMember, this.projectTeam.value.team_member.id]
         this.projectTeam.controls["team_member"].reset();
         this.projectTeam.controls["select_role"].reset();
         this.projectTeam.controls["team_jira_user"].reset();
       }
     }
-    deleteTeamMember(index: any) {
+    deleteTeamMember(index: any,teamMemberId: any,jiraUser: any) {
       this.teamMemberList.splice(index, 1);
       this.projectTeam.controls["team_member"].reset();
       this.projectTeam.controls["select_role"].reset();
+      this.projectTeam.controls["team_jira_user"].reset();
+      this.selectedJiraUser = [ this.selectJiraUser.indexOf(jiraUser)]
+      this.selectedTeamMember = [ this.selectedTeamMember.indexOf(teamMemberId)]
+      this.filterFunctions();
     }
     submitProjectDetails(){
       if (!this.projectDetials.invalid) {
@@ -440,9 +462,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           this.teamMemberList = [
             ...this.teamMemberList,
             {
-              name: this.projectTeam.value.project_manager ,
-              role: "MANAGER",
-              jiraUser: this.projectTeam.value.jira_user,
+              // name: this.projectTeam.value.project_manager ,
+              teamMemberId: this.projectTeam.value.project_manager.id,
+              role: "Manager",
+              jiraUser: this.projectTeam.value.jira_user.displayName,
               isManager: true
             }
           ];
@@ -467,35 +490,22 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             jiraProjectKey: this.projectSetting.value.project,
             teamDetails: this.teamMemberList
           }
+          console.log(payload)
           this.submitInProcess = true;
-          this.ProjectService.syncJira(payload).subscribe(
+          this.ProjectService.createProject(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              if(res.data.message = "Project already exists"){
-                this.snackBarConfig.panelClass = ["red-snackbar"];  
-                this._snackBar.open(
-                  res.data.message,
-                  "x",
-                  this.snackBarConfig
-                ); 
+              if(res.data.error == false){
+                this.snackBar.successSnackBar("Project created successFully");
               }else{
-                this.snackBarConfig.panelClass = ["success-snackbar"];  
-                this._snackBar.open(
-                  "Project created Successfully",
-                  "x",
-                  this.snackBarConfig
-                ); 
+                this.snackBar.errorSnackBar(res.data.Message)
               }
             
             }, 
             error => {
               this.submitInProcess = false;
-              this.snackBarConfig.panelClass = ["red-snackbar"];
-              this._snackBar.open(
-                "server error",
-                "x",
-                this.snackBarConfig
-              );
+
+              this.snackBar.errorSnackBar("server error")
             }
           )
         this.projectDetials.reset();
@@ -508,13 +518,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         }
         else{
           this.isAddTeam = false
-          this.snackBarConfig.panelClass = ["red-snackbar"];
-          this._snackBar.open(
-            "Add team member and role",
-            "x",
-            this.snackBarConfig
-          );
-          
+          this.snackBar.errorSnackBar("Add team member and role")
         }
       }
     }   
@@ -533,28 +537,13 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             this.ProjectService.getTeamMember(payload).subscribe(
               (res:any)=>{
                 this.submitInProcess = false;
-                console.log("teamMember",res);
                 this.teamMembers = res.data.teamMember
                 this.managerLists = res.data.teamMember
-                this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges
-                .pipe(
-                  startWith(''),
-                  map(teamMember => teamMember ? this.filterTeamMembers(teamMember) : this.filterTeamMemberSlice())
-                );
-                this.filteredManagerLists = this.projectTeam.get('project_manager')?.valueChanges
-                .pipe(
-                  startWith(''),
-                  map(managerList => managerList ? this.filterManagerLists(managerList) : this.filterManagerListsSlice())
-                );
+                this.filterFunctions();
               }, 
               error => {
                 this.submitInProcess = false;
-                this.snackBarConfig.panelClass = ["red-snackbar"];
-                this._snackBar.open(
-                  "Server error",
-                  "x",
-                  this.snackBarConfig
-                );
+                this.snackBar.errorSnackBar("Server error")
               }
             )
     }
@@ -585,5 +574,57 @@ selectedJiraUserOption(event: any) {
       return false;
     }
     return true;
+  }
+  isEmptyStr(val: any) {
+    return val === undefined || val === null || val === "+" || val.length <= 0 || val.trim().length === 0
+      ? null
+      : val.trim();
+  }
+  displayFn(user?: ManagerList): string | any {
+    return user ? user.firstName+" "+user.lastName : null;
+  }
+  displayFnTeam(user?: TeamMember): string | any {
+    return user ? user.firstName+" "+user.lastName : null;
+  }
+  displayFnJiraManager(user?: JiraTeamUser): string | any {
+    return user ? user.displayName : null;
+  }
+  displayFnJiraTeam(user?: JiraUser): string | any {
+    return user ? user.displayName : null;
+  }
+  fetchEditproject(id: number){
+    let res = StaticData.PROJECT_DETAILS
+    let pojectdata = [res.data.project]
+    let clientData =[res.data.clientModels]
+    let projectsetting = [] ;
+    projectsetting.push(res.data.authUser) 
+    pojectdata.forEach((item: any) => {
+      this.projectDetials.patchValue({
+        projectName: item.name?item.name:"",
+        projectDescription: item.description?item.description:"",
+      });
+      this.settingProjectName =item.key?item.key:""
+    })
+    clientData.forEach((item: any)=>{
+      console.log(item)
+      this.clientDetials.patchValue({
+        firstName:item.length > 0 ? (item[0].firstName?item[0].firstName:""):null ,
+        lastName: item.length > 0 ?(item[0].lastName?item[0].lastName:""):null,
+        firstName2: item.length > 1 ?(item[1].firstName?item[1].firstName:""):null,
+        lastName2: item.length > 1 ?(item[1].lastName?item[1].lastName:""):null,
+        firstName3:  item.length > 2 ?(item[2].firstName?item[2].firstName:""):null,
+        lastName3: item.length > 2 ?(item[2].lastName?item[2].lastName:""):null,
+      })
+    })
+    projectsetting.forEach((item:any)=>{
+      this.projectSetting.patchValue({
+        url:item.baseUrl?(item.baseUrl.slice(8)).slice(0,-14):null,
+        email:item.email?item.email:"",
+        token:item.apiKey?item.apiKey:"",
+        project: this.settingProjectName
+      })
+    })
+
+    
   }
 }

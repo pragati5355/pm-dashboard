@@ -11,8 +11,11 @@ export class CreateProjecteService {
   constructor(private http: HttpClient, private storage: LocalStorageService) {
   }
 
+  createProject(obj: any) {
+    return this.http.post(AppConstants['CREATE_PROJECT'], obj);
+  }
   syncJira(obj: any) {
-    return this.http.post(AppConstants['JIRA_SYNC'], obj);
+    return this.http.post(AppConstants['SYNC_JIRA'], obj);
   }
   getJiraUser(obj: any) {
     return this.http.post(AppConstants['GET_JIRA_USER'], obj);

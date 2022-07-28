@@ -62,23 +62,6 @@
         </mat-select>
       </mat-form-field>
       <!-- experience -->
-      <!-- <mat-form-field
-        class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-50"
-      >
-        <mat-select
-          (selectionChange)="selectChange()"
-          [(ngModel)]="selectedExpriencesFromArray"
-          [disableOptionCentering]="true"
-          [placeholder]="'Choose expriences'"
-        >
-          <mat-option
-            *ngFor="let expriences of expriences"
-            [value]="expriences"
-            >{{ expriences }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field> -->
-       <!-- experience Menu for future design-->
        <button class="ml-4" mat-stroked-button [matMenuTriggerFor]="beforeMenu">Choose expriences <div class="mat-select-arrow-wrapper ng-tns-c179-6"><div class="mat-select-arrow ng-tns-c179-6"></div></div></button>
         <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
         <form [formGroup]="exprienceForm">
@@ -177,15 +160,6 @@
             >
               <!-- Image -->
               <div class="flex items-center">
-              <!--  <div
-                  class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border"
-                >
-                  <img
-                    [src]="resources.image"
-                    alt="Contact avatar"
-                    class="object-cover w-full h-full rounded-full"
-                  />
-                </div>-->
               <ng-container *ngIf="resources.image">
                 <img
                   class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover w-full h-full rounded-full"

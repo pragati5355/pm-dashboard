@@ -2,7 +2,7 @@
     <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
         <!-- Loader -->
         <!-- Title -->
-        <div class="text-4xl font-extrabold tracking-tight">Add New Project</div>
+        <div class="text-4xl font-extrabold tracking-tight">{{pageTitle | titlecase}} <span *ngIf="pageTitle === 'add' ">New</span> Project</div>
     
     </div>
     <mat-drawer-container class="flex-auto h-full">
@@ -49,7 +49,6 @@
         <mat-drawer-content class="flex flex-col overflow-y-auto">
 
             <!-- Main -->
-            <!-- <div class="flex flex-auto overflow-hidden"> -->
                 <!-- Sidebar toggle button -->
                 <button
                 mat-icon-button class="hidden"
@@ -69,7 +68,7 @@
                             <form  [formGroup]="projectDetials" 
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
                             >
-                                <h2 class="text-3xl font-semibold tracking-tight leading-8">Add Project Details</h2>
+                                <h2 class="text-3xl font-semibold tracking-tight leading-8">{{pageTitle | titlecase}} Project Details</h2>
                                 <!-- Subject -->
                                 <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
                                     <mat-label>Project Name</mat-label>
@@ -151,7 +150,7 @@
                     
                                 <!-- Section -->
                                 <div class="w-full">
-                                    <h2 class="text-3xl font-semibold tracking-tight leading-8">Add Client Details</h2>
+                                    <h2 class="text-3xl font-semibold tracking-tight leading-8">{{pageTitle | titlecase}} Client Details</h2>
                                 </div>
                                 <!-- <div class="grid grid-cols-4 gap-6 w-full "> -->
                                     <div class=" flex flex-col mb-2 sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
@@ -282,7 +281,6 @@
                                                     </mat-form-field>
                                                 </div>
                                     </div>
-                                <!-- </div> -->
                         
                                 <!-- Actions -->
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
@@ -337,7 +335,7 @@
                             <input
                                 matInput
                                 formControlName="url"
-                                placeholder="Base Url">
+                                placeholder="Base Url" >
                                 <span matPrefix>https://</span>
                                 <span matSuffix>.atlassian.net</span>
                                 <mat-error *ngIf="projectSettingsForm['url'].errors &&
@@ -379,7 +377,6 @@
                              </div>
                         </div>
                         <div *ngIf="settingProjectName" class=" flex flex-col mb-2 sm:flex-row flex-0 sm:items-center ">
-                            <!-- <div class=" w-full font-extrabold tracking-tight ng-tns-c274-3859"> -->
                                 <mat-form-field class="w-full sm:w-100 mt-4 sm:mt-0 "  [floatLabel]="'always'">
                                     <mat-label>Project Name</mat-label>
                                     <input 
@@ -482,10 +479,10 @@
                                                     projectTeamForm['project_manager']?.invalid &&
                                                     projectTeamForm['project_manager']?.touched ">
                                                     <div *ngIf="projectTeamForm['project_manager'].errors['required']">Poject manager name is mandatory</div>
-                                                    <div *ngIf="projectTeamForm['project_manager'].errors['pattern']">Enter valid project manager name</div>
+                                                    <div *ngIf="projectTeamForm['project_manager'].invalid && !projectTeamForm['project_manager'].errors['required']">Choose valid project manager name</div>
                                                     </mat-error>
-                                                    <mat-autocomplete #autoManagerList="matAutocomplete" (optionSelected)="selectedManagerOption($event)">
-                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList.firstName+' '+managerList.lastName">
+                                                    <mat-autocomplete #autoManagerList="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectedManagerOption($event)">
+                                                        <mat-option *ngFor="let managerList of filteredManagerLists | async, let i=index" [value]="managerList">
             
                                                         <span>{{ managerList.firstName +" "+managerList.lastName }}</span> 
                                                         </mat-option>
@@ -508,10 +505,10 @@
                                                     projectTeamForm['jira_user']?.invalid &&
                                                     projectTeamForm['jira_user']?.touched ">
                                                     <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name is mandatory</div>
-                                                    <div *ngIf="projectTeamForm['jira_user'].errors['pattern']">Enter valid user name</div>
+                                                    <div *ngIf="projectTeamForm['jira_user'].invalid && !projectTeamForm['jira_user'].errors['required']">Choose valid user name</div>
                                                     </mat-error>
-                                                    <mat-autocomplete #autojiraUser="matAutocomplete" (optionSelected)="selectedJiraUserOption($event)">
-                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async, let i=index" [value]="jiraUser.displayName">
+                                                    <mat-autocomplete #autojiraUser="matAutocomplete" [displayWith]="displayFnJiraManager" (optionSelected)="selectedJiraUserOption($event)">
+                                                        <mat-option *ngFor="let jiraUser of filteredJiraUsers | async, let i=index" [value]="jiraUser">
                                                          
                                                           <span>{{ jiraUser.displayName }}</span> 
                                                         </mat-option>
@@ -536,11 +533,11 @@
                                             <mat-error *ngIf="projectTeamForm['team_member'].errors &&
                                             projectTeamForm['team_member']?.invalid &&
                                             projectTeamForm['team_member']?.touched ">
-                                            <div *ngIf="projectTeamForm['team_member'].errors['required']">Team manager name is mandatory</div>
-                                            <div *ngIf="projectTeamForm['team_member'].errors['pattern']">Enter valid team manager name</div>
+                                            <div *ngIf="projectTeamForm['team_member'].errors['required']">Team maember name is mandatory</div>
+                                            <div *ngIf="projectTeamForm['team_member'].invalid">Choose valid team member name</div>
                                             </mat-error>
-                                            <mat-autocomplete #auto="matAutocomplete" >
-                                            <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember.firstName +' '+ teamMember.lastName">
+                                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnTeam">
+                                            <mat-option *ngFor="let teamMember of filteredTeamMembers | async" [value]="teamMember">
 
                                             <span>{{ teamMember.firstName +" "+teamMember.lastName}} </span> 
                                             </mat-option>
@@ -585,11 +582,12 @@
                                             projectTeamForm['team_jira_user']?.invalid &&
                                             projectTeamForm['team_jira_user']?.touched ">
                                             <div *ngIf="projectTeamForm['team_jira_user'].errors['required']">Jira User name is mandatory</div>
-                                            <div *ngIf="projectTeamForm['team_jira_user'].errors['pattern']">Enter valid user name</div>
+                                            <div *ngIf="projectTeamForm['team_jira_user'].invalid">Choose valid user name</div>
+
                                             </mat-error>  
                                             
-                                            <mat-autocomplete #autojiraTeamUser="matAutocomplete" >
-                                            <mat-option *ngFor="let jiraTeamUser of filteredTeamJiraUsers | async" [value]="jiraTeamUser.displayName">
+                                            <mat-autocomplete #autojiraTeamUser="matAutocomplete"  [displayWith]="displayFnJiraTeam">
+                                            <mat-option *ngFor="let jiraTeamUser of filteredTeamJiraUsers | async" [value]="jiraTeamUser">
 
                                             <span>{{ jiraTeamUser.displayName }}</span> 
                                             </mat-option>
@@ -601,7 +599,6 @@
                                               <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">Add</span>
                                              </div>
                                 </div>
-                            <!-- </div> -->
                           <!-- Products list -->
                               <div class=" w-full sm:w-140 mt-8">
                                 <div class="flex flex-col flex-auto  sm:mb-18 overflow-hidden sm:overflow-y-auto">
@@ -612,7 +609,6 @@
                                                 <div
                                                     class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                                 >
-                                                    <!-- <div class="flex flex-col sm:flex-row flex-0 col-span-3 sm:col-span-3 sm:items-center sm:justify-between"> -->
                                                     <div
                                                         >
                                                         Team Member
@@ -623,18 +619,16 @@
                                                         >
                                                         Active
                                                     </div>
-                                                    <!-- </div> -->
                                                 </div>
                                                 <!-- Rows -->
                                                 <ng-container >
                                                     <ng-container *ngFor="let teamMember of teamMemberList;index as i">
                                                         <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-
-                                
-                                                            <!-- <div class="flex flex-col sm:flex-row flex-0 col-span-3 sm:col-span-3 sm:items-center sm:justify-between"> -->
                                                             <!-- SKU -->
                                                             <div class="hidden md:block truncate">
-                                                                {{teamMember.name | titlecase}}
+                                                                <ng-container *ngFor="let member of teamMembers">
+                                                                    <ng-container *ngIf="member.id == teamMember.teamMemberId">{{member.firstName+ " "+member.lastName | titlecase}}</ng-container>
+                                                                </ng-container>
                                                             </div>
 
                                                             <!-- Name -->
@@ -653,11 +647,10 @@
                                                             <div class="hidden lg:block">
                                                                 <ng-container >
                                                                     <mat-icon
-                                                                        class="text-gray-400 icon-size-5 cursor-pointer"  (click)="deleteTeamMember(i)"
+                                                                        class="text-gray-400 icon-size-5 cursor-pointer"  (click)="deleteTeamMember(i,teamMember.teamMemberId,teamMember.jiraUser)"
                                                                         [svgIcon]="'heroicons_solid:x'"></mat-icon>
                                                                 </ng-container>
                                                             </div>
-                                                            <!-- </div> -->
                                                             <!-- Details button -->
                                                         
                                                         </div>

@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild,ElementRef, ViewEncapsulation, HostListener } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IDeactivateComponent } from "@services/deactivate-service/decativate.guard";
 import { ValidationConstants } from "../../../../core/constacts/constacts";
 import { StaticData } from "../../../../core/constacts/static";
 import { C, COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -20,7 +21,13 @@ export class Technology {
   templateUrl: './add-resources.component.html',
   styleUrls: ['./add-resources.component.scss']
 })
-export class AddResourcesComponent implements OnInit {
+export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateComponent {
+  @HostListener("window:beforeunload", ["$event"])
+  public onPageUnload($event: BeforeUnloadEvent) {
+    if (!this.canExit()) {
+      $event.returnValue = true;
+    }
+  }
   formTypeAdd = true
   editFormId = 0
   pageTitle = ""
@@ -170,7 +177,6 @@ export class AddResourcesComponent implements OnInit {
       });
     }
 
-    // Reset the input value
     if (input) {
       input.value = '';
     }
@@ -218,8 +224,8 @@ export class AddResourcesComponent implements OnInit {
           lastName:item.lastName?item.lastName: "",
           email: item.email?item.email: "",
           team:item.team?item.team: "",
-          year: item.month?item.month: 0,
-          month: item.year?item.year: 0,
+          year: item.year?item.year: 0,
+          month: item.month?item.month: 0,
         });
         this.firstName=item.firstName?item.firstName: ""
         this.technologys =item.technology
@@ -227,13 +233,22 @@ export class AddResourcesComponent implements OnInit {
         .pipe(
           startWith(''),
           map((technology: any |null) => technology ?  this._filter(technology) : this._filterslice()));
-        console.log(item.team)
+        
       })
       },
       error => {
         this.initialLoading = false;
       }
     );
+  }
+  ngOnDestroy(): void{
+    this.routeSubscribe.unsubscribe();
+  }
+  canExit(): boolean {
+    if (!this.resourcesForm.pristine) {
+      return false;
+    }
+    return true;
   }
   editresource(){
     if (!this.resourcesForm.invalid) {

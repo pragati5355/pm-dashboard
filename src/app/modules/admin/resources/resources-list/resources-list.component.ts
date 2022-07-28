@@ -107,23 +107,16 @@ export class ResourcesListComponent implements OnInit {
       this.totalRecored = res.data.totalRecored
       this.resources = res.data.teamMember;
       this.isLoading = false;
-     }else{
+     }else if(res.data == null){
       this.totalRecored = 0
       this.isLoading = false;
      }
     }, error => {
       this.isLoading = false;
     })
-    // this.isLoading = false;
   }
 
-  /*******************************************************************
-   * @description Getting a list of technology in Resource List and pass to technologyLIst
-   *
-   * @author- Naynesh Rathod
-   * @created_date - 19/07/2022
-   *
-   ******************************************************************/
+
 
   getListtechList() {
     this.isLoading = true;
@@ -135,14 +128,6 @@ export class ResourcesListComponent implements OnInit {
     })
   }
 
-
-  /*******************************************************************
-   * @description Handle Scroll pagination in Resource List
-   *
-   * @author- Naynesh Rathod
-   * @created_date - 18/07/2022
-   *
-   ******************************************************************/
 
   handleScroll() {
     if (!this.pagination) {
@@ -169,14 +154,6 @@ export class ResourcesListComponent implements OnInit {
       });
     }
   }
-
-  /*******************************************************************
-   * @description Filter Serach in Resource List
-   *
-   * @author- Naynesh Rathod
-   * @created_date - 19/07/2022
-   *
-   ******************************************************************/
 
   selectChange() {
     this.isLoading = true;
@@ -209,14 +186,6 @@ export class ResourcesListComponent implements OnInit {
   }
 
 
-  /*******************************************************************
-   * @description Input Serach in Resource List
-   *
-   * @author- Naynesh Rathod
-   * @created_date - 19/07/2022
-   *
-   ******************************************************************/
-
 
   inputSearch(event: any) {
     this.count = 1;
@@ -245,7 +214,6 @@ export class ResourcesListComponent implements OnInit {
     // Open the dialog and save the reference of it
     this.ProjectService.getresource(payload).subscribe(
       (res: any) => {
-        //  console.log(res);
         this.updateDeleteObj.push(res.data)
         this.updateDeleteObj.forEach((item: any) => {
           this.deleteObject = {
@@ -261,18 +229,15 @@ export class ResourcesListComponent implements OnInit {
             year: item.year ? item.year : 0,
             technology: item.technology ? item.technology : null
           }
-          console.log(payload)
 
         })
         const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
 
         // Subscribe to afterClosed from the dialog reference
         dialogRef.afterClosed().subscribe((result) => {
-          console.log(result);
           if (result == "confirmed") {
             this.ProjectService.updateDeleteResource(this.deleteObject).subscribe(
               (res: any) => {
-                console.log(res);
                 this.snackBar.successSnackBar(res.data.Message)
                 let expriencePayload = [
                   parseInt(this.exprienceForm.value.minExprience),
@@ -329,7 +294,6 @@ export class ResourcesListComponent implements OnInit {
       }, error => {
         this.isLoading = false;
       });
-      console.log(payload)
     }else{
       event.stopPropagation();
     }

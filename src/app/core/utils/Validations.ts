@@ -88,3 +88,22 @@ export function ExprienceValidation(
       } 
     };
   }
+
+  export function ObjectValidation(
+    controlName: any,
+  ) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      if (
+        control.errors &&
+        !control.errors['InvalidCode']
+      ) {
+        return;
+      }
+      if (typeof(control.value)=="object") {
+        control.setErrors(null);
+      }else {
+        control.setErrors({ InvalidCode: true });
+      } 
+    };
+  } 

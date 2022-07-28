@@ -17,10 +17,7 @@ export class ConnectJiraPopupComponent implements OnInit
   connectJiraForm!: FormGroup;
     list: any = [];
   
-    selection = [
-      { id: 1, name: 'Metrics'},
-      { id: 2, name: 'ChatBiopsy'},
-    ];
+    selection = [];
     constructor(
         public matDialogRef: MatDialogRef<ConnectJiraPopupComponent>,
         private _formBuilder: FormBuilder,
@@ -31,13 +28,6 @@ export class ConnectJiraPopupComponent implements OnInit
       
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void
     {
         // Create the form
@@ -48,75 +38,13 @@ export class ConnectJiraPopupComponent implements OnInit
         this.project_name = this.data.settingProjectName
         console.log(this.data)
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-      /**
-     * Save and close
-     */
-       saveAndClose(): void
-       {
-           // Save the message as a draft
-   
-           // Close the dialog
-           this.matDialogRef.close();
-       }
-    /**
-     * Send the message
-     */
-    send(): void
-    { 
-      // console.log(this.connectJiraForm.value)
-      // let payload ={
-      //   url: this.connectJiraForm.value.url,
-      //   email: this.connectJiraForm.value.email,
-      //   password: this.connectJiraForm.value.password     
-      // }
-      // console.log(payload)
-      // this._authService.connectJira(payload).subscribe(
-      //   (res:any)=>{
-      //     console.log(res);
-                 
-          
-      //   },
-      // )
-       this.list = [
-        { id: 1, name: 'Metrics'},
-        { id: 2, name: 'ChatBiopsy'},
-        { id: 3, name: 'Beacon Learning'},
-      ];
-    }
-
-
-    getSelection(item: any) {
-      return this.selection.findIndex(s => s.id === item.id) !== -1;
-    }
-  
-    changeHandler(item: any) {
-      const id = item.id;
-  
-      const index = this.selection.findIndex(u => u.id === id);
-      if (index === -1) {
-        // ADD TO SELECTION
-        // this.selection.push(item);
-        this.selection = [...this.selection, item];
-      } else {
-        // REMOVE FROM SELECTION
-        this.selection = this.selection.filter(user => user.id !== item.id)
-        // this.selection.splice(index, 1)
-      }
-    }
   
     save() {
-      // this.matDialogRef.close();
       if (!this.connectJiraForm.invalid) {
-      console.log( this.connectJiraForm.value.name);
       this.matDialogRef.close({
         project: this.connectJiraForm.value.name
       });
     }
-      console.log(this.project_name);
     }
     close(){
       this.matDialogRef.close();

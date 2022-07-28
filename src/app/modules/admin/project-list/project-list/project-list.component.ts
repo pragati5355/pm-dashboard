@@ -4,7 +4,7 @@ import {CreateProjecteService} from '@services/create-projecte.service';
 import {Router} from '@angular/router';
 import {FuseCardComponent} from '@fuse/components/card';
 import {SessionService} from "@services/auth/session.service";
-
+import {SnackBar} from '../../../../core/utils/snackBar'
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
@@ -22,11 +22,13 @@ export class ProjectListComponent implements OnInit {
   totalPageData = 2
   totalProject = 0;
   cardList: boolean = true;
+  submitInProcess: boolean = false;
   private _fuseCards!: QueryList<ElementRef>;
 
   constructor(private router: Router, private _authService: AuthService,
               private ProjectService: CreateProjecteService,
-              private sessionService: SessionService,) {
+              private sessionService: SessionService,
+              private snackBar: SnackBar) {
   }
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class ProjectListComponent implements OnInit {
     this.ProjectService.getProjectDetails(payload).subscribe(
       (res: any) => {
         this.initialLoading = false;
-        console.log(res);
+        // console.log(res);
         this.projectList = res.data.projects;
         this.totalProject = res.data.totalRecored
       }, error => {
@@ -96,5 +98,28 @@ export class ProjectListComponent implements OnInit {
       [`/projects/project/details`],
       {queryParams: {id: id}}
     );
+  }
+  snycproject(event:any,id: number){
+    event.preventDefault();
+    let payload ={
+      id: id
+    } 
+    this.submitInProcess = true;
+    this.ProjectService.syncJira(payload).subscribe(
+      (res:any)=>{
+        this.submitInProcess = false;
+        if(!res.data.error){
+          this.snackBar.errorSnackBar(res.data.Message);
+        }else{
+          this.snackBar.errorSnackBar( res.data.Message)
+        }
+      
+      }, 
+      error => {
+        this.submitInProcess = false;
+
+        this.snackBar.errorSnackBar("server error")
+      }
+    )
   }
 }

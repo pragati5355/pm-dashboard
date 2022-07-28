@@ -55,7 +55,16 @@ export class InterceptorService implements HttpInterceptor {
     }
     return next.handle(request).pipe(
       tap(
-        () => {},
+        (res: any) => {
+          if (res.status === 200) {
+            // future changes
+                // console.log(res);
+              // this.authService.updateToken().subscribe(
+              //   (res: any) => {
+              //     this.authService.setToken(res.data.accessToken);
+              //   })
+          }
+        },
         (err: any) => {
           if (err instanceof HttpErrorResponse) {
             console.log(err);
@@ -87,14 +96,12 @@ export class InterceptorService implements HttpInterceptor {
               );
               this.router.navigate(['/sign-in']) 
             }else if(err.status === 404){
-              this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
                 err.error.message,
                 "X",
                 this.snackBarConfig
               );
-              this.router.navigate(['/sign-in']) 
             }else if(err.status === 500){
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
@@ -112,14 +119,12 @@ export class InterceptorService implements HttpInterceptor {
               );
               this.router.navigate(['/sign-in']) 
             }else if(err.status === 503){
-              // this.sessionService.clearStorage();
               this.snackBarConfig.panelClass = ["red-snackbar"];
               this._snackBar.open(
                 err.error.message,
                 "X",
                 this.snackBarConfig
               );
-              // this.router.navigate(['/sign-in']) 
             }
           }
         }
