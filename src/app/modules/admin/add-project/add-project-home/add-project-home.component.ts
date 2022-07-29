@@ -46,6 +46,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     }
   }
   pageTitle ="Add"
+  editProjectId = 0;
   project_manager = new FormControl();
   // team_member = new FormControl();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
@@ -175,7 +176,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         });
         this.routeSubscribe = this._route.queryParams.subscribe(projecteditId => {
           if (projecteditId['id']) {
-              this.fetchEditproject(projecteditId['id'])
+            this.fetchEditproject(projecteditId['id'])
+            this.editProjectId = projecteditId['id']
             this.pageTitle = "edit"
             this.editProject = true
           }else{
@@ -400,7 +402,11 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
 
     }
     addTeamMember() {
-      // if (!this.projectTeam.invalid) {
+      // this.projectTeam.get('project_manager')?.clearValidators()
+      // this.projectTeam.controls["project_manager"].clearValidators();
+      // this.projectTeam.controls['project_manager'].updateValueAndValidity();
+      // this.projectTeam.get('team_member')?.clearValidators()
+      if (!this.projectTeam.controls['team_member'].invalid && !this.projectTeam.controls['team_jira_user'].invalid) {
       if (
         !this.projectTeam.value.team_jira_user
       ) {
@@ -430,7 +436,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         this.projectTeam.controls["select_role"].reset();
         this.projectTeam.controls["team_jira_user"].reset();
       }
-    // }
+    }
     }
     deleteTeamMember(index: any,teamMemberId: any,jiraUser: any) {
       this.teamMemberList.splice(index, 1);
@@ -668,8 +674,8 @@ selectedJiraUserOption(event: any) {
             }
           ];
         })
-        this.managerEditTeamLIst = this.teamMemberList.filter((item: any) => item.role == "MANAGER" )
-        this.teamMemberList = this.teamMemberList.filter((item: any) => item.role !== "MANAGER" )
+        this.managerEditTeamLIst = this.teamMemberList.filter((item: any) => item.role == "Manager" )
+        this.teamMemberList = this.teamMemberList.filter((item: any) => item.role !== "Manager" )
        
         this.teamMemberList.forEach((element:any) => {
           this.selectedJiraUser = [  ...this.selectedJiraUser, element.jiraUser]
@@ -684,4 +690,77 @@ selectedJiraUserOption(event: any) {
       });
   
   }
+  updateProject(){
+
+    if (!this.projectTeam.invalid) {
+      if(this.teamMemberList.length > 0){
+        this.teamMemberList = [
+          ...this.teamMemberList,
+          {
+            // name: this.projectTeam.value.project_manager ,
+            teamMemberId: this.projectTeam.value.project_manager.id,
+            role: "Manager",
+            jiraUser: this.projectTeam.value.jira_user.displayName,
+            isManager: true
+          }
+        ];
+        let payload = 
+        {
+          projectDetails: {
+            name: this.projectDetials.value.projectName,
+            description: this.projectDetials.value.projectDescription,
+            key: this.projectSetting.value.project,
+            entityId: null,
+            uuid: null,
+            orgId: null,
+            private: false,
+            id: this.editProjectId,
+            createdAt: 1659001283034,
+            lastModifiedAt: 1659001283034,
+            isDeleted: false,
+            projectId: "10000",
+            isPrivate: false,
+            userId: 4,
+          },
+          clientDetails: this.clientDtailsList,
+          baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
+          apiKey:  this.projectSetting.value.token,
+          adminEmail: this.projectSetting.value.email,
+          orgId: 1,
+          addedBy: this.userData.userId,
+          jiraProjectKey: this.projectSetting.value.project,
+          teamDetails: this.teamMemberList
+        }
+        console.log(payload)
+        this.submitInProcess = true;
+        this.ProjectService.updateProject(payload).subscribe(
+          (res:any)=>{
+            this.submitInProcess = false;
+            if(res.data.error == false){
+              this.snackBar.successSnackBar("Project created successFully");
+            }else{
+              this.snackBar.errorSnackBar(res.data.Message)
+            }
+          
+          }, 
+          error => {
+            this.submitInProcess = false;
+
+            this.snackBar.errorSnackBar("server error")
+          }
+        )
+      this.projectDetials.reset();
+      this.clientDetials.reset();
+      this.projectSetting.reset();
+      this.projectTeam.reset();
+      this.teamMemberList = []
+      this.settingProjectName = ""
+      this.router.navigate(['/projects/project-list']) 
+      }
+      else{
+        this.isAddTeam = false
+        this.snackBar.errorSnackBar("Add team member and role")
+      }
+    }
+  } 
 }
