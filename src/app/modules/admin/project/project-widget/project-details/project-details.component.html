@@ -44,33 +44,61 @@
         </div>
 
         <!-- Main Section On -->
-
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full mt-8">
-            <div class="grid gap-8 sm:grid-flow-col xl:grid-flow-row">
+        <div class="grid  xl:grid-cols-3 gap-2 w-full mt-8">
+            <div class="grid gap-4 col-start-1 col-end-7 sm:grid-flow-col xl:grid-flow-row">
                 <div class="relative flex flex-col flex-auto bg-card  shadow overflow-hidden">
                     <app-overall-project-score></app-overall-project-score>
                 </div>
                 <div class="relative flex flex-col flex-auto bg-card  shadow overflow-hidden">
-                    <app-overall-project-score></app-overall-project-score>
+                    <app-customer-happiness-score></app-customer-happiness-score>
                 </div>
             </div>
         </div>
         <!-- Sprint Data -->
-        <div class="flex flex-col flex-auto mt-8 bg-card shadow overflow-hidden" *ngIf="sprints">
+        <div class="flex flex-col flex-auto mt-8 bg-card w-full shadow overflow-hidden" *ngIf="sprints">
             <app-sprints-list></app-sprints-list>
         </div>
         <!-- time line chart -->
-        <div class="flex flex-col flex-auto mt-8 bg-card shadow overflow-hidden">
+        <div class="flex flex-col  flex-auto mt-8 bg-card shadow w-full overflow-hidden">
             <app-project-timeline-chart></app-project-timeline-chart>
         </div>
         <!-- Member List Data -->
         <div class="flex flex-col flex-auto mt-8 w-full overflow-hidden" *ngIf="members">
             <div class="text-3xl pb-2 font-semibold  tracking-tight leading-none">Members</div>
         </div>
-        <div class="flex flex-col flex-auto mt-2 bg-card shadow overflow-hidden" *ngIf="members">
+        <div class="flex flex-col flex-auto mt-2 bg-card shadow w-full overflow-hidden" *ngIf="members">
             <app-project-members-list></app-project-members-list>
         </div>
 
+        <!-- This is A Sprint Data   -->
+        <div class="text-3xl font-semibold tracking-tight mt-8 leading-8">Sprint Name </div>
 
+        <!-- this is a sprint list Details  -->
+        <div class="grid  xl:grid-cols-2 gap-2 w-full mt-8">
+            <div class="grid gap-4 sm:grid-flow-col xl:grid-flow-row">
+                <div class="relative flex flex-col flex-auto bg-card  shadow overflow-hidden">
+                    <!-- <app-schedule-variance></app-schedule-variance> -->
+                    <app-defect-leakage></app-defect-leakage>
+                </div>
+                <div class="relative flex flex-col flex-auto bg-card  shadow overflow-hidden">
+                    <app-quality-percentage></app-quality-percentage>
+                </div>
+                <div class="relative flex flex-col flex-auto bg-card  shadow overflow-hidden">
+                    <app-retest-ratio></app-retest-ratio>
+                </div>
+            </div>
+        </div>
+        <!-- Sprint name details data  -->
+
+        <div class="grid  xl:grid-cols-2 gap-2 w-full mt-8">
+            <div class="grid gap-4 sm:grid-flow-col xl:grid-flow-row">
+                <div class="relative flex flex-col flex-auto w-full  bg-card  shadow overflow-hidden">
+                    <app-schedule-variance></app-schedule-variance>
+                </div>
+                <div class=" flex flex-col flex-auto w-300  bg-card  shadow overflow-hidden">
+                    <app-customer-happiness-score></app-customer-happiness-score>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
