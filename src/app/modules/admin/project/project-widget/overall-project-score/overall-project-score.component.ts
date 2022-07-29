@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { chartConfig } from 'app/core/config/chart.config';
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataLabels, ApexNonAxisChartSeries, ApexStroke, ApexLegend, ApexFill, ApexTooltip, ApexPlotOptions, ApexResponsive, ApexYAxis, ApexGrid, ApexStates, ApexTheme, ApexAnnotations } from "ng-apexcharts";
 
 @Component({
@@ -9,11 +10,11 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataL
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OverallProjectScoreComponent implements OnInit {
-  @Input() chart: ApexChart;
-  @Input() xaxis: ApexXAxis;
-  @Input() labels: string[];
-  @Input() title: ApexTitleSubtitle;
-  @Input() responsive: ApexResponsive[];
+  @Input() chart: ApexChart | any;
+  @Input() xaxis: ApexXAxis | any;
+  @Input() labels: string[] | any;
+  @Input() title: ApexTitleSubtitle | any;
+  @Input() responsive: ApexResponsive[] | any;
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
@@ -30,12 +31,12 @@ export class OverallProjectScoreComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.series = [44, 55, 13, 43, 22];
-    this.chart = { type: "donut" ,height:'300'};
-    this.title = { text: "Overall Project Score" };
-    this.labels = ["Team A", "Team B", "Team C", "Team D", "Team E"];
-    this.xaxis = { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"] };
-    this.responsive = [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }]
+    this.series = chartConfig.Pie_Chart[0].series;
+    this.chart = chartConfig.Pie_Chart[0].chart;
+    this.title = chartConfig.Pie_Chart[0].title;
+    this.xaxis = chartConfig.Pie_Chart[0].xaxis;
+    this.labels = chartConfig.Pie_Chart[0].labels;
+    this.responsive = chartConfig.Pie_Chart[0].responsive;
   }
 
   ngOnInit() {
