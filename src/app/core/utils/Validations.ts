@@ -103,7 +103,7 @@ export function ExprienceValidation(
       if (typeof(control.value)=="object") {
         control.setErrors(null);
       }else {
-        control.setErrors({ InvalidCode: true });
+        control.setErrors({ ObjectValidation: true });
       } 
     };
   } 

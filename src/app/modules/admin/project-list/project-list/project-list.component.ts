@@ -51,8 +51,12 @@ export class ProjectListComponent implements OnInit {
       (res: any) => {
         this.initialLoading = false;
         // console.log(res);
+       if(res.data){
         this.projectList = res.data.projects;
         this.totalProject = res.data.totalRecored
+       }else{
+        this.totalProject = 0
+       }
       }, error => {
         this.initialLoading = false;
       });

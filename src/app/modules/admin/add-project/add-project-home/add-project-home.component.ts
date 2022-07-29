@@ -50,12 +50,14 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
   // team_member = new FormControl();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
+    editProject = false
     selectJiraUser = ""
     selectManager= ""
     teamJiraUser=false
     isAddTeam = true
     selectedIndex = 0;
     showStep = 1
+    initialLoading: boolean =false
     submitInProcess: boolean = false;
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
@@ -75,6 +77,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     ];
     selectRoleList= StaticData.TEAM_MEMBER_ROLE
     teamMemberList: any = [];
+    managerEditTeamLIst: any = [];
     filteredTeamMembers!: Observable<any[]> | undefined;
     filteredManagerLists!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;
@@ -174,8 +177,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           if (projecteditId['id']) {
               this.fetchEditproject(projecteditId['id'])
             this.pageTitle = "edit"
+            this.editProject = true
           }else{
             this.pageTitle = "add"
+            this.editProject = false
           }
         });
       
@@ -327,6 +332,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       this._authService.connectJira(payload).subscribe(
         (res:any)=>{
         if(res.data.length>0){
+          if(this.editProject == false){
           const dialogRef = this.dialog.open(ConnectJiraPopupComponent, {
             disableClose: true,
             panelClass:"warn-dialog-content",
@@ -344,12 +350,21 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               });
             }
           });
+           }
           this.ProjectService.getJiraUser(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
               if(res.data.length>0){
                this.jiraUsers = res.data
                 this.jiraTeamUsers = res.data
+                if(this.editProject == true){
+                console.log("afsdlk", this.jiraTeamUsers)
+                let projectManagerdata = this.jiraUsers.filter((JiraUsers: any) => JiraUsers.displayName == this.managerEditTeamLIst[0].jiraUser )
+                console.log("dfjsld",projectManagerdata)
+                this.projectTeam.patchValue({
+                 jira_user: projectManagerdata[0]?projectManagerdata[0]:null
+                })
+              }
             }else{
               this.submitInProcess = false;
               if(res.data.error){
@@ -368,7 +383,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         }else{
           this.submitInProcess = false;
           if(res.data.error){
-            this.snackBar.errorSnackBar(res.data.error)
+            this.snackBar.errorSnackBar("server error")
           }
          else{
           this.snackBar.errorSnackBar("Jira user not found")
@@ -385,6 +400,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
 
     }
     addTeamMember() {
+      // if (!this.projectTeam.invalid) {
       if (
         !this.projectTeam.value.team_jira_user
       ) {
@@ -414,6 +430,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         this.projectTeam.controls["select_role"].reset();
         this.projectTeam.controls["team_jira_user"].reset();
       }
+    // }
     }
     deleteTeamMember(index: any,teamMemberId: any,jiraUser: any) {
       this.teamMemberList.splice(index, 1);
@@ -540,6 +557,14 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 this.teamMembers = res.data.teamMember
                 this.managerLists = res.data.teamMember
                 this.filterFunctions();
+                if(this.editProject == true){
+                console.log("afsdlk", this.managerLists)
+                 let projectManagerdata = this.managerLists.filter((ManagerList: any) => ManagerList.id == this.managerEditTeamLIst[0].teamMemberId )
+                 console.log("dfjsld",projectManagerdata)
+                 this.projectTeam.patchValue({
+                  project_manager: projectManagerdata[0]?projectManagerdata[0]:null
+                })
+              }
               }, 
               error => {
                 this.submitInProcess = false;
@@ -593,38 +618,70 @@ selectedJiraUserOption(event: any) {
     return user ? user.displayName : null;
   }
   fetchEditproject(id: number){
-    let res = StaticData.PROJECT_DETAILS
-    let pojectdata = [res.data.project]
-    let clientData =[res.data.clientModels]
-    let projectsetting = [] ;
-    projectsetting.push(res.data.authUser) 
-    pojectdata.forEach((item: any) => {
-      this.projectDetials.patchValue({
-        projectName: item.name?item.name:"",
-        projectDescription: item.description?item.description:"",
+    // let res = StaticData.PROJECT_DETAILS
+    let payload ={
+      id: id
+    }
+    this.initialLoading = true;
+    this.ProjectService.getOneProjectDetails(payload).subscribe(
+      (res: any) => {
+        this.initialLoading = false;
+        let pojectdata = [res.data.project]
+        let clientData =[res.data.clientModels]
+        let projectsetting = [] ;
+        projectsetting.push(res.data.authUser) 
+        let projectTeam = res.data.teamModel
+        pojectdata.forEach((item: any) => {
+          this.projectDetials.patchValue({
+            projectName: item.name?item.name:"",
+            projectDescription: item.description?item.description:"",
+          });
+          this.settingProjectName =item.key?item.key:""
+        })
+        clientData.forEach((item: any)=>{
+          console.log(item)
+          this.clientDetials.patchValue({
+            firstName:item.length > 0 ? (item[0].firstName?item[0].firstName:""):null ,
+            lastName: item.length > 0 ?(item[0].lastName?item[0].lastName:""):null,
+            firstName2: item.length > 1 ?(item[1].firstName?item[1].firstName:""):null,
+            lastName2: item.length > 1 ?(item[1].lastName?item[1].lastName:""):null,
+            firstName3:  item.length > 2 ?(item[2].firstName?item[2].firstName:""):null,
+            lastName3: item.length > 2 ?(item[2].lastName?item[2].lastName:""):null,
+          })
+        })
+        projectsetting.forEach((item:any)=>{
+          this.projectSetting.patchValue({
+            url:item.baseUrl?(item.baseUrl.slice(8)).slice(0,-14):null,
+            email:item.email?item.email:"",
+            token:item.apiKey?item.apiKey:"",
+            project: this.settingProjectName
+          })
+        })
+        projectTeam.forEach((item: any)=>{
+          this.teamMemberList = [
+            ...this.teamMemberList,
+            {
+              teamMemberId: item.teamMemberId,
+              role: item.role,
+              jiraUser: item.jiraUser,
+              isManager: item.isManager
+            }
+          ];
+        })
+        this.managerEditTeamLIst = this.teamMemberList.filter((item: any) => item.role == "MANAGER" )
+        this.teamMemberList = this.teamMemberList.filter((item: any) => item.role !== "MANAGER" )
+       
+        this.teamMemberList.forEach((element:any) => {
+          this.selectedJiraUser = [  ...this.selectedJiraUser, element.jiraUser]
+        });
+        this.teamMemberList.forEach((element:any) => {
+          this.selectedTeamMember = [  ...this.selectedTeamMember, element.teamMemberId]
+        });
+       this.getTeamMember()
+       this.send();
+      }, error => {
+        this.initialLoading = false;
       });
-      this.settingProjectName =item.key?item.key:""
-    })
-    clientData.forEach((item: any)=>{
-      console.log(item)
-      this.clientDetials.patchValue({
-        firstName:item.length > 0 ? (item[0].firstName?item[0].firstName:""):null ,
-        lastName: item.length > 0 ?(item[0].lastName?item[0].lastName:""):null,
-        firstName2: item.length > 1 ?(item[1].firstName?item[1].firstName:""):null,
-        lastName2: item.length > 1 ?(item[1].lastName?item[1].lastName:""):null,
-        firstName3:  item.length > 2 ?(item[2].firstName?item[2].firstName:""):null,
-        lastName3: item.length > 2 ?(item[2].lastName?item[2].lastName:""):null,
-      })
-    })
-    projectsetting.forEach((item:any)=>{
-      this.projectSetting.patchValue({
-        url:item.baseUrl?(item.baseUrl.slice(8)).slice(0,-14):null,
-        email:item.email?item.email:"",
-        token:item.apiKey?item.apiKey:"",
-        project: this.settingProjectName
-      })
-    })
-
-    
+  
   }
 }

@@ -17,7 +17,8 @@ import {SnackBar} from '../../../../core/utils/snackBar'
   animations: fuseAnimations
 })
 export class ResourcesListComponent implements OnInit {
-
+  minExprience =""
+  maxExprience = ""
   exprienceForm!: FormGroup;
   startExprience: any
   endExprience: any
@@ -272,14 +273,22 @@ export class ResourcesListComponent implements OnInit {
     );
   }
 
-  getExprience(event: Event) {
+  getExprience(event: Event,type: any) {
     this.count = 1
     this.pagination = false
+    if(type=="remove"){
+      this.exprienceForm.patchValue({
+        minExprience:"",
+        maxExprience:"",
+      });
+    }
     if (!this.exprienceForm.invalid) {
       let expriencePayload = [
         parseInt(this.exprienceForm.value.minExprience),
         parseInt(this.exprienceForm.value.maxExprience)
       ];
+      this.minExprience =this.exprienceForm.value.minExprience
+      this.maxExprience = this.exprienceForm.value.maxExprience
       let payload = {
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
         "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
@@ -288,9 +297,14 @@ export class ResourcesListComponent implements OnInit {
         "name": this.searchValue
       }
       this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
-        this.totalRecored = res.data.totalRecored
-        this.resources = res.data.teamMember;
         this.isLoading = false;
+        if(res.data){
+          this.totalRecored = res.data.totalRecored
+        this.resources = res.data.teamMember;
+        }else{
+          this.totalRecored  = 0
+        }
+        
       }, error => {
         this.isLoading = false;
       });
