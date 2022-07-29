@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {StaticData} from "../../../../../core/constacts/static";
-import {CreateProjecteService} from "@services/create-projecte.service";
+import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { StaticData } from "../../../../../core/constacts/static";
+import { CreateProjecteService } from "@services/create-projecte.service";
 
 @Component({
   selector: 'app-sprints-list',
@@ -14,7 +15,7 @@ export class SprintsListComponent implements OnInit {
   totalPerPageData = StaticData.PER_PAGE_DATA;
   sprintList: any = [];
 
-  constructor(private ProjectService: CreateProjecteService) {
+  constructor(private ProjectService: CreateProjecteService, private router: Router,) {
   }
 
   ngOnInit(): void {
@@ -34,5 +35,11 @@ export class SprintsListComponent implements OnInit {
     }, error => {
       this.isLoading = false;
     })
+  }
+  goToSprint(id: number) {
+    this.router.navigate(
+      [`/projects/project/sprint-details`],
+      { queryParams: { id: id } }
+    );
   }
 }
