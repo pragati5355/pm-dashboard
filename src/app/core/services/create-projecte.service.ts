@@ -26,6 +26,9 @@ export class CreateProjecteService {
   getProjectDetails(obj: any) {
     return this.http.post(AppConstants['GET_PROJECTS'], obj);
   }
+  getOneProjectDetails(obj: any) {
+    return this.http.post(AppConstants['GET_PROJECT_DETAILS'], obj);
+  }
   getResourceMember(obj: any) {
     return this.http.post(AppConstants['GET_RESOURCE_LIST'], obj);
   }
@@ -41,22 +44,10 @@ export class CreateProjecteService {
    updateDeleteResource(obj: any) {
     return this.http.post(AppConstants['UPDATE_DELETE_RESOURCE'],obj);
    }
-/******************************************************
- * @description Getting a Details about Sprint
- *
- * @author  Naynesh Rathod
- * @created_Date  22-july-2022
- ******************************************************/
+
    getSprintList(obj: any) {
     return this.http.post(AppConstants['GET_SPRINT_LIST'],obj);
    }
-
-/******************************************************
- * @description Getting a Details about Team Member
- *
- * @author  Naynesh Rathod
- * @created_Date  22-july-2022
- ******************************************************/
  getTeamMemberList(obj: any) {
   return this.http.post(AppConstants['GET_PROJECT_TEAM_LIST'],obj);
  }

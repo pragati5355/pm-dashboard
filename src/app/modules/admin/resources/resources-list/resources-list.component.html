@@ -62,7 +62,8 @@
         </mat-select>
       </mat-form-field>
       <!-- experience -->
-       <button class="ml-4" mat-stroked-button [matMenuTriggerFor]="beforeMenu">Choose expriences <div class="mat-select-arrow-wrapper ng-tns-c179-6"><div class="mat-select-arrow ng-tns-c179-6"></div></div></button>
+      <div class="ml-4 items-center  text-gray-400 inline-flex items-center  px-3 py-2.5 rounded-full  border border-gray-300" *ngIf="maxExprience.length > 0">  <span  class="flex flex-0 items-center justify-center ml-4">{{minExprience}} to {{maxExprience}} <mat-icon   class="ml-4 text-gray-400 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x" (click)="getExprience($event,'remove')"></mat-icon></span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></div>
+       <button class="ml-4 items-center  text-gray-400" *ngIf="maxExprience.length == 0" mat-stroked-button [matMenuTriggerFor]="beforeMenu"> <span >Choose expriences</span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></button>
         <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
         <form [formGroup]="exprienceForm">
             <div class="flex items-center min-w-50 px-3 py-2">
@@ -101,7 +102,7 @@
             [color]="'primary'"
             class="ml-4 rounded"
             mat-flat-button
-            (click)="getExprience($event)"
+            (click)="getExprience($event,'add')"
             >
             <span class="ml-2 mr-1">Apply</span>
             </button>
