@@ -1,11 +1,12 @@
-<!-- <div class="flex items-center  sm:mx-8 mt-3 mb-2">
-    <div class="flex flex-col">
-        <span class="text-lg font-semibold leading-none">Overall Project Score</span>
-    </div>
-</div> -->
 
-<div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
-    <div class="flex flex-col flex-auto ">
-        <apx-chart [series]=" series" [chart]=" chart" [xaxis]=" xaxis" [title]=" title"></apx-chart>
+<div class="flex flex-col flex-auto col-end-7	 bg-card shadow  overflow-hidden">
+  <div class="p-2 border-b">
+    <div class="flex items-start justify-between ">
+      <div class="text-lg font-medium tracking-tight leading-6 truncate"> Overall Project Score </div>
     </div>
+  </div>
+      <div class="flex flex-col flex-auto ">
+         <apx-chart class="flex-auto w-full h-80" [series]=" series" [chart]=" chart" [xaxis]=" xaxis"  >
+        </apx-chart>
+      </div>
 </div>

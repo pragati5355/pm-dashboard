@@ -3,18 +3,18 @@ import { chartConfig } from 'app/core/config/chart.config';
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataLabels, ApexNonAxisChartSeries, ApexStroke, ApexLegend, ApexFill, ApexTooltip, ApexPlotOptions, ApexResponsive, ApexYAxis, ApexGrid, ApexStates, ApexTheme, ApexAnnotations } from "ng-apexcharts";
 
 @Component({
-  selector: 'app-overall-project-score',
-  templateUrl: './overall-project-score.component.html',
-  styleUrls: ['./overall-project-score.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-defect-leakage',
+  templateUrl: './defect-leakage.component.html',
+  styleUrls: ['./defect-leakage.component.scss']
 })
-export class OverallProjectScoreComponent implements OnInit {
+export class DefectLeakageComponent implements OnInit {
+  @Input() fill: ApexFill;
   @Input() chart: ApexChart | any;
   @Input() xaxis: ApexXAxis | any;
   @Input() labels: string[] | any;
   @Input() title: ApexTitleSubtitle | any;
   @Input() responsive: ApexResponsive[] | any;
+  @Input() plotOptions: ApexPlotOptions | any;
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
@@ -22,21 +22,20 @@ export class OverallProjectScoreComponent implements OnInit {
   // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
   // @Input() legend: ApexLegend;
-  // @Input() fill: ApexFill;
   // @Input() tooltip: ApexTooltip;
-  // @Input() plotOptions: ApexPlotOptions;
   // @Input() grid: ApexGrid;
   // @Input() states: ApexStates;
   // @Input() subtitle: ApexTitleSubtitle;
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.series = chartConfig.Pie_Chart[0].series;
-    this.chart = chartConfig.Pie_Chart[0].chart;
-    this.title = chartConfig.Pie_Chart[0].title;
-    this.xaxis = chartConfig.Pie_Chart[0].xaxis;
-    this.labels = chartConfig.Pie_Chart[0].labels;
-    this.responsive = chartConfig.Pie_Chart[0].responsive;
+    this.fill = chartConfig.Semi_Circle_Gauge_Chart[0].fill;
+    this.chart = chartConfig.Semi_Circle_Gauge_Chart[0].chart;
+    this.xaxis = chartConfig.Semi_Circle_Gauge_Chart[0].xaxis;
+    this.series = chartConfig.Semi_Circle_Gauge_Chart[0].series;
+    this.labels = chartConfig.Semi_Circle_Gauge_Chart[0].labels;
+    this.responsive = chartConfig.Semi_Circle_Gauge_Chart[0].responsive;
+    this.plotOptions = chartConfig.Semi_Circle_Gauge_Chart[0].plotOptions;
   }
 
   ngOnInit() {

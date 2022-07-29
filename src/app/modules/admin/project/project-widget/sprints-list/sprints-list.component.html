@@ -18,8 +18,7 @@
           <div class="inventory-grid grid items-center  gap-4 py-4 px-6 md:px-8 border-b h-67">
             <!-- Sprints -->
             <div class="truncate font-semibold text-black">
-              <div class="truncate">
-                {{sprint.name }}
+              <div class="truncate" (click)="goToSprint( sprint.id )"> {{sprint.name }}
               </div>
             </div>
 
