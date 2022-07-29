@@ -1,5 +1,16 @@
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { SprintDetailsComponent } from './sprint-details/sprint-details.component';
+import { ScheduleVarianceComponent } from './schedule-variance/schedule-variance.component';
+import { QualityPercentageComponent } from './quality-percentage/quality-percentage.component';
+import { DefectLeakageComponent } from './defect-leakage/defect-leakage.component';
+import { RetestRatioComponent } from './retest-ratio/retest-ratio.component';
+import { CustomerHappinessScoreComponent } from './customer-happiness-score/customer-happiness-score.component';
+import { Routes, RouterModule } from '@angular/router';
 import { ProjectTimelineChartComponent } from './project-timeline-chart/project-timeline-chart.component';
-import { Route, Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'app/core/shared.module';
@@ -14,11 +25,15 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from "@angular/material/button";
 import { OverallProjectScoreComponent } from './overall-project-score/overall-project-score.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { MatRippleModule } from '@angular/material/core';
+import { TranslocoModule } from '@ngneat/transloco';
 const routes: Routes = [
-  { path: "details", component: ProjectDetailsComponent, }
+  { path: "project-details", component: ProjectDetailsComponent, },
+  { path: "sprint-details", component: SprintDetailsComponent, },
 ]
 
 @NgModule({
@@ -28,6 +43,12 @@ const routes: Routes = [
     ProjectMembersListComponent,
     OverallProjectScoreComponent,
     ProjectTimelineChartComponent,
+    CustomerHappinessScoreComponent,
+    RetestRatioComponent,
+    DefectLeakageComponent,
+    QualityPercentageComponent,
+    ScheduleVarianceComponent,
+    SprintDetailsComponent,
   ],
   imports: [
     FormsModule,
@@ -43,7 +64,18 @@ const routes: Routes = [
     MatProgressBarModule,
     NgApexchartsModule,
     RouterModule.forChild(routes),
-    FuseCardModule
+    FuseCardModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatDividerModule,
+    MatIconModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
   ],
   exports: [
     ProjectDetailsComponent,
@@ -51,6 +83,12 @@ const routes: Routes = [
     ProjectMembersListComponent,
     ProjectTimelineChartComponent,
     OverallProjectScoreComponent,
+    CustomerHappinessScoreComponent,
+    RetestRatioComponent,
+    DefectLeakageComponent,
+    QualityPercentageComponent,
+    ScheduleVarianceComponent,
+    SprintDetailsComponent,
   ]
 })
 export class ProjectWidgetModule { }
