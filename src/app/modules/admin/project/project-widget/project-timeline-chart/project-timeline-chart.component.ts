@@ -30,12 +30,12 @@ export class ProjectTimelineChartComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.series = chartConfig.PIE_CHART[0].series;
-    this.chart = chartConfig.PIE_CHART[0].chart;
-    this.plotOptions = chartConfig.PIE_CHART[0].plotOptions;
-    this.xaxis = chartConfig.PIE_CHART[0].xaxis
-    this.fill = chartConfig.PIE_CHART[0].fill;
-    this.legend = chartConfig.PIE_CHART[0].legend;
+    this.series = chartConfig.Timeline_Chart[0].series;
+    this.chart = chartConfig.Timeline_Chart[0].chart;
+    this.plotOptions = chartConfig.Timeline_Chart[0].plotOptions;
+    this.xaxis = chartConfig.Timeline_Chart[0].xaxis
+    this.fill = chartConfig.Timeline_Chart[0].fill;
+    this.legend = chartConfig.Timeline_Chart[0].legend;
   }
 
   ngOnInit() {
