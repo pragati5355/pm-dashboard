@@ -99,7 +99,7 @@ export class ProjectListComponent implements OnInit {
   }
   goToProject(id: number) {
     this.router.navigate(
-      [`/projects/project/details`],
+      [`/projects/project/project-details`],
       {queryParams: {id: id}}
     );
   }
@@ -107,7 +107,7 @@ export class ProjectListComponent implements OnInit {
     event.preventDefault();
     let payload ={
       id: id
-    } 
+    }
     this.submitInProcess = true;
     this.ProjectService.syncJira(payload).subscribe(
       (res:any)=>{
@@ -117,8 +117,8 @@ export class ProjectListComponent implements OnInit {
         }else{
           this.snackBar.errorSnackBar( res.data.Message)
         }
-      
-      }, 
+
+      },
       error => {
         this.submitInProcess = false;
 
