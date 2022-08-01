@@ -46,52 +46,92 @@ export const chartConfig = {
             enabled: true,
             fillSeriesColor: false,
             theme: 'dark',
-        }
+        },
+        legend: { position: "top", horizontalAlign: "left" }
     }],
     // Project and Sprint Customer Happiness Score
     Customer_Happiness_Score_Chart: [{
-        series: [100],
-        chart: { type: "radialBar", offsetY: -20, height: '300' },
-        fill: {
-            type: "gradient",
-            gradient: { shade: "light", shadeIntensity: 0.4, inverseColors: false, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 53, 91] }
+        series: [75],
+        chart: {
+            height: 350,
+            type: "radialBar",
+            toolbar: {
+                show: true
+            }
         },
-        labels: ["All Test Cases Passed!"],
-        responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
         plotOptions: {
             radialBar: {
                 startAngle: -90,
                 endAngle: 90,
-                track: {
-                    background: "#e7e7e7",
-                    strokeWidth: "97%",
-                    margin: 5, // margin is in pixels
+                hollow: {
+                    margin: 60,
+                    size: "70%",
+                    background: "transparent",
+                    image: undefined,
+                    position: "front",
                     dropShadow: {
                         enabled: true,
-                        top: 2,
+                        top: 3,
                         left: 0,
-                        opacity: 0.31,
-                        blur: 2
+                        blur: 4,
+                        opacity: 0.24
                     }
                 },
+                track: {
+                    background: "#fff",
+                    strokeWidth: "67%",
+                    margin: 0, // margin is in pixels
+                    dropShadow: {
+                        enabled: true,
+                        top: -3,
+                        left: 0,
+                        blur: 4,
+                        opacity: 0.35
+                    }
+                },
+
                 dataLabels: {
-                    textAnchor: 'middle',
+                    show: true,
                     name: {
-                        fontSize: "16px",
-                        color: undefined,
-                        offsetY: 55,
+                        offsetY: 60,
+                        show: true,
+                        color: "#888",
+                        fontSize: "15px"
                     },
                     value: {
-                        offsetY: 6,
-                        fontSize: "22px",
-                        color: undefined,
                         formatter: function (val: any) {
-                            return val;
-                        }
-                    },
+                            return parseInt(val.toString(), 10).toString();
+                        },
+                        color: "#111",
+                        fontSize: "30px",
+                        show: true
+                    }
                 }
             }
         },
+        fill: {
+            type: "gradient",
+            gradient: {
+                shade: "dark",
+                type: "horizontal",
+                shadeIntensity: 0.5,
+                gradientToColors: ["#ABE5A1"],
+                inverseColors: true,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100]
+            }
+        },
+        // stroke: {
+        //     lineCap: "round"
+        // },
+        stroke: {
+            // curve: 'stepline',
+            // OR provide an array
+            curve: ['smooth', 'straight', 'stepline']
+        },
+        labels: ["All Test Cases Passed!"],
+        responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
         legend: { position: "top", horizontalAlign: "left" }
     }],
     // Project Timeline Chart
