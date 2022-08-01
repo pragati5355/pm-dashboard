@@ -21,7 +21,7 @@ export class OverallProjectScoreComponent implements OnInit {
   @Input() colors: string[];
   // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
-  // @Input() legend: ApexLegend;
+  @Input() legend: ApexLegend|any;
   // @Input() fill: ApexFill;
   @Input() tooltip: ApexTooltip;
   @Input() plotOptions: ApexPlotOptions | any;
@@ -39,6 +39,7 @@ export class OverallProjectScoreComponent implements OnInit {
     this.plotOptions = chartConfig.Overall_Project_Score_Chart[0].plotOptions;
     this.labels = chartConfig.Overall_Project_Score_Chart[0].labels;
     this.tooltip = chartConfig.Overall_Project_Score_Chart[0].tooltip;
+    this.legend = chartConfig.Overall_Project_Score_Chart[0].legend;
   }
 
   ngOnInit() {

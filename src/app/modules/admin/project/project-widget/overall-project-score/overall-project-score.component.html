@@ -1,11 +1,11 @@
-<div class="flex flex-col flex-auto   bg-card shadow  overflow-hidden">
+<div class="flex flex-col flex-auto bg-card overflow-hidden">
   <div class="p-2 border-b">
     <div class="flex items-start justify-between ">
       <div class="text-lg font-medium tracking-tight leading-6 truncate"> Overall Project Score </div>
     </div>
   </div>
   <div class="flex   flex-auto ">
-    <apx-chart class="flex-auto" [series]=" series" [chart]=" chart" [colors]="colors" [states]="states"
+    <apx-chart class="flex-auto" [legend]="legend" [series]=" series" [chart]=" chart" [colors]="colors" [states]="states"
       [plotOptions]="plotOptions" [labels]="labels" [tooltip]="tooltip">
     </apx-chart>
     <div class="flex p-6 ">
