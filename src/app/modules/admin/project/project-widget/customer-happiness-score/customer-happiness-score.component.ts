@@ -30,13 +30,12 @@ export class CustomerHappinessScoreComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.fill = chartConfig.Semi_Circle_Gauge_Chart[0].fill;
-    this.chart = chartConfig.Semi_Circle_Gauge_Chart[0].chart;
-    this.xaxis = chartConfig.Semi_Circle_Gauge_Chart[0].xaxis;
-    this.series = chartConfig.Semi_Circle_Gauge_Chart[0].series;
-    this.labels = chartConfig.Semi_Circle_Gauge_Chart[0].labels;
-    this.responsive = chartConfig.Semi_Circle_Gauge_Chart[0].responsive;
-    this.plotOptions = chartConfig.Semi_Circle_Gauge_Chart[0].plotOptions;
+    this.fill = chartConfig.Customer_Happiness_Score_Chart[0].fill;
+    this.chart = chartConfig.Customer_Happiness_Score_Chart[0].chart;
+    this.series = chartConfig.Customer_Happiness_Score_Chart[0].series;
+    this.labels = chartConfig.Customer_Happiness_Score_Chart[0].labels;
+    this.responsive = chartConfig.Customer_Happiness_Score_Chart[0].responsive;
+    this.plotOptions = chartConfig.Customer_Happiness_Score_Chart[0].plotOptions;
   }
 
   ngOnInit() {
