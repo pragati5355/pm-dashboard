@@ -1,11 +1,12 @@
-<div class="flex flex-col flex-auto   bg-card    overflow-hidden">
+<div class="flex flex-col flex-auto bg-card h-full overflow-hidden">
   <div class="p-2 border-b">
     <div class="flex items-start justify-between ">
       <div class="text-lg font-medium tracking-tight leading-6 truncate"> Customer Happiness Score </div>
     </div>
   </div>
-  <div class="flex flex-col flex-auto ">
-    <apx-chart [series]=" series" [chart]=" chart" [xaxis]=" xaxis" [fill]="fill" [plotOptions]="plotOptions">
+  <div class="flex flex-col flex-auto">
+    <apx-chart [series]="series" [chart]=" chart" [stroke]="stroke" [responsive]="responsive" [legend]="legend"
+      [fill]="fill" [plotOptions]="plotOptions" [labels]="labels">
     </apx-chart>
   </div>
-</div>  
+</div>

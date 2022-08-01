@@ -17,9 +17,10 @@ export class RetestRatioComponent implements OnInit {
   @Input() responsive: ApexResponsive[] | any;
   @Input() plotOptions: ApexPlotOptions | any;
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+  data: any;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
-  // @Input() colors: string[];
+  @Input() colors: string[]|any;
   // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
   // @Input() fill: ApexFill;
@@ -30,6 +31,9 @@ export class RetestRatioComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
+    this.data = chartConfig.retest_ratio_chart[0];
+    
+    this.colors = chartConfig.retest_ratio_chart[0].colors;
     this.series = chartConfig.retest_ratio_chart[0].series;
     this.chart = chartConfig.retest_ratio_chart[0].chart;
     this.labels = chartConfig.retest_ratio_chart[0].labels;
