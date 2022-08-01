@@ -15,19 +15,19 @@ export class ProjectTimelineChartComponent implements OnInit {
   @Input() legend: ApexLegend | any;
   @Input() plotOptions: ApexPlotOptions;
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
-  // @Input() labels: string[];
-  // @Input() title: ApexTitleSubtitle;
-  // @Input() responsive: ApexResponsive[];
-  // @Input() yaxis: ApexYAxis | ApexYAxis[];
-  // @Input() annotations: ApexAnnotations;
-  // @Input() colors: string[];
-  // @Input() dataLabels: ApexDataLabels;
-  // @Input() stroke: ApexStroke;
-  // @Input() tooltip: ApexTooltip;
-  // @Input() grid: ApexGrid;
-  // @Input() states: ApexStates;
-  // @Input() subtitle: ApexTitleSubtitle;
-  // @Input() theme: ApexTheme;
+  @Input() labels: string[] | any;
+  @Input() title: ApexTitleSubtitle | any;
+  @Input() responsive: ApexResponsive[] | any;
+  @Input() yaxis: ApexYAxis | ApexYAxis[] | any;
+  @Input() annotations: ApexAnnotations | any;
+  @Input() colors: string[] | any;
+  @Input() dataLabels: ApexDataLabels | any;
+  @Input() stroke: ApexStroke | any;
+  @Input() tooltip: ApexTooltip | any;
+  @Input() grid: ApexGrid | any;
+  @Input() states: ApexStates | any;
+  @Input() subtitle: ApexTitleSubtitle | any;
+  @Input() theme: ApexTheme | any;
 
   constructor() {
     this.series = chartConfig.Timeline_Chart[0].series;
