@@ -17,23 +17,25 @@ export class CustomerHappinessScoreComponent implements OnInit {
   @Input() responsive: ApexResponsive[] | any;
   @Input() plotOptions: ApexPlotOptions | any;
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
-  // @Input() yaxis: ApexYAxis | ApexYAxis[];
-  // @Input() annotations: ApexAnnotations;
-  // @Input() colors: string[];
-  // @Input() dataLabels: ApexDataLabels;
-  // @Input() stroke: ApexStroke;
-  // @Input() legend: ApexLegend;
-  // @Input() tooltip: ApexTooltip;
-  // @Input() grid: ApexGrid;
-  // @Input() states: ApexStates;
-  // @Input() subtitle: ApexTitleSubtitle;
-  // @Input() theme: ApexTheme;
+  @Input() yaxis: ApexYAxis | ApexYAxis[] | any;
+  @Input() annotations: ApexAnnotations | any;
+  @Input() colors: string[] | any;
+  @Input() dataLabels: ApexDataLabels | any;
+  @Input() stroke: ApexStroke | any;
+  @Input() legend: ApexLegend | any;
+  @Input() tooltip: ApexTooltip | any;
+  @Input() grid: ApexGrid | any;
+  @Input() states: ApexStates | any;
+  @Input() subtitle: ApexTitleSubtitle | any;
+  @Input() theme: ApexTheme | any;
 
   constructor() {
     this.fill = chartConfig.Customer_Happiness_Score_Chart[0].fill;
     this.chart = chartConfig.Customer_Happiness_Score_Chart[0].chart;
     this.series = chartConfig.Customer_Happiness_Score_Chart[0].series;
     this.labels = chartConfig.Customer_Happiness_Score_Chart[0].labels;
+    this.legend = chartConfig.Customer_Happiness_Score_Chart[0].legend;
+    this.stroke = chartConfig.Customer_Happiness_Score_Chart[0].stroke;
     this.responsive = chartConfig.Customer_Happiness_Score_Chart[0].responsive;
     this.plotOptions = chartConfig.Customer_Happiness_Score_Chart[0].plotOptions;
   }
