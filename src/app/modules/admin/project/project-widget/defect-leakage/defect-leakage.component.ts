@@ -18,10 +18,10 @@ export class DefectLeakageComponent implements OnInit {
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
-  // @Input() colors: string[];
+  @Input() colors: string[];
   // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
-  // @Input() legend: ApexLegend;
+  @Input() legend: ApexLegend|any;
   // @Input() tooltip: ApexTooltip;
   // @Input() grid: ApexGrid;
   // @Input() states: ApexStates;
@@ -29,13 +29,13 @@ export class DefectLeakageComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.fill = chartConfig.Semi_Circle_Gauge_Chart[0].fill;
-    this.chart = chartConfig.Semi_Circle_Gauge_Chart[0].chart;
-    this.xaxis = chartConfig.Semi_Circle_Gauge_Chart[0].xaxis;
-    this.series = chartConfig.Semi_Circle_Gauge_Chart[0].series;
-    this.labels = chartConfig.Semi_Circle_Gauge_Chart[0].labels;
-    this.responsive = chartConfig.Semi_Circle_Gauge_Chart[0].responsive;
-    this.plotOptions = chartConfig.Semi_Circle_Gauge_Chart[0].plotOptions;
+    this.fill = chartConfig.Defect_Leakage_Chart[0].fill;
+    this.chart = chartConfig.Defect_Leakage_Chart[0].chart;
+    this.colors = chartConfig.Defect_Leakage_Chart[0].colors;
+    this.series = chartConfig.Defect_Leakage_Chart[0].series;
+    this.labels = chartConfig.Defect_Leakage_Chart[0].labels;
+    this.legend = chartConfig.Defect_Leakage_Chart[0].legend;
+    this.plotOptions = chartConfig.Defect_Leakage_Chart[0].plotOptions;
   }
 
   ngOnInit() {
