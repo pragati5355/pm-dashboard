@@ -29,13 +29,12 @@ export class QualityPercentageComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.fill = chartConfig.Semi_Circle_Gauge_Chart[0].fill;
-    this.chart = chartConfig.Semi_Circle_Gauge_Chart[0].chart;
-    this.xaxis = chartConfig.Semi_Circle_Gauge_Chart[0].xaxis;
-    this.series = chartConfig.Semi_Circle_Gauge_Chart[0].series;
-    this.labels = chartConfig.Semi_Circle_Gauge_Chart[0].labels;
-    this.responsive = chartConfig.Semi_Circle_Gauge_Chart[0].responsive;
-    this.plotOptions = chartConfig.Semi_Circle_Gauge_Chart[0].plotOptions;
+    this.fill = chartConfig.Quality_Percentage_Chart[0].fill;
+    this.chart = chartConfig.Quality_Percentage_Chart[0].chart;
+    this.series = chartConfig.Quality_Percentage_Chart[0].series;
+    this.labels = chartConfig.Quality_Percentage_Chart[0].labels;
+    this.responsive = chartConfig.Quality_Percentage_Chart[0].responsive;
+    this.plotOptions = chartConfig.Quality_Percentage_Chart[0].plotOptions;
   }
 
   ngOnInit() {

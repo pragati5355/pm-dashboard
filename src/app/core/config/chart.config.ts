@@ -1,4 +1,140 @@
+import { values } from "lodash";
+
 export const chartConfig = {
+    // Project Overall Project Score
+    Overall_Project_Score_Chart: [{
+        chart: {
+            animations: {
+                speed: 400,
+                animateGradually: {
+                    enabled: false
+                }
+            },
+            fontFamily: 'inherit',
+            foreColor: 'inherit',
+            height: '100%',
+            type: 'donut',
+            sparkline: {
+                enabled: true
+            }
+        },
+        colors: ['#3182CE', '#63B3ED', "#231488", "#3ac5b7", "#e46e3b"],
+        labels: ["Naynesh Rathod", "Rishikesh Salunkhe", "Suraj Jaiswal", "Pooja Tangade", "Sanskriti Gupta"],
+        plotOptions: {
+            pie: {
+                customScale: 0.9,
+                expandOnClick: false,
+                donut: {
+                    size: '70%'
+                }
+            }
+        },
+        series: [44, 55, 13, 43, 22],
+        states: {
+            hover: {
+                filter: {
+                    type: 'none'
+                }
+            },
+            active: {
+                filter: {
+                    type: 'none'
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            fillSeriesColor: false,
+            theme: 'dark',
+        },
+        legend: { position: "top", horizontalAlign: "left" }
+    }],
+    // Project and Sprint Customer Happiness Score
+    Customer_Happiness_Score_Chart: [{
+        series: [75],
+        chart: {
+            height: 350,
+            type: "radialBar",
+            toolbar: {
+                show: true
+            }
+        },
+        plotOptions: {
+            radialBar: {
+                startAngle: -90,
+                endAngle: 90,
+                hollow: {
+                    margin: 60,
+                    size: "70%",
+                    background: "transparent",
+                    image: undefined,
+                    position: "front",
+                    dropShadow: {
+                        enabled: true,
+                        top: 3,
+                        left: 0,
+                        blur: 4,
+                        opacity: 0.24
+                    }
+                },
+                track: {
+                    background: "#fff",
+                    strokeWidth: "67%",
+                    margin: 0, // margin is in pixels
+                    dropShadow: {
+                        enabled: true,
+                        top: -3,
+                        left: 0,
+                        blur: 4,
+                        opacity: 0.35
+                    }
+                },
+
+                dataLabels: {
+                    show: true,
+                    name: {
+                        offsetY: 60,
+                        show: true,
+                        color: "#888",
+                        fontSize: "15px"
+                    },
+                    value: {
+                        formatter: function (val: any) {
+                            return parseInt(val.toString(), 10).toString();
+                        },
+                        color: "#111",
+                        fontSize: "30px",
+                        show: true
+                    }
+                }
+            }
+        },
+        fill: {
+            type: "gradient",
+            gradient: {
+                shade: "dark",
+                type: "horizontal",
+                shadeIntensity: 0.5,
+                gradientToColors: ["#ABE5A1"],
+                inverseColors: true,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100]
+            }
+        },
+        // stroke: {
+        //     lineCap: "round"
+        // },
+        stroke: {
+            // curve: 'stepline',
+            // OR provide an array
+            curve: ['smooth', 'straight', 'stepline']
+        },
+        labels: ["All Test Cases Passed!"],
+        responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
+        legend: { position: "top", horizontalAlign: "left" }
+    }],
+    // Project Timeline Chart
     Timeline_Chart: [{
         series: [
             {
@@ -157,16 +293,65 @@ export const chartConfig = {
          dataLabels: { // add this part to remove %
             enabled: false,
           }
+        }],
+    // Sprint Start 
+    // Sprint Defect Leakage  
+    Defect_Leakage_Chart: [{
+        chart: {
+            height: 280, offsetY: -20, type: "radialBar",
+        },
+        series: [67],
+        colors: ["#20E647"],
+        plotOptions: {
+            radialBar: {
+                startAngle: -90,
+                endAngle: 90,
+                track: {
+                    background: '#333',
+                    startAngle: -90,
+                    endAngle: 90,
+                },
+                dataLabels: {
+                    name: {
+                        fontSize: "16px",
+                        color: undefined,
+                        offsetY: 55,
+                    },
+                    value: {
+                        offsetY: 15,
+                        fontSize: "22px",
+                        color: undefined,
+                        formatter: function (val: any) {
+                            return val;
+                        }
+                    },
+                }
+            }
+        },
+        fill: {
+            type: "gradient",
+            gradient: {
+                shade: "dark",
+                type: "horizontal",
+                gradientToColors: ["#87D4F9"],
+                stops: [0, 100]
+            }
+        },
+        stroke: {
+            lineCap: "butt"
+        },
+        labels: ["Progress"],
+        legend: { position: "top", horizontalAlign: "left" }
     }],
-    Semi_Circle_Gauge_Chart: [{
-        series: [76],
+    // Quality Percentage
+    Quality_Percentage_Chart: [{
+        series: [100],
         chart: { type: "radialBar", offsetY: -20, height: '300' },
         fill: {
             type: "gradient",
             gradient: { shade: "light", shadeIntensity: 0.4, inverseColors: false, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 53, 91] }
         },
-        labels: ["Average Results"],
-        xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"] },
+        labels: ["All Test Cases Passed!"],
         responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
         plotOptions: {
             radialBar: {
@@ -186,19 +371,28 @@ export const chartConfig = {
                 },
                 dataLabels: {
                     name: {
-                        show: false
+                        fontSize: "16px",
+                        color: undefined,
+                        offsetY: 55,
                     },
                     value: {
-                        offsetY: -2,
-                        fontSize: "22px"
-                    }
+                        offsetY: 6,
+                        fontSize: "22px",
+                        color: undefined,
+                        formatter: function (val: any) {
+                            return val;
+                        }
+                    },
                 }
             }
         },
         legend: { position: "top", horizontalAlign: "left" }
     }],
+    // Sprint Retest Ratio
     retest_ratio_chart: [{
         series: [44, 55, 67, 83],
+        colors: ['#3182CE', '#63B3ED', "#3ac5b7", "#e46e3b"],
+
         chart: { height: 200, type: "radialBar" },
         legend: { position: "top", horizontalAlign: "left" },
         plotOptions: {
@@ -222,6 +416,7 @@ export const chartConfig = {
         },
         labels: ["Apples", "Oranges", "Bananas", "Berries"]
     }],
+    // Sprint Schedule Variance
     Schedule_Variance_chart: [{
         series: [
             {
@@ -235,7 +430,6 @@ export const chartConfig = {
         ],
         chart: {
             height: 350,
-            width:650,
             type: "line",
             zoom: {
                 enabled: false
@@ -346,8 +540,54 @@ export const chartConfig = {
         },
         labels: ["Progress"],
       } 
-    ]
+    ],
 
+    // Sprint Progress
+    Sprint_Progress_Chart: [{
+        series: [100],
+        chart: { type: "radialBar", offsetY: -20, height: '300' },
+        fill: {
+            type: "gradient",
+            gradient: { shade: "light", shadeIntensity: 0.4, inverseColors: false, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 53, 91] }
+        },
+        labels: ["All Test Cases Passed!"],
+        responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
+        plotOptions: {
+            radialBar: {
+                startAngle: -90,
+                endAngle: 90,
+                track: {
+                    background: "#e7e7e7",
+                    strokeWidth: "97%",
+                    margin: 5, // margin is in pixels
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 0,
+                        opacity: 0.31,
+                        blur: 2
+                    }
+                },
+                dataLabels: {
+                    textAnchor: 'middle',
+                    name: {
+                        fontSize: "16px",
+                        color: undefined,
+                        offsetY: 55,
+                    },
+                    value: {
+                        offsetY: 6,
+                        fontSize: "22px",
+                        color: undefined,
+                        formatter: function (val: any) {
+                            return val;
+                        }
+                    },
+                }
+            }
+        },
+        legend: { position: "top", horizontalAlign: "left" }
+    }],
 }
 export interface ChartInterface {
     [key: string]: string;

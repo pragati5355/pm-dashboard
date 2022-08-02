@@ -18,26 +18,28 @@ export class OverallProjectScoreComponent implements OnInit {
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
-  // @Input() colors: string[];
-  @Input() dataLabels: ApexResponsive[] | any;
+  @Input() colors: string[];
+  // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
-  // @Input() legend: ApexLegend;
+  @Input() legend: ApexLegend|any;
   // @Input() fill: ApexFill;
-  // @Input() tooltip: ApexTooltip;
-  // @Input() plotOptions: ApexPlotOptions;
+  @Input() tooltip: ApexTooltip;
+  @Input() plotOptions: ApexPlotOptions | any;
   // @Input() grid: ApexGrid;
-  // @Input() states: ApexStates;
+  @Input() states: ApexStates;
   // @Input() subtitle: ApexTitleSubtitle;
   // @Input() theme: ApexTheme;
-
+  data: any;
   constructor() {
-    this.series = chartConfig.Pie_Chart[0].series;
-    this.chart = chartConfig.Pie_Chart[0].chart;
-    this.title = chartConfig.Pie_Chart[0].title;
-    this.xaxis = chartConfig.Pie_Chart[0].xaxis;
-    this.labels = chartConfig.Pie_Chart[0].labels;
-    this.responsive = chartConfig.Pie_Chart[0].responsive;
-    this.dataLabels =chartConfig.Pie_Chart[0].dataLabels;
+    this.data = chartConfig.Overall_Project_Score_Chart[0];
+    this.series = chartConfig.Overall_Project_Score_Chart[0].series;
+    this.chart = chartConfig.Overall_Project_Score_Chart[0].chart;
+    this.colors = chartConfig.Overall_Project_Score_Chart[0].colors;
+    this.states = chartConfig.Overall_Project_Score_Chart[0].states;
+    this.plotOptions = chartConfig.Overall_Project_Score_Chart[0].plotOptions;
+    this.labels = chartConfig.Overall_Project_Score_Chart[0].labels;
+    this.tooltip = chartConfig.Overall_Project_Score_Chart[0].tooltip;
+    this.legend = chartConfig.Overall_Project_Score_Chart[0].legend;
   }
 
   ngOnInit() {

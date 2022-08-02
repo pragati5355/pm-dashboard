@@ -54,7 +54,9 @@ export class ProjectMembersListComponent implements OnInit {
   getTeamMemberList(payload: any) {
     this.ProjectService.getTeamMemberList(payload).subscribe((res: any) => {
       this.teamMember = res.data;
-      this.totalRecored = this.teamMember.length ? this.teamMember.length : 0;
+      if (this.teamMember !== null) {
+        this.totalRecored = this.teamMember.length ? this.teamMember.length : 0;
+      }
       this.isLoading = false;
     }, error => {
       this.isLoading = false;

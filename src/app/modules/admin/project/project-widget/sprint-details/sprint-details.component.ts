@@ -14,4 +14,7 @@ export class SprintDetailsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void { }
+  goBack(){
+    window.history.back()
+  }
 }
