@@ -402,10 +402,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
 
     }
     addTeamMember() {
-      // this.projectTeam.get('project_manager')?.clearValidators()
-      // this.projectTeam.controls["project_manager"].clearValidators();
-      // this.projectTeam.controls['project_manager'].updateValueAndValidity();
-      // this.projectTeam.get('team_member')?.clearValidators()
+
       if (!this.projectTeam.controls['team_member'].invalid && !this.projectTeam.controls['team_jira_user'].invalid) {
       if (
         !this.projectTeam.value.team_jira_user
@@ -421,8 +418,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         this.teamMemberList = [
           ...this.teamMemberList,
           {
-            // name: this.projectTeam.value
-            //   .team_member,
+            
               teamMemberId:this.projectTeam.value
               .team_member.id,
             role: this.projectTeam.value.select_role,
