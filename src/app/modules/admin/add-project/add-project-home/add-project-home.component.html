@@ -60,7 +60,7 @@
 
                 <!-- main div start -->
                 <!-- first step -->
-                <div *ngIf="showStep === 1" class="flex flex-col flex-auto w-full ">
+                <div *ngIf="showStep === 1 && !initialLoading" class="flex flex-col flex-auto w-full ">
                     <!-- Header -->
                     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     
@@ -335,6 +335,7 @@
                             <input
                                 matInput
                                 formControlName="url"
+                                [readonly]="editProject"
                                 placeholder="Base Url" 
                                 >
                                 <span matPrefix>https://</span>
@@ -350,6 +351,7 @@
                             <input
                                 matInput
                                 formControlName="email"
+                                [readonly]="editProject"
                                 placeholder="Email Address">
                                 <mat-error *ngIf="projectSettingsForm['email'].errors &&
                                 projectSettingsForm['email']?.invalid &&
@@ -365,6 +367,7 @@
                                     <input 
                                         matInput
                                         formControlName="token"
+                                        [readonly]="editProject"
                                         placeholder="API Token">
                                         <mat-error *ngIf="projectSettingsForm['token'].errors &&
                                         projectSettingsForm['token']?.invalid &&
@@ -385,12 +388,13 @@
                                         type="text"
                                         formControlName="project"
                                         placeholder="Project Name"
-                                        (click)="send()"
+                                        [readonly]="editProject"
+                                        (click)="editProject?'':send()"
                                         >
                                     </mat-form-field>
                                 <!-- </div> -->
                             <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
-                                <span class="text-primary cursor-pointer .mt-8p" (click)="send()">Change Project</span>
+                                <span class="text-primary cursor-pointer .mt-8p" (click)="editProject?'':send()">Change Project</span>
                              </div>
                         </div>
                         <!-- Actions -->
@@ -679,11 +683,21 @@
                                 <button
                                     class="order-first sm:order-last ml-4"
                                     mat-flat-button
+                                    *ngIf="!editProject"
                                     [color]="'primary'"
                                     (click)="createProject()"
                                     >
                                     Create Project
                                 </button>
+                                <button
+                                class="order-first sm:order-last ml-4"
+                                mat-flat-button
+                                *ngIf="editProject"
+                                [color]="'primary'"
+                                (click)="updateProject()"
+                                >
+                                Update Project
+                            </button>
                             </div>
                             </div>
                         </form>

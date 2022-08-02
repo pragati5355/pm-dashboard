@@ -89,15 +89,15 @@
                                 <span class="text-lg font-semibold leading-none" *ngIf="project.name">{{project.name | titlecase}}</span>
                             </div>
                            <!-- future changes -->
-                            <!-- <span *ngIf="project.status" class=" ml-auto  inline-flex items-center font-bold text-xs px-3 py-2.5 rounded-full tracking-wide uppercase"
+                            <span *ngIf="project.status" class=" ml-auto  inline-flex items-center font-bold text-xs px-3 py-3 rounded-full tracking-wide uppercase"
                             [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50 bg-red-200 ':project.status == 'Sync In Progress',
                             'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500':project.status == 'On Track',
                             'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500':project.status == 'At Risk',
                             'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500':project.status == 'Off Track'}">
                                 <span class="leading-relaxed whitespace-nowrap">{{project.status}}</span>
-                            </span> -->
-                            <button
-                            class=" ml-auto  inline-flex items-center"
+                            </span>
+                            <button 
+                            class=" ml-4  inline-flex items-center"
                             mat-flat-button
                             [color]="'primary'"
                             (click)="snycproject($event,project.id)"

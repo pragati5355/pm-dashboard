@@ -282,7 +282,18 @@ export const chartConfig = {
             horizontalAlign: "left"
         }
     }],
-
+    Pie_Chart: [{
+        series: [44, 55, 13, 43, 22],
+        chart: { type: "donut", height: '300' },
+        title: { text: "Overall Project Score" },
+        labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+        xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"] },
+        responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
+        legend: { position: "top", horizontalAlign: "left" },
+         dataLabels: { // add this part to remove %
+            enabled: false,
+          }
+        }],
     // Sprint Start 
     // Sprint Defect Leakage  
     Defect_Leakage_Chart: [{
@@ -467,6 +478,70 @@ export const chartConfig = {
             ]
         }
     }],
+    SCORE_CHART: [{
+        chart: {
+          height: 280,
+          type: "radialBar",
+        },
+      
+        series: [67],
+        colors: ["#20E647"],
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 135,
+            hollow: {
+              margin: 20,
+              size: "70%",
+              background: "#293450",
+            },
+            track: {
+              dropShadow: {
+                enabled: true,
+                top: 2,
+                left: 0,
+                blur: 8,
+                opacity: 0.15
+              }
+            },
+            dataLabels: {
+            //   border: {
+              borderWidth: 2,
+              borderColor: "#fac5c7",
+            //   },
+              name: {
+                show: false,
+                offsetY: -10,
+                color: "#fff",
+                fontSize: "13px"
+              },
+              value: {
+                color: "#fff",
+                fontSize: "30px",
+                show: true,
+                formatter: function (val:any) {
+                    return val 
+                  }
+              }
+            }
+          }
+        },
+        fill: {
+          type: "gradient",
+          gradient: {
+            shade: "dark",
+            type: "vertical",
+            gradientToColors: ["#87D4F9"],
+            stops: [0, 100]
+          }
+        },
+        stroke: {
+          lineCap: "round"
+        },
+        labels: ["Progress"],
+      } 
+    ],
+
     // Sprint Progress
     Sprint_Progress_Chart: [{
         series: [100],

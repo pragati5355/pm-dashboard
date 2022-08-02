@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, QueryList, ViewChildren, ViewEncapsulati
 import { FuseCardComponent } from '@fuse/components/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import {SnackBar} from '../../../../../core/utils/snackBar'
+import {  Input } from '@angular/core'
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.component.html',
@@ -17,6 +18,7 @@ export class ProjectDetailsComponent implements OnInit {
   sprints=true;
   routeSubscribe: any;
   projectId = 0
+  @Input() dataId: any ;
   constructor(private router: Router,
     private _route: ActivatedRoute,
     private snackBar: SnackBar) { }

@@ -103,7 +103,7 @@ export class ProjectListComponent implements OnInit {
       {queryParams: {id: id}}
     );
   }
-  snycproject(event:any,id: number){
+  snycproject(event:any,id: any){
     event.preventDefault();
     let payload ={
       id: id
@@ -112,10 +112,11 @@ export class ProjectListComponent implements OnInit {
     this.ProjectService.syncJira(payload).subscribe(
       (res:any)=>{
         this.submitInProcess = false;
-        if(!res.data.error){
+        if(res.data.error){
           this.snackBar.errorSnackBar(res.data.Message);
-        }else{
-          this.snackBar.errorSnackBar( res.data.Message)
+        }
+        if(res.data){
+          this.snackBar.successSnackBar(res.data);
         }
 
       },
