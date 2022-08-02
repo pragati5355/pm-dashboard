@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StaticData } from "../../../../../core/constacts/static";
 import { CreateProjecteService } from "@services/create-projecte.service";
 import { Router } from "@angular/router";
-
+import {  Input } from '@angular/core'
 @Component({
   selector: 'app-project-members-list',
   templateUrl: './project-members-list.component.html',
@@ -15,7 +15,7 @@ export class ProjectMembersListComponent implements OnInit {
   totalPerPageData = StaticData.PER_PAGE_DATA;
   totalRecored = 0;
   teamMember: any = [];
-
+  @Input() dataId: any ;
   constructor(private ProjectService: CreateProjecteService, private router: Router) {
   }
 
@@ -23,7 +23,7 @@ export class ProjectMembersListComponent implements OnInit {
     this.isLoading = true;
     // id pass only temporary after implementing router pass query by id
     let payload = {
-      "id": 29
+      "id": this.dataId
     }
     this.getTeamMemberList(payload);
   }

@@ -76,9 +76,11 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     settingProjectName = ""
     selection = [
     ];
+    clientData: any = [];
     selectRoleList= StaticData.TEAM_MEMBER_ROLE
     teamMemberList: any = [];
     managerEditTeamLIst: any = [];
+    editteamMemberList: any = []
     filteredTeamMembers!: Observable<any[]> | undefined;
     filteredManagerLists!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;
@@ -360,9 +362,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                this.jiraUsers = res.data
                 this.jiraTeamUsers = res.data
                 if(this.editProject == true){
-                console.log("afsdlk", this.jiraTeamUsers)
                 let projectManagerdata = this.jiraUsers.filter((JiraUsers: any) => JiraUsers.displayName == this.managerEditTeamLIst[0].jiraUser )
-                console.log("dfjsld",projectManagerdata)
                 this.projectTeam.patchValue({
                  jira_user: projectManagerdata[0]?projectManagerdata[0]:null
                 })
@@ -469,7 +469,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                   lastName: this.clientDetials.value.lastName3
                 }
               ]
-              this.clientDtailsList = this.clientDtailsList.filter((item: any) => item.firstName !== '' || item.lastName !== '' )
+              this.clientDtailsList = this.clientDtailsList.filter((item: any) => (item.firstName !== '' || item.lastName !== '') && (item.firstName !== null || item.lastName !== null) )
       }
     }
     submitProjectSetting(){
@@ -564,9 +564,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 this.managerLists = res.data.teamMember
                 this.filterFunctions();
                 if(this.editProject == true){
-                console.log("afsdlk", this.managerLists)
                  let projectManagerdata = this.managerLists.filter((ManagerList: any) => ManagerList.id == this.managerEditTeamLIst[0].teamMemberId )
-                 console.log("dfjsld",projectManagerdata)
                  this.projectTeam.patchValue({
                   project_manager: projectManagerdata[0]?projectManagerdata[0]:null
                 })
@@ -633,7 +631,7 @@ selectedJiraUserOption(event: any) {
       (res: any) => {
         this.initialLoading = false;
         let pojectdata = [res.data.project]
-        let clientData =[res.data.clientModels]
+        this.clientData.push(res.data.clientModels)
         let projectsetting = [] ;
         projectsetting.push(res.data.authUser) 
         let projectTeam = res.data.teamModel
@@ -644,8 +642,7 @@ selectedJiraUserOption(event: any) {
           });
           this.settingProjectName =item.key?item.key:""
         })
-        clientData.forEach((item: any)=>{
-          console.log(item)
+        this.clientData.forEach((item: any)=>{
           this.clientDetials.patchValue({
             firstName:item.length > 0 ? (item[0].firstName?item[0].firstName:""):null ,
             lastName: item.length > 0 ?(item[0].lastName?item[0].lastName:""):null,
@@ -676,7 +673,7 @@ selectedJiraUserOption(event: any) {
         })
         this.managerEditTeamLIst = this.teamMemberList.filter((item: any) => item.role == "Manager" )
         this.teamMemberList = this.teamMemberList.filter((item: any) => item.role !== "Manager" )
-       
+        this.editteamMemberList = projectTeam.filter((item: any) => item.role !== "Manager" )
         this.teamMemberList.forEach((element:any) => {
           this.selectedJiraUser = [  ...this.selectedJiraUser, element.jiraUser]
         });
@@ -691,19 +688,34 @@ selectedJiraUserOption(event: any) {
   
   }
   updateProject(){
+    this.clientDtailsList.forEach((clientItem:any,i: any)=>{
+    this.clientData[0].forEach((item: any,index: any)=>{
+        if(i===index){
+          item.firstName = clientItem.firstName,
+          item.lastName = clientItem.lastName
+        
+        }
+      })
+      if(this.clientData[0].length < this.clientDtailsList.length){
+        this.clientData[0].push(clientItem)
+      }
+    })
 
+    console.log(this.editteamMemberList)
+    console.log(this.teamMemberList)
     if (!this.projectTeam.invalid) {
       if(this.teamMemberList.length > 0){
-        this.teamMemberList = [
-          ...this.teamMemberList,
-          {
-            // name: this.projectTeam.value.project_manager ,
-            teamMemberId: this.projectTeam.value.project_manager.id,
-            role: "Manager",
-            jiraUser: this.projectTeam.value.jira_user.displayName,
-            isManager: true
-          }
-        ];
+        //update feature changes
+        // this.teamMemberList = [
+        //   ...this.teamMemberList,
+        //   {
+        //     // name: this.projectTeam.value.project_manager ,
+        //     teamMemberId: this.projectTeam.value.project_manager.id,
+        //     role: "Manager",
+        //     jiraUser: this.projectTeam.value.jira_user.displayName,
+        //     isManager: true
+        //   }
+        // ];
         let payload = 
         {
           projectDetails: {
@@ -720,7 +732,7 @@ selectedJiraUserOption(event: any) {
             isDeleted: false,
             projectId: "10000",
             isPrivate: false,
-            userId: 4,
+            userId: 3,
           },
           clientDetails: this.clientDtailsList,
           baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
@@ -732,23 +744,24 @@ selectedJiraUserOption(event: any) {
           teamDetails: this.teamMemberList
         }
         console.log(payload)
-        this.submitInProcess = true;
-        this.ProjectService.updateProject(payload).subscribe(
-          (res:any)=>{
-            this.submitInProcess = false;
-            if(res.data.error == false){
-              this.snackBar.successSnackBar("Project created successFully");
-            }else{
-              this.snackBar.errorSnackBar(res.data.Message)
-            }
+        //update feature changes
+        // this.submitInProcess = true;
+        // this.ProjectService.updateProject(payload).subscribe(
+        //   (res:any)=>{
+        //     this.submitInProcess = false;
+        //     if(res.data.error == false){
+        //       this.snackBar.successSnackBar("Project created successFully");
+        //     }else{
+        //       this.snackBar.errorSnackBar(res.data.message)
+        //     }
           
-          }, 
-          error => {
-            this.submitInProcess = false;
+        //   }, 
+        //   error => {
+        //     this.submitInProcess = false;
 
-            this.snackBar.errorSnackBar("server error")
-          }
-        )
+        //     this.snackBar.errorSnackBar("server error")
+        //   }
+        // )
       this.projectDetials.reset();
       this.clientDetials.reset();
       this.projectSetting.reset();

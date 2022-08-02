@@ -153,7 +153,10 @@ export const chartConfig = {
         labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
         xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"] },
         responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
-        legend: { position: "top", horizontalAlign: "left" }
+        legend: { position: "top", horizontalAlign: "left" },
+         dataLabels: { // add this part to remove %
+            enabled: false,
+          }
     }],
     Semi_Circle_Gauge_Chart: [{
         series: [76],
@@ -280,7 +283,71 @@ export const chartConfig = {
                 "Sep"
             ]
         }
-    }]
+    }],
+    SCORE_CHART: [{
+        chart: {
+          height: 280,
+          type: "radialBar",
+        },
+      
+        series: [67],
+        colors: ["#20E647"],
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 135,
+            hollow: {
+              margin: 20,
+              size: "70%",
+              background: "#293450",
+            },
+            track: {
+              dropShadow: {
+                enabled: true,
+                top: 2,
+                left: 0,
+                blur: 8,
+                opacity: 0.15
+              }
+            },
+            dataLabels: {
+            //   border: {
+              borderWidth: 2,
+              borderColor: "#fac5c7",
+            //   },
+              name: {
+                show: false,
+                offsetY: -10,
+                color: "#fff",
+                fontSize: "13px"
+              },
+              value: {
+                color: "#fff",
+                fontSize: "30px",
+                show: true,
+                formatter: function (val:any) {
+                    return val 
+                  }
+              }
+            }
+          }
+        },
+        fill: {
+          type: "gradient",
+          gradient: {
+            shade: "dark",
+            type: "vertical",
+            gradientToColors: ["#87D4F9"],
+            stops: [0, 100]
+          }
+        },
+        stroke: {
+          lineCap: "round"
+        },
+        labels: ["Progress"],
+      } 
+    ]
+
 }
 export interface ChartInterface {
     [key: string]: string;

@@ -19,7 +19,7 @@ export class OverallProjectScoreComponent implements OnInit {
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
   // @Input() colors: string[];
-  // @Input() dataLabels: ApexDataLabels;
+  @Input() dataLabels: ApexResponsive[] | any;
   // @Input() stroke: ApexStroke;
   // @Input() legend: ApexLegend;
   // @Input() fill: ApexFill;
@@ -37,6 +37,7 @@ export class OverallProjectScoreComponent implements OnInit {
     this.xaxis = chartConfig.Pie_Chart[0].xaxis;
     this.labels = chartConfig.Pie_Chart[0].labels;
     this.responsive = chartConfig.Pie_Chart[0].responsive;
+    this.dataLabels =chartConfig.Pie_Chart[0].dataLabels;
   }
 
   ngOnInit() {

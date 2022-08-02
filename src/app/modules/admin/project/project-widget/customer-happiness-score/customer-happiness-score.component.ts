@@ -19,9 +19,9 @@ export class CustomerHappinessScoreComponent implements OnInit {
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
-  // @Input() colors: string[];
-  // @Input() dataLabels: ApexDataLabels;
-  // @Input() stroke: ApexStroke;
+  @Input() colors: string[] | any;
+  @Input() dataLabels: ApexResponsive[] | any;
+  @Input() stroke: ApexStroke | any;
   // @Input() legend: ApexLegend;
   // @Input() tooltip: ApexTooltip;
   // @Input() grid: ApexGrid;
@@ -30,13 +30,23 @@ export class CustomerHappinessScoreComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.fill = chartConfig.Semi_Circle_Gauge_Chart[0].fill;
-    this.chart = chartConfig.Semi_Circle_Gauge_Chart[0].chart;
-    this.xaxis = chartConfig.Semi_Circle_Gauge_Chart[0].xaxis;
-    this.series = chartConfig.Semi_Circle_Gauge_Chart[0].series;
-    this.labels = chartConfig.Semi_Circle_Gauge_Chart[0].labels;
-    this.responsive = chartConfig.Semi_Circle_Gauge_Chart[0].responsive;
-    this.plotOptions = chartConfig.Semi_Circle_Gauge_Chart[0].plotOptions;
+    // this.fill = chartConfig.Semi_Circle_Gauge_Chart[0].fill;
+    // this.chart = chartConfig.Semi_Circle_Gauge_Chart[0].chart;
+    // this.xaxis = chartConfig.Semi_Circle_Gauge_Chart[0].xaxis;
+    // this.series = chartConfig.Semi_Circle_Gauge_Chart[0].series;
+    // this.labels = chartConfig.Semi_Circle_Gauge_Chart[0].labels;
+    // this.responsive = chartConfig.Semi_Circle_Gauge_Chart[0].responsive;
+    // this.plotOptions = chartConfig.Semi_Circle_Gauge_Chart[0].plotOptions;
+    this.fill = chartConfig.SCORE_CHART[0].fill;
+    this.chart = chartConfig.SCORE_CHART[0].chart;
+    // this.xaxis = chartConfig.SCORE_CHART[0].xaxis;
+    this.series = chartConfig.SCORE_CHART[0].series;
+    this.labels = chartConfig.SCORE_CHART[0].labels;
+    // this.responsive = chartConfig.SCORE_CHART[0].responsive;
+    this.plotOptions = chartConfig.SCORE_CHART[0].plotOptions;
+    this.colors = chartConfig.SCORE_CHART[0].colors;
+    this.stroke = chartConfig.SCORE_CHART[0].stroke;
+    // this.dataLabels =chartConfig.SCORE_CHART[0].dataLabels;
   }
 
   ngOnInit() {

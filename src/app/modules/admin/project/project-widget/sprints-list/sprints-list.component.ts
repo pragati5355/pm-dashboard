@@ -2,7 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { StaticData } from "../../../../../core/constacts/static";
 import { CreateProjecteService } from "@services/create-projecte.service";
-
+import {  Input } from '@angular/core'
+import { E } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-sprints-list',
   templateUrl: './sprints-list.component.html',
@@ -17,21 +18,27 @@ export class SprintsListComponent implements OnInit {
 
   constructor(private ProjectService: CreateProjecteService, private router: Router,) {
   }
-
+  @Input() dataId: any ;
   ngOnInit(): void {
+    console.log("projectId",this.dataId)
     this.isLoading = true;
     // id pass only temporary after implementing router pass query by id
     let payload = {
-      "id": 29
+      "id": this.dataId
     }
     this.getSprintList(payload);
   }
 
   getSprintList(paylaod: any) {
     this.ProjectService.getSprintList(paylaod).subscribe((res: any) => {
-      this.sprintList = res.data;
+      if(res.data){
+        this.sprintList = res.data;
       this.totalRecored = this.sprintList.length ? this.sprintList.length : 0;
       this.isLoading = false;
+      }else{
+        this.totalRecored =  0;
+        this.isLoading = false;
+      }
     }, error => {
       this.isLoading = false;
     })
