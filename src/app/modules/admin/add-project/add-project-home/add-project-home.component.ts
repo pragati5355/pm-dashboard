@@ -46,9 +46,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     }
   }
   pageTitle ="Add"
-  editProjectId = 0;
+  editProjectId: any;
   project_manager = new FormControl();
-  // team_member = new FormControl();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
     editProject = false
@@ -68,6 +67,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     projectSetting!: FormGroup;
     projectTeam!: FormGroup;
     disableTextbox =  false;
+    filteredTeamMember: any = [];
+    filteredEditClientList: any = []
+    jiraProjectList: any = []
     list: any = [
       { id: 1, name: 'Metrics', key:"MT"},
       { id: 2, name: 'ChatBiopsy', key:"CB"},
@@ -352,9 +354,15 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               this.projectSetting.patchValue({
                 project: result.project
               });
+              let jiraProjectListResult = res.data
+              this.jiraProjectList= jiraProjectListResult.filter((item: any) =>  item.key == this.settingProjectName)
             }
           });
-           }
+        }
+        if(this.editProject == true){
+        let jiraProjectListResult = res.data
+        this.jiraProjectList= jiraProjectListResult.filter((item: any) =>  item.key == this.settingProjectName)
+        }
           this.ProjectService.getJiraUser(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
@@ -434,13 +442,13 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       }
     }
     }
-    deleteTeamMember(index: any,teamMemberId: any,jiraUser: any) {
+    deleteTeamMember(index: any,teamMemberId: any,jiraUser: string) {
       this.teamMemberList.splice(index, 1);
       this.projectTeam.controls["team_member"].reset();
       this.projectTeam.controls["select_role"].reset();
       this.projectTeam.controls["team_jira_user"].reset();
-      this.selectedJiraUser = [ this.selectJiraUser.indexOf(jiraUser)]
-      this.selectedTeamMember = [ this.selectedTeamMember.indexOf(teamMemberId)]
+      this.selectedJiraUser =  this.selectedJiraUser.filter((arrayItem:any) => arrayItem !== jiraUser);
+      this.selectedTeamMember =  this.selectedTeamMember.filter((arrayItem:any) => arrayItem !== teamMemberId);
       this.filterFunctions();
     }
     submitProjectDetails(){
@@ -481,7 +489,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           this.teamMemberList = [
             ...this.teamMemberList,
             {
-              // name: this.projectTeam.value.project_manager ,
               teamMemberId: this.projectTeam.value.project_manager.id,
               role: "Manager",
               jiraUser: this.projectTeam.value.jira_user.displayName,
@@ -494,11 +501,11 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               name: this.projectDetials.value.projectName,
               description: this.projectDetials.value.projectDescription,
               key: this.projectSetting.value.project,
-              entityId: null,
-              uuid: null,
-              orgId: null,
-              private: false,
-              id: "10000"
+              entityId: this.jiraProjectList[0].entityId,
+              uuid: this.jiraProjectList[0].uuid,
+              orgId: this.jiraProjectList[0].orgId,
+              private: this.jiraProjectList[0].private,
+              id: this.jiraProjectList[0].id
             },
             clientDetails: this.clientDtailsList,
             baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
@@ -509,7 +516,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
             jiraProjectKey: this.projectSetting.value.project,
             teamDetails: this.teamMemberList
           }
-          console.log(payload)
           this.submitInProcess = true;
           this.ProjectService.createProject(payload).subscribe(
             (res:any)=>{
@@ -618,7 +624,6 @@ selectedJiraUserOption(event: any) {
     return user ? user.displayName : null;
   }
   fetchEditproject(id: number){
-    // let res = StaticData.PROJECT_DETAILS
     let payload ={
       id: id
     }
@@ -667,7 +672,7 @@ selectedJiraUserOption(event: any) {
             }
           ];
         })
-        this.managerEditTeamLIst = this.teamMemberList.filter((item: any) => item.role == "Manager" )
+        this.managerEditTeamLIst = projectTeam.filter((item: any) => item.role == "Manager" )
         this.teamMemberList = this.teamMemberList.filter((item: any) => item.role !== "Manager" )
         this.editteamMemberList = projectTeam.filter((item: any) => item.role !== "Manager" )
         this.teamMemberList.forEach((element:any) => {
@@ -684,87 +689,62 @@ selectedJiraUserOption(event: any) {
   
   }
   updateProject(){
-    this.clientDtailsList.forEach((clientItem:any,i: any)=>{
-    this.clientData[0].forEach((item: any,index: any)=>{
-        if(i===index){
-          item.firstName = clientItem.firstName,
-          item.lastName = clientItem.lastName
-        
-        }
-      })
-      if(this.clientData[0].length < this.clientDtailsList.length){
-        this.clientData[0].push(clientItem)
-      }
-    })
 
-    console.log(this.editteamMemberList)
-    console.log(this.teamMemberList)
+    this.filterEditTeamMember()
+    this.filterEditClientList();
     if (!this.projectTeam.invalid) {
-      if(this.teamMemberList.length > 0){
-        //update feature changes
-        // this.teamMemberList = [
-        //   ...this.teamMemberList,
-        //   {
-        //     // name: this.projectTeam.value.project_manager ,
-        //     teamMemberId: this.projectTeam.value.project_manager.id,
-        //     role: "Manager",
-        //     jiraUser: this.projectTeam.value.jira_user.displayName,
-        //     isManager: true
-        //   }
-        // ];
+      if (this.filteredTeamMember.length > 0){
         let payload = 
         {
           projectDetails: {
             name: this.projectDetials.value.projectName,
             description: this.projectDetials.value.projectDescription,
             key: this.projectSetting.value.project,
-            entityId: null,
-            uuid: null,
-            orgId: null,
-            private: false,
-            id: this.editProjectId,
-            createdAt: 1659001283034,
-            lastModifiedAt: 1659001283034,
+            entityId: this.jiraProjectList[0].entityId,
+            uuid: this.jiraProjectList[0].uuid,
+            orgId: this.jiraProjectList[0].orgId,
+            private: this.jiraProjectList[0].private,
+            id: parseInt(this.editProjectId),
             isDeleted: false,
-            projectId: "10000",
+            projectId: this.jiraProjectList[0].id,
             isPrivate: false,
-            userId: 3,
+            userId: this.userData.userId,
           },
-          clientDetails: this.clientDtailsList,
+          clientDetails: this.filteredEditClientList,
           baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
           apiKey:  this.projectSetting.value.token,
           adminEmail: this.projectSetting.value.email,
           orgId: 1,
           addedBy: this.userData.userId,
           jiraProjectKey: this.projectSetting.value.project,
-          teamDetails: this.teamMemberList
+          teamDetails: this.filteredTeamMember
         }
-        console.log(payload)
         //update feature changes
-        // this.submitInProcess = true;
-        // this.ProjectService.updateProject(payload).subscribe(
-        //   (res:any)=>{
-        //     this.submitInProcess = false;
-        //     if(res.data.error == false){
-        //       this.snackBar.successSnackBar("Project created successFully");
-        //     }else{
-        //       this.snackBar.errorSnackBar(res.data.message)
-        //     }
+        this.submitInProcess = true;
+        this.ProjectService.updateProject(payload).subscribe(
+          (res:any)=>{
+            this.submitInProcess = false;
+            if(res.data){
+              this.snackBar.successSnackBar("Project updated successFully");
+              this.projectDetials.reset();
+              this.clientDetials.reset();
+              this.projectSetting.reset();
+              this.projectTeam.reset();
+              this.teamMemberList = []
+              this.settingProjectName = ""
+              this.router.navigate(['/projects/project-list']) 
+            }else{
+              this.snackBar.errorSnackBar(res.data.message)
+            }
           
-        //   }, 
-        //   error => {
-        //     this.submitInProcess = false;
+          }, 
+          error => {
+            this.submitInProcess = false;
 
-        //     this.snackBar.errorSnackBar("server error")
-        //   }
-        // )
-      this.projectDetials.reset();
-      this.clientDetials.reset();
-      this.projectSetting.reset();
-      this.projectTeam.reset();
-      this.teamMemberList = []
-      this.settingProjectName = ""
-      this.router.navigate(['/projects/project-list']) 
+            this.snackBar.errorSnackBar("server error")
+          }
+        )
+  
       }
       else{
         this.isAddTeam = false
@@ -772,4 +752,48 @@ selectedJiraUserOption(event: any) {
       }
     }
   } 
+  filterEditTeamMember(){
+
+    for(let arr in this.editteamMemberList){
+    for(let filter in this.teamMemberList){
+       if(this.editteamMemberList[arr].jiraUser == this.teamMemberList[filter].jiraUser && this.editteamMemberList[arr].teamMemberId == this.teamMemberList[filter].teamMemberId && this.editteamMemberList[arr].role == this.teamMemberList[filter].role){
+        this.filteredTeamMember.push(this.editteamMemberList[arr]);
+         }
+        }
+    }
+    const resultsUnique = this.teamMemberList.filter((elementlist: any) => !this.filteredTeamMember.some((element: any) => element.jiraUser === elementlist.jiraUser && element.teamMemberId === elementlist.teamMemberId && element.role === elementlist.role));
+    const resultsDelete = this.editteamMemberList.filter((elementlist: any) => !this.filteredTeamMember.some((element: any) => element.jiraUser === elementlist.jiraUser && element.teamMemberId === elementlist.teamMemberId && element.role === elementlist.role));
+    resultsUnique.forEach((element:any,i: any)=>{
+      this.filteredTeamMember.push(element);})
+    resultsDelete.forEach((element:any,i: any)=>{
+      element.isDeleted = true
+      this.filteredTeamMember.push(element);
+    })
+
+    this.managerEditTeamLIst.forEach((item: any,index: any)=>{
+        item.teamMemberId= this.projectTeam.value.project_manager.id,
+        item.jiraUser= this.projectTeam.value.jira_user.displayName
+        this.filteredTeamMember.push(item)
+
+    })
+  }
+  filterEditClientList(){
+    this.clientDtailsList.forEach((clientItem:any,i: any)=>{
+      this.clientData[0].forEach((item: any,index: any)=>{
+          if(i===index){
+            item.firstName = clientItem.firstName,
+            item.lastName = clientItem.lastName   
+            this.filteredEditClientList.push(item);
+          }
+        })
+        if(this.clientData[0].length < i+1){
+          this.filteredEditClientList.push(clientItem)
+        }  
+      })
+      const resultsDelete = this.clientData[0].filter((elementlist: any) => !this.clientDtailsList.some((element: any) => element.firstName === elementlist.firstName && element.lastName === elementlist.lastName ));
+      resultsDelete.forEach((element:any,i: any)=>{
+        element.isDeleted = true
+        this.filteredEditClientList.push(element);
+      })
+  }
 }
