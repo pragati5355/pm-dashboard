@@ -102,6 +102,8 @@ export function ExprienceValidation(
       }
       if (typeof(control.value)=="object") {
         control.setErrors(null);
+      }else if(control.value == "" || control.value == null){
+        control.setErrors(null);
       }else {
         control.setErrors({ ObjectValidation: true });
       } 

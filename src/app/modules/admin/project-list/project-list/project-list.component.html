@@ -81,7 +81,7 @@
                 <ng-container *ngFor="let project of projectList">
                     <div>
                         <fuse-card
-                        class="min-h-313 flex flex-col max-w-140 w-full filter-post filter-interactive"
+                        class="min-h-344 flex flex-col max-w-140 w-full filter-post filter-interactive"
                         #expandableCard02="fuseCard"  >
                         <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
 
@@ -97,7 +97,8 @@
                                 <span class="leading-relaxed whitespace-nowrap">{{project.status}}</span>
                             </span>
                             <button 
-                            class=" ml-4  inline-flex items-center"
+                            class=" ml-auto    inline-flex items-center"
+                            *ngIf="!project.status"
                             mat-flat-button
                             [color]="'primary'"
                             (click)="snycproject($event,project.id)"
@@ -121,8 +122,9 @@
                                 <span class="text-sm text-secondary leading-none">Team</span>
                                 <div class="flex items-center mt-1">
                                 <ng-container *ngIf="project.teamModel.length > 0">
-                                    <div *ngFor="let team of project.teamModel;index as i"
-                                    class="w-6 h-6 m-0.5 rounded-full items-center justify-center text-card ring-2 ring-bg-card bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+                                    <ng-container *ngFor="let team of project.teamModel;index as i">
+                                    <div *ngIf="i<9"
+                                    class="w-8 h-8 m-0.5 rounded-full items-center justify-center text-card ring-2 ring-bg-card bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
                                     [ngClass]="{'-ml-3': i !== 0}">
                                     <img
                                         class="rounded-full"
@@ -130,11 +132,17 @@
                                         [src]="team.image"
                                         alt="Card cover image">
                                         <div
-                                        class="rounded-full text-center uppercase text-1xl  mt-1.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                        *ngIf="!team.image">
+                                        class="rounded-full text-center uppercase text-1xl  mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                        *ngIf="!team.image && i<8">
                                         {{team.name.charAt(0)}}
                                         </div>
+                                        <div  *ngIf="i == 8 "
+                                        class="rounded-full text-center uppercase text-1xl  mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                        >
+                                        +{{project.teamModel.length - 8}}
+                                        </div>
                                     </div>
+                                    </ng-container>
                                 </ng-container>
                                 </div>
                             </div>
@@ -150,8 +158,8 @@
                         </div>
 
 
-                        <div  *ngIf="project.teamModel.length === 0 && !project.progres" class="mx-6 sm:mx-8 mt-2 mb-6 text-secondary text-primary dark:text-primary-500">
-                            Sync with Jira is in progress. Project details will appear here when the sync is complete.
+                        <div  *ngIf="!project.progres" class="mx-6 sm:mx-8 mt-2 mb-6 text-secondary text-primary dark:text-primary-500">
+                           Not sync with Jira . Project details will appear here when the sync is complete.
                         </div>
                         </fuse-card>
                     </div>

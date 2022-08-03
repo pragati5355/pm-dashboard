@@ -13,6 +13,7 @@ export const chartConfig = {
             fontFamily: 'inherit',
             foreColor: 'inherit',
             height: '100%',
+            width: 280,
             type: 'donut',
             sparkline: {
                 enabled: true
@@ -436,7 +437,7 @@ export const chartConfig = {
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: true
         },
         stroke: {
             curve: "straight"
