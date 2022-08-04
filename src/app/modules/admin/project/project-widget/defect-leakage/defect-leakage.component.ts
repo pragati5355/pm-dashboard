@@ -18,6 +18,7 @@ export class DefectLeakageComponent implements OnInit {
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
+  @Input() stroke: ApexStroke | any;
   @Input() colors: string[];
   // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
@@ -29,13 +30,22 @@ export class DefectLeakageComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.fill = chartConfig.Defect_Leakage_Chart[0].fill;
     this.chart = chartConfig.Defect_Leakage_Chart[0].chart;
-    this.colors = chartConfig.Defect_Leakage_Chart[0].colors;
-    this.series = chartConfig.Defect_Leakage_Chart[0].series;
-    this.labels = chartConfig.Defect_Leakage_Chart[0].labels;
+    this.series = [70];
+    this.labels = ['More Bugs to Fix during the Iteration'];
     this.legend = chartConfig.Defect_Leakage_Chart[0].legend;
     this.plotOptions = chartConfig.Defect_Leakage_Chart[0].plotOptions;
+    this.stroke = chartConfig.Defect_Leakage_Chart[0].stroke;
+    if(this.series[0] < 100){
+      this.fill = chartConfig.Defect_Leakage_Chart[0].fill;
+    }else{
+      this.fill = chartConfig.Defect_Leakage_Chart[0].fullfill;
+    }
+    if(this.series[0] < 100){
+      this.colors = chartConfig.Defect_Leakage_Chart[0].colors;
+    }else{
+      this.colors = chartConfig.Defect_Leakage_Chart[0].fullcolors;
+    }
   }
 
   ngOnInit() {

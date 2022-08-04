@@ -93,12 +93,6 @@ export const chartConfig = {
 
                 dataLabels: {
                     show: true,
-                    name: {
-                        offsetY: 60,
-                        show: true,
-                        color: "#888",
-                        fontSize: "15px"
-                    },
                     value: {
                         formatter: function (val: any) {
                             return parseInt(val.toString(), 10).toString();
@@ -302,29 +296,43 @@ export const chartConfig = {
             height: 280, offsetY: -20, type: "radialBar",
         },
         series: [67],
-        colors: ["#20E647"],
+        labels: ['More Bugs to Fix during the Iteration'],
+        colors: ["#DC2626"],
+        // fullcolors: ["#20E647"],
+        fullcolors: ["#22C55E"],
         plotOptions: {
             radialBar: {
                 startAngle: -90,
                 endAngle: 90,
+                hollow: {
+                    
+                    // image: '../../assets/mbicons/circle.svg',
+                    // imageWidth: 10,
+                    // imageHeight: 10,
+                    // imageClipped: false
+                  },
                 track: {
-                    background: '#333',
-                    startAngle: -90,
-                    endAngle: 90,
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 0,
+                        blur: 8,
+                        opacity: 0.15
+                      }
                 },
                 dataLabels: {
                     name: {
-                        fontSize: "16px",
+                        // show: false,
+                        fontSize: "14px",
                         color: undefined,
-                        offsetY: 55,
+                        offsetY: 65,
+                        values: "More Bugs to Fix during the Iteration"
                     },
                     value: {
-                        offsetY: 15,
+                        offsetY: 25,
                         fontSize: "22px",
                         color: undefined,
-                        formatter: function (val: any) {
-                            return val;
-                        }
+                        fontWeight: 800,
                     },
                 }
             }
@@ -334,15 +342,56 @@ export const chartConfig = {
             gradient: {
                 shade: "dark",
                 type: "horizontal",
-                gradientToColors: ["#87D4F9"],
-                stops: [0, 100]
-            }
+                // type: "gradient",
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                colorStops: [
+                  {
+                    offset: 20,
+                    color: "#FF720D",
+                    opacity: 1
+                  },
+
+                  {
+                    offset: 100,
+                    color: "#DC2626",
+                    opacity: 1
+                  }
+                ]
+              }
+            // }
+        },
+        fullfill: {
+            type: "gradient",
+            gradient: {
+                shade: "dark",
+                type: "horizontal",
+                // type: "gradient",
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                colorStops: [
+                  {
+                    offset: 2,
+                    color: "#87D4F9",
+                    opacity: 1
+                  },
+
+                  {
+                    offset: 100,
+                    color: "#22C55E",
+                    opacity: 1
+                  }
+                ]
+              }
+            // }
         },
         stroke: {
-            lineCap: "butt"
+            lineCap: "butt",
+            dashArray: 2
         },
-        labels: ["Progress"],
-        legend: { position: "top", horizontalAlign: "left" }
+        legend: { position: "top", horizontalAlign: "left" },
     }],
     // Quality Percentage
     Quality_Percentage_Chart: [{
@@ -386,6 +435,10 @@ export const chartConfig = {
                     },
                 }
             }
+        },
+        stroke: {
+            lineCap: "butt",
+            dashArray: 0
         },
         legend: { position: "top", horizontalAlign: "left" }
     }],
@@ -506,10 +559,6 @@ export const chartConfig = {
               }
             },
             dataLabels: {
-            //   border: {
-              borderWidth: 2,
-              borderColor: "#fac5c7",
-            //   },
               name: {
                 show: false,
                 offsetY: -10,
@@ -517,6 +566,7 @@ export const chartConfig = {
                 fontSize: "13px"
               },
               value: {
+                offsetY: 12,
                 color: "#fff",
                 fontSize: "30px",
                 show: true,

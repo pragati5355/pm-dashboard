@@ -18,7 +18,8 @@ export class QualityPercentageComponent implements OnInit {
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
-  // @Input() colors: string[];
+  @Input() stroke: ApexStroke | any;
+  @Input() colors: string[];
   // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
   // @Input() legend: ApexLegend;
@@ -29,12 +30,23 @@ export class QualityPercentageComponent implements OnInit {
   // @Input() theme: ApexTheme;
 
   constructor() {
-    this.fill = chartConfig.Quality_Percentage_Chart[0].fill;
+    // this.fill = chartConfig.Quality_Percentage_Chart[0].fill;
     this.chart = chartConfig.Quality_Percentage_Chart[0].chart;
     this.series = chartConfig.Quality_Percentage_Chart[0].series;
     this.labels = chartConfig.Quality_Percentage_Chart[0].labels;
     this.responsive = chartConfig.Quality_Percentage_Chart[0].responsive;
     this.plotOptions = chartConfig.Quality_Percentage_Chart[0].plotOptions;
+    this.stroke = chartConfig.Quality_Percentage_Chart[0].stroke;
+    if(this.series[0] < 100){
+      this.fill = chartConfig.Defect_Leakage_Chart[0].fill;
+    }else{
+      this.fill = chartConfig.Defect_Leakage_Chart[0].fullfill;
+    }
+    if(this.series[0] < 100){
+      this.colors = chartConfig.Defect_Leakage_Chart[0].colors;
+    }else{
+      this.colors = chartConfig.Defect_Leakage_Chart[0].fullcolors;
+    }
   }
 
   ngOnInit() {
