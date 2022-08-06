@@ -8,18 +8,19 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataL
   styleUrls: ['./defect-leakage.component.scss']
 })
 export class DefectLeakageComponent implements OnInit {
-  @Input() fill: ApexFill;
+  titleMain =""
+  @Input() fill: ApexFill |any;
   @Input() chart: ApexChart | any;
   @Input() xaxis: ApexXAxis | any;
   @Input() labels: string[] | any;
   @Input() title: ApexTitleSubtitle | any;
   @Input() responsive: ApexResponsive[] | any;
   @Input() plotOptions: ApexPlotOptions | any;
-  @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+  @Input() series: ApexAxisChartSeries | any;
   // @Input() yaxis: ApexYAxis | ApexYAxis[];
   // @Input() annotations: ApexAnnotations;
   @Input() stroke: ApexStroke | any;
-  @Input() colors: string[];
+  @Input() colors: string[] | any;
   // @Input() dataLabels: ApexDataLabels;
   // @Input() stroke: ApexStroke;
   @Input() legend: ApexLegend|any;
@@ -28,27 +29,36 @@ export class DefectLeakageComponent implements OnInit {
   // @Input() states: ApexStates;
   // @Input() subtitle: ApexTitleSubtitle;
   // @Input() theme: ApexTheme;
-
+  @Input() dataType: any ;
   constructor() {
+  //  this.chartfunction()
+  }
+
+  ngOnInit() {
+    console.log(this.dataType)
+    this.chartfunction()
+  }
+  chartfunction(){
     this.chart = chartConfig.Defect_Leakage_Chart[0].chart;
-    this.series = [70];
-    this.labels = ['More Bugs to Fix during the Iteration'];
     this.legend = chartConfig.Defect_Leakage_Chart[0].legend;
     this.plotOptions = chartConfig.Defect_Leakage_Chart[0].plotOptions;
     this.stroke = chartConfig.Defect_Leakage_Chart[0].stroke;
-    if(this.series[0] < 100){
+    if(this.dataType == "defectLeakage"){
       this.fill = chartConfig.Defect_Leakage_Chart[0].fill;
+      this.series = [70];
+      this.labels = ['More Bugs to Fix during the Iteration'];
+      this.titleMain = "Defect Leakage"
     }else{
       this.fill = chartConfig.Defect_Leakage_Chart[0].fullfill;
+      this.series = [100];
+      this.labels = ['All Test Cases Passed!'];
+      this.titleMain = "Quality Percentage"
     }
-    if(this.series[0] < 100){
+    if(this.dataType == "defectLeakage"){
       this.colors = chartConfig.Defect_Leakage_Chart[0].colors;
     }else{
       this.colors = chartConfig.Defect_Leakage_Chart[0].fullcolors;
     }
-  }
-
-  ngOnInit() {
   }
 
 }

@@ -1,15 +1,31 @@
 <div class="flex flex-col flex-auto   overflow-hidden">
-  <div class="p-2 border-b">
-    <div class="flex items-start justify-between ">
-      <div class="text-lg font-medium tracking-tight leading-6 truncate"> Schedule Variance
-      </div>
-      <div class="text-lg font-medium tracking-tight leading-6 truncate mt-3 sm:mt-0 sm:ml-2">
-        +254
-      </div>
+    <div class="p-2 border-b">
+        <div class="flex items-start justify-between ">
+            <div class="text-lg font-medium tracking-tight leading-6 truncate"> Schedule Variance
+            </div>
+            <!--  this is temporary
+            <div class="text-lg font-medium tracking-tight truncate sm:mt-0 sm:ml-2">
+                 <mat-form-field  appearance="legacy" >
+                     <mat-select  [formControl]="panelColor"  [disableOptionCentering]="true">
+                         <mat-option *ngFor="let cData of chartData" [value]="cData.name">{{cData.name}}</mat-option>
+                     </mat-select>
+                 </mat-form-field>
+             </div>
+             -->
+            <div class="ml-2">
+                <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button [matMenuTriggerFor]="conversionMenu">
+                    <span class="font-medium text-sm text-secondary">{{chartChange}} </span>
+                </button>
+                <mat-menu #conversionMenu="matMenu">
+                    <button (click)="selectvalue('Original Time Estimate')" mat-menu-item>Original Time Estimate</button>
+                    <button (click)="selectvalue('Story Points')" mat-menu-item>Story Points</button>
+                </mat-menu>
+            </div>
+
+        </div>
     </div>
-  </div>
-  <div class="flex flex-col p-3 mt-2">
-    <apx-chart [series]="series" [chart]="chart" [yaxis]="yaxis" [dataLabels]="dataLabels" [grid]="grid"
-      [stroke]="stroke"></apx-chart>
-  </div>
+    <div class="flex flex-col p-3 mt-2">
+        <apx-chart [series]="series" [chart]="chart" [yaxis]="yaxis" [dataLabels]="dataLabels" [grid]="grid"
+                   [stroke]="stroke"></apx-chart>
+    </div>
 </div>

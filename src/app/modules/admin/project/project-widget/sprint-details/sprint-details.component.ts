@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component,ElementRef, Input, QueryList,  OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-sprint-details',
@@ -11,9 +11,13 @@ export class SprintDetailsComponent implements OnInit {
   project_name = "This is a Sprint name";
   project_status = "On Track";
   project_progres = 45;
+  @Input() dataType: any;
+  qulitychare= ["defectLeakage","qualityPercentage"]
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    
+  }
   goBack(){
     window.history.back()
   }

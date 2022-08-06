@@ -96,13 +96,15 @@
                                     required
                                     maxlength="150"
                                     trim="blur" 
+                                    rows="2"
+                                    style="resize:none"
                                     formControlName="projectDescription"
                                     [placeholder]="'Add project description here...'"></textarea>
                                     <mat-error *ngIf="projectDetailsForm['projectDescription'].errors &&
                                     projectDetailsForm['projectDescription']?.invalid &&
                                     projectDetailsForm['projectDescription']?.touched ">
                                     <div *ngIf="projectDetailsForm['projectDescription'].errors['required']">Project Description is mandatory</div>
-                                    <div *ngIf="projectDetailsForm['projectDescription'].invalid">Enter valid project Description</div>
+                                    <div *ngIf="projectDetailsForm['projectDescription'].invalid && !projectDetailsForm['projectDescription'].errors['required']">Enter valid project Description</div>
                                 </mat-error>
                                 </mat-form-field>
                             
@@ -628,37 +630,39 @@
                                                 <!-- Rows -->
                                                 <ng-container >
                                                     <ng-container *ngFor="let teamMember of teamMemberList;index as i">
-                                                        <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-                                                            <!-- SKU -->
-                                                            <div class="hidden md:block truncate">
-                                                                <ng-container *ngFor="let member of teamMembers">
-                                                                    <ng-container *ngIf="member.id == teamMember.teamMemberId">{{member.firstName+ " "+member.lastName | titlecase}}</ng-container>
-                                                                </ng-container>
-                                                            </div>
+                                                        <ng-container *ngIf="teamMember.role !== 'Manager'">
+                                                            <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                                                <!-- SKU -->
+                                                                <div class="hidden md:block truncate">
+                                                                    <ng-container *ngFor="let member of teamMembers">
+                                                                        <ng-container *ngIf="member.id == teamMember.teamMemberId">{{member.firstName+ " "+member.lastName | titlecase}}</ng-container>
+                                                                    </ng-container>
+                                                                </div>
 
-                                                            <!-- Name -->
-                                                            <div class="truncate">
-                                                                <div *ngFor="let role of selectRoleList" >
-                                                                    <div *ngIf="role.value == teamMember.role">
-                                                                            {{role.viewValue}}
+                                                                <!-- Name -->
+                                                                <div class="truncate">
+                                                                    <div *ngFor="let role of selectRoleList" >
+                                                                        <div *ngIf="role.value == teamMember.role">
+                                                                                {{role.viewValue}}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div class="hidden md:block truncate">
-                                                                {{teamMember.jiraUser | titlecase}}
+                                                                <div class="hidden md:block truncate">
+                                                                    {{teamMember.jiraUser | titlecase}}
+                                                                </div>
+                                                                <!-- Active -->
+                                                                <div class="hidden lg:block">
+                                                                    <ng-container >
+                                                                        <mat-icon
+                                                                            class="text-gray-400 icon-size-5 cursor-pointer"  (click)="deleteTeamMember(i,teamMember.teamMemberId,teamMember.jiraUser)"
+                                                                            [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                                                                    </ng-container>
+                                                                </div>
+                                                                <!-- Details button -->
+                                                            
                                                             </div>
-                                                            <!-- Active -->
-                                                            <div class="hidden lg:block">
-                                                                <ng-container >
-                                                                    <mat-icon
-                                                                        class="text-gray-400 icon-size-5 cursor-pointer"  (click)="deleteTeamMember(i,teamMember.teamMemberId,teamMember.jiraUser)"
-                                                                        [svgIcon]="'heroicons_solid:x'"></mat-icon>
-                                                                </ng-container>
-                                                            </div>
-                                                            <!-- Details button -->
-                                                        
-                                                        </div>
+                                                        </ng-container>
                                                     </ng-container>
                                                 </ng-container>
                                             </div>

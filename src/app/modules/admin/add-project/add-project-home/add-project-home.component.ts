@@ -297,26 +297,34 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       // stepper.previous();
       this.selectedIndex = stepper
       if(this.selectedIndex== 0){
+        this.projectDetials.reset( this.projectDetials.value);
         this.showStep = 1
       }else if(this.selectedIndex == 1){
+        this.clientDetials.reset( this.clientDetials.value);
         this.showStep = 2
       }else if(this.selectedIndex == 2){
         this.showStep = 3
+        this.projectSetting.reset( this.projectSetting.value);
       }else if(this.selectedIndex == 3){
         this.getTeamMember()
         this.showStep = 4
+        this.projectTeam.reset( this.projectTeam.value);
       }
     }
     public selectionChange($event: any): void {
       if($event.selectedIndex == 0){
           this.showStep = 1
+          this.projectDetials.reset( this.projectDetials.value);
         }else if($event.selectedIndex == 1){
           this.showStep = 2
+          this.clientDetials.reset( this.clientDetials.value);
         }else if($event.selectedIndex == 2){
           this.showStep = 3
+          this.projectSetting.reset( this.projectSetting.value);
         }else if($event.selectedIndex == 3){
           this.getTeamMember()
           this.showStep = 4
+          this.projectTeam.reset( this.projectTeam.value);
         }
       this.selectedIndex = $event.selectedIndex;
     }
@@ -522,8 +530,20 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               this.submitInProcess = false;
               if(res.data.error == false){
                 this.snackBar.successSnackBar("Project created successFully");
+                this.projectDetials.reset();
+                this.clientDetials.reset();
+                this.projectSetting.reset();
+                this.projectTeam.reset();
+                this.teamMemberList = []
+                this.settingProjectName = ""
+                this.router.navigate(['/projects/project-list']) 
               }else{
-                this.snackBar.errorSnackBar(res.data.Message)
+                this.snackBar.errorSnackBar(res.data.message)
+                if(res.data.message=="Project already exists"){
+                  this.selectedIndex = 2
+                  this.projectTeam.reset();
+                  this.teamMemberList = []
+                }
               }
             
             }, 
@@ -533,13 +553,6 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               this.snackBar.errorSnackBar("server error")
             }
           )
-        this.projectDetials.reset();
-        this.clientDetials.reset();
-        this.projectSetting.reset();
-        this.projectTeam.reset();
-        this.teamMemberList = []
-        this.settingProjectName = ""
-        this.router.navigate(['/projects/project-list']) 
         }
         else{
           this.isAddTeam = false
@@ -558,10 +571,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         "totalPerPageData":0,
         "name": ""
       } 
-        this.submitInProcess = true;
+        this.initialLoading = true;
             this.ProjectService.getTeamMember(payload).subscribe(
               (res:any)=>{
-                this.submitInProcess = false;
+                this.initialLoading = false;
                 this.teamMembers = res.data.teamMember
                 this.managerLists = res.data.teamMember
                 this.filterFunctions();
@@ -573,7 +586,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               }
               }, 
               error => {
-                this.submitInProcess = false;
+                this.initialLoading = false;
                 this.snackBar.errorSnackBar("Server error")
               }
             )
