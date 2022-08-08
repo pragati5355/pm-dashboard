@@ -107,6 +107,7 @@
                   <mat-form-field [floatLabel]="'always'" class="w-full  ">
                     <mat-label>Experience</mat-label>
                     <input formControlName="year" matInput placeholder="Year" InputFormatter="numeric" type="text">
+                    <span matPrefix>YY</span>
                     <mat-error
                       *ngIf="resourcesValidForm['year'].errors && resourcesValidForm['year']?.invalid && resourcesValidForm['year']?.touched ">
                       <div *ngIf="resourcesValidForm['year'].errors['required']">Year is mandatory</div>
@@ -117,6 +118,7 @@
                 <div class=" w-full sm:w-60 mb-2 mt-6 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
                   <mat-form-field [floatLabel]="'always'" class="w-full">
                     <input class="" formControlName="month" InputFormatter="numeric" matInput  placeholder="Month" type="text">
+                    <span matPrefix>MM</span>
                     <mat-error
                       *ngIf="resourcesValidForm['month'].errors && resourcesValidForm['month']?.invalid && resourcesValidForm['month']?.touched ">
                       <div *ngIf="resourcesValidForm['month'].errors['required']">Month is mandatory</div>
