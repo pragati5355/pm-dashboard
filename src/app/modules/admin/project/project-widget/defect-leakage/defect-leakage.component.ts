@@ -17,21 +17,11 @@ export class DefectLeakageComponent implements OnInit {
   @Input() responsive: ApexResponsive[] | any;
   @Input() plotOptions: ApexPlotOptions | any;
   @Input() series: ApexAxisChartSeries | any;
-  // @Input() yaxis: ApexYAxis | ApexYAxis[];
-  // @Input() annotations: ApexAnnotations;
   @Input() stroke: ApexStroke | any;
   @Input() colors: string[] | any;
-  // @Input() dataLabels: ApexDataLabels;
-  // @Input() stroke: ApexStroke;
   @Input() legend: ApexLegend|any;
-  // @Input() tooltip: ApexTooltip;
-  // @Input() grid: ApexGrid;
-  // @Input() states: ApexStates;
-  // @Input() subtitle: ApexTitleSubtitle;
-  // @Input() theme: ApexTheme;
   @Input() dataType: any ;
   constructor() {
-  //  this.chartfunction()
   }
 
   ngOnInit() {

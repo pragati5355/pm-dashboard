@@ -42,7 +42,6 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     getProjectDetails() {
-        // let res = StaticData.PROJECT_DETAILS
         let payload = {
             id: this.projectId
         }

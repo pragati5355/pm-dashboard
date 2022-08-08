@@ -7,7 +7,7 @@ export const chartConfig = {
     Overall_Project_Score_Chart: [{
         chart: {
             animations: {
-                speed: 400, animateGradually: {
+                speed: 360, animateGradually: {
                     enabled: false
                 }
             }, fontFamily: 'inherit', foreColor: 'inherit', height: '100%', type: 'donut', sparkline: {
@@ -265,52 +265,6 @@ export const chartConfig = {
         },
         legend: { position: "top", horizontalAlign: "left" },
     }],
-    // Quality Percentage
-    Quality_Percentage_Chart: [{
-        series: [100],
-        chart: {type: "radialBar", offsetY: -20, height: '300'},
-        fill: {
-            type: "gradient", gradient: {
-                // colorFrom: "#f00",
-                // colorTo: "#0f0",
-                type: "vertical",
-                shade: "light",
-                shadeIntensity: 0.4,
-                inverseColors: false,
-                opacityFrom: 1,
-                opacityTo: 1,
-
-                gradientToColors: ["#f00","#0f0"],
-                stops: [0, 20, 50, 80, 100]
-            },
-        },
-        labels: ["All Test Cases Passed!"],
-        responsive: [{breakpoint: 480, options: {chart: {width: 200}, legend: {position: "bottom"}}}],
-        plotOptions: {
-            radialBar: {
-                startAngle: -90, endAngle: 90, track: {
-                    background: "#e7e7e7", strokeWidth: "97%", margin: 5, // margin is in pixels
-                    dropShadow: {
-                        enabled: true, top: 2, left: 0, opacity: 0.31, blur: 2
-                    }
-                },
-                dataLabels: {
-                    name: {
-                        fontSize: "16px", color: undefined, offsetY: 55,
-                    }, value: {
-                        offsetY: 6, fontSize: "22px", color: undefined, formatter: function (val: any) {
-                            return val;
-                        }
-                    },
-                }
-            }
-        },
-        stroke: {
-            lineCap: "butt",
-            dashArray: 0
-        },
-        legend: { position: "top", horizontalAlign: "left" }
-    }],
     // Sprint Retest Ratio
     retest_ratio_chart: [{
         series: [44, 67, 83],
@@ -361,7 +315,13 @@ export const chartConfig = {
                 colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
                 opacity: 0.5
             }
-        },
+        }, 
+        markers: {
+            sizeOffset: 4,
+            hover: {
+              sizeOffset: 4
+            }
+          },
         xaxis: {
             type: 'datetime', tickAmount: 10, labels: {
                 hideOverlappingLabels: true, datetimeFormatter: {

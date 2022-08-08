@@ -5,7 +5,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SprintDetailsComponent } from './sprint-details/sprint-details.component';
 import { ScheduleVarianceComponent } from './schedule-variance/schedule-variance.component';
-import { QualityPercentageComponent } from './quality-percentage/quality-percentage.component';
 import { DefectLeakageComponent } from './defect-leakage/defect-leakage.component';
 import { RetestRatioComponent } from './retest-ratio/retest-ratio.component';
 import { CustomerHappinessScoreComponent } from './customer-happiness-score/customer-happiness-score.component';
@@ -46,7 +45,6 @@ const routes: Routes = [
     CustomerHappinessScoreComponent,
     RetestRatioComponent,
     DefectLeakageComponent,
-    QualityPercentageComponent,
     ScheduleVarianceComponent,
     SprintDetailsComponent,
   ],
@@ -86,7 +84,6 @@ const routes: Routes = [
     CustomerHappinessScoreComponent,
     RetestRatioComponent,
     DefectLeakageComponent,
-    QualityPercentageComponent,
     ScheduleVarianceComponent,
     SprintDetailsComponent,
   ]

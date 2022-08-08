@@ -22,7 +22,6 @@ export class SprintsListComponent implements OnInit {
   ngOnInit(): void {
     console.log("projectId",this.dataId)
     this.isLoading = true;
-    // id pass only temporary after implementing router pass query by id
     let payload = {
       "id": this.dataId
     }

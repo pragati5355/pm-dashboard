@@ -16,19 +16,11 @@ export class OverallProjectScoreComponent implements OnInit {
   @Input() title: ApexTitleSubtitle | any;
   @Input() responsive: ApexResponsive[] | any;
   @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
-  // @Input() yaxis: ApexYAxis | ApexYAxis[];
-  // @Input() annotations: ApexAnnotations;
   @Input() colors: string[];
-  // @Input() dataLabels: ApexDataLabels;
-  // @Input() stroke: ApexStroke;
   @Input() legend: ApexLegend|any;
-  // @Input() fill: ApexFill;
   @Input() tooltip: ApexTooltip;
   @Input() plotOptions: ApexPlotOptions | any;
-  // @Input() grid: ApexGrid;
   @Input() states: ApexStates;
-  // @Input() subtitle: ApexTitleSubtitle;
-  // @Input() theme: ApexTheme;
   data: any;
   constructor() {
     this.data = chartConfig.Overall_Project_Score_Chart[0];
