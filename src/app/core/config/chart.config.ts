@@ -169,19 +169,11 @@ export const chartConfig = {
         series: [67],
         labels: ['More Bugs to Fix during the Iteration'],
         colors: ["#DC2626"],
-        // fullcolors: ["#20E647"],
         fullcolors: ["#22C55E"],
         plotOptions: {
             radialBar: {
                 startAngle: -90,
                 endAngle: 90,
-                hollow: {
-                    
-                    // image: '../../assets/mbicons/circle.svg',
-                    // imageWidth: 10,
-                    // imageHeight: 10,
-                    // imageClipped: false
-                  },
                 track: {
                     dropShadow: {
                         enabled: true,
@@ -213,7 +205,6 @@ export const chartConfig = {
             gradient: {
                 shade: "dark",
                 type: "horizontal",
-                // type: "gradient",
                 shadeIntensity: 1,
                 opacityFrom: 0.7,
                 opacityTo: 0.9,
@@ -444,7 +435,7 @@ export const chartConfig = {
         xaxis: {categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]},
         responsive: [{breakpoint: 480, options: {chart: {width: 200}, legend: {position: "bottom"}}}],
         legend: {position: "top", horizontalAlign: "left"},
-        dataLabels: { // add this part to remove %
+        dataLabels: { 
             enabled: false,
         }
     }],
