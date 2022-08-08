@@ -50,7 +50,7 @@ export class ScheduleVarianceComponent implements OnInit {
         {name: 'Original Time Estimate'},
         {name: 'Story Points'}
     ]
-    chartChange = new FormControl('Original Time Estimate');
+    chartChange ="Original Time Estimate";
 
     constructor() {
         this.grid = chartConfig.Schedule_Variance_chart[0].grid;
@@ -65,5 +65,7 @@ export class ScheduleVarianceComponent implements OnInit {
 
     ngOnInit() {
     }
-
+    selectvalue(value:string){
+     this.chartChange = value
+    }
 }

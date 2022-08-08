@@ -8,37 +8,47 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataL
   styleUrls: ['./defect-leakage.component.scss']
 })
 export class DefectLeakageComponent implements OnInit {
-  @Input() fill: ApexFill;
+  titleMain =""
+  @Input() fill: ApexFill |any;
   @Input() chart: ApexChart | any;
   @Input() xaxis: ApexXAxis | any;
   @Input() labels: string[] | any;
   @Input() title: ApexTitleSubtitle | any;
   @Input() responsive: ApexResponsive[] | any;
   @Input() plotOptions: ApexPlotOptions | any;
-  @Input() series: ApexAxisChartSeries | ApexNonAxisChartSeries;
-  // @Input() yaxis: ApexYAxis | ApexYAxis[];
-  // @Input() annotations: ApexAnnotations;
-  @Input() colors: string[];
-  // @Input() dataLabels: ApexDataLabels;
-  // @Input() stroke: ApexStroke;
+  @Input() series: ApexAxisChartSeries | any;
+  @Input() stroke: ApexStroke | any;
+  @Input() colors: string[] | any;
   @Input() legend: ApexLegend|any;
-  // @Input() tooltip: ApexTooltip;
-  // @Input() grid: ApexGrid;
-  // @Input() states: ApexStates;
-  // @Input() subtitle: ApexTitleSubtitle;
-  // @Input() theme: ApexTheme;
-
+  @Input() dataType: any ;
   constructor() {
-    this.fill = chartConfig.Defect_Leakage_Chart[0].fill;
-    this.chart = chartConfig.Defect_Leakage_Chart[0].chart;
-    this.colors = chartConfig.Defect_Leakage_Chart[0].colors;
-    this.series = chartConfig.Defect_Leakage_Chart[0].series;
-    this.labels = chartConfig.Defect_Leakage_Chart[0].labels;
-    this.legend = chartConfig.Defect_Leakage_Chart[0].legend;
-    this.plotOptions = chartConfig.Defect_Leakage_Chart[0].plotOptions;
   }
 
   ngOnInit() {
+    console.log(this.dataType)
+    this.chartfunction()
+  }
+  chartfunction(){
+    this.chart = chartConfig.Defect_Leakage_Chart[0].chart;
+    this.legend = chartConfig.Defect_Leakage_Chart[0].legend;
+    this.plotOptions = chartConfig.Defect_Leakage_Chart[0].plotOptions;
+    this.stroke = chartConfig.Defect_Leakage_Chart[0].stroke;
+    if(this.dataType == "defectLeakage"){
+      this.fill = chartConfig.Defect_Leakage_Chart[0].fill;
+      this.series = [70];
+      this.labels = ['More Bugs to Fix during the Iteration'];
+      this.titleMain = "Defect Leakage"
+    }else{
+      this.fill = chartConfig.Defect_Leakage_Chart[0].fullfill;
+      this.series = [100];
+      this.labels = ['All Test Cases Passed!'];
+      this.titleMain = "Quality Percentage"
+    }
+    if(this.dataType == "defectLeakage"){
+      this.colors = chartConfig.Defect_Leakage_Chart[0].colors;
+    }else{
+      this.colors = chartConfig.Defect_Leakage_Chart[0].fullcolors;
+    }
   }
 
 }

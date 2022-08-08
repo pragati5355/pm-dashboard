@@ -33,6 +33,12 @@ margin-top: 8px;
 .lh-2{
 line-height: 2 !important;
 }
+.textarea{
+  resize: none;
+}
+.border-b-a{
+  border-bottom: 1px solid #1e293b;
+}
 //mat snackbar
 .mat-simple-snackbar {
 font-size: 16px !important;

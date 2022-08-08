@@ -1,13 +1,13 @@
-var oldeEstimate: any[] = [10800 / 6000, 3660 / 6000, 41400 / 6000, 14400 / 6000, 0 / 6000, 0 / 6000, 5400 / 6000, 201600 / 6000, 154800 / 6000, 0 / 6000]
-var newEstimate: any[] = [21600 / 6000, 3660 / 6000, 41400 / 6000, 21600 / 6000, 10800 / 6000, 0 / 6000, 5400 / 6000, 201600 / 6000, 212400 / 6000, 0 / 6000]
-var DateTIME: any[] = ['07/25/2022', '07/21/2022', '07/29/2022', '07/20/2022', '05/27/2022', '07/28/2022', '07/26/2022', '05/25/2022', '05/26/2022', '07/19/2022']
+var oldeEstimate: any[] = [0,0,0,0,0,16,16,8,16,8,8,8,3,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,2,3,0,0,2]
+var newEstimate: any[] = [0,16,16,8,8,8,16,8,8,8,0,3,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,2,3,1,0,2,0]
+var DateTIME: any[] = ["05/25/2022,1","05/25/2022,2","05/25/2022,3","05/25/2022,4","05/25/2022,5","05/25/2022,6","05/26/2022,7","05/26/2022,8","05/26/2022,9","05/26/2022,10","05/26/2022,11","05/26/2022,12","05/27/2022,13","07/19/2022,14","07/20/2022,15","07/20/2022,16","07/20/2022,17","07/20/2022,18","07/20/2022,19","07/21/2022,20","07/21/2022,21","07/21/2022,22","07/21/2022,23","07/21/2022,24","07/21/2022,25","07/25/2022,26","07/25/2022,27","07/25/2022,28","07/25/2022,29","07/25/2022,30","07/26/2022,31","07/26/2022,32","07/26/2022,33","07/26/2022,34","07/28/2022,35","07/28/2022,36","07/28/2022,37","07/29/2022,38","07/29/2022,39","07/29/2022,40","07/29/2022,41","07/29/2022,42","07/29/2022,43","07/29/2022,44","07/29/2022,45","07/29/2022,46","07/29/2022,47","07/29/2022,48","07/29/2022,49","07/29/2022,50","07/29/2022,51","08/04/2022,52","08/04/2022,53"]
 
 export const chartConfig = {
     // Project Overall Project Score
     Overall_Project_Score_Chart: [{
         chart: {
             animations: {
-                speed: 400, animateGradually: {
+                speed: 360, animateGradually: {
                     enabled: false
                 }
             }, fontFamily: 'inherit', foreColor: 'inherit', height: '100%', type: 'donut', sparkline: {
@@ -67,9 +67,8 @@ export const chartConfig = {
                 },
 
                 dataLabels: {
-                    show: true, name: {
-                        offsetY: 60, show: true, color: "#888", fontSize: "15px"
-                    }, value: {
+                    show: true,
+                    value: {
                         formatter: function (val: any) {
                             return parseInt(val.toString(), 10).toString();
                         }, color: "#111", fontSize: "30px", show: true
@@ -167,72 +166,95 @@ export const chartConfig = {
         chart: {
             height: 280, offsetY: -20, type: "radialBar",
         },
-        series: [67], colors: ["#20E647"], plotOptions: {
-            radialBar: {
-                startAngle: -90, endAngle: 90, track: {
-                    background: '#333', startAngle: -90, endAngle: 90,
-                }, dataLabels: {
-                    name: {
-                        fontSize: "16px", color: undefined, offsetY: 55,
-                    }, value: {
-                        offsetY: 15, fontSize: "22px", color: undefined, formatter: function (val: any) {
-                            return val;
-                        }
-                    },
-                }
-            }
-        },
-        fill: {
-            type: "gradient", gradient: {
-                shade: "dark", type: "horizontal", gradientToColors: ["#87D4F9"], stops: [0, 100]
-            }
-        },
-        stroke: {
-            lineCap: "butt"
-        },
-        labels: ["Progress"], legend: {position: "top", horizontalAlign: "left"}
-    }],
-    // Quality Percentage
-    Quality_Percentage_Chart: [{
-        series: [100],
-        chart: {type: "radialBar", offsetY: -20, height: '300'},
-        fill: {
-            type: "gradient", gradient: {
-                // colorFrom: "#f00",
-                // colorTo: "#0f0",
-                type: "vertical",
-                shade: "light",
-                shadeIntensity: 0.4,
-                inverseColors: false,
-                opacityFrom: 1,
-                opacityTo: 1,
-
-                gradientToColors: ["#f00","#0f0"],
-                stops: [0, 20, 50, 80, 100]
-            },
-        },
-        labels: ["All Test Cases Passed!"],
-        responsive: [{breakpoint: 480, options: {chart: {width: 200}, legend: {position: "bottom"}}}],
+        series: [67],
+        labels: ['More Bugs to Fix during the Iteration'],
+        colors: ["#DC2626"],
+        fullcolors: ["#22C55E"],
         plotOptions: {
             radialBar: {
-                startAngle: -90, endAngle: 90, track: {
-                    background: "#e7e7e7", strokeWidth: "97%", margin: 5, // margin is in pixels
+                startAngle: -90,
+                endAngle: 90,
+                track: {
                     dropShadow: {
-                        enabled: true, top: 2, left: 0, opacity: 0.31, blur: 2
-                    }
+                        enabled: true,
+                        top: 2,
+                        left: 0,
+                        blur: 8,
+                        opacity: 0.15
+                      }
                 },
                 dataLabels: {
                     name: {
-                        fontSize: "16px", color: undefined, offsetY: 55,
-                    }, value: {
-                        offsetY: 6, fontSize: "22px", color: undefined, formatter: function (val: any) {
-                            return val;
-                        }
+                        // show: false,
+                        fontSize: "14px",
+                        color: undefined,
+                        offsetY: 65,
+                        values: "More Bugs to Fix during the Iteration"
+                    },
+                    value: {
+                        offsetY: 25,
+                        fontSize: "22px",
+                        color: undefined,
+                        fontWeight: 800,
                     },
                 }
             }
         },
-        legend: {position: "top", horizontalAlign: "left"}
+        fill: {
+            type: "gradient",
+            gradient: {
+                shade: "dark",
+                type: "horizontal",
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                colorStops: [
+                  {
+                    offset: 20,
+                    color: "#22C55E",
+                    opacity: 1
+                  },
+
+                  {
+                    offset: 100,
+                    color: "#DC2626",
+                    opacity: 1
+                  }
+                ]
+              }
+            // }
+        },
+        fullfill: {
+            type: "gradient",
+            gradient: {
+                shade: "dark",
+                type: "horizontal",
+                // type: "gradient",
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                colorStops: [
+                   
+                  {
+                    offset: 30,
+                    color: "#DC2626",
+                    opacity: 1
+                  },
+
+                  {
+                    offset: 100,
+                    color: "#22C55E",
+                    opacity: 1
+                  }
+                ]
+              }
+            // }
+        },
+        stroke: {
+            lineCap: "butt",
+            dashArray: 0
+        },
+        legend: { position: "top", horizontalAlign: "left" },
     }],
     // Sprint Retest Ratio
     retest_ratio_chart: [{
@@ -284,7 +306,13 @@ export const chartConfig = {
                 colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
                 opacity: 0.5
             }
-        },
+        }, 
+        markers: {
+            sizeOffset: 4,
+            hover: {
+              sizeOffset: 4
+            }
+          },
         xaxis: {
             type: 'datetime', tickAmount: 10, labels: {
                 hideOverlappingLabels: true, datetimeFormatter: {
@@ -303,40 +331,64 @@ export const chartConfig = {
     //this is for a Sprint Customer Happiness Score
     SCORE_CHART: [{
         chart: {
-            height: 280, type: "radialBar",
+          height: 280,
+          type: "radialBar",
         },
-
-        series: [67], colors: ["#20E647"], plotOptions: {
-            radialBar: {
-                startAngle: -135, endAngle: 135, hollow: {
-                    margin: 20, size: "70%", background: "#293450",
-                }, track: {
-                    dropShadow: {
-                        enabled: true, top: 2, left: 0, blur: 8, opacity: 0.15
-                    }
-                }, dataLabels: {
-                    border: {
-                        borderWidth: 2, borderColor: "#fac5c7",
-                    }, name: {
-                        show: false, offsetY: 0, color: "#fff", fontSize: "13px"
-                    }, value: {
-                        color: "#fff", fontSize: "30px", show: true, formatter: function (val: any) {
-                            return val
-                        }
-                    }
-                }
+      
+        series: [67],
+        colors: ["#20E647"],
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 135,
+            hollow: {
+              margin: 20,
+              size: "70%",
+              background: "#293450",
+            },
+            track: {
+              dropShadow: {
+                enabled: true,
+                top: 2,
+                left: 0,
+                blur: 8,
+                opacity: 0.15
+              }
+            },
+            dataLabels: {
+              name: {
+                show: false,
+                offsetY: -10,
+                color: "#fff",
+                fontSize: "13px"
+              },
+              value: {
+                offsetY: 12,
+                color: "#fff",
+                fontSize: "30px",
+                show: true,
+                formatter: function (val:any) {
+                    return val 
+                  }
+              }
             }
+          }
         },
         fill: {
-            type: "gradient", gradient: {
-                shade: "dark", type: "vertical", gradientToColors: ["#87D4F9"], stops: [0, 100]
-            }
+          type: "gradient",
+          gradient: {
+            shade: "dark",
+            type: "vertical",
+            gradientToColors: ["#87D4F9"],
+            stops: [0, 100]
+          }
         },
         stroke: {
-            lineCap: "round"
+          lineCap: "round"
         },
         labels: ["Progress"],
-    }],
+      } 
+    ],
     // Sprint Progress
     Sprint_Progress_Chart: [{
         series: [100],
@@ -383,7 +435,7 @@ export const chartConfig = {
         xaxis: {categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]},
         responsive: [{breakpoint: 480, options: {chart: {width: 200}, legend: {position: "bottom"}}}],
         legend: {position: "top", horizontalAlign: "left"},
-        dataLabels: { // add this part to remove %
+        dataLabels: { 
             enabled: false,
         }
     }],
