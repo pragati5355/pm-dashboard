@@ -14,7 +14,7 @@ export const AppConstants: ConstantsInterface = {
   CONNECT_PROJECT: `${jiraBaseUrl}/jira-project`,
   CREATE_PROJECT: `${jiraBaseUrl}/connect-jira`,
   GET_JIRA_USER: `${jiraBaseUrl}/jira-user`,
-  SYNC_JIRA: `${jiraBaseUrl}/project-sync`,
+  SYNC_JIRA: `https://us773ifzr2h6ih5h4imvu5sspy0ixbhc.lambda-url.ap-south-1.on.aws/`,
   GET_TEAM_MEMBER_LIST: `${projectBaseUrl}/get-team-member`,
   GET_RESOURCE_LIST: `${projectBaseUrl}/get-team-member`,
   ADD_RESOURCE_LIST: `${projectBaseUrl}/team-member`,
@@ -26,6 +26,7 @@ export const AppConstants: ConstantsInterface = {
   GET_SPRINT_LIST: `${projectBaseUrl}/sprint`,
   GET_PROJECT_TEAM_LIST: `${projectBaseUrl}/project-team`,
   UPDATE_PROJECT: `${projectBaseUrl}/update-project`,
+  BURNDOWN_CHART: `${jiraBaseUrl}/burndown-chart`
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

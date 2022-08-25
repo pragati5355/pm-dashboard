@@ -37,6 +37,7 @@ export const appRoutes: Routes = [
           {path: 'dashboard', loadChildren: () => import('./modules/admin/dashboard/dashboard.module').then(m => m.DashboardModule)},
           {path: 'projects', loadChildren: () => import('./modules/admin/project/project.module').then(m => m.ProjectModule)},
           {path: 'resources', loadChildren: () => import('./modules/admin/resources/resources.module').then(m => m.ResourcesModule)},
+          {path: 'forms', loadChildren: () => import('./modules/admin/create-form/create-form.module').then(m => m.CreateFormModule)},
       ]
   },
   {

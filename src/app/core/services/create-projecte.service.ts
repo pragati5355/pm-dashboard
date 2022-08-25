@@ -54,4 +54,7 @@ export class CreateProjecteService {
  updateProject(obj: any) {
   return this.http.post(AppConstants['UPDATE_PROJECT'], obj);
 }
+burndownChart(obj: any) {
+  return this.http.post(AppConstants['BURNDOWN_CHART'], obj);
+}
 }
