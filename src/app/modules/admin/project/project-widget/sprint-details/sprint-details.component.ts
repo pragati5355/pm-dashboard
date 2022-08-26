@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component,ElementRef, Input, QueryList,  OnInit, ViewEncapsulation } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import { CreateProjecteService } from "@services/create-projecte.service";
 @Component({
   selector: 'app-sprint-details',
   templateUrl: './sprint-details.component.html',
@@ -17,7 +18,10 @@ export class SprintDetailsComponent implements OnInit {
   sprintId = 0
   initialLoading = false
   @Input() dataId: any;
-  constructor(private router: Router, private _route: ActivatedRoute) { }
+  @Input() data: any = {};
+  isLoading= false
+  burndownData = {}
+  constructor(private router: Router, private _route: ActivatedRoute,private ProjectService: CreateProjecteService) { }
 
   ngOnInit(): void { 
     this.routeSubscribe = this._route.queryParams.subscribe(sprintId => {
@@ -25,8 +29,23 @@ export class SprintDetailsComponent implements OnInit {
           this.sprintId = sprintId['id']
       }
   });
+  let payload = {
+    sprintId: this.sprintId
+  }
+  // this.getBurnDownChartData(payload)
   }
   goBack(){
     window.history.back()
   }
+   getBurnDownChartData(payload: any) {
+    this.isLoading = true
+     this.ProjectService.burndownChart(payload).subscribe((res: any) => {
+      this.burndownData = res.data
+      // console.log(this.burndownData)
+      this.isLoading = false;
+    }, error => {
+      this.isLoading = false;
+    })
+  }
+  
 }

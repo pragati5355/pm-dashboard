@@ -24,7 +24,7 @@
 
         </div>
     </div>
-    <div class="flex flex-col p-3 mt-2">
+    <div *ngIf="isChartLoaded" class="flex flex-col p-3 mt-2">
         <apx-chart [series]="series" [chart]="chart" [yaxis]="yaxis"  [xaxis]="xaxis" [dataLabels]="dataLabels" [grid]="grid"
                    [stroke]="stroke" [markers]="markers"></apx-chart>
     </div>
