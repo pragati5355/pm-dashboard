@@ -117,10 +117,11 @@ export class ScheduleVarianceComponent implements OnInit {
     newDataset: any = []
     notDoneDataset: any = []
     burndownData: any={}
+    @Input() dataId: any ;
     ngOnInit() {
     //  const burndownchart= chartConfig.burndownchar.filter
     let payload = {
-      "sprintId": 140
+      sprintId: parseInt(this.dataId)
     }
     this.getBurnDownChartData(payload)
     // this.getDatasetForChart(chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
@@ -299,10 +300,10 @@ export class ScheduleVarianceComponent implements OnInit {
       }
       async Chartdatavalue(){
         // console.log(this.newDataset)
-        let payload = {
-          "sprintId": 40
-        }
-        this.getBurnDownChartData(payload)
+        // let payload = {
+        //   sprintId: parseInt(this.dataId)
+        // }
+        // this.getBurnDownChartData(payload)
         this.getOriginalEstimate( chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
           //  this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime)
         let total = 0
