@@ -23,6 +23,7 @@ import {
 } from "ng-apexcharts";
 import {FormControl} from "@angular/forms";
 import { E } from '@angular/cdk/keycodes';
+import { keys } from 'lodash';
 
 @Component({
     selector: 'app-schedule-variance',
@@ -55,7 +56,7 @@ export class ScheduleVarianceComponent implements OnInit {
         {name: 'Story Points'}
     ]
     chartChange ="Original Time Estimate";
-
+    isLoading = false
     constructor(private ProjectService: CreateProjecteService,) {
       this.markers = {
         size: 0,
@@ -86,70 +87,7 @@ export class ScheduleVarianceComponent implements OnInit {
         // this.series = chartConfig.Schedule_Variance_chart[0].series;
         this.stroke = chartConfig.Schedule_Variance_chart[0].stroke;
         this.dataLabels = chartConfig.Schedule_Variance_chart[0].dataLabels;
-        this.series = [
-
-            // {
-            //    name: "JiraData",
-            //    data: [
-            //        {
-            //            x:1653455340000,
-            //            y:0
-            //        },
-            //        {
-            //            x:1658978880000,
-            //            y:0
-            //        },
-            //        {
-            //            x:1658979060000,
-            //            y:0
-            //        },
-            //        {
-            //            x:1659052800000,
-            //            y:0
-            //        },
-            //        {
-            //            x:1659053460000,
-            //            y:2.0
-            //        },
-            //        {
-            //            x:1659067620000,
-            //            y:2.5
-            //        },
-            //        {
-            //           x:1659067860000,
-            //           y:3
-            //        },
-            //        {
-            //            x:1659076560000,
-            //            y:1
-            //        },
-            //        {
-            //            x:1659077460000,
-            //            y:4
-            //        },
-            //        {
-            //            x:1659077700000,
-            //            y:0.5
-            //        },
-            //        {
-            //            x:1659078180000,
-            //            y:0
-            //        },
-            //        {
-            //            x:1659572460000,
-            //            y:2
-            //        },
-            //        {
-            //            x:1659655440000,
-            //            y:0
-            //        },
-            //        {
-            //            x:1660009440000,
-            //            y:0
-            //        }
-            //    ]
-            // }
-        ]
+        this.series = [ ]
         this.xaxis = {
             axisBorder: {
                 show: true
@@ -165,7 +103,7 @@ export class ScheduleVarianceComponent implements OnInit {
             type      : 'datetime'
         }
         this.yaxis = {
-          type: 'number', tickAmount: 10, 
+          type: 'numeric', tickAmount: 0, 
           // labels: {
           //     hideOverlappingLabels: true, datetimeFormatter: {
           //         hour: 'HH:mm'
@@ -185,23 +123,15 @@ export class ScheduleVarianceComponent implements OnInit {
       "sprintId": 140
     }
     this.getBurnDownChartData(payload)
-    this.getDatasetForChart(chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
-    this.getTotalSprintHours(chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
-    this.getOriginalEstimate( chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
-  
+    // this.getDatasetForChart(chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
+    // this.getTotalSprintHours(chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
+    // this.getOriginalEstimate( chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
+    // if(!this.isLoading){
+
+      this.Chartdatavalue()
+    // }
     // console.log(chartConfig.burndownchar.changes)
 
-    this.dataset.forEach((element:any) => {
-      this.newDataset.push(
-        {
-          x: element.Date,
-          y: element.Remaining
-        }
-      )
-    });
-    this.getSprintEnd( chartConfig.burndownchar.changes, chartConfig.burndownchar.completeTime)
-    console.log(this.newDataset)
-    this.series =[{data: this.newDataset}]
 }
     selectvalue(value:string){
      this.chartChange = value
@@ -216,11 +146,11 @@ export class ScheduleVarianceComponent implements OnInit {
       getTotalSprintHours(changes: any, startTime: any) {
         let keys: any = [];
         let totalEstimate = 0;
-        console.log(changes)
+        // console.log(changes)
         Object.keys(changes).forEach((element) => {
           if (Number.parseInt(element) <= Number.parseInt(startTime)) {
             keys.push(element);
-            console.log();
+            // console.log();
             if (parseInt(changes[element][0]?.statC?.newValue)) {
               totalEstimate =
                 totalEstimate +
@@ -232,23 +162,15 @@ export class ScheduleVarianceComponent implements OnInit {
               })
             }
           }
-          console.log("storylist",this.storyList)
+          // console.log("storylist",this.storyList)
         });
         return totalEstimate;
       }
       getOriginalEstimate(changes:any, startTime: any){
-        // for (let key in changes) {
-        //   changes[key].forEach((element: any) => {
-        //   if (Number.parseInt(key) <= Number.parseInt(startTime)) {
-        //     console.log("element",new Date(Number.parseInt(key)))
-        //   }
-        // })
-        // }
+        console.log("Hello")
         for (let key in changes) {
-          // if(parseInt(changes[key][0]?.statC?.newValue) || parseInt(changes[key][0]?.statC?.oldValue) || changes[key][0]?.added){
             changes[key].forEach((element: any) => {
               if(element.added){
-                // console.log(changes[key][0]?.added, key)
                 this.totalEstimates =this.totalEstimates + 0
                 this.dataset = [
                     ...this.dataset,
@@ -264,8 +186,7 @@ export class ScheduleVarianceComponent implements OnInit {
                   ];
             }
             });
-            const found = this.dataset.some((el: any) => el.key === changes[key][0].key);
-            console.log(found)
+          const found = this.dataset.some((el: any) => el.key === changes[key][0].key);
           if(found){
             if(changes[key][0]?.column?.notDone == false ){
               let newdac = 0
@@ -311,7 +232,6 @@ export class ScheduleVarianceComponent implements OnInit {
             }
             if(changes[key][0]?.column?.notDone == true && !changes[key][0].added){
               const found2 = this.dataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
-              console.log(found2)
               if(!found2){
                 let newInc = 0
                 this.dataset.forEach((element:any) => {
@@ -347,12 +267,12 @@ export class ScheduleVarianceComponent implements OnInit {
                 Inc:null,
                 Dec: null,
                 Remaining: 0,
-                // notDone: element?.column?.notDone?element?.column?.notDone:true
+                notDone: changes[key][0]?.column?.notDone?changes[key][0]?.column?.notDone:true
               }
             ];
           }
-          console.log(this.dataset)
-          console.log(this.notDoneDataset)
+          // console.log(this.dataset)
+          // console.log(this.notDoneDataset)
           }
         // }
       }
@@ -364,12 +284,62 @@ export class ScheduleVarianceComponent implements OnInit {
           y:0
         })
       }
-      getBurnDownChartData(payload: any) {
-        this.ProjectService.burndownChart(payload).subscribe((res: any) => {
-          this.burndownData = res.data;
-          // this.isLoading = false;
+       async getBurnDownChartData(payload: any) {
+        this.isLoading = true
+          await this.ProjectService.burndownChart(payload).subscribe((res: any) => {
+          this.burndownData = chartConfig.burndownchar;
+          this.isLoading = false;
+          // this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime)
+          //  this.getOriginalEstimate( chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
+          // this.Chartdatavalue()
+          console.log(this.burndownData)
         }, error => {
-          // this.isLoading = false;
+          this.isLoading = false;
         })
+      }
+      async Chartdatavalue(){
+        // console.log(this.newDataset)
+        let payload = {
+          "sprintId": 40
+        }
+        this.getBurnDownChartData(payload)
+        this.getOriginalEstimate( chartConfig.burndownchar.changes, chartConfig.burndownchar.startTime)
+          //  this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime)
+        let total = 0
+        this.dataset.forEach((element:any) => {
+          if(element.Date <=  chartConfig.burndownchar.startTime){
+            console.log(element.key)
+            total =element.Remaining
+            console.log(total)
+          }
+          // else{
+            this.newDataset =[{x:chartConfig.burndownchar.startTime, y:total}]
+          //     this.newDataset.push(
+          //   {
+          //     x: element.Date,
+          //     y: element.Remaining
+          //   }
+          // )
+          // }
+        });
+            this.dataset.forEach((element:any) => {
+              if(element.Date > chartConfig.burndownchar.startTime){
+          this.newDataset.push(
+            {
+              x: element.Date,
+              y: element.Remaining
+            }
+          )
+              }
+        });
+        // let EndDate = chartConfig.burndownchar.completeTime?chartConfig.burndownchar.completeTime:chartConfig.burndownchar.now
+        // for (let key in chartConfig.burndownchar) {
+        //   console.log("key",key)
+        // if( key == 'completeTime'){
+          this.getSprintEnd( chartConfig?.burndownchar?.changes, chartConfig?.burndownchar?.completeTime)
+        //  }
+        // }
+        console.log(this.newDataset)
+        this.series =[{name: "Hours",data: this.newDataset}]
       }
 }
