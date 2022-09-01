@@ -14,7 +14,7 @@ export const AppConstants: ConstantsInterface = {
   CONNECT_PROJECT: `${jiraBaseUrl}/jira-project`,
   CREATE_PROJECT: `${jiraBaseUrl}/connect-jira`,
   GET_JIRA_USER: `${jiraBaseUrl}/jira-user`,
-  SYNC_JIRA: `https://us773ifzr2h6ih5h4imvu5sspy0ixbhc.lambda-url.ap-south-1.on.aws/`,
+  SYNC_JIRA: `${jiraBaseUrl}/project-sync`,
   GET_TEAM_MEMBER_LIST: `${projectBaseUrl}/get-team-member`,
   GET_RESOURCE_LIST: `${projectBaseUrl}/get-team-member`,
   ADD_RESOURCE_LIST: `${projectBaseUrl}/team-member`,

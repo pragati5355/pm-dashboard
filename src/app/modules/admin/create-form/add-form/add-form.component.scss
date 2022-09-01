@@ -1,0 +1,30 @@
+h1, h2 {
+    font-family: Lato;
+  }
+  
+  .version:before {
+    display: block;
+    content: 'formio version'
+  }
+  
+  .version {
+    float: left;
+    color: white;
+    font-size: 12px;
+    padding: 20px;
+  }
+  
+  .container > h1 {
+    background-color: #5255e5;
+  }
+  .container > p {
+    margin: 20px auto;
+  }
+  
+  /* Form.io form builder submit button layout fix */
+  #formio-builder button[name="data[submit]"] {
+    margin-top: 20px;
+  }
+  .btn-primary{
+    background-color: #5255e5 !important;
+  }

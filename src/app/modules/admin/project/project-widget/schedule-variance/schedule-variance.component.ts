@@ -1,60 +1,43 @@
-import {Component, Input, OnInit, SimpleChange} from '@angular/core';
+import { Component, Input, OnInit, ViewChild} from '@angular/core';
 import { CreateProjecteService } from "@services/create-projecte.service";
 import {ActivatedRoute, Router} from '@angular/router';
-import {chartConfig} from 'app/core/config/chart.config';
 import {
-    ApexAnnotations,
     ApexAxisChartSeries,
     ApexChart,
     ApexDataLabels,
-    ApexFill,
     ApexGrid,
-    ApexLegend,
-    ApexMarkers,
-    ApexNonAxisChartSeries,
-    ApexPlotOptions,
-    ApexResponsive,
-    ApexStates,
     ApexStroke,
-    ApexTheme,
     ApexTitleSubtitle,
-    ApexTooltip,
     ApexXAxis,
     ApexYAxis,
-    ApexOptions
+    ChartComponent,
 } from "ng-apexcharts";
-import {FormControl} from "@angular/forms";
-import { E } from '@angular/cdk/keycodes';
-import { keys } from 'lodash';
+import ApexCharts from 'apexcharts';
+import { ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy } from '@angular/core';
 
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  title: ApexTitleSubtitle;
+  grid: ApexGrid;
+  dataLabels: ApexDataLabels;
+  stroke: ApexStroke;
+  yaxis: ApexYAxis
+};
 @Component({
     selector: 'app-schedule-variance',
     templateUrl: './schedule-variance.component.html',
-    styleUrls: ['./schedule-variance.component.scss']
+    styleUrls: ['./schedule-variance.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScheduleVarianceComponent implements OnInit {
-    @Input() grid: ApexGrid|any;
-    @Input() fill: ApexFill | any;
-    @Input() chart: ApexChart | any;
-    @Input() xaxis: ApexXAxis | any;
-    @Input() theme: ApexTheme | any;
-    @Input() colors: string[] | any;
-    @Input() labels: string[] | any;
-    @Input() stroke: ApexStroke | any;
-    @Input() states: ApexStates | any;
-    @Input() legend: ApexLegend | any;
-    @Input() dataLabels: ApexDataLabels|any;
-    @Input() tooltip: ApexTooltip | any;
-    @Input() title: ApexTitleSubtitle | any;
-    @Input() subtitle: ApexTitleSubtitle | any;
-    @Input() responsive: ApexResponsive[] | any;
-    @Input() plotOptions: ApexPlotOptions | any;
-    @Input() annotations: ApexAnnotations | any;
-    @Input() yaxis: ApexYAxis | ApexYAxis[] | any;
-    @Input() series: ApexAxisChartSeries | any;
-    @Input() markers : ApexMarkers | any;
-    @Input() options: ApexOptions| any
-    isChartLoaded = false
+  @ViewChild("chart", { static: false }) chart: ChartComponent| any;
+  public chartOptions:any  = {}; 
+  
+    isChartLoaded: boolean = true
     chartData = [
         {name: 'Original Time Estimate'},
         {name: 'Story Points'}
@@ -62,17 +45,22 @@ export class ScheduleVarianceComponent implements OnInit {
     chartChange ="Original Time Estimate";
     isLoading = false
     constructor(private router: Router, private _route: ActivatedRoute,private ProjectService: CreateProjecteService,) {
-     
+
     }
+
+    
     totalEstimates =0
     storyList:any =[]
     dataset: any = []
     newDataset: any = []
     notDoneDataset: any = []
     burndownData: any={}
+    guidelineData: any =[]
     @Input() data: any ;
     dataId = 0
     ngOnInit() {
+      this.chartComponentFn();
+
      this._route.queryParams.subscribe((sprintId: any) => {
         if (sprintId['id']) {
             this.dataId = parseInt(sprintId['id'])
@@ -81,13 +69,17 @@ export class ScheduleVarianceComponent implements OnInit {
     let payload = {
       sprintId: this.dataId
     }
+    // this.burndownData = chartConfig.burndownchar
     this.getBurnDownChartData(payload)
-
+    console.log(this.isChartLoaded)
+    // this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime, this.burndownData.endTime, this.burndownData.now,this.burndownData.completeTime) 
 }
     selectvalue(value:string){
      this.chartChange = value
     }
-      getOriginalEstimate(changes:any, startTime: any){
+      getOriginalEstimate(changes:any, startTime: any, endTime: any, now: any, completeTime: any){
+        this.isChartLoaded = true
+        console.log(this.isChartLoaded)
         let filterdataset: any = []
         for (let key in changes) {
             changes[key].forEach((element: any) => {
@@ -191,7 +183,19 @@ export class ScheduleVarianceComponent implements OnInit {
             ];
           }
           }
-        this.Chartdatavalue(filterdataset)
+        this.Chartdatavalue(filterdataset,startTime,endTime)
+        if(completeTime !== undefined){
+          this.getSprintEnd(changes,completeTime)  
+        }else{
+          this.getSprintEnd(changes,now)  
+        }
+        this.chartOptions.series=[{name: "Hours",data:this.newDataset},
+        {
+          name: "guildeline",
+          type: "line",
+          data: this.guidelineData
+        }] 
+        console.log(this.newDataset,this.guidelineData)
       }
 
       getSprintEnd(change:any, endDate: any){
@@ -200,23 +204,35 @@ export class ScheduleVarianceComponent implements OnInit {
           y:this.totalEstimates
         })
       }
-       getBurnDownChartData(payload: any) {
+    getBurnDownChartData(payload: any) {
+      this.isChartLoaded = false
          this.ProjectService.burndownChart(payload).subscribe((res: any) => {
           this.burndownData = res.data;
-          this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime)          
+
+          if(res.data.changes){
+            this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime, this.burndownData.endTime,this.burndownData.now,this.burndownData.completeTime)   
+            const chart = new ApexCharts( document.querySelector("#chart"), this.chartOptions);
+            chart.render();
+          }
+         
         })
       }
-       Chartdatavalue(filterdataset: any){
+      public  Chartdatavalue(filterdataset: any, startTime: any, endTime: any){
         let total = 0
         let newfilterDataSet: any = []
         filterdataset.forEach((element:any) => {
-          if(element.Date <=  chartConfig.burndownchar.startTime){
+          if(element.Date <=  startTime){
             total =element.Remaining
           }
-          newfilterDataSet =[{x:chartConfig.burndownchar.startTime, y:total}]
+          newfilterDataSet =[{x:startTime, y:total}]
+          this.guidelineData=[{x:startTime, y:total}]
         });
+        this.guidelineData.push({
+          x:endTime, 
+          y:0
+        })
         filterdataset.forEach((element:any) => {
-              if(element.Date > chartConfig.burndownchar.startTime){
+              if(element.Date > startTime){
                 newfilterDataSet.push(
             {
               x: element.Date,
@@ -225,49 +241,45 @@ export class ScheduleVarianceComponent implements OnInit {
           )
               }
         });
-
-      // this.getSprintEnd( chartConfig?.burndownchar?.changes, chartConfig?.burndownchar?.now)
-        this.series =[{name: "Hours",data:newfilterDataSet}]
-        console.log(this.series);
-        this.isChartLoaded = true
-        this.chartComponent();
+        this.newDataset = newfilterDataSet   
+       
       }
      
-      chartComponent(){
-        this.markers = {
-          size: 0,
-          colors: undefined,
-          strokeColors: '#fff',
-          strokeWidth: 2,
-          strokeOpacity: 0.9,
-          strokeDashArray: 0,
-          fillOpacity: 1,
-          discrete: [],
-          shape: "circle",
-          radius: 2,
-          offsetX: 0,
-          offsetY: 0,
-          onClick: undefined,
-          onDblClick: undefined,
-          showNullDataPoints: true,
-          hover: {
-            size: undefined,
-            sizeOffset: 3
-          }
-        }
-          this.grid = chartConfig.Schedule_Variance_chart[0].grid;
-          // this.xaxis = chartConfig.Schedule_Variance_chart[0].xaxis;
-          this.yaxis = chartConfig.Schedule_Variance_chart[0].yaxis;
-          this.chart = chartConfig.Schedule_Variance_chart[0].chart;
-          this.title = chartConfig.Schedule_Variance_chart[0].title;
-          // this.series = chartConfig.Schedule_Variance_chart[0].series;
-          this.stroke = chartConfig.Schedule_Variance_chart[0].stroke;
-          this.dataLabels = chartConfig.Schedule_Variance_chart[0].dataLabels;
-          this.series = [{
+      chartComponentFn(){
+        this.chartOptions={
+        grid : {
+            row: {
+                colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+                opacity: 0.5
+            },
+        }, 
+          
+          chart : {
+            height: 350, type: "line", zoom: {
+                enabled: false
+            }
+        },
+          title : {
+            text: "", align: "left"
+        },
+          stroke:{
+            width: 1.5,
+            curve: ["stepline","straight"]
+        },
+          dataLabels: {
+            enabled: false
+        },
+          series : [{
             name: "jiraData",
-            data:[]
-          }]
-          this.xaxis = {
+            
+            data: this.newDataset
+          },{
+            name: "guildeline",
+            type: "line",
+            data: this.guidelineData
+          }
+        ],
+          xaxis :{
               axisBorder: {
                   show: true
               },
@@ -280,15 +292,12 @@ export class ScheduleVarianceComponent implements OnInit {
                   enabled: false
               },
               type      : 'datetime'
-          }
-          this.yaxis = {
-            type: 'numeric', tickAmount: 0, 
-            y: 0
-            // labels: {
-            //     hideOverlappingLabels: true, datetimeFormatter: {
-            //         hour: 'HH:mm'
-            //     }
-            // }
+          },
+          yaxis : {
+            type: 'numeric', 
+            tickAmount: 0, 
+            
         }
+         }
       }
 }

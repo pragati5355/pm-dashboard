@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-// import { FormioModule } from 'angular-formio';
+import { FormioModule, FormioAppConfig } from 'angular-formio';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -56,7 +56,7 @@ const routes: Routes = [
     SharedModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    // FormioModule,
+    FormioModule,
     DragDropModule,
         MatAutocompleteModule,
         MatButtonModule,
@@ -74,6 +74,11 @@ const routes: Routes = [
         MatSelectModule,
         MatSidenavModule,
         MatTooltipModule,
-  ]
+  ],
+  providers:    [ {provide: FormioAppConfig, useValue: {
+    appUrl: 'https://examples.form.io',
+    apiUrl: 'https://api.form.io',
+    icons: 'fontawesome'
+  }} ]
 })
 export class CreateFormModule { }

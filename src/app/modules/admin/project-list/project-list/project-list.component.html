@@ -98,7 +98,7 @@
                             </span>
                             <button 
                             class=" ml-auto    inline-flex items-center"
-                            *ngIf="!project.status"
+                            *ngIf="!project.lastSyncDate" 
                             mat-flat-button
                             [color]="'primary'"
                             (click)="snycproject($event,project.id)"
@@ -160,19 +160,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col mx-6 sm:mx-8 mb-6"  *ngIf="project.progres">
+                            <div class="flex flex-col mx-6 sm:mx-8 mb-6"  *ngIf="project.done !== 'NaN'">
                                 <span class="text-sm text-secondary leading-none">Progress</span>
                                 <div class="mt-2 flex items-center ">
                                     <mat-progress-bar
                                         class="my-2"
-                                        [value]="project.progres"></mat-progress-bar>
-                                    <div class="max-w-10 w-full text-right"> {{project.progres}}%</div>
+                                        [value]="project.done"></mat-progress-bar>
+                                    <div class="max-w-10 w-full text-right"> {{project.done}}%</div>
                                 </div>
                             </div>
                         </div>
 
 
-                        <div  *ngIf="!project.progres" class="mx-6 sm:mx-8 mt-2 mb-6 text-secondary text-primary dark:text-primary-500">
+                        <div  *ngIf="project.done == 'NaN'" class="mx-6 sm:mx-8 mt-2 mb-6 text-secondary text-primary dark:text-primary-500">
                            Not sync with Jira . Project details will appear here when the sync is complete.
                         </div>
                         </fuse-card>
