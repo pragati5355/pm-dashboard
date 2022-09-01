@@ -69,17 +69,13 @@ export class ScheduleVarianceComponent implements OnInit {
     let payload = {
       sprintId: this.dataId
     }
-    // this.burndownData = chartConfig.burndownchar
     this.getBurnDownChartData(payload)
-    console.log(this.isChartLoaded)
-    // this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime, this.burndownData.endTime, this.burndownData.now,this.burndownData.completeTime) 
 }
     selectvalue(value:string){
      this.chartChange = value
     }
       getOriginalEstimate(changes:any, startTime: any, endTime: any, now: any, completeTime: any){
         this.isChartLoaded = true
-        console.log(this.isChartLoaded)
         let filterdataset: any = []
         for (let key in changes) {
             changes[key].forEach((element: any) => {
@@ -195,7 +191,6 @@ export class ScheduleVarianceComponent implements OnInit {
           type: "line",
           data: this.guidelineData
         }] 
-        console.log(this.newDataset,this.guidelineData)
       }
 
       getSprintEnd(change:any, endDate: any){
