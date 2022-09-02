@@ -1,0 +1,39 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    
+
+        <!-- <mat-drawer-content class="flex flex-col"> -->
+
+            <!-- Main -->
+            <div class="flex flex-col flex-auto ">
+
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between py-8 px-6 md:px-8  bg-card dark:bg-transparent">
+                    <!-- Title -->
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Forms</div>
+                    </div>
+                    <!-- Actions -->
+                    <div class="mt-4 sm:mt-0">
+          
+                        <!-- Add task button -->
+                        <button
+                            class="ml-3"
+                            mat-flat-button
+                            [color]="'primary'"
+                            (click)="gotoAddForm()"
+                          >
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add Form</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tasks list -->
+                <div></div>
+
+            </div>
+
+        <!-- </mat-drawer-content> -->
+
+</div>

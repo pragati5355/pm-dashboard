@@ -1,9 +1,5 @@
-var oldeEstimate: any[] = [0,0,0,0,0,16,16,8,16,8,8,8,3,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,2,3,0,0,2]
-var newEstimate: any[] = [0,16,16,8,8,8,16,8,8,8,0,3,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,2,3,1,0,2,0]
-var DateTIME: any[] = ["05/25/2022,1","05/25/2022,2","05/25/2022,3","05/25/2022,4","05/25/2022,5","05/25/2022,6","05/26/2022,7","05/26/2022,8","05/26/2022,9","05/26/2022,10","05/26/2022,11","05/26/2022,12","05/27/2022,13","07/19/2022,14","07/20/2022,15","07/20/2022,16","07/20/2022,17","07/20/2022,18","07/20/2022,19","07/21/2022,20","07/21/2022,21","07/21/2022,22","07/21/2022,23","07/21/2022,24","07/21/2022,25","07/25/2022,26","07/25/2022,27","07/25/2022,28","07/25/2022,29","07/25/2022,30","07/26/2022,31","07/26/2022,32","07/26/2022,33","07/26/2022,34","07/28/2022,35","07/28/2022,36","07/28/2022,37","07/29/2022,38","07/29/2022,39","07/29/2022,40","07/29/2022,41","07/29/2022,42","07/29/2022,43","07/29/2022,44","07/29/2022,45","07/29/2022,46","07/29/2022,47","07/29/2022,48","07/29/2022,49","07/29/2022,50","07/29/2022,51","08/04/2022,52","08/04/2022,53"]
-
 export const chartConfig = {
-    // Project Overall Project Score
+      // Project Overall Project Score
     Overall_Project_Score_Chart: [{
         chart: {
             animations: {
@@ -276,57 +272,6 @@ export const chartConfig = {
             }
         },
         labels: ["Apples", "Oranges", "Berries"]
-    }],
-    // Sprint Schedule Variance
-    Schedule_Variance_chart: [{
-        series: [{
-            name: "New  Estimates", data: oldeEstimate.map((y, i) => ({y, x: DateTIME[i]})),
-
-        }, {
-            name: "Old Estimates", data: newEstimate.map((y, i) => ({y, x: DateTIME[i]})),
-
-        }],
-        chart: {
-            height: 350, type: "line", zoom: {
-                enabled: false
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            width: 1.5,
-            curve: "straight"
-        },
-        title: {
-            text: "Schedule Variance", align: "left"
-        },
-        grid: {
-            row: {
-                colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-                opacity: 0.5
-            }
-        }, 
-        markers: {
-            sizeOffset: 4,
-            hover: {
-              sizeOffset: 4
-            }
-          },
-        xaxis: {
-            type: 'datetime', tickAmount: 10, labels: {
-                hideOverlappingLabels: true, datetimeFormatter: {
-                    day: 'M/dd',
-                }
-            }
-        },
-        yaxis: {
-            type: 'datetime', tickAmount: 10, labels: {
-                hideOverlappingLabels: true, datetimeFormatter: {
-                    day: 'M/dd',
-                }
-            }
-        }
     }],
     //this is for a Sprint Customer Happiness Score
     SCORE_CHART: [{

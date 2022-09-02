@@ -26,6 +26,7 @@ export const AppConstants: ConstantsInterface = {
   GET_SPRINT_LIST: `${projectBaseUrl}/sprint`,
   GET_PROJECT_TEAM_LIST: `${projectBaseUrl}/project-team`,
   UPDATE_PROJECT: `${projectBaseUrl}/update-project`,
+  BURNDOWN_CHART: `${jiraBaseUrl}/burndown-chart`
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
