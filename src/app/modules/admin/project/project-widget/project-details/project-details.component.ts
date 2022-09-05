@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnInit, QueryList, ViewEncapsulation} from
 import {ActivatedRoute, Router} from '@angular/router';
 import {SnackBar} from '../../../../../core/utils/snackBar'
 import {CreateProjecteService} from '@services/create-projecte.service';
-
+import {AuthService} from '@services/auth/auth.service';
 @Component({
     selector: 'app-project-details',
     templateUrl: './project-details.component.html',
@@ -21,17 +21,18 @@ export class ProjectDetailsComponent implements OnInit {
     @Input() dataId: any;
     private _fuseCards!: QueryList<ElementRef>;
 
-    constructor(private router: Router, private _route: ActivatedRoute, private ProjectService: CreateProjecteService, private snackBar: SnackBar) {
+    constructor(private router: Router,private _authService: AuthService, private _route: ActivatedRoute, private ProjectService: CreateProjecteService, private snackBar: SnackBar) {
     }
 
     ngOnInit(): void {
-        console.log('app-project-details')
         this.routeSubscribe = this._route.queryParams.subscribe(projectId => {
             if (projectId['id']) {
                 this.projectId = projectId['id']
             }
         });
-        this.getProjectDetails()
+        let projectData= this._authService.getProjectDetails()
+        this.project_name = projectData.name
+        this.project_progres = projectData.progress
     }
 
     editProject() {
@@ -44,21 +45,5 @@ export class ProjectDetailsComponent implements OnInit {
         this.router.navigate(
             [`/projects/project-list`]
         );
-    }
-    getProjectDetails() {
-        let payload = {
-            id: this.projectId
-        }
-        this.initialLoading = true;
-        this.ProjectService.getOneProjectDetails(payload).subscribe(
-            (res: any) => {
-                this.initialLoading = false;
-                console.log(res)
-                this.project_name = res.data.project.name
-
-            }, (error: any) => {
-                this.initialLoading = false;
-            });
-
     }
 }

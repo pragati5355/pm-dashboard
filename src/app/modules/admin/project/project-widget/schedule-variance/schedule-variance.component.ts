@@ -291,7 +291,7 @@ export class ScheduleVarianceComponent implements OnInit {
           yaxis : {
             type: 'numeric', 
             tickAmount: 0, 
-            
+            decimalsInFloat: 0,
         }
          }
       }

@@ -50,13 +50,19 @@ export class ProjectListComponent implements OnInit {
     this.ProjectService.getProjectDetails(payload).subscribe(
       (res: any) => {
         this.initialLoading = false;
-        // console.log(res);
        if(res.data){
         this.projectList = res.data.projects;
         this.totalProject = res.data.totalRecored
        }else{
         this.totalProject = 0
        }
+       if(res.error == true){
+        this._authService.updateToken().subscribe(
+          (res: any) => {
+            this._authService.setToken(res.data.accessToken);
+          })
+          window.location.reload() 
+        }
       }, error => {
         this.initialLoading = false;
       });
@@ -97,11 +103,17 @@ export class ProjectListComponent implements OnInit {
         });
     }
   }
-  goToProject(id: number) {
+  goToProject(id: number, name: any, progress: any) {
     this.router.navigate(
       [`/projects/project/project-details`],
       {queryParams: {id: id}}
     );
+    let payload = {
+      id : id,
+      name: name,
+      progress: progress
+    }
+    this._authService.setProjectDetails(payload)
   }
   snycproject(event:any,id: any){
     event.preventDefault();
