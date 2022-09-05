@@ -19,7 +19,7 @@ export class ProjectListComponent implements OnInit {
   searchValue = "";
   projectList: any = []
   count = 1;
-  totalPageData = 2
+  totalPageData = 10
   totalProject = 0;
   cardList: boolean = true;
   submitInProcess: boolean = false;

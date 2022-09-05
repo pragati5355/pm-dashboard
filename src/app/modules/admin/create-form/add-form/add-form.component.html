@@ -41,17 +41,18 @@
                     class="ml-3"
                     mat-flat-button
                     [color]="'primary'"
-                   
+                    (click)="guardarFormulario()"
                   >
                     <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                    <span (click)="guardarFormulario()" class="ml-2 mr-1 ">Save Form</span>
+                    <span  class="ml-2 mr-1 ">Save Form</span>
                 </button>
             </div>
         </div>
           <div><form-builder [form]="form" (change?)="onChange($event)" #formio></form-builder>
-            <div class="well jsonviewer">
+            <!-- <div class="well jsonviewer">
               <pre id="json"><code class="language-json" #json></code></pre>
-            </div></div>
+            </div> -->
+          </div>
         </div>
       </div>
     </div>

@@ -40,7 +40,11 @@ export class ProjectDetailsComponent implements OnInit {
             {queryParams: {id: this.projectId}}
         );
     }
-
+    gotoProject(){
+        this.router.navigate(
+            [`/projects/project-list`]
+        );
+    }
     getProjectDetails() {
         let payload = {
             id: this.projectId
