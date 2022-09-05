@@ -42,10 +42,10 @@ export class SprintsListComponent implements OnInit {
       this.isLoading = false;
     })
   }
-  goToSprint(id: number) {
+  goToSprint(id: number, name: any) {
     this.router.navigate(
       [`/projects/project/sprint-details`],
-      { queryParams: { id: id } }
+      { queryParams: { id: id, name: name } }
     );
   }
 }
