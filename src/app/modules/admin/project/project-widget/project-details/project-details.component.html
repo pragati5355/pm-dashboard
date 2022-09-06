@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex items-center mt-5 mb-6  justify-between w-full">
+        <div *ngIf="project_progres > 0" class="flex items-center mt-5 mb-6  justify-between w-full">
             <mat-progress-bar class="my-2" [value]="project_progres"></mat-progress-bar>
             <div class="max-w-10 w-full text-right"> {{project_progres | number: '0.0-0'}}%</div>
         </div>

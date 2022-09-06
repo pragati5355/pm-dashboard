@@ -12,7 +12,7 @@ import {AuthService} from '@services/auth/auth.service';
 export class ProjectDetailsComponent implements OnInit {
     project_name = "This is a Project name";
     project_status = "On Track";
-    project_progres = 45;
+    project_progres = 0;
     members = true;
     sprints = true;
     routeSubscribe: any;
@@ -32,7 +32,9 @@ export class ProjectDetailsComponent implements OnInit {
         });
         let projectData= this._authService.getProjectDetails()
         this.project_name = projectData.name
-        this.project_progres = projectData.progress
+        if(projectData !== 'NaN'){
+            this.project_progres = projectData.progress
+        }
     }
 
     editProject() {
