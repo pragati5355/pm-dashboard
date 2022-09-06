@@ -538,12 +538,17 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 this.settingProjectName = ""
                 this.router.navigate(['/projects/project-list']) 
               }else{
-                this.snackBar.errorSnackBar(res.data.message)
-                if(res.data.message=="Project already exists"){
-                  this.selectedIndex = 2
-                  this.projectTeam.reset();
-                  this.teamMemberList = []
+                if(!res.data.message){
+                  this.snackBar.errorSnackBar("Something went wrong")
+                }else{
+                  this.snackBar.errorSnackBar(res.data.message)
+                  if(res.data.message=="Project already exists"){
+                    this.selectedIndex = 2
+                    this.projectTeam.reset();
+                    this.teamMemberList = []
+                  }
                 }
+               
               }
             
             }, 

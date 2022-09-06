@@ -11,6 +11,7 @@ import {
     ApexXAxis,
     ApexYAxis,
     ChartComponent,
+    ApexNoData
 } from "ng-apexcharts";
 import ApexCharts from 'apexcharts';
 import { ViewEncapsulation } from '@angular/core';
@@ -24,7 +25,8 @@ export type ChartOptions = {
   grid: ApexGrid;
   dataLabels: ApexDataLabels;
   stroke: ApexStroke;
-  yaxis: ApexYAxis
+  yaxis: ApexYAxis,
+  noData: ApexNoData
 };
 @Component({
     selector: 'app-schedule-variance',
@@ -37,7 +39,7 @@ export class ScheduleVarianceComponent implements OnInit {
   @ViewChild("chart", { static: false }) chart: ChartComponent| any;
   public chartOptions:any  = {}; 
   
-    isChartLoaded: boolean = true
+    isChartLoaded: boolean = false
     chartData = [
         {name: 'Original Time Estimate'},
         {name: 'Story Points'}
@@ -45,7 +47,6 @@ export class ScheduleVarianceComponent implements OnInit {
     chartChange ="Original Time Estimate";
     isLoading = false
     constructor(private router: Router, private _route: ActivatedRoute,private ProjectService: CreateProjecteService,) {
-
     }
 
     
@@ -58,9 +59,11 @@ export class ScheduleVarianceComponent implements OnInit {
     guidelineData: any =[]
     @Input() data: any ;
     dataId = 0
+    renderChart: any
     ngOnInit() {
       this.chartComponentFn();
-
+      this.renderChart  = new ApexCharts( document.querySelector("#chart"), this.chartOptions);
+       this.renderChart.render();
      this._route.queryParams.subscribe((sprintId: any) => {
         if (sprintId['id']) {
             this.dataId = parseInt(sprintId['id'])
@@ -70,12 +73,12 @@ export class ScheduleVarianceComponent implements OnInit {
       sprintId: this.dataId
     }
     this.getBurnDownChartData(payload)
+    console.log(this.isChartLoaded)
 }
     selectvalue(value:string){
      this.chartChange = value
     }
       getOriginalEstimate(changes:any, startTime: any, endTime: any, now: any, completeTime: any){
-        this.isChartLoaded = true
         let filterdataset: any = []
         for (let key in changes) {
             changes[key].forEach((element: any) => {
@@ -185,9 +188,10 @@ export class ScheduleVarianceComponent implements OnInit {
         }else{
           this.getSprintEnd(changes,now)  
         }
-        this.chartOptions.series=[{name: "Hours",data:this.newDataset},
+        this.isChartLoaded = false
+        this.chartOptions.series=[{name: "Time Estimate",data:this.newDataset},
         {
-          name: "guildeline",
+          name: "Guilde Line",
           type: "line",
           data: this.guidelineData
         }] 
@@ -200,16 +204,19 @@ export class ScheduleVarianceComponent implements OnInit {
         })
       }
     getBurnDownChartData(payload: any) {
-      this.isChartLoaded = false
+      this.isChartLoaded = true
          this.ProjectService.burndownChart(payload).subscribe((res: any) => {
-          this.burndownData = res.data;
-
-          if(res.data.changes){
+           this.burndownData = res.data;
+           if(res.data.changes){
+          
             this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime, this.burndownData.endTime,this.burndownData.now,this.burndownData.completeTime)   
-            const chart = new ApexCharts( document.querySelector("#chart"), this.chartOptions);
-            chart.render();
+            this.renderChart.updateSeries([{name: "Time Estimate",data:this.newDataset},
+            {
+              name: "Guilde Line",
+              type: "line",
+              data: this.guidelineData
+            }] )
           }
-         
         })
       }
       public  Chartdatavalue(filterdataset: any, startTime: any, endTime: any){
@@ -237,7 +244,7 @@ export class ScheduleVarianceComponent implements OnInit {
               }
         });
         this.newDataset = newfilterDataSet   
-       
+        
       }
      
       chartComponentFn(){
@@ -264,15 +271,7 @@ export class ScheduleVarianceComponent implements OnInit {
           dataLabels: {
             enabled: false
         },
-          series : [{
-            name: "jiraData",
-            
-            data: this.newDataset
-          },{
-            name: "guildeline",
-            type: "line",
-            data: this.guidelineData
-          }
+          series : [
         ],
           xaxis :{
               axisBorder: {
@@ -291,7 +290,10 @@ export class ScheduleVarianceComponent implements OnInit {
           yaxis : {
             type: 'numeric', 
             tickAmount: 0, 
-            
+            decimalsInFloat: 0,
+        },
+        noData: {
+          text: 'Loading...'
         }
          }
       }

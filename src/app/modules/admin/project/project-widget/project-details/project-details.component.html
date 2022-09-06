@@ -2,25 +2,11 @@
     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
         <!-- Title and action buttons -->
         <div class="flex items-center justify-between w-full">
-            <div class="text-4xl font-extrabold tracking-tight">
-                <mat-icon [svgIcon]="'heroicons_outline:arrow-sm-left'" class="cursor-pointer" (click)="gotoProject()"></mat-icon>
-            </div>
-        </div>
-        <div class="flex items-center justify-between w-full">
-            <div class="mt-3">
-                <div class="text-3xl font-semibold tracking-tight leading-8">{{project_name | titlecase}}</div>
+            <div class=" ">
+                <div class="flex items-center justify-between text-3xl font-semibold tracking-tight leading-8">   <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="gotoProject()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon> {{project_name | titlecase}}</div>
                 <div class="font-medium tracking-tight text-secondary"> </div>
             </div>
             <div class="mt-3 flex items-center ml-6">
-                <button mat-flat-button *ngIf="project_status"
-                    class=" ml-auto inline-flex items-center font-bold text-xs px-3 py-2.5 tracking-wide uppercase"
-                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50 bg-red-200 ':project_status == 'Sync In Progress',
-                'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500':project_status == 'On Track',
-                'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500':project_status == 'At Risk',
-                'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500':project_status == 'Off Track'}">
-                    <span class="leading-relaxed whitespace-nowrap">{{project_status}}</span>
-                </button>
-
                 <button class="ml-4" mat-flat-button [color]="'primary'" (click)="editProject()">
                     <mat-icon class=" icon-size-5" [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
                     <span class="ml-2 mr-1">Edit Project</span>
@@ -38,9 +24,9 @@
                 </div>
             </div>
         </div>
-        <div class="flex items-center mt-5 mb-6  justify-between w-full">
+        <div *ngIf="project_progres > 0" class="flex items-center mt-5 mb-6  justify-between w-full">
             <mat-progress-bar class="my-2" [value]="project_progres"></mat-progress-bar>
-            <div class="max-w-10 w-full text-right"> {{project_progres}}%</div>
+            <div class="max-w-10 w-full text-right"> {{project_progres | number: '0.0-0'}}%</div>
         </div>
 
         <!-- Main Section On -->

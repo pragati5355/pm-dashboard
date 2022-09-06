@@ -26,6 +26,7 @@ export class SprintDetailsComponent implements OnInit {
     this.routeSubscribe = this._route.queryParams.subscribe(sprintId => {
       if (sprintId['id']) {
           this.sprintId = sprintId['id']
+          this.project_name =sprintId['name']
       }
   });
   }

@@ -25,7 +25,9 @@ export class AuthService{
   setUser(user: any) {
     this.storage.set("user", user);
   }
-
+  setProjectDetails(project: any) {
+    this.storage.set("project", project);
+  }
   setRefreshToken(refreshToken: any) {
     this.storage.set("refreshToken", refreshToken);
   }
@@ -44,6 +46,9 @@ export class AuthService{
   }
   getUser() {
     return this.storage.get("user");
+  }
+  getProjectDetails(){
+    return this.storage.get("project");
   }
   setAuthenticated(isLoggedIn: boolean) {
     this.storage.set("isLoggedIn", isLoggedIn);
