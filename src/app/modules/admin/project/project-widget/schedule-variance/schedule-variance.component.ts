@@ -59,9 +59,11 @@ export class ScheduleVarianceComponent implements OnInit {
     guidelineData: any =[]
     @Input() data: any ;
     dataId = 0
+    renderChart: any
     ngOnInit() {
       this.chartComponentFn();
-
+      this.renderChart  = new ApexCharts( document.querySelector("#chart"), this.chartOptions);
+       this.renderChart.render();
      this._route.queryParams.subscribe((sprintId: any) => {
         if (sprintId['id']) {
             this.dataId = parseInt(sprintId['id'])
@@ -208,8 +210,12 @@ export class ScheduleVarianceComponent implements OnInit {
            if(res.data.changes){
           
             this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime, this.burndownData.endTime,this.burndownData.now,this.burndownData.completeTime)   
-            const chart = new ApexCharts( document.querySelector("#chart"), this.chartOptions);
-            chart.render();
+            this.renderChart.updateSeries([{name: "Time Estimate",data:this.newDataset},
+            {
+              name: "Guilde Line",
+              type: "line",
+              data: this.guidelineData
+            }] )
           }
         })
       }
