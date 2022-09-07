@@ -47,25 +47,18 @@ export class AddFormComponent implements OnInit {
   onChange(event:any) {
     this.jsonElement.nativeElement.innerHTML = '';
     this.jsonElement.nativeElement.appendChild(document.createTextNode(JSON.stringify(event.form, null, 4)));
-    // console.log(this.form)
   }
   guardarFormulario(){
-    // this.jsonElement.nativeElement.innerHTML = '';
-    // this.jsonElement.nativeElement.appendChild(document.createTextNode(JSON.stringify(this.formio.form, null, 4)));
-    //  console.log(this.formdata.name)
     const json = document.createTextNode(JSON.stringify(this.formio.form, null, 4));
-    console.log(this.form)
-    // console.log(Object.keys(this.form).length)
     let payload = {
-      formname: this.formdata.name,
-      formcomponent: this.form
+      formName: this.formdata.name,
+      formComponent: this.form
     }
     if(this.formdata.name){
       if(Object.values(this.form).map(v => v.length)[0]== 1){
         this.snackBar.errorSnackBar("Add form component")
       }else{
         this.formService.addForm(payload).subscribe((res: any)=>{
-           console.log(res);
            if(!res.error){
              if(res.message == "Success"){
                this.snackBar.successSnackBar(res.data)

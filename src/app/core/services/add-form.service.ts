@@ -9,7 +9,16 @@ export class AddFormService {
 
   constructor(private http: HttpClient, private storage: LocalStorageService) {
   }
-addForm(obj: any) {
-  return this.http.post(AppConstants['ADD_FORM'], obj);
-}
+  addForm(obj: any) {
+    return this.http.post(AppConstants['ADD_FORM'], obj);
+  }
+  updateForm(obj: any) {
+    return this.http.post(AppConstants['UPDATE_FORM'], obj);
+  }
+  getFormList(obj: any) {
+    return this.http.post(AppConstants['GET_FORM_LIST'], obj);
+  }
+  deleteForm(obj: any) {
+    return this.http.post(AppConstants['DELETE_FORM'], obj);
+  }
 }
