@@ -1,7 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {SnackBar} from '../../../../core/utils/snackBar'
 import { Subject } from 'rxjs';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { AddFormService } from '@services/add-form.service';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 @Component({
   selector: 'app-add-form',
   templateUrl: './add-form.component.html',
@@ -17,37 +24,21 @@ export class AddFormComponent implements OnInit {
   public language!: string;
   public rebuildEmitter: Subject<void> = new Subject<void>();
   formdata = {name:""}
-  constructor(private snackBar: SnackBar,) { }
-
+  formDetails!: FormGroup;
+  constructor(private snackBar: SnackBar, private formService: AddFormService, 
+    private _route: ActivatedRoute,
+    private router: Router,
+    private _formBuilder: FormBuilder,) { }
+  get formDetailsValidation(): { [key: string]: AbstractControl } {
+    return this.formDetails.controls;
+  }
   ngOnInit(): void {
     // this.options = ;
+    this.formDetails = this._formBuilder.group({
+      formName: ['',[Validators.required]],
+      });
     this.form = {components: [
-      {
-        type: 'number',
-        key: 'technicalRating',
-        label: 'Technical Rating',
-        tooltip: "",
-      },
-      {
-        type: 'number',
-        key: 'communicationRating',
-        label: 'Communication Rating'
-      },
-      {
-        type: 'number',
-        key: 'understandingRating',
-        label: 'Understanding Rating'
-      },
-      {
-        type: 'button',
-        label: 'submit',
-        theme: "primary",
-        key: 'submit',
-        input: true,
-        tableview: false,
-        disableOnInvalid: true,
-      }
-    ]};
+     ]};
   }
   onSubmit(event: any) {
     alert('form submitted!')
@@ -56,26 +47,35 @@ export class AddFormComponent implements OnInit {
   onChange(event:any) {
     this.jsonElement.nativeElement.innerHTML = '';
     this.jsonElement.nativeElement.appendChild(document.createTextNode(JSON.stringify(event.form, null, 4)));
-    console.log(this.form)
+    // console.log(this.form)
   }
   guardarFormulario(){
-    this.jsonElement.nativeElement.innerHTML = '';
-    this.jsonElement.nativeElement.appendChild(document.createTextNode(JSON.stringify(this.formio.form, null, 4)));
-     console.log(this.formdata.name)
+    // this.jsonElement.nativeElement.innerHTML = '';
+    // this.jsonElement.nativeElement.appendChild(document.createTextNode(JSON.stringify(this.formio.form, null, 4)));
+    //  console.log(this.formdata.name)
     const json = document.createTextNode(JSON.stringify(this.formio.form, null, 4));
-    console.log(Object.values(this.form).map(v => v.length))
-    console.log(Object.keys(this.form).length)
+    console.log(this.form)
+    // console.log(Object.keys(this.form).length)
     let payload = {
       formname: this.formdata.name,
-      formcomponent: json
+      formcomponent: this.form
     }
     if(this.formdata.name){
-      if(Object.values(this.form).map(v => v.length)[0]== 0){
-
+      if(Object.values(this.form).map(v => v.length)[0]== 1){
         this.snackBar.errorSnackBar("Add form component")
       }else{
-      }
-   
+        this.formService.addForm(payload).subscribe((res: any)=>{
+           console.log(res);
+           if(!res.error){
+             if(res.message == "Success"){
+               this.snackBar.successSnackBar(res.data)
+             }else{
+              this.snackBar.errorSnackBar(res.data)
+             }
+           }
+           this.router.navigate(['/forms/form-list']) 
+        })
+      }  
     }else{
       this.snackBar.errorSnackBar("Enter form name")
     }

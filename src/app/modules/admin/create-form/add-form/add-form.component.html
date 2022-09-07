@@ -15,45 +15,49 @@
       <!-- main section -->
 
       <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent px-4 md:px-4 py-4">
-        <div class="">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
-            <!-- Title -->
-            <div>
-              <mat-form-field class="w-full sm:w-140 mb-2 mt-4 sm:mt-0 "  [floatLabel]="'always'">
-                <mat-label>Form Name</mat-label>
-                <input
-                    matInput
-                    placeholder="Form Name" 
-                    [(ngModel)]="formdata.name"
+        <form [formGroup]="formDetails" >
+          <div class="">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
+              <!-- Title -->
+              <div>
+                <mat-form-field class="w-full sm:w-140 mb-2 mt-4 sm:mt-0 "  [floatLabel]="'always'">
+                  <mat-label>Form Name</mat-label>
+                  <input
+                      matInput
+                      placeholder="Form Name" 
+                      [(ngModel)]="formdata.name"
+                      formControlName="formName" 
+                      >
+                      <mat-error *ngIf="formDetailsValidation['formName'].errors &&
+                      formDetailsValidation['formName']?.invalid &&
+                      formDetailsValidation['formName']?.touched ">
+                      <div *ngIf="formDetailsValidation['formName'].errors['required']">Form name is mandatory</div>
+                      <div *ngIf="formDetailsValidation['formName'].errors['pattern']">Enter valid project name</div>
+                  </mat-error>
+              </mat-form-field>
+              </div>
+              <!-- Actions -->
+              <div class="mt-4 sm:mt-0">
+    
+                  <!-- Add task button -->
+                  <button
+                      class="ml-3"
+                      mat-flat-button
+                      [color]="'primary'"
+                      (click)="guardarFormulario()"
                     >
-                    <!-- <mat-error *ngIf="projectSettingsForm['url'].errors &&
-                    projectSettingsForm['url']?.invalid &&
-                    projectSettingsForm['url']?.touched ">
-                    <div *ngIf="projectSettingsForm['url'].errors['required']">Base Url is mandatory</div>
-                </mat-error> -->
-            </mat-form-field>
-            </div>
-            <!-- Actions -->
-            <div class="mt-4 sm:mt-0">
-  
-                <!-- Add task button -->
-                <button
-                    class="ml-3"
-                    mat-flat-button
-                    [color]="'primary'"
-                    (click)="guardarFormulario()"
-                  >
-                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                    <span  class="ml-2 mr-1 ">Save Form</span>
-                </button>
-            </div>
-        </div>
-          <div><form-builder [form]="form" (change?)="onChange($event)" #formio></form-builder>
-            <!-- <div class="well jsonviewer">
-              <pre id="json"><code class="language-json" #json></code></pre>
-            </div> -->
+                      <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                      <span  class="ml-2 mr-1 ">Save Form</span>
+                  </button>
+              </div>
           </div>
-        </div>
+            <div><form-builder [form]="form" (change?)="onChange($event)" #formio></form-builder>
+              <!-- <div class="well jsonviewer">
+                <pre id="json"><code class="language-json" #json></code></pre>
+              </div> -->
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
