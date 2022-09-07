@@ -1,39 +1,92 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {SnackBar} from '../../../../core/utils/snackBar'
+import {AbstractControl, FormBuilder, FormControl, FormGroup,Validators} from '@angular/forms';
+import {fuseAnimations} from '@fuse/animations';
+import {FuseConfirmationService} from '@fuse/services/confirmation';
 import { AddFormService } from '@services/add-form.service';
 import {AuthService} from '@services/auth/auth.service';
 @Component({
   selector: 'app-form-list',
   templateUrl: './form-list.component.html',
-  styleUrls: ['./form-list.component.scss']
+  styleUrls: ['./form-list.component.scss'],
+  animations: fuseAnimations
 })
 export class FormListComponent implements OnInit {
 
   constructor(private router: Router,
     private snackBar: SnackBar,
     private formService: AddFormService,
-    private _authService: AuthService) { }
+    private _authService: AuthService,
+    private _formBuilder: FormBuilder,
+    private _fuseConfirmationService: FuseConfirmationService,) { }
     formList: any = []
    isLoading = false
    pageNo = 1;
    pagination = false;
    initialLoading = false;
-   totalPageData = 2
+   totalPageData = 10
   totalForm = 0;
   count = 1;
+  configForm!: FormGroup;
   ngOnInit(): void {
     let payload = {
       perPageData: this.count,
       totalPerPageData: this.totalPageData,
     }
     this.getList(payload);
+    this.configForm = this._formBuilder.group({
+      title: 'Delete Form',
+      message: 'Are you sure you want to delete this form? <span class="font-medium">This action cannot be undone!</span>',
+      icon: this._formBuilder.group({
+        show: true,
+        name: 'heroicons_outline:exclamation',
+        color: 'warn'
+      }),
+      actions: this._formBuilder.group({
+        confirm: this._formBuilder.group({
+          show: true,
+          label: 'Delete',
+          color: 'warn'
+        }),
+        cancel: this._formBuilder.group({
+          show: true,
+          label: 'Cancel'
+        })
+      }),
+      dismissible: false
+    });
   }
   gotoAddForm() {
     this.router.navigate(['/forms/add-form'])
   }
-  deleteResource(event:any){
-
+  deleteForm(id: number): void {
+    let payload = {
+      id: id
+    }
+    // Open the dialog and save the reference of it
+        const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result == "confirmed") {
+            this.formService.deleteForm(payload).subscribe(
+              (res: any) => {
+                if(!res.data.error){
+                  this.snackBar.successSnackBar(res.data.message)
+                }
+                else{
+                  this.snackBar.errorSnackBar(res.data.message)
+                }
+                let payload = {
+                  perPageData: this.count,
+                  totalPerPageData: this.totalPageData,
+                }
+                this.getList(payload);
+              },
+              error => {
+                this.snackBar.errorSnackBar("Server error")
+              })
+          }
+        });
   }
   edit(event: any){
 
