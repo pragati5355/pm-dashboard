@@ -19,7 +19,8 @@ export class FormListComponent implements OnInit {
     private formService: AddFormService,
     private _authService: AuthService,
     private _formBuilder: FormBuilder,
-    private _fuseConfirmationService: FuseConfirmationService,) { }
+    private _fuseConfirmationService: FuseConfirmationService,
+    ) { }
     formList: any = []
    isLoading = false
    pageNo = 1;
@@ -88,8 +89,17 @@ export class FormListComponent implements OnInit {
           }
         });
   }
-  edit(event: any){
-
+  editForm(id: number) {
+    this.router.navigate(
+      [`/forms/edit-form`],
+      {queryParams: {id: id}}
+    );
+  }
+  viewForm(id: number) {
+    this.router.navigate(
+      [`/forms/view-form`],
+      {queryParams: {id: id}}
+    );
   }
   handleScroll() {
     if (!this.pagination && this.formList.length < this.totalForm) {
@@ -122,18 +132,21 @@ export class FormListComponent implements OnInit {
         this.totalForm = 0
        }
        if(res.error == true){
-        this._authService.updateToken().subscribe(
-          (res: any) => {
-           if(res){
-            this._authService.setToken(res.data.accessToken);
-            window.location.reload() 
-           }else{
-            this.router.navigate(['/sign-in'])
-           }
-          })
+        // this._authService.updateToken().subscribe(
+        //   (res: any) => {
+        //    if(res){
+        //     this._authService.setToken(res.data.accessToken);
+        //     window.location.reload() 
+        //    }else{
+        //     this.router.navigate(['/sign-in'])
+        //    }
+        //   })
         }
       }, error => {
         this.initialLoading = false;
       });
+  }
+  duplicateForm(id: number){
+
   }
 }

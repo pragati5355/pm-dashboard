@@ -79,18 +79,23 @@
                         <mat-icon
                         class=" text-gray-400 icon-size-5 cursor-pointer"
                         svgIcon="heroicons_outline:eye"
+                        (click)="viewForm(data.id)"
                       ></mat-icon>
                         <mat-icon
                           class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
                           svgIcon="heroicons_outline:pencil"
-                          (click)="edit(data.id)"
+                          (click)="editForm(data.id)"
                         ></mat-icon>
-                      
                         <mat-icon
-                          class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
-                          svgIcon="heroicons_outline:trash"
-                          (click)="deleteForm(data.id)"
-                        ></mat-icon> 
+                        class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
+                        svgIcon="heroicons_outline:duplicate"
+                        (click)="duplicateForm(data.id)"
+                      ></mat-icon> 
+                      <mat-icon
+                      class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
+                      svgIcon="heroicons_outline:trash"
+                      (click)="deleteForm(data.id)"
+                    ></mat-icon> 
                       </div>
                     </div>
                   </ng-container>

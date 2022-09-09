@@ -21,4 +21,7 @@ export class AddFormService {
   deleteForm(obj: any) {
     return this.http.post(AppConstants['DELETE_FORM'], obj);
   }
+  getFormDetails(obj: any) {
+    return this.http.post(AppConstants['GET_FORM_DETAILS'], obj);
+  }
 }

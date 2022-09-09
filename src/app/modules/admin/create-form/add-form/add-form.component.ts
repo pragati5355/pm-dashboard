@@ -15,16 +15,19 @@ import {
   styleUrls: ['./add-form.component.scss']
 })
 export class AddFormComponent implements OnInit {
-
-
   @ViewChild('json', {static: true}) jsonElement?: ElementRef | any;
   @ViewChild('formio') formio:any;
+  pageTitle= ""
+  formTypeAdd = true
   public form!: Object;
   public options: any;
   public language!: string;
   public rebuildEmitter: Subject<void> = new Subject<void>();
   formdata = {name:""}
   formDetails!: FormGroup;
+  editFormId = 0
+  routeSubscribe: any;
+  initialLoading = false
   constructor(private snackBar: SnackBar, private formService: AddFormService, 
     private _route: ActivatedRoute,
     private router: Router,
@@ -37,8 +40,18 @@ export class AddFormComponent implements OnInit {
     this.formDetails = this._formBuilder.group({
       formName: ['',[Validators.required]],
       });
-    this.form = {components: [
-     ]};
+    this.form = {components: []};
+    this.routeSubscribe = this._route.queryParams.subscribe(formtype => {
+      if (formtype['id']) {
+          this.getFormDetails({id:formtype['id']})
+          this.editFormId = formtype['id']
+        this.pageTitle = "Edit Form"
+        this.formTypeAdd = false
+      }else{
+        this.pageTitle = "Add Form"
+        this.formTypeAdd = true
+      }
+    });
   }
   onSubmit(event: any) {
     alert('form submitted!')
@@ -48,7 +61,7 @@ export class AddFormComponent implements OnInit {
     this.jsonElement.nativeElement.innerHTML = '';
     this.jsonElement.nativeElement.appendChild(document.createTextNode(JSON.stringify(event.form, null, 4)));
   }
-  guardarFormulario(){
+  addForm(){
     const json = document.createTextNode(JSON.stringify(this.formio.form, null, 4));
     let payload = {
       formName: this.formdata.name,
@@ -72,5 +85,44 @@ export class AddFormComponent implements OnInit {
     }else{
       this.snackBar.errorSnackBar("Enter form name")
     }
+  }
+  updateForm(){
+    const json = document.createTextNode(JSON.stringify(this.formio.form, null, 4));
+    let payload = {
+      id: this.editFormId,
+      formName: this.formdata.name,
+      formComponent: this.form
+    }
+    if(this.formdata.name){
+      if(Object.values(this.form).map(v => v.length)[0]== 1){
+        this.snackBar.errorSnackBar("Add form component")
+      }else{
+        this.formService.updateForm(payload).subscribe((res: any)=>{
+             if(!res.error){
+               this.snackBar.successSnackBar(res.data.message)
+             }else{
+              this.snackBar.errorSnackBar(res.data.message)
+             }
+           this.router.navigate(['/forms/form-list']) 
+        })
+      }  
+    }else{
+      this.snackBar.errorSnackBar("Enter form name")
+    }
+  }
+  getFormDetails(payload: any){
+    this.initialLoading = true;
+    this.formService.getFormDetails(payload).subscribe((res: any) =>{
+      this.initialLoading = false;
+      let formdata: any = []
+      formdata.push(res.data.form)
+      console.log(formdata)
+      formdata.forEach((item: any) => {
+      this.formDetails.patchValue({
+        formName:item.formName?item.formName: "",
+      });
+      // this.form = item.formComponent
+    })
+    })
   }
 }
