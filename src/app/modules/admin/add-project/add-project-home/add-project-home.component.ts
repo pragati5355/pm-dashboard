@@ -80,6 +80,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     ];
     clientData: any = [];
     selectRoleList= StaticData.TEAM_MEMBER_ROLE
+    selectFomList= StaticData.FORM_NAME
     teamMemberList: any = [];
     managerEditTeamLIst: any = [];
     editteamMemberList: any = []
@@ -135,7 +136,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required]],
       projectDescription: ['',[Validators.required,
-        TextRegexValidator(RegexConstants.Text_Area)]]
+        TextRegexValidator(RegexConstants.Text_Area)]],
+        feedback_form: [''],
       },{
         validator: [
         noWhitespaceValidator("projectDescription"),
