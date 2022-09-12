@@ -20,17 +20,21 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import * as moment from 'moment';
 import { CreateFormHomeComponent } from './create-form-home/create-form-home.component';
 import { FormListComponent } from './form-list/form-list.component';
 import { AddFormComponent } from './add-form/add-form.component';
 import { SharedModule } from 'app/core/shared.module';
+import { ViewFormComponent } from './view-form/view-form.component';
 const routes: Routes = [
   {
     path: "",
     component: CreateFormHomeComponent,
     children: [
       { path: 'add-form', component: AddFormComponent },
+      { path: 'edit-form', component: AddFormComponent },
+      { path: 'view-form', component: ViewFormComponent },
       { path: 'form-list', component: FormListComponent },
       {
         path: "",
@@ -49,7 +53,8 @@ const routes: Routes = [
   declarations: [
     CreateFormHomeComponent,
     FormListComponent,
-    AddFormComponent
+    AddFormComponent,
+    ViewFormComponent
   ],
   imports: [
     CommonModule,
@@ -74,6 +79,7 @@ const routes: Routes = [
         MatSelectModule,
         MatSidenavModule,
         MatTooltipModule,
+        InfiniteScrollModule,
   ],
   providers:    [ {provide: FormioAppConfig, useValue: {
     appUrl: 'https://examples.form.io',

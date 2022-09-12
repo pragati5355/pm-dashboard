@@ -1,0 +1,37 @@
+<div *ngIf="!initialLoading" class="flex flex-col flex-auto min-w-0">
+
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <!-- <div class="-ml-4 sm:mt-8"> -->
+                <!-- <a
+                    mat-button
+                    [routerLink]="['../']"
+                    [color]="'primary'">
+                    <mat-icon [svgIcon]="'heroicons_outline:arrow-narrow-left'"></mat-icon>
+                    <span class="ml-2">Back to Help Center</span>
+                </a> -->
+            <!-- </div> -->
+            <div  class="flex items-center justify-between w-full">
+                <div class=" flex items-center justify-between mt-2 text-3xl  font-extrabold tracking-tight leading-tight">
+                    <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="gotoforms()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon> Feedback Form
+                </div>
+            </div>
+            
+            <!-- <div class=" "> -->
+                <!-- <div class="flex items-center justify-between text-3xl font-semibold tracking-tight leading-8">   <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="gotoforms()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon> Feedback Form</div> -->
+                <!-- <div class="font-medium tracking-tight text-secondary"> </div> -->
+            <!-- </div> -->
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <div class="mb-6">
+                    <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}}</div>
+                    <!-- <div class="text-secondary">Your request will be processed and our support staff will get back to you in 24 hours.</div> -->
+                </div>
+                <formio
+                [form]="form" (submit)="submit($event)" ></formio>
+            </div>
+        </div>
+    </div>
+</div>

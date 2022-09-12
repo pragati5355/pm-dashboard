@@ -36,37 +36,41 @@
         <!-- </mat-drawer-content> -->
         <!-- main -->
         <div class="flex flex-auto overflow-hidden">
-            <!-- formData list -->
-            <div
+            <!-- data list -->
+            <div  infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            [scrollWindow]="false"
+            (scrolled)="handleScroll()"
               class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
               
             >
-              <ng-container *ngIf="!isLoading && formsData.length > 0; else noProducts">
-                <div *ngIf="formsData.length > 0" class="grid">
+              <ng-container *ngIf="!isLoading && formList.length > 0; else noProducts">
+                <div *ngIf="formList.length > 0" class="grid">
                   <!-- Header -->
                   <div
                     class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                     matSortDisableClear
                   >
                     <div>Name</div>
-                    <div class="hidden md:block">Projects</div>
+                    <div class="hidden md:block"></div>
                     <div>Action</div>
                   </div>
                   <!-- Rows -->
-                  <ng-container *ngFor="let formData of formsData">
+                  <ng-container *ngFor="let data of formList">
                     <div
                       class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
                     >
                       <!-- SKU -->
                       <div>
                         <div class="truncate">
-                          {{ formData.name }}
+                          {{ data.formName }}
                         </div>
                       </div>
         
                       <!-- Name -->
                       <div class="hidden md:block truncate">
-                        {{ formData.projects }}
+                        <!-- {{ data.projects }} -->
                       </div>
     
         
@@ -75,18 +79,23 @@
                         <mat-icon
                         class=" text-gray-400 icon-size-5 cursor-pointer"
                         svgIcon="heroicons_outline:eye"
+                        (click)="viewForm(data.id)"
                       ></mat-icon>
                         <mat-icon
                           class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
                           svgIcon="heroicons_outline:pencil"
-                          (click)="edit(formData.id)"
+                          (click)="editForm(data.id)"
                         ></mat-icon>
-                      
                         <mat-icon
-                          class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
-                          svgIcon="heroicons_outline:trash"
-                          (click)="deleteResource(formData.id)"
-                        ></mat-icon> 
+                        class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
+                        svgIcon="heroicons_outline:duplicate"
+                        (click)="duplicateForm(data.id)"
+                      ></mat-icon> 
+                      <mat-icon
+                      class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
+                      svgIcon="heroicons_outline:trash"
+                      (click)="deleteForm(data.id)"
+                    ></mat-icon> 
                       </div>
                     </div>
                   </ng-container>
@@ -96,7 +105,7 @@
                 <div
                   class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
                 >
-                  There are no formData
+                  There are no data
                 </div>
               </ng-template>
             </div>
