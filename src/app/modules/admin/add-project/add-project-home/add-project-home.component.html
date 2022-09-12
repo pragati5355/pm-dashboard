@@ -111,13 +111,12 @@
                                     <mat-label>Choose feedback form </mat-label>
                                     <mat-select
                                     formControlName="feedback_form"
-
                                     type="text"
                                     placeholder="Choose feedback form"
                                     [disableOptionCentering]="true"
                                     >
-                                    <mat-option *ngFor="let role of selectFomList" [value]="role.value" >
-                                    {{ role.viewValue }}
+                                    <mat-option *ngFor="let form of selectFomList" [value]="form.id" >
+                                    {{ form.formName }}
                                     </mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="projectDetailsForm['feedback_form'].errors &&

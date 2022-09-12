@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth/auth.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AbstractControl } from '@angular/forms';
+import {SnackBar} from '../../../../core/utils/snackBar'
+import { AddFormService } from '@services/add-form.service';
 export interface DialogData {
   resend: any;
 }
@@ -19,6 +21,7 @@ get copyFormValidation(): { [key: string]: AbstractControl } {
 }
 formTitle = ""
   constructor(
+       private snackBar: SnackBar, private formService: AddFormService,
       public matDialogRef: MatDialogRef<CopyFormComponent>,
       private _formBuilder: FormBuilder,
       private _authService: AuthService,
@@ -40,9 +43,20 @@ formTitle = ""
 
   save() {
     if (!this.copyForm.invalid) {
-    this.matDialogRef.close({
-      result: "success"
+      let payload = {
+        id : this.data.id,
+        formName: this.copyForm.value.formName
+      }
+    this.formService.copyForm(payload).subscribe((res: any)=>{
+       console.log(res);
+       if(res.message == "Success"){
+         this.snackBar.successSnackBar("Form copied successfully!")
+        this.matDialogRef.close({
+          result: "success"
+        });
+       }
     });
+  
   }
   }
   close(){
