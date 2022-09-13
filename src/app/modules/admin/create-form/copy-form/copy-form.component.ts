@@ -51,12 +51,11 @@ formTitle = ""
        console.log(res);
        if(res.message == "Success"){
          this.snackBar.successSnackBar("Form copied successfully!")
-        this.matDialogRef.close({
-          result: "success"
-        });
        }
     });
-  
+    this.matDialogRef.close({
+      result: "success"
+    });
   }
   }
   close(){
