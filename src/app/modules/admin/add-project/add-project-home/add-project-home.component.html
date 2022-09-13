@@ -107,9 +107,9 @@
                                     <div *ngIf="projectDetailsForm['projectDescription'].invalid && !projectDetailsForm['projectDescription'].errors['required']">Enter valid project Description</div>
                                 </mat-error>
                                 </mat-form-field>
-                                <mat-form-field   class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 " [floatLabel]="'always'" >
+                                <mat-form-field   class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 select-form" [floatLabel]="'always'" >
                                     <mat-label>Choose feedback form </mat-label>
-                                    <mat-select
+                                    <mat-select panelClass="select-form-option"
                                     formControlName="feedback_form"
                                     type="text"
                                     placeholder="Choose feedback form"
