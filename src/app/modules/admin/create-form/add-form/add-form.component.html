@@ -25,7 +25,6 @@
                   <input
                       matInput
                       placeholder="Form Name" 
-                      [(ngModel)]="formdata.name"
                       formControlName="formName" 
                       >
                       <mat-error *ngIf="formDetailsValidation['formName'].errors &&
@@ -60,7 +59,7 @@
               </div>
           </div>
           <mat-label class="">Form Component *</mat-label>
-            <div class="mt-2"><form-builder [form]="form" (change?)="onChange($event)" #formio></form-builder>
+            <div class="mt-2 form-builder"><form-builder [form]="form" (change?)="onChange($event)" #formio></form-builder>
             </div>
           </div>
         </form>

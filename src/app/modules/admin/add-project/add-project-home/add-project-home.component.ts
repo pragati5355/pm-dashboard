@@ -19,6 +19,7 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import {SnackBar} from '../../../../core/utils/snackBar'
 import {ObjectValidation} from "../../../../core/utils/Validations";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
+import { AddFormService } from '@services/add-form.service';
 export class TeamMember {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
@@ -80,6 +81,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     ];
     clientData: any = [];
     selectRoleList= StaticData.TEAM_MEMBER_ROLE
+    selectFomList: any = [];
     teamMemberList: any = [];
     managerEditTeamLIst: any = [];
     editteamMemberList: any = []
@@ -116,6 +118,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       private ProjectService:CreateProjecteService,
       private snackBar: SnackBar,
       private _route: ActivatedRoute,
+      private formService: AddFormService,
       )
     {
     
@@ -135,7 +138,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       this.projectDetials = this._formBuilder.group({
       projectName: ['',[Validators.required]],
       projectDescription: ['',[Validators.required,
-        TextRegexValidator(RegexConstants.Text_Area)]]
+        TextRegexValidator(RegexConstants.Text_Area)]],
+        feedback_form: ['',[Validators.required]],
       },{
         validator: [
         noWhitespaceValidator("projectDescription"),
@@ -207,7 +211,15 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                     this.drawerOpened = false;
                 }
             });
+       this.getFormList();
        this.filterFunctions();
+    }
+    getFormList(){
+      this.initialLoading = true
+      this.formService.getFormListWithoutPagination().subscribe((res:any)=>{
+            this.selectFomList= res.data
+            this.initialLoading = false;
+      })
     }
     filterFunctions(){
       this.filteredTeamMembers = this.projectTeam.get('team_member')?.valueChanges

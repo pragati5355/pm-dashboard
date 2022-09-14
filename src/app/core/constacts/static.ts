@@ -27,7 +27,11 @@ export const StaticData = {
     {value: 'DevOps', viewValue: 'DevOps'},
     {value: 'Designer', viewValue: 'Designer'}
   ],
-
+  FORM_NAME: [
+    {value: 'Metics form', viewValue: 'Metics form'},
+    {value: 'Demo form', viewValue: 'Demo form'},
+    {value: 'Test form', viewValue: 'Test form'},
+  ],
   TEAM_MEMBER_LIST: [
     {image: 'assets/images/avatars/male-01.jpg', name: 'Naynesh Rathod', start_date: 'Jan 21,2021', email: 'nayneshrathod@gmail.com', role: 'Developer'},
     {image: 'assets/images/avatars/male-02.jpg', name: 'Khumesh Lohar', start_date: 'Feb 22,2021', email: 'khumeshlohar@gmail.com', role: 'WEB Designer'},

@@ -29,10 +29,12 @@ export const AppConstants: ConstantsInterface = {
   UPDATE_PROJECT: `${projectBaseUrl}/update-project`,
   BURNDOWN_CHART: `${jiraBaseUrl}/burndown-chart`,
   ADD_FORM: `${projectBaseUrl}/add-form`,
-  GET_FORM_LIST: `${projectBaseUrl}/formname`,
+  GET_FORM_LIST_PAGINATION: `${projectBaseUrl}/formname`,
   UPDATE_FORM: `${projectBaseUrl}/update-form`,
   DELETE_FORM: `${projectBaseUrl}/delete-form`,
   GET_FORM_DETAILS: `${projectBaseUrl}/formdata`,
+  COPY_FORM: `${projectBaseUrl}/copy-form`,
+  GET_FORM_LIST: `${projectBaseUrl}/get-formname`,
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

@@ -3,9 +3,11 @@ import {Router} from '@angular/router';
 import {SnackBar} from '../../../../core/utils/snackBar'
 import {AbstractControl, FormBuilder, FormControl, FormGroup,Validators} from '@angular/forms';
 import {fuseAnimations} from '@fuse/animations';
+import { MatDialog } from '@angular/material/dialog';
 import {FuseConfirmationService} from '@fuse/services/confirmation';
 import { AddFormService } from '@services/add-form.service';
 import {AuthService} from '@services/auth/auth.service';
+import { CopyFormComponent } from '../copy-form/copy-form.component';
 @Component({
   selector: 'app-form-list',
   templateUrl: './form-list.component.html',
@@ -20,6 +22,7 @@ export class FormListComponent implements OnInit {
     private _authService: AuthService,
     private _formBuilder: FormBuilder,
     private _fuseConfirmationService: FuseConfirmationService,
+    private dialog: MatDialog,
     ) { }
     formList: any = []
    isLoading = false
@@ -77,6 +80,8 @@ export class FormListComponent implements OnInit {
                 else{
                   this.snackBar.errorSnackBar(res.data.message)
                 }
+                this.count  = 0
+                this.formList = []
                 let payload = {
                   perPageData: this.count,
                   totalPerPageData: this.totalPageData,
@@ -132,21 +137,38 @@ export class FormListComponent implements OnInit {
         this.totalForm = 0
        }
        if(res.error == true){
-        // this._authService.updateToken().subscribe(
-        //   (res: any) => {
-        //    if(res){
-        //     this._authService.setToken(res.data.accessToken);
-        //     window.location.reload() 
-        //    }else{
-        //     this.router.navigate(['/sign-in'])
-        //    }
-        //   })
+        this._authService.updateToken().subscribe(
+          (res: any) => {
+           if(res){
+            this._authService.setToken(res.data.accessToken);
+            window.location.reload() 
+           }else{
+            this.router.navigate(['/sign-in'])
+           }
+          })
         }
       }, error => {
         this.initialLoading = false;
       });
   }
-  duplicateForm(id: number){
-
+  duplicateForm(id: number, name:any){
+    const dialogRef = this.dialog.open(CopyFormComponent, {
+      disableClose: true,
+      panelClass:"warn-dialog-content",
+      autoFocus: false,
+      data: {
+        id:id,
+        formname: name
+      }
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result.result == 'success') {
+        let payload = {
+          perPageData: this.count,
+          totalPerPageData: this.totalPageData,
+        }
+        this.getList(payload);
+      }
+    });
   }
 }

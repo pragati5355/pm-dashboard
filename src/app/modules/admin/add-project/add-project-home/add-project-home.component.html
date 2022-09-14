@@ -107,7 +107,24 @@
                                     <div *ngIf="projectDetailsForm['projectDescription'].invalid && !projectDetailsForm['projectDescription'].errors['required']">Enter valid project Description</div>
                                 </mat-error>
                                 </mat-form-field>
-                            
+                                <mat-form-field   class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 select-form" [floatLabel]="'always'" >
+                                    <mat-label>Choose feedback form </mat-label>
+                                    <mat-select panelClass="select-form-option"
+                                    formControlName="feedback_form"
+                                    type="text"
+                                    placeholder="Choose feedback form"
+                                    [disableOptionCentering]="true"
+                                    >
+                                    <mat-option *ngFor="let form of selectFomList" [value]="form.id" >
+                                    {{ form.formName }}
+                                    </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="projectDetailsForm['feedback_form'].errors &&
+                                    projectDetailsForm['feedback_form']?.invalid &&
+                                    projectDetailsForm['feedback_form']?.touched ">
+                                    <div *ngIf="projectDetailsForm['feedback_form'].errors['required']">Feedback form is mandatory</div>
+                                    </mat-error>
+                                    </mat-form-field>
                                 <!-- Actions -->
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                         

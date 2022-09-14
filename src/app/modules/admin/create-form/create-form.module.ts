@@ -27,6 +27,7 @@ import { FormListComponent } from './form-list/form-list.component';
 import { AddFormComponent } from './add-form/add-form.component';
 import { SharedModule } from 'app/core/shared.module';
 import { ViewFormComponent } from './view-form/view-form.component';
+import { CopyFormComponent } from './copy-form/copy-form.component';
 const routes: Routes = [
   {
     path: "",
@@ -54,7 +55,8 @@ const routes: Routes = [
     CreateFormHomeComponent,
     FormListComponent,
     AddFormComponent,
-    ViewFormComponent
+    ViewFormComponent,
+    CopyFormComponent
   ],
   imports: [
     CommonModule,
