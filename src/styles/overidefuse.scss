@@ -108,3 +108,29 @@ color: black !important;
 .multiple-select-style{
    left: 20px;
 }
+.form-builder{
+  .formarea{
+    button .btn-primary,  [type=submit]:not(:disabled), button:not(:disabled){
+        background: #027afb !important;
+    }
+  }
+  .formcomponent{
+       background: #027afb !important;
+  }
+//   .alert-info {
+//     color: #5255e5;
+//     background-color: #dbdbf5;
+//     border-color: #dbdbf5;
+// }
+}
+.btn-primary.disabled, .btn-primary:disabled {
+  background: #027afb;
+}
+.formio-render, .formio-form{
+  button .btn-primary,  [type=submit]:not(:disabled), button:not(:disabled){
+    background: #027afb !important;
+}
+}
+.form-check-input{
+  background: #027afb !important;
+}

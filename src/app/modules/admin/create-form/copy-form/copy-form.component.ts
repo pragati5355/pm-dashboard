@@ -48,7 +48,6 @@ formTitle = ""
         formName: this.copyForm.value.formName
       }
     this.formService.copyForm(payload).subscribe((res: any)=>{
-       console.log(res);
        if(res.message == "Success"){
          this.snackBar.successSnackBar("Form copied successfully!")
        }

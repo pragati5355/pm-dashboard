@@ -80,6 +80,8 @@ export class FormListComponent implements OnInit {
                 else{
                   this.snackBar.errorSnackBar(res.data.message)
                 }
+                this.count  = 0
+                this.formList = []
                 let payload = {
                   perPageData: this.count,
                   totalPerPageData: this.totalPageData,
@@ -160,7 +162,12 @@ export class FormListComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
+      if (result.result == 'success') {
+        let payload = {
+          perPageData: this.count,
+          totalPerPageData: this.totalPageData,
+        }
+        this.getList(payload);
       }
     });
   }
