@@ -525,7 +525,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               uuid: this.jiraProjectList[0].uuid,
               orgId: this.jiraProjectList[0].orgId,
               private: this.jiraProjectList[0].private,
-              id: this.jiraProjectList[0].id
+              id: this.jiraProjectList[0].id,
+              formId: this.projectDetials.value.feedback_form
             },
             clientDetails: this.clientDtailsList,
             baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
@@ -670,6 +671,7 @@ selectedJiraUserOption(event: any) {
           this.projectDetials.patchValue({
             projectName: item.name?item.name:"",
             projectDescription: item.description?item.description:"",
+            feedback_form: item.formId?item.formId:"",
           });
           this.settingProjectName =item.key?item.key:""
         })
@@ -739,6 +741,7 @@ selectedJiraUserOption(event: any) {
             projectId: this.jiraProjectList[0].id,
             isPrivate: false,
             userId: this.userData.userId,
+            formId: this.projectDetials.value.feedback_form
           },
           clientDetails: this.filteredEditClientList,
           baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
