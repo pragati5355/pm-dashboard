@@ -134,7 +134,7 @@ export class ProjectListComponent implements OnInit {
         if(res.data){
           this.snackBar.successSnackBar(res.data);
           let payload = {
-            perPageData: this.count,
+            perPageData: 0,
             totalPerPageData: this.totalPageData,
             projectKey: "",
             projectName: this.searchValue
