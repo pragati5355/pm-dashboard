@@ -27,8 +27,10 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { ProjectHomeComponent } from './project-home/project-home.component';
 import { SharedModule } from 'app/core/shared.module';
+import {MatChipsModule} from '@angular/material/chips';
 import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-popup.component';
 import { ProjectWidgetModule } from "@modules/admin/project/project-widget/project-widget.module";
+import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
 const routes: Routes = [
   {
     path: "",
@@ -73,6 +75,7 @@ const routes: Routes = [
   declarations: [
     ProjectHomeComponent,
     ConnectJiraPopupComponent,
+    SendFeedbackFormComponent,
   ],
   exports: [CdkStepperModule,
     MatStepperModule,],
@@ -103,7 +106,8 @@ const routes: Routes = [
     FuseFindByKeyPipeModule,
     FuseNavigationModule,
     FuseScrollbarModule,
-    FuseScrollResetModule
+    FuseScrollResetModule,
+    MatChipsModule
   ]
 })
 export class ProjectModule { }

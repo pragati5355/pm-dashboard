@@ -35,6 +35,7 @@ export const AppConstants: ConstantsInterface = {
   GET_FORM_DETAILS: `${projectBaseUrl}/formdata`,
   COPY_FORM: `${projectBaseUrl}/copy-form`,
   GET_FORM_LIST: `${projectBaseUrl}/get-formname`,
+  FEEDBACK_FORM: `${projectBaseUrl}/send-email`,
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
