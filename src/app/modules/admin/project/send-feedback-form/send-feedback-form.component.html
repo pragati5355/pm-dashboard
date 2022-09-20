@@ -26,22 +26,9 @@
                                 *ngFor="let email of emails"
                                 (removed)="remove(email)">
                                 {{email}}
-                                <!-- <button > -->
                                   <mat-icon matChipRemove>cancel</mat-icon>
-                                <!-- </button> -->
                               </mat-chip>
                             </mat-chip-list>
-                                <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                  <mat-option *ngFor="let email of filteredemails | async" [value]="email">
-                                    {{email}}
-                                  </mat-option>
-                                </mat-autocomplete> -->
-                                    <!-- <mat-error *ngIf="feedbaclFormValidation['formName'].errors &&
-                                    feedbaclFormValidation['formName']?.invalid &&
-                                    feedbaclFormValidation['formName']?.touched ">
-                                    <div *ngIf="feedbaclFormValidation['formName'].errors['required']">Form name is mandatory</div>
-                                    <div *ngIf="feedbaclFormValidation['formName'].errors['pattern']">Enter valid form name</div>
-                                </mat-error> -->
                             </mat-form-field>
                             <div class="error-msg text-md mb-2">
                                 <mat-error  *ngIf="emailInvalid">Invalid email </mat-error>
@@ -88,7 +75,6 @@
                                 <div *ngIf="feedbaclFormValidation['formName'].errors['pattern']">Enter valid form name</div>
                             </mat-error>
                         </mat-form-field>
-                    <!-- </div> -->
           <div class="flex items-center ml-auto mt-4 sm:mt-0">
             <!-- Send -->
             <button
@@ -101,7 +87,7 @@
                 mat-flat-button
                 [color]="'primary'"
                 (click)="save()">
-                Copy
+                Send
             </button>
         </div>
     </form>
