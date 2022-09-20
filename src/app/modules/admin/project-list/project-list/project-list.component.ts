@@ -107,7 +107,7 @@ export class ProjectListComponent implements OnInit {
         });
     }
   }
-  goToProject(id: number, name: any, progress: any) {
+  goToProject(id: number, name: any, progress: any, form: any) {
     this.router.navigate(
       [`/projects/project/project-details`],
       {queryParams: {id: id}}
@@ -115,7 +115,8 @@ export class ProjectListComponent implements OnInit {
     let payload = {
       id : id,
       name: name,
-      progress: progress
+      progress: progress, 
+      form:form
     }
     this._authService.setProjectDetails(payload)
   }
@@ -134,7 +135,7 @@ export class ProjectListComponent implements OnInit {
         if(res.data){
           this.snackBar.successSnackBar(res.data);
           let payload = {
-            perPageData: this.count,
+            perPageData: 0,
             totalPerPageData: this.totalPageData,
             projectKey: "",
             projectName: this.searchValue
