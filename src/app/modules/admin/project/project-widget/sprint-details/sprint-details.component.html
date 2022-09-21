@@ -1,16 +1,9 @@
 <div  class="flex flex-col flex-auto min-w-0">
 
-  <!-- Header -->
   <div class="mt-6" >
     <div class="flex flex-col w-full max-w-screen-xl mx-auto px-1  sm:px-8">
       <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0   sm:my-2">
-        <!-- Avatar and name -->
         <div class="flex flex-col flex-auto items-center mb-4 min-w-0">
-          <!-- <div class="flex items-center justify-between w-full">
-            <div class="text-4xl font-extrabold tracking-tight cursor-pointer" (click)="goBack()">
-              <mat-icon [svgIcon]="'heroicons_outline:arrow-sm-left'"></mat-icon>
-            </div>
-          </div> -->
           <div class="flex items-center justify-between w-full">
             <div class="">
               <div class=" flex items-center justify-between text-3xl font-semibold tracking-tight leading-8"> <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="goBack()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>  {{sprint_name}}</div>
@@ -21,8 +14,6 @@
               <button class="ml-4" mat-flat-button [color]="'primary'" (click)="feedbackForm()">
                 <span class="ml-2 mr-1">Send Feedback Form</span>
               </button>
-
-              <!-- Actions menu (visible on xs) -->
               <div class="sm:hidden">
                 <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
                   <mat-icon [svgIcon]="'heroicons_outline:dots-vertical'"></mat-icon>
@@ -44,8 +35,6 @@
   <div  class="flex-auto -mt-px pt-4 mb-6 sm:pt-6">
     <div class="w-full max-w-screen-xl mx-auto">
       <div class="sm:px-6">
-
-        <!-- First Row -->
         <div class="grid grid-cols-1 sm:grid-cols-2 mb-6 md:grid-cols-3 gap-6 w-full min-w-0">
 
 

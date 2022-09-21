@@ -8,8 +8,8 @@
     <!-- Compose form -->
     <form [formGroup]="feedbaclForm"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                         <div class="chip-input w-full mb-2 tracking-tight ng-tns-c274-3859">
-                            <mat-form-field  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
-                                <mat-label>Email</mat-label>
+                            <mat-form-field  [floatLabel]="'always'" appearance="fill" class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 " >
+                                <mat-label>Email *</mat-label>
                                 <mat-chip-list #chipList aria-label="email selection">
                                  
                                   <input
@@ -26,22 +26,9 @@
                                 *ngFor="let email of emails"
                                 (removed)="remove(email)">
                                 {{email}}
-                                <!-- <button > -->
                                   <mat-icon matChipRemove>cancel</mat-icon>
-                                <!-- </button> -->
                               </mat-chip>
                             </mat-chip-list>
-                                <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                  <mat-option *ngFor="let email of filteredemails | async" [value]="email">
-                                    {{email}}
-                                  </mat-option>
-                                </mat-autocomplete> -->
-                                    <!-- <mat-error *ngIf="feedbaclFormValidation['formName'].errors &&
-                                    feedbaclFormValidation['formName']?.invalid &&
-                                    feedbaclFormValidation['formName']?.touched ">
-                                    <div *ngIf="feedbaclFormValidation['formName'].errors['required']">Form name is mandatory</div>
-                                    <div *ngIf="feedbaclFormValidation['formName'].errors['pattern']">Enter valid form name</div>
-                                </mat-error> -->
                             </mat-form-field>
                             <div class="error-msg text-md mb-2">
                                 <mat-error  *ngIf="emailInvalid">Invalid email </mat-error>
@@ -49,6 +36,23 @@
                             </div>
                             
                         </div>
+                        <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
+                            <mat-label>Subject</mat-label>
+                            <input
+                                matInput
+                                [placeholder]="'Subject here.'"
+                                required
+                                id="subject"
+                                #feedbaclsubject
+                                formControlName="subject" maxlength="100"
+                                >
+                                <mat-error *ngIf="feedbaclFormValidation['subject'].errors &&
+                                feedbaclFormValidation['subject']?.invalid &&
+                                feedbaclFormValidation['subject']?.touched ">
+                                <div *ngIf="feedbaclFormValidation['subject'].errors['required']">Subject is mandatory</div>
+                                <div *ngIf="feedbaclFormValidation['subject'].errors['pattern']">Enter valid subject</div>
+                            </mat-error>
+                        </mat-form-field>
                        
                         <mat-form-field 
                                 
@@ -88,7 +92,6 @@
                                 <div *ngIf="feedbaclFormValidation['formName'].errors['pattern']">Enter valid form name</div>
                             </mat-error>
                         </mat-form-field>
-                    <!-- </div> -->
           <div class="flex items-center ml-auto mt-4 sm:mt-0">
             <!-- Send -->
             <button
@@ -101,7 +104,7 @@
                 mat-flat-button
                 [color]="'primary'"
                 (click)="save()">
-                Copy
+                Send
             </button>
         </div>
     </form>
