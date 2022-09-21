@@ -30,7 +30,7 @@ const routes: Routes = [
     path: "",
     component: SharedHomeComponent,
     children: [
-      { path: 'feedback-form/:projectId/:sprintId', component: FeedbackFormComponent },
+      { path: 'feedback/:projectId/:sprintId', component: FeedbackFormComponent },
       { path: 'empty-feedback-form', component: EmptyHomeComponent },
       {
         path: "",
