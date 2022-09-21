@@ -29,6 +29,7 @@ export class SendFeedbackFormComponent implements OnInit {
   }
   formTitle = ""
   form_name=""
+  project_name=""
   separatorKeysCodes: number[] = [ENTER, COMMA];
   emailCtrl = new FormControl('');
   emails: string[] = [];
@@ -49,10 +50,13 @@ export class SendFeedbackFormComponent implements OnInit {
     ngOnInit(): void
     {
         // Create the form
+        this.formTitle = this.data.sprintName
         let projectData= this._authService.getProjectDetails()
         this.form_name = projectData.form.formName
+        this.project_name = projectData.name
         this.feedbaclForm = this._formBuilder.group({
           emails: this._formBuilder.array([]),
+          subject: [ this.project_name +"| Feedback for Sprint "+this.formTitle,[Validators.required]], 
           formName: [this.form_name,[Validators.required]], 
            message: ['',[Validators.required,
             TextRegexValidator(RegexConstants.Text_Area)]],
@@ -61,7 +65,7 @@ export class SendFeedbackFormComponent implements OnInit {
           noWhitespaceValidator("message"),
         ]
         });
-        this.formTitle = this.data.sprintName
+        
     }
   
     save() {

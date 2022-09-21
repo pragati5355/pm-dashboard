@@ -36,7 +36,6 @@ export class ConnectJiraPopupComponent implements OnInit
         });
         this.list = this.data.projectList
         this.project_name = this.data.settingProjectName
-        console.log(this.data)
     }
   
     save() {
