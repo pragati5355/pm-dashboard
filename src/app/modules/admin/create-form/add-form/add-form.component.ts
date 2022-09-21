@@ -23,7 +23,7 @@ export class AddFormComponent implements OnInit {
   public options: any;
   public language!: string;
   public rebuildEmitter: Subject<void> = new Subject<void>();
-  formdata = {name:""}
+  formName = ""
   formDetails!: FormGroup;
   editFormId = 0
   routeSubscribe: any;
@@ -64,10 +64,10 @@ export class AddFormComponent implements OnInit {
   addForm(){
     const json = document.createTextNode(JSON.stringify(this.formio.form, null, 4));
     let payload = {
-      formName: this.formdata.name,
+      formName: this.formDetails.value.formName,
       formComponent: this.form
     }
-    if(this.formdata.name){
+    if(this.formDetails.value.formName){
       if(Object.values(this.form).map(v => v.length)[0]== 1){
         this.snackBar.errorSnackBar("Add form component")
       }else{
@@ -90,10 +90,10 @@ export class AddFormComponent implements OnInit {
     const json = document.createTextNode(JSON.stringify(this.formio.form, null, 4));
     let payload = {
       id: this.editFormId,
-      formName: this.formdata.name,
+      formName: this.formDetails.value.formName,
       formComponent: this.form
     }
-    if(this.formdata.name){
+    if(this.formDetails.value.formName){
       if(Object.values(this.form).map(v => v.length)[0]== 1){
         this.snackBar.errorSnackBar("Add form component")
       }else{
@@ -115,13 +115,12 @@ export class AddFormComponent implements OnInit {
     this.formService.getFormDetails(payload).subscribe((res: any) =>{
       this.initialLoading = false;
       let formdata: any = []
-      formdata.push(res.data.form)
-      console.log(formdata)
+      formdata.push(res.data)
       formdata.forEach((item: any) => {
       this.formDetails.patchValue({
-        formName:item.formName?item.formName: "",
+        formName:item.formName,
       });
-      // this.form = item.formComponent
+       this.form = item.formComponent
     })
     })
   }

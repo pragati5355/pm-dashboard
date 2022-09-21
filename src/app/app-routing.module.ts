@@ -46,7 +46,7 @@ export const appRoutes: Routes = [
         layout: 'empty'
     },
     children: [
-        {path: 'shared', loadChildren: () => import('./modules/public/home/home.module').then(m => m.HomeModule)},
+        {path: 'shared', loadChildren: () => import('./modules/public/shared/shared.module').then(m => m.SharedModule)},
     ]
 },
   {

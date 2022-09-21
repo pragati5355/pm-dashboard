@@ -39,6 +39,9 @@ line-height: 2 !important;
 .border-b-a{
   border-bottom: 1px solid #1e293b;
 }
+.error-msg{
+  margin-top: -20px;
+}
 //mat snackbar
 .mat-simple-snackbar {
 font-size: 16px !important;
@@ -102,9 +105,31 @@ color: black !important;
 .mat-select-panel {
   position: absolute;
   top: 40px;
-  min-width: calc(100% + 42px) !important;
-  max-height: 200px !important;
+  min-width: calc(100% + 30px) !important;
+  max-height: 120px !important;
 }
 .multiple-select-style{
    left: 20px;
+}
+.form-builder{
+  .formarea{
+    button .btn-primary,  [type=submit]:not(:disabled), button:not(:disabled){
+        background: #027afb !important;
+    }
+  }
+  .formcomponent{
+       background: #027afb !important;
+  }
+
+}
+.btn-primary.disabled, .btn-primary:disabled {
+  background: #027afb;
+}
+.formio-render, .formio-form{
+  button .btn-primary,  [type=submit]:not(:disabled), button:not(:disabled){
+    background: #027afb !important;
+}
+}
+.form-check-input{
+  background: #027afb !important;
 }

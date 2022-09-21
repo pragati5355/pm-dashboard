@@ -16,12 +16,21 @@ export class AddFormService {
     return this.http.post(AppConstants['UPDATE_FORM'], obj);
   }
   getFormList(obj: any) {
-    return this.http.post(AppConstants['GET_FORM_LIST'], obj);
+    return this.http.post(AppConstants['GET_FORM_LIST_PAGINATION'], obj);
   }
   deleteForm(obj: any) {
     return this.http.post(AppConstants['DELETE_FORM'], obj);
   }
   getFormDetails(obj: any) {
     return this.http.post(AppConstants['GET_FORM_DETAILS'], obj);
+  }
+  copyForm(obj: any) {
+    return this.http.post(AppConstants['COPY_FORM'], obj);
+  }
+  getFormListWithoutPagination() {
+    return this.http.get(AppConstants['GET_FORM_LIST']);
+  }
+  feedbaclForm(obj: any) {
+    return this.http.post(AppConstants['FEEDBACK_FORM'], obj);
   }
 }

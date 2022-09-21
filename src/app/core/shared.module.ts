@@ -14,6 +14,8 @@ import {MatIconModule} from '@angular/material/icon';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     // AngularWebStorageModule,
     RouterModule,
@@ -21,6 +23,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatIconModule
   ],
   exports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatIconModule,
