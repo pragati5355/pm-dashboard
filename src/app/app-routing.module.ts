@@ -46,7 +46,7 @@ export const appRoutes: Routes = [
         layout: 'empty'
     },
     children: [
-        {path: 'shared', loadChildren: () => import('./modules/public/shared/shared.module').then(m => m.SharedModule)},
+        {path: 'client-portal', loadChildren: () => import('./modules/public/shared/shared.module').then(m => m.SharedModule)},
     ]
 },
   {
