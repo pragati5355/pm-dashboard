@@ -8,8 +8,8 @@
     <!-- Compose form -->
     <form [formGroup]="feedbaclForm"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                         <div class="chip-input w-full mb-2 tracking-tight ng-tns-c274-3859">
-                            <mat-form-field  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
-                                <mat-label>Email</mat-label>
+                            <mat-form-field  [floatLabel]="'always'" appearance="fill" class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 " >
+                                <mat-label>Email *</mat-label>
                                 <mat-chip-list #chipList aria-label="email selection">
                                  
                                   <input
@@ -36,6 +36,23 @@
                             </div>
                             
                         </div>
+                        <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
+                            <mat-label>Subject</mat-label>
+                            <input
+                                matInput
+                                [placeholder]="'Subject here.'"
+                                required
+                                id="subject"
+                                #feedbaclsubject
+                                formControlName="subject" maxlength="100"
+                                >
+                                <mat-error *ngIf="feedbaclFormValidation['subject'].errors &&
+                                feedbaclFormValidation['subject']?.invalid &&
+                                feedbaclFormValidation['subject']?.touched ">
+                                <div *ngIf="feedbaclFormValidation['subject'].errors['required']">Subject is mandatory</div>
+                                <div *ngIf="feedbaclFormValidation['subject'].errors['pattern']">Enter valid subject</div>
+                            </mat-error>
+                        </mat-form-field>
                        
                         <mat-form-field 
                                 
