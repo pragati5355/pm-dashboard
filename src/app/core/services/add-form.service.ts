@@ -33,4 +33,7 @@ export class AddFormService {
   feedbaclForm(obj: any) {
     return this.http.post(AppConstants['FEEDBACK_FORM'], obj);
   }
+  getFeedbackForm(obj: any) {
+    return this.http.post(AppConstants['GET_FEEDBACK_FORM'], obj);
+  }
 }
