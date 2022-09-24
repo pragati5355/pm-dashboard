@@ -27,7 +27,7 @@ export class SendFeedbackFormComponent implements OnInit {
   get feedbaclFormValidation(): { [key: string]: AbstractControl } {
     return this.feedbaclForm.controls;
   }
-  formTitle = ""
+  sprintName = ""
   form_name=""
   project_name=""
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -35,6 +35,8 @@ export class SendFeedbackFormComponent implements OnInit {
   emails: string[] = [];
   emailInvalid= false
   notempty = true
+  project_id =0
+  sprint_id: any
   @ViewChild('emailInput') emailInput: ElementRef<HTMLInputElement> | any;
     constructor(
          private snackBar: SnackBar, private formService: AddFormService,
@@ -50,13 +52,15 @@ export class SendFeedbackFormComponent implements OnInit {
     ngOnInit(): void
     {
         // Create the form
-        this.formTitle = this.data.sprintName
+        this.sprintName = this.data.sprintName
+        this.sprint_id = this.data.id
         let projectData= this._authService.getProjectDetails()
         this.form_name = projectData.form.formName
         this.project_name = projectData.name
+        this.project_id = projectData.id
         this.feedbaclForm = this._formBuilder.group({
           emails: this._formBuilder.array([]),
-          subject: [ this.project_name +"| Feedback for Sprint "+this.formTitle,[Validators.required]], 
+          subject: [ this.project_name +"| Feedback for Sprint "+this.sprintName,[Validators.required]], 
           formName: [this.form_name,[Validators.required]], 
            message: ['',[Validators.required,
             TextRegexValidator(RegexConstants.Text_Area)]],
@@ -73,7 +77,10 @@ export class SendFeedbackFormComponent implements OnInit {
       if (!this.feedbaclForm.invalid) {
         let payload = {
           content : this.feedbaclForm.value.message,
-          email: this.emails
+          emails: this.emails,
+          subject:this.feedbaclForm.value.subject,
+          projectId:this.project_id,
+          sprintId: parseInt(this.sprint_id)
         }
       this.formService.feedbaclForm(payload).subscribe((res: any)=>{
          if(res.data){
