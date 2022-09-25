@@ -57,15 +57,7 @@ export class ProjectListComponent implements OnInit {
         this.totalProject = 0
        }
        if(res.error == true){
-        this._authService.updateToken().subscribe(
-          (res: any) => {
-           if(res){
-            this._authService.setToken(res.data.accessToken);
-            window.location.reload() 
-           }else{
-            this.router.navigate(['/sign-in'])
-           }
-          })
+        this._authService.updateAndReload(window.location);
         }
       }, error => {
         this.initialLoading = false;

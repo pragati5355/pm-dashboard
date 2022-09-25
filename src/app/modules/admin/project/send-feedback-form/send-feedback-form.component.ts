@@ -11,7 +11,7 @@ import {SnackBar} from '../../../../core/utils/snackBar'
 import { ValidationConstants } from "../../../../core/constacts/constacts";
 import {TextRegexValidator, RegexConstants,noWhitespaceValidator } from "../../../../core/utils/Validations";
 import { AddFormService } from '@services/add-form.service';
-
+import { ErrorMessage } from 'app/core/constacts/constacts'
 export interface DialogData {
   resend: any;
 }
@@ -23,9 +23,9 @@ export interface DialogData {
   encapsulation: ViewEncapsulation.None
 })
 export class SendFeedbackFormComponent implements OnInit {
-  feedbaclForm!: FormGroup;
-  get feedbaclFormValidation(): { [key: string]: AbstractControl } {
-    return this.feedbaclForm.controls;
+  feedbackFrom!: FormGroup;
+  get feedbackFromValidation(): { [key: string]: AbstractControl } {
+    return this.feedbackFrom.controls;
   }
   sprintName = ""
   form_name=""
@@ -58,7 +58,7 @@ export class SendFeedbackFormComponent implements OnInit {
         this.form_name = projectData.form.formName
         this.project_name = projectData.name
         this.project_id = projectData.id
-        this.feedbaclForm = this._formBuilder.group({
+        this.feedbackFrom = this._formBuilder.group({
           emails: this._formBuilder.array([]),
           subject: [ this.project_name +"| Feedback for Sprint "+this.sprintName,[Validators.required]], 
           formName: [this.form_name,[Validators.required]], 
@@ -74,19 +74,19 @@ export class SendFeedbackFormComponent implements OnInit {
   
     save() {
       if(this.emails.length !==0){
-      if (!this.feedbaclForm.invalid) {
+      if (!this.feedbackFrom.invalid) {
         let payload = {
-          content : this.feedbaclForm.value.message,
+          content : this.feedbackFrom.value.message,
           emails: this.emails,
-          subject:this.feedbaclForm.value.subject,
+          subject:this.feedbackFrom.value.subject,
           projectId:this.project_id,
           sprintId: parseInt(this.sprint_id)
         }
-      this.formService.feedbaclForm(payload).subscribe((res: any)=>{
+      this.formService.feedbackFrom(payload).subscribe((res: any)=>{
          if(res.data){
            this.snackBar.successSnackBar(res.data)
          }else{
-           this.snackBar.errorSnackBar("Something went wrong")
+           this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG)
          }
       });
       this.matDialogRef.close({

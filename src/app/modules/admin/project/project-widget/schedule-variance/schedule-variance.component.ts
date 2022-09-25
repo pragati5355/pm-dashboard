@@ -16,7 +16,7 @@ import {
 import ApexCharts from 'apexcharts';
 import { ViewEncapsulation } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
-
+import { AuthService } from '@services/auth/auth.service';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -46,7 +46,7 @@ export class ScheduleVarianceComponent implements OnInit {
     ]
     chartChange ="Original Time Estimate";
     isLoading = false
-    constructor(private router: Router, private _route: ActivatedRoute,private ProjectService: CreateProjecteService,) {
+    constructor(private _authService: AuthService,private router: Router, private _route: ActivatedRoute,private ProjectService: CreateProjecteService,) {
     }
 
     
@@ -217,6 +217,9 @@ export class ScheduleVarianceComponent implements OnInit {
               data: this.guidelineData
             }] )
           }
+          if(res.error == true){
+            this._authService.updateAndReload(window.location);
+            }
         })
       }
       public  Chartdatavalue(filterdataset: any, startTime: any, endTime: any){

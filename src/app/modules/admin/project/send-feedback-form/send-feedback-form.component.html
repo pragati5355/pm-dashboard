@@ -6,7 +6,7 @@
     </div>
 
     <!-- Compose form -->
-    <form [formGroup]="feedbaclForm"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+    <form [formGroup]="feedbackFrom"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                         <div class="chip-input w-full mb-2 tracking-tight ng-tns-c274-3859">
                             <mat-form-field  [floatLabel]="'always'" appearance="fill" class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 " >
                                 <mat-label>Email *</mat-label>
@@ -46,11 +46,11 @@
                                 #feedbaclsubject
                                 formControlName="subject" maxlength="100"
                                 >
-                                <mat-error *ngIf="feedbaclFormValidation['subject'].errors &&
-                                feedbaclFormValidation['subject']?.invalid &&
-                                feedbaclFormValidation['subject']?.touched ">
-                                <div *ngIf="feedbaclFormValidation['subject'].errors['required']">Subject is mandatory</div>
-                                <div *ngIf="feedbaclFormValidation['subject'].errors['pattern']">Enter valid subject</div>
+                                <mat-error *ngIf="feedbackFromValidation['subject'].errors &&
+                                feedbackFromValidation['subject']?.invalid &&
+                                feedbackFromValidation['subject']?.touched ">
+                                <div *ngIf="feedbackFromValidation['subject'].errors['required']">Subject is mandatory</div>
+                                <div *ngIf="feedbackFromValidation['subject'].errors['pattern']">Enter valid subject</div>
                             </mat-error>
                         </mat-form-field>
                        
@@ -67,11 +67,11 @@
                             style="resize:none"
                             formControlName="message"
                             [placeholder]="'Add message here...'"></textarea>
-                            <mat-error *ngIf="feedbaclFormValidation['message'].errors &&
-                            feedbaclFormValidation['message']?.invalid &&
-                            feedbaclFormValidation['message']?.touched ">
-                            <div *ngIf="feedbaclFormValidation['message'].errors['required']">Project Description is mandatory</div>
-                            <div *ngIf="feedbaclFormValidation['message'].invalid && !feedbaclFormValidation['message'].errors['required']">Enter valid project Description</div>
+                            <mat-error *ngIf="feedbackFromValidation['message'].errors &&
+                            feedbackFromValidation['message']?.invalid &&
+                            feedbackFromValidation['message']?.touched ">
+                            <div *ngIf="feedbackFromValidation['message'].errors['required']">Project Description is mandatory</div>
+                            <div *ngIf="feedbackFromValidation['message'].invalid && !feedbackFromValidation['message'].errors['required']">Enter valid project Description</div>
                         </mat-error>
                         </mat-form-field>
                         <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
@@ -81,15 +81,15 @@
                                 [placeholder]="'Form Name here.'"
                                 required
                                 id="formName"
-                                #feedbaclFormName
+                                #feedbackFromName
                                 [readonly]="form_name"
                                 formControlName="formName" maxlength="50"
                                 >
-                                <mat-error *ngIf="feedbaclFormValidation['formName'].errors &&
-                                feedbaclFormValidation['formName']?.invalid &&
-                                feedbaclFormValidation['formName']?.touched ">
-                                <div *ngIf="feedbaclFormValidation['formName'].errors['required']">Form name is mandatory</div>
-                                <div *ngIf="feedbaclFormValidation['formName'].errors['pattern']">Enter valid form name</div>
+                                <mat-error *ngIf="feedbackFromValidation['formName'].errors &&
+                                feedbackFromValidation['formName']?.invalid &&
+                                feedbackFromValidation['formName']?.touched ">
+                                <div *ngIf="feedbackFromValidation['formName'].errors['required']">Form name is mandatory</div>
+                                <div *ngIf="feedbackFromValidation['formName'].errors['pattern']">Enter valid form name</div>
                             </mat-error>
                         </mat-form-field>
           <div class="flex items-center ml-auto mt-4 sm:mt-0">
