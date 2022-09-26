@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseLoadingBarModule } from '@fuse/components/loading-bar';
-import { SharedModule } from 'app/shared/shared.module';
+import { SharedModule } from 'app/core/shared.module'; 
 import { EmptyLayoutComponent } from 'app/layout/layouts/empty/empty.component';
 
 @NgModule({

@@ -14,13 +14,11 @@ export const appRoutes: Routes = [
       {
           path: "",
           canActivate: [NoAuthGuard],
-          // canActivateChild: [NoAuthGuard],
           component: LayoutComponent,
           data: {
               layout: 'empty'
           },
           children: [
-              
               {path: 'sign-in', loadChildren: () => import('./modules/auth/sign-in/sign-in.module').then(m => m.AuthSignInModule)},
           ]
       },
@@ -40,6 +38,17 @@ export const appRoutes: Routes = [
           {path: 'forms', loadChildren: () => import('./modules/admin/create-form/create-form.module').then(m => m.CreateFormModule)},
       ]
   },
+  {
+    path: "",
+    canActivate: [NoAuthGuard],
+    component: LayoutComponent,
+    data: {
+        layout: 'empty'
+    },
+    children: [
+        {path: 'client-portal', loadChildren: () => import('./modules/public/shared/shared.module').then(m => m.SharedModule)},
+    ]
+},
   {
     path: "**",
     redirectTo: "sign-in",
