@@ -30,6 +30,9 @@ import { OverallProjectScoreComponent } from './overall-project-score/overall-pr
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatRippleModule } from '@angular/material/core';
 import { TranslocoModule } from '@ngneat/transloco';
+import { SprintIssuesComponent } from './sprint-issues/sprint-issues.component';
+import { SprintStoryPointsComponent } from './sprint-story-points/sprint-story-points.component';
+import { SprintIssuesTypeComponent } from './sprint-issues-type/sprint-issues-type.component';
 const routes: Routes = [
   { path: "project-details", component: ProjectDetailsComponent, },
   { path: "sprint-details", component: SprintDetailsComponent, },
@@ -47,6 +50,9 @@ const routes: Routes = [
     DefectLeakageComponent,
     ScheduleVarianceComponent,
     SprintDetailsComponent,
+    SprintIssuesComponent,
+    SprintStoryPointsComponent,
+    SprintIssuesTypeComponent,
   ],
   imports: [
     FormsModule,
