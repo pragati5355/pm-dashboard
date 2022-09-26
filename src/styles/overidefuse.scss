@@ -128,6 +128,12 @@ color: black !important;
   button .btn-primary,  [type=submit]:not(:disabled), button:not(:disabled){
     background: #027afb !important;
 }
+.alert-success {
+  display: none;
+}
+.button-icon-right {
+  display: none;
+}
 }
 .form-check-input{
   background: #027afb !important;
