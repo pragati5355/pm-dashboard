@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {SnackBar} from '../../../../core/utils/snackBar'
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AddFormService } from '@services/add-form.service';
+import { AuthService } from '@services/auth/auth.service';
+import {SnackBar} from '../../../../core/utils/snackBar';
+import { ErrorMessage } from 'app/core/constacts/constacts'
 import {
   AbstractControl,
   FormBuilder,
@@ -31,6 +33,7 @@ export class AddFormComponent implements OnInit {
   constructor(private snackBar: SnackBar, private formService: AddFormService, 
     private _route: ActivatedRoute,
     private router: Router,
+    private _authService: AuthService,
     private _formBuilder: FormBuilder,) { }
   get formDetailsValidation(): { [key: string]: AbstractControl } {
     return this.formDetails.controls;
@@ -100,10 +103,14 @@ export class AddFormComponent implements OnInit {
         this.formService.updateForm(payload).subscribe((res: any)=>{
              if(!res.error){
                this.snackBar.successSnackBar(res.data.message)
+               this.router.navigate(['/forms/form-list']) 
              }else{
               this.snackBar.errorSnackBar(res.data.message)
              }
-           this.router.navigate(['/forms/form-list']) 
+             if(res.error == true){
+              this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
+              this._authService.updateAndReload(window.location);
+              }
         })
       }  
     }else{

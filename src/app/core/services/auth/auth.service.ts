@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient   } from '@angular/common/http';
 import { LocalStorageService } from "angular-web-storage";
 import { AppConstants } from '../../constacts/constacts';
+import {Router} from '@angular/router';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService{
   private isLoggedIn: boolean = false;
-  constructor(private http: HttpClient,private storage: LocalStorageService) {
+  constructor(private http: HttpClient,private storage: LocalStorageService,private router: Router) {
 
    }
 
@@ -55,6 +56,17 @@ export class AuthService{
   }
   updateToken(){
     return this.http.get(AppConstants['UPDATE_ACCESS_TOKEN']);
+  }
+  updateAndReload(pageUrl: any){
+    this.updateToken().subscribe(
+      (res: any) => {
+       if(res){
+        this.setToken(res.data.accessToken);
+        window.location.reload() 
+       }else{
+        this.router.navigate(['/sign-in'])
+       }
+      })
   }
 }
 

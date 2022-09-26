@@ -30,7 +30,7 @@ export class AddFormService {
   getFormListWithoutPagination() {
     return this.http.get(AppConstants['GET_FORM_LIST']);
   }
-  feedbaclForm(obj: any) {
+  feedbackFrom(obj: any) {
     return this.http.post(AppConstants['FEEDBACK_FORM'], obj);
   }
   getFeedbackForm(obj: any) {

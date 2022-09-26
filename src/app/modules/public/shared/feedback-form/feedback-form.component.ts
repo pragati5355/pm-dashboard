@@ -59,15 +59,17 @@ export class FeedbackFormComponent implements OnInit {
      let formComponent = event.data
      let payload = {
       formResponse: formComponent,
-      projectId: this.sprintId,
+      projectId: this.projectId,
       sprintId: this.sprintId,
       emailId: this.email
      }
-     console.log(event)
      this.formService.saveFeedbackForm(payload).subscribe((res: any) =>{
        if(res.error){
          this.snackBar.errorSnackBar(res.message)
        }else{
+        this.router.navigate(
+          [`/client-portal/feedback`]
+        );
          this.snackBar.successSnackBar("Successfully submitted!")
        }
      })

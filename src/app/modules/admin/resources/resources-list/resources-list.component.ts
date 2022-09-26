@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
+import {AuthService} from '@services/auth/auth.service';
 import {AbstractControl, FormBuilder, FormControl, FormGroup,Validators} from '@angular/forms';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
 import {ExprienceValidation} from "../../../../core/utils/Validations";
@@ -26,7 +27,6 @@ export class ResourcesListComponent implements OnInit {
   technologys = new FormControl('');
   techName: any = null;
   technologyLIst: any = [];
-  expriences: string[] = ['0 - 1', '1+', '2+', '3+', '4+'];
   pagination = false;
   searchValue = "";
   techList: string[] = []
@@ -34,14 +34,13 @@ export class ResourcesListComponent implements OnInit {
   resources: any = null;
   isLoading: boolean = false;
   totalRecored: any;
-  selectedExpriencesFromArray: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   allResources: any;
   updateDeleteObj: any = []
   deleteObject: any
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
-  constructor(private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
+  constructor( private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
               private _fuseConfirmationService: FuseConfirmationService,
               private snackBar: SnackBar,) {
   }
@@ -111,7 +110,9 @@ export class ResourcesListComponent implements OnInit {
      }else if(res.data == null){
       this.totalRecored = 0
       this.isLoading = false;
-     }
+     }else  if(res.error == true){
+      this._authService.updateAndReload(window.location);
+      }
     }, error => {
       this.isLoading = false;
     })

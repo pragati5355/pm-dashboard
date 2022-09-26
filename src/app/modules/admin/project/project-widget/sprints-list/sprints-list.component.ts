@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { StaticData } from "../../../../../core/constacts/static";
 import { CreateProjecteService } from "@services/create-projecte.service";
 import {  Input } from '@angular/core'
-import { E } from '@angular/cdk/keycodes';
+import { AuthService } from '@services/auth/auth.service';
 @Component({
   selector: 'app-sprints-list',
   templateUrl: './sprints-list.component.html',
@@ -16,7 +16,7 @@ export class SprintsListComponent implements OnInit {
   totalPerPageData = StaticData.PER_PAGE_DATA;
   sprintList: any = [];
 
-  constructor(private ProjectService: CreateProjecteService, private router: Router,) {
+  constructor(private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router,) {
   }
   @Input() dataId: any ;
   ngOnInit(): void {
@@ -38,6 +38,9 @@ export class SprintsListComponent implements OnInit {
         this.totalRecored =  0;
         this.isLoading = false;
       }
+      if(res.error == true){
+        this._authService.updateAndReload(window.location);
+        }
     }, error => {
       this.isLoading = false;
     })

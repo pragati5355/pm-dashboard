@@ -20,6 +20,7 @@ import {SnackBar} from '../../../../core/utils/snackBar'
 import {ObjectValidation} from "../../../../core/utils/Validations";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
 import { AddFormService } from '@services/add-form.service';
+import { ErrorMessage } from 'app/core/constacts/constacts'
 export class TeamMember {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
@@ -552,7 +553,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 this.router.navigate(['/projects/project-list']) 
               }else{
                 if(!res.data.message){
-                  this.snackBar.errorSnackBar("Something went wrong")
+                  this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG)
                 }else{
                   this.snackBar.errorSnackBar(res.data.message)
                   if(res.data.message=="Project already exists"){
@@ -563,7 +564,10 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 }
                
               }
-            
+              if(res.error == true){
+                this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
+                this._authService.updateAndReload(window.location);
+              }
             }, 
             error => {
               this.submitInProcess = false;
@@ -769,7 +773,10 @@ selectedJiraUserOption(event: any) {
             }else{
               this.snackBar.errorSnackBar(res.data.message)
             }
-          
+            if(res.error == true){
+              this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
+              this._authService.updateAndReload(window.location);
+              }
           }, 
           error => {
             this.submitInProcess = false;

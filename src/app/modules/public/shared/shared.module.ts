@@ -24,6 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedHomeComponent } from './shared-home/shared-home.component';
 import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
 import { EmptyHomeComponent } from './empty-home/empty-home.component';
+import { FeedbackHomeComponent } from './feedback-home/feedback-home.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,7 @@ const routes: Routes = [
     component: SharedHomeComponent,
     children: [
       { path: 'feedback/:projectId/:sprintId', component: FeedbackFormComponent },
+      { path: 'feedback', component: FeedbackHomeComponent },
       { path: 'empty-feedback-form', component: EmptyHomeComponent },
       {
         path: "",
@@ -49,7 +51,8 @@ const routes: Routes = [
   declarations: [
     SharedHomeComponent,
     FeedbackFormComponent,
-    EmptyHomeComponent
+    EmptyHomeComponent,
+    FeedbackHomeComponent
   ],
   imports: [
     CommonModule,

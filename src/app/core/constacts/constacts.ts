@@ -45,7 +45,8 @@ export const ValidationConstants = {
   YEAR_VALIDATION: "^[0-9]{1,2}$",
 };
 export const ErrorMessage = {
-  ERROR_FIVE_HUNDRED: "Internal Server Error"
+  ERROR_FIVE_HUNDRED: "Internal Server Error",
+  ERROR_SOMETHING_WENT_WRONG: "Something went wrong" 
 };
 
 

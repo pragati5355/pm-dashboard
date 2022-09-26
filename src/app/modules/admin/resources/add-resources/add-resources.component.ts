@@ -12,7 +12,8 @@ import {MonthValdation} from "../../../../core/utils/Validations";
 import { map, startWith } from 'rxjs/operators';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { AuthService } from '@services/auth/auth.service';
-import {SnackBar} from '../../../../core/utils/snackBar'
+import {SnackBar} from '../../../../core/utils/snackBar';
+import { ErrorMessage } from 'app/core/constacts/constacts'
 export class Technology {
   constructor( public id: number, public name: string) { }
 }
@@ -111,6 +112,10 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
       this.ProjectService.addresources(payload).subscribe(
         (res: any) => {
           this.submitInProcess = false;
+        if(res.error == true){
+          this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
+          this._authService.updateAndReload(window.location);
+          }
          if(res.data.error){
           this.snackBar.errorSnackBar(res.data.error)
         }else{
@@ -277,6 +282,10 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
           this.resourcesForm.reset();
           this.router.navigate(['/resources/resources-list'])
         }
+        if(res.error == true){
+          this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
+          this._authService.updateAndReload(window.location);
+          }
         },
         error => {
           this.submitInProcess = false;

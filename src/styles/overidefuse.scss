@@ -110,23 +110,39 @@ color: black !important;
 .multiple-select-style{
    left: 20px;
 }
+//form.io style changes
 .form-builder{
   .formarea{
     button .btn-primary,  [type=submit]:not(:disabled), button:not(:disabled){
-        background: #027afb !important;
+        background: #5255e5 !important;
     }
   }
   .formcomponent{
-       background: #027afb !important;
+       background: #5255e5 !important;
   }
+  .alert-info {
+    color: #5255e5;
+    background-color: #dadae5;
+    border-color: #dadae5;
+}
+.btn.focus, .btn:focus {
+  outline: 0;
+  box-shadow: none;
+}
 
 }
+.drag-copy, .gu-mirror {
+  background: #5255e5 !important;
+  border-color:#5255e5 !important;
+}
 .btn-primary.disabled, .btn-primary:disabled {
-  background: #027afb;
+  background: #5255e5;
+  border-color:#5255e5 !important;
 }
 .formio-render, .formio-form{
   button .btn-primary,  [type=submit]:not(:disabled), button:not(:disabled){
-    background: #027afb !important;
+    background: #5255e5 !important;
+    border-color:#5255e5 !important;
 }
 .alert-success {
   display: none;
@@ -136,5 +152,18 @@ color: black !important;
 }
 }
 .form-check-input{
-  background: #027afb !important;
+  accent-color: #5255e5 !important;
+}
+.form-control:focus{
+  border-color:#5255e5 !important;
+  box-shadow:none !important;
+}
+.component-btn-group .component-settings-button {
+  box-shadow: 0 0 5px 1px rgb(48 13 169 / 60%) !important;
+}
+.formio-dialog{
+
+  a:hover {
+    color: #5255e5;
+  }
 }

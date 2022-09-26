@@ -11,7 +11,7 @@ import {SnackBar} from '../../../../core/utils/snackBar'
 import { ValidationConstants } from "../../../../core/constacts/constacts";
 import {TextRegexValidator, RegexConstants,noWhitespaceValidator } from "../../../../core/utils/Validations";
 import { AddFormService } from '@services/add-form.service';
-
+import { ErrorMessage } from 'app/core/constacts/constacts'
 export interface DialogData {
   resend: any;
 }
@@ -23,11 +23,11 @@ export interface DialogData {
   encapsulation: ViewEncapsulation.None
 })
 export class SendFeedbackFormComponent implements OnInit {
-  feedbaclForm!: FormGroup;
-  get feedbaclFormValidation(): { [key: string]: AbstractControl } {
-    return this.feedbaclForm.controls;
+  feedbackFrom!: FormGroup;
+  get feedbackFromValidation(): { [key: string]: AbstractControl } {
+    return this.feedbackFrom.controls;
   }
-  formTitle = ""
+  sprintName = ""
   form_name=""
   project_name=""
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -35,6 +35,8 @@ export class SendFeedbackFormComponent implements OnInit {
   emails: string[] = [];
   emailInvalid= false
   notempty = true
+  project_id =0
+  sprint_id: any
   @ViewChild('emailInput') emailInput: ElementRef<HTMLInputElement> | any;
     constructor(
          private snackBar: SnackBar, private formService: AddFormService,
@@ -50,13 +52,15 @@ export class SendFeedbackFormComponent implements OnInit {
     ngOnInit(): void
     {
         // Create the form
-        this.formTitle = this.data.sprintName
+        this.sprintName = this.data.sprintName
+        this.sprint_id = this.data.id
         let projectData= this._authService.getProjectDetails()
         this.form_name = projectData.form.formName
         this.project_name = projectData.name
-        this.feedbaclForm = this._formBuilder.group({
+        this.project_id = projectData.id
+        this.feedbackFrom = this._formBuilder.group({
           emails: this._formBuilder.array([]),
-          subject: [ this.project_name +"| Feedback for Sprint "+this.formTitle,[Validators.required]], 
+          subject: [ this.project_name +"| Feedback for Sprint "+this.sprintName,[Validators.required]], 
           formName: [this.form_name,[Validators.required]], 
            message: ['',[Validators.required,
             TextRegexValidator(RegexConstants.Text_Area)]],
@@ -70,16 +74,19 @@ export class SendFeedbackFormComponent implements OnInit {
   
     save() {
       if(this.emails.length !==0){
-      if (!this.feedbaclForm.invalid) {
+      if (!this.feedbackFrom.invalid) {
         let payload = {
-          content : this.feedbaclForm.value.message,
-          email: this.emails
+          content : this.feedbackFrom.value.message,
+          emails: this.emails,
+          subject:this.feedbackFrom.value.subject,
+          projectId:this.project_id,
+          sprintId: parseInt(this.sprint_id)
         }
-      this.formService.feedbaclForm(payload).subscribe((res: any)=>{
+      this.formService.feedbackFrom(payload).subscribe((res: any)=>{
          if(res.data){
            this.snackBar.successSnackBar(res.data)
          }else{
-           this.snackBar.errorSnackBar("Something went wrong")
+           this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG)
          }
       });
       this.matDialogRef.close({
