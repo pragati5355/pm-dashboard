@@ -1,9 +1,8 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { StaticData } from "../../../../../core/constacts/static";
 import { CreateProjecteService } from "@services/create-projecte.service";
-import {  Input } from '@angular/core'
 import { AuthService } from '@services/auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   selector: 'app-sprint-issues',
   templateUrl: './sprint-issues.component.html',
@@ -12,25 +11,38 @@ import { AuthService } from '@services/auth/auth.service';
 export class SprintIssuesComponent implements OnInit {
   count = 1;
   isLoading: boolean = false;
-  totalRecored = 2;
+  totalRecored = 0;
   totalPerPageData = StaticData.PER_PAGE_DATA;
-  issuesList: any = [
-    {
-      assignee: "sanskriti",
-      assigned: 7,
-      resolved: 6
-    },
-    {
-      assignee: "Suraj",
-      assigned: 8,
-      resolved: 5
-    }
-  ];
+  sprintId: any
+  issuesList: any[] = []
 
-  constructor(private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router,) {
+  constructor(private _authService: AuthService, private _route: ActivatedRoute,private ProjectService: CreateProjecteService, private router: Router,) {
   }
   ngOnInit(): void {
-    this.isLoading = true;
+    this._route.queryParams.subscribe((sprintId: any) => {
+      if (sprintId['id']) {
+          this.sprintId = parseInt(sprintId['id'])
+      }
+      });
+    let payload = {
+      sprintId:this.sprintId,
+      issueType:"Bug"
+    }
+    this.getIssuesList(payload);
   }
 
+  getIssuesList(paylaod: any) {
+    this.ProjectService.getSprintIssueList(paylaod).subscribe((res: any) => {
+      if(res.data){
+      this.issuesList = res.data
+      this.totalRecored = this.issuesList.length 
+      this.isLoading = false;
+      }else{
+        this.totalRecored =  0;
+        this.isLoading = false;
+      }
+    }, error => {
+      this.isLoading = false;
+    })
+  }
 }
