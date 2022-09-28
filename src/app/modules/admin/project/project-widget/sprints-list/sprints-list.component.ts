@@ -38,7 +38,7 @@ export class SprintsListComponent implements OnInit {
         this.totalRecored =  0;
         this.isLoading = false;
       }
-      if(res.error == true){
+      if(res.tokenExpire == true){
         this._authService.updateAndReload(window.location);
         }
     }, error => {

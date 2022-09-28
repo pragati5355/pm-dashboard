@@ -110,7 +110,7 @@ export class ResourcesListComponent implements OnInit {
      }else if(res.data == null){
       this.totalRecored = 0
       this.isLoading = false;
-     }else  if(res.error == true){
+     }else  if(res.tokenExpire == true){
       this._authService.updateAndReload(window.location);
       }
     }, error => {
