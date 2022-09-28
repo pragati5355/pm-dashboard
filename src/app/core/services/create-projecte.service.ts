@@ -57,4 +57,7 @@ export class CreateProjecteService {
 burndownChart(obj: any) {
   return this.http.post(AppConstants['BURNDOWN_CHART'], obj);
 }
+getSprintIssueList(obj: any) {
+  return this.http.post(AppConstants['GET_SPRINT_ISSUES'], obj);
+}
 }

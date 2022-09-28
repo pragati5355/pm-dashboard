@@ -39,7 +39,7 @@ export class AddFormComponent implements OnInit {
     return this.formDetails.controls;
   }
   ngOnInit(): void {
-    // this.options = ;
+    // this.options = 
     this.formDetails = this._formBuilder.group({
       formName: ['',[Validators.required]],
       });
@@ -107,7 +107,7 @@ export class AddFormComponent implements OnInit {
              }else{
               this.snackBar.errorSnackBar(res.data.message)
              }
-             if(res.error == true){
+             if(res.tokenExpire == true){
               this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
               this._authService.updateAndReload(window.location);
               }

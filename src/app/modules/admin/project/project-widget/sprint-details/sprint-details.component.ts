@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component,ElementRef, Input, QueryList,  OnInit, ViewEncapsulation } from '@angular/core';
+import { Component,ElementRef, Input, QueryList,  OnInit, ViewEncapsulation } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CreateProjecteService } from "@services/create-projecte.service";
 import { MatDialog } from '@angular/material/dialog';
@@ -8,7 +8,6 @@ import { SendFeedbackFormComponent } from '../../send-feedback-form/send-feedbac
   templateUrl: './sprint-details.component.html',
   styleUrls: ['./sprint-details.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SprintDetailsComponent implements OnInit {
   sprint_name = "This is a Sprint name";

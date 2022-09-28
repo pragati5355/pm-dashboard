@@ -112,7 +112,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
       this.ProjectService.addresources(payload).subscribe(
         (res: any) => {
           this.submitInProcess = false;
-        if(res.error == true){
+        if(res.tokenExpire == true){
           this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
           this._authService.updateAndReload(window.location);
           }
@@ -282,7 +282,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
           this.resourcesForm.reset();
           this.router.navigate(['/resources/resources-list'])
         }
-        if(res.error == true){
+        if(res.tokenExpire == true){
           this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
           this._authService.updateAndReload(window.location);
           }

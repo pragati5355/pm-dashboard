@@ -564,7 +564,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
                 }
                
               }
-              if(res.error == true){
+              if(res.tokenExpire == true){
                 this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
                 this._authService.updateAndReload(window.location);
               }
@@ -773,7 +773,7 @@ selectedJiraUserOption(event: any) {
             }else{
               this.snackBar.errorSnackBar(res.data.message)
             }
-            if(res.error == true){
+            if(res.tokenExpire == true){
               this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
               this._authService.updateAndReload(window.location);
               }

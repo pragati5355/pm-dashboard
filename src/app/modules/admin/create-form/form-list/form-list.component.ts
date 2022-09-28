@@ -136,7 +136,7 @@ export class FormListComponent implements OnInit {
        }else{
         this.totalForm = 0
        }
-       if(res.error == true){
+       if(res.tokenExpire == true){
         this._authService.updateAndReload(window.location);
         }
       }, error => {

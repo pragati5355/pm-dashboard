@@ -26,6 +26,7 @@ export const AppConstants: ConstantsInterface = {
   UPDATE_DELETE_RESOURCE: `${projectBaseUrl}/update-delete`,
   GET_SPRINT_LIST: `${projectBaseUrl}/sprint`,
   GET_PROJECT_TEAM_LIST: `${projectBaseUrl}/project-team`,
+  GET_SPRINT_ISSUES: `${projectBaseUrl}/get-sprint-issue`,
   UPDATE_PROJECT: `${projectBaseUrl}/update-project`,
   BURNDOWN_CHART: `${jiraBaseUrl}/burndown-chart`,
   ADD_FORM: `${projectBaseUrl}/add-form`,

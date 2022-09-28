@@ -92,6 +92,7 @@ const routes: Routes = [
     DefectLeakageComponent,
     ScheduleVarianceComponent,
     SprintDetailsComponent,
+    SprintIssuesComponent
   ]
 })
 export class ProjectWidgetModule { }
