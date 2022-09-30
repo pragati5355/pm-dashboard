@@ -60,4 +60,7 @@ burndownChart(obj: any) {
 getSprintIssueList(obj: any) {
   return this.http.post(AppConstants['GET_SPRINT_ISSUES'], obj);
 }
+getSprintIssueTypeCount(obj: any) {
+  return this.http.post(AppConstants['GET_SPRINT_ISSUES_TYPE_COUNT'], obj);
+}
 }
