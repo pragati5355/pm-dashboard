@@ -83,10 +83,6 @@ const routes: Routes = [
         MatTooltipModule,
         InfiniteScrollModule,
   ],
-  providers:    [ {provide: FormioAppConfig, useValue: {
-    appUrl: 'https://examples.form.io',
-    apiUrl: 'https://api.form.io',
-    icons: 'fontawesome'
-  }} ]
+  providers:    [  ]
 })
 export class CreateFormModule { }

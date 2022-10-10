@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, EventEmitter, HostListener } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AddFormService } from '@services/add-form.service';
@@ -11,37 +11,93 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { CreateProjecteService } from '@services/create-projecte.service';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Formio } from 'angular-formio';
 @Component({
   selector: 'app-add-form',
   templateUrl: './add-form.component.html',
   styleUrls: ['./add-form.component.scss']
 })
 export class AddFormComponent implements OnInit {
+  @HostListener('document:mouseover', ['$event'])
+  mouseover(event: any) {
+      if(event.target.matches('.drag-container'||'.drag-and-drop-alert' || '.formarea' || '.formio-form' || '.builder-component' || '.formio-component' || '.dragComponent')) {
+          console.log("true")
+      }else{
+        console.log("false")
+      }
+      // console.log(event)
+  }
   @ViewChild('json', {static: true}) jsonElement?: ElementRef | any;
   @ViewChild('formio') formio:any;
   pageTitle= ""
   formTypeAdd = true
-  public form!: Object;
+  public form: Object |any;
   public options: any;
   public language!: string;
+  activeCustomers = [
+    {"label":"Survey","labelPosition":"top","description":"","tooltip":"fjlkdjf fsdaflkj","customClass":"inputclasstest","tabindex":"","hidden":false,"hideLabel":false,"autofocus":false,"disabled":false,"tableView":false,"modalEdit":false,"questions":[{"label":"sans","value":"sans","tooltip":""},{"label":"vis","value":"vis","tooltip":""}],"values":[{"label":"1","value":"1","tooltip":""},{"label":"1","value":"1","tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"customserveyinput","defaultValue":{}},
+  ];
+teammemberQuestion: any = []
+  refreshForm: any
   public rebuildEmitter: Subject<void> = new Subject<void>();
   formName = ""
   formDetails!: FormGroup;
   editFormId = 0
   routeSubscribe: any;
   initialLoading = false
+  selectFomList: any = [];
   constructor(private snackBar: SnackBar, private formService: AddFormService, 
     private _route: ActivatedRoute,
     private router: Router,
     private _authService: AuthService,
-    private _formBuilder: FormBuilder,) { }
+    private _formBuilder: FormBuilder,
+    private ProjectService:CreateProjecteService,
+    private el: ElementRef) { }
   get formDetailsValidation(): { [key: string]: AbstractControl } {
     return this.formDetails.controls;
   }
   ngOnInit(): void {
-    // this.options = 
+    this.options = {
+      builder: {
+        
+        customBasic: {
+          title: 'Custom',
+          weight: 0,
+          components: {
+            survey:  {
+              title: 'Customelemet',
+              tooltip: 'The code/key/ID/name of the field.',
+              id:"sanskriti",
+              attr: {  id:"sanskriti",},
+              key: 'customesurvey',
+              icon: 'terminal',
+              defaultValue: 'values',
+              label: 'Data Source Type',
+              dataSrc: 'values',
+              data: {
+                values: [
+                  { label: 'Values', value: 'values' },
+                  { label: 'URL', value: 'url' },
+                  { label: 'Resource', value: 'resource' },
+                  { label: 'Custom', value: 'custom' },
+                  { label: 'Raw JSON', value: 'json' },
+                ],
+              },
+              settings: {
+                input: true,
+                tableView: true,
+                label: '',},
+               schema: {data:{"label":"Survey","labelPosition":"top","description":"","tooltip":"","customClass":"inputclasstest","tabindex":"","hidden":false,"hideLabel":false,"autofocus":false,"disabled":false,"tableView":false,"modalEdit":false,"questions":[{"label":"sans","value":"sans","tooltip":""},{"label":"vis","value":"vis","tooltip":""}],"values":[{"label":"1","value":"1","tooltip":""},{"label":"1","value":"1","tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"customserveyinput","defaultValue":{}}},
+            }
+          }
+        },
+      }
+    };
     this.formDetails = this._formBuilder.group({
       formName: ['',[Validators.required]],
+      project_name: ['',[Validators.required]],
       });
     this.form = {components: []};
     this.routeSubscribe = this._route.queryParams.subscribe(formtype => {
@@ -55,6 +111,8 @@ export class AddFormComponent implements OnInit {
         this.formTypeAdd = true
       }
     });
+    this.refreshForm = new EventEmitter();
+    this.getProjectList();
   }
   onSubmit(event: any) {
     alert('form submitted!')
@@ -71,7 +129,8 @@ export class AddFormComponent implements OnInit {
       formComponent: this.form
     }
     if(this.formDetails.value.formName){
-      if(Object.values(this.form).map(v => v.length)[0]== 1){
+      // if(Object.values(this.form).map(v => v.length)[0]== 1){
+        if(this.form.components.lenght == 1){
         this.snackBar.errorSnackBar("Add form component")
       }else{
         this.formService.addForm(payload).subscribe((res: any)=>{
@@ -97,7 +156,10 @@ export class AddFormComponent implements OnInit {
       formComponent: this.form
     }
     if(this.formDetails.value.formName){
-      if(Object.values(this.form).map(v => v.length)[0]== 1){
+      // if(Object.values(this.form).map(v => v.length)[0]== 1){
+        console.log(this.form.components)
+        if(this.form.components.lenght == 1){
+          
         this.snackBar.errorSnackBar("Add form component")
       }else{
         this.formService.updateForm(payload).subscribe((res: any)=>{
@@ -130,5 +192,59 @@ export class AddFormComponent implements OnInit {
        this.form = item.formComponent
     })
     })
+  }
+  drop(event: CdkDragDrop<any[]>){
+    let data = {"label":"Survey","labelPosition":"top","description":"","tooltip":"fjlkdjf fsdaflkj","customClass":"inputclasstest","tabindex":"","hidden":false,"hideLabel":false,"autofocus":false,"disabled":false,"tableView":false,"modalEdit":false,"questions":this.teammemberQuestion,
+    "values":[{"label":"Excellent","value":"excellent","tooltip":""},
+    {"label":"Great","value":"great","tooltip":""},
+    {"label":"Good","value":"good","tooltip":""},
+    {"label":"Average","value":"average","tooltip":""},
+    {"label":"Poor","value":"poor","tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"customserveyinput","defaultValue":{}}
+    this.form.components.push(data)
+    this.refreshForm.emit({
+      form: this.form
+    });
+    
+  }
+  getProjectList(){
+    this.initialLoading = true
+    this.ProjectService.getProjectListWithoutPagination().subscribe((res:any)=>{
+          this.selectFomList= res.data
+          this.initialLoading = false;
+      if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+    })
+  }
+  getTeamMemberList(payload: any) {
+    this.ProjectService.getTeamMemberList(payload).subscribe((res: any) => {
+      let teamMember = res.data;
+      // if (this.teamMember !== null) {
+      //   this.totalRecored = this.teamMember.length ? this.teamMember.length : 0;
+      // }
+      this.teammemberQuestion = [];
+      teamMember.forEach((item: any)=>{
+        this.teammemberQuestion = [
+          ...this.teammemberQuestion,
+          {
+            "label": item.name,
+            "value": item.name,
+            "tooltip": "",
+          }
+        ];
+      })
+      console.log(this.teammemberQuestion)
+      this.initialLoading = false;
+    }, error => {
+      this.initialLoading = false;
+    })
+    
+  }
+  selectchange(event: any){
+    console.log(event.value)
+    let payload = {
+      "id": event.value
+    }
+    this.getTeamMemberList(payload);
   }
 }

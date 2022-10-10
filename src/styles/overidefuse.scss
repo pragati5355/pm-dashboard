@@ -129,7 +129,9 @@ color: black !important;
   outline: 0;
   box-shadow: none;
 }
-
+.btn-primary.focus, .btn-primary:focus {
+  box-shadow: none !important;
+}
 }
 .drag-copy, .gu-mirror {
   background: #5255e5 !important;
@@ -166,4 +168,14 @@ color: black !important;
   a:hover {
     color: #5255e5;
   }
+}
+.drag-box{
+  color: white;
+  background-color: #5255e5;
+  text-align: left;
+  padding: 5px 5px 5px 8px;
+  margin-top: 0.2rem;
+  font-size: .8em;
+  line-height: 1.2;
+  border-radius: 0.3em;
 }

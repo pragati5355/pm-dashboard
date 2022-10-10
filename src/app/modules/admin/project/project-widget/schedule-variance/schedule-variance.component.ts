@@ -281,7 +281,7 @@ export class ScheduleVarianceComponent implements OnInit {
                   show: true
               },
               labels    : {
-                  format: 'MMM dd,'
+                  format: 'MMM dd'
               },
               // tickAmount: 3,
               tickPlacement: 'between',

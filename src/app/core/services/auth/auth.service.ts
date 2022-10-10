@@ -26,6 +26,9 @@ export class AuthService{
   setUser(user: any) {
     this.storage.set("user", user);
   }
+  setUserPhoto(photoUrl: any) {
+    this.storage.set("photoUrl", photoUrl);
+  }
   setProjectDetails(project: any) {
     this.storage.set("project", project);
   }
@@ -36,7 +39,9 @@ export class AuthService{
   getRefreshToken() {
     return this.storage.get("refreshToken");
   }
-
+  getUserPhoto(){
+    return this.storage.get("photoUrl");
+  }
   deleteToken() {
     this.storage.remove("accessToken");
     this.storage.remove("refreshToken");

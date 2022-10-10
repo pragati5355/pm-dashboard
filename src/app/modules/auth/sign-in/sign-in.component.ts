@@ -37,12 +37,11 @@ export class AuthSignInComponent implements OnInit
     loginWithGoogle(): void {
       this.submitInProcess = true;
       this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then(res => {
+      .then(result => {
           this.showAlert = false;
-          console.log(res);
-          this._authService.login(JSON.stringify(res)).subscribe(
+          console.log(result);
+          this._authService.login(JSON.stringify(result)).subscribe(
               (res:any)=>{
-                console.log("signresponsive",res);
                 this.submitInProcess = false;
                 if(res.data.user == null){
                   this.alert = {
@@ -53,18 +52,17 @@ export class AuthSignInComponent implements OnInit
                 // Show the alert
                 this.showAlert = true;
                 }else{
-                  console.log(res)
                   this._authService.setToken(res.data.token.accessToken);
                   this._authService.setRefreshToken(res.data.token.refreshToken);
                   this._authService.setAuthenticated(true);
                   this._authService.setUser(res.data.user);
+                  this._authService.setUserPhoto(result.photoUrl)
                   this.router.navigate(['/projects']) 
                 }          
                 
               },
               error =>{
                 this.submitInProcess = false;
-                console.log(error.message)
                   this.alert = {
                       type   : 'error',
                       message: 'Server network issue'
