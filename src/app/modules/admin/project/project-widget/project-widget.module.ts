@@ -33,6 +33,7 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { SprintIssuesComponent } from './sprint-issues/sprint-issues.component';
 import { SprintStoryPointsComponent } from './sprint-story-points/sprint-story-points.component';
 import { SprintIssuesTypeComponent } from './sprint-issues-type/sprint-issues-type.component';
+import { SpringProgressComponent } from './spring-progress/spring-progress.component';
 const routes: Routes = [
   { path: "project-details", component: ProjectDetailsComponent, },
   { path: "sprint-details", component: SprintDetailsComponent, },
@@ -53,6 +54,7 @@ const routes: Routes = [
     SprintIssuesComponent,
     SprintStoryPointsComponent,
     SprintIssuesTypeComponent,
+    SpringProgressComponent,
   ],
   imports: [
     FormsModule,
