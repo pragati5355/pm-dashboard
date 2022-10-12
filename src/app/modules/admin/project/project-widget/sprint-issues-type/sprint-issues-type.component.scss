@@ -2,15 +2,15 @@
     grid-template-columns:  150px 60px ;
   
     @screen sm {
-      grid-template-columns: auto 280px     ;
+      grid-template-columns: auto 400px     ;
     }
   
     @screen md {
-      grid-template-columns:  auto 280px   ;
+      grid-template-columns:  auto 400px   ;
     }
   
     @screen lg {
-      grid-template-columns:   auto  280px  ;
+      grid-template-columns:   auto  400px  ;
     }
   }
   
