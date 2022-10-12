@@ -13,21 +13,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id   : 'project',
         title: 'Project',
         type : 'basic',
-        icon : 'heroicons_outline:document-text',
+        icon : 'heroicons_outline:table',
         link : '/projects'
     },
     {
         id   : 'resources',
         title: 'Resources',
         type : 'basic',
-        icon : 'heroicons_outline:document-text',
+        icon : 'heroicons_outline:user-add',
         link : '/resources'
     },
     {
         id   : 'forms',
         title: 'Forms',
         type : 'basic',
-        icon : 'heroicons_outline:document-text',
+        icon : 'heroicons_outline:pencil-alt',
         link : '/forms'
     }
 ];
