@@ -20,14 +20,11 @@ import { Formio } from 'angular-formio';
   styleUrls: ['./add-form.component.scss']
 })
 export class AddFormComponent implements OnInit {
-  @HostListener('document:mouseover', ['$event'])
-  mouseover(event: any) {
-      if(event.target.matches('.drag-container'||'.drag-and-drop-alert' || '.formarea' || '.formio-form' || '.builder-component' || '.formio-component' || '.dragComponent')) {
-          console.log("true")
-      }else{
-        console.log("false")
-      }
-      // console.log(event)
+  @HostListener("window:beforeunload", ["$event"])
+  public onPageUnload($event: BeforeUnloadEvent) {
+    if (!this.canExit()) {
+      $event.returnValue = true;
+    }
   }
   @ViewChild('json', {static: true}) jsonElement?: ElementRef | any;
   @ViewChild('formio') formio:any;
@@ -59,42 +56,6 @@ teammemberQuestion: any = []
     return this.formDetails.controls;
   }
   ngOnInit(): void {
-    this.options = {
-      builder: {
-        
-        customBasic: {
-          title: 'Custom',
-          weight: 0,
-          components: {
-            survey:  {
-              title: 'Customelemet',
-              tooltip: 'The code/key/ID/name of the field.',
-              id:"sanskriti",
-              attr: {  id:"sanskriti",},
-              key: 'customesurvey',
-              icon: 'terminal',
-              defaultValue: 'values',
-              label: 'Data Source Type',
-              dataSrc: 'values',
-              data: {
-                values: [
-                  { label: 'Values', value: 'values' },
-                  { label: 'URL', value: 'url' },
-                  { label: 'Resource', value: 'resource' },
-                  { label: 'Custom', value: 'custom' },
-                  { label: 'Raw JSON', value: 'json' },
-                ],
-              },
-              settings: {
-                input: true,
-                tableView: true,
-                label: '',},
-               schema: {data:{"label":"Survey","labelPosition":"top","description":"","tooltip":"","customClass":"inputclasstest","tabindex":"","hidden":false,"hideLabel":false,"autofocus":false,"disabled":false,"tableView":false,"modalEdit":false,"questions":[{"label":"sans","value":"sans","tooltip":""},{"label":"vis","value":"vis","tooltip":""}],"values":[{"label":"1","value":"1","tooltip":""},{"label":"1","value":"1","tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"customserveyinput","defaultValue":{}}},
-            }
-          }
-        },
-      }
-    };
     this.formDetails = this._formBuilder.group({
       formName: ['',[Validators.required]],
       project_name: ['',[Validators.required]],
@@ -128,9 +89,9 @@ teammemberQuestion: any = []
       formName: this.formDetails.value.formName,
       formComponent: this.form
     }
+    let formcompoent: [] = this.form?.components
     if(this.formDetails.value.formName){
-      // if(Object.values(this.form).map(v => v.length)[0]== 1){
-        if(this.form.components.lenght == 1){
+      if(formcompoent.length <= 1){
         this.snackBar.errorSnackBar("Add form component")
       }else{
         this.formService.addForm(payload).subscribe((res: any)=>{
@@ -155,10 +116,9 @@ teammemberQuestion: any = []
       formName: this.formDetails.value.formName,
       formComponent: this.form
     }
+    let formcompoent: [] = this.form?.components
     if(this.formDetails.value.formName){
-      // if(Object.values(this.form).map(v => v.length)[0]== 1){
-        console.log(this.form.components)
-        if(this.form.components.lenght == 1){
+      if(formcompoent.length <= 1){
           
         this.snackBar.errorSnackBar("Add form component")
       }else{
@@ -194,12 +154,12 @@ teammemberQuestion: any = []
     })
   }
   drop(event: CdkDragDrop<any[]>){
-    let data = {"label":"Survey","labelPosition":"top","description":"","tooltip":"fjlkdjf fsdaflkj","customClass":"inputclasstest","tabindex":"","hidden":false,"hideLabel":false,"autofocus":false,"disabled":false,"tableView":false,"modalEdit":false,"questions":this.teammemberQuestion,
+    let data = {"label":"Survey","labelPosition":"top","description":"","tooltip":"","customClass":"surveyCopmonent","tabindex":"","hidden":false,"hideLabel":false,"autofocus":false,"disabled":false,"tableView":false,"modalEdit":false,"questions":this.teammemberQuestion,
     "values":[{"label":"Excellent","value":"excellent","tooltip":""},
     {"label":"Great","value":"great","tooltip":""},
     {"label":"Good","value":"good","tooltip":""},
     {"label":"Average","value":"average","tooltip":""},
-    {"label":"Poor","value":"poor","tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"customserveyinput","defaultValue":{}}
+    {"label":"Poor","value":"poor","tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"surveyComponentId","defaultValue":{}}
     this.form.components.push(data)
     this.refreshForm.emit({
       form: this.form
@@ -219,9 +179,7 @@ teammemberQuestion: any = []
   getTeamMemberList(payload: any) {
     this.ProjectService.getTeamMemberList(payload).subscribe((res: any) => {
       let teamMember = res.data;
-      // if (this.teamMember !== null) {
-      //   this.totalRecored = this.teamMember.length ? this.teamMember.length : 0;
-      // }
+
       this.teammemberQuestion = [];
       teamMember.forEach((item: any)=>{
         this.teammemberQuestion = [
@@ -233,7 +191,6 @@ teammemberQuestion: any = []
           }
         ];
       })
-      console.log(this.teammemberQuestion)
       this.initialLoading = false;
     }, error => {
       this.initialLoading = false;
@@ -241,10 +198,15 @@ teammemberQuestion: any = []
     
   }
   selectchange(event: any){
-    console.log(event.value)
     let payload = {
       "id": event.value
     }
     this.getTeamMemberList(payload);
+  }
+  canExit(): boolean {
+    if (!this.formDetails.pristine) {
+      return false;
+    }
+    return true;
   }
 }

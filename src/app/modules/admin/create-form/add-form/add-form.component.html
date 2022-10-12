@@ -3,8 +3,6 @@
   <div
     class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
     <div class="text-4xl font-extrabold tracking-tight">{{pageTitle}}</div>
-    <!-- <div id="box">Hello</div> -->
-    <input type="text" id="box" class="box">
   </div>
   <div class="flex flex-col flex-auto w-full overflow-y-auto">
     <!-- Header -->
@@ -58,7 +56,7 @@
             </button>
             </div>
               </div>
-              <div  class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
+              <div  class="flex sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
               <mat-form-field   class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 select-form" [floatLabel]="'always'" >
                 <mat-label>Project </mat-label>
                 <mat-select panelClass="select-form-option"
@@ -72,6 +70,7 @@
                 {{ project.name | titlecase }}
                 </mat-option>
                 </mat-select>
+                
                 <mat-error *ngIf="formDetailsValidation['project_name'].errors &&
                 formDetailsValidation['project_name']?.invalid &&
                 formDetailsValidation['project_name']?.touched ">
@@ -79,15 +78,11 @@
                 </mat-error>
                 
               </mat-form-field>
-              </div>
-                <!-- <small>kdfalsdjl</small> -->
+            </div>
+            <small class="mb-4">Choose a project to use the Survey Component below</small>
               <!-- Actions -->
               
           </div>
-          <mat-label class="">Form Component *</mat-label>
-    <!-- <span class="custom-class">Custom</span> -->
-    <div>
-      <!-- <button class="custom-class">Custom</button> -->
       <div #activeList="cdkDropList"
           class="box-list-component"
           cdkDropList
@@ -95,9 +90,8 @@
           [cdkDropListData]="activeCustomers"
           (cdkDropListDropped)="drop($event)">
           <button class="drag-box" cdkDrag [disabled]="teammemberQuestion.length == 0">
-          Custom component
+          Survey component
             </button>
-        </div>
     </div>
   
             <div class="mt-2 form-builder"  ><form-builder id="builder" [form]="form" (change?)="onChange($event)" #formio [refresh]="refreshForm"></form-builder>
