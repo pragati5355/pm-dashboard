@@ -21,6 +21,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     user!: User;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     userData: any;
+    userPhoto: any = "";
     /**
      * Constructor
      */
@@ -81,6 +82,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
                 this.isScreenSmall = !matchingAliases.includes('md');
             });
             this.userData = this.authService.getUser();
+            this.userPhoto= this.authService.getUserPhoto(); 
+            console.log(this.userPhoto)
     }
 
     /**

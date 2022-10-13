@@ -8,6 +8,7 @@ import {FuseConfirmationService} from '@fuse/services/confirmation';
 import { AddFormService } from '@services/add-form.service';
 import {AuthService} from '@services/auth/auth.service';
 import { CopyFormComponent } from '../copy-form/copy-form.component';
+import { ErrorMessage } from 'app/core/constacts/constacts'
 @Component({
   selector: 'app-form-list',
   templateUrl: './form-list.component.html',
@@ -74,11 +75,11 @@ export class FormListComponent implements OnInit {
           if (result == "confirmed") {
             this.formService.deleteForm(payload).subscribe(
               (res: any) => {
-                if(!res.data.error){
+                if(!res.error){
                   this.snackBar.successSnackBar(res.data.message)
                 }
                 else{
-                  this.snackBar.errorSnackBar(res.data.message)
+                  this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG)
                 }
                 this.count  = 0
                 this.formList = []

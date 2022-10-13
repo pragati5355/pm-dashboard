@@ -20,6 +20,7 @@ export const AppConstants: ConstantsInterface = {
   GET_RESOURCE_LIST: `${projectBaseUrl}/get-team-member`,
   ADD_RESOURCE_LIST: `${projectBaseUrl}/team-member`,
   GET_PROJECTS: `${projectBaseUrl}/project`,
+  GET_PROJECTS_LIST_WITHOUTPAGINATION:`${projectBaseUrl}/get-project`,
   GET_PROJECT_DETAILS: `${projectBaseUrl}/get-project-by-id  `,
   GET_TECHNOLOGY: `${projectBaseUrl}/technology`,
   GET_RESOURCE: `${projectBaseUrl}/get-resource-by-id`,

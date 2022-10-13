@@ -63,4 +63,7 @@ getSprintIssueList(obj: any) {
 getSprintIssueTypeCount(obj: any) {
   return this.http.post(AppConstants['GET_SPRINT_ISSUES_TYPE_COUNT'], obj);
 }
+getProjectListWithoutPagination(){
+  return this.http.get(AppConstants['GET_PROJECTS_LIST_WITHOUTPAGINATION']);
+}
 }
