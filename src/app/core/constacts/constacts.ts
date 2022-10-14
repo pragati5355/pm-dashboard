@@ -24,6 +24,7 @@ export const AppConstants: ConstantsInterface = {
   GET_PROJECT_DETAILS: `${projectBaseUrl}/get-project-by-id  `,
   GET_TECHNOLOGY: `${projectBaseUrl}/technology`,
   GET_RESOURCE: `${projectBaseUrl}/get-resource-by-id`,
+  SPRINT_PROGRESS: `${projectBaseUrl}/sprint-progress`,
   UPDATE_DELETE_RESOURCE: `${projectBaseUrl}/update-delete`,
   GET_SPRINT_LIST: `${projectBaseUrl}/sprint`,
   GET_PROJECT_TEAM_LIST: `${projectBaseUrl}/project-team`,
