@@ -25,7 +25,7 @@
               class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
               
             >
-              <ng-container *ngIf="!isLoading && formList.length > 0; else noProducts">
+              <ng-container *ngIf="!isLoading && formList.length > 0;">
                 <div *ngIf="formList.length > 0" class="grid">
                   <div
                     class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
@@ -72,13 +72,20 @@
                   </ng-container>
                 </div>
               </ng-container>
-              <ng-template #noProducts>
+              <ng-container *ngIf="initialLoading">
+                <div
+                  class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+                >
+                  Loading......
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!initialLoading && totalForm == 0;">
                 <div
                   class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
                 >
                   Forms not found
                 </div>
-              </ng-template>
+              </ng-container>
             </div>
           </div>
 </div>

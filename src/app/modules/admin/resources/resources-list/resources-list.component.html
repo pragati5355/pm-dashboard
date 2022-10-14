@@ -5,10 +5,6 @@
   <div
     class="relative flex flex-col sm:flex-row md:flex-col justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent"
   >
-    <!-- Loader -->
-    <div *ngIf="isLoading" class="absolute inset-x-0 bottom-0">
-      <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
-    </div>
     <!-- Title -->
     <div class="text-4xl font-extrabold tracking-tight leading-none">
       Resources
@@ -140,7 +136,7 @@
       class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
       infiniteScroll
     >
-      <ng-container *ngIf="!isLoading && totalRecored > 0; else noProducts">
+      <ng-container *ngIf="!initialLoading && totalRecored > 0;">
         <div *ngIf="totalRecored > 0" class="grid">
           <!-- Header -->
           <div
@@ -209,6 +205,7 @@
                       : ""
                   }}
                 </div>
+                <div *ngIf="!resources.month && !resources.year">-</div>
               </div>
 
               <!-- Active -->
@@ -228,13 +225,18 @@
           </ng-container>
         </div>
       </ng-container>
-      <ng-template #noProducts>
-        <div
-          class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+      <ng-container *ngIf="!initialLoading && resources.length == 0;">
+        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
         >
          Resources not found
         </div>
-      </ng-template>
+      </ng-container>
+      <ng-container *ngIf="initialLoading">
+        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+        >
+         Loading......
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

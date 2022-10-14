@@ -31,8 +31,8 @@ export class ResourcesListComponent implements OnInit {
   searchValue = "";
   techList: string[] = []
   count = 1;
-  resources: any = null;
-  isLoading: boolean = false;
+  resources: any[] = [];
+  initialLoading: boolean = false;
   totalRecored: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   allResources: any;
@@ -48,7 +48,6 @@ export class ResourcesListComponent implements OnInit {
     return this.exprienceForm.controls;
   }
   ngOnInit(): void {
-    this.isLoading = true;
     this.exprienceForm = this._formBuilder.group({
       minExprience: ['', [ Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
       maxExprience: ['', [ Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
@@ -101,32 +100,29 @@ export class ResourcesListComponent implements OnInit {
   }
 
   getList(payload: any) {
-    this.isLoading = true;
+    this.initialLoading = true;
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
      if(res.data){
       this.totalRecored = res.data.totalRecored
       this.resources = res.data.teamMember;
-      this.isLoading = false;
+      this.initialLoading = false;
      }else if(res.data == null){
       this.totalRecored = 0
-      this.isLoading = false;
+      this.initialLoading = false;
      }else  if(res.tokenExpire == true){
       this._authService.updateAndReload(window.location);
       }
     }, error => {
-      this.isLoading = false;
+      this.initialLoading = false;
     })
   }
 
 
 
   getListtechList() {
-    this.isLoading = true;
     this.ProjectService.getTechnology().subscribe((res: any) => {
       this.technologyLIst = res.data;
-      this.isLoading = false;
     }, error => {
-      this.isLoading = false;
     })
   }
 
@@ -158,7 +154,6 @@ export class ResourcesListComponent implements OnInit {
   }
 
   selectChange() {
-    this.isLoading = true;
     this.count = 1
     this.pagination = false
     let tech = this.technologys.value?.[0];
@@ -181,9 +176,9 @@ export class ResourcesListComponent implements OnInit {
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
       this.totalRecored = res.data.totalRecored
       this.resources = res.data.teamMember;
-      this.isLoading = false;
+      this.initialLoading = false;
     }, error => {
-      this.isLoading = false;
+      this.initialLoading = false;
     });
   }
 
@@ -298,7 +293,6 @@ export class ResourcesListComponent implements OnInit {
         "name": this.searchValue
       }
       this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
-        this.isLoading = false;
         if(res.data){
           this.totalRecored = res.data.totalRecored
         this.resources = res.data.teamMember;
@@ -307,7 +301,7 @@ export class ResourcesListComponent implements OnInit {
         }
         
       }, error => {
-        this.isLoading = false;
+        this.initialLoading = false;
       });
     }else{
       event.stopPropagation();
