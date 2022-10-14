@@ -134,6 +134,7 @@ export class SpringProgressComponent implements OnInit {
   }
    
   getSprintProgress(paylaod: any) {
+    this.initialLoading = true;
     this.ProjectService.getSprintProgress(paylaod).subscribe((res: any) => {
       if(res.data){
       this.sprintProgressList = res.data
@@ -178,7 +179,7 @@ export class SpringProgressComponent implements OnInit {
       console.log(this.resultProgress)
       this.chartOptions.series = 
       [{
-        name: 'Done',
+        name: 'Todo',
         data: [this.sprintProgressList.todo ]
       }, {
         name: 'In Progress',
