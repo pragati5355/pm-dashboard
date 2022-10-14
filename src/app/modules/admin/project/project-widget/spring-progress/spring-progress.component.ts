@@ -14,7 +14,10 @@ import {
   ApexLegend
 } from "ng-apexcharts";
 import ApexCharts from 'apexcharts';
-import { NONE_TYPE } from '@angular/compiler';
+import { StaticData } from "../../../../../core/constacts/static";
+import { CreateProjecteService } from "@services/create-projecte.service";
+import { AuthService } from '@services/auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -37,22 +40,17 @@ export class SpringProgressComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent | any;
   public chartOptions: Partial<ChartOptions> | any;
+  count = 1;
+  initialLoading: boolean = false;
+  totalRecored = 0;
+  totalPerPageData = StaticData.PER_PAGE_DATA;
+  sprintId: any
+  sprintProgressList: any = []
+  resultProgress: any[]=[];
 
-  constructor() {
+  constructor(private _authService: AuthService, private _route: ActivatedRoute,private ProjectService: CreateProjecteService, private router: Router,)  {
     this.chartOptions = {
-      series: [{
-      name: 'Marine Sprite',
-      data: [44]
-    }, {
-      name: 'Striking Calf',
-      data: [53]
-    }, {
-      name: 'Tank Picture',
-      data: [12]
-    },  {
-      name: 'Reborn Kid',
-      data: [34]
-    }],
+      series: [],
       chart: {
       type: 'bar',
       height: 150,
@@ -124,6 +122,81 @@ export class SpringProgressComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._route.queryParams.subscribe((sprintId: any) => {
+      if (sprintId['id']) {
+          this.sprintId = parseInt(sprintId['id'])
+      }
+      });
+    let payload = {
+      sprintId:this.sprintId,
+    }
+    this.getSprintProgress(payload);
   }
-
+   
+  getSprintProgress(paylaod: any) {
+    this.ProjectService.getSprintProgress(paylaod).subscribe((res: any) => {
+      if(res.data){
+      this.sprintProgressList = res.data
+      this.totalRecored = this.sprintProgressList.length 
+      console.log(this.sprintProgressList)
+        if(this.sprintProgressList.todo > 0){
+        this.resultProgress = [
+          ...this.resultProgress,
+          {
+            name: "Todo",
+            data: this.sprintProgressList.todo,
+          }
+        ];
+      }
+      if(this.sprintProgressList.inProgress > 0){
+        this.resultProgress = [
+          ...this.resultProgress,
+          {
+            name: "In Progress",
+            data: this.sprintProgressList.inProgress,
+          }
+        ];
+      }
+      if(this.sprintProgressList.done > 0){
+        this.resultProgress = [
+          ...this.resultProgress,
+          {
+            name: "Done",
+            data: this.sprintProgressList.done,
+          }
+        ];
+      }
+      if(this.sprintProgressList.readyForQA > 0){
+        this.resultProgress = [
+          ...this.resultProgress,
+          {
+            name: "Ready For QA",
+            data: this.sprintProgressList.readyForQA,
+          }
+        ];
+      }
+      console.log(this.resultProgress)
+      this.chartOptions.series = 
+      [{
+        name: 'Done',
+        data: [this.sprintProgressList.todo ]
+      }, {
+        name: 'In Progress',
+        data: [this.sprintProgressList.inProgress]
+      }, {
+        name: 'Done',
+        data: [this.sprintProgressList.done]
+      },  {
+        name: 'Ready For QA',
+        data: [this.sprintProgressList.readyForQA]
+      }],
+      this.initialLoading = false;
+      }else{
+        this.totalRecored =  0;
+        this.initialLoading = false;
+      }
+    }, error => {
+      this.initialLoading = false;
+    })
+  }
 }

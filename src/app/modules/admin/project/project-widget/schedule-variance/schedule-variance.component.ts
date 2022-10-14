@@ -80,9 +80,30 @@ export class ScheduleVarianceComponent implements OnInit {
     }
       getOriginalEstimate(changes:any, startTime: any, endTime: any, now: any, completeTime: any){
         let filterdataset: any = []
+        let addfilterdataset: any = []
+        for (let key in changes) {
+          changes[key].forEach((element: any) => {
+            if(element.added ==  true){
+              // this.totalEstimates =this.totalEstimates + 0
+              addfilterdataset = [
+                  ...addfilterdataset,
+                  {
+                    Date:  Number.parseInt(key),
+                    key: element.key,
+                    // Detail:  "Scope change",
+                    Inc: 0,
+                    Dec: null,
+                    Remaining: this.totalEstimates,
+                    notDone: element?.column?.notDone?element?.column?.notDone:true
+                  }
+                ];
+          }
+          });
+        }
+        console.log(addfilterdataset)
         for (let key in changes) {
             changes[key].forEach((element: any) => {
-              if(element.added){
+              if(element.added == true){
                 this.totalEstimates =this.totalEstimates + 0
                 filterdataset = [
                     ...filterdataset,
@@ -98,7 +119,7 @@ export class ScheduleVarianceComponent implements OnInit {
                   ];
             }
             });
-          const found = filterdataset.some((el: any) => el.key === changes[key][0].key);
+          const found = addfilterdataset.some((el: any) => el.key === changes[key][0].key);
           if(found){
             if(changes[key][0]?.column?.notDone == false ){
               let newdac = 0
@@ -142,6 +163,27 @@ export class ScheduleVarianceComponent implements OnInit {
                 }
               ];
             }
+            if(!changes[key][0]?.statC?.newValue && changes[key][0]?.statC?.oldValue){
+              let newInc =changes[key][0]?.statC?.oldValue/ 3600
+              // if(changes[key][0]?.statC?.oldValue){
+              //   newInc =changes[key][0]?.statC?.newValue/ 3600 -changes[key][0]?.statC?.oldValue/ 3600
+              // }else{
+              //   newInc =changes[key][0]?.statC?.newValue/ 3600
+              // }
+              this.totalEstimates = this.totalEstimates - newInc
+              filterdataset = [
+                ...filterdataset,
+                { 
+                  Date:  Number.parseInt(key),
+                  key: changes[key][0].key,
+                  // Detail:  "Issue completed",
+                  Inc: null,
+                  Dec: newInc,
+                  Remaining: this.totalEstimates,
+                  notDone: changes[key][0]?.column?.notDone?changes[key][0]?.column?.notDone:true
+                }
+              ];
+            }
             if(changes[key][0]?.column?.notDone == true && !changes[key][0].added){
               const found2 = filterdataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
               if(!found2){
@@ -165,8 +207,79 @@ export class ScheduleVarianceComponent implements OnInit {
                 }
               ];}
               }
-             
+              // if(changes[key][0]?.added == false  ){
+              //   const found2 = filterdataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
+              //   // if(found2){
+              //     let newDec = 0
+              //     filterdataset.forEach((element:any) => {
+              //       if(element.key === changes[key][0].key){
+              //         newDec = element.Inc
+              //       }
+              //     });
+              //     this.totalEstimates = this.totalEstimates - newDec
+              //     filterdataset = [
+              //     ...filterdataset,
+              //     { 
+              //       Date:  Number.parseInt(key),
+              //       key: changes[key][0].key,
+              //       // Detail:  "Issue completed",
+              //       Inc: null,
+              //       Dec: newDec,
+              //       Remaining: this.totalEstimates,
+              //       notDone: changes[key][0]?.column?.notDone?changes[key][0]?.column?.notDone:true
+              //     }
+              //   ];
+              // // }
+              //   }
+              //   if(changes[key][0]?.column?.done == true  ){
+              //     const found2 = filterdataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
+              //     // if(found2){
+              //       let newDec = 0
+              //       filterdataset.forEach((element:any) => {
+              //         if(element.key === changes[key][0].key){
+              //           newDec = element.Inc
+              //         }
+              //       });
+              //       this.totalEstimates = this.totalEstimates - newDec
+              //       filterdataset = [
+              //       ...filterdataset,
+              //       { 
+              //         Date:  Number.parseInt(key),
+              //         key: changes[key][0].key,
+              //         // Detail:  "Issue completed",
+              //         Inc: null,
+              //         Dec: newDec,
+              //         Remaining: this.totalEstimates,
+              //         notDone: changes[key][0]?.column?.notDone?changes[key][0]?.column?.notDone:true
+              //       }
+              //     ];
+              //   // }
+              //     }
           }
+          if(changes[key][0]?.added == false  ){
+            const found2 = filterdataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
+            // if(found2){
+              let newDec = 0
+              filterdataset.forEach((element:any) => {
+                if(element.key === changes[key][0].key){
+                  newDec = element.Inc
+                }
+              });
+              this.totalEstimates = this.totalEstimates - newDec
+              filterdataset = [
+              ...filterdataset,
+              { 
+                Date:  Number.parseInt(key),
+                key: changes[key][0].key,
+                // Detail:  "Issue completed",
+                Inc: null,
+                Dec: newDec,
+                Remaining: this.totalEstimates,
+                notDone: changes[key][0]?.column?.notDone?changes[key][0]?.column?.notDone:true
+              }
+            ];
+          // }
+            }
           if(changes[key][0]?.column?.notDone == true && changes[key][0]?.statC){
              this.notDoneDataset = [
               ...this.notDoneDataset,
@@ -182,6 +295,7 @@ export class ScheduleVarianceComponent implements OnInit {
             ];
           }
           }
+          console.log(filterdataset)
         this.Chartdatavalue(filterdataset,startTime,endTime)
         if(completeTime !== undefined){
           this.getSprintEnd(changes,completeTime)  
