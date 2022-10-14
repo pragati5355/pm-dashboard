@@ -40,7 +40,6 @@ export const appRoutes: Routes = [
   },
   {
     path: "",
-    canActivate: [NoAuthGuard],
     component: LayoutComponent,
     data: {
         layout: 'empty'
