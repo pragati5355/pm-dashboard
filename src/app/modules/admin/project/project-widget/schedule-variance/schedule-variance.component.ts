@@ -165,11 +165,6 @@ export class ScheduleVarianceComponent implements OnInit {
             }
             if(!changes[key][0]?.statC?.newValue && changes[key][0]?.statC?.oldValue){
               let newInc =changes[key][0]?.statC?.oldValue/ 3600
-              // if(changes[key][0]?.statC?.oldValue){
-              //   newInc =changes[key][0]?.statC?.newValue/ 3600 -changes[key][0]?.statC?.oldValue/ 3600
-              // }else{
-              //   newInc =changes[key][0]?.statC?.newValue/ 3600
-              // }
               this.totalEstimates = this.totalEstimates - newInc
               filterdataset = [
                 ...filterdataset,
@@ -207,54 +202,7 @@ export class ScheduleVarianceComponent implements OnInit {
                 }
               ];}
               }
-              // if(changes[key][0]?.added == false  ){
-              //   const found2 = filterdataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
-              //   // if(found2){
-              //     let newDec = 0
-              //     filterdataset.forEach((element:any) => {
-              //       if(element.key === changes[key][0].key){
-              //         newDec = element.Inc
-              //       }
-              //     });
-              //     this.totalEstimates = this.totalEstimates - newDec
-              //     filterdataset = [
-              //     ...filterdataset,
-              //     { 
-              //       Date:  Number.parseInt(key),
-              //       key: changes[key][0].key,
-              //       // Detail:  "Issue completed",
-              //       Inc: null,
-              //       Dec: newDec,
-              //       Remaining: this.totalEstimates,
-              //       notDone: changes[key][0]?.column?.notDone?changes[key][0]?.column?.notDone:true
-              //     }
-              //   ];
-              // // }
-              //   }
-              //   if(changes[key][0]?.column?.done == true  ){
-              //     const found2 = filterdataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
-              //     // if(found2){
-              //       let newDec = 0
-              //       filterdataset.forEach((element:any) => {
-              //         if(element.key === changes[key][0].key){
-              //           newDec = element.Inc
-              //         }
-              //       });
-              //       this.totalEstimates = this.totalEstimates - newDec
-              //       filterdataset = [
-              //       ...filterdataset,
-              //       { 
-              //         Date:  Number.parseInt(key),
-              //         key: changes[key][0].key,
-              //         // Detail:  "Issue completed",
-              //         Inc: null,
-              //         Dec: newDec,
-              //         Remaining: this.totalEstimates,
-              //         notDone: changes[key][0]?.column?.notDone?changes[key][0]?.column?.notDone:true
-              //       }
-              //     ];
-              //   // }
-              //     }
+            
           }
           if(changes[key][0]?.added == false  ){
             const found2 = filterdataset.some((el: any) => el.key === changes[key][0].key && el.notDone === false);
