@@ -52,7 +52,9 @@
       <!-- project add -->
       <mat-form-field class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
         <mat-select
-        [placeholder]="'Choose project'">
+        [placeholder]="'Choose project'"
+        (selectionChange)="selectChangeProject($event)"
+        [formControl]="projects" >
           <mat-option>None</mat-option>
           <mat-option *ngFor="let project of projectsList" [value]="project.id">{{project.name}}</mat-option>
         </mat-select>
@@ -159,6 +161,7 @@
             <div></div>
             <div>Name</div>
             <div class="hidden md:block">Technology</div>
+            <div class="hidden md:block">Pojects</div>
             <div class="hidden sm:block">Team</div>
             <div class="hidden lg:block">Experience</div>
             <div>Action</div>
@@ -194,7 +197,12 @@
               <div class="hidden md:block truncate">
                 {{ resources.technologys }}
               </div>
-
+              <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length >0">
+                {{ resources.assignedProject }}
+              </div>
+              <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length == 0">
+               -
+              </div>
               <!-- Price -->
               <div class="hidden sm:block">
                 {{ resources.team }}
@@ -231,14 +239,14 @@
                 <mat-icon
                   class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
                   svgIcon="heroicons_outline:trash"
-                  (click)="deleteResource(resources.id)"
+                  (click)="deleteResource(resources.id,resources.assignedProjects.length)"
                 ></mat-icon>
               </div>
             </div>
           </ng-container>
         </div>
       </ng-container>
-      <ng-container *ngIf="!initialLoading && resources.length == 0;">
+      <ng-container *ngIf="!initialLoading && totalRecored == 0;">
         <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
         >
          Resources not found
