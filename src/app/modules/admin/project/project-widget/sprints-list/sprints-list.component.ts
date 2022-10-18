@@ -11,7 +11,7 @@ import { AuthService } from '@services/auth/auth.service';
 })
 export class SprintsListComponent implements OnInit {
   count = 1;
-  isLoading: boolean = false;
+  initialLoading: boolean = false;
   totalRecored = 0;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   sprintList: any = [];
@@ -21,7 +21,7 @@ export class SprintsListComponent implements OnInit {
   @Input() dataId: any ;
   ngOnInit(): void {
     console.log("projectId",this.dataId)
-    this.isLoading = true;
+    this.initialLoading = true;
     let payload = {
       "id": this.dataId
     }
@@ -29,20 +29,21 @@ export class SprintsListComponent implements OnInit {
   }
 
   getSprintList(paylaod: any) {
+    this.initialLoading = true;
     this.ProjectService.getSprintList(paylaod).subscribe((res: any) => {
       if(res.data){
         this.sprintList = res.data;
       this.totalRecored = this.sprintList.length ? this.sprintList.length : 0;
-      this.isLoading = false;
+      this.initialLoading = false;
       }else{
         this.totalRecored =  0;
-        this.isLoading = false;
+        this.initialLoading = false;
       }
       if(res.tokenExpire == true){
         this._authService.updateAndReload(window.location);
         }
     }, error => {
-      this.isLoading = false;
+      this.initialLoading = false;
     })
   }
   goToSprint(id: number, name: any) {
