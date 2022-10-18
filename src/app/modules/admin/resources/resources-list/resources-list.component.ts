@@ -38,6 +38,7 @@ export class ResourcesListComponent implements OnInit {
   allResources: any;
   updateDeleteObj: any = []
   deleteObject: any
+  projectsList: any = [];
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   constructor( private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
@@ -70,6 +71,7 @@ export class ResourcesListComponent implements OnInit {
     }
     this.getList(payload);
     this.getListtechList();
+    this.getProjectList();
     // Build the config form
     this.configForm = this._formBuilder.group({
       title: 'Delete Resource',
@@ -307,5 +309,14 @@ export class ResourcesListComponent implements OnInit {
       event.stopPropagation();
     }
   }
-  
+  getProjectList(){
+    this.initialLoading = true
+    this.ProjectService.getProjectListWithoutPagination().subscribe((res:any)=>{
+          this.projectsList= res.data
+          this.initialLoading = false;
+      if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+    })
+  }
 }
