@@ -32,7 +32,7 @@
                     matSortDisableClear
                   >
                     <div>Name</div>
-                    <div class="hidden md:block"></div>
+                    <div class="hidden md:block">Projects</div>
                     <div>Action</div>
                   </div>
                   <ng-container *ngFor="let data of formList">
@@ -45,6 +45,12 @@
                         </div>
                       </div>
                       <div class="hidden md:block truncate">
+                        <span *ngIf="data.projects.length > 0">
+                          {{  data.projects }}
+                        </span>
+                        <span *ngIf="data.projects.length == 0">
+                         -
+                        </span>
                       </div>
                       <div class="sm:block">
                         <mat-icon
