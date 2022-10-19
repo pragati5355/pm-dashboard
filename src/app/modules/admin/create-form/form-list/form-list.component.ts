@@ -34,6 +34,7 @@ export class FormListComponent implements OnInit {
   totalForm = 0;
   count = 1;
   configForm!: FormGroup;
+  configFormWithProject!: FormGroup;
   ngOnInit(): void {
     let payload = {
       perPageData: this.count,
@@ -61,11 +62,34 @@ export class FormListComponent implements OnInit {
       }),
       dismissible: false
     });
+    this.configFormWithProject = this._formBuilder.group({
+      title: 'Delete Form',
+      message: 'Remove Form from project, <span class="font-medium">To delete form!</span>',
+      icon: this._formBuilder.group({
+        show: true,
+        name: 'heroicons_outline:exclamation',
+        color: 'warn'
+      }),
+      actions: this._formBuilder.group({
+        confirm: this._formBuilder.group({
+          show: false,
+          label: 'Delete',
+          color: 'warn'
+        }),
+        cancel: this._formBuilder.group({
+          show: true,
+          label: 'Cancel'
+        })
+      }),
+      dismissible: false
+    });
   }
   gotoAddForm() {
     this.router.navigate(['/forms/add-form'])
   }
-  deleteForm(id: number): void {
+  deleteForm(id: number, projects: any): void {
+    console.log(projects)
+    if(projects == 0){
     let payload = {
       id: id
     }
@@ -94,6 +118,13 @@ export class FormListComponent implements OnInit {
               })
           }
         });
+      }else{
+        const dialogRef = this._fuseConfirmationService.open(this.configFormWithProject.value);
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result == "confirmed") {
+          }
+        });
+      }
   }
   editForm(id: number) {
     this.router.navigate(
