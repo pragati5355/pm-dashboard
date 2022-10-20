@@ -34,15 +34,26 @@
     <div class="md:flex md:items-center md:justify-center w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
         <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
                   <!-- Alert -->
-                  <fuse-alert
-                  class="mt-8 -mb-4 "
-                  *ngIf="showAlert"
-                  [appearance]="'outline'"
-                  [showIcon]="false"
-                  [type]="alert.type"
-                  [@shake]="alert.type === 'error'">
-                  {{alert.message}}
-              </fuse-alert>
+             <div class="">
+                <fuse-alert
+                class="mt-8 -mb-4 v-hidden"
+                *ngIf="!showAlert"
+                [appearance]="'outline'"
+                [showIcon]="false"
+                [type]="alert.type"
+                [@shake]="alert.type === 'error'">
+                error message
+            </fuse-alert>
+                <fuse-alert
+                class="mt-8 -mb-4 "
+                *ngIf="showAlert"
+                [appearance]="'outline'"
+                [showIcon]="false"
+                [type]="alert.type"
+                >
+                {{alert.message}}
+            </fuse-alert>
+             </div>
             <!-- Logo -->
             <div class="w-40 ml--4 mt-8 ">
                 <img class="img-logo" src="/assets/images/logo/logo.svg">
