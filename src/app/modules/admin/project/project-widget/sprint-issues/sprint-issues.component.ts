@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class SprintIssuesComponent implements OnInit {
   count = 1;
-  isLoading: boolean = false;
+  initialLoading: boolean = false;
   totalRecored = 0;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   sprintId: any
@@ -32,17 +32,18 @@ export class SprintIssuesComponent implements OnInit {
   }
 
   getIssuesList(paylaod: any) {
+    this.initialLoading = true
     this.ProjectService.getSprintIssueList(paylaod).subscribe((res: any) => {
       if(res.data){
       this.issuesList = res.data
       this.totalRecored = this.issuesList.length 
-      this.isLoading = false;
+      this.initialLoading = false;
       }else{
         this.totalRecored =  0;
-        this.isLoading = false;
+        this.initialLoading = false;
       }
     }, error => {
-      this.isLoading = false;
+      this.initialLoading = false;
     })
   }
 }

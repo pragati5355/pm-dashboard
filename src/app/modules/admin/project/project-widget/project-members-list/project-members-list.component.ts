@@ -11,7 +11,7 @@ import {  Input } from '@angular/core'
 export class ProjectMembersListComponent implements OnInit {
   count = 1;
   pagination = false;
-  isLoading: boolean = false;
+  initialLoading: boolean = false;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   totalRecored = 0;
   teamMember: any = [];
@@ -20,7 +20,7 @@ export class ProjectMembersListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
+    this.initialLoading = true;
     // id pass only temporary after implementing router pass query by id
     let payload = {
       "id": this.dataId
@@ -52,14 +52,15 @@ export class ProjectMembersListComponent implements OnInit {
    ******************************************************************/
 
   getTeamMemberList(payload: any) {
+    this.initialLoading = true;
     this.ProjectService.getTeamMemberList(payload).subscribe((res: any) => {
       this.teamMember = res.data;
       if (this.teamMember !== null) {
         this.totalRecored = this.teamMember.length ? this.teamMember.length : 0;
       }
-      this.isLoading = false;
+      this.initialLoading = false;
     }, error => {
-      this.isLoading = false;
+      this.initialLoading = false;
     })
   }
 }

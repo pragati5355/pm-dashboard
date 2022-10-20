@@ -24,20 +24,23 @@ export class ResourcesListComponent implements OnInit {
   startExprience: any
   endExprience: any
   configForm!: FormGroup;
+  configFormAssignedProject!:FormGroup;
   technologys = new FormControl('');
+  projects = new FormControl('');
   techName: any = null;
   technologyLIst: any = [];
   pagination = false;
   searchValue = "";
   techList: string[] = []
   count = 1;
-  resources: any = null;
-  isLoading: boolean = false;
+  resources: any[] = [];
+  initialLoading: boolean = false;
   totalRecored: any;
   totalPerPageData = StaticData.PER_PAGE_DATA;
   allResources: any;
   updateDeleteObj: any = []
   deleteObject: any
+  projectsList: any = [];
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   constructor( private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
@@ -48,7 +51,6 @@ export class ResourcesListComponent implements OnInit {
     return this.exprienceForm.controls;
   }
   ngOnInit(): void {
-    this.isLoading = true;
     this.exprienceForm = this._formBuilder.group({
       minExprience: ['', [ Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
       maxExprience: ['', [ Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
@@ -65,12 +67,14 @@ export class ResourcesListComponent implements OnInit {
     let payload = {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
       "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0) ? expriencePayload : null,
+      "projects": this.projects.value ? [this.projects.value] : null,
       "perPageData": this.count,
       "totalPerPageData": this.totalPerPageData,
       "name": this.searchValue
     }
     this.getList(payload);
     this.getListtechList();
+    this.getProjectList();
     // Build the config form
     this.configForm = this._formBuilder.group({
       title: 'Delete Resource',
@@ -93,7 +97,28 @@ export class ResourcesListComponent implements OnInit {
       }),
       dismissible: false
     });
- 
+    this.configFormAssignedProject = this._formBuilder.group({
+      title: 'Delete Resource',
+      message: 'Please remove resource from  projects <span class="font-medium">To delete resource</span>',
+      icon: this._formBuilder.group({
+        show: true,
+        name: 'heroicons_outline:exclamation',
+        color: 'warn'
+      }),
+      actions: this._formBuilder.group({
+        confirm: this._formBuilder.group({
+          show: false,
+          label: 'Delete',
+          color: 'warn'
+        }),
+        cancel: this._formBuilder.group({
+          show: true,
+          label: 'Cancel'
+        })
+      }),
+      dismissible: false
+    });
+    
   }
 
   gotoAddResources() {
@@ -101,32 +126,29 @@ export class ResourcesListComponent implements OnInit {
   }
 
   getList(payload: any) {
-    this.isLoading = true;
+    this.initialLoading = true;
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
      if(res.data){
       this.totalRecored = res.data.totalRecored
       this.resources = res.data.teamMember;
-      this.isLoading = false;
+      this.initialLoading = false;
      }else if(res.data == null){
       this.totalRecored = 0
-      this.isLoading = false;
+      this.initialLoading = false;
      }else  if(res.tokenExpire == true){
       this._authService.updateAndReload(window.location);
       }
     }, error => {
-      this.isLoading = false;
+      this.initialLoading = false;
     })
   }
 
 
 
   getListtechList() {
-    this.isLoading = true;
     this.ProjectService.getTechnology().subscribe((res: any) => {
       this.technologyLIst = res.data;
-      this.isLoading = false;
     }, error => {
-      this.isLoading = false;
     })
   }
 
@@ -143,22 +165,25 @@ export class ResourcesListComponent implements OnInit {
         "totalPerPageData": this.totalPerPageData,
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
         "experience": (this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0) ? expriencePayload : null,
+        "projects": this.projects.value ? [this.projects.value] : null,
         "name": this.searchValue
       };
       this.pagination = true;
+      this.initialLoading = true;
       this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
         this.pagination = false
-        if (res) {
+        if (res.data) {
           this.resources = [...this.resources, ...res.data.teamMember];
         }
+        this.initialLoading = false
       }, (err: any) => {
         this.pagination = false;
+        this.initialLoading = false
       });
     }
   }
 
   selectChange() {
-    this.isLoading = true;
     this.count = 1
     this.pagination = false
     let tech = this.technologys.value?.[0];
@@ -174,16 +199,25 @@ export class ResourcesListComponent implements OnInit {
     let payload = {
       "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
       "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
+      "projects": this.projects.value ? [this.projects.value] : null,
       "perPageData": this.count,
       "totalPerPageData": this.totalPerPageData,
       "name": this.searchValue
     }
     this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
-      this.totalRecored = res.data.totalRecored
-      this.resources = res.data.teamMember;
-      this.isLoading = false;
+      if(res.data){
+        this.totalRecored = res.data.totalRecored
+        this.resources = res.data.teamMember;
+        this.initialLoading = false;
+       }else if(res.data == null){
+        this.totalRecored = 0
+        this.initialLoading = false;
+       }else  if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+      this.initialLoading = false;
     }, error => {
-      this.isLoading = false;
+      this.initialLoading = false;
     });
   }
 
@@ -201,6 +235,7 @@ export class ResourcesListComponent implements OnInit {
       let payload = {
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
         "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0) ? expriencePayload : null,
+        "projects": this.projects.value ? [this.projects.value] : null,
         "perPageData": this.count,
         "totalPerPageData": this.totalPerPageData,
         "name": this.searchValue
@@ -209,61 +244,74 @@ export class ResourcesListComponent implements OnInit {
     }
   }
 
-  deleteResource(id: number): void {
-    let payload = {
-      id: id
-    }
-    // Open the dialog and save the reference of it
-    this.ProjectService.getresource(payload).subscribe(
-      (res: any) => {
-        this.updateDeleteObj.push(res.data)
-        this.updateDeleteObj.forEach((item: any) => {
-          this.deleteObject = {
-            id: id,
-            createdAt: null,
-            lastModifiedAt: null,
-            isDeleted: true,
-            firstName: item.firstName ? item.firstName : "",
-            lastName: item.lastName ? item.lastName : "",
-            email: item.email ? item.email : "",
-            team: item.team ? item.team : "",
-            month: item.month ? item.month : 0,
-            year: item.year ? item.year : 0,
-            technology: item.technology ? item.technology : null
-          }
-
-        })
-        const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
-
-        // Subscribe to afterClosed from the dialog reference
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result == "confirmed") {
-            this.ProjectService.updateDeleteResource(this.deleteObject).subscribe(
-              (res: any) => {
-                this.snackBar.successSnackBar(res.data.Message)
-                let expriencePayload = [
-                  parseInt(this.exprienceForm.value.minExprience),
-                  parseInt(this.exprienceForm.value.maxExprience)
-                ];
-                let payload = {
-                  "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
-                  "experience": (this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
-                  "perPageData": this.count,
-                  "totalPerPageData": this.totalPerPageData,
-                  "name": this.searchValue
-                }
-                this.getList(payload);
-              },
-              error => {
-                this.snackBar.errorSnackBar("Server error")
-              })
-          }
-        });
-      },
-      error => {
-
+  deleteResource(id: number, assignedProjects: any): void {
+    console.log(assignedProjects)
+    if(assignedProjects == 0){
+      let payload = {
+        id: id
       }
-    );
+      // Open the dialog and save the reference of it
+      this.ProjectService.getresource(payload).subscribe(
+        (res: any) => {
+          this.updateDeleteObj.push(res.data)
+          this.updateDeleteObj.forEach((item: any) => {
+            this.deleteObject = {
+              id: id,
+              createdAt: item.createdAt,
+              lastModifiedAt: null,
+              isDeleted: true,
+              firstName: item.firstName ? item.firstName : "",
+              lastName: item.lastName ? item.lastName : "",
+              email: item.email ? item.email : "",
+              team: item.team ? item.team : "",
+              month: item.month ? item.month : 0,
+              year: item.year ? item.year : 0,
+              technology: item.technology ? item.technology : null,
+              assignedProjects: [0]
+            }
+
+          })
+          const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+
+          // Subscribe to afterClosed from the dialog reference
+          dialogRef.afterClosed().subscribe((result) => {
+            if (result == "confirmed") {
+              this.ProjectService.updateDeleteResource(this.deleteObject).subscribe(
+                (res: any) => {
+                  this.snackBar.successSnackBar(res.data.Message)
+                  let expriencePayload = [
+                    parseInt(this.exprienceForm.value.minExprience),
+                    parseInt(this.exprienceForm.value.maxExprience)
+                  ];
+                  let payload = {
+                    "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
+                    "experience": (this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
+                    "projects": this.projects.value ? [this.projects.value] : null,
+                    "perPageData": this.count,
+                    "totalPerPageData": this.totalPerPageData,
+                    "name": this.searchValue
+                  }
+                  this.getList(payload);
+                },
+                error => {
+                  this.snackBar.errorSnackBar("Server error")
+                })
+            }
+          });
+        },
+        error => {
+
+        }
+      );
+    }else{
+      const dialogRef = this._fuseConfirmationService.open(this.configFormAssignedProject.value);
+
+      // Subscribe to afterClosed from the dialog reference
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result == "confirmed") {
+        }
+      });
+    }
 
   }
 
@@ -293,25 +341,70 @@ export class ResourcesListComponent implements OnInit {
       let payload = {
         "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
         "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
+        "projects": this.projects.value ? [this.projects.value] : null,
         "perPageData": this.count,
         "totalPerPageData": this.totalPerPageData,
         "name": this.searchValue
       }
       this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
-        this.isLoading = false;
         if(res.data){
           this.totalRecored = res.data.totalRecored
-        this.resources = res.data.teamMember;
-        }else{
-          this.totalRecored  = 0
-        }
-        
+          this.resources = res.data.teamMember;
+          this.initialLoading = false;
+         }else if(res.data == null){
+          this.totalRecored = 0
+          this.initialLoading = false;
+         }else  if(res.tokenExpire == true){
+          this._authService.updateAndReload(window.location);
+          }
+        this.initialLoading = false
       }, error => {
-        this.isLoading = false;
+        this.initialLoading = false;
       });
     }else{
       event.stopPropagation();
     }
   }
-  
+  getProjectList(){
+    this.initialLoading = true
+    this.ProjectService.getProjectListWithoutPagination().subscribe((res:any)=>{
+          this.projectsList= res.data
+          this.initialLoading = false;
+      if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+    })
+  }
+
+  selectChangeProject(event: any) {
+    this.count = 1
+    this.pagination = false
+    let expriencePayload = [
+      parseInt(this.exprienceForm.value.minExprience),
+      parseInt(this.exprienceForm.value.maxExprience)
+    ];
+    let payload = {
+      "technology": this.technologys.value.length > 0 ? this.technologys.value : null,
+      "experience":(this.exprienceForm.value.minExprience.length > 0 && this.exprienceForm.value.maxExprience.length > 0)? expriencePayload : null,
+      "projects": this.projects.value ? [this.projects.value] : null,
+      "perPageData": this.count,
+      "totalPerPageData": this.totalPerPageData,
+      "name": this.searchValue
+    }
+    this.ProjectService.getResourceMember(payload).subscribe((res: any) => {
+      if(res.data){
+        this.totalRecored = res.data.totalRecored
+        this.resources = res.data.teamMember;
+        this.initialLoading = false;
+       }else if(res.data == null){
+        this.totalRecored = 0
+        this.initialLoading = false;
+       }else  if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+      this.initialLoading = false;
+    }, error => {
+      this.initialLoading = false;
+    });
+  }
 }

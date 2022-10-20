@@ -2,7 +2,7 @@
 <div class="flex flex-auto overflow-hidden">
   <!-- Resources list -->
   <div class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto">
-    <ng-container *ngIf="!isLoading && totalRecored > 0; else noProducts">
+    <ng-container *ngIf="!initialLoading && totalRecored > 0">
       <div *ngIf="totalRecored > 0" class="grid">
         <!-- Header -->
         <div
@@ -48,10 +48,15 @@
         </ng-container>
       </div>
     </ng-container>
-    <ng-template #noProducts>
+    <ng-container  *ngIf="!initialLoading && totalRecored == 0">
       <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
         Sprints not found
       </div>
-    </ng-template>
+    </ng-container>
+    <ng-container  *ngIf="initialLoading">
+      <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+        Loading.....
+      </div>
+    </ng-container>
   </div>
 </div>
