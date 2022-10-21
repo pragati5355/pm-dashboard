@@ -139,6 +139,7 @@ export class ResourcesListComponent implements OnInit {
       this._authService.updateAndReload(window.location);
       }
     }, error => {
+      this.totalRecored = 0
       this.initialLoading = false;
     })
   }
