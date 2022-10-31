@@ -9,6 +9,7 @@ import { AddFormService } from '@services/add-form.service';
 import {AuthService} from '@services/auth/auth.service';
 import { CopyFormComponent } from '../copy-form/copy-form.component';
 import { ErrorMessage } from 'app/core/constacts/constacts'
+import { result } from 'lodash';
 @Component({
   selector: 'app-form-list',
   templateUrl: './form-list.component.html',
@@ -35,6 +36,8 @@ export class FormListComponent implements OnInit {
   count = 1;
   configForm!: FormGroup;
   configFormWithProject!: FormGroup;
+  deletePojects:any []=[]
+  cont: HTMLElement| any = document.getElementsByClassName('listClass');
   ngOnInit(): void {
     let payload = {
       perPageData: this.count,
@@ -62,34 +65,17 @@ export class FormListComponent implements OnInit {
       }),
       dismissible: false
     });
-    this.configFormWithProject = this._formBuilder.group({
-      title: 'Delete Form',
-      message: 'Remove Form from project, <span class="font-medium">To delete form!</span>',
-      icon: this._formBuilder.group({
-        show: true,
-        name: 'heroicons_outline:exclamation',
-        color: 'warn'
-      }),
-      actions: this._formBuilder.group({
-        confirm: this._formBuilder.group({
-          show: false,
-          label: 'Delete',
-          color: 'warn'
-        }),
-        cancel: this._formBuilder.group({
-          show: true,
-          label: 'Cancel'
-        })
-      }),
-      dismissible: false
-    });
+  
   }
   gotoAddForm() {
     this.router.navigate(['/forms/add-form'])
   }
   deleteForm(id: number, projects: any): void {
-    console.log(projects)
-    if(projects == 0){
+    this.deletePojects=projects
+
+
+
+    if(projects.length == 0){
     let payload = {
       id: id
     }
@@ -119,6 +105,27 @@ export class FormListComponent implements OnInit {
           }
         });
       }else{
+        this.configFormWithProject = this._formBuilder.group({
+          title: 'Delete Form',
+          message: 'This form is attached to the following projects. Remove the association of the form from the projects in order to delete it. <div class="listClass">'+this.deletePojects+'</div>',
+          icon: this._formBuilder.group({
+            show: true,
+            name: 'heroicons_outline:exclamation',
+            color: 'warn'
+          }),
+          actions: this._formBuilder.group({
+            confirm: this._formBuilder.group({
+              show: false,
+              label: 'Delete',
+              color: 'warn'
+            }),
+            cancel: this._formBuilder.group({
+              show: true,
+              label: 'Cancel'
+            })
+          }),
+          dismissible: false
+        });
         const dialogRef = this._fuseConfirmationService.open(this.configFormWithProject.value);
         dialogRef.afterClosed().subscribe((result) => {
           if (result == "confirmed") {
