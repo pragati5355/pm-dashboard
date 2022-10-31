@@ -41,6 +41,7 @@ export class ResourcesListComponent implements OnInit {
   updateDeleteObj: any = []
   deleteObject: any
   projectsList: any = [];
+  deletePojects:any []=[]
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   constructor( private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
@@ -97,27 +98,7 @@ export class ResourcesListComponent implements OnInit {
       }),
       dismissible: false
     });
-    this.configFormAssignedProject = this._formBuilder.group({
-      title: 'Delete Resource',
-      message: 'Please remove resource from  projects <span class="font-medium">To delete resource</span>',
-      icon: this._formBuilder.group({
-        show: true,
-        name: 'heroicons_outline:exclamation',
-        color: 'warn'
-      }),
-      actions: this._formBuilder.group({
-        confirm: this._formBuilder.group({
-          show: false,
-          label: 'Delete',
-          color: 'warn'
-        }),
-        cancel: this._formBuilder.group({
-          show: true,
-          label: 'Cancel'
-        })
-      }),
-      dismissible: false
-    });
+
     
   }
 
@@ -139,6 +120,7 @@ export class ResourcesListComponent implements OnInit {
       this._authService.updateAndReload(window.location);
       }
     }, error => {
+      this.totalRecored = 0
       this.initialLoading = false;
     })
   }
@@ -246,7 +228,9 @@ export class ResourcesListComponent implements OnInit {
 
   deleteResource(id: number, assignedProjects: any): void {
     console.log(assignedProjects)
-    if(assignedProjects == 0){
+    this.deletePojects=assignedProjects
+
+    if(assignedProjects.length == 0){
       let payload = {
         id: id
       }
@@ -304,6 +288,27 @@ export class ResourcesListComponent implements OnInit {
         }
       );
     }else{
+      this.configFormAssignedProject = this._formBuilder.group({
+        title: 'Delete Resource',
+        message: 'This resource is attached to the following projects. Remove the association of the resources from the projects in order to delete it. <div class="listClass">'+this.deletePojects+'</div>',
+        icon: this._formBuilder.group({
+          show: true,
+          name: 'heroicons_outline:exclamation',
+          color: 'warn'
+        }),
+        actions: this._formBuilder.group({
+          confirm: this._formBuilder.group({
+            show: false,
+            label: 'Delete',
+            color: 'warn'
+          }),
+          cancel: this._formBuilder.group({
+            show: true,
+            label: 'Cancel'
+          })
+        }),
+        dismissible: false
+      });
       const dialogRef = this._fuseConfirmationService.open(this.configFormAssignedProject.value);
 
       // Subscribe to afterClosed from the dialog reference

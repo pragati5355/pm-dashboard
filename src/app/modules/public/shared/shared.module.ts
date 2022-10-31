@@ -33,6 +33,7 @@ const routes: Routes = [
     children: [
       { path: 'feedback/:projectId/:sprintId', component: FeedbackFormComponent },
       { path: 'empty-feedback-form', component: EmptyHomeComponent },
+      { path: 'feedback-submitted', component: FeedbackHomeComponent },
       {
         path: "",
         redirectTo: "empty-feedback-form",

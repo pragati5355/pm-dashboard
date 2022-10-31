@@ -52,14 +52,9 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
   alltechnologys: Technology[] = [];
   routeSubscribe: any;
   updateDeleteObj: any=[]
-  project = new FormControl();
-  filteredprojects: Observable<any[]> | undefined;
-  projects: any = [];
-  allprojects: Project[] = [];
+
   @ViewChild('technologyInput')
   technologyInput!: ElementRef;
-  @ViewChild('projectInput')
-  projectInput!: ElementRef;
   constructor(private _formBuilder: FormBuilder, private router: Router,
     private ProjectService:CreateProjecteService,
     private _authService: AuthService,
@@ -104,7 +99,6 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     });
   
     this.getTechnology();
-    this.getProjectList();
   }
 
   submit() {
@@ -118,7 +112,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
-        assignedProjects: this.projects?this.projects: [0]
+        assignedProjects: []
       };
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
@@ -181,13 +175,6 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
   }
   _filterslice() {
     return this.alltechnologys.filter(alltechnologys =>  !this.technologys.includes(alltechnologys.id))
-  }
-  _filterProject(value: any) {
-    return this.allprojects.filter((allprojects: any) =>
-    allprojects.name.toLowerCase().indexOf(value) === 0  && !this.projects.includes(allprojects.id));
-  }
-  _filtersliceProject() {
-    return this.allprojects.filter(allprojects =>  !this.projects.includes(allprojects.id))
   }
   add(event: MatChipInputEvent): void {
     debugger
@@ -254,7 +241,6 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         this.createdAt = item.createdAt
         this.firstName=item.firstName?item.firstName: ""
         this.technologys =item.technology
-        this.projects = item.assignedProjects
         this.filteredtechnologys = this.resourcesForm.get('technology')?.valueChanges
         .pipe(
           startWith(''),
@@ -294,7 +280,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
-        assignedProjects: this.projects?this.projects: [0]
+        assignedProjects: []
       };
       this.submitInProcess = true;
       this.ProjectService.updateDeleteResource(payload).subscribe(
@@ -322,49 +308,5 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         this.snackBar.errorSnackBar("Choose technology");
       }
     }
-  }
-  getProjectList(){
-    this.initialLoading = true
-    this.ProjectService.getProjectListWithoutPagination().subscribe((res:any)=>{
-      this.allprojects = res.data
-      this.filteredprojects = this.resourcesForm.get('project')?.valueChanges
-      .pipe(
-        startWith(''),
-        map((project: any |null) => project ?  this._filterProject(project) : this._filtersliceProject()));
-        this.initialLoading = false;
-      if(res.tokenExpire == true){
-        this._authService.updateAndReload(window.location);
-        }
-    })
-  }
-  addProject(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    // Add our technology
-    if ((value || '').trim()) {
-      this.projects.push({
-        id:Math.random(),
-        name:value.trim()
-      });
-    }
-
-    if (input) {
-      input.value = '';
-    }
-
-    this.project.setValue('');
-    this.resourcesForm.get('project')?.setValue('');
-  }
-
-  removeProject(project: any, selectIndex: any): void {
-    this.projects.splice(selectIndex, 1);
-    this.resourcesForm.get('project')?.setValue('');
-  }
-
-  selectedProject(event: MatAutocompleteSelectedEvent): void {
-    this.projects.push(event.option.value);
-    this.projectInput.nativeElement.value = '';
-    this.project.setValue('');
-    this.resourcesForm.get('project')?.setValue('');
   }
 }
