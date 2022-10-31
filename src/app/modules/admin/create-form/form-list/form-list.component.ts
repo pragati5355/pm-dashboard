@@ -36,7 +36,7 @@ export class FormListComponent implements OnInit {
   count = 1;
   configForm!: FormGroup;
   configFormWithProject!: FormGroup;
-  deletePojects:any []=[]
+  deletePojects:any =""
   cont: HTMLElement| any = document.getElementsByClassName('listClass');
   ngOnInit(): void {
     let payload = {
@@ -71,7 +71,7 @@ export class FormListComponent implements OnInit {
     this.router.navigate(['/forms/add-form'])
   }
   deleteForm(id: number, projects: any): void {
-    this.deletePojects=projects
+    // this.deletePojects=projects
 
 
 
@@ -105,6 +105,7 @@ export class FormListComponent implements OnInit {
           }
         });
       }else{
+        this.deleteprojectstring(projects)
         this.configFormWithProject = this._formBuilder.group({
           title: 'Delete Form',
           message: 'This form is attached to the following projects. Remove the association of the form from the projects in order to delete it. <div class="listClass">'+this.deletePojects+'</div>',
@@ -203,5 +204,12 @@ export class FormListComponent implements OnInit {
         this.getList(payload);
       }
     });
+  }
+  deleteprojectstring(projects: any){
+    this.deletePojects = ""
+    var arr = projects;
+    for (let i = 0; i <= arr.length - 1; i++) {
+        this.deletePojects = this.deletePojects +arr[i]+"<br>"
+    }
   }
 }
