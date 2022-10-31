@@ -68,7 +68,7 @@ export class FeedbackFormComponent implements OnInit {
          this.snackBar.errorSnackBar(res.message)
        }else{
         this.router.navigate(
-          [`/client-portal/feedback`]
+          [`/client-portal/feedback-submitted`]
         );
          this.snackBar.successSnackBar("Successfully submitted!")
        }
