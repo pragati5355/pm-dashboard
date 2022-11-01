@@ -41,7 +41,7 @@ export class ResourcesListComponent implements OnInit {
   updateDeleteObj: any = []
   deleteObject: any
   projectsList: any = [];
-  deletePojects:any []=[]
+  deletePojects:any = ""
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   constructor( private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
@@ -227,9 +227,7 @@ export class ResourcesListComponent implements OnInit {
   }
 
   deleteResource(id: number, assignedProjects: any): void {
-    console.log(assignedProjects)
-    this.deletePojects=assignedProjects
-
+    this.deleteprojectstring(assignedProjects);
     if(assignedProjects.length == 0){
       let payload = {
         id: id
@@ -411,5 +409,12 @@ export class ResourcesListComponent implements OnInit {
     }, error => {
       this.initialLoading = false;
     });
+  }
+  deleteprojectstring(projects: any){
+    this.deletePojects = ""
+    var arr = projects;
+    for (let i = 0; i <= arr.length - 1; i++) {
+        this.deletePojects = this.deletePojects +arr[i]+"<br>"
+    }
   }
 }
