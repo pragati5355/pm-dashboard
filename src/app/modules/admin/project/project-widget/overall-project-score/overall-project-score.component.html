@@ -1,0 +1,22 @@
+<div class="flex flex-col flex-auto bg-card overflow-hidden">
+  <div class="p-2 border-b">
+    <div class="flex items-start justify-between ">
+      <div class="text-lg font-medium tracking-tight leading-6 truncate"> Overall Project Score </div>
+    </div>
+  </div>
+  <div class="flex   flex-auto ">
+    <apx-chart class="flex-auto items-center" [legend]="legend" [series]=" series" [chart]=" chart" [colors]="colors" [states]="states"
+      [plotOptions]="plotOptions" [labels]="labels" [tooltip]="tooltip">
+    </apx-chart>
+    <div class="flex p-6 ">
+      <div class="   ">
+        <ng-container *ngFor="let dataset of data.series; let i = index">
+          <div class="flex mt-4 items-center">
+            <div class="flex-0 w-2 h-2 rounded-full" [style.backgroundColor]="colors[i]"></div>
+            <div class="ml-3 truncate">{{labels[i]}}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

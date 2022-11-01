@@ -1,11 +1,17 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "4dbf093f-5528-40ee-94fe-ba876b227b21"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "metrics": {
+    "Metrics-PM-Dashboard-Web": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
         "@schematics/angular:application": {
           "strict": true
         }
@@ -17,18 +23,29 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/metrics",
+            "outputPath": "dist/metrics-pm-dashboard-web",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                  "src/@fuse/styles"
+              ]
+          },
+          "styles": [
+              "src/@fuse/styles/tailwind.scss",
+              "src/@fuse/styles/themes.scss",
+              "src/styles/vendors.scss",
+              "src/@fuse/styles/main.scss",
+              "src/styles/styles.scss",
+              "src/styles/tailwind.scss"
+          ],
             "scripts": []
           },
           "configurations": {
@@ -36,13 +53,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "1.5mb"
                 }
               ],
               "fileReplacements": [
@@ -68,10 +85,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "metrics:build:production"
+              "browserTarget": "Metrics-PM-Dashboard-Web:build:production"
             },
             "development": {
-              "browserTarget": "metrics:build:development"
+              "browserTarget": "Metrics-PM-Dashboard-Web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +96,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "metrics:build"
+            "browserTarget": "Metrics-PM-Dashboard-Web:build"
           }
         },
         "test": {
@@ -89,18 +106,19 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [ "node_modules/apexcharts/dist/apexcharts.min.js" ]
           }
         }
       }
     }
   },
-  "defaultProject": "metrics"
+  "defaultProject": "Metrics-PM-Dashboard-Web"
 }

@@ -1,0 +1,42 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">{{formTitle | titlecase}}</div>
+    </div>
+
+    <form [formGroup]="copyForm"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+
+                        <span class="font-semibold mb-6 text-s text-secondary"> Are you sure you want to copy this form? </span>
+                        <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
+                            <mat-label>Form Name</mat-label>
+                            <input
+                                matInput
+                                [placeholder]="'Form Name here.'"
+                                required
+                                id="formName"
+                                #copyFormName
+                                formControlName="formName" maxlength="50"
+                                >
+                                <mat-error *ngIf="copyFormValidation['formName'].errors &&
+                                copyFormValidation['formName']?.invalid &&
+                                copyFormValidation['formName']?.touched ">
+                                <div *ngIf="copyFormValidation['formName'].errors['required']">Form name is mandatory</div>
+                                <div *ngIf="copyFormValidation['formName'].errors['pattern']">Enter valid form name</div>
+                            </mat-error>
+                        </mat-form-field>
+          <div class="flex items-center ml-auto mt-4 sm:mt-0">
+            <button
+            mat-stroked-button
+            type="button" (click)="close()">
+            Close
+        </button>
+            <button
+                class="order-first sm:order-last ml-4"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="save()">
+                Copy
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,50 @@
+<!-- Main -->
+<div class="flex flex-auto overflow-hidden">
+    <!-- Resources list -->
+    <div class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto">
+      <ng-container *ngIf="!initialLoading && totalRecored > 0">
+        <div *ngIf="totalRecored > 0" class="grid">
+          <!-- Header -->
+          <div
+            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+            matSortDisableClear>
+            <div class="primary-900">Assignee</div>
+            <div class="hidden md:block">Assigned</div>
+            <div class="hidden sm:block">Resolved</div>
+          </div>
+          <!-- Rows -->
+          <ng-container *ngFor="let issue of issuesList ">
+            <div class="inventory-grid grid items-center  gap-4 py-4 px-6 md:px-8 border-b h-67">
+              <!-- issueLists -->
+              <div class="truncate font-semibold text-black">
+                <div class="truncate cursor-pointer"> {{issue.assignee }}
+                </div>
+              </div>
+  
+              <!-- Start Date -->
+              <div class="hidden md:block truncate">
+                {{ issue.totalAssigned ? (issue.totalAssigned ) : '-' }}
+              </div>
+  
+              <!-- End Date -->
+              <div class="hidden sm:block">
+                {{issue.resolved ? issue.resolved : '-' }}
+              </div>
+
+  
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!initialLoading && totalRecored == 0">
+        <div class="p-8 sm:p-16 border-t text-3xl font-semibold tracking-tight text-center">
+          Issues not found
+        </div>
+      </ng-container>
+      <ng-container *ngIf="initialLoading">
+        <div class="p-8 sm:p-16 border-t text-3xl font-semibold tracking-tight text-center">
+          Loading.....
+        </div>
+      </ng-container>
+    </div>
+  </div>

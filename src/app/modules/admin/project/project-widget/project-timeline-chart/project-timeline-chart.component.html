@@ -1,0 +1,11 @@
+<div class="flex flex-col flex-auto col-end-7	 bg-card shadow  overflow-hidden">
+  <div class="p-2 border-b">
+    <div class="flex items-start justify-between ">
+      <div class="text-lg font-medium tracking-tight leading-6 truncate"> Project Timeline</div>
+    </div>
+  </div>
+  <div class="flex flex-col flex-auto ">
+    <apx-chart [series]="series" [chart]="chart" [fill]="fill" [plotOptions]="plotOptions" [xaxis]="xaxis">
+    </apx-chart>
+  </div>
+</div>

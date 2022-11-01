@@ -1,0 +1,104 @@
+
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+  <div
+    class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
+    <div class="text-4xl font-extrabold tracking-tight">{{pageTitle}}</div>
+  </div>
+  <div class="flex flex-col flex-auto w-full overflow-y-auto">
+    <!-- Header -->
+    <div class="flex flex-wrap w-full max-w-screen-xl mx-auto ">
+
+      <!-- Title and action buttons -->
+
+
+      <!-- main section -->
+
+      <div *ngIf="!initialLoading" class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent px-4 md:px-4 py-4">
+        <form [formGroup]="formDetails" >
+          <div class="">
+            <div>
+              <!-- Title -->
+              <div  class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
+                <mat-form-field class="w-full sm:w-140 mb-2 mt-4 sm:mt-0 userlist" id="userlist"  [floatLabel]="'always'">
+                  <mat-label   >Form Name</mat-label>
+                  <input
+                      matInput
+                      placeholder="Form Name" 
+                      formControlName="formName" 
+                      class="inputlist"
+                      >
+                      <mat-error *ngIf="formDetailsValidation['formName'].errors &&
+                      formDetailsValidation['formName']?.invalid &&
+                      formDetailsValidation['formName']?.touched ">
+                      <div *ngIf="formDetailsValidation['formName'].errors['required']">Form name is mandatory</div>
+                      <div *ngIf="formDetailsValidation['formName'].errors['pattern']">Enter valid project name</div>
+                  </mat-error>
+              </mat-form-field>
+              <div class="mt-4 sm:mt-0">
+    
+                <!-- Add task button -->
+                <button *ngIf="formTypeAdd"
+                    class="ml-3"
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="addForm()"
+                  >
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span  class="ml-2 mr-1 ">Save Form</span>
+                </button>
+                <button *ngIf="!formTypeAdd"
+                class="ml-3"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="updateForm()"
+              >
+                <span  class="ml-2 mr-1 ">Update Form</span>
+            </button>
+            </div>
+              </div>
+              <div  class="flex sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
+              <mat-form-field   class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 select-form" [floatLabel]="'always'" >
+                <mat-label>Project </mat-label>
+                <mat-select panelClass="select-form-option"
+                formControlName="project_name"
+                type="text"
+                placeholder="Choose project"
+                [disableOptionCentering]="true"
+                (selectionChange)="selectchange($event)"
+                >
+                <mat-option *ngFor="let project of selectFomList" [value]="project.id" >
+                {{ project.name | titlecase }}
+                </mat-option>
+                </mat-select>
+                
+                <mat-error *ngIf="formDetailsValidation['project_name'].errors &&
+                formDetailsValidation['project_name']?.invalid &&
+                formDetailsValidation['project_name']?.touched ">
+                <div *ngIf="formDetailsValidation['project_name'].errors['required']"> Project Name is mandatory</div>
+                </mat-error>
+                
+              </mat-form-field>
+            </div>
+            <small class="mb-4">Choose a project to use the Survey Component below</small>
+              <!-- Actions -->
+              
+          </div>
+      <div #activeList="cdkDropList"
+          class="box-list-component"
+          cdkDropList
+          cdkDropListOrientation="vertical"
+          [cdkDropListData]="activeCustomers"
+          (cdkDropListDropped)="drop($event)">
+          <button class="drag-box" cdkDrag [disabled]="teammemberQuestion.length == 0">
+          Survey component
+            </button>
+    </div>
+  
+            <div class="mt-2 form-builder"  ><form-builder id="builder" [form]="form" (change?)="onChange($event)" #formio [refresh]="refreshForm"></form-builder>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
