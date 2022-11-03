@@ -25,7 +25,6 @@ export class DefectLeakageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.dataType)
     this.chartfunction()
   }
   chartfunction(){

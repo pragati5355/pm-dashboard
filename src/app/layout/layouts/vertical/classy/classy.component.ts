@@ -83,7 +83,6 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
             });
             this.userData = this.authService.getUser();
             this.userPhoto= this.authService.getUserPhoto(); 
-            console.log(this.userPhoto)
     }
 
     /**
