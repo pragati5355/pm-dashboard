@@ -56,8 +56,7 @@ export class SpringProgressComponent implements OnInit {
       height: 150,
       width: 900,
       stacked: true,
-      // stackType: '100%',
-      color: '#fff',
+      
       toolbar: {
         show: true,
         tools: {
@@ -65,6 +64,7 @@ export class SpringProgressComponent implements OnInit {
         }
       }
     },
+    colors: ['#eb485e', '#f5af31', "#258ffb", "#6ee497"],
     plotOptions: {
       bar: {
         horizontal: true,
@@ -72,7 +72,6 @@ export class SpringProgressComponent implements OnInit {
     },
     stroke: {
       width: 1,
-      colors: ['#fff']
     },
     title: {
       text: ''
@@ -110,13 +109,15 @@ export class SpringProgressComponent implements OnInit {
       }
     },
     fill: {
-      opacity: 1
+      opacity: 1,
     
     },
     legend: {
       position: 'bottom',
       horizontalAlign: 'center',
-      offsetX: 40
+      offsetX: 40,
+      style:{
+      }
     }
     };
   }
@@ -185,12 +186,13 @@ export class SpringProgressComponent implements OnInit {
         name: 'In Progress',
         data: [this.sprintProgressList.inProgress]
       }, {
-        name: 'Done',
-        data: [this.sprintProgressList.done]
-      },  {
         name: 'Ready For QA',
         data: [this.sprintProgressList.readyForQA]
-      }],
+      },
+      {
+        name: 'Done',
+        data: [this.sprintProgressList.done]
+      }, ],
       this.initialLoading = false;
       }else{
         this.totalRecored =  0;

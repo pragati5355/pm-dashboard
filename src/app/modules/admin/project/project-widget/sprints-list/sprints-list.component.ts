@@ -20,7 +20,6 @@ export class SprintsListComponent implements OnInit {
   }
   @Input() dataId: any ;
   ngOnInit(): void {
-    console.log("projectId",this.dataId)
     this.initialLoading = true;
     let payload = {
       "id": this.dataId

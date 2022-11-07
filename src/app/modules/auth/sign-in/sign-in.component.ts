@@ -39,7 +39,6 @@ export class AuthSignInComponent implements OnInit
       this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
       .then(result => {
           this.showAlert = false;
-          console.log(result);
           this._authService.login(JSON.stringify(result)).subscribe(
               (res:any)=>{
                 this.submitInProcess = false;

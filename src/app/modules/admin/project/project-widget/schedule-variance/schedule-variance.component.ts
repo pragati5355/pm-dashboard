@@ -278,8 +278,8 @@ export class ScheduleVarianceComponent implements OnInit {
               type: "line",
               data: this.guidelineData
             }] )
-          }
-          if(res.tokenExpire == true){
+            }
+          if(res.data.tokenExpire == true){
             this._authService.updateAndReload(window.location);
             }
         })

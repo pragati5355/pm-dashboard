@@ -213,11 +213,12 @@
                 <div class="min-w-4">
                   {{
                     resources.year > "1"
-                      ? resources.year + " Years,"
+                      ? resources.year + " Years"
                       : resources.year == "1"
-                      ? resources.year + " Year,"
+                      ? resources.year + " Year"
                       : ""
                   }}
+                  <span *ngIf="resources.year && resources.month">,</span>
                   {{
                     resources.month > "1"
                       ? resources.month + " Months"
