@@ -132,6 +132,9 @@ export class ProjectListComponent implements OnInit {
             projectKey: "",
             projectName: this.searchValue
           }
+          if(res.tokenExpire == true){
+            this._authService.updateAndReload(window.location);
+            }
           this.getList(payload);
         }
 

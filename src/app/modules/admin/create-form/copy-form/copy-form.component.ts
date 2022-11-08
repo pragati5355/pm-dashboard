@@ -37,7 +37,6 @@ formTitle = ""
       this.copyForm = this._formBuilder.group({
         formName: ['Copy of '+this.data.formname,[Validators.required]],
       });
-      console.log(this.data)
       this.formTitle = this.data.formname
   }
 
