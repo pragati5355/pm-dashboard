@@ -16,8 +16,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Formio } from 'angular-formio';
 @Component({
   selector: 'app-add-form',
-  templateUrl: './add-form.component.html',
-  styleUrls: ['./add-form.component.scss']
+  templateUrl: './add-form.component.html'
 })
 export class AddFormComponent implements OnInit {
   @HostListener("window:beforeunload", ["$event"])

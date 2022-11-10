@@ -22,8 +22,7 @@ export class Project {
 }
 @Component({
   selector: 'app-add-resources',
-  templateUrl: './add-resources.component.html',
-  styleUrls: ['./add-resources.component.scss']
+  templateUrl: './add-resources.component.html'
 })
 export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateComponent {
   @HostListener("window:beforeunload", ["$event"])
