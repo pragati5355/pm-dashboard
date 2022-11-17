@@ -542,7 +542,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           this.ProjectService.createProject(payload).subscribe(
             (res:any)=>{
               this.submitInProcess = false;
-              if(res.data.error == false){
+              if(!res.error){
                 this.snackBar.successSnackBar("Project created successFully");
                 this.projectDetials.reset();
                 this.clientDetials.reset();
@@ -761,7 +761,7 @@ selectedJiraUserOption(event: any) {
         this.ProjectService.updateProject(payload).subscribe(
           (res:any)=>{
             this.submitInProcess = false;
-            if(res.data){
+            if(!res.error){
               this.snackBar.successSnackBar("Project updated successFully");
               this.projectDetials.reset();
               this.clientDetials.reset();
