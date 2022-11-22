@@ -452,7 +452,8 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               .team_member.id,
             role: this.projectTeam.value.select_role,
             jiraUser: this.projectTeam.value.team_jira_user.displayName,
-            isManager: false
+            isManager: false,
+            isDeleted: false
           }
         ];
         this.selectedJiraUser = [  ...this.selectedJiraUser, this.projectTeam.value.team_jira_user.displayName]
@@ -704,7 +705,8 @@ selectedJiraUserOption(event: any) {
               teamMemberId: item.teamMemberId,
               role: item.role,
               jiraUser: item.jiraUser,
-              isManager: item.isManager
+              isManager: item.isManager,
+              isDeleted: false
             }
           ];
         })
