@@ -118,7 +118,7 @@
               </div>
             </div>
             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-              <div class="chip-input w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+              <div class="chip-input w-full  font-extrabold tracking-tight ng-tns-c274-3859">
                 <mat-form-field  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
                   <mat-label>Technology</mat-label>
                   <mat-chip-list #chipList>
@@ -135,6 +135,41 @@
                       <div *ngFor="let technologyi of alltechnologys ">
                         <div *ngIf="technologyi.id == technology">
                           {{technologyi.name}}
+                        </div>
+                      </div>
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                  </mat-chip-list>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+              <div class="chip-input w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                 <div class="mb-2">
+                  <button   class="fuse-mat-button-rounded bg-accent-700"
+                  mat-flat-button
+                  [color]="'accent'"
+                  (click)="isShow=!isShow">
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    External Project
+                  </button>
+                 </div>
+                <mat-form-field  *ngIf="isShow"  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
+                  <mat-label >Project</mat-label>
+                  <mat-chip-list #chipListproject>
+                    <input placeholder="Project..." #projectInput [formControl]="project"  formControlName="project" [matAutocomplete]="autoProject" [matChipInputFor]="chipListproject"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addProject($event)" class="w-full">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoProject="matAutocomplete" (optionSelected)="selectedProject($event)">
+                    <mat-option *ngFor="let project of filteredprojects | async" [value]="project.id">
+                      {{project.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-chip-list #chipListproject class="mb-2">
+                    <mat-chip *ngFor="let project of projects;let selectIndex=index;" [selectable]="selectable" [removable]="removable" (removed)="removeProject(project,selectIndex)">
+                      <div *ngFor="let projecti of allprojects ">
+                        <div *ngIf="projecti.id == project">
+                          {{projecti.name}}
                         </div>
                       </div>
                       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
