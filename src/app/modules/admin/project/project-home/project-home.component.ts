@@ -5,7 +5,6 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 @Component({
   selector: 'app-project-home',
   templateUrl: './project-home.component.html',
-  styleUrls: ['./project-home.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ProjectHomeComponent implements OnInit, OnDestroy {

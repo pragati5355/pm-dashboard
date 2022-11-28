@@ -19,7 +19,6 @@ export interface DialogData {
 @Component({
   selector: 'app-send-feedback-form',
   templateUrl: './send-feedback-form.component.html',
-  styleUrls: ['./send-feedback-form.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class SendFeedbackFormComponent implements OnInit {
