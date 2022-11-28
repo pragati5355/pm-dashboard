@@ -16,8 +16,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Formio } from 'angular-formio';
 @Component({
   selector: 'app-add-form',
-  templateUrl: './add-form.component.html',
-  styleUrls: ['./add-form.component.scss']
+  templateUrl: './add-form.component.html'
 })
 export class AddFormComponent implements OnInit {
   @HostListener("window:beforeunload", ["$event"])
@@ -155,12 +154,16 @@ teammemberQuestion: any = []
   }
   drop(event: CdkDragDrop<any[]>){
     let data = {"label":"Survey","labelPosition":"top","description":"","tooltip":"","customClass":"surveyCopmonent","tabindex":"","hidden":false,"hideLabel":false,"autofocus":false,"disabled":false,"tableView":false,"modalEdit":false,"questions":this.teammemberQuestion,
-    "values":[{"label":"Excellent","value":"excellent","tooltip":""},
-    {"label":"Great","value":"great","tooltip":""},
-    {"label":"Good","value":"good","tooltip":""},
-    {"label":"Average","value":"average","tooltip":""},
-    {"label":"Poor","value":"poor","tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"surveyComponentId","defaultValue":{}}
-    this.form.components.push(data)
+    "values":[{"label":"Excellent","value":5,"tooltip":""},
+    {"label":"Great","value":4,"tooltip":""},
+    {"label":"Good","value":3,"tooltip":""},
+    {"label":"Average","value":2,"tooltip":""},
+    {"label":"Poor","value":1,"tooltip":""}],"persistent":true,"protected":false,"dbIndex":false,"encrypted":false,"redrawOn":"","clearOnHide":true,"customDefaultValue":"","calculateValue":"","calculateServer":false,"allowCalculateOverride":false,"validate":{"required":false,"customMessage":"","custom":"","customPrivate":false,"json":"","strictDateValidation":false,"multiple":false,"unique":false},"unique":false,"errorLabel":"","errors":"","key":"survey","tags":[],"properties":{},"conditional":{"show":null,"when":null,"eq":"","json":""},"customConditional":"","logic":[],"attributes":{},"overlay":{"style":"","page":"","left":"","top":"","width":"","height":""},"type":"survey","input":true,"placeholder":"","prefix":"","suffix":"","multiple":false,"refreshOn":"","dataGridLabel":false,"widget":null,"validateOn":"change","showCharCount":false,"showWordCount":false,"allowMultipleMasks":false,"addons":[],"id":"surveyComponentId","defaultValue":{}}
+    let indexvalue = 0
+    if(this.form.components.length > 0){
+      indexvalue = this.form.components.length-1
+    }
+    this.form.components.splice(indexvalue,0,data)
     this.refreshForm.emit({
       form: this.form
     });
@@ -191,6 +194,21 @@ teammemberQuestion: any = []
           }
         ];
       })
+      if(this.form.components.length> 1){
+        let surveyCompoenent : any[] = this.form.components.filter((item: any) => item.customClass == "surveyCopmonent");
+        this.form.components =this.form.components.filter((item: any) => item.customClass !== "surveyCopmonent");
+        surveyCompoenent.forEach((element:any,i: any)=>{
+          element.questions = this.teammemberQuestion
+          let indexvalue = 0
+          if(this.form.components.length > 0){
+            indexvalue = this.form.components.length-1
+          }
+          this.form.components.splice(indexvalue,0,element);
+        })
+        this.refreshForm.emit({
+          form: this.form
+        });
+      }
       this.initialLoading = false;
     }, error => {
       this.initialLoading = false;

@@ -8,7 +8,6 @@ export interface DialogData {
 @Component({
   selector: 'app-connect-jira-popup',
   templateUrl: './connect-jira-popup.component.html',
-  styleUrls: ['./connect-jira-popup.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ConnectJiraPopupComponent implements OnInit

@@ -3,8 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AddFormService } from '@services/add-form.service';
 @Component({
   selector: 'app-view-form',
-  templateUrl: './view-form.component.html',
-  styleUrls: ['./view-form.component.scss']
+  templateUrl: './view-form.component.html'
 })
 export class ViewFormComponent implements OnInit {
   public form!: Object;
