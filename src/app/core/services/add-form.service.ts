@@ -39,4 +39,13 @@ export class AddFormService {
   saveFeedbackForm(obj: any) {
     return this.http.post(AppConstants['SAVE_FEEDBACK_FORM'], obj);
   }
+  getFeedbackFormBySprint(obj: any) {
+    return this.http.post(AppConstants['GET_FEEDBACK_FORM_BY_SPRINT'], obj);
+  }
+  getFeedbackFormEamilList(obj: any) {
+    return this.http.post(AppConstants['GET_FEEDBACK_FORM_EMAIL_LIST'], obj);
+  }
+  getFeedbackFormByEmail(obj: any) {
+    return this.http.post(AppConstants['GET_FEEDBACK_FORM_BY_EMAIL'], obj);
+  }
 }

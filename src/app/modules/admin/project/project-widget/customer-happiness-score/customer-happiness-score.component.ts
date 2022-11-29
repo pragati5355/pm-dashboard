@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { chartConfig } from 'app/core/config/chart.config';
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataLabels, ApexNonAxisChartSeries, ApexStroke, ApexLegend, ApexFill, ApexTooltip, ApexPlotOptions, ApexResponsive, ApexYAxis, ApexGrid, ApexStates, ApexTheme, ApexAnnotations } from "ng-apexcharts";
-
-
+import {ActivatedRoute, Router} from '@angular/router';
+import { AuthService } from '@services/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateProjecteService } from '@services/create-projecte.service';
+import { SprintFeedbackFormComponent } from '../../sprint-feedback-form/sprint-feedback-form.component';
 @Component({
   selector: 'app-customer-happiness-score',
   templateUrl: './customer-happiness-score.component.html',
@@ -28,8 +31,12 @@ export class CustomerHappinessScoreComponent implements OnInit {
     @Input() states: ApexStates | any;
     @Input() subtitle: ApexTitleSubtitle | any;
     @Input() theme: ApexTheme | any;
-
-    constructor() {
+    sprintId: any
+    projectId =0
+    isShow = false
+    initialLoading =true
+    score: any= "Nil"
+    constructor(private _authService: AuthService, private _route: ActivatedRoute, private dialog: MatDialog,private ProjectService: CreateProjecteService,) {
         this.fill = chartConfig.SCORE_CHART[0].fill;
         this.chart = chartConfig.SCORE_CHART[0].chart;
         this.series = chartConfig.SCORE_CHART[0].series;
@@ -40,6 +47,74 @@ export class CustomerHappinessScoreComponent implements OnInit {
     }
 
     ngOnInit() {
+      let projectData= this._authService.getProjectDetails()
+      this.projectId = projectData.id
+      this._route.queryParams.subscribe((sprintId: any) => {
+        if (sprintId['id'] && sprintId['name']) {
+            this.sprintId = parseInt(sprintId['id'])
+            this.isShow = true;
+            let payload={
+              projectId : this.projectId,
+              sprintId:this.sprintId
+            }
+            this.getHappinessScoreBySprint(payload)
+        }else{
+          let payload={
+            projectId : this.projectId,
+          }
+          this.getHappinessScoreByProject(payload)
+        }
+        });
+        
+      
     }
-
+    feedbackForm(){
+      const dialogRef = this.dialog.open(SprintFeedbackFormComponent, {
+        disableClose: true,
+        width: "880px",
+        panelClass:"warn-dialog-content",
+        autoFocus: false,
+        data: {
+          id:this.sprintId,
+          // sprintName: this.sprint_name
+        }
+      });
+    }
+    getHappinessScoreBySprint(paylaod: any){
+      this.initialLoading = true;
+      this.ProjectService.getHappinessScoreBySprint(paylaod).subscribe((res: any) => {
+        console.log(res);
+        if(res.data.score > 0){
+          this.labels = [res.data.score+"/"+res.data.outOf]
+          this.series = [res.data.score*res.data.outOf/100]
+          this.score = res.data.score
+        this.initialLoading = false;
+        }else{
+          this.labels = ["NA"]
+          this.series = [0]
+          this.initialLoading = false;
+        }
+      }, error => {
+        this.initialLoading = false;
+      })
+    }
+    getHappinessScoreByProject(paylaod: any){
+      this.initialLoading = true;
+      this.ProjectService.getHappinessScoreByProject(paylaod).subscribe((res: any) => {
+        console.log(res);
+        if(res.data.score > 0){
+          this.labels = [res.data.score+"/"+res.data.outOf]
+          this.series = [res.data.score*res.data.outOf/100]
+          this.score = res.data.score
+        this.initialLoading = false;
+        }else{
+          this.labels = ["NA"]
+          this.series = [0]
+          this.initialLoading = false;
+        }
+        
+      }, error => {
+        this.initialLoading = false;
+      })
+    }
 }

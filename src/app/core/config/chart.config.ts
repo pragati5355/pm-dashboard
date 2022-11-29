@@ -278,9 +278,11 @@ export const chartConfig = {
         chart: {
           height: 280,
           type: "radialBar",
+          toolbar: {
+            show: false
+          }
         },
-      
-        series: [67],
+         series: [0],
         colors: ["#20E647"],
         plotOptions: {
           radialBar: {
@@ -302,20 +304,20 @@ export const chartConfig = {
             },
             dataLabels: {
               name: {
-                show: false,
-                offsetY: -10,
+                show: true,
+                offsetY: 12,
                 color: "#fff",
-                fontSize: "13px"
+                fontSize: "30px",
               },
               value: {
                 offsetY: 12,
                 color: "#fff",
                 fontSize: "30px",
-                show: true,
+                show: false,
                 formatter: function (val:any) {
                     return val 
                   }
-              }
+              },
             }
           }
         },
@@ -331,7 +333,7 @@ export const chartConfig = {
         stroke: {
           lineCap: "round"
         },
-        labels: ["Progress"],
+        labels: ["NA"],
       } 
     ],
     // Sprint Progress

@@ -44,6 +44,11 @@ export const AppConstants: ConstantsInterface = {
   FEEDBACK_FORM: `${projectBaseUrl}/send-email`,
   GET_FEEDBACK_FORM: `${projectBaseUrl}/form-by-project`,
   SAVE_FEEDBACK_FORM: `${projectBaseUrl}/form`,
+  GET_FEEDBACK_FORM_BY_SPRINT: `${projectBaseUrl}/feedback-form-by-sprint`,
+  GET_FEEDBACK_FORM_EMAIL_LIST: `${projectBaseUrl}/get-response-emails`,
+  GET_FEEDBACK_FORM_BY_EMAIL: `${projectBaseUrl}/get-response-by-email`,
+  GET_HAPPINESS_SCORE_BY_SPRINT: `${projectBaseUrl}/happiness-score-by-sprint`,
+  GET_HAPPINESS_SCORE_BY_PROJECT: `${projectBaseUrl}/happiness-score-by-project`,
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

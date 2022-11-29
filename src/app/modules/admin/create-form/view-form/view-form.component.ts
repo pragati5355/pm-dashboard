@@ -35,6 +35,7 @@ export class ViewFormComponent implements OnInit {
      })
    }
    submit(event: any) {
+     console.log(event)
   }
   gotoforms(){
     this.router.navigate(
