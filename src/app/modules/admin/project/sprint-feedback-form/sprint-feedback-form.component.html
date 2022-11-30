@@ -1,0 +1,46 @@
+
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">{{sprintName}} Feedback form  </div>
+        <button
+        mat-icon-button
+        (click)="close()"
+        [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"></mat-icon>
+    </button>
+    </div>
+
+    <!-- Compose form -->
+        <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+            <div  *ngIf="!initialLoading">
+                <div class="mb-6">
+                    <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}}</div>
+                </div>
+                <div class="formio-render">
+                        
+                <formio
+                [form]="form"  [submission]="formData"></formio>
+                </div>
+                <div *ngIf="isShowEmails"> 
+                    <div class=" p-2" *ngIf="emailList.length > 0">
+                        <div class="text-2xl font-bold tracking-tight mb-6">Email</div>
+                        <div *ngFor="let email of emailList" class="flex flex-0 items-center justify-between">
+                            <div class="text-lg font-medium"> {{email}} </div>
+                            <button
+                            mat-icon-button
+                            (click)="getFormDetailsByEmail(email)"
+                            [tabIndex]="-1">
+                            <mat-icon
+                                class="text-current"
+                                [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
+                            </button>
+                            </div>
+                    </div>
+                </div>
+             </div> 
+        </div>
+</div>

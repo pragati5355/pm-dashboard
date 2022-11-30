@@ -26,6 +26,12 @@ export class CreateProjecteService {
   getProjectDetails(obj: any) {
     return this.http.post(AppConstants['GET_PROJECTS'], obj);
   }
+  getExternalProjectList(){
+    return this.http.get(AppConstants['GET_EXTERNAL_PROJECTS']);
+  }
+  addExternalProject(obj: any){
+    return this.http.post(AppConstants['ADD_EXTERNAL_PROJECTS'], obj);
+  }
   getOneProjectDetails(obj: any) {
     return this.http.post(AppConstants['GET_PROJECT_DETAILS'], obj);
   }
@@ -68,5 +74,11 @@ getProjectListWithoutPagination(){
 }
 getSprintProgress(obj: any) {
   return this.http.post(AppConstants['SPRINT_PROGRESS'], obj);
+}
+getHappinessScoreBySprint(obj: any) {
+  return this.http.post(AppConstants['GET_HAPPINESS_SCORE_BY_SPRINT'], obj);
+}
+getHappinessScoreByProject(obj: any) {
+  return this.http.post(AppConstants['GET_HAPPINESS_SCORE_BY_PROJECT'], obj);
 }
 }
