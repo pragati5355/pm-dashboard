@@ -83,10 +83,9 @@ export class CustomerHappinessScoreComponent implements OnInit {
     getHappinessScoreBySprint(paylaod: any){
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreBySprint(paylaod).subscribe((res: any) => {
-        console.log(res);
         if(res.data.score > 0){
           this.labels = [res.data.score+"/"+res.data.outOf]
-          this.series = [res.data.score*res.data.outOf/100]
+          this.series = [res.data.score*100/res.data.outOf]
           this.score = res.data.score
         this.initialLoading = false;
         }else{
@@ -101,10 +100,9 @@ export class CustomerHappinessScoreComponent implements OnInit {
     getHappinessScoreByProject(paylaod: any){
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreByProject(paylaod).subscribe((res: any) => {
-        console.log(res);
         if(res.data.score > 0){
           this.labels = [res.data.score+"/"+res.data.outOf]
-          this.series = [res.data.score*res.data.outOf/100]
+          this.series = [res.data.score*100/res.data.outOf]
           this.score = res.data.score
         this.initialLoading = false;
         }else{
