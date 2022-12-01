@@ -12,12 +12,28 @@
     </div>
     </div>
   </div>
-  <div class="flex flex-col flex-auto items-center">
-    <apx-chart  [chart]=" chart"  [series]=" series" [plotOptions]="plotOptions" [stroke]="stroke"  [labels]="labels" [dataLabels]="dataLabels" [colors]=" colors" [fill]="fill">
-    </apx-chart>
-    <div class="flex-col items-center justify-between text-center mb-6">
-     <div class="mt-8 font-medium"> Your Customer Happiness Score is {{score}}!</div>
-     <div class="text-md">Updated 27 Feb,2022</div>
+  <ng-container *ngIf="!initialLoading && score > 0">
+    <div class="flex flex-col flex-auto items-center">
+      <apx-chart  [chart]=" chart"  [series]=" series" [plotOptions]="plotOptions" [stroke]="stroke"  [labels]="labels" [dataLabels]="dataLabels" [colors]=" colors" [fill]="fill">
+      </apx-chart>
+      <div class="flex-col items-center justify-between text-center mb-6">
+      <div class="mt-8 font-medium"> Your Customer Happiness Score is {{score}}!</div>
+      <div class="text-md">Updated 27 Feb,2022</div>
+      </div>
     </div>
-  </div>
+  </ng-container>
+  <ng-container *ngIf="!initialLoading && score == 'Nil'">
+    <div class="grid grid-cols-1 sm:grid-cols-1 mb-6 md:grid-cols-1 gap-6 w-full min-w-0">
+    <div class="w-full p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
+      Happiness Score Not Available
+    </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="initialLoading ">
+    <div class="grid grid-cols-1 sm:grid-cols-1 mb-6 md:grid-cols-1 gap-6 w-full min-w-0">
+    <div class="w-full p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
+        Loading.....
+    </div>
+    </div>
+  </ng-container>
 </div>
