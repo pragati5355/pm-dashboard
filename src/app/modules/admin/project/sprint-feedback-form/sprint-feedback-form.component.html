@@ -17,33 +17,47 @@
     <!-- Compose form -->
         <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
             <div  *ngIf="!initialLoading">
-                <div class="mb-6">
-                    <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}}</div>
+               
+                <div > 
+                    <div class="" *ngIf="emailList.length > 0">
+                        <div *ngFor="let email of emailList;index as i" >
+                           <div class="flex flex-0 items-center justify-between" *ngIf="i==0">
+                            <button
+                            mat-icon-button
+                            (click)="getFormDetailsByEmailPrevious()"
+                            [tabIndex]="-1" 
+                            [disabled]="emailId == 0">
+                            <mat-icon
+                                class="text-current"
+                                [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
+                            </button>   
+                            <div class="text-2xl font-bold tracking-tight " >Email</div>
+                            <button
+                            mat-icon-button
+                            (click)="getFormDetailsByEmailNext()"
+                            [tabIndex]="-1" [disabled]="emailId == emailList.length-1">
+                            <mat-icon
+                                class="text-current"
+                                [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
+                            </button>
+                            </div>
+                            <div class="text-lg font-medium text-center cursor-pointer" (click)="getFormDetailsByEmail(i)"> {{email}} </div>
+                          
+                            </div>
+                    </div>
+                </div>
+                <div class="mb-2 mt-4">
+                    <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}} ({{email}})</div>
                 </div>
                 <div class="formio-render">
                         
                 <formio
                 [form]="form"  [submission]="formData" [readOnly]="true"></formio>
                 </div>
-                <div *ngIf="isShowEmails"> 
-                    <div class=" p-2" *ngIf="emailList.length > 0">
-                        <div class="text-2xl font-bold tracking-tight mb-6">Email</div>
-                        <div *ngFor="let email of emailList" class="flex flex-0 items-center justify-between">
-                            <div class="text-lg font-medium"> {{email}} </div>
-                            <button
-                            mat-icon-button
-                            (click)="getFormDetailsByEmail(email)"
-                            [tabIndex]="-1">
-                            <mat-icon
-                                class="text-current"
-                                [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
-                            </button>
-                            </div>
-                    </div>
-                </div>
+                
              </div> 
              <ng-container  *ngIf="initialLoading">
-                <div class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
+                <div class="p-8 sm:p-16 text-2xl font-semibold tracking-tight text-center">
                   Loading.....
                 </div>
               </ng-container>

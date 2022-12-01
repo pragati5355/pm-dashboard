@@ -21,6 +21,8 @@ export class SprintFeedbackFormComponent  implements OnInit {
   formData: any
   sprintName: any
   isShowEmails: boolean = true
+  emailId = 0
+  email: any
   constructor(private _authService: AuthService,
     private formService: AddFormService,
     private _route: ActivatedRoute,
@@ -40,8 +42,8 @@ export class SprintFeedbackFormComponent  implements OnInit {
         let projectData= this._authService.getProjectDetails()
         this.projectId = projectData.id
         // if(this.isShow){
-          this.getFormDetailsBySprint()
           this.getFeedbackFormEmailList()
+         
         // }
   
  
@@ -76,34 +78,71 @@ export class SprintFeedbackFormComponent  implements OnInit {
 
       this.initialLoading = false
       this.emailList = res.data
-      
+      this.getFormDetailsBySprint()
+      this.getFormDetailsByEmail(0);
       console.log(res)
      })
    }
-   getFormDetailsByEmail(email:any){
+   getFormDetailsByEmail(index: number){
+     
     this.initialLoading = true;
+    this.emailId = index
       let payload = {
         projectId: this.projectId,
         sprintId: this.sprintId,
-        email:email
+        email:this.emailList[index]
       }
+      this.email=this.emailList[index]
      this.formService.getFeedbackFormByEmail(payload).subscribe((res: any) =>{
 
       this.initialLoading = false;
       console.log(res)
-      // let formdata: any = []
-      // formdata.push(res.data.form)
-      // formdata.forEach((item: any) => {
-      //   this.formName = item.formName
-      //   this.form = item.formComponent
-      // });
       this.data = res.data.formResponse
       this.formData={data:res.data.formResponse}
       this.isShowEmails = false
-      // this.form = {components: this.formComponent,data:this.formData}
-      
      })
    }
+   getFormDetailsByEmailPrevious(){
+    if(this.emailId > 0){
+        this.emailId = this.emailId -1
+
+   this.initialLoading = true;
+     let payload = {
+       projectId: this.projectId,
+       sprintId: this.sprintId,
+       email:this.emailList[this.emailId]
+     }
+     this.email=this.emailList[this.emailId]
+    this.formService.getFeedbackFormByEmail(payload).subscribe((res: any) =>{
+
+     this.initialLoading = false;
+     console.log(res)
+     this.data = res.data.formResponse
+     this.formData={data:res.data.formResponse}
+     this.isShowEmails = false
+    })
+  }
+  }
+  getFormDetailsByEmailNext(){
+   if(this.emailId < this.emailList.length-1){
+    this.emailId = this.emailId +1
+    this.initialLoading = true;
+      let payload = {
+        projectId: this.projectId,
+        sprintId: this.sprintId,
+        email:this.emailList[this.emailId]
+      }
+      this.email=this.emailList[this.emailId]
+     this.formService.getFeedbackFormByEmail(payload).subscribe((res: any) =>{
+ 
+      this.initialLoading = false;
+      console.log(res)
+      this.data = res.data.formResponse
+      this.formData={data:res.data.formResponse}
+      this.isShowEmails = false
+     })
+   }
+  }
    submit(event: any) {
   }
   gotoforms(){
