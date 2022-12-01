@@ -81,7 +81,7 @@ export class SprintFeedbackFormComponent  implements OnInit {
      })
    }
    getFormDetailsByEmail(email:any){
-    // this.initialLoading = true;
+    this.initialLoading = true;
       let payload = {
         projectId: this.projectId,
         sprintId: this.sprintId,
@@ -89,7 +89,7 @@ export class SprintFeedbackFormComponent  implements OnInit {
       }
      this.formService.getFeedbackFormByEmail(payload).subscribe((res: any) =>{
 
-      // this.initialLoading = false;
+      this.initialLoading = false;
       console.log(res)
       // let formdata: any = []
       // formdata.push(res.data.form)

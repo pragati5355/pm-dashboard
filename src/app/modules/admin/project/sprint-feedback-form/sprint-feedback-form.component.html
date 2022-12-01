@@ -23,7 +23,7 @@
                 <div class="formio-render">
                         
                 <formio
-                [form]="form"  [submission]="formData"></formio>
+                [form]="form"  [submission]="formData" [readOnly]="true"></formio>
                 </div>
                 <div *ngIf="isShowEmails"> 
                     <div class=" p-2" *ngIf="emailList.length > 0">
@@ -42,5 +42,10 @@
                     </div>
                 </div>
              </div> 
+             <ng-container  *ngIf="initialLoading">
+                <div class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
+                  Loading.....
+                </div>
+              </ng-container>
         </div>
 </div>
