@@ -17,7 +17,7 @@
     <!-- Compose form -->
         <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
             <div  *ngIf="!initialLoading">
-               
+  
                 <div > 
                     <div class="" *ngIf="emailList.length > 0">
                         <div *ngFor="let email of emailList;index as i" >
@@ -41,13 +41,16 @@
                                 [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
                             </button>
                             </div>
-                            <div class="text-lg font-medium text-center cursor-pointer" (click)="getFormDetailsByEmail(i)"> {{email}} </div>
+                            <div class="text-lg font-medium text-center cursor-pointer hidden" (click)="getFormDetailsByEmail(i)"> {{email}} </div>
                           
                             </div>
                     </div>
                 </div>
                 <div class="mb-2 mt-4">
-                    <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}} ({{email}})</div>
+                    <div class="text-2xl font-bold tracking-tight text-center"> {{email}}</div>
+                </div>
+                <div class="mb-2 mt-4">
+                    <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}} </div>
                 </div>
                 <div class="formio-render">
                         
