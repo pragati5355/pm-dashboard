@@ -114,6 +114,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     userData: any;
     clientDtailsList: any = []
     routeSubscribe: any;
+    changeForm:any= 0;
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
       private _matStepperIntl: MatStepperIntl,
       private _fuseConfirmationService: FuseConfirmationService,
@@ -867,17 +868,22 @@ selectedJiraUserOption(event: any) {
   }
   selectChangeProject(event: any){
    if(this.editProject){
-    const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
-    // Subscribe to afterClosed from the dialog reference
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == "cancelled") {
-        this.pojectdata.forEach((item: any) => {
-          this.projectDetials.patchValue({
-            feedback_form: item.formId?item.formId:"",
-          });
-        })
+    if(this.changeForm == 0){
+      const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+      // Subscribe to afterClosed from the dialog reference
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result == "cancelled") {
+          this.pojectdata.forEach((item: any) => {
+            this.projectDetials.patchValue({
+              feedback_form: item.formId?item.formId:"",
+            });
+          })
+        }
+        if (result == "confirmed") {
+         this.changeForm =  this.changeForm +1
+        }
+      });
     }
-    });
    }
   }
 }
