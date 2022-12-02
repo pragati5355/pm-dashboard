@@ -20,7 +20,8 @@ import {SnackBar} from '../../../../core/utils/snackBar'
 import {ObjectValidation} from "../../../../core/utils/Validations";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
 import { AddFormService } from '@services/add-form.service';
-import { ErrorMessage } from 'app/core/constacts/constacts'
+import { ErrorMessage } from 'app/core/constacts/constacts';
+import {FuseConfirmationService} from '@fuse/services/confirmation';
 export class TeamMember {
   constructor(public firstName: string, public lastName: string,  public id: string, public email: string, public team: string ) { }
 }
@@ -52,6 +53,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
   project_manager = new FormControl();
   @ViewChild("stepper", { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
+    configForm!: FormGroup;
     editProject = false
     selectJiraUser = ""
     selectManager= ""
@@ -90,6 +92,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     filteredManagerLists!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;
     filteredTeamJiraUsers!: Observable<any[]> | undefined;
+    pojectdata:any
      get projectDetailsForm(): { [key: string]: AbstractControl } {
       return this.projectDetials.controls;
     }
@@ -111,7 +114,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     userData: any;
     clientDtailsList: any = []
     routeSubscribe: any;
-    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,private _matStepperIntl: MatStepperIntl,
+    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
+      private _matStepperIntl: MatStepperIntl,
+      private _fuseConfirmationService: FuseConfirmationService,
       private _formBuilder: FormBuilder,
       private _authService: AuthService,
       private dialog: MatDialog,
@@ -196,24 +201,46 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
         });
       
         // Subscribe to media changes
-        this._fuseMediaWatcherService.onMediaChange$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(({matchingAliases}) => {
+      this._fuseMediaWatcherService.onMediaChange$
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe(({matchingAliases}) => {
 
-                // Set the drawerMode and drawerOpened if the given breakpoint is active
-                if ( matchingAliases.includes('md') )
-                {
-                    this.drawerMode = 'side';
-                    this.drawerOpened = true;
-                }
-                else
-                {
-                    this.drawerMode = 'side';
-                    this.drawerOpened = false;
-                }
-            });
+              // Set the drawerMode and drawerOpened if the given breakpoint is active
+              if ( matchingAliases.includes('md') )
+              {
+                  this.drawerMode = 'side';
+                  this.drawerOpened = true;
+              }
+              else
+              {
+                  this.drawerMode = 'side';
+                  this.drawerOpened = false;
+              }
+          });
        this.getFormList();
        this.filterFunctions();
+       this.configForm = this._formBuilder.group({
+        // title: 'Delete Resource',
+        message: 'You already have a Feedback form associated with this project. If you  change the Feedback form to a new one, this will erase all the previously filled data for the old feedback form. Which also means your previous Customer Happiness Score will go back to zero. <span class="font-medium"> Are you sure you want to change the Feedback form?</span>',
+        icon: this._formBuilder.group({
+          show: true,
+          name: 'heroicons_outline:exclamation',
+          color: 'primary'
+        }),
+        actions: this._formBuilder.group({
+          confirm: this._formBuilder.group({
+            show: true,
+            label: 'Yes',
+            color: 'primary'
+          }),
+          cancel: this._formBuilder.group({
+            show: true,
+            label: 'No',
+          })
+        }),
+        dismissible: false
+      });
+
     }
     getFormList(){
       this.initialLoading = true
@@ -667,12 +694,12 @@ selectedJiraUserOption(event: any) {
     this.ProjectService.getOneProjectDetails(payload).subscribe(
       (res: any) => {
         this.initialLoading = false;
-        let pojectdata = [res.data.project]
+        this.pojectdata = [res.data.project]
         this.clientData.push(res.data.clientModels)
         let projectsetting = [] ;
         projectsetting.push(res.data.authUser) 
         let projectTeam = res.data.teamModel
-        pojectdata.forEach((item: any) => {
+        this.pojectdata.forEach((item: any) => {
           this.projectDetials.patchValue({
             projectName: item.name?item.name:"",
             projectDescription: item.description?item.description:"",
@@ -837,5 +864,20 @@ selectedJiraUserOption(event: any) {
         element.isDeleted = true
         this.filteredEditClientList.push(element);
       })
+  }
+  selectChangeProject(event: any){
+   if(this.editProject){
+    const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+    // Subscribe to afterClosed from the dialog reference
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == "cancelled") {
+        this.pojectdata.forEach((item: any) => {
+          this.projectDetials.patchValue({
+            feedback_form: item.formId?item.formId:"",
+          });
+        })
+    }
+    });
+   }
   }
 }

@@ -99,6 +99,7 @@
                                     type="text"
                                     placeholder="Choose feedback form"
                                     [disableOptionCentering]="true"
+                                    (selectionChange)="selectChangeProject($event)"
                                     >
                                     <mat-option *ngFor="let form of selectFomList" [value]="form.id" >
                                     {{ form.formName }}
