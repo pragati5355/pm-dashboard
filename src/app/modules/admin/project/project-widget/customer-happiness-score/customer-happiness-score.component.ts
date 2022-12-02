@@ -52,7 +52,6 @@ export class CustomerHappinessScoreComponent implements OnInit {
       this._route.queryParams.subscribe((sprintId: any) => {
         if (sprintId['id'] && sprintId['name']) {
             this.sprintId = parseInt(sprintId['id'])
-            this.isShow = true;
             let payload={
               projectId : this.projectId,
               sprintId:this.sprintId
@@ -87,6 +86,7 @@ export class CustomerHappinessScoreComponent implements OnInit {
           this.labels = [res.data.score+"/"+res.data.outOf]
           this.series = [res.data.score*100/res.data.outOf]
           this.score = res.data.score
+          this.isShow = true;
         this.initialLoading = false;
         }else{
           this.labels = ["NA"]
