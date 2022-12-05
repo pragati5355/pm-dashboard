@@ -17,37 +17,33 @@
     <!-- Compose form -->
         <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
             <div  *ngIf="!initialLoading">
-  
-                <div > 
-                    <div class="" *ngIf="emailList.length > 0">
-                        <div *ngFor="let email of emailList;index as i" >
-                           <div class="flex flex-0 items-center justify-between" *ngIf="i==0">
-                            <button
-                            mat-icon-button
-                            (click)="getFormDetailsByEmailPrevious()"
-                            [tabIndex]="-1" 
-                            [disabled]="emailId == 0">
-                            <mat-icon
-                                class="text-current"
-                                [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
-                            </button>   
-                            <div class="text-2xl font-bold tracking-tight " >Email</div>
+                <div class="mb-2 mt-4">
+                    <div class="flex flex-0 items-center justify-between" >
+                         <div>
+                            <div *ngFor="let email of emailList;index as i" >
+                                <button
+                                mat-icon-button
+                                (click)="getFormDetailsByEmailPrevious()"
+                                [tabIndex]="-1" 
+                                [disabled]="emailId == 0" *ngIf="i==0">
+                                <mat-icon
+                                    class="text-current"
+                                    [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
+                                </button>   
+                            </div>
+                         </div> 
+                         <div class="text-2xl font-bold tracking-tight"> {{email}}</div>
+                         <div> <div class="" *ngFor="let email of emailList;index as i" >
                             <button
                             mat-icon-button
                             (click)="getFormDetailsByEmailNext()"
-                            [tabIndex]="-1" [disabled]="emailId == emailList.length-1">
+                            [tabIndex]="-1" [disabled]="emailId == emailList.length-1" *ngIf="i==0">
                             <mat-icon
                                 class="text-current"
                                 [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
                             </button>
-                            </div>
-                            <div class="text-lg font-medium text-center cursor-pointer hidden" (click)="getFormDetailsByEmail(i)"> {{email}} </div>
-                          
-                            </div>
-                    </div>
-                </div>
-                <div class="mb-2 mt-4">
-                    <div class="text-2xl font-bold tracking-tight text-center"> {{email}}</div>
+                        </div></div>
+                    </div >
                 </div>
                 <div class="mb-2 mt-4">
                     <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}} </div>
