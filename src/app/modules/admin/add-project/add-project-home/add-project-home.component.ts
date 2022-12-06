@@ -114,7 +114,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     userData: any;
     clientDtailsList: any = []
     routeSubscribe: any;
-    changeForm:any= 0;
+    changeForm:number= 0;
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
       private _matStepperIntl: MatStepperIntl,
       private _fuseConfirmationService: FuseConfirmationService,
