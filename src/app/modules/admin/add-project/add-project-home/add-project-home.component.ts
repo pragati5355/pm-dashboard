@@ -66,7 +66,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    projectDetials!: FormGroup;
+    projectDetails!: FormGroup;
     clientDetials!: FormGroup
     projectSetting!: FormGroup;
     projectTeam!: FormGroup;
@@ -92,9 +92,9 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     filteredManagerLists!: Observable<any[]> | undefined;
     filteredJiraUsers!: Observable<any[]> | undefined;
     filteredTeamJiraUsers!: Observable<any[]> | undefined;
-    pojectdata:any
+    projectData:any
      get projectDetailsForm(): { [key: string]: AbstractControl } {
-      return this.projectDetials.controls;
+      return this.projectDetails.controls;
     }
     get clientDetailForm(): { [key: string]: AbstractControl } {
       return this.clientDetials.controls;
@@ -142,7 +142,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     {
       
       this.userData = this._authService.getUser();
-      this.projectDetials = this._formBuilder.group({
+      this.projectDetails = this._formBuilder.group({
       projectName: ['',[Validators.required]],
       projectDescription: ['',[Validators.required,
         TextRegexValidator(RegexConstants.Text_Area)]],
@@ -338,7 +338,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       // stepper.previous();
       this.selectedIndex = stepper
       if(this.selectedIndex== 0){
-        this.projectDetials.reset( this.projectDetials.value);
+        this.projectDetails.reset( this.projectDetails.value);
         this.showStep = 1
       }else if(this.selectedIndex == 1){
         this.clientDetials.reset( this.clientDetials.value);
@@ -355,7 +355,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
     public selectionChange($event: any): void {
       if($event.selectedIndex == 0){
           this.showStep = 1
-          this.projectDetials.reset( this.projectDetials.value);
+          this.projectDetails.reset( this.projectDetails.value);
         }else if($event.selectedIndex == 1){
           this.showStep = 2
           this.clientDetials.reset( this.clientDetials.value);
@@ -502,7 +502,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
       this.filterFunctions();
     }
     submitProjectDetails(){
-      if (!this.projectDetials.invalid) {
+      if (!this.projectDetails.invalid) {
                this.selectedIndex = 1
       }
     }
@@ -548,15 +548,15 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
           let payload = 
           {
             projectDetails: {
-              name: this.projectDetials.value.projectName,
-              description: this.projectDetials.value.projectDescription,
+              name: this.projectDetails.value.projectName,
+              description: this.projectDetails.value.projectDescription,
               key: this.projectSetting.value.project,
               entityId: this.jiraProjectList[0].entityId,
               uuid: this.jiraProjectList[0].uuid,
               orgId: this.jiraProjectList[0].orgId,
               private: this.jiraProjectList[0].private,
               id: this.jiraProjectList[0].id,
-              formId: this.projectDetials.value.feedback_form
+              formId: this.projectDetails.value.feedback_form
             },
             clientDetails: this.clientDtailsList,
             baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
@@ -573,7 +573,7 @@ export class AddProjectHomeComponent implements OnInit, OnDestroy,IDeactivateCom
               this.submitInProcess = false;
               if(!res.error){
                 this.snackBar.successSnackBar("Project created successFully");
-                this.projectDetials.reset();
+                this.projectDetails.reset();
                 this.clientDetials.reset();
                 this.projectSetting.reset();
                 this.projectTeam.reset();
@@ -665,7 +665,7 @@ selectedJiraUserOption(event: any) {
      );
    }
    canExit(): boolean {
-    if (!this.projectDetials.pristine) {
+    if (!this.projectDetails.pristine) {
       return false;
     }
     return true;
@@ -695,13 +695,13 @@ selectedJiraUserOption(event: any) {
     this.ProjectService.getOneProjectDetails(payload).subscribe(
       (res: any) => {
         this.initialLoading = false;
-        this.pojectdata = [res.data.project]
+        this.projectData = [res.data.project]
         this.clientData.push(res.data.clientModels)
         let projectsetting = [] ;
         projectsetting.push(res.data.authUser) 
         let projectTeam = res.data.teamModel
-        this.pojectdata.forEach((item: any) => {
-          this.projectDetials.patchValue({
+        this.projectData.forEach((item: any) => {
+          this.projectDetails.patchValue({
             projectName: item.name?item.name:"",
             projectDescription: item.description?item.description:"",
             feedback_form: item.formId?item.formId:"",
@@ -763,8 +763,8 @@ selectedJiraUserOption(event: any) {
         let payload = 
         {
           projectDetails: {
-            name: this.projectDetials.value.projectName,
-            description: this.projectDetials.value.projectDescription,
+            name: this.projectDetails.value.projectName,
+            description: this.projectDetails.value.projectDescription,
             key: this.projectSetting.value.project,
             entityId: this.jiraProjectList[0].entityId,
             uuid: this.jiraProjectList[0].uuid,
@@ -775,7 +775,7 @@ selectedJiraUserOption(event: any) {
             projectId: this.jiraProjectList[0].id,
             isPrivate: false,
             userId: this.userData.userId,
-            formId: this.projectDetials.value.feedback_form
+            formId: this.projectDetails.value.feedback_form
           },
           clientDetails: this.filteredEditClientList,
           baseUrl: "https://"+ this.projectSetting.value.url+".atlassian.net",
@@ -793,7 +793,7 @@ selectedJiraUserOption(event: any) {
             this.submitInProcess = false;
             if(!res.error){
               this.snackBar.successSnackBar("Project updated successFully");
-              this.projectDetials.reset();
+              this.projectDetails.reset();
               this.clientDetials.reset();
               this.projectSetting.reset();
               this.projectTeam.reset();
@@ -873,8 +873,8 @@ selectedJiraUserOption(event: any) {
       // Subscribe to afterClosed from the dialog reference
       dialogRef.afterClosed().subscribe((result) => {
         if (result == "cancelled") {
-          this.pojectdata.forEach((item: any) => {
-            this.projectDetials.patchValue({
+          this.projectData.forEach((item: any) => {
+            this.projectDetails.patchValue({
               feedback_form: item.formId?item.formId:"",
             });
           })
