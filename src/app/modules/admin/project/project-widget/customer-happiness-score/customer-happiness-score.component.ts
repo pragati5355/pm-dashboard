@@ -6,6 +6,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { SprintFeedbackFormComponent } from '../../sprint-feedback-form/sprint-feedback-form.component';
+import { round } from 'lodash';
 @Component({
   selector: 'app-customer-happiness-score',
   templateUrl: './customer-happiness-score.component.html',
@@ -83,9 +84,9 @@ export class CustomerHappinessScoreComponent implements OnInit {
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreBySprint(paylaod).subscribe((res: any) => {
         if(res.data.score > 0){
-          this.labels = [res.data.score+"/"+res.data.outOf]
+          this.labels = [round(res.data.score)+"/"+res.data.outOf]
           this.series = [res.data.score*100/res.data.outOf]
-          this.score = res.data.score
+          this.score = round(res.data.score)
           this.isShow = true;
         this.initialLoading = false;
         }else{
@@ -101,9 +102,9 @@ export class CustomerHappinessScoreComponent implements OnInit {
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreByProject(paylaod).subscribe((res: any) => {
         if(res.data.score > 0){
-          this.labels = [res.data.score+"/"+res.data.outOf]
+          this.labels = [round(res.data.score)+"/"+res.data.outOf]
           this.series = [res.data.score*100/res.data.outOf]
-          this.score = res.data.score
+          this.score = round(res.data.score)
         this.initialLoading = false;
         }else{
           this.labels = ["NA"]
