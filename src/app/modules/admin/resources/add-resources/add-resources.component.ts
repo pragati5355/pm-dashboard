@@ -62,6 +62,9 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
   @ViewChild('projectInput')
   projectInput!: ElementRef;
   isShow = false;
+  newExternalProjects: any=[]
+  newExternalProjectsId: any=[]
+  allNewExternalProjects: any=[]
   constructor(private _formBuilder: FormBuilder, private router: Router,
     private ProjectService:CreateProjecteService,
     private _authService: AuthService,
@@ -121,7 +124,8 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
-        assignedProjects: this.projects
+        assignedProjects: this.projects? this.projects.filter((project: any) => !this.newExternalProjectsId.includes(project)):[],
+        newExternalProjects: this.newExternalProjects
       };
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
@@ -132,7 +136,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
           this._authService.updateAndReload(window.location);
           }
          if(res.error){
-          this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
+          this.snackBar.errorSnackBar(res.message);
         }else{
           this.snackBar.successSnackBar("Successfully Added")
           this.resourcesForm.reset();
@@ -289,14 +293,15 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
-        assignedProjects: this.projects
+        assignedProjects: this.projects? this.projects.filter((project: any) => !this.newExternalProjectsId.includes(project)):[],
+        newExternalProjects: this.newExternalProjects
       };
       this.submitInProcess = true;
       this.ProjectService.updateDeleteResource(payload).subscribe(
         (res: any) => {
           this.submitInProcess = false;
          if(res.error){
-          this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
+          this.snackBar.errorSnackBar(res.message);
         }else{
           this.snackBar.successSnackBar("Updated successfully");
           this.resourcesForm.reset();
@@ -338,26 +343,16 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     const value = event.value;
     // Add our project
     if(typeof event.value == "string"){
-      let payload = {
-        name: event.value,
-        userId:  this.userData.userId
-      }
-      this.ProjectService.addExternalProject(payload).subscribe(
-        (res: any) => {
-          this.submitInProcess = false;
-         if(res.data){
-           this.allprojects.push(res.data);
-          this.projects.push(res.data.id);
-        }
-        if(res.tokenExpire == true){
-          this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
-          this._authService.updateAndReload(window.location);
-          }
-        },
-        error => {
-          this.submitInProcess = false;
-        }
-      );
+      this.newExternalProjects.push(event.value);
+      let max = Math.max.apply(Math, this.allprojects.map(ele=>ele.id)) +1
+      this.allprojects.push({id: max,
+        name: event.value
+      })
+      this.projects.push(max)
+      this.newExternalProjectsId.push(max)
+      this.allNewExternalProjects.push({id: max,
+        name: event.value
+      })
     }
 
     if (input) {
@@ -368,8 +363,23 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     this.resourcesForm.get('project')?.setValue('');
   }
 
-  removeProject(project: any, selectIndex: any): void {
+  removeProject(project: number, selectIndex: any): void {
     this.projects.splice(selectIndex, 1);
+    const found = this.newExternalProjectsId.some((el: any) => el === project);
+    if(found){
+      this.newExternalProjectsId.splice(selectIndex, 1);
+    let filteredExternalProject: any = this.allNewExternalProjects.filter( (item: any) => item.id === project )
+    this.newExternalProjects.forEach((element: any,index: any)=>{
+      if(element==filteredExternalProject[0].name) this.newExternalProjects.splice(index,1);
+   });
+    this.allprojects.forEach((element: any,index: any)=>{
+      if(element.id==project) this.allprojects.splice(index,1);
+    });
+    this.allNewExternalProjects.forEach((element: any,index: any)=>{
+      if(element.id==project) this.allNewExternalProjects.splice(index,1);
+    });
+
+    }
     this.resourcesForm.get('project')?.setValue('');
   }
 
