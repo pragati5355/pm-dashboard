@@ -15,7 +15,6 @@ export class SprintFeedbackFormComponent  implements OnInit {
   initialLoading= false
   sprintId: any
   projectId: any
-  // isShow =false
   emailList:any = []
   formComponent: any =[]
   formData: any
@@ -36,18 +35,11 @@ export class SprintFeedbackFormComponent  implements OnInit {
         if (sprintId['id'] && sprintId['name']) {
             this.sprintId = parseInt(sprintId['id'])
             this.sprintName = sprintId['name']
-            // this.isShow =true
         }
         });
         let projectData= this._authService.getProjectDetails()
         this.projectId = projectData.id
-        // if(this.isShow){
           this.getFeedbackFormEmailList()
-         
-        // }
-  
- 
-      console.log(this.router.url)
   }
    getFormDetailsBySprint(){
     this.initialLoading = true;
@@ -80,7 +72,6 @@ export class SprintFeedbackFormComponent  implements OnInit {
       this.emailList = res.data
       this.getFormDetailsBySprint()
       this.getFormDetailsByEmail(0);
-      console.log(res)
      })
    }
    getFormDetailsByEmail(index: number){
@@ -96,7 +87,6 @@ export class SprintFeedbackFormComponent  implements OnInit {
      this.formService.getFeedbackFormByEmail(payload).subscribe((res: any) =>{
 
       this.initialLoading = false;
-      console.log(res)
       this.data = res.data.formResponse
       this.formData={data:res.data.formResponse}
       this.isShowEmails = false
@@ -116,7 +106,6 @@ export class SprintFeedbackFormComponent  implements OnInit {
     this.formService.getFeedbackFormByEmail(payload).subscribe((res: any) =>{
 
      this.initialLoading = false;
-     console.log(res)
      this.data = res.data.formResponse
      this.formData={data:res.data.formResponse}
      this.isShowEmails = false
@@ -136,7 +125,6 @@ export class SprintFeedbackFormComponent  implements OnInit {
      this.formService.getFeedbackFormByEmail(payload).subscribe((res: any) =>{
  
       this.initialLoading = false;
-      console.log(res)
       this.data = res.data.formResponse
       this.formData={data:res.data.formResponse}
       this.isShowEmails = false
