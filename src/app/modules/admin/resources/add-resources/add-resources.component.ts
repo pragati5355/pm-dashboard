@@ -254,10 +254,18 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         this.createdAt = item.createdAt
         this.firstName=item.firstName?item.firstName: ""
         this.technologys =item.technology
+        this.projects = item.assignedProjects?item.assignedProjects:""
         this.filteredtechnologys = this.resourcesForm.get('technology')?.valueChanges
         .pipe(
           startWith(''),
           map((technology: any |null) => technology ?  this._filter(technology) : this._filterslice()));
+          this.filteredprojects = this.resourcesForm.get('project')?.valueChanges
+          .pipe(
+            startWith(''),
+            map((project: any |null) => project ?  this._filterProject(project) : this._filtersliceProject()));
+            if(this.projects.length > 0){
+              this.isShow = true
+            }
         
       })
       if(res.tokenExpire == true){
