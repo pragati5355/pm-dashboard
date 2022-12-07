@@ -18,7 +18,7 @@
       </apx-chart>
       <div class="flex-col items-center justify-between text-center mb-6">
       <div class="mt-8 font-medium"> Your Customer Happiness Score is {{score}}!</div>
-      <div class="text-md">Updated 27 Feb,2022</div>
+      <div class="text-md" *ngIf="updatedAt">Updated {{updatedAt |date }}</div>
       </div>
     </div>
   </ng-container>

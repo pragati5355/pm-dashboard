@@ -37,6 +37,7 @@ export class CustomerHappinessScoreComponent implements OnInit {
     isShow = false
     initialLoading =true
     score: any= "Nil"
+    updatedAt!: Date;
     constructor(private _authService: AuthService, private _route: ActivatedRoute, private dialog: MatDialog,private ProjectService: CreateProjecteService,) {
         this.fill = chartConfig.SCORE_CHART[0].fill;
         this.chart = chartConfig.SCORE_CHART[0].chart;
@@ -83,10 +84,11 @@ export class CustomerHappinessScoreComponent implements OnInit {
     getHappinessScoreBySprint(paylaod: any){
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreBySprint(paylaod).subscribe((res: any) => {
-        if(res.data.score > 0){
-          this.labels = [round(res.data.score)+"/"+res.data.outOf]
-          this.series = [res.data.score*100/res.data.outOf]
-          this.score = round(res.data.score)
+        if(res.data.happinessScore > 0){
+          this.labels = [round(res.data.happinessScore)+"/"+res.data.outOf]
+          this.series = [res.data.happinessScore*100/res.data.outOf]
+          this.score = round(res.data.happinessScore)
+          this.updatedAt = res.data.lastModifiedAt
           this.isShow = true;
         this.initialLoading = false;
         }else{
@@ -101,10 +103,11 @@ export class CustomerHappinessScoreComponent implements OnInit {
     getHappinessScoreByProject(paylaod: any){
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreByProject(paylaod).subscribe((res: any) => {
-        if(res.data.score > 0){
-          this.labels = [round(res.data.score)+"/"+res.data.outOf]
-          this.series = [res.data.score*100/res.data.outOf]
-          this.score = round(res.data.score)
+        if(res.data.happinessScore > 0){
+          this.labels = [round(res.data.happinessScore)+"/"+res.data.outOf]
+          this.series = [res.data.happinessScore*100/res.data.outOf]
+          this.score = round(res.data.happinessScore)
+          this.updatedAt = res.data.lastModifiedAt
         this.initialLoading = false;
         }else{
           this.labels = ["NA"]
