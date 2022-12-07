@@ -6,6 +6,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { SprintFeedbackFormComponent } from '../../sprint-feedback-form/sprint-feedback-form.component';
+import { round } from 'lodash';
 @Component({
   selector: 'app-customer-happiness-score',
   templateUrl: './customer-happiness-score.component.html',
@@ -52,7 +53,6 @@ export class CustomerHappinessScoreComponent implements OnInit {
       this._route.queryParams.subscribe((sprintId: any) => {
         if (sprintId['id'] && sprintId['name']) {
             this.sprintId = parseInt(sprintId['id'])
-            this.isShow = true;
             let payload={
               projectId : this.projectId,
               sprintId:this.sprintId
@@ -84,9 +84,10 @@ export class CustomerHappinessScoreComponent implements OnInit {
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreBySprint(paylaod).subscribe((res: any) => {
         if(res.data.score > 0){
-          this.labels = [res.data.score+"/"+res.data.outOf]
+          this.labels = [round(res.data.score)+"/"+res.data.outOf]
           this.series = [res.data.score*100/res.data.outOf]
-          this.score = res.data.score
+          this.score = round(res.data.score)
+          this.isShow = true;
         this.initialLoading = false;
         }else{
           this.labels = ["NA"]
@@ -101,9 +102,9 @@ export class CustomerHappinessScoreComponent implements OnInit {
       this.initialLoading = true;
       this.ProjectService.getHappinessScoreByProject(paylaod).subscribe((res: any) => {
         if(res.data.score > 0){
-          this.labels = [res.data.score+"/"+res.data.outOf]
+          this.labels = [round(res.data.score)+"/"+res.data.outOf]
           this.series = [res.data.score*100/res.data.outOf]
-          this.score = res.data.score
+          this.score = round(res.data.score)
         this.initialLoading = false;
         }else{
           this.labels = ["NA"]
