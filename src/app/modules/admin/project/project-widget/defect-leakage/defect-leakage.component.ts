@@ -4,8 +4,7 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataL
 
 @Component({
   selector: 'app-defect-leakage',
-  templateUrl: './defect-leakage.component.html',
-  styleUrls: ['./defect-leakage.component.scss']
+  templateUrl: './defect-leakage.component.html'
 })
 export class DefectLeakageComponent implements OnInit {
   titleMain =""
