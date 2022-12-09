@@ -4,8 +4,7 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataL
 
 @Component({
   selector: 'app-project-timeline-chart',
-  templateUrl: './project-timeline-chart.component.html',
-  styleUrls: ['./project-timeline-chart.component.scss']
+  templateUrl: './project-timeline-chart.component.html'
 })
 
 export class ProjectTimelineChartComponent implements OnInit {
