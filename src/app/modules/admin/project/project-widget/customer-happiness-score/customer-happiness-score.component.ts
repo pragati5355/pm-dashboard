@@ -9,8 +9,7 @@ import { SprintFeedbackFormComponent } from '../../sprint-feedback-form/sprint-f
 import { round } from 'lodash';
 @Component({
   selector: 'app-customer-happiness-score',
-  templateUrl: './customer-happiness-score.component.html',
-  styleUrls: ['./customer-happiness-score.component.scss']
+  templateUrl: './customer-happiness-score.component.html'
 })
 export class CustomerHappinessScoreComponent implements OnInit {
     @Input() fill: ApexFill;
