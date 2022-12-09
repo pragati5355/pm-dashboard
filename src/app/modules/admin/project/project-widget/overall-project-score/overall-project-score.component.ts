@@ -5,7 +5,6 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataL
 @Component({
   selector: 'app-overall-project-score',
   templateUrl: './overall-project-score.component.html',
-  styleUrls: ['./overall-project-score.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

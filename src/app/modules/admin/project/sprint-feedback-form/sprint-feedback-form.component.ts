@@ -55,6 +55,8 @@ export class SprintFeedbackFormComponent  implements OnInit {
       formdata.forEach((item: any) => {
         this.formName = item.formName
         this.formComponent = item.formComponent.components
+        this.formComponent = this.formComponent.filter((element: any)=> element.key !== 'submit')
+       
       });
       this.form = {components: this.formComponent}
      
