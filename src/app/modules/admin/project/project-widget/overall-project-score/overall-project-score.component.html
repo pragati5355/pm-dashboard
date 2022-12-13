@@ -5,10 +5,11 @@
     </div>
   </div>
   <div class="flex   flex-auto ">
-    <apx-chart class="flex-auto items-center" [legend]="legend" [series]=" series" [chart]=" chart" [colors]="colors" [states]="states"
+    <div class="coming-soon">Coming Soon</div>
+    <apx-chart class="flex-auto items-center overlay-5 " [legend]="legend" [series]=" series" [chart]=" chart" [colors]="colors" [states]="states"
       [plotOptions]="plotOptions" [labels]="labels" [tooltip]="tooltip">
     </apx-chart>
-    <div class="flex p-6 ">
+    <div class="flex p-6 overlay-5 ">
       <div class="   ">
         <ng-container *ngFor="let dataset of data.series; let i = index">
           <div class="flex mt-4 items-center">
@@ -19,4 +20,5 @@
       </div>
     </div>
   </div>
+ 
 </div>
