@@ -28,9 +28,11 @@ import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { ProjectHomeComponent } from './project-home/project-home.component';
 import { SharedModule } from 'app/core/shared.module';
 import {MatChipsModule} from '@angular/material/chips';
+import { FormioModule, FormioAppConfig } from 'angular-formio';
 import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-popup.component';
 import { ProjectWidgetModule } from "@modules/admin/project/project-widget/project-widget.module";
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
+import { SprintFeedbackFormComponent } from './sprint-feedback-form/sprint-feedback-form.component';
 const routes: Routes = [
   {
     path: "",
@@ -76,6 +78,7 @@ const routes: Routes = [
     ProjectHomeComponent,
     ConnectJiraPopupComponent,
     SendFeedbackFormComponent,
+    SprintFeedbackFormComponent,
   ],
   exports: [CdkStepperModule,
     MatStepperModule,],
@@ -107,7 +110,8 @@ const routes: Routes = [
     FuseNavigationModule,
     FuseScrollbarModule,
     FuseScrollResetModule,
-    MatChipsModule
+    MatChipsModule,
+    FormioModule
   ]
 })
 export class ProjectModule { }

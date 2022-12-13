@@ -16,7 +16,7 @@
                 [linear]="true"
                 #verticalStepper  [selectedIndex]="this.selectedIndex" 
                 (selectionChange)="selectionChange($event)">
-                <mat-step label="Project Details" [completed]="!projectDetials.invalid"
+                <mat-step label="Project Details" [completed]="!projectDetails.invalid"
                   >
                   
                 </mat-step>
@@ -51,7 +51,7 @@
                     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     
                         <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
-                            <form  [formGroup]="projectDetials" 
+                            <form  [formGroup]="projectDetails" 
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
                             >
                                 <h2 class="text-3xl font-semibold tracking-tight leading-8">{{pageTitle | titlecase}} Project Details</h2>
@@ -99,6 +99,7 @@
                                     type="text"
                                     placeholder="Choose feedback form"
                                     [disableOptionCentering]="true"
+                                    (selectionChange)="selectChangeProject($event)"
                                     >
                                     <mat-option *ngFor="let form of selectFomList" [value]="form.id" >
                                     {{ form.formName }}

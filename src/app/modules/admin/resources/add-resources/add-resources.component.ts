@@ -44,6 +44,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
   addOnBlur = false;
   initialLoading = false;
   createdAt: any
+  userData: any;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   technology = new FormControl();
   filteredtechnologys: Observable<any[]> | undefined;
@@ -54,6 +55,16 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
 
   @ViewChild('technologyInput')
   technologyInput!: ElementRef;
+  project = new FormControl();
+  filteredprojects: Observable<any[]> | undefined;
+  projects: any = [];
+  allprojects: Project[] = [];
+  @ViewChild('projectInput')
+  projectInput!: ElementRef;
+  isShow = false;
+  newExternalProjects: any=[]
+  newExternalProjectsId: any=[]
+  allNewExternalProjects: any=[]
   constructor(private _formBuilder: FormBuilder, private router: Router,
     private ProjectService:CreateProjecteService,
     private _authService: AuthService,
@@ -98,6 +109,8 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     });
   
     this.getTechnology();
+    this.getProjectList();
+    this.userData = this._authService.getUser();
   }
 
   submit() {
@@ -111,7 +124,8 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
-        assignedProjects: []
+        assignedProjects: this.projects? this.projects.filter((project: any) => !this.newExternalProjectsId.includes(project)):[],
+        newExternalProjects: this.newExternalProjects
       };
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
@@ -121,8 +135,8 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
           this.snackBar.errorSnackBar(ErrorMessage.ERROR_SOMETHING_WENT_WRONG);
           this._authService.updateAndReload(window.location);
           }
-         if(res.data.error){
-          this.snackBar.errorSnackBar(res.data.error)
+         if(res.error){
+          this.snackBar.errorSnackBar(res.message);
         }else{
           this.snackBar.successSnackBar("Successfully Added")
           this.resourcesForm.reset();
@@ -175,17 +189,17 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
   _filterslice() {
     return this.alltechnologys.filter(alltechnologys =>  !this.technologys.includes(alltechnologys.id))
   }
+  _filterProject(value: any) {
+    return this.allprojects.filter((allprojects: any) =>
+    allprojects.name.toLowerCase().indexOf(value) === 0  && !this.projects.includes(allprojects.id));
+  }
+  _filtersliceProject() {
+    return this.allprojects.filter(allprojects =>  !this.projects.includes(allprojects.id))
+  }
   add(event: MatChipInputEvent): void {
-    debugger
     const input = event.input;
     const value = event.value;
     // Add our technology
-    if ((value || '').trim()) {
-      this.technologys.push({
-        id:Math.random(),
-        name:value.trim()
-      });
-    }
 
     if (input) {
       input.value = '';
@@ -240,10 +254,18 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         this.createdAt = item.createdAt
         this.firstName=item.firstName?item.firstName: ""
         this.technologys =item.technology
+        this.projects = item.assignedProjects?item.assignedProjects:""
         this.filteredtechnologys = this.resourcesForm.get('technology')?.valueChanges
         .pipe(
           startWith(''),
           map((technology: any |null) => technology ?  this._filter(technology) : this._filterslice()));
+          this.filteredprojects = this.resourcesForm.get('project')?.valueChanges
+          .pipe(
+            startWith(''),
+            map((project: any |null) => project ?  this._filterProject(project) : this._filtersliceProject()));
+            if(this.projects.length > 0){
+              this.isShow = true
+            }
         
       })
       if(res.tokenExpire == true){
@@ -279,13 +301,15 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         team:this.resourcesForm.value.team,
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
-        assignedProjects: []
+        assignedProjects: this.projects? this.projects.filter((project: any) => !this.newExternalProjectsId.includes(project)):[],
+        newExternalProjects: this.newExternalProjects
       };
       this.submitInProcess = true;
       this.ProjectService.updateDeleteResource(payload).subscribe(
         (res: any) => {
           this.submitInProcess = false;
-         if(res.data.error){
+         if(res.error){
+          this.snackBar.errorSnackBar(res.message);
         }else{
           this.snackBar.successSnackBar("Updated successfully");
           this.resourcesForm.reset();
@@ -307,5 +331,70 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         this.snackBar.errorSnackBar("Choose technology");
       }
     }
+  }
+  getProjectList(){
+    this.initialLoading = true
+    this.ProjectService.getExternalProjectList().subscribe((res:any)=>{
+      this.allprojects = res.data
+      this.filteredprojects = this.resourcesForm.get('project')?.valueChanges
+      .pipe(
+        startWith(''),
+        map((project: any |null) => project ?  this._filterProject(project) : this._filtersliceProject()));
+        this.initialLoading = false;
+      if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+    })
+  }
+  addProject(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    // Add our project
+    if(typeof event.value == "string"){
+      this.newExternalProjects.push(event.value);
+      let max = Math.max.apply(Math, this.allprojects.map(ele=>ele.id)) +1
+      this.allprojects.push({id: max,
+        name: event.value
+      })
+      this.projects.push(max)
+      this.newExternalProjectsId.push(max)
+      this.allNewExternalProjects.push({id: max,
+        name: event.value
+      })
+    }
+
+    if (input) {
+      input.value = '';
+    }
+
+    this.project.setValue('');
+    this.resourcesForm.get('project')?.setValue('');
+  }
+
+  removeProject(project: number, selectIndex: any): void {
+    this.projects.splice(selectIndex, 1);
+    const found = this.newExternalProjectsId.some((el: any) => el === project);
+    if(found){
+      this.newExternalProjectsId.splice(selectIndex, 1);
+    let filteredExternalProject: any = this.allNewExternalProjects.filter( (item: any) => item.id === project )
+    this.newExternalProjects.forEach((element: any,index: any)=>{
+      if(element==filteredExternalProject[0].name) this.newExternalProjects.splice(index,1);
+   });
+    this.allprojects.forEach((element: any,index: any)=>{
+      if(element.id==project) this.allprojects.splice(index,1);
+    });
+    this.allNewExternalProjects.forEach((element: any,index: any)=>{
+      if(element.id==project) this.allNewExternalProjects.splice(index,1);
+    });
+
+    }
+    this.resourcesForm.get('project')?.setValue('');
+  }
+
+  selectedProject(event: MatAutocompleteSelectedEvent): void {
+    this.projects.push(event.option.value);
+    this.projectInput.nativeElement.value = '';
+    this.project.setValue('');
+    this.resourcesForm.get('project')?.setValue('');
   }
 }

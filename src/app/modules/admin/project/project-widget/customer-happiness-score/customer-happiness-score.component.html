@@ -2,14 +2,38 @@
   <div class="p-2 border-b">
     <div class="flex items-start justify-between ">
       <div class="text-lg font-medium tracking-tight leading-6 truncate"> Customer Happiness Score </div>
+      <div class="ml-2"  *ngIf="isShow == true">
+        <mat-icon
+       
+        class=" text-gray-400 icon-size-5 cursor-pointer"
+        svgIcon="heroicons_outline:eye"
+        (click)="feedbackForm()"
+      ></mat-icon>
+    </div>
     </div>
   </div>
-  <div class="flex flex-col flex-auto items-center">
-    <apx-chart [series]=" series" [chart]=" chart" [colors]=" colors" [fill]="fill" [plotOptions]="plotOptions" [stroke]="stroke" [dataLabels]="dataLabels">
-    </apx-chart>
-    <div class="flex-col items-center justify-between text-center mb-6">
-     <div class="mt-8 font-medium"> Your Customer Happiness Score is Nil!</div>
-     <div class="text-md">Updated 27 Feb,2022</div>
+  <ng-container *ngIf="!initialLoading && score > 0">
+    <div class="flex flex-col flex-auto items-center">
+      <apx-chart  [chart]=" chart"  [series]=" series" [plotOptions]="plotOptions" [stroke]="stroke"  [labels]="labels" [dataLabels]="dataLabels" [colors]=" colors" [fill]="fill">
+      </apx-chart>
+      <div class="flex-col items-center justify-between text-center mb-6">
+      <div class="mt-8 font-medium"> Your Customer Happiness Score is {{score}}!</div>
+      <div class="text-md" *ngIf="updatedAt">Updated {{updatedAt |date }}</div>
+      </div>
     </div>
-  </div>
+  </ng-container>
+  <ng-container *ngIf="!initialLoading && score == 'Nil'">
+    <div class="grid grid-cols-1 sm:grid-cols-1 mb-6 md:grid-cols-1 gap-6 w-full min-w-0">
+    <div class="w-full p-8 sm:p-16 text-secondary tracking-tight text-center">
+      Happiness score is not available.
+    </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="initialLoading ">
+    <div class="grid grid-cols-1 sm:grid-cols-1 mb-6 md:grid-cols-1 gap-6 w-full min-w-0">
+    <div class="w-full p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
+        Loading.....
+    </div>
+    </div>
+  </ng-container>
 </div>

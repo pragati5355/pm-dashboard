@@ -9,7 +9,8 @@
             class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
             matSortDisableClear>
             <div class="primary-900">Issue Type</div>
-            <div class="hidden md:block">Number</div>
+            <div class="hidden md:block">Total</div>
+            <div class="hidden md:block">Resolved</div>
           </div>
           <!-- Rows -->
           <ng-container *ngFor="let issueType of  issueTypeList ">
@@ -25,18 +26,20 @@
                 {{ issueType.issueCount ? (issueType.issueCount ) : '-' }}
               </div>
 
-  
+              <div class="hidden md:block truncate">
+                {{ issueType.resolvedCount ? (issueType.resolvedCount ) : '-' }}
+              </div>     
             </div>
           </ng-container>
         </div>
       </ng-container>
       <ng-container  *ngIf="!initialLoading && totalRecored == 0">
-        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+        <div class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
           Issues not found
         </div>
       </ng-container>
       <ng-container  *ngIf="initialLoading ">
-        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+        <div class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
           Loading.....
         </div>
       </ng-container>
