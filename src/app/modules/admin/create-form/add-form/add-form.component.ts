@@ -189,7 +189,7 @@ teammemberQuestion: any = []
           ...this.teammemberQuestion,
           {
             "label": item.name,
-            "value": item.name,
+            "value": item.id,
             "tooltip": "",
           }
         ];
