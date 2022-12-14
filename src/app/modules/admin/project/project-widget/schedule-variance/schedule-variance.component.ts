@@ -319,7 +319,7 @@ export class ScheduleVarianceComponent implements OnInit {
                 opacity: 0.5
             },
         }, 
-          
+        colors: ['#DC2626', '#6B7280'],
           chart : {
             height: 350, type: "line", zoom: {
                 enabled: false
