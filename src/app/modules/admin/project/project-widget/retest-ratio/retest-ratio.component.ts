@@ -5,7 +5,6 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexDataL
 @Component({
   selector: 'app-retest-ratio',
   templateUrl: './retest-ratio.component.html',
-  styleUrls: ['./retest-ratio.component.scss']
 })
 export class RetestRatioComponent implements OnInit {
 

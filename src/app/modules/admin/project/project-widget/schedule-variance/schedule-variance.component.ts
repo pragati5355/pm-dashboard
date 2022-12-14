@@ -31,7 +31,6 @@ export type ChartOptions = {
 @Component({
     selector: 'app-schedule-variance',
     templateUrl: './schedule-variance.component.html',
-    styleUrls: ['./schedule-variance.component.scss'],
     encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
