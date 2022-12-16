@@ -194,10 +194,10 @@
               </div>
 
               <!-- Name -->
-              <div class="hidden md:block truncate">
+              <div class="hidden md:block truncate" [matTooltip]="resources.technologys">
                 {{ resources.technologys }}
               </div>
-              <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length >0">
+              <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length >0"  [matTooltip]="resources.assignedProject">
                 {{ resources.assignedProject }}
               </div>
               <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length == 0">
@@ -218,7 +218,6 @@
                       ? resources.year + " Year"
                       : ""
                   }}
-                  <span *ngIf="resources.year && resources.month">,</span>
                   {{
                     resources.month > "1"
                       ? resources.month + " Months"
