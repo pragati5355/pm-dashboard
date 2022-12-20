@@ -19,6 +19,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { FuseNavigationModule } from '@fuse/components/navigation';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { SharedModule } from 'app/core/shared.module';
@@ -26,6 +27,7 @@ import { ResourcesHomeComponent } from './resources-home/resources-home.componen
 import { ResourcesListComponent } from './resources-list/resources-list.component';
 import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { ResourceDetailsComponent } from './resource-details/resource-details.component';
 
 const routes: Routes = [
   {
@@ -34,7 +36,13 @@ const routes: Routes = [
     children: [
       { path: 'add-resources', component: AddResourcesComponent },
       { path: 'edit-resources', component: AddResourcesComponent },
-      { path: 'resources-list', component: ResourcesListComponent },
+      { path: 'resources-list', component: ResourcesListComponent,
+      children : [
+        {
+            path         : ':id',
+            component    : ResourceDetailsComponent,
+        }
+    ] },
       {
         path: "",
         redirectTo: "resources-list",
@@ -52,7 +60,8 @@ const routes: Routes = [
   declarations: [
     ResourcesHomeComponent,
     ResourcesListComponent,
-    AddResourcesComponent
+    AddResourcesComponent,
+    ResourceDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -74,6 +83,7 @@ const routes: Routes = [
     MatRadioModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     FuseFindByKeyPipeModule,
     FuseNavigationModule,
     FuseScrollbarModule,

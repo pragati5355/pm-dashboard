@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
+import {ChangeDetectionStrategy, ChangeDetectorRef,Component, OnInit, ViewChild} from '@angular/core';
+import {Router,ActivatedRoute} from '@angular/router';
 import {AuthService} from '@services/auth/auth.service';
 import {AbstractControl, FormBuilder, FormControl, FormGroup,Validators} from '@angular/forms';
 import { ValidationConstants } from "../../../../core/constacts/constacts";
@@ -10,7 +10,9 @@ import {StaticData} from 'app/core/constacts/static';
 import {FuseConfirmationService} from '@fuse/services/confirmation';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {SnackBar} from '../../../../core/utils/snackBar'
-
+import { MatDrawer } from '@angular/material/sidenav';
+import { filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 @Component({
   selector: 'app-resources-list',
   templateUrl: './resources-list.component.html',
@@ -18,6 +20,12 @@ import {SnackBar} from '../../../../core/utils/snackBar'
   animations: fuseAnimations
 })
 export class ResourcesListComponent implements OnInit {
+
+  @ViewChild('matDrawer', {static: true}) matDrawer!: MatDrawer;
+  // contacts$!: Observable<Contact[]: any>;
+
+  selectedContact: any;
+  drawerMode!: 'side' | 'over';
   minExprience =""
   maxExprience = ""
   exprienceForm!: FormGroup;
@@ -43,10 +51,16 @@ export class ResourcesListComponent implements OnInit {
   projectsList: any = [];
   deletePojects:any = ""
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
-
-  constructor( private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router, private _formBuilder: FormBuilder,
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  opened: any;
+  constructor( private _authService: AuthService,private ProjectService: CreateProjecteService, private router: Router, 
+              private _formBuilder: FormBuilder,
+              private _activatedRoute: ActivatedRoute,
               private _fuseConfirmationService: FuseConfirmationService,
-              private snackBar: SnackBar,) {
+              private snackBar: SnackBar,
+              private _changeDetectorRef: ChangeDetectorRef,
+              private _fuseMediaWatcherService: FuseMediaWatcherService
+              ) {
   }
   get exprienceValidForm(): { [key: string]: AbstractControl } {
     return this.exprienceForm.controls;
@@ -98,8 +112,33 @@ export class ResourcesListComponent implements OnInit {
       }),
       dismissible: false
     });
+    this.matDrawer.openedChange.subscribe((opened) => {
+      if ( !opened )
+      {
+          // Remove the selected contact when drawer closed
+          this.selectedContact = null;
 
-    
+          // Mark for check
+          this._changeDetectorRef.markForCheck();
+      }
+  });
+  this._fuseMediaWatcherService.onMediaChange$
+  .pipe(takeUntil(this._unsubscribeAll))
+  .subscribe(({matchingAliases}) => {
+
+      // Set the drawerMode if the given breakpoint is active
+      if ( matchingAliases.includes('lg') )
+      {
+          this.drawerMode = 'side';
+      }
+      else
+      {
+          this.drawerMode = 'over';
+      }
+
+      // Mark for check
+      this._changeDetectorRef.markForCheck();
+  });
   }
 
   gotoAddResources() {
@@ -416,5 +455,13 @@ export class ResourcesListComponent implements OnInit {
     for (let i = 0; i <= arr.length - 1; i++) {
         this.deletePojects = this.deletePojects +arr[i]+"<br>"
     }
+  }
+  viewResource(id: number){
+   // Go to the new contact
+   this.router.navigate(['./',id], {relativeTo: this._activatedRoute});
+
+   // Mark for check
+   this._changeDetectorRef.markForCheck();
+   this.opened==true
   }
 }
