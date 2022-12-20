@@ -31,7 +31,6 @@ export type ChartOptions = {
 @Component({
     selector: 'app-schedule-variance',
     templateUrl: './schedule-variance.component.html',
-    styleUrls: ['./schedule-variance.component.scss'],
     encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -320,7 +319,7 @@ export class ScheduleVarianceComponent implements OnInit {
                 opacity: 0.5
             },
         }, 
-          
+        colors: ['#DC2626', '#6B7280'],
           chart : {
             height: 350, type: "line", zoom: {
                 enabled: false

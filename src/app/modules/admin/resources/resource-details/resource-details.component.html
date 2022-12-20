@@ -35,14 +35,14 @@
                         <div
                             class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
                             >
-                            {{resourceDetails.firstName.charAt(0)}}
+                            {{resourceDetails?.firstName?.charAt(0)}}
                         </div>
                     </div>
                     <!-- Actions -->
                 </div>
 
                 <!-- Name -->
-                <div class="mt-3 pt-2 pb-2 text-4xl font-bold truncate">{{resourceDetails.firstName | titlecase}} {{resourceDetails.lastName | titlecase}}</div>
+                <div class="mt-3 pt-2 pb-2 text-4xl font-bold truncate">{{resourceDetails?.firstName | titlecase}} {{resourceDetails.lastName | titlecase}}</div>
 
                 <!-- Tags -->
                 <ng-container *ngIf="resourceDetails.email">

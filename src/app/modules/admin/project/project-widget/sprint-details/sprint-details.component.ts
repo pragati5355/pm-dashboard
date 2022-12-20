@@ -6,7 +6,6 @@ import { SendFeedbackFormComponent } from '../../send-feedback-form/send-feedbac
 @Component({
   selector: 'app-sprint-details',
   templateUrl: './sprint-details.component.html',
-  styleUrls: ['./sprint-details.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class SprintDetailsComponent implements OnInit {

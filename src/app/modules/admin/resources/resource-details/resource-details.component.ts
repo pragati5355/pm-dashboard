@@ -29,15 +29,9 @@ export class ResourceDetailsComponent implements OnInit {
     private _resourcesListComponent: ResourcesListComponent,) { }
 
   ngOnInit(): void {
-    console.log("hellonm,mn")
     this._resourcesListComponent.matDrawer.open();
-    console.log("routes");
-    console.log(this.activatedRoute.snapshot.url); // array of states
-    console.log(this.activatedRoute.snapshot.url[0].path); 
-    //  this._route.queryParams.subscribe(checkformtype => {
     let path = this.activatedRoute.snapshot.url[0].path
           this.fetchEditdata(path)
-    // });
   }
 
 
