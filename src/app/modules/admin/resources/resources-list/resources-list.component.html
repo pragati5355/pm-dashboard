@@ -211,8 +211,8 @@
                           </ng-container>
                         </div>
                           <!-- SKU -->
-                          <div>
-                            <div class="truncate"[routerLink]="['./', resources.id]"
+                          <div class="cursor-pointer" [routerLink]="['./', resources.id]">
+                            <div class="truncate"
                             
                              [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedContact || selectedContact.id !== resources.id,
                             'bg-primary-50 dark:bg-hover': selectedContact && selectedContact.id === resources.id}">

@@ -5,12 +5,7 @@
 
         <!-- Header -->
         <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
-            <!-- Background -->
-            <!-- <ng-container *ngIf="contact.background">
-                <img
-                    class="absolute inset-0 object-cover w-full h-full"
-                    [src]="contact.background">
-            </ng-container> -->
+
             <!-- Close button -->
             <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
                 <button
@@ -27,7 +22,6 @@
         <!-- Contact -->
         <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
             <div class="w-full max-w-3xl">
-
                 <!-- Avatar and actions -->
                 <div class="flex flex-auto items-end -mt-16">
                     <!-- Avatar -->
@@ -56,24 +50,39 @@
 
                 <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
                     <!-- project -->
-                    <ng-container *ngIf="resourceDetails.assignedProject.length">
+                    <ng-container *ngIf="resourceDetails.assignedProject">
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:briefcase'"></mat-icon>
-                            <span> Projects:</span>
-                            <ng-container *ngFor="let project of resourceDetails.assignedProject">
-                                <div class="ml-6 leading-6"> {{project}}</div>
+                            <span class="ml-2"> Projects: </span>
+                            
+                            <ng-container >
+                                <div class="flex flex-wrap items-center mt-2 ml-4">
+                                    <!-- Tag -->
+                                    <ng-container *ngFor="let project of resourceDetails.assignedProject">
+                                        <div *ngIf="project" class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                            <span class="text-sm font-medium whitespace-nowrap">{{project}}</span>
+                                        </div>
+                                    </ng-container>
+                                </div>
                             </ng-container>
                         </div>
                     </ng-container>
 
                     <!-- technologys -->
 
-                    <ng-container *ngIf="resourceDetails.technologys.length">
-                        <div class="flex sm:items-center">
+                    <ng-container>
+                        <div class="flex sm:items-center mt-2">
                             <mat-icon [svgIcon]="'heroicons_outline:code'"></mat-icon>
-                            <span>Technologies:</span>
-                            <ng-container *ngFor="let technology of resourceDetails.technologys">
-                                <div class="ml-6 leading-6">{{technology}}</div>
+                            <span class="ml-2">Technologies:</span>
+                            <ng-container *ngIf="resourceDetails.technologys.length > 0" >
+                                <div class="flex flex-wrap items-center mt-2 ml-4">
+                                    <!-- Tag -->
+                                    <ng-container *ngFor="let technology of resourceDetails.technologys">
+                                        <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                            <span class="text-sm font-medium whitespace-nowrap">{{technology}}</span>
+                                        </div>
+                                    </ng-container>
+                                </div>
                             </ng-container>
                         </div>
                     </ng-container>
@@ -83,8 +92,8 @@
                     <ng-container>
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:document-text'"></mat-icon>
-                            <span>Experience:</span>    
-                            <div class="ml-6 leading-6">
+                            <span class="ml-2">Experience:</span>    
+                            <div class="ml-4 leading-6">
                                     {{
                                         resourceDetails.year > "1"
                                           ? resourceDetails.year + " Years"
@@ -104,13 +113,26 @@
                         </div>
                     </ng-container>
 
+                    <!-- happiness score -->
+
+                    <ng-container *ngIf="score>0" >
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon>
+                            <span class="ml-2">Happiness Score:</span>
+                                <div class="ml-4 leading-6">
+                                   {{score}}/{{outOfScore}}
+                                </div>
+                        </div>
+                    </ng-container>
+
                     <!-- data of joining -->
 
                     <ng-container>
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:flag'"></mat-icon>
-                            <span>Date Of Joining:</span>
-                                <div class="ml-6 leading-6">-</div>
+                            <span class="ml-2">Date Of Joining:</span>
+                                <div *ngIf="!resourceDetails.dateOfJoining" class="ml-4 leading-6">-</div>
+                                <div *ngIf="resourceDetails.dateOfJoining" class="ml-4 leading-6">{{resourceDetails.dateOfJoining | date }}</div>
                             
                         </div>
                     </ng-container>
@@ -121,8 +143,8 @@
                     <ng-container  >
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:users'"></mat-icon>
-                            <span>Team:</span>
-                                <div class="ml-6 leading-6">
+                            <span class="ml-2">Team:</span>
+                                <div class="ml-4 leading-6">
                                     {{resourceDetails.team}}
                                 </div>
                         </div>
@@ -133,10 +155,13 @@
                        <ng-container  >
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <span>Salary:</span>
-                                <div class="ml-6 leading-6">
+                            <span  class="ml-2">Salary:</span>
+                                <div *ngIf="!resourceDetails.salary" class="ml-4 leading-6">
                                    -
                                 </div>
+                                <div *ngIf="resourceDetails.salary" class="ml-4 leading-6">
+                                    {{resourceDetails.salary}}
+                                 </div>
                         </div>
                     </ng-container>
                 </div>

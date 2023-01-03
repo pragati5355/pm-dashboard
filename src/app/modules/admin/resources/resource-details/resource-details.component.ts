@@ -10,6 +10,7 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ResourcesListComponent } from '../resources-list/resources-list.component';
+import { round } from 'lodash';
 @Component({
   selector: 'app-resource-details',
   templateUrl: './resource-details.component.html',
@@ -18,8 +19,9 @@ import { ResourcesListComponent } from '../resources-list/resources-list.compone
 })
 export class ResourceDetailsComponent implements OnInit {
   initialLoading=false
-  resourceDetails: any
-
+  resourceDetails: any = {}
+  score:any =0
+  outOfScore: any =10
   constructor(private _formBuilder: FormBuilder, private router: Router,
     private ProjectService:CreateProjecteService,
     private _authService: AuthService,
@@ -31,6 +33,7 @@ export class ResourceDetailsComponent implements OnInit {
   ngOnInit(): void {
     this._resourcesListComponent.matDrawer.open();
     let path = this.activatedRoute.snapshot.url[0].path
+    this.getResourceHappinessScore(path)
           this.fetchEditdata(path)
   }
 
@@ -42,6 +45,28 @@ export class ResourceDetailsComponent implements OnInit {
       (res: any) => {
         this.initialLoading = false;
         this.resourceDetails= res.data
+       
+      if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+      },
+      error => {
+        this.initialLoading = false;
+      }
+    );
+  }
+  
+  getResourceHappinessScore(id:any){
+    let payload={resourceId: id}
+    this.initialLoading = true;
+    this.ProjectService.getResourceHappinessScore(payload).subscribe(
+      (res: any) => {
+       this.initialLoading = false; 
+        console.log(res)
+       if(res.data !==null){
+        this.score = round(res.data.happinessScore)
+        this.outOfScore = res.data.outOf
+       }
       if(res.tokenExpire == true){
         this._authService.updateAndReload(window.location);
         }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DatePipe } from "@angular/common";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,8 +17,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
@@ -76,6 +79,8 @@ const routes: Routes = [
     MatProgressBarModule,
     MatTableModule,
     MatDialogModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -89,6 +94,7 @@ const routes: Routes = [
     FuseScrollbarModule,
     FuseScrollResetModule,
     InfiniteScrollModule
-  ]
+  ],
+  providers: [DatePipe]
 })
 export class ResourcesModule { }
