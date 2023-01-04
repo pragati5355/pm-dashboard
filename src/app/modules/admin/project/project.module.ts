@@ -59,6 +59,12 @@ const routes: Routes = [
         loadChildren: () =>
           import("../project/project-widget/project-widget.module").then(m => m.ProjectWidgetModule)
       },
+      
+      {
+        path: "reporsitory",
+        loadChildren: () =>
+          import("../repository/repository.module").then(m => m.RepositoryModule)
+      },
 
       {
         path: "",
