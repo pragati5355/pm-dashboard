@@ -33,7 +33,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     }
   }
   formTypeAdd = true
-  maxDate = new Date(2023, 11, 28);
+  maxDate = new Date();
   editFormId = 0
   pageTitle = ""
   submitInProcess: boolean = false;
