@@ -14,6 +14,7 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import { AuthService } from '@services/auth/auth.service';
 import {SnackBar} from '../../../../core/utils/snackBar';
 import { ErrorMessage } from 'app/core/constacts/constacts'
+import { DatePipe } from "@angular/common";
 export class Technology {
   constructor( public id: number, public name: string) { }
 }
@@ -32,6 +33,7 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     }
   }
   formTypeAdd = true
+  maxDate = new Date();
   editFormId = 0
   pageTitle = ""
   submitInProcess: boolean = false;
@@ -69,7 +71,8 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
     private ProjectService:CreateProjecteService,
     private _authService: AuthService,
     private _route: ActivatedRoute,
-    private snackBar: SnackBar
+    private snackBar: SnackBar,
+    private datePipe: DatePipe
     ) {
   }
 
@@ -89,6 +92,8 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
       team: ['', [Validators.required]],
       year: ['', [Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
       month: ['', [Validators.pattern(ValidationConstants.YEAR_VALIDATION)]],
+      dateOfJoining: [''],
+      salary:['', [Validators.pattern(ValidationConstants.SALARY_VALIDATION)]],
       technology: [''],
       project: [''],
     },{
@@ -125,7 +130,9 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
         assignedProjects: this.projects? this.projects.filter((project: any) => !this.newExternalProjectsId.includes(project)):[],
-        newExternalProjects: this.newExternalProjects
+        newExternalProjects: this.newExternalProjects,
+        salary: this.resourcesForm.value.salary,
+        dateOfJoining: this.resourcesForm.value.dateOfJoining
       };
       this.submitInProcess = true;
       this.ProjectService.addresources(payload).subscribe(
@@ -250,6 +257,9 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
           team:item.team?item.team: "",
           year: item.year?item.year: 0,
           month: item.month?item.month: 0,
+          salary:item.salary?item.salary: null,
+          dateOfJoining:item.dateOfJoining?this.datePipe.transform(item.dateOfJoining, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"): null,
+          
         });
         this.createdAt = item.createdAt
         this.firstName=item.firstName?item.firstName: ""
@@ -302,7 +312,9 @@ export class AddResourcesComponent implements OnInit, OnDestroy,IDeactivateCompo
         month:this.resourcesForm.value.month? this.resourcesForm.value.month: 0,
         technology: this.technologys,
         assignedProjects: this.projects? this.projects.filter((project: any) => !this.newExternalProjectsId.includes(project)):[],
-        newExternalProjects: this.newExternalProjects
+        newExternalProjects: this.newExternalProjects,
+        salary: this.resourcesForm.value.salary,
+        dateOfJoining: this.resourcesForm.value.dateOfJoining
       };
       this.submitInProcess = true;
       this.ProjectService.updateDeleteResource(payload).subscribe(

@@ -41,6 +41,9 @@ export class CreateProjecteService {
   addresources(obj: any){
     return this.http.post(AppConstants['ADD_RESOURCE_LIST'], obj);
   }
+  getResourceHappinessScore(obj: any){
+    return this.http.post(AppConstants['GET_RESOURCE_HAPPINESS_SCORE'], obj);
+  }
   getTechnology() {
     return this.http.get(AppConstants['GET_TECHNOLOGY']);
    }

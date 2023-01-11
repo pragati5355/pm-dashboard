@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DatePipe } from "@angular/common";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,34 +25,26 @@ import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { SharedModule } from 'app/core/shared.module';
-import { ResourcesHomeComponent } from './resources-home/resources-home.component';
-import { ResourcesListComponent } from './resources-list/resources-list.component';
-import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
-import { ResourceDetailsComponent } from './resource-details/resource-details.component';
+import { RepositoryHomeComponent } from './repository-home/repository-home.component';
+import { RepositoryListComponent } from './repository-list/repository-list.component';
+import { AddRepositoryComponent } from './add-repository/add-repository.component';
 
 const routes: Routes = [
   {
     path: "",
-    component: ResourcesHomeComponent,
+    component: RepositoryHomeComponent,
     children: [
-      { path: 'add-resources', component: AddResourcesComponent },
-      { path: 'edit-resources', component: AddResourcesComponent },
-      { path: 'resources-list', component: ResourcesListComponent,
-      children : [
-        {
-            path         : ':id',
-            component    : ResourceDetailsComponent,
-        }
-    ] },
+      { path: 'repository-list', component: RepositoryListComponent },
+      { path: 'add-repository', component: AddRepositoryComponent },
       {
         path: "",
-        redirectTo: "resources-list",
+        redirectTo: "repository-list",
         pathMatch: "full"
       },
       {
         path: "**",
-        redirectTo: "resources-list"
+        redirectTo: "repository-list"
       }
     ]
   }
@@ -61,10 +52,9 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    ResourcesHomeComponent,
-    ResourcesListComponent,
-    AddResourcesComponent,
-    ResourceDetailsComponent
+    RepositoryHomeComponent,
+    RepositoryListComponent,
+    AddRepositoryComponent
   ],
   imports: [
     CommonModule,
@@ -94,7 +84,6 @@ const routes: Routes = [
     FuseScrollbarModule,
     FuseScrollResetModule,
     InfiniteScrollModule
-  ],
-  providers: [DatePipe]
+  ]
 })
-export class ResourcesModule { }
+export class RepositoryModule { }
