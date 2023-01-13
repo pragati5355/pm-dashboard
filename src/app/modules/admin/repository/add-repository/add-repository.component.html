@@ -72,7 +72,7 @@
                                 </div>
 
                                   <!-- REACT JS-->
-                                  <div  (click)="getTechnology('react js')" class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto  bg-card shadow  overflow-hidden cursor-pointer">
+                                  <div  (click)="getTechnology('react-js')" class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto  bg-card shadow  overflow-hidden cursor-pointer">
                                     REACT JS
                                 </div>
 
@@ -93,7 +93,7 @@
                     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     
                         <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
-                            <form  [formGroup]="createBitbucketProjectFrom"  (ngSubmit)="submit()"
+                            <form  [formGroup]="createBitbucketProjectFrom" 
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
                             >
                                 <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
@@ -109,6 +109,11 @@
                                         {{option.projectName}}
                                       </mat-option>
                                     </mat-autocomplete>
+                                    <mat-error *ngIf="createBitbucketProject['bitbucketProjectName'].errors &&
+                                    createBitbucketProject['bitbucketProjectName']?.invalid &&
+                                    createBitbucketProject['bitbucketProjectName']?.touched ">
+                                    <div *ngIf="createBitbucketProject['bitbucketProjectName'].errors['required']">Bitbucket Project Name is mandatory</div>
+                                </mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
                                     <mat-label>Project Name</mat-label>
@@ -122,11 +127,10 @@
                                         <mat-error *ngIf="createBitbucketProject['projectName'].errors &&
                                         createBitbucketProject['projectName']?.invalid &&
                                         createBitbucketProject['projectName']?.touched ">
-                                        <div *ngIf="createBitbucketProject['projectName'].errors['required']">Subject is mandatory</div>
-                                        <!-- <div *ngIf="createBitbucketProject['projectName'].errors['pattern']">Enter valid subject</div> -->
+                                        <div *ngIf="createBitbucketProject['projectName'].errors['required']">Project is mandatory</div>
                                     </mat-error>
                                 </mat-form-field>
-                                <mat-form-field *ngIf="formType == ('angular' || 'react-js')" class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
+                                <mat-form-field *ngIf="formType == 'angular' ||formType == 'react-js'" class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
                                     <mat-label>Portal Name</mat-label>
                                     <input
                                         matInput
@@ -134,6 +138,11 @@
                                         #createBitbucketProjectFormPortalName
                                         formControlName="portalName" maxlength="50"
                                         >
+                                        <mat-error *ngIf="createBitbucketProject['portalName'].errors &&
+                                        createBitbucketProject['portalName']?.invalid &&
+                                        createBitbucketProject['portalName']?.touched ">
+                                        <div *ngIf="createBitbucketProject['portalName'].errors['required']">Portal Name is mandatory</div>
+                                    </mat-error>
                                 </mat-form-field>
                                 <mat-form-field *ngIf="formType == 'django' || formType == 'java'" class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 "  [floatLabel]="'always'">
                                     <mat-label>Microservice Name</mat-label>
@@ -143,12 +152,18 @@
                                         #createBitbucketProjectFormMicroserviceName
                                         formControlName="microserviceName" maxlength="50"
                                         >
+                                        <mat-error *ngIf="createBitbucketProject['microserviceName'].errors &&
+                                        createBitbucketProject['microserviceName']?.invalid &&
+                                        createBitbucketProject['microserviceName']?.touched ">
+                                        <div *ngIf="createBitbucketProject['microserviceName'].errors['required']">Microservice Name is mandatory</div>
+                                    </mat-error>
                                 </mat-form-field>
                                 <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
                                     <div class="chip-input w-full  font-extrabold tracking-tight ng-tns-c274-3859">
                                       <mat-form-field  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
-                                        <mat-label>Repository</mat-label>
-                                        <mat-chip-list #chipListRepository>
+                                        <mat-label>Repository *</mat-label>
+                                        <mat-chip-list #chipListRepository 
+                                        formControlName="repositoryName" >
                                           <input   placeholder="New repository..."
                                           #repositoryInput
                                           formControlName="repositoryName" 
@@ -182,6 +197,7 @@
                                     <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                   </mat-chip>
                                         </mat-chip-list>
+                                        <mat-error >At least add one repository </mat-error>
                                       </mat-form-field>
                                     </div>
                                   </div>
@@ -200,20 +216,18 @@
                                             </mat-autocomplete>
                                             <mat-chip-list #chipListDeveloper class="mb-2">
                                               <mat-chip *ngFor="let developer of developers;let selectIndex=index;" [selectable]="selectable" [removable]="removable" (removed)="removeDeveloper(developer,selectIndex)">
-                                                <div *ngFor="let developeri of allDevelopers ">
-                                                  <div *ngIf="developeri.email == developer">
-                                                    {{developeri.email}}
+                                                <div *ngFor="let developerObj of allDevelopers ">
+                                                  <div *ngIf="developerObj.email == developer">
+                                                    {{developerObj.email}}
                                                   </div>
                                                 </div>
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                               </mat-chip>
                                             </mat-chip-list>
                                             <mat-error >At least add one developer </mat-error>
-                                            <!-- <mat-error  *ngIf="emailInvalid">Invalid email </mat-error> -->
                                           </mat-form-field>
                                           <div class="error-msg text-md mb-2">
                                             <mat-error  *ngIf="emailInvalid">Invalid email </mat-error>
-                                            <!-- <mat-error *ngIf="!notempty">Please enter email</mat-error> -->
                                         </div>
                                         </div>
                                       </div>
@@ -249,7 +263,7 @@
                                                 {{codeReviewer.display_name}}
                                               </mat-option>
                                             </mat-autocomplete>
-                                            <mat-error >At least add one Code Reviewer & PM </mat-error>
+                                          
                                             <mat-chip-list
                                               #chipListCodeReviewer
                                               class="mb-2"
@@ -265,6 +279,7 @@
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                               </mat-chip>
                                             </mat-chip-list>
+                                            <mat-error >At least add one Code Reviewer & PM </mat-error>
                                           </mat-form-field>
                                         </div>
                                       </div>
@@ -275,8 +290,8 @@
                                             appearance="fill"
                                             class="example-chip-list w-full flex-0 mb-2"
                                           >
-                                            <mat-label>Branch Or Pattern</mat-label>
-                                            <mat-chip-list #chipListBranch>
+                                            <mat-label>Branch Or Pattern *</mat-label>
+                                            <mat-chip-list #chipListBranch  formControlName="branchOrPattern" >
                                               <input
                                                 placeholder="New branch..."
                                                 #branchInput
@@ -312,12 +327,7 @@
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                               </mat-chip>
                                             </mat-chip-list>
-                                            <mat-error *ngIf="createBitbucketProject['branchOrPattern'].errors &&
-                                            createBitbucketProject['branchOrPattern']?.invalid &&
-                                            createBitbucketProject['branchOrPattern']?.touched ">
-                                            <div *ngIf="createBitbucketProject['branchOrPattern'].errors['required']">Subject is mandatory</div>
-                                            <!-- <div *ngIf="createBitbucketProject['branchOrPattern'].errors['pattern']">Enter valid subject</div> -->
-                                        </mat-error>
+                                            <mat-error >At least add one branch</mat-error>
                                           </mat-form-field>
                                         </div>
                                       </div>

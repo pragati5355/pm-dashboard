@@ -16,7 +16,7 @@ import { IDeactivateComponent } from "@services/deactivate-service/decativate.gu
 import {TextRegexValidator, RegexConstants,noWhitespaceValidator } from "../../../../core/utils/Validations";
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
-import { CreateProjecteService } from '@services/create-projecte.service';
+import { RepositoryService } from '@services/repository.service';
 import {SnackBar} from '../../../../core/utils/snackBar'
 import {ObjectValidation} from "../../../../core/utils/Validations";
 import { ConnectJiraPopupComponent } from '@modules/admin/project/connect-jira-popup/connect-jira-popup.component';
@@ -58,16 +58,14 @@ export class AddRepositoryComponent implements OnInit {
   initialLoading: boolean =false
   drawerMode: 'over' | 'side' = 'side';
   drawerOpened: boolean = true;
-  project_name = ""
+  jiraProjectName = ""
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   routeSubscribe: any;
   userData: any;
   createBitbucketProjectFrom!: FormGroup;
   angularForm!: FormGroup;
   emailInvalid= false
-  // allRepositories: any =["kjhk","kjhkjh"]
-  formType: any = "sans"
-  // selectTeamList = StaticData.ROLE_LIST
+  formType: any = ""
   visible = true;
   selectable = true;
   removable = true;
@@ -112,188 +110,7 @@ export class AddRepositoryComponent implements OnInit {
   // bitbucket project field
   bitbucketProjectName = "";
   myControl = new FormControl();
-  options: BitbucketProject[] = [
-    {
-      id: 1,
-      uuid: '{c154166c-69a3-4384-9696-ed1de7b548b2}',
-      projectName: 'ginger10',
-      bitbucketProjectName: 'ginger10',
-      key: 'GINGER10',
-      createdAt: '2021-11-18T10:42:44.376',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'GINGER10',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 2,
-      uuid: '{261831a9-e754-4f42-b5a7-52e1595407e9}',
-      projectName: 'taj',
-      bitbucketProjectName: 'taj',
-      key: 'TAJ',
-      createdAt: '2021-11-18T10:44:57.509',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TAJ',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 3,
-      uuid: '{b56f57d9-721e-442c-96dd-220a6d54f38d}',
-      projectName: 'taj1',
-      bitbucketProjectName: 'taj1',
-      key: 'TAJ1',
-      createdAt: '2021-11-18T10:48:52.709',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TAJ1',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 4,
-      uuid: '{b1e598a2-d90f-420c-bd74-263acc483039}',
-      projectName: 'taj10',
-      bitbucketProjectName: 'taj10',
-      key: 'TAJ10',
-      createdAt: '2021-11-18T11:00:40.938',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TAJ10',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 5,
-      uuid: '{05bd2fc4-70d8-485a-acab-98ce768f396b}',
-      projectName: 'taj12',
-      bitbucketProjectName: 'taj12',
-      key: 'TAJ12',
-      createdAt: '2021-11-18T06:00:01.716',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TAJ12',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 6,
-      uuid: '{4d04d960-4708-4814-ae2c-e99827fddf23}',
-      projectName: 'js',
-      bitbucketProjectName: 'js',
-      key: 'JS',
-      createdAt: '2021-11-18T12:11:54.772',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'JS',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 7,
-      uuid: '{5837d2d2-3276-45cd-b458-5f17170e541c}',
-      projectName: 'indbowser',
-      bitbucketProjectName: 'ginger13',
-      key: 'GINGER13',
-      createdAt: '2021-11-18T08:18:12.92',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'GINGER13',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 8,
-      uuid: '{16188316-4812-4f06-bd2d-36e7709d3dc0}',
-      projectName: 'indbowser',
-      bitbucketProjectName: 'ginger14',
-      key: 'GINGER14',
-      createdAt: '2021-11-18T08:18:50.437',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'GINGER14',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 9,
-      uuid: '{a6f34c18-d055-40e4-93d3-5f44ee4a503b}',
-      projectName: 'workspace',
-      bitbucketProjectName: 'workspace',
-      key: 'WORKSPACE',
-      createdAt: '2021-11-19T05:21:08.571',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'WORKSPACE',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 10,
-      uuid: '{56948dae-16fc-4f2d-8b93-872632012803}',
-      projectName: 'portalnametest',
-      bitbucketProjectName: 'portalnametest',
-      key: 'PORTALNAMETEST',
-      createdAt: '2021-11-19T05:54:19.78',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'PORTALNAMETEST',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 11,
-      uuid: '{10f57342-db0f-417b-98c1-a74b9488b17b}',
-      projectName: 'indbowser',
-      bitbucketProjectName: 'taj13',
-      key: 'TAJ13',
-      createdAt: '2021-11-22T05:02:34.922',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TAJ13',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 12,
-      uuid: '{b30faa72-fa43-4302-887d-0e001b293655}',
-      projectName: 'indbowser',
-      bitbucketProjectName: 'taj14',
-      key: 'TAJ14',
-      createdAt: '2021-11-22T05:04:55.55',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TAJ14',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 13,
-      uuid: '{60586983-36dc-47ba-bf3e-9e4b219359a9}',
-      projectName: 'indbowser',
-      bitbucketProjectName: 'taj8',
-      key: 'TAJ8',
-      createdAt: '2021-11-22T05:16:10.616',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TAJ8',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 14,
-      uuid: '{2442423b-7eb6-4840-a43b-2ae1df0026d5}',
-      projectName: 'bitbucketProject app',
-      bitbucketProjectName: 'Test28',
-      key: 'TEST28',
-      createdAt: '2022-12-28T07:34:35.057',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'TEST28',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-    {
-      id: 15,
-      uuid: '{22478f83-d3a6-4c3d-95cf-cb5683d5bb57}',
-      projectName: 'fgfgd',
-      bitbucketProjectName: 'fgf',
-      key: 'FGF',
-      createdAt: '2023-01-05T09:49:09.289',
-      createdBy: 'Pranita',
-      bitbucketUrl: 'FGF',
-      jenkinsUrl: null,
-      status: 'success',
-    },
-  ];
+  options: BitbucketProject[] = [];
   filteredOptions: Observable<BitbucketProject[]>| any;
   get createBitbucketProject(): { [key: string]: AbstractControl } {
     // console.log(key)
@@ -306,7 +123,7 @@ export class AddRepositoryComponent implements OnInit {
     private _authService: AuthService,
     private dialog: MatDialog,
     private router: Router,
-    private ProjectService:CreateProjecteService,
+    private RepositoryService:RepositoryService,
     private snackBar: SnackBar,
     private _route: ActivatedRoute,) { }
 
@@ -314,7 +131,8 @@ export class AddRepositoryComponent implements OnInit {
     this.userData = this._authService.getUser();
         // Subscribe to media changes
         let projectData= this._authService.getProjectDetails()
-        this.project_name = projectData.name
+        let jiraProjectName = projectData.name.toLowerCase()
+        this.jiraProjectName = jiraProjectName.replace(/\s/g,"-")
     this._fuseMediaWatcherService.onMediaChange$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe(({matchingAliases}) => {
@@ -334,11 +152,11 @@ export class AddRepositoryComponent implements OnInit {
 
     this.createBitbucketProjectFrom = this._formBuilder.group({
       bitbucketProjectName: ['',[Validators.required]],
-      projectName: ['',[Validators.required]],
-      repositoryName: [[],[Validators.required]],
-      developer:[[],this.validateDevelopers],
-      codeReviewerAndPm: [[],this.validateCodeReviewer],
-      branchOrPattern: ['',[Validators.required]],
+      projectName: [this.jiraProjectName,[Validators.required]],
+      repositoryName: [[],this.validateChipField],
+      developer:[[],this.validateChipField],
+      codeReviewerAndPm: [[],this.validateChipField],
+      branchOrPattern: [this.branches,this.validateChipField],
       },
       );
       this.getDeveloper();
@@ -358,34 +176,24 @@ export class AddRepositoryComponent implements OnInit {
     // stepper.previous();
     this.selectedIndex = stepper
     if(this.selectedIndex== 0){
-      // this.projectDetails.reset( this.projectDetails.value);
       this.showStep = 1
     }else if(this.selectedIndex == 1){
-      // this.clientDetials.reset( this.clientDetials.value);
       this.showStep = 2
     }else if(this.selectedIndex == 2){
       this.showStep = 3
-      // this.projectSetting.reset( this.projectSetting.value);
     }else if(this.selectedIndex == 3){
-      // this.getTeamMember()
       this.showStep = 4
-      // this.projectTeam.reset( this.projectTeam.value);
     }
   }
   public selectionChange($event: any): void {
     if($event.selectedIndex == 0){
         this.showStep = 1
-        // this.projectDetails.reset( this.projectDetails.value);
       }else if($event.selectedIndex == 1){
         this.showStep = 2
-        // this.clientDetials.reset( this.clientDetials.value);
       }else if($event.selectedIndex == 2){
         this.showStep = 3
-        // this.projectSetting.reset( this.projectSetting.value);
       }else if($event.selectedIndex == 3){
-        // this.getTeamMember()
         this.showStep = 4
-        // this.projectTeam.reset( this.projectTeam.value);
       }
     this.selectedIndex = $event.selectedIndex;
   }
@@ -398,27 +206,22 @@ export class AddRepositoryComponent implements OnInit {
     this.selectedIndex = 1
     this.showStep = 2
     this.formType = name
-    if(this.formType == ("angular"||"react-js")){
+    if(this.formType == "angular"|| this.formType =="react-js"){
       this.createBitbucketProjectFrom.addControl('portalName', new FormControl('', Validators.required));
     }
-    if(this.formType == "django" || "java"){
+    if(this.formType == "django" ||this.formType == "java"){
       this.createBitbucketProjectFrom.addControl('microserviceName', new FormControl('', Validators.required));
     }
 
   }
   //developer filter function start
   _filterDevelopers(value: any) {
-    console.log(value)
-    console.log(this.allDevelopers)
-    console.log("Hello")
     const filterValue = value.toLowerCase();
     return this.allDevelopers.filter(
       (developer: any) =>
         developer.email.toLowerCase().indexOf(filterValue) === 0 &&
         !this.developers.includes(developer.email)
     );
-    // return this.developers.filter((allDevelopers: any) =>
-    // allDevelopers.email.toLowerCase().indexOf(value.toLowerCase()) === 0  && !this.developers.includes(allDevelopers.email));
   }
   _filterDevelopersSlice() {
     this.emailInvalid = false
@@ -447,10 +250,8 @@ export class AddRepositoryComponent implements OnInit {
   
       this.developer.setValue('');
       this.createBitbucketProjectFrom.get('developer')?.setValue('');
-      console.log(this.emailInvalid)
       }else{
         this.emailInvalid = true
-        console.log(this.emailInvalid)
       }
     }
    
@@ -471,10 +272,7 @@ export class AddRepositoryComponent implements OnInit {
     this.newExternalDeveloper.forEach((element: any,index: any)=>{
       if(element.email==developer) this.newExternalDeveloper.splice(index,1);
     });
-     console.log("newExternalDeveloper",this.newExternalDeveloper)
-     console.log("allDevelopers",this.allDevelopers)
     }
-    console.log(this.developers)
     this.createBitbucketProjectFrom.get('developer')?.setValue('');
   }
 
@@ -482,38 +280,21 @@ export class AddRepositoryComponent implements OnInit {
     this.emailInvalid = false
     this.developers.push(event.option.value);
     this.developerInput.nativeElement.value = '';
-    console.log(this.developers)
     this.developer.setValue('');
     this.createBitbucketProjectFrom.get('developer')?.setValue('');
   }
   getDeveloper(){
     this.initialLoading = true;
-    // this.ProjectService.getTechnology().subscribe(
-    //   (res: any) => {
-        // this.submitInProcess = false;
         this.allDevelopers =[{"id":14,"email":"pranita.jadhav@mindbowser.com"},{"id":15,"email":"ashwin.kawade@mindbowser.com"},{"id":23,"email":"sanskriti/gupta@mindbower.com"}]
        this.filteredDevelopers = this.createBitbucketProjectFrom.get('developer')?.valueChanges
        .pipe(
          startWith(''),
          map((developer: any |null) => developer ?  this._filterDevelopers(developer) : this._filterDevelopersSlice()));
          this.initialLoading = false;
-        //  if(res.data.error){
-        //   this._authService.updateToken().subscribe(
-        //     (res: any) => {
-        //       this._authService.setToken(res.data.accessToken);
-        //     })
-        //  }
-      // },
-      // error => {
-      //   this.submitInProcess = false;
-      //   this.snackBar.errorSnackBar("Server error")
-      // }
-    // );
   }
   //developer filter function end
   // repository filter function start
   changeProject(event: any){
-    console.log(this.createBitbucketProjectFrom.value.projectName)
     let projectName = this.createBitbucketProjectFrom.value.projectName+"-"+this.formType
     this.allRepositories =[projectName,projectName+"-config"]
     this.filteredRepositories = this.createBitbucketProjectFrom.get('repositoryName')?.valueChanges.pipe(
@@ -527,15 +308,10 @@ export class AddRepositoryComponent implements OnInit {
     
   }
   addRepository(event: MatChipInputEvent): void {
-    // Add repository only when MatAutocomplete is not open
-    // To make sure this does not conflict with OptionSelected Event
-    // if (!this.matAutocomplete.isOpen) {
       const input = event.input;
       const value = event.value;
-
       // Add our repository
       if ((value || '').trim()) {
-        // this.repositories.push(value.trim());
       }
 
       // Reset the input value
@@ -543,12 +319,10 @@ export class AddRepositoryComponent implements OnInit {
         input.value = '';
       }
       this.createBitbucketProjectFrom.get('repositoryName')?.setValue('');
-    // }
   }
 
   removeRepository(repository: string): void {
     const index = this.repositories.indexOf(repository);
-    console.log(repository)
     if (index >= 0) {
       this.repositories.splice(index, 1);
     }
@@ -590,12 +364,10 @@ export class AddRepositoryComponent implements OnInit {
 
   removeBranch(branch: string): void {
     const index = this.branches.indexOf(branch);
-    console.log( this.branches.indexOf(branch))
     if (index >= 0) {
       this.branches.splice(index, 1);
     }
     this.createBitbucketProjectFrom.get('branchOrPattern')?.setValue('');
-    console.log(this.branches)
   }
 
   selectedBranch(event: MatAutocompleteSelectedEvent): void {
@@ -621,33 +393,25 @@ export class AddRepositoryComponent implements OnInit {
 
   // code reviewer filter function start
   getCodeReviewer(){
-    this.allCodeReviewers = [
-      {
-        display_name: 'Pranita Ananda Jadhav',
-        uuid: '{d74946e9-b60e-451f-9636-543de534bcee}',
-      },
-      {
-        display_name: 'Ashwin kawade',
-        uuid: '{c528f949-55ec-401a-aefe-82f7f6783800}',
-      },
-      {
-        display_name: 'Pranita Jadhav',
-        uuid: '{d0844247-1730-4d78-9bb5-aef57613d5af}',
-      },
-      {
-        display_name: 'Bshwin kawade',
-        uuid: '{c528f949-55ec-401a-aefe-82f7f6783800}',
-      },
-    ]
-    this.filteredCodeReviewers = this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.valueChanges.pipe(
-      startWith(null),
-      map((codeReviewer: string | null) =>
-        codeReviewer ? this._filterCodeReviewer(codeReviewer) : this._filterCodeReviewerSlice()
-      )
-    );
+    this.RepositoryService.getBitbucketMember().subscribe((res:any)=>{
+      res.data.forEach((item: any) => {
+        this.allCodeReviewers.push(item.user)
+      })
+      console.log(this.allCodeReviewers)
+      this.filteredCodeReviewers = this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.valueChanges.pipe(
+        startWith(null),
+        map((codeReviewer: string | null) =>
+          codeReviewer ? this._filterCodeReviewer(codeReviewer) : this._filterCodeReviewerSlice()
+        )
+      );
+        this.initialLoading = false;
+      if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+    })
+  
   }
   addCodeReviewer(event: MatChipInputEvent): void {
-    debugger;
     const input = event.input;
     const value = event.value;
     // Add our codeReviewer
@@ -658,8 +422,6 @@ export class AddRepositoryComponent implements OnInit {
     if (input) {
       input.value = '';
     }
-
-    // this.codeReviewerCtrl.setValue(null);
     this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.setValue('');
   }
 
@@ -671,18 +433,11 @@ export class AddRepositoryComponent implements OnInit {
   selectedCodeReviewer(event: MatAutocompleteSelectedEvent): void {
     this.codeReviewers.push(event.option.value);
     this.codeReviewerInput.nativeElement.value = '';
-    // this.codeReviewerCtrl.setValue(null);
     this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.setValue('');
-    console.log('codeReviewers', this.codeReviewers);
   }
 
   private _filterCodeReviewer(value: any) {
-    console.log(value);
-    // return this.allCodeReviewers.filter((codeReviewer) =>
-    //   codeReviewer.display_name.toLowerCase().includes(value.toLowerCase())
-    // );
     if (typeof value == 'object') {
-      console.log('helldd');
       return this.allCodeReviewers.filter((codeReviewer: any) =>
         codeReviewer.display_name
           .toLowerCase()
@@ -692,7 +447,6 @@ export class AddRepositoryComponent implements OnInit {
           )
       );
     } else {
-      console.log('hellddhjhhj');
       return this.allCodeReviewers.filter(
         (codeReviewer: any) =>
           codeReviewer.display_name
@@ -707,20 +461,130 @@ export class AddRepositoryComponent implements OnInit {
       (allCodeReviewers: any) => !this.codeReviewers.includes(allCodeReviewers)
     );
   }
-  private validateCodeReviewer(codeReviewers: FormControl) {
-    if (codeReviewers.value && codeReviewers.value.length === 0) {
-      console.log("codeReviewers",codeReviewers.value)
-      return {
-        validateCodeReviewersArray: { valid: false }
-      };
-    }
-
-    return true;
-  }
   // code reviewer filter function end
 
   //bitbucket project filter function start
   getBitbucketProjectName(){
+    let payload = {
+      "projectName":""
+    }
+    this.options = [
+      {
+        id: 1,
+        uuid: '{c154166c-69a3-4384-9696-ed1de7b548b2}',
+        projectName: 'ginger10',
+        bitbucketProjectName: 'ginger10',
+        key: 'GINGER10',
+        createdAt: '2021-11-18T10:42:44.376',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'GINGER10',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 2,
+        uuid: '{261831a9-e754-4f42-b5a7-52e1595407e9}',
+        projectName: 'taj',
+        bitbucketProjectName: 'taj',
+        key: 'TAJ',
+        createdAt: '2021-11-18T10:44:57.509',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'TAJ',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 3,
+        uuid: '{b56f57d9-721e-442c-96dd-220a6d54f38d}',
+        projectName: 'taj1',
+        bitbucketProjectName: 'taj1',
+        key: 'TAJ1',
+        createdAt: '2021-11-18T10:48:52.709',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'TAJ1',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 4,
+        uuid: '{b1e598a2-d90f-420c-bd74-263acc483039}',
+        projectName: 'taj10',
+        bitbucketProjectName: 'taj10',
+        key: 'TAJ10',
+        createdAt: '2021-11-18T11:00:40.938',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'TAJ10',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 5,
+        uuid: '{05bd2fc4-70d8-485a-acab-98ce768f396b}',
+        projectName: 'taj12',
+        bitbucketProjectName: 'taj12',
+        key: 'TAJ12',
+        createdAt: '2021-11-18T06:00:01.716',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'TAJ12',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 6,
+        uuid: '{4d04d960-4708-4814-ae2c-e99827fddf23}',
+        projectName: 'js',
+        bitbucketProjectName: 'js',
+        key: 'JS',
+        createdAt: '2021-11-18T12:11:54.772',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'JS',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 7,
+        uuid: '{5837d2d2-3276-45cd-b458-5f17170e541c}',
+        projectName: 'indbowser',
+        bitbucketProjectName: 'ginger13',
+        key: 'GINGER13',
+        createdAt: '2021-11-18T08:18:12.92',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'GINGER13',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 14,
+        uuid: '{2442423b-7eb6-4840-a43b-2ae1df0026d5}',
+        projectName: 'bitbucketProject app',
+        bitbucketProjectName: 'Test28',
+        key: 'TEST28',
+        createdAt: '2022-12-28T07:34:35.057',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'TEST28',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+      {
+        id: 15,
+        uuid: '{22478f83-d3a6-4c3d-95cf-cb5683d5bb57}',
+        projectName: 'fgfgd',
+        bitbucketProjectName: 'fgf',
+        key: 'FGF',
+        createdAt: '2023-01-05T09:49:09.289',
+        createdBy: 'Pranita',
+        bitbucketUrl: 'FGF',
+        jenkinsUrl: null,
+        status: 'success',
+      },
+    ]
+    this.RepositoryService.getBitbucketProjectName(payload).subscribe((res:any)=>{
+      // this.options = res.data
+        this.initialLoading = false;
+      if(res.tokenExpire == true){
+        this._authService.updateAndReload(window.location);
+        }
+    })
     this.filteredOptions = this.createBitbucketProjectFrom.get('bitbucketProjectName')?.valueChanges.pipe(
       startWith(''),
       map((value) => (typeof value === 'string' ? value : value.projectName)),
@@ -730,15 +594,11 @@ export class AddRepositoryComponent implements OnInit {
     );
   }
   displayFn(bitbucketProject: any) {
-    console.log('kz;lksd;f', bitbucketProject);
-    // console.log("this.myControl",this.myControl.value)
     if (typeof bitbucketProject == 'object') {
       return bitbucketProject ? bitbucketProject.projectName : undefined;
     }
-    // return this.myControl.value
   }
   returnFn(bitbucketProject?: any) {
-    console.log('bitbucketProject');
     if (typeof bitbucketProject == 'object') {
       return bitbucketProject ? bitbucketProject.projectName : undefined;
     }
@@ -753,10 +613,10 @@ export class AddRepositoryComponent implements OnInit {
     );
   }
   //bitbucket project filter function end
-  selectChangeProject(event: any){}
   submit(){
-    console.log(this.createBitbucketProjectFrom)
+    console.log("invalid",this.createBitbucketProjectFrom.invalid)
     if (!this.createBitbucketProjectFrom.invalid){
+      this.selectedIndex = 2
       this.showStep = 3
     }
   }
@@ -764,15 +624,12 @@ export class AddRepositoryComponent implements OnInit {
     var re = ValidationConstants.EMAIL_VALIDATION;
     return re.test(String(email).toLowerCase());
   }
-  private validateDevelopers(developers: FormControl) {
-    // console.log(this.developers)
-    // console.log("developers",developers.value.length)
-    if (developers.value && developers.value.length === 0 ) {
+  private validateChipField(validateChipField: FormControl) {
+    if (validateChipField.value && validateChipField.value.length === 0 ) {
       return {
-        validateDevelopersArray: { valid: false }
+        validateChipFieldArray: { valid: false }
       };
     }
-
     return null;
   }
 }
