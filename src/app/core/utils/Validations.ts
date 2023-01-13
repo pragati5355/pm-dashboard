@@ -1,5 +1,5 @@
-import { FormGroup, Validators } from "@angular/forms";
-import { AbstractControl, ValidatorFn, ValidationErrors } from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators, ValidatorFn, ValidationErrors} from '@angular/forms';
+
 import * as moment from "moment";
 export function MonthValdation(monthValue: string) {
   return (formGroup: FormGroup) => {
@@ -109,3 +109,13 @@ export function ExprienceValidation(
       } 
     };
   } 
+  export function validateChips(chips: any) {
+    console.log("validate chip",chips)
+    if (chips.value && chips.value.length === 0) {
+      return {
+        validateChipsArray: { valid: false }
+      };
+    }
+
+    return null;
+  }

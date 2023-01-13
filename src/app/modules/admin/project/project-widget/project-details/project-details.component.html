@@ -11,7 +11,10 @@
                     <mat-icon class=" icon-size-5" [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
                     <span class="ml-2 mr-1">Edit Project</span>
                 </button>
-
+                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createRepository()">
+                    <mat-icon class=" icon-size-5" [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1">Create Repository</span>
+                </button>
                 <!-- Actions menu (visible on xs) -->
                 <div class="sm:hidden">
                     <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
