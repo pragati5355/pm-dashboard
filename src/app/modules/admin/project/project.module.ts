@@ -61,7 +61,7 @@ const routes: Routes = [
       },
       
       {
-        path: "reporsitory",
+        path: "repository",
         loadChildren: () =>
           import("../repository/repository.module").then(m => m.RepositoryModule)
       },

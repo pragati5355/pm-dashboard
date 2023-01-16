@@ -448,7 +448,7 @@
                                                     <mat-error *ngIf="projectTeamForm['project_manager'].errors &&
                                                     projectTeamForm['project_manager']?.invalid &&
                                                     projectTeamForm['project_manager']?.touched ">
-                                                    <div *ngIf="projectTeamForm['project_manager'].errors['required']">Poject manager name is mandatory</div>
+                                                    <div *ngIf="projectTeamForm['project_manager'].errors['required']">Project manager name is mandatory</div>
                                                     <div *ngIf="projectTeamForm['project_manager'].invalid && !projectTeamForm['project_manager'].errors['required']">Choose valid project manager name</div>
                                                     </mat-error>
                                                     <mat-autocomplete #autoManagerList="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectedManagerOption($event)">
@@ -503,7 +503,7 @@
                                             <mat-error *ngIf="projectTeamForm['team_member'].errors &&
                                             projectTeamForm['team_member']?.invalid &&
                                             projectTeamForm['team_member']?.touched ">
-                                            <div *ngIf="projectTeamForm['team_member'].errors['required']">Team maember name is mandatory</div>
+                                            <div *ngIf="projectTeamForm['team_member'].errors['required']">Team member name is mandatory</div>
                                             <div *ngIf="projectTeamForm['team_member'].invalid">Choose valid team member name</div>
                                             </mat-error>
                                             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnTeam">

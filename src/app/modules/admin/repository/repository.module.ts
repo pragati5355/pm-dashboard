@@ -26,6 +26,7 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { SharedModule } from 'app/core/shared.module';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { MatStepperModule } from '@angular/material/stepper';
 import { RepositoryHomeComponent } from './repository-home/repository-home.component';
 import { RepositoryListComponent } from './repository-list/repository-list.component';
 import { AddRepositoryComponent } from './add-repository/add-repository.component';
@@ -83,7 +84,8 @@ const routes: Routes = [
     FuseNavigationModule,
     FuseScrollbarModule,
     FuseScrollResetModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    MatStepperModule
   ]
 })
 export class RepositoryModule { }
