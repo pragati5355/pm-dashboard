@@ -39,6 +39,7 @@ import { AssignBitbucketProjectDialogComponent } from './assign-bitbucket-projec
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const routes: Routes = [
     { path: 'project-details', component: ProjectDetailsComponent },
@@ -92,7 +93,8 @@ const routes: Routes = [
         FuseAlertModule,
         MatRadioModule,
         MatAutocompleteModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatProgressSpinnerModule
     ],
     exports: [
         ProjectDetailsComponent,
