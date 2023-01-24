@@ -25,14 +25,15 @@
     </button>
 </div>
 <ng-template #existingProjectRef>
-    <mat-form-field [floatLabel]="'always'">
+    <mat-progress-bar *ngIf="isProjectListLoading" mode="indeterminate"></mat-progress-bar>
+    <mat-form-field *ngIf="!isProjectListLoading" [floatLabel]="'always'">
         <mat-label>Select Project</mat-label>
         <input type="text" placeholder="Select existing Bitbucket project from here"
             [formControl]="projectNameFormControl" matInput [matAutocomplete]="auto" />
 
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProjectNameFn">
             <mat-option *ngFor="let option of filteredBitbucketProjectOptions | async" [value]="option">
-                {{ option.projectName }}
+                {{ option.name }}
             </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="projectNameFormControl.hasError('required')">

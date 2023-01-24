@@ -26,11 +26,12 @@ function autocompleteObjectValidator(): ValidatorFn {
 })
 export class AssignBitbucketProjectDialogComponent implements OnInit {
     projectType: 'new' | 'existing' = 'existing';
-    allBitbucketProjects = [];
+    allBitbucketProjects: BitbucketProjectModel[] = [];
     filteredBitbucketProjectOptions: Observable<BitbucketProjectModel[]> | any;
     projectNameFormControl: FormControl;
     mProjectId = this.data?.projectId;
     mProjectName = this.data?.projectName;
+    isProjectListLoading = true;
 
     constructor(
         public dialogRef: MatDialogRef<AssignBitbucketProjectDialogComponent>,
@@ -39,7 +40,6 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.initializeDefaultControl();
         this.getBitbucketProjectList();
     }
 
@@ -54,12 +54,14 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
     getBitbucketProjectList() {
         this.bitbucketProjectService.findAll().subscribe((response) => {
             this.allBitbucketProjects = response;
+            this.isProjectListLoading = false
+            this.initializeDefaultControl();
         });
     }
 
     displayProjectNameFn(bitbucketProject: any) {
         if (typeof bitbucketProject == 'object') {
-            return bitbucketProject ? bitbucketProject.projectName : undefined;
+            return bitbucketProject ? bitbucketProject.name : undefined;
         }
     }
 
@@ -83,18 +85,15 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
     private filterProjectByName(projectName: string): BitbucketProjectModel[] {
         return this.allBitbucketProjects.filter(
             (option) =>
-                option.projectName
-                    .toLowerCase()
-                    .indexOf(projectName.toLowerCase()) === 0
+                option.name.toLowerCase().includes(projectName)
         );
     }
 
     private addFilterOnProjects() {
         this.filteredBitbucketProjectOptions =
             this.projectNameFormControl.valueChanges.pipe(
-                startWith(''),
                 map((value) =>
-                    typeof value === 'string' ? value : value.projectName
+                    typeof value === 'string' ? value.trim().toLowerCase() : value.name.toLowerCase()
                 ),
                 map((projectName) =>
                     projectName
