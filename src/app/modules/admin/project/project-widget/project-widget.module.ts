@@ -38,6 +38,7 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { AssignBitbucketProjectDialogComponent } from './assign-bitbucket-project-dialog/assign-bitbucket-project-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const routes: Routes = [
     { path: 'project-details', component: ProjectDetailsComponent },
@@ -91,6 +92,7 @@ const routes: Routes = [
         FuseAlertModule,
         MatRadioModule,
         MatAutocompleteModule,
+        MatTooltipModule
     ],
     exports: [
         ProjectDetailsComponent,
