@@ -6,6 +6,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BitbucketProjectModel } from '@modules/admin/repository/common/models/bitbucket-project.model';
 import { BitbucketProjectService } from '@modules/admin/repository/common/services/bitbucket-project.service';
 import { map, Observable, startWith } from 'rxjs';
@@ -32,11 +33,13 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
     mProjectId = this.data?.projectId;
     mProjectName = this.data?.projectName;
     isProjectListLoading = true;
+    isAssigningProject = false;
 
     constructor(
         public dialogRef: MatDialogRef<AssignBitbucketProjectDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private bitbucketProjectService: BitbucketProjectService
+        private bitbucketProjectService: BitbucketProjectService,
+        private snackBar: MatSnackBar
     ) {}
 
     ngOnInit(): void {
@@ -66,7 +69,38 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
     }
 
     save() {
-        console.log(this.mProjectId, this.projectNameFormControl?.value);
+        this.isAssigningProject = true;
+        const payload = this.getAssignPayload();
+        this.bitbucketProjectService.assign(payload)
+        .subscribe(res => {
+            this.isAssigningProject = false;
+            this.snackBar.open(res?.message, null, {duration: 5000});
+            if(!res?.error){
+                this.dialogRef.close(res);
+            }
+        })
+    }
+
+    private getAssignPayload() {
+        const payload = {
+            id: this.mProjectId,
+            name: null,
+            uuid: null,
+            key: null
+        };
+        this.extractDataFromFormValue(payload);
+        return payload;
+    }
+
+    private extractDataFromFormValue(payload: { id: any; name: any; uuid: any; key: any; }) {
+        if (typeof this.projectNameFormControl?.value === 'string') {
+            payload.name = this.projectNameFormControl?.value;
+            payload.key = this.projectNameFormControl?.value.replace(' ', '_').toUpperCase()
+        } else {
+            payload.name = this.projectNameFormControl?.value?.name;
+            payload.uuid = this.projectNameFormControl?.value?.uuid;
+            payload.key = this.projectNameFormControl?.value?.key;
+        }
     }
 
     private initializeDefaultControl() {

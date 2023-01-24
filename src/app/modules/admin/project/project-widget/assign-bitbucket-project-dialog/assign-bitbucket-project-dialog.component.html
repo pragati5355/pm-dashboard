@@ -19,8 +19,11 @@
         <mat-icon class="mr-2">close</mat-icon>
         Cancel
     </button>
-    <button mat-button color="primary" [disabled]="!projectNameFormControl?.valid" (click)="save()">
-        <mat-icon class="mr-2">done</mat-icon>
+    <button mat-button color="primary" [disabled]="!projectNameFormControl?.valid || isAssigningProject"
+        (click)="save()">
+        <mat-icon *ngIf="!isAssigningProject" class="mr-2">done</mat-icon>
+        <mat-progress-spinner *ngIf="isAssigningProject" class="mr-2" mode="indeterminate"
+            diameter="24"></mat-progress-spinner>
         {{ projectType === "new" ? "Create" : "Assign" }}
     </button>
 </div>
