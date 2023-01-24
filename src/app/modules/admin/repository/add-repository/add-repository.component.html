@@ -99,63 +99,48 @@
                                     </div>
                                 </mat-error>
                             </mat-form-field>
-                            <mat-form-field *ngIf="
-                                    formType == 'angular' ||
-                                    formType == 'react-js'
-                                " class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
-                                <mat-label>Portal Name</mat-label>
-                                <input matInput [placeholder]="'Portal Name here.'"
-                                    #createBitbucketProjectFormPortalName formControlName="portalName" maxlength="50" />
-                                <mat-error *ngIf="
-                                        createBitbucketProject['portalName']
-                                            .errors &&
-                                        createBitbucketProject['portalName']
-                                            ?.invalid &&
-                                        createBitbucketProject['portalName']
-                                            ?.touched
-                                    ">
-                                    <div *ngIf="
-                                            createBitbucketProject['portalName']
-                                                .errors['required']
-                                        ">
-                                        Portal Name is mandatory
-                                    </div>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field *ngIf="
-                                    formType == 'django' || formType == 'java'
-                                " class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
-                                <mat-label>Microservice Name</mat-label>
-                                <input matInput [placeholder]="'Microservice Name here.'"
-                                    #createBitbucketProjectFormMicroserviceName formControlName="microserviceName"
-                                    maxlength="50" />
-                                <mat-error *ngIf="
-                                        createBitbucketProject[
-                                            'microserviceName'
-                                        ].errors &&
-                                        createBitbucketProject[
-                                            'microserviceName'
-                                        ]?.invalid &&
-                                        createBitbucketProject[
-                                            'microserviceName'
-                                        ]?.touched
-                                    ">
-                                    <div *ngIf="
-                                            createBitbucketProject[
-                                                'microserviceName'
-                                            ].errors['required']
-                                        ">
-                                        Microservice Name is mandatory
-                                    </div>
-                                </mat-error>
-                            </mat-form-field>
+                            <div *ngIf="
+                        formType == 'angular' ||
+                        formType == 'react-js' || formType == 'django' || formType == 'java'
+                    "  class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
+                            <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
+                                <mat-form-field [floatLabel]="'always'" appearance="fill"
+                                    class="example-chip-list w-full flex-0 mb-2">
+                                    <mat-label>Portal Name *</mat-label>
+                                    <mat-chip-list #portalChipList  formControlName="portalNameOrMicroserviceName">
+                                        <input    
+                                        placeholder="New Portal Name..."
+                                        #portalNameOrMicroserviceNameInput
+                                        formControlName="portalNameOrMicroserviceName"
+                                        [matChipInputFor]="portalChipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur"
+                                        (matChipInputTokenEnd)="addPortal($event)"
+                                        class="w-full" />
+                                    </mat-chip-list>
+                                    <mat-chip-list #portalChipList aria-label="portalNameOrMicroserviceName selection" class="mb-2"
+                                        >
+                                        <mat-chip
+                                        *ngFor="let portalNameOrMicroserviceName of portalNameOrMicroserviceNames"
+                                        [selectable]="selectable"
+                                        [removable]="removable"
+                                        (removed)="removePortal(portalNameOrMicroserviceName)">
+                                        {{portalNameOrMicroserviceName}}
+                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                        </mat-chip>
+                                    </mat-chip-list>
+                                    <mat-error>At least add one portal name
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            </div>
                             <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
                                 <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
                                     <mat-form-field [floatLabel]="'always'" appearance="fill"
                                         class="example-chip-list w-full flex-0 mb-2">
                                         <mat-label>Repository *</mat-label>
                                         <mat-chip-list #chipListRepository formControlName="repositoryName">
-                                            <input placeholder="New repository..." #repositoryInput
+                                            <input placeholder="Search repository..." #repositoryInput
                                                 formControlName="repositoryName" [matAutocomplete]="
                                                     autoRepository
                                                 " [matChipInputFor]="
@@ -200,7 +185,7 @@
                                         class="example-chip-list w-full flex-0 mb-2">
                                         <mat-label>Branch Or Pattern *</mat-label>
                                         <mat-chip-list #chipListBranch formControlName="branchOrPattern">
-                                            <input placeholder="New branch..." #branchInput
+                                            <input placeholder="Search branch..." #branchInput
                                                 formControlName="branchOrPattern" [matAutocomplete]="autoBranch"
                                                 [matChipInputFor]="chipListBranch"
                                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -283,7 +268,7 @@
                                         class="example-chip-list w-full flex-0 mb-2">
                                         <mat-label>Code Reviewer & PM *</mat-label>
                                         <mat-chip-list #chipListCodeReviewer formControlName="codeReviewerAndPm">
-                                            <input placeholder="New Code Reviewer & PM..." #codeReviewerInput
+                                            <input placeholder="Search Code Reviewer & PM..." #codeReviewerInput
                                                 formControlName="codeReviewerAndPm" [matAutocomplete]="
                                                     autoCodeReviewer
                                                 " [matChipInputFor]="
@@ -330,7 +315,7 @@
 
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button mat-stroked-button type="button">
+                                    <button mat-stroked-button type="button" (click)="goBack(0)">
                                         Back
                                     </button>
                                     <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"

@@ -99,6 +99,11 @@ export class AddRepositoryComponent implements OnInit {
         return this.createBitbucketProjectFrom.controls;
     }
 
+    // portal field
+    portalNameOrMicroserviceNames: string[] = [];
+    @ViewChild('portalNameOrMicroserviceNameInput', { static: false })
+    portalNameOrMicroserviceNameInput: ElementRef<HTMLInputElement>;
+  
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _matStepperIntl: MatStepperIntl,
@@ -163,17 +168,13 @@ export class AddRepositoryComponent implements OnInit {
         this.selectedIndex = 1;
         this.showStep = 2;
         this.formType = name;
-        if (this.formType == 'angular' || this.formType == 'react-js') {
+        if (this.formType == 'angular' || this.formType == 'react-js' || this.formType == 'django' || this.formType == 'java') {
             this.createBitbucketProjectFrom.addControl(
-                'portalName',
-                new FormControl('', Validators.required)
+                'portalNameOrMicroserviceName',
+                new FormControl([], this.validateChipField)
             );
-        }
-        if (this.formType == 'django' || this.formType == 'java') {
-            this.createBitbucketProjectFrom.addControl(
-                'microserviceName',
-                new FormControl('', Validators.required)
-            );
+        }else{
+            this.createBitbucketProjectFrom.removeControl('portalNameOrMicroserviceName')
         }
     }
     //developer filter function start
@@ -281,10 +282,22 @@ export class AddRepositoryComponent implements OnInit {
     // repository filter function start
     changeProject(event: any) {
         let projectName =
-            this.createBitbucketProjectFrom.value.projectName +
+            this.createBitbucketProjectFrom.value.projectName ;
+        this.allRepositories = [projectName+
             '-' +
-            this.formType;
-        this.allRepositories = [projectName, projectName + '-config'];
+            this.formType, projectName+
+            '-' +
+            this.formType + '-config'];
+      if(this.portalNameOrMicroserviceNames.length > 0){
+        this.portalNameOrMicroserviceNames.forEach((item: any) => {
+            this.allRepositories.push(projectName+
+                '-' + item +'-'+
+                this.formType)
+                this.allRepositories.push(projectName+
+                    '-' + item +'-'+
+                    this.formType+ '-config')
+        })
+      }
         this.filteredRepositories = this.createBitbucketProjectFrom
             .get('repositoryName')
             ?.valueChanges.pipe(
@@ -497,6 +510,32 @@ export class AddRepositoryComponent implements OnInit {
                 )
             );
     }
+
+    // Add portal function
+
+    addPortal(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = event.value;
+    
+        // Add our portalNameOrMicroserviceName
+        if ((value || '').trim()) {
+          this.portalNameOrMicroserviceNames.push(value.trim());
+        }
+    
+        // Reset the input value
+        if (input) {
+          input.value = '';
+        }
+        this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue('');
+      }
+    
+      removePortal(portalNameOrMicroserviceName: string): void {
+        const index = this.portalNameOrMicroserviceNames.indexOf(portalNameOrMicroserviceName);
+    
+        if (index >= 0) {
+          this.portalNameOrMicroserviceNames.splice(index, 1);
+        }
+      }
 
     private setJiraProject() {
         let projectData = this._authService.getProjectDetails();
