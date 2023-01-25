@@ -18,7 +18,6 @@ import { startWith } from 'rxjs';
 import { map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
-import { RepositoryService } from '@services/repository.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -29,6 +28,7 @@ import {
     MatAutocomplete,
 } from '@angular/material/autocomplete';
 import { BitbucketProjectModel } from '../common/models/bitbucket-project.model';
+import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 export class Developer {
     constructor(public id: number, public email: string) {}
 }
@@ -168,6 +168,8 @@ export class AddRepositoryComponent implements OnInit {
         this.selectedIndex = 1;
         this.showStep = 2;
         this.formType = name;
+        this.allRepositories = []
+        this.portalNameOrMicroserviceNames = []
         if (this.formType == 'angular' || this.formType == 'react-js' || this.formType == 'django' || this.formType == 'java') {
             this.createBitbucketProjectFrom.addControl(
                 'portalNameOrMicroserviceName',
@@ -261,12 +263,10 @@ export class AddRepositoryComponent implements OnInit {
 
     getAllDevelopers() {
         this.initialLoading = true;
-        this.allDevelopers = [
-            { id: 14, email: 'pranita.jadhav@mindbowser.com' },
-            { id: 15, email: 'ashwin.kawade@mindbowser.com' },
-            { id: 23, email: 'sanskriti/gupta@mindbower.com' },
-        ];
-        this.filteredDevelopers = this.createBitbucketProjectFrom
+        this.RepositoryService.findAllDeveloperEmails().subscribe((res: any) => {
+            this.allDevelopers = res.data
+            console.log(res);
+            this.filteredDevelopers = this.createBitbucketProjectFrom
             .get('developer')
             ?.valueChanges.pipe(
                 startWith(''),
@@ -276,7 +276,12 @@ export class AddRepositoryComponent implements OnInit {
                         : this._filterDevelopersSlice()
                 )
             );
-        this.initialLoading = false;
+            this.initialLoading = false;
+            if (res.tokenExpire == true) {
+                this._authService.updateAndReload(window.location);
+            }
+        });
+        
     }
     //developer filter function end
     // repository filter function start
@@ -398,7 +403,7 @@ export class AddRepositoryComponent implements OnInit {
 
     // code reviewer filter function start
     getCodeReviewer() {
-        this.RepositoryService.getBitbucketMember().subscribe((res: any) => {
+        this.RepositoryService.findAllMembers().subscribe((res: any) => {
             res.data.forEach((item: any) => {
                 this.allCodeReviewers.push(item.user);
             });
@@ -480,9 +485,37 @@ export class AddRepositoryComponent implements OnInit {
     //bitbucket project filter function end
     submit() {
         console.log('invalid', this.createBitbucketProjectFrom.invalid);
+        let newCodeReviewers  = []
+        this.codeReviewers.forEach(items => {
+            newCodeReviewers.push(items.uuid)
+        } )
         if (!this.createBitbucketProjectFrom.invalid) {
-            this.selectedIndex = 2;
-            this.showStep = 3;
+           
+        let payload = {
+            projectName: this.createBitbucketProjectFrom.value.projectName,
+            project_key:"TEST_1_AMARESH_JAN_24",
+            bitbucketProjectName: "test 1 amaresh jan 24",
+            repoNames: this.repositories,
+            createdBy: "Amaresh",
+            branchName: this.branches,
+            email: this.developers,
+            mergeAccessUserUUIDs: newCodeReviewers
+        }
+        this.RepositoryService.create(payload).subscribe((res: any) => {
+          
+            if(!res.error){
+                this.snackBar.successSnackBar(res.message);
+                this.selectedIndex = 2;
+                this.showStep = 3;
+              }else{
+                this.snackBar.errorSnackBar(res.data.message)
+              }
+            this.initialLoading = false;
+            if (res.tokenExpire == true) {
+                this._authService.updateAndReload(window.location);
+            }
+        });
+        console.log(payload)
         }
     }
     private validateEmail(email: any) {
@@ -526,15 +559,21 @@ export class AddRepositoryComponent implements OnInit {
         if (input) {
           input.value = '';
         }
+
         this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue('');
       }
     
       removePortal(portalNameOrMicroserviceName: string): void {
-        const index = this.portalNameOrMicroserviceNames.indexOf(portalNameOrMicroserviceName);
-    
+        if (this.portalNameOrMicroserviceNames.length == 1){
+            this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue([]);
+          }
+        let index = this.portalNameOrMicroserviceNames.indexOf(portalNameOrMicroserviceName);
+       
         if (index >= 0) {
+            
           this.portalNameOrMicroserviceNames.splice(index, 1);
         }
+     
       }
 
     private setJiraProject() {

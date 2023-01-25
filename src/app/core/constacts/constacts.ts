@@ -51,7 +51,9 @@ export const AppConstants: ConstantsInterface = {
   GET_HAPPINESS_SCORE_BY_SPRINT: `${projectBaseUrl}/happiness-score-by-sprint`,
   GET_HAPPINESS_SCORE_BY_PROJECT: `${projectBaseUrl}/happiness-score-by-project`,
   GET_BITBUCKET_MEMBER: `${projectBaseUrl}/bitbucket-members`,
+  GET_EMAILS: `${projectBaseUrl}/emails`,
   GET_BITBUCKET_PROJECT_NAME: `${projectBaseUrl}/search-project`,
+  CREATE_BITBUCKET_REPOSITORY:`${projectBaseUrl}/create-project`
 };
 export const ValidationConstants = {
   EMAIL_VALIDATION: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
