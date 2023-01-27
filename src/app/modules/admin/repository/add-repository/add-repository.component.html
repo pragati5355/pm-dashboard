@@ -319,7 +319,7 @@
                                         Back
                                     </button>
                                     <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
-                                        (click)="submit()">
+                                        (click)="submitBitbucketProject()">
                                         Next Step
                                     </button>
                                 </div>
@@ -378,6 +378,17 @@
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
                         Review form
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                                <button mat-stroked-button type="button" (click)="goBack(2)">
+                                    Back
+                                </button>
+                                <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                    (click)="submit()">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

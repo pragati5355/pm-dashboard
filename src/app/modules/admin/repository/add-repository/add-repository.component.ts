@@ -499,39 +499,6 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     //bitbucket project filter function end
-    submit() {
-        let newCodeReviewers  = []
-        this.codeReviewers.forEach(items => {
-            newCodeReviewers.push(items.uuid)
-        } )
-        if (!this.createBitbucketProjectFrom.invalid) {
-           
-        let payload = {
-            projectName: this.createBitbucketProjectFrom.value.projectName,
-            project_key:"TEST_1_AMARESH_JAN_24",
-            bitbucketProjectName: "test 1 amaresh jan 24",
-            repoNames: this.repositories,
-            createdBy: "Amaresh",
-            branchName: this.branches,
-            email: this.developers,
-            mergeAccessUserUUIDs: newCodeReviewers
-        }
-        this.RepositoryService.create(payload).subscribe((res: any) => {
-          
-            if(!res.error){
-                this.snackBar.successSnackBar(res.message);
-                this.selectedIndex = 2;
-                this.showStep = 3;
-              }else{
-                this.snackBar.errorSnackBar(res.data.message)
-              }
-            this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
-        });
-        }
-    }
     private validateEmail(email: any) {
         var re = ValidationConstants.EMAIL_VALIDATION;
         return re.test(String(email).toLowerCase());
@@ -614,7 +581,7 @@ export class AddRepositoryComponent implements OnInit {
             branchOrPattern: [this.branches, this.validateChipField],
         });
         this.ansibleScriptFrom = this._formBuilder.group({
-            ansibleScriptUrl: [this.jiraProjectName, [Validators.required]],
+            ansibleScriptUrl: ['', [Validators.required]],
         });
     }
 
@@ -632,11 +599,52 @@ export class AddRepositoryComponent implements OnInit {
                 }
             });
     }
+    submitBitbucketProject(){
+        if (!this.createBitbucketProjectFrom.invalid) {
+           
+            this.selectedIndex = 2;
+            this.showStep = 3;
+        
+        }
+    }
     submitAnsibleScript(){
         if (!this.ansibleScriptFrom.invalid) {
            
             this.selectedIndex = 3;
             this.showStep = 4;
             }
+    }
+    submit() {
+        let newCodeReviewers  = []
+        this.codeReviewers.forEach(items => {
+            newCodeReviewers.push(items.uuid)
+        } )
+        if (!this.createBitbucketProjectFrom.invalid) {
+           
+        let payload = {
+            projectName: this.createBitbucketProjectFrom.value.projectName,
+            project_key:"TEST_1_AMARESH_JAN_24",
+            bitbucketProjectName: "test 1 amaresh jan 24",
+            repoNames: this.repositories,
+            createdBy: "Amaresh",
+            branchName: this.branches,
+            email: this.developers,
+            mergeAccessUserUUIDs: newCodeReviewers
+        }
+        this.RepositoryService.create(payload).subscribe((res: any) => {
+          
+            if(!res.error){
+                this.snackBar.successSnackBar(res.message);
+                this.selectedIndex = 2;
+                this.showStep = 3;
+              }else{
+                this.snackBar.errorSnackBar(res.data.message)
+              }
+            this.initialLoading = false;
+            if (res.tokenExpire == true) {
+                this._authService.updateAndReload(window.location);
+            }
+        });
+        }
     }
 }
