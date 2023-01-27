@@ -15,7 +15,7 @@
 
                     <mat-step label="Create Bitbucket Project" > </mat-step>
 
-                    <mat-step label="Ansible Script"> </mat-step>
+                    <mat-step label="Create Ansible Script"> </mat-step>
 
                     <mat-step label="Review Repository"> </mat-step>
                 </mat-vertical-stepper>
@@ -334,14 +334,51 @@
             <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full overflow-y-auto">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
-                        Ansible Script
+                        <form [formGroup]="ansibleScriptFrom"
+                            class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+                            <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
+                                <mat-label>Ansible Script Url</mat-label>
+                                <input type="text" placeholder="Ansible Script Url."
+                                    aria-label="Ansible Script Url" matInput formControlName="ansibleScriptUrl"
+                                    />
+                                    <mat-error *ngIf="
+                                    ansibleScriptProjectFrom['ansibleScriptUrl']
+                                        .errors &&
+                                        ansibleScriptProjectFrom['ansibleScriptUrl']
+                                        ?.invalid &&
+                                        ansibleScriptProjectFrom['ansibleScriptUrl']
+                                        ?.touched
+                                ">
+                                <div *ngIf="
+                                ansibleScriptProjectFrom[
+                                            'ansibleScriptUrl'
+                                        ].errors['required']
+                                    ">
+                                    Ansible Script is mandatory
+                                </div>
+                            </mat-error>
+                            </mat-form-field>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                                    <button mat-stroked-button type="button" (click)="goBack(1)">
+                                        Back
+                                    </button>
+                                    <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                        (click)="submitAnsibleScript()">
+                                        Next Step
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
             <!-- Review your project -->
             <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full overflow-y-auto">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent"></div>
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
+                        Review form
+                    </div>
                 </div>
             </div>
         </div>

@@ -99,18 +99,11 @@ export class ProjectListComponent implements OnInit {
         });
     }
   }
-  goToProject(id: number, name: any, progress: any, form: any) {
+  goToProject(project) {
     this.router.navigate(
       [`/projects/project/project-details`],
-      {queryParams: {id: id}}
+      {queryParams: {id: project?.id}}
     );
-    let payload = {
-      id : id,
-      name: name,
-      progress: progress, 
-      form:form
-    }
-    this._authService.setProjectDetails(payload)
   }
   snycproject(event:any,id: any){
     event.preventDefault();

@@ -12,6 +12,7 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import { AuthService } from '@services/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AssignBitbucketProjectDialogComponent } from '../assign-bitbucket-project-dialog/assign-bitbucket-project-dialog.component';
+
 @Component({
     selector: 'app-project-details',
     templateUrl: './project-details.component.html',
@@ -19,35 +20,39 @@ import { AssignBitbucketProjectDialogComponent } from '../assign-bitbucket-proje
     encapsulation: ViewEncapsulation.None,
 })
 export class ProjectDetailsComponent implements OnInit {
-    project_name = 'This is a Project name';
-    project_status = 'On Track';
-    project_progres = 0;
     members = true;
     sprints = true;
     routeSubscribe: any;
-    projectId = 0;
+    projectId: string;
     initialLoading = false;
+    project: any;
     @Input() dataId: any;
     private _fuseCards!: QueryList<ElementRef>;
 
     constructor(
         private router: Router,
-        private _authService: AuthService,
         private _route: ActivatedRoute,
-        private matDialog: MatDialog
+        private projectService: CreateProjecteService,
+        private matDialog: MatDialog,
+        private _authService: AuthService,
     ) {}
 
     ngOnInit(): void {
         this.routeSubscribe = this._route.queryParams.subscribe((projectId) => {
             if (projectId['id']) {
                 this.projectId = projectId['id'];
+                this.getProjectDetails();
             }
         });
-        let projectData = this._authService.getProjectDetails();
-        this.project_name = projectData.name;
-        if (projectData !== 'NaN') {
-            this.project_progres = projectData.progress;
-        }
+        
+    }
+    getProjectDetails() {
+        this.projectService.getOneProjectDetails({
+            id: this.projectId
+        }).subscribe((res: any) => {
+             this.project = res?.data?.project;     
+             this._authService.setProjectDetails(this.project)       
+        })
     }
 
     editProject() {
@@ -68,7 +73,7 @@ export class ProjectDetailsComponent implements OnInit {
                 width: '50%',
                 data: {
                     projectId: this.projectId,
-                    projectName: this.project_name,
+                    projectName: this.project.name,
                 },
                 disableClose: true,
             })

@@ -9,18 +9,21 @@ import { AppConstants } from '../../../../../core/constacts/constacts';
 })
 export class RepositoryService {
     constructor(private http: HttpClient) {}
+    createBitbucketRepository = AppConstants['PROJECT_API_URL'] + '/create-project';
+    getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
+    getBitbucketMember = AppConstants['PROJECT_API_URL'] + '/bitbucket-members';
 
     create(obj: any) {
-        return this.http.post(AppConstants['CREATE_BITBUCKET_REPOSITORY'], obj)
+        return this.http.post(this.createBitbucketRepository, obj)
     }
 
     find(id: string) {}
 
     findAllDeveloperEmails() {
-        return this.http.get(AppConstants['GET_EMAILS']);
+        return this.http.get(this.getEmails);
     }
 
     findAllMembers() {
-        return this.http.get(AppConstants['GET_BITBUCKET_MEMBER']);
+        return this.http.get(this.getBitbucketMember);
     }
 }
