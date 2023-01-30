@@ -70,7 +70,7 @@ export class AddRepositoryComponent implements OnInit {
     filteredRepositories!: Observable<any[]> | undefined;
     repositories: any = [];
     allRepositories: any = [];
-
+    isRepository =  false
     //branch filter value
     addOnBlurBranch = false;
     filteredBranches: Observable<any[]> | undefined;
@@ -178,7 +178,9 @@ export class AddRepositoryComponent implements OnInit {
                 'portalNameOrMicroserviceName',
                 new FormControl([], this.validateChipField)
             );
+            this.isRepository = true
         }else{
+            this.isRepository = false
             this.createBitbucketProjectFrom.removeControl('portalNameOrMicroserviceName')
         }
     }
@@ -295,6 +297,7 @@ export class AddRepositoryComponent implements OnInit {
     //developer filter function end
     // repository filter function start
     changeProject(event: any) {
+        console.log("hejdsljfd")
         let projectName =
             this.createBitbucketProjectFrom.value.projectName ;
         this.allRepositories = [projectName+
@@ -530,7 +533,7 @@ export class AddRepositoryComponent implements OnInit {
     addPortal(event: MatChipInputEvent): void {
         const input = event.input;
         const value = event.value;
-    
+        this.isRepository = false
         // Add our portalNameOrMicroserviceName
         if ((value || '').trim()) {
           this.portalNameOrMicroserviceNames.push(value.trim());
@@ -546,6 +549,7 @@ export class AddRepositoryComponent implements OnInit {
     
       removePortal(portalNameOrMicroserviceName: string): void {
         if (this.portalNameOrMicroserviceNames.length == 1){
+            this.isRepository = true
             this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue([]);
           }
         let index = this.portalNameOrMicroserviceNames.indexOf(portalNameOrMicroserviceName);
@@ -646,5 +650,8 @@ export class AddRepositoryComponent implements OnInit {
             }
         });
         }
+    }
+    changeRepository(event:any){
+        console.log("hello")
     }
 }

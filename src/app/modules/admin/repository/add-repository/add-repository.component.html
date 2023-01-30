@@ -140,7 +140,7 @@
                                         class="example-chip-list w-full flex-0 mb-2">
                                         <mat-label>Repository *</mat-label>
                                         <mat-chip-list #chipListRepository formControlName="repositoryName">
-                                            <input placeholder="Search repository..." #repositoryInput
+                                            <input [disabled]="isRepository" placeholder="Search repository..." #repositoryInput
                                                 formControlName="repositoryName" [matAutocomplete]="
                                                     autoRepository
                                                 " [matChipInputFor]="
@@ -337,7 +337,7 @@
                         <form [formGroup]="ansibleScriptFrom"
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                             <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
-                                <mat-label>Ansible Script Url</mat-label>
+                                <mat-label>Script Url</mat-label>
                                 <input type="text" placeholder="Ansible Script Url."
                                     aria-label="Ansible Script Url" matInput formControlName="ansibleScriptUrl"
                                     />
@@ -377,18 +377,98 @@
             <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full overflow-y-auto">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
-                        Review form
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
-                            <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                <button mat-stroked-button type="button" (click)="goBack(2)">
-                                    Back
-                                </button>
-                                <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
-                                    (click)="submit()">
-                                    Submit
-                                </button>
+                        <!-- Review form -->
+                        <!-- <form [formGroup]="createBitbucketProjectFrom"> -->
+                        <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+                                <ng-container  >
+                                    <div class="flex sm:items-center">
+                                        <!-- <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon> -->
+                                        <span class="ml-2">Bitbucket Project Name:</span>
+                                            <div class="ml-4 leading-6">
+                                               {{bitbucketRepositoryName}}
+                                            </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container  >
+                                    <div class="flex sm:items-center mt-4">
+                                        <!-- <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon> -->
+                                        <span class="ml-2 ">Project Name:</span>
+                                            <div class="ml-4 leading-6">
+                                               {{jiraProjectName}}
+                                            </div>
+                                    </div>
+                                </ng-container>
+                                <div class="flex sm:items-center mt-2">
+                                    <span class="ml-2">
+                                        Repository:</span>
+                                    <ng-container *ngIf="repositories.length > 0" >
+                                        <div class="flex flex-wrap items-center mt-2 ml-4">
+                                            <!-- Tag -->
+                                            <ng-container *ngFor="let repository of repositories">
+                                                <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                    <span class="text-sm font-medium whitespace-nowrap">{{repository}}</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="flex sm:items-center mt-2">
+                                    <span class="ml-2">
+                                        Branch Or Pattern:</span>
+                                    <ng-container *ngIf="branches.length > 0" >
+                                        <div class="flex flex-wrap items-center mt-2 ml-4">
+                                            <!-- Tag -->
+                                            <ng-container *ngFor="let branch of branches">
+                                                <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                    <span class="text-sm font-medium whitespace-nowrap">{{branch}}</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="flex sm:items-center mt-2">
+                                    <span class="ml-2">
+                                        Developer:</span>
+                                    <ng-container *ngIf="developers.length > 0" >
+                                        <div class="flex flex-wrap items-center mt-2 ml-4">
+                                            <!-- Tag -->
+                                            <ng-container *ngFor="let developer of developers">
+                                                <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                    <span class="text-sm font-medium whitespace-nowrap">{{developer}}</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="flex sm:items-center mt-2">
+                                    <span class="ml-2">
+                                        Code Reviewer & PM:</span>
+                                    <ng-container *ngIf="codeReviewers.length > 0" >
+                                        <div class="flex flex-wrap items-center mt-2 ml-4">
+                                            <!-- Tag -->
+                                            <ng-container *ngFor="let codeReviewer of codeReviewers">
+                                                <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                    <span class="text-sm font-medium whitespace-nowrap">{{codeReviewer.display_name}}</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+
+                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                                    <button mat-stroked-button type="button" (click)="goBack(2)">
+                                        Back
+                                    </button>
+                                    <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                        (click)="submit()">
+                                        Submit
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>
