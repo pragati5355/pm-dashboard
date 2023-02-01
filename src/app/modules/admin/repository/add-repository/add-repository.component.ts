@@ -18,7 +18,6 @@ import { startWith } from 'rxjs';
 import { map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
-import { RepositoryService } from '@services/repository.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -29,6 +28,7 @@ import {
     MatAutocomplete,
 } from '@angular/material/autocomplete';
 import { BitbucketProjectModel } from '../common/models/bitbucket-project.model';
+import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 export class Developer {
     constructor(public id: number, public email: string) {}
 }
@@ -45,7 +45,6 @@ export class AddRepositoryComponent implements OnInit {
     @ViewChild('branchInput') branchInput!: ElementRef;
     @ViewChild('developerInput') developerInput!: ElementRef;
     @ViewChild('codeReviewerInput') codeReviewerInput!: ElementRef;
-
     pageTitle = 'add';
     selectedIndex = 0;
     showStep = 1;
@@ -53,12 +52,15 @@ export class AddRepositoryComponent implements OnInit {
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
     jiraProjectName = '';
+    bitbucketRepositoryName= '';
     routeSubscribe: any;
     userData: any;
     createBitbucketProjectFrom!: FormGroup;
+    ansibleScriptFrom!: FormGroup
     angularForm!: FormGroup;
     emailInvalid = false;
     formType: any = '';
+    isFormType = false
     visible = true;
     selectable = true;
     removable = true;
@@ -68,7 +70,7 @@ export class AddRepositoryComponent implements OnInit {
     filteredRepositories!: Observable<any[]> | undefined;
     repositories: any = [];
     allRepositories: any = [];
-
+    isRepository =  false
     //branch filter value
     addOnBlurBranch = false;
     filteredBranches: Observable<any[]> | undefined;
@@ -95,10 +97,16 @@ export class AddRepositoryComponent implements OnInit {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     get createBitbucketProject(): { [key: string]: AbstractControl } {
-        // console.log(key)
         return this.createBitbucketProjectFrom.controls;
     }
-
+    get ansibleScriptProjectFrom(): { [key: string]: AbstractControl } {
+        return this.ansibleScriptFrom.controls;
+    }
+    // portal field
+    portalNameOrMicroserviceNames: string[] = [];
+    @ViewChild('portalNameOrMicroserviceNameInput', { static: false })
+    portalNameOrMicroserviceNameInput: ElementRef<HTMLInputElement>;
+  
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _matStepperIntl: MatStepperIntl,
@@ -160,20 +168,20 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     getTechnology(name: any) {
+        this.formType = name;
         this.selectedIndex = 1;
         this.showStep = 2;
-        this.formType = name;
-        if (this.formType == 'angular' || this.formType == 'react-js') {
+        this.allRepositories = []
+        this.portalNameOrMicroserviceNames = []
+        if (this.formType == 'angular' || this.formType == 'react-js' || this.formType == 'django' || this.formType == 'java') {
             this.createBitbucketProjectFrom.addControl(
-                'portalName',
-                new FormControl('', Validators.required)
+                'portalNameOrMicroserviceName',
+                new FormControl([], this.validateChipField)
             );
-        }
-        if (this.formType == 'django' || this.formType == 'java') {
-            this.createBitbucketProjectFrom.addControl(
-                'microserviceName',
-                new FormControl('', Validators.required)
-            );
+            this.isRepository = true
+        }else{
+            this.isRepository = false
+            this.createBitbucketProjectFrom.removeControl('portalNameOrMicroserviceName')
         }
     }
     //developer filter function start
@@ -225,6 +233,7 @@ export class AddRepositoryComponent implements OnInit {
 
     removeDeveloper(developer: any, selectIndex: any): void {
         this.developers.splice(selectIndex, 1);
+       
         const found = this.newExternalDeveloper.some(
             (el: any) => el === developer
         );
@@ -247,7 +256,13 @@ export class AddRepositoryComponent implements OnInit {
                     this.newExternalDeveloper.splice(index, 1);
             });
         }
-        this.createBitbucketProjectFrom.get('developer')?.setValue('');
+        
+        if (this.developers.length == 0){
+            this.createBitbucketProjectFrom.get('developer')?.setValue([]);
+        }else{
+          this.createBitbucketProjectFrom.get('developer')?.setValue('');
+        }
+       
     }
 
     selectedDeveloper(event: MatAutocompleteSelectedEvent): void {
@@ -260,12 +275,9 @@ export class AddRepositoryComponent implements OnInit {
 
     getAllDevelopers() {
         this.initialLoading = true;
-        this.allDevelopers = [
-            { id: 14, email: 'pranita.jadhav@mindbowser.com' },
-            { id: 15, email: 'ashwin.kawade@mindbowser.com' },
-            { id: 23, email: 'sanskriti/gupta@mindbower.com' },
-        ];
-        this.filteredDevelopers = this.createBitbucketProjectFrom
+        this.RepositoryService.findAllDeveloperEmails().subscribe((res: any) => {
+            this.allDevelopers = res.data
+            this.filteredDevelopers = this.createBitbucketProjectFrom
             .get('developer')
             ?.valueChanges.pipe(
                 startWith(''),
@@ -275,16 +287,36 @@ export class AddRepositoryComponent implements OnInit {
                         : this._filterDevelopersSlice()
                 )
             );
-        this.initialLoading = false;
+            this.initialLoading = false;
+            if (res.tokenExpire == true) {
+                this._authService.updateAndReload(window.location);
+            }
+        });
+        
     }
     //developer filter function end
     // repository filter function start
     changeProject(event: any) {
+        console.log("hejdsljfd")
         let projectName =
-            this.createBitbucketProjectFrom.value.projectName +
+            this.createBitbucketProjectFrom.value.projectName ;
+      if(this.formType == 'react-native'){
+        this.allRepositories = [projectName+
             '-' +
-            this.formType;
-        this.allRepositories = [projectName, projectName + '-config'];
+            this.formType, projectName+
+            '-' +
+            this.formType + '-config'];
+      }
+      if(this.portalNameOrMicroserviceNames.length > 0){
+        this.portalNameOrMicroserviceNames.forEach((item: any) => {
+            this.allRepositories.push(projectName+
+                '-' + item +'-'+
+                this.formType)
+                this.allRepositories.push(projectName+
+                    '-' + item +'-'+
+                    this.formType+ '-config')
+        })
+      }
         this.filteredRepositories = this.createBitbucketProjectFrom
             .get('repositoryName')
             ?.valueChanges.pipe(
@@ -315,6 +347,9 @@ export class AddRepositoryComponent implements OnInit {
         if (index >= 0) {
             this.repositories.splice(index, 1);
         }
+        if (this.repositories.length == 0){
+            this.createBitbucketProjectFrom.get('repositoryName')?.setValue([]);
+        }
     }
 
     selectedRepository(event: MatAutocompleteSelectedEvent): void {
@@ -342,8 +377,6 @@ export class AddRepositoryComponent implements OnInit {
 
     // branch filter function start
     addBranch(event: MatChipInputEvent): void {
-        console.log(event);
-
         const input = event.input;
         const value = event.value;
         if ((value || '').trim()) {
@@ -359,7 +392,11 @@ export class AddRepositoryComponent implements OnInit {
         if (index >= 0) {
             this.branches.splice(index, 1);
         }
-        this.createBitbucketProjectFrom.get('branchOrPattern')?.setValue('');
+        if (this.branches.length == 0){
+            this.createBitbucketProjectFrom.get('branchOrPattern')?.setValue([]);
+        }else{
+            this.createBitbucketProjectFrom.get('branchOrPattern')?.setValue('');
+        }
     }
 
     selectedBranch(event: MatAutocompleteSelectedEvent): void {
@@ -385,11 +422,10 @@ export class AddRepositoryComponent implements OnInit {
 
     // code reviewer filter function start
     getCodeReviewer() {
-        this.RepositoryService.getBitbucketMember().subscribe((res: any) => {
+        this.RepositoryService.findAllMembers().subscribe((res: any) => {
             res.data.forEach((item: any) => {
                 this.allCodeReviewers.push(item.user);
             });
-            console.log(this.allCodeReviewers);
             this.filteredCodeReviewers = this.createBitbucketProjectFrom
                 .get('codeReviewerAndPm')
                 ?.valueChanges.pipe(
@@ -412,7 +448,6 @@ export class AddRepositoryComponent implements OnInit {
         // Add our codeReviewer
         if ((value || '').trim()) {
         }
-        console.log('codeReviewers', this.codeReviewers);
         // Reset the input value
         if (input) {
             input.value = '';
@@ -422,7 +457,11 @@ export class AddRepositoryComponent implements OnInit {
 
     removeCodeReviewer(codeReviewer: any, indx: any) {
         this.codeReviewers.splice(indx, 1);
-        this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.setValue('');
+        if (this.codeReviewers.length == 0){
+            this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.setValue([]);
+        }else{
+            this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.setValue('');
+        }
     }
 
     selectedCodeReviewer(event: MatAutocompleteSelectedEvent): void {
@@ -465,13 +504,6 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     //bitbucket project filter function end
-    submit() {
-        console.log('invalid', this.createBitbucketProjectFrom.invalid);
-        if (!this.createBitbucketProjectFrom.invalid) {
-            this.selectedIndex = 2;
-            this.showStep = 3;
-        }
-    }
     private validateEmail(email: any) {
         var re = ValidationConstants.EMAIL_VALIDATION;
         return re.test(String(email).toLowerCase());
@@ -498,10 +530,44 @@ export class AddRepositoryComponent implements OnInit {
             );
     }
 
+    // Add portal function
+
+    addPortal(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = event.value;
+        this.isRepository = false
+        // Add our portalNameOrMicroserviceName
+        if ((value || '').trim()) {
+          this.portalNameOrMicroserviceNames.push(value.trim());
+        }
+    
+        // Reset the input value
+        if (input) {
+          input.value = '';
+        }
+
+        this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue('');
+      }
+    
+      removePortal(portalNameOrMicroserviceName: string): void {
+        if (this.portalNameOrMicroserviceNames.length == 1){
+            this.isRepository = true
+            this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue([]);
+          }
+        let index = this.portalNameOrMicroserviceNames.indexOf(portalNameOrMicroserviceName);
+       
+        if (index >= 0) {
+            
+          this.portalNameOrMicroserviceNames.splice(index, 1);
+        }
+     
+      }
+
     private setJiraProject() {
         let projectData = this._authService.getProjectDetails();
         let jiraProjectName = projectData.name.toLowerCase();
         this.jiraProjectName = jiraProjectName.replace(/\s/g, '-');
+        this.bitbucketRepositoryName = projectData.repoProject.name
     }
 
     private setUserData() {
@@ -511,7 +577,7 @@ export class AddRepositoryComponent implements OnInit {
     private initializeForm() {
         this.createBitbucketProjectFrom = this._formBuilder.group({
             bitbucketProjectName: [
-                { value: 'My bitbucket project', disabled: true },
+                { value: this.bitbucketRepositoryName, disabled: true },
                 [Validators.required],
             ],
             projectName: [this.jiraProjectName, [Validators.required]],
@@ -519,6 +585,9 @@ export class AddRepositoryComponent implements OnInit {
             developer: [[], this.validateChipField],
             codeReviewerAndPm: [[], this.validateChipField],
             branchOrPattern: [this.branches, this.validateChipField],
+        });
+        this.ansibleScriptFrom = this._formBuilder.group({
+            ansibleScriptUrl: ['Ansible Script', [Validators.required]],
         });
     }
 
@@ -536,4 +605,60 @@ export class AddRepositoryComponent implements OnInit {
                 }
             });
     }
+    submitBitbucketProject(){
+        if (!this.createBitbucketProjectFrom.invalid) {
+           
+            this.selectedIndex = 2;
+            this.showStep = 3;
+        
+        }
+    }
+    submitAnsibleScript(){
+        if (!this.ansibleScriptFrom.invalid) {
+           
+            this.selectedIndex = 3;
+            this.showStep = 4;
+            }
+    }
+    submit() {
+        let newCodeReviewers  = []
+        this.codeReviewers.forEach(items => {
+            newCodeReviewers.push(items.uuid)
+        } )
+        if (!this.createBitbucketProjectFrom.invalid) {
+           
+        let payload = {
+            projectName: this.createBitbucketProjectFrom.value.projectName,
+            project_key:"TEST_1_AMARESH_JAN_24",
+            bitbucketProjectName: "test 1 amaresh jan 24",
+            repoNames: this.repositories,
+            createdBy: "Amaresh",
+            branchName: this.branches,
+            email: this.developers,
+            mergeAccessUserUUIDs: newCodeReviewers
+        }
+        this.RepositoryService.create(payload).subscribe((res: any) => {
+          
+            if(!res.error){
+                this.snackBar.successSnackBar(res.message);
+                this.selectedIndex = 2;
+                this.showStep = 3;
+              }else{
+                this.snackBar.errorSnackBar(res.data.message)
+              }
+            this.initialLoading = false;
+            if (res.tokenExpire == true) {
+                this._authService.updateAndReload(window.location);
+            }
+        });
+        }
+    }
+    downloadYmlFile() {
+        let filePath =  "./../../../../../assets/templates/"+this.formType+".yml"
+        var a = document.createElement('a');
+        a.href = filePath; //URL FOR DOWNLOADING
+        a.download = this.formType+'.yml';
+        a.click();
+    }
+
 }

@@ -12,6 +12,7 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import { AuthService } from '@services/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AssignBitbucketProjectDialogComponent } from '../assign-bitbucket-project-dialog/assign-bitbucket-project-dialog.component';
+
 @Component({
     selector: 'app-project-details',
     templateUrl: './project-details.component.html',
@@ -32,7 +33,8 @@ export class ProjectDetailsComponent implements OnInit {
         private router: Router,
         private _route: ActivatedRoute,
         private projectService: CreateProjecteService,
-        private matDialog: MatDialog
+        private matDialog: MatDialog,
+        private _authService: AuthService,
     ) {}
 
     ngOnInit(): void {
@@ -45,10 +47,13 @@ export class ProjectDetailsComponent implements OnInit {
         
     }
     getProjectDetails() {
+         this.initialLoading = true
         this.projectService.getOneProjectDetails({
             id: this.projectId
         }).subscribe((res: any) => {
-             this.project = res?.data?.project;            
+             this.project = res?.data?.project;     
+             this._authService.setProjectDetails(this.project)    
+              this.initialLoading = false   
         })
     }
 
