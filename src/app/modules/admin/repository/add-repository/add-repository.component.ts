@@ -45,7 +45,6 @@ export class AddRepositoryComponent implements OnInit {
     @ViewChild('branchInput') branchInput!: ElementRef;
     @ViewChild('developerInput') developerInput!: ElementRef;
     @ViewChild('codeReviewerInput') codeReviewerInput!: ElementRef;
-
     pageTitle = 'add';
     selectedIndex = 0;
     showStep = 1;
@@ -61,6 +60,7 @@ export class AddRepositoryComponent implements OnInit {
     angularForm!: FormGroup;
     emailInvalid = false;
     formType: any = '';
+    isFormType = false
     visible = true;
     selectable = true;
     removable = true;
@@ -168,9 +168,9 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     getTechnology(name: any) {
+        this.formType = name;
         this.selectedIndex = 1;
         this.showStep = 2;
-        this.formType = name;
         this.allRepositories = []
         this.portalNameOrMicroserviceNames = []
         if (this.formType == 'angular' || this.formType == 'react-js' || this.formType == 'django' || this.formType == 'java') {
@@ -300,11 +300,13 @@ export class AddRepositoryComponent implements OnInit {
         console.log("hejdsljfd")
         let projectName =
             this.createBitbucketProjectFrom.value.projectName ;
+      if(this.formType == 'react-native'){
         this.allRepositories = [projectName+
             '-' +
             this.formType, projectName+
             '-' +
             this.formType + '-config'];
+      }
       if(this.portalNameOrMicroserviceNames.length > 0){
         this.portalNameOrMicroserviceNames.forEach((item: any) => {
             this.allRepositories.push(projectName+
@@ -585,7 +587,7 @@ export class AddRepositoryComponent implements OnInit {
             branchOrPattern: [this.branches, this.validateChipField],
         });
         this.ansibleScriptFrom = this._formBuilder.group({
-            ansibleScriptUrl: ['', [Validators.required]],
+            ansibleScriptUrl: ['Ansible Script', [Validators.required]],
         });
     }
 
@@ -651,7 +653,12 @@ export class AddRepositoryComponent implements OnInit {
         });
         }
     }
-    changeRepository(event:any){
-        console.log("hello")
+    downloadYmlFile() {
+        let filePath =  "./../../../../../assets/templates/"+this.formType+".yml"
+        var a = document.createElement('a');
+        a.href = filePath; //URL FOR DOWNLOADING
+        a.download = this.formType+'.yml';
+        a.click();
     }
+
 }

@@ -11,11 +11,11 @@
             <div class="p-6 lg:py-8 lg:pl-4 lg:pr-0 h-full">
                 <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
                     [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
-                    <mat-step label="Choose Technology"> </mat-step>
+                    <mat-step label="Choose Technology"  [completed]="isFormType"> </mat-step>
 
-                    <mat-step label="Create Bitbucket Project" > </mat-step>
+                    <mat-step label="Create Bitbucket Project" [completed]="!createBitbucketProjectFrom.invalid"> </mat-step>
 
-                    <mat-step label="Create Ansible Script"> </mat-step>
+                    <mat-step label="Create Ansible Script" [completed]="!ansibleScriptFrom.invalid"> </mat-step>
 
                     <mat-step label="Review Repository"> </mat-step>
                 </mat-vertical-stepper>
@@ -31,32 +31,37 @@
                     <!-- <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent"> -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 mb-6 mt-4 md:grid-cols-3 gap-6 w-full min-w-0">
                         <!-- REACT NATIVE -->
-                        <div (click)="getTechnology('react-native')"
-                            class="flex rounded-md flex-col flex-auto text-center py-16 bg-card shadow overflow-hidden cursor-pointer">
+                        <div (click)="isFormType = true" 
+                            class="flex rounded-md flex-col flex-auto text-center py-16 bg-card shadow overflow-hidden cursor-pointer"
+                            (click)="getTechnology('react-native')">
                             REACT NATIVE
                         </div>
 
                         <!-- ANGULAR-->
-                        <div (click)="getTechnology('angular')"
-                            class="flex rounded-md flex-col flex-auto text-center py-16 bg-card shadow overflow-hidden cursor-pointer">
+                        <div (click)="isFormType = true"  
+                            class="flex rounded-md flex-col flex-auto text-center py-16 bg-card shadow overflow-hidden cursor-pointer" 
+                            (click)="getTechnology('angular')">
                             ANGULAR
                         </div>
 
                         <!-- DJANGO-->
-                        <div (click)="getTechnology('django')"
-                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer">
+                        <div (click)="isFormType = true"
+                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            (click)="getTechnology('django')">
                             DJANGO
                         </div>
 
                         <!-- REACT JS-->
-                        <div (click)="getTechnology('react-js')"
-                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer">
+                        <div  (click)="isFormType = true"
+                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            (click)="getTechnology('react-js')">
                             REACT JS
                         </div>
 
                         <!-- JAVA-->
-                        <div (click)="getTechnology('java')"
-                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer">
+                        <div  (click)="isFormType = true" 
+                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            (click)="getTechnology('java')">
                             JAVA
                         </div>
 
@@ -99,10 +104,7 @@
                                     </div>
                                 </mat-error>
                             </mat-form-field>
-                            <div *ngIf="
-                        formType == 'angular' ||
-                        formType == 'react-js' || formType == 'django' || formType == 'java'
-                    "  class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
+                            <div *ngIf="formType != 'react-native'"  class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
                             <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
                                 <mat-form-field [floatLabel]="'always'" appearance="fill"
                                     class="example-chip-list w-full flex-0 mb-2">
@@ -340,6 +342,7 @@
                                 <mat-label>Script Url</mat-label>
                                 <input type="text" placeholder="Ansible Script Url."
                                     aria-label="Ansible Script Url" matInput formControlName="ansibleScriptUrl"
+                                    [disabled]="false"
                                     />
                                     <mat-error *ngIf="
                                     ansibleScriptProjectFrom['ansibleScriptUrl']
@@ -358,6 +361,17 @@
                                 </div>
                             </mat-error>
                             </mat-form-field>
+                            <div>
+                                <div class="mb-2">
+                                    <button   class="fuse-mat-button-rounded bg-accent-700"
+                                    mat-flat-button
+                                    [color]="'accent'"
+                                    (click)="downloadYmlFile()">
+                                      <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
+                                       <span class="ml-2">Download YML File</span>
+                                    </button>
+                                   </div>
+                            </div>
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button mat-stroked-button type="button" (click)="goBack(1)">

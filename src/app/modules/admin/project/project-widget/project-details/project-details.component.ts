@@ -47,11 +47,13 @@ export class ProjectDetailsComponent implements OnInit {
         
     }
     getProjectDetails() {
+         this.initialLoading = true
         this.projectService.getOneProjectDetails({
             id: this.projectId
         }).subscribe((res: any) => {
              this.project = res?.data?.project;     
-             this._authService.setProjectDetails(this.project)       
+             this._authService.setProjectDetails(this.project)    
+              this.initialLoading = false   
         })
     }
 
