@@ -29,6 +29,7 @@ import {
 } from '@angular/material/autocomplete';
 import { BitbucketProjectModel } from '../common/models/bitbucket-project.model';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
+import { SendMailComponent } from '../send-mail/send-mail.component';
 export class Developer {
     constructor(public id: number, public email: string) {}
 }
@@ -106,7 +107,9 @@ export class AddRepositoryComponent implements OnInit {
     portalNameOrMicroserviceNames: string[] = [];
     @ViewChild('portalNameOrMicroserviceNameInput', { static: false })
     portalNameOrMicroserviceNameInput: ElementRef<HTMLInputElement>;
-  
+     
+    @ViewChild('fileUpload')
+    fileUpload: ElementRef
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _matStepperIntl: MatStepperIntl,
@@ -660,5 +663,25 @@ export class AddRepositoryComponent implements OnInit {
         a.download = this.formType+'.yml';
         a.click();
     }
+    sendEmail(){
+        const dialogRef = this.dialog.open(SendMailComponent, {
+          disableClose: true,
+          panelClass:"warn-dialog-content",
+          autoFocus: false,
+          data: {
+            repositoryName:this.bitbucketRepositoryName,
+            projectName: this.createBitbucketProjectFrom.value.projectName,
+            technologyName: this.formType
+          }
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+          if (result.result == 'success') {
+          }
+        });
+      }
 
+      onClick(event) {
+        if (this.fileUpload)
+          this.fileUpload.nativeElement.click()
+      }
 }

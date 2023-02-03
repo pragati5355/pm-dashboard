@@ -12,7 +12,7 @@ export class RepositoryService {
     createBitbucketRepository = AppConstants['PROJECT_API_URL'] + '/create-project';
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     getBitbucketMember = AppConstants['PROJECT_API_URL'] + '/bitbucket-members';
-
+    sendFile = AppConstants['PROJECT_API_URL'] + '/send-file';
     create(obj: any) {
         return this.http.post(this.createBitbucketRepository, obj)
     }
@@ -25,5 +25,9 @@ export class RepositoryService {
 
     findAllMembers() {
         return this.http.get(this.getBitbucketMember);
+    }
+
+    sendFileEmail(obj: any) {
+        return this.http.post(this.sendFile, obj)
     }
 }

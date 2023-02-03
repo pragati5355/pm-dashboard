@@ -30,6 +30,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { RepositoryHomeComponent } from './repository-home/repository-home.component';
 import { RepositoryListComponent } from './repository-list/repository-list.component';
 import { AddRepositoryComponent } from './add-repository/add-repository.component';
+import { SendMailComponent } from './send-mail/send-mail.component';
 
 const routes: Routes = [
   {
@@ -55,7 +56,8 @@ const routes: Routes = [
   declarations: [
     RepositoryHomeComponent,
     RepositoryListComponent,
-    AddRepositoryComponent
+    AddRepositoryComponent,
+    SendMailComponent
   ],
   imports: [
     CommonModule,

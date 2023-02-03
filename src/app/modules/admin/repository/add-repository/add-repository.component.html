@@ -338,30 +338,48 @@
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
                         <form [formGroup]="ansibleScriptFrom"
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
-                            <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
-                                <mat-label>Script Url</mat-label>
-                                <input type="text" placeholder="Ansible Script Url."
-                                    aria-label="Ansible Script Url" matInput formControlName="ansibleScriptUrl"
-                                    [disabled]="false"
-                                    />
-                                    <mat-error *ngIf="
-                                    ansibleScriptProjectFrom['ansibleScriptUrl']
-                                        .errors &&
+                           
+                            <div class=" flex flex-col mb-2 sm:flex-row flex-0 sm:items-center ">
+                                <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
+                                    <mat-label>Script Url</mat-label>
+                                    <input type="text" placeholder="Ansible Script Url."
+                                        aria-label="Ansible Script Url" matInput formControlName="ansibleScriptUrl"
+                                        [disabled]="false"
+                                        />
+                                        <mat-error *ngIf="
                                         ansibleScriptProjectFrom['ansibleScriptUrl']
-                                        ?.invalid &&
-                                        ansibleScriptProjectFrom['ansibleScriptUrl']
-                                        ?.touched
-                                ">
-                                <div *ngIf="
-                                ansibleScriptProjectFrom[
-                                            'ansibleScriptUrl'
-                                        ].errors['required']
+                                            .errors &&
+                                            ansibleScriptProjectFrom['ansibleScriptUrl']
+                                            ?.invalid &&
+                                            ansibleScriptProjectFrom['ansibleScriptUrl']
+                                            ?.touched
                                     ">
-                                    Ansible Script is mandatory
+                                    <div *ngIf="
+                                    ansibleScriptProjectFrom[
+                                                'ansibleScriptUrl'
+                                            ].errors['required']
+                                        ">
+                                        Ansible Script is mandatory
+                                    </div>
+                                </mat-error>
+                                </mat-form-field>
+                                <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
+                                    <button mat-raised-button color="primary"
+                                            (click)="onClick($event)"
+                                    >
+                                    Upload</button>
+                                    <input #fileUpload class="d-none" type="file" />
                                 </div>
-                            </mat-error>
-                            </mat-form-field>
-                            <div>
+                        </div>
+                            <!-- <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'"> -->
+                                <!-- <mat-label>File upload</mat-label>
+                                <input type="file" /> -->
+                            <!-- </mat-form-field> -->
+                            <div class=" flex flex-col mb-2 sm:flex-row flex-0 sm:items-center">
+                                <div class="">  <a class="text-primary .mt-8p"(click)="downloadYmlFile()"> Download Template</a></div>
+                                <div class="text-left ml-auto"><a class="text-primary .mt-8p" (click)="sendEmail()"> Email Template</a></div>
+                             </div>
+                            <!-- <div>
                                 <div class="mb-2">
                                     <button   class="fuse-mat-button-rounded bg-accent-700"
                                     mat-flat-button
@@ -371,11 +389,14 @@
                                        <span class="ml-2">Download YML File</span>
                                     </button>
                                    </div>
-                            </div>
+                            </div> -->
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button mat-stroked-button type="button" (click)="goBack(1)">
                                         Back
+                                    </button>
+                                    <button mat-stroked-button type="button" class="order-first sm:order-last ml-4"  [color]="'secondary'" >
+                                        Save as Draft
                                     </button>
                                     <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
                                         (click)="submitAnsibleScript()">
