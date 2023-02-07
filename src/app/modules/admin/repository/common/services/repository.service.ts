@@ -9,12 +9,13 @@ import { AppConstants } from '../../../../../core/constacts/constacts';
 })
 export class RepositoryService {
     constructor(private http: HttpClient) {}
-    createBitbucketRepository = AppConstants['PROJECT_API_URL'] + '/create-project';
+    createBitbucketRepository =
+        AppConstants['PROJECT_API_URL'] + '/create-project';
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     getBitbucketMember = AppConstants['PROJECT_API_URL'] + '/bitbucket-members';
     sendFile = AppConstants['PROJECT_API_URL'] + '/send-file';
     create(obj: any) {
-        return this.http.post(this.createBitbucketRepository, obj)
+        return this.http.post(this.createBitbucketRepository, obj);
     }
 
     find(id: string) {}
@@ -28,6 +29,6 @@ export class RepositoryService {
     }
 
     sendFileEmail(obj: any) {
-        return this.http.post(this.sendFile, obj)
+        return this.http.post(this.sendFile, obj);
     }
 }

@@ -29,7 +29,9 @@ import {
 } from '@angular/material/autocomplete';
 import { BitbucketProjectModel } from '../common/models/bitbucket-project.model';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
+import { UploadServiceService } from '@modules/admin/repository/common/services/upload-service.service';
 import { SendMailComponent } from '../send-mail/send-mail.component';
+import { items } from 'app/mock-api/apps/file-manager/data';
 export class Developer {
     constructor(public id: number, public email: string) {}
 }
@@ -53,15 +55,14 @@ export class AddRepositoryComponent implements OnInit {
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
     jiraProjectName = '';
-    bitbucketRepositoryName= '';
+    bitbucketRepositoryName = '';
     routeSubscribe: any;
     userData: any;
     createBitbucketProjectFrom!: FormGroup;
-    ansibleScriptFrom!: FormGroup
     angularForm!: FormGroup;
     emailInvalid = false;
     formType: any = '';
-    isFormType = false
+    isFormType = false;
     visible = true;
     selectable = true;
     removable = true;
@@ -71,7 +72,7 @@ export class AddRepositoryComponent implements OnInit {
     filteredRepositories!: Observable<any[]> | undefined;
     repositories: any = [];
     allRepositories: any = [];
-    isRepository =  false
+    isRepository = false;
     //branch filter value
     addOnBlurBranch = false;
     filteredBranches: Observable<any[]> | undefined;
@@ -100,16 +101,19 @@ export class AddRepositoryComponent implements OnInit {
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
     }
-    get ansibleScriptProjectFrom(): { [key: string]: AbstractControl } {
-        return this.ansibleScriptFrom.controls;
-    }
     // portal field
     portalNameOrMicroserviceNames: string[] = [];
     @ViewChild('portalNameOrMicroserviceNameInput', { static: false })
     portalNameOrMicroserviceNameInput: ElementRef<HTMLInputElement>;
-     
+
     @ViewChild('fileUpload')
-    fileUpload: ElementRef
+    fileUpload: ElementRef;
+
+    uploadInProcess = false;
+    uploadResourceUrl = '';
+    isFileUploaded = false;
+
+    draftObj: any;
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _matStepperIntl: MatStepperIntl,
@@ -120,10 +124,12 @@ export class AddRepositoryComponent implements OnInit {
         private router: Router,
         private RepositoryService: RepositoryService,
         private snackBar: SnackBar,
-        private _route: ActivatedRoute
+        private _route: ActivatedRoute,
+        private _uploadService: UploadServiceService
     ) {}
 
     ngOnInit(): void {
+        // this.fetchDraft();
         this.setUserData();
         this.setJiraProject();
         this.setDrawerWatcher();
@@ -146,6 +152,7 @@ export class AddRepositoryComponent implements OnInit {
             this.showStep = 2;
         } else if (this.selectedIndex == 2) {
             this.showStep = 3;
+            this.isFileUploaded = true;
         } else if (this.selectedIndex == 3) {
             this.showStep = 4;
         }
@@ -158,6 +165,7 @@ export class AddRepositoryComponent implements OnInit {
             this.showStep = 2;
         } else if ($event.selectedIndex == 2) {
             this.showStep = 3;
+            this.isFileUploaded = true;
         } else if ($event.selectedIndex == 3) {
             this.showStep = 4;
         }
@@ -174,17 +182,24 @@ export class AddRepositoryComponent implements OnInit {
         this.formType = name;
         this.selectedIndex = 1;
         this.showStep = 2;
-        this.allRepositories = []
-        this.portalNameOrMicroserviceNames = []
-        if (this.formType == 'angular' || this.formType == 'react-js' || this.formType == 'django' || this.formType == 'java') {
+        this.allRepositories = [];
+        this.portalNameOrMicroserviceNames = [];
+        if (
+            this.formType == 'angular' ||
+            this.formType == 'react-js' ||
+            this.formType == 'django' ||
+            this.formType == 'java'
+        ) {
             this.createBitbucketProjectFrom.addControl(
                 'portalNameOrMicroserviceName',
                 new FormControl([], this.validateChipField)
             );
-            this.isRepository = true
-        }else{
-            this.isRepository = false
-            this.createBitbucketProjectFrom.removeControl('portalNameOrMicroserviceName')
+            this.isRepository = true;
+        } else {
+            this.isRepository = false;
+            this.createBitbucketProjectFrom.removeControl(
+                'portalNameOrMicroserviceName'
+            );
         }
     }
     //developer filter function start
@@ -236,7 +251,7 @@ export class AddRepositoryComponent implements OnInit {
 
     removeDeveloper(developer: any, selectIndex: any): void {
         this.developers.splice(selectIndex, 1);
-       
+
         const found = this.newExternalDeveloper.some(
             (el: any) => el === developer
         );
@@ -259,13 +274,12 @@ export class AddRepositoryComponent implements OnInit {
                     this.newExternalDeveloper.splice(index, 1);
             });
         }
-        
-        if (this.developers.length == 0){
+
+        if (this.developers.length == 0) {
             this.createBitbucketProjectFrom.get('developer')?.setValue([]);
-        }else{
-          this.createBitbucketProjectFrom.get('developer')?.setValue('');
+        } else {
+            this.createBitbucketProjectFrom.get('developer')?.setValue('');
         }
-       
     }
 
     selectedDeveloper(event: MatAutocompleteSelectedEvent): void {
@@ -278,48 +292,47 @@ export class AddRepositoryComponent implements OnInit {
 
     getAllDevelopers() {
         this.initialLoading = true;
-        this.RepositoryService.findAllDeveloperEmails().subscribe((res: any) => {
-            this.allDevelopers = res.data
-            this.filteredDevelopers = this.createBitbucketProjectFrom
-            .get('developer')
-            ?.valueChanges.pipe(
-                startWith(''),
-                map((developer: any | null) =>
-                    developer
-                        ? this._filterDevelopers(developer)
-                        : this._filterDevelopersSlice()
-                )
-            );
-            this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
+        this.RepositoryService.findAllDeveloperEmails().subscribe(
+            (res: any) => {
+                this.allDevelopers = res.data;
+                this.filteredDevelopers = this.createBitbucketProjectFrom
+                    .get('developer')
+                    ?.valueChanges.pipe(
+                        startWith(''),
+                        map((developer: any | null) =>
+                            developer
+                                ? this._filterDevelopers(developer)
+                                : this._filterDevelopersSlice()
+                        )
+                    );
+                this.initialLoading = false;
+                if (res.tokenExpire == true) {
+                    this._authService.updateAndReload(window.location);
+                }
             }
-        });
-        
+        );
     }
     //developer filter function end
     // repository filter function start
     changeProject(event: any) {
-        console.log("hejdsljfd")
-        let projectName =
-            this.createBitbucketProjectFrom.value.projectName ;
-      if(this.formType == 'react-native'){
-        this.allRepositories = [projectName+
-            '-' +
-            this.formType, projectName+
-            '-' +
-            this.formType + '-config'];
-      }
-      if(this.portalNameOrMicroserviceNames.length > 0){
-        this.portalNameOrMicroserviceNames.forEach((item: any) => {
-            this.allRepositories.push(projectName+
-                '-' + item +'-'+
-                this.formType)
-                this.allRepositories.push(projectName+
-                    '-' + item +'-'+
-                    this.formType+ '-config')
-        })
-      }
+        console.log('hejdsljfd');
+        let projectName = this.createBitbucketProjectFrom.value.projectName;
+        if (this.formType == 'react-native') {
+            this.allRepositories = [
+                projectName + '-' + this.formType,
+                projectName + '-' + this.formType + '-config',
+            ];
+        }
+        if (this.portalNameOrMicroserviceNames.length > 0) {
+            this.portalNameOrMicroserviceNames.forEach((item: any) => {
+                this.allRepositories.push(
+                    projectName + '-' + item + '-' + this.formType
+                );
+                this.allRepositories.push(
+                    projectName + '-' + item + '-' + this.formType + '-config'
+                );
+            });
+        }
         this.filteredRepositories = this.createBitbucketProjectFrom
             .get('repositoryName')
             ?.valueChanges.pipe(
@@ -350,7 +363,7 @@ export class AddRepositoryComponent implements OnInit {
         if (index >= 0) {
             this.repositories.splice(index, 1);
         }
-        if (this.repositories.length == 0){
+        if (this.repositories.length == 0) {
             this.createBitbucketProjectFrom.get('repositoryName')?.setValue([]);
         }
     }
@@ -395,10 +408,14 @@ export class AddRepositoryComponent implements OnInit {
         if (index >= 0) {
             this.branches.splice(index, 1);
         }
-        if (this.branches.length == 0){
-            this.createBitbucketProjectFrom.get('branchOrPattern')?.setValue([]);
-        }else{
-            this.createBitbucketProjectFrom.get('branchOrPattern')?.setValue('');
+        if (this.branches.length == 0) {
+            this.createBitbucketProjectFrom
+                .get('branchOrPattern')
+                ?.setValue([]);
+        } else {
+            this.createBitbucketProjectFrom
+                .get('branchOrPattern')
+                ?.setValue('');
         }
     }
 
@@ -460,10 +477,14 @@ export class AddRepositoryComponent implements OnInit {
 
     removeCodeReviewer(codeReviewer: any, indx: any) {
         this.codeReviewers.splice(indx, 1);
-        if (this.codeReviewers.length == 0){
-            this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.setValue([]);
-        }else{
-            this.createBitbucketProjectFrom.get('codeReviewerAndPm')?.setValue('');
+        if (this.codeReviewers.length == 0) {
+            this.createBitbucketProjectFrom
+                .get('codeReviewerAndPm')
+                ?.setValue([]);
+        } else {
+            this.createBitbucketProjectFrom
+                .get('codeReviewerAndPm')
+                ?.setValue('');
         }
     }
 
@@ -538,39 +559,43 @@ export class AddRepositoryComponent implements OnInit {
     addPortal(event: MatChipInputEvent): void {
         const input = event.input;
         const value = event.value;
-        this.isRepository = false
+        this.isRepository = false;
         // Add our portalNameOrMicroserviceName
         if ((value || '').trim()) {
-          this.portalNameOrMicroserviceNames.push(value.trim());
-        }
-    
-        // Reset the input value
-        if (input) {
-          input.value = '';
+            this.portalNameOrMicroserviceNames.push(value.trim());
         }
 
-        this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue('');
-      }
-    
-      removePortal(portalNameOrMicroserviceName: string): void {
-        if (this.portalNameOrMicroserviceNames.length == 1){
-            this.isRepository = true
-            this.createBitbucketProjectFrom.get('portalNameOrMicroserviceName')?.setValue([]);
-          }
-        let index = this.portalNameOrMicroserviceNames.indexOf(portalNameOrMicroserviceName);
-       
-        if (index >= 0) {
-            
-          this.portalNameOrMicroserviceNames.splice(index, 1);
+        // Reset the input value
+        if (input) {
+            input.value = '';
         }
-     
-      }
+
+        this.createBitbucketProjectFrom
+            .get('portalNameOrMicroserviceName')
+            ?.setValue('');
+    }
+
+    removePortal(portalNameOrMicroserviceName: string): void {
+        if (this.portalNameOrMicroserviceNames.length == 1) {
+            this.isRepository = true;
+            this.createBitbucketProjectFrom
+                .get('portalNameOrMicroserviceName')
+                ?.setValue([]);
+        }
+        let index = this.portalNameOrMicroserviceNames.indexOf(
+            portalNameOrMicroserviceName
+        );
+
+        if (index >= 0) {
+            this.portalNameOrMicroserviceNames.splice(index, 1);
+        }
+    }
 
     private setJiraProject() {
         let projectData = this._authService.getProjectDetails();
         let jiraProjectName = projectData.name.toLowerCase();
         this.jiraProjectName = jiraProjectName.replace(/\s/g, '-');
-        this.bitbucketRepositoryName = projectData.repoProject.name
+        this.bitbucketRepositoryName = projectData.repoProject.name;
     }
 
     private setUserData() {
@@ -589,9 +614,6 @@ export class AddRepositoryComponent implements OnInit {
             codeReviewerAndPm: [[], this.validateChipField],
             branchOrPattern: [this.branches, this.validateChipField],
         });
-        this.ansibleScriptFrom = this._formBuilder.group({
-            ansibleScriptUrl: ['Ansible Script', [Validators.required]],
-        });
     }
 
     private setDrawerWatcher() {
@@ -608,80 +630,172 @@ export class AddRepositoryComponent implements OnInit {
                 }
             });
     }
-    submitBitbucketProject(){
+    submitBitbucketProject() {
         if (!this.createBitbucketProjectFrom.invalid) {
-           
             this.selectedIndex = 2;
             this.showStep = 3;
-        
+            this.isFileUploaded = true;
         }
     }
-    submitAnsibleScript(){
-        if (!this.ansibleScriptFrom.invalid) {
-           
+    submitAnsibleScript() {
+        if (this.uploadResourceUrl) {
             this.selectedIndex = 3;
             this.showStep = 4;
-            }
+        } else {
+            this.isFileUploaded = false;
+        }
     }
     submit() {
-        let newCodeReviewers  = []
-        this.codeReviewers.forEach(items => {
-            newCodeReviewers.push(items.uuid)
-        } )
-        if (!this.createBitbucketProjectFrom.invalid) {
-           
-        let payload = {
-            projectName: this.createBitbucketProjectFrom.value.projectName,
-            project_key:"TEST_1_AMARESH_JAN_24",
-            bitbucketProjectName: "test 1 amaresh jan 24",
-            repoNames: this.repositories,
-            createdBy: "Amaresh",
-            branchName: this.branches,
-            email: this.developers,
-            mergeAccessUserUUIDs: newCodeReviewers
-        }
-        this.RepositoryService.create(payload).subscribe((res: any) => {
-          
-            if(!res.error){
-                this.snackBar.successSnackBar(res.message);
-                this.selectedIndex = 2;
-                this.showStep = 3;
-              }else{
-                this.snackBar.errorSnackBar(res.data.message)
-              }
-            this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
+        let newCodeReviewers = [];
+        this.codeReviewers.forEach((items) => {
+            newCodeReviewers.push(items.uuid);
         });
+        if (!this.createBitbucketProjectFrom.invalid) {
+            let payload = {
+                projectName: this.createBitbucketProjectFrom.value.projectName,
+                project_key: 'TEST_1_AMARESH_JAN_24',
+                bitbucketProjectName: 'test 1 amaresh jan 24',
+                repoNames: this.repositories,
+                createdBy: 'Amaresh',
+                branchName: this.branches,
+                email: this.developers,
+                mergeAccessUserUUIDs: newCodeReviewers,
+            };
+            this.RepositoryService.create(payload).subscribe((res: any) => {
+                if (!res.error) {
+                    this.snackBar.successSnackBar(res.message);
+                    this.selectedIndex = 2;
+                    this.showStep = 3;
+                } else {
+                    this.snackBar.errorSnackBar(res.data.message);
+                }
+                this.initialLoading = false;
+                if (res.tokenExpire == true) {
+                    this._authService.updateAndReload(window.location);
+                }
+            });
         }
     }
     downloadYmlFile() {
-        let filePath =  "./../../../../../assets/templates/"+this.formType+".yml"
+        let filePath =
+            'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com' +
+            '/templates/' +
+            this.formType +
+            '.yml';
+        console.log(filePath);
         var a = document.createElement('a');
         a.href = filePath; //URL FOR DOWNLOADING
-        a.download = this.formType+'.yml';
+        a.download = this.formType + '.yml';
         a.click();
     }
-    sendEmail(){
+    sendEmail() {
         const dialogRef = this.dialog.open(SendMailComponent, {
-          disableClose: true,
-          panelClass:"warn-dialog-content",
-          autoFocus: false,
-          data: {
-            repositoryName:this.bitbucketRepositoryName,
-            projectName: this.createBitbucketProjectFrom.value.projectName,
-            technologyName: this.formType
-          }
+            disableClose: true,
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                repositoryName: this.bitbucketRepositoryName,
+                projectName: this.createBitbucketProjectFrom.value.projectName,
+                technologyName: this.formType,
+                attachmentUrl: 'templates/' + this.formType + '.yml',
+            },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-          if (result.result == 'success') {
-          }
+            if (result.result == 'success') {
+            }
         });
-      }
+    }
 
-      onClick(event) {
-        if (this.fileUpload)
-          this.fileUpload.nativeElement.click()
-      }
+    onClick(event) {
+        if (this.fileUpload) this.fileUpload.nativeElement.click();
+    }
+    uploadChange({ target }: any) {
+        this.uploadInProcess = true;
+        if (target.files[0]) {
+            let file = target.files[0];
+            let extension = file.name
+                .substring(file.name.lastIndexOf('.') + 1)
+                .toLowerCase();
+            let payload = {
+                fileName: file.name,
+            };
+            this._uploadService
+                .getPreSignedURL(payload)
+                .subscribe((res: any) => {
+                    this.uploadResourceUrl = res.data.resourceUrl;
+                    const preSignedURL = res.data.preSignedURL;
+                    if (preSignedURL) {
+                        this._uploadService
+                            .upload(preSignedURL, file)
+                            .subscribe((res: any) => {
+                                console.log(res);
+                                this.initialLoading = false;
+                                this.uploadInProcess = false;
+                                this.isFileUploaded = true;
+                            });
+                    } else {
+                        this.initialLoading = false;
+                        this.uploadInProcess = false;
+                    }
+                    if (res.tokenExpire == true) {
+                        this._authService.updateAndReload(window.location);
+                    }
+                });
+        }
+    }
+    fetchDraft() {
+        let item = {
+            formType: 'angular',
+            bitbucketProjectName: 'test 4 amaresh jan 12',
+            projectName: 'chartbiopsy',
+            repoNames: ['chartbiopsy-djasflkj-angular-config'],
+            branchName: ['master', 'staging', 'development'],
+            email: ['decsanstest@yopmail.com'],
+            codeReviewer: [
+                {
+                    display_name: 'Amaresh Joshi',
+                    uuid: '{7f8d55ca-2891-47a3-a251-bbfba1994c32}',
+                },
+            ],
+            portal: ['admin', 'djasflkj'],
+            uploadResourceUrl:
+                'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/configs/new-react.yml',
+        };
+        // this.draftObj.forEach((item: any) => {
+        this.createBitbucketProjectFrom.patchValue({
+            bitbucketProjectName: item.bitbucketProjectName
+                ? item.bitbucketProjectName
+                : '',
+            projectName: item.projectName ? item.projectName : '',
+        });
+        this.formType = item.formType;
+        this.repositories = item.repoNames;
+        this.branches = item.branchName;
+        this.developers = item.email;
+        this.codeReviewers = item.codeReviewer;
+        if (item.portal.length > 0) {
+            this.portalNameOrMicroserviceNames = item.portal;
+        }
+        if (item.uploadResourceUrl) {
+            this.uploadResourceUrl = item.uploadResourceUrl;
+            this.isFileUploaded = true;
+        }
+        this.selectedIndex = 2;
+        this.showStep = 3;
+        // });
+    }
+    saveAsDraft() {
+        const payload = {
+            bitbucketProjectName: this.bitbucketRepositoryName,
+            projectName: this.createBitbucketProjectFrom.value.projectName,
+            repoNames: this.repositories,
+            branchName: this.branches,
+            email: this.developers,
+            codeReviewer: this.codeReviewers,
+            portal: this.portalNameOrMicroserviceNames,
+            uploadResourceUrl: this.uploadResourceUrl,
+            technology: this.formType,
+        };
+        console.log(payload);
+    }
 }
