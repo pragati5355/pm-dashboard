@@ -27,7 +27,6 @@ import {
     MatAutocompleteSelectedEvent,
     MatAutocomplete,
 } from '@angular/material/autocomplete';
-import { BitbucketProjectModel } from '../common/models/bitbucket-project.model';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 import { UploadServiceService } from '@modules/admin/repository/common/services/upload-service.service';
 import { SendMailComponent } from '../send-mail/send-mail.component';
@@ -112,8 +111,9 @@ export class AddRepositoryComponent implements OnInit {
     uploadInProcess = false;
     uploadResourceUrl = '';
     isFileUploaded = false;
-
+    metricsProjectData: any;
     draftObj: any;
+    draftId = null;
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _matStepperIntl: MatStepperIntl,
@@ -129,14 +129,13 @@ export class AddRepositoryComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        // this.fetchDraft();
         this.setUserData();
         this.setJiraProject();
         this.setDrawerWatcher();
-        this.initializeForm();
+        // this.initializeForm();
+        this.fetchDraft();
         this.getAllDevelopers();
         this.getCodeReviewer();
-        this.addBranchFilterSubscription();
     }
 
     toggle() {
@@ -315,7 +314,6 @@ export class AddRepositoryComponent implements OnInit {
     //developer filter function end
     // repository filter function start
     changeProject(event: any) {
-        console.log('hejdsljfd');
         let projectName = this.createBitbucketProjectFrom.value.projectName;
         if (this.formType == 'react-native') {
             this.allRepositories = [
@@ -592,10 +590,10 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     private setJiraProject() {
-        let projectData = this._authService.getProjectDetails();
-        let jiraProjectName = projectData.name.toLowerCase();
+        this.metricsProjectData = this._authService.getProjectDetails();
+        let jiraProjectName = this.metricsProjectData.name.toLowerCase();
         this.jiraProjectName = jiraProjectName.replace(/\s/g, '-');
-        this.bitbucketRepositoryName = projectData.repoProject.name;
+        this.bitbucketRepositoryName = this.metricsProjectData.repoProject.name;
     }
 
     private setUserData() {
@@ -614,6 +612,7 @@ export class AddRepositoryComponent implements OnInit {
             codeReviewerAndPm: [[], this.validateChipField],
             branchOrPattern: [this.branches, this.validateChipField],
         });
+        this.addBranchFilterSubscription();
     }
 
     private setDrawerWatcher() {
@@ -682,7 +681,6 @@ export class AddRepositoryComponent implements OnInit {
             '/templates/' +
             this.formType +
             '.yml';
-        console.log(filePath);
         var a = document.createElement('a');
         a.href = filePath; //URL FOR DOWNLOADING
         a.download = this.formType + '.yml';
@@ -697,7 +695,7 @@ export class AddRepositoryComponent implements OnInit {
                 repositoryName: this.bitbucketRepositoryName,
                 projectName: this.createBitbucketProjectFrom.value.projectName,
                 technologyName: this.formType,
-                attachmentUrl: 'templates/' + this.formType + '.yml',
+                attachmentUrl: this.formType,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
@@ -722,16 +720,15 @@ export class AddRepositoryComponent implements OnInit {
             this._uploadService
                 .getPreSignedURL(payload)
                 .subscribe((res: any) => {
-                    this.uploadResourceUrl = res.data.resourceUrl;
                     const preSignedURL = res.data.preSignedURL;
                     if (preSignedURL) {
                         this._uploadService
                             .upload(preSignedURL, file)
                             .subscribe((res: any) => {
-                                console.log(res);
                                 this.initialLoading = false;
                                 this.uploadInProcess = false;
                                 this.isFileUploaded = true;
+                                this.uploadResourceUrl = res.data.resourceUrl;
                             });
                     } else {
                         this.initialLoading = false;
@@ -744,58 +741,95 @@ export class AddRepositoryComponent implements OnInit {
         }
     }
     fetchDraft() {
-        let item = {
-            formType: 'angular',
-            bitbucketProjectName: 'test 4 amaresh jan 12',
-            projectName: 'chartbiopsy',
-            repoNames: ['chartbiopsy-djasflkj-angular-config'],
-            branchName: ['master', 'staging', 'development'],
-            email: ['decsanstest@yopmail.com'],
-            codeReviewer: [
-                {
-                    display_name: 'Amaresh Joshi',
-                    uuid: '{7f8d55ca-2891-47a3-a251-bbfba1994c32}',
-                },
-            ],
-            portal: ['admin', 'djasflkj'],
-            uploadResourceUrl:
-                'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/configs/new-react.yml',
+        const payload = {
+            metricsProjectId: this.metricsProjectData.id,
         };
-        // this.draftObj.forEach((item: any) => {
-        this.createBitbucketProjectFrom.patchValue({
-            bitbucketProjectName: item.bitbucketProjectName
-                ? item.bitbucketProjectName
-                : '',
-            projectName: item.projectName ? item.projectName : '',
-        });
-        this.formType = item.formType;
-        this.repositories = item.repoNames;
-        this.branches = item.branchName;
-        this.developers = item.email;
-        this.codeReviewers = item.codeReviewer;
-        if (item.portal.length > 0) {
-            this.portalNameOrMicroserviceNames = item.portal;
-        }
-        if (item.uploadResourceUrl) {
-            this.uploadResourceUrl = item.uploadResourceUrl;
-            this.isFileUploaded = true;
-        }
-        this.selectedIndex = 2;
-        this.showStep = 3;
-        // });
+        this.initialLoading = true;
+        this.RepositoryService.getDraftRepository(payload).subscribe(
+            (res: any) => {
+                if (res.data) {
+                    this._authService.setRepositoryDraft(res.data);
+                    this.draftId = res.data.id;
+                    const item =
+                        this._authService.getRepositoryDraft().draftData;
+                    this.initializeForm();
+                    this.formType = item.technology;
+                    this.isFormType = true;
+                    if (this.formType) {
+                        this.changeProject(this.formType);
+                        this.createBitbucketProjectFrom.patchValue({
+                            bitbucketProjectName: item.bitbucketProjectName
+                                ? item.bitbucketProjectName
+                                : '',
+                            projectName: item.projectName
+                                ? item.projectName
+                                : '',
+                            repositoryName: '',
+                            developer: '',
+                            codeReviewerAndPm: '',
+                            branchOrPattern: '',
+                        });
+                    }
+                    this.repositories = item.repoNames;
+                    this.branches = item.branchName;
+                    this.developers = item.email;
+                    this.codeReviewers = item.codeReviewer;
+                    if (item.portal.length > 0) {
+                        this.portalNameOrMicroserviceNames = item.portal;
+                        this.createBitbucketProjectFrom.patchValue({
+                            portalNameOrMicroserviceNames: '',
+                        });
+                    }
+                    if (item.uploadResourceUrl) {
+                        this.uploadResourceUrl = item.uploadResourceUrl;
+                        this.isFileUploaded = true;
+                    }
+                    this.isFileUploaded = true;
+                    this.selectedIndex = 2;
+                    this.showStep = 3;
+                } else {
+                    this.initializeForm();
+                }
+                this.initialLoading = false;
+                if (res.tokenExpire == true) {
+                    this._authService.updateAndReload(window.location);
+                }
+            }
+        );
     }
     saveAsDraft() {
         const payload = {
-            bitbucketProjectName: this.bitbucketRepositoryName,
-            projectName: this.createBitbucketProjectFrom.value.projectName,
-            repoNames: this.repositories,
-            branchName: this.branches,
-            email: this.developers,
-            codeReviewer: this.codeReviewers,
-            portal: this.portalNameOrMicroserviceNames,
-            uploadResourceUrl: this.uploadResourceUrl,
-            technology: this.formType,
+            draftData: {
+                bitbucketProjectName: this.bitbucketRepositoryName,
+                projectName: this.createBitbucketProjectFrom.value.projectName,
+                repoNames: this.repositories,
+                branchName: this.branches,
+                email: this.developers,
+                codeReviewer: this.codeReviewers,
+                portal: this.portalNameOrMicroserviceNames,
+                uploadResourceUrl: this.uploadResourceUrl,
+                technology: this.formType,
+            },
+            metricsProjectId: this.metricsProjectData.id,
+            id: this.draftId,
         };
-        console.log(payload);
+        this.RepositoryService.saveAsDraftRepository(payload).subscribe(
+            (res: any) => {
+                if (!res.error) {
+                    this.snackBar.successSnackBar(res.message);
+                    // this.selectedIndex = 2;
+                    // this.showStep = 3;
+                } else {
+                    this.snackBar.errorSnackBar(res.data.message);
+                }
+                this.initialLoading = false;
+                if (res.tokenExpire == true) {
+                    this._authService.updateAndReload(window.location);
+                }
+            }
+        );
+    }
+    deleteURL() {
+        this.uploadResourceUrl = '';
     }
 }

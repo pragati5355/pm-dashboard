@@ -107,7 +107,6 @@ export class SendMailComponent implements OnInit {
                     repoName: this.repositoryName,
                     attachmentUrl: this.data.attachmentUrl,
                 };
-                console.log(payload);
                 this.RepositoryService.sendFileEmail(payload).subscribe(
                     (res: any) => {
                         if (res.data) {

@@ -9,7 +9,7 @@
     <form [formGroup]="sendYmlFileForm"  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                         <mat-form-field [floatLabel]="'always'" appearance="fill" class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 " >
                             <mat-label>To</mat-label>
-                            <input [disabled]="true" type="text" placeholder="Send Email." matInput formControlName="toEmail"  />
+                            <input [readonly]="true" placeholder="Send Email." matInput formControlName="toEmail"   />
                             <mat-error *ngIf="sendYmlFileFormValidation['toEmail'].errors &&
                             sendYmlFileFormValidation['toEmail']?.invalid &&
                             sendYmlFileFormValidation['toEmail']?.touched ">
@@ -55,7 +55,7 @@
                                 required
                                 id="subject"
                                 #feedbaclsubject
-                                formControlName="subject" maxlength="500"
+                                formControlName="subject" maxlength="150"
                                 >
                                 <mat-error *ngIf="sendYmlFileFormValidation['subject'].errors &&
                                 sendYmlFileFormValidation['subject']?.invalid &&
@@ -72,7 +72,7 @@
                         <textarea
                             matInput
                             required
-                            maxlength="150"
+                            maxlength="300"
                             trim="blur" 
                             rows="4"
                             style="resize:none"

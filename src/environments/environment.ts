@@ -8,5 +8,6 @@ export const environment = {
         ' https://us773ifzr2h6ih5h4imvu5sspy0ixbhc.lambda-url.ap-south-1.on.aws',
     GoogleClientId:
         '634085334801-2qo990of3dib17r84cdqa1rn2h5ur0ju.apps.googleusercontent.com',
-    // GoogleClientId: "348103697312-ibthsgsun4vi3mcpa6i078f513ed6sq3.apps.googleusercontent.com"
+    // GoogleClientId:
+    // '348103697312-ibthsgsun4vi3mcpa6i078f513ed6sq3.apps.googleusercontent.com',
 };

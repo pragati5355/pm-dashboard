@@ -14,6 +14,8 @@ export class RepositoryService {
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     getBitbucketMember = AppConstants['PROJECT_API_URL'] + '/bitbucket-members';
     sendFile = AppConstants['PROJECT_API_URL'] + '/send-file';
+    getDraft = AppConstants['PROJECT_API_URL'] + '/get-draft';
+    saveDraft = AppConstants['PROJECT_API_URL'] + '/draft';
     create(obj: any) {
         return this.http.post(this.createBitbucketRepository, obj);
     }
@@ -30,5 +32,11 @@ export class RepositoryService {
 
     sendFileEmail(obj: any) {
         return this.http.post(this.sendFile, obj);
+    }
+    getDraftRepository(obj: any) {
+        return this.http.post(this.getDraft, obj);
+    }
+    saveAsDraftRepository(obj: any) {
+        return this.http.post(this.saveDraft, obj);
     }
 }
