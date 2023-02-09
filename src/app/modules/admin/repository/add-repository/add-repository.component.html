@@ -6,16 +6,16 @@
             <span *ngIf="pageTitle === 'add'">New</span> Reporsitory
         </div>
     </div>
-    <div class="flex flex-row w-full h-full overflow-y-auto">
+    <div *ngIf="!initialLoading" class="flex flex-row w-full h-full overflow-y-auto">
         <div class="w-1/4 border-r-0 bg-default sticky top-0">
             <div class="p-6 lg:py-8 lg:pl-4 lg:pr-0 h-full">
                 <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
                     [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
                     <mat-step label="Choose Technology"  [completed]="isFormType"> </mat-step>
 
-                    <mat-step label="Create Bitbucket Project" [completed]="!createBitbucketProjectFrom.invalid"> </mat-step>
+                    <mat-step label="Create Repository" [completed]="!createBitbucketProjectFrom.invalid"> </mat-step>
 
-                    <mat-step label="Create Ansible Script" [completed]="!ansibleScriptFrom.invalid"> </mat-step>
+                    <mat-step label="Create Ansible Script" [completed]="isFileUploaded"> </mat-step>
 
                     <mat-step label="Review Repository"> </mat-step>
                 </mat-vertical-stepper>
@@ -28,41 +28,45 @@
             <!-- Choose Technology -->
             <div *ngIf="selectedIndex === 0 && !initialLoading" class="flex flex-col flex-auto w-full">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-                    <!-- <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent"> -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 mb-6 mt-4 md:grid-cols-3 gap-6 w-full min-w-0">
                         <!-- REACT NATIVE -->
                         <div (click)="isFormType = true" 
-                            class="flex rounded-md flex-col flex-auto text-center py-16 bg-card shadow overflow-hidden cursor-pointer"
+                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('react-native')">
-                            REACT NATIVE
+                            <div>  <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
+                            <div>REACT NATIVE</div>
                         </div>
 
                         <!-- ANGULAR-->
                         <div (click)="isFormType = true"  
-                            class="flex rounded-md flex-col flex-auto text-center py-16 bg-card shadow overflow-hidden cursor-pointer" 
+                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-pointer" 
                             (click)="getTechnology('angular')">
-                            ANGULAR
+                            <div>  <img  class="w-20 h-20" src="/assets/mbicons/angular.png" alt=""></div>
+                            <div>ANGULAR</div>
                         </div>
 
                         <!-- DJANGO-->
                         <div (click)="isFormType = true"
-                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('django')">
-                            DJANGO
+                            <div>  <img class="w-20 h-20" src="/assets/mbicons/django.png" alt=""></div>
+                            <div> DJANGO</div>
                         </div>
 
                         <!-- REACT JS-->
                         <div  (click)="isFormType = true"
-                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('react-js')">
-                            REACT JS
+                            <div>  <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
+                            <div> REACT JS</div>
                         </div>
 
                         <!-- JAVA-->
                         <div  (click)="isFormType = true" 
-                            class="flex flex-col text-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('java')">
-                            JAVA
+                            <div >  <img class="w-20 h-20"  src="/assets/mbicons/java.png" alt=""></div>
+                            <div>JAVA</div>
                         </div>
 
                         <!-- </div> -->
@@ -322,7 +326,7 @@
                                     </button>
                                     <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
                                         (click)="submitBitbucketProject()">
-                                        Next Step
+                                        Next 
                                     </button>
                                 </div>
                             </div>
@@ -336,50 +340,43 @@
             <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full overflow-y-auto">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
-                        <form [formGroup]="ansibleScriptFrom"
+                        <form 
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
-                            <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
-                                <mat-label>Script Url</mat-label>
-                                <input type="text" placeholder="Ansible Script Url."
-                                    aria-label="Ansible Script Url" matInput formControlName="ansibleScriptUrl"
-                                    [disabled]="false"
-                                    />
-                                    <mat-error *ngIf="
-                                    ansibleScriptProjectFrom['ansibleScriptUrl']
-                                        .errors &&
-                                        ansibleScriptProjectFrom['ansibleScriptUrl']
-                                        ?.invalid &&
-                                        ansibleScriptProjectFrom['ansibleScriptUrl']
-                                        ?.touched
-                                ">
-                                <div *ngIf="
-                                ansibleScriptProjectFrom[
-                                            'ansibleScriptUrl'
-                                        ].errors['required']
-                                    ">
-                                    Ansible Script is mandatory
+                           
+                            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 ">
+                                <div class="shrink-0 items-center mt-6 sm:mt-0 ng-tns-c274-3859 mb-4 max-w-full">
+                                    <div class="mb-2 ">Sprint URL</div>
+                                     <div class="text-secondary flex items-center" *ngIf="uploadResourceUrl"><a class="break-all" href="{{uploadResourceUrl}}" target="_blank" >{{uploadResourceUrl}}</a>  <div class="ml-4 cursor-pointer"><mat-icon class="text-primary" [svgIcon]="'heroicons_outline:x'" (click)="deleteURL()"></mat-icon></div></div>
+                                    <button class="min-w-27" *ngIf="!uploadResourceUrl" mat-raised-button color="primary"
+                                            (click)="onClick($event)"
+                                    >
+                                    <span  *ngIf="!uploadInProcess">Upload</span>
+                                    <mat-progress-spinner class="min-w-65" 
+                                    *ngIf="uploadInProcess"
+                                    [diameter]="24"
+                                    [mode]="'indeterminate'" class="px-2"></mat-progress-spinner>
+                                </button>
+                                    <input #fileUpload class="d-none" type="file" accept=".yml" (change)="uploadChange($event)" />
+                                     <div class="text-sm text-red-600 mt-1" *ngIf="!isFileUploaded">Upload Script URL</div>
                                 </div>
-                            </mat-error>
-                            </mat-form-field>
-                            <div>
-                                <div class="mb-2">
-                                    <button   class="fuse-mat-button-rounded bg-accent-700"
-                                    mat-flat-button
-                                    [color]="'accent'"
-                                    (click)="downloadYmlFile()">
-                                      <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
-                                       <span class="ml-2">Download YML File</span>
-                                    </button>
-                                   </div>
-                            </div>
+                        </div>
+                         
+                            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
+                                <div class="">  <a class="text-primary .mt-8p"(click)="downloadYmlFile()"> Download Template</a></div>
+                                <div class="text-left ml-auto"><a class="text-primary .mt-8p" (click)="sendEmail()"> Email Template</a></div>
+                             </div>
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button mat-stroked-button type="button" (click)="goBack(1)">
                                         Back
                                     </button>
+                                    <button  type="button" class="order-first sm:order-last ml-4"  mat-flat-button
+                                    [color]="'accent'" (click)="saveAsDraft()" >
+                                        Save as Draft
+                                    </button>
                                     <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
                                         (click)="submitAnsibleScript()">
-                                        Next Step
+                                        Next 
                                     </button>
                                 </div>
                             </div>
@@ -392,11 +389,9 @@
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
                         <!-- Review form -->
-                        <!-- <form [formGroup]="createBitbucketProjectFrom"> -->
                         <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                                 <ng-container  >
                                     <div class="flex sm:items-center">
-                                        <!-- <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon> -->
                                         <span class="ml-2">Bitbucket Project Name:</span>
                                             <div class="ml-4 leading-6">
                                                {{bitbucketRepositoryName}}
@@ -405,10 +400,9 @@
                                 </ng-container>
                                 <ng-container  >
                                     <div class="flex sm:items-center mt-4">
-                                        <!-- <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon> -->
                                         <span class="ml-2 ">Project Name:</span>
                                             <div class="ml-4 leading-6">
-                                               {{jiraProjectName}}
+                                               {{createBitbucketProjectFrom.value.projectName}}
                                             </div>
                                     </div>
                                 </ng-container>
@@ -482,7 +476,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- </form> -->
                     </div>
                 </div>
             </div>

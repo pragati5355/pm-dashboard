@@ -11,6 +11,9 @@ min-height: 362px;
 .min-h-344{
   min-height: 344px;
   }
+.min-w-65{
+  min-width: 65px !important;
+}
 .w-72-px{
   width: 72px;
 }
@@ -217,4 +220,9 @@ color: black !important;
   z-index: 2;
   color: #FFFFFF;
   overflow: hidden !important;
+}
+.upload-input{
+   .mat-form-field-flex{
+     padding-right: 0 !important;
+   }
 }

@@ -11,6 +11,7 @@ const jirasyncBaseUrl = environment.jirasyncBaseUrl;
 export const AppConstants: ConstantsInterface = {
     BASE_URL: baseUrl,
     PROJECT_API_URL: projectBaseUrl,
+    S3_BUCKET_NAME: environment.bucketName,
     AUTH_USER_API: `${baseUrl}/signin`,
     UPDATE_ACCESS_TOKEN: `${baseUrl}/get-access-token`,
     CONNECT_PROJECT: `${jiraBaseUrl}/jira-project`,
