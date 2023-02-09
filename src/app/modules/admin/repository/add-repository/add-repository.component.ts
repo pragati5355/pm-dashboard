@@ -724,7 +724,7 @@ export class AddRepositoryComponent implements OnInit {
                     if (preSignedURL) {
                         this._uploadService
                             .upload(preSignedURL, file)
-                            .subscribe((res: any) => {
+                            .subscribe((response: any) => {
                                 this.initialLoading = false;
                                 this.uploadInProcess = false;
                                 this.isFileUploaded = true;
