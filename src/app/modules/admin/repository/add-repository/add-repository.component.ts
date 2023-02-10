@@ -827,8 +827,9 @@ export class AddRepositoryComponent implements OnInit {
             (res: any) => {
                 if (!res.error) {
                     this.snackBar.successSnackBar(res.message);
-                    // this.selectedIndex = 2;
-                    // this.showStep = 3;
+                    this.router.navigate([
+                        '/projects/repository/repository-list',
+                    ]);
                 } else {
                     this.snackBar.errorSnackBar(res.data.message);
                 }

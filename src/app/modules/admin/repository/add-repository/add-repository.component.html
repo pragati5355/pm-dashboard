@@ -3,7 +3,7 @@
         class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
         <div class="text-4xl font-extrabold tracking-tight">
             {{ pageTitle | titlecase }}
-            <span *ngIf="pageTitle === 'add'">New</span> Reporsitory
+            <span *ngIf="pageTitle === 'add'">New</span> Repository
         </div>
     </div>
     <div *ngIf="!initialLoading" class="flex flex-row w-full h-full overflow-y-auto">
