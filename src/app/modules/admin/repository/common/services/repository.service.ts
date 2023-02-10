@@ -10,7 +10,7 @@ import { AppConstants } from '../../../../../core/constacts/constacts';
 export class RepositoryService {
     constructor(private http: HttpClient) {}
     createBitbucketRepository =
-        AppConstants['PROJECT_API_URL'] + '/create-project';
+        AppConstants['PROJECT_API_URL'] + '/create-repo';
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     getBitbucketMember = AppConstants['PROJECT_API_URL'] + '/bitbucket-members';
     sendFile = AppConstants['PROJECT_API_URL'] + '/send-file';

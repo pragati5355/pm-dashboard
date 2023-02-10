@@ -321,10 +321,10 @@
 
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button mat-stroked-button type="button" (click)="goBack(0)">
+                                    <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(0)">
                                         Back
                                     </button>
-                                    <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                    <button class="min-w-30 order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
                                         (click)="submitBitbucketProject()">
                                         Next 
                                     </button>
@@ -347,11 +347,11 @@
                                 <div class="shrink-0 items-center mt-6 sm:mt-0 ng-tns-c274-3859 mb-4 max-w-full">
                                     <div class="mb-2 ">Sprint URL</div>
                                      <div class="text-secondary flex items-center" *ngIf="uploadResourceUrl"><a class="break-all" href="{{uploadResourceUrl}}" target="_blank" >{{uploadResourceUrl}}</a>  <div class="ml-4 cursor-pointer"><mat-icon class="text-primary" [svgIcon]="'heroicons_outline:x'" (click)="deleteURL()"></mat-icon></div></div>
-                                    <button class="min-w-27" *ngIf="!uploadResourceUrl" mat-raised-button color="primary"
+                                    <button class="min-w-30" *ngIf="!uploadResourceUrl" mat-raised-button color="primary"
                                             (click)="onClick($event)"
                                     >
                                     <span  *ngIf="!uploadInProcess">Upload</span>
-                                    <mat-progress-spinner class="min-w-65" 
+                                    <mat-progress-spinner 
                                     *ngIf="uploadInProcess"
                                     [diameter]="24"
                                     [mode]="'indeterminate'" class="px-2"></mat-progress-spinner>
@@ -367,14 +367,14 @@
                              </div>
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button mat-stroked-button type="button" (click)="goBack(1)">
+                                    <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(1)">
                                         Back
                                     </button>
-                                    <button  type="button" class="order-first sm:order-last ml-4"  mat-flat-button
+                                    <button type="button" class="min-w-30 order-first sm:order-last ml-4"  mat-flat-button
                                     [color]="'accent'" (click)="saveAsDraft()" >
                                         Save as Draft
                                     </button>
-                                    <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                    <button class="min-w-30  order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
                                         (click)="submitAnsibleScript()">
                                         Next 
                                     </button>
@@ -390,8 +390,16 @@
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
                         <!-- Review form -->
                         <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+                            <ng-container  >
+                                <div class="flex sm:items-center">
+                                    <span class="ml-2">Technology:</span>
+                                        <div class="ml-4 leading-6">
+                                           {{formType | titlecase}}
+                                        </div>
+                                </div>
+                            </ng-container>
                                 <ng-container  >
-                                    <div class="flex sm:items-center">
+                                    <div class="flex sm:items-center mt-4">
                                         <span class="ml-2">Bitbucket Project Name:</span>
                                             <div class="ml-4 leading-6">
                                                {{bitbucketRepositoryName}}
@@ -462,16 +470,28 @@
                                         </div>
                                     </ng-container>
                                 </div>
+                                <ng-container *ngIf="uploadResourceUrl" >
+                                    <div class="flex sm:items-center mt-4">
+                                        <span class="ml-2">ScriptURL:</span>
+                                            <div class="ml-4 leading-6">
+                                               {{uploadResourceUrl}}
+                                            </div>
+                                    </div>
+                                </ng-container>
 
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
 
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button mat-stroked-button type="button" (click)="goBack(2)">
+                                    <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(2)">
                                         Back
                                     </button>
-                                    <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                    <button class="min-w-30 order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
                                         (click)="submit()">
-                                        Submit
+                                        <span *ngIf="!submitInProcess">Submit</span>
+                                        <mat-progress-spinner 
+                                        *ngIf="submitInProcess"
+                                        [diameter]="24"
+                                        [mode]="'indeterminate'" class="px-2"></mat-progress-spinner>
                                     </button>
                                 </div>
                             </div>
