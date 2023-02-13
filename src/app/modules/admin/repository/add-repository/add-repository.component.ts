@@ -669,6 +669,7 @@ export class AddRepositoryComponent implements OnInit {
                 projectKey: this.metricsProjectData.repoProject.name,
                 scriptUrl: this.uploadResourceUrl,
                 technology: this.formType,
+                metricsProjectId: this.metricsProjectData.id,
             };
             this.RepositoryService.create(payload).subscribe((res: any) => {
                 if (!res.error) {
