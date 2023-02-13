@@ -668,12 +668,15 @@ export class AddRepositoryComponent implements OnInit {
                 mergeAccessUserUUIDs: newCodeReviewers,
                 projectKey: this.metricsProjectData.repoProject.name,
                 scriptUrl: this.uploadResourceUrl,
+                technology: this.formType,
             };
             this.RepositoryService.create(payload).subscribe((res: any) => {
                 if (!res.error) {
                     this.snackBar.successSnackBar(res.message);
-                    this.selectedIndex = 2;
-                    this.showStep = 3;
+                    this.router.navigate([
+                        '/projects/repository/repository-list',
+                    ]);
+                    this._authService.removeRepositoryDraft();
                 } else {
                     this.snackBar.errorSnackBar(res.data.message);
                 }
