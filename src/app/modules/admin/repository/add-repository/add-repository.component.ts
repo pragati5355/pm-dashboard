@@ -673,10 +673,10 @@ export class AddRepositoryComponent implements OnInit {
             this.RepositoryService.create(payload).subscribe((res: any) => {
                 if (!res.error) {
                     this.snackBar.successSnackBar(res.message);
+                    this._authService.removeRepositoryDraft();
                     this.router.navigate([
                         '/projects/repository/repository-list',
                     ]);
-                    this._authService.removeRepositoryDraft();
                 } else {
                     this.snackBar.errorSnackBar(res.data.message);
                 }
