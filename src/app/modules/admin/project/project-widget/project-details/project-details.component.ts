@@ -34,7 +34,7 @@ export class ProjectDetailsComponent implements OnInit {
         private _route: ActivatedRoute,
         private projectService: CreateProjecteService,
         private matDialog: MatDialog,
-        private _authService: AuthService,
+        private _authService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -44,17 +44,18 @@ export class ProjectDetailsComponent implements OnInit {
                 this.getProjectDetails();
             }
         });
-        
     }
     getProjectDetails() {
-         this.initialLoading = true
-        this.projectService.getOneProjectDetails({
-            id: this.projectId
-        }).subscribe((res: any) => {
-             this.project = res?.data?.project;     
-             this._authService.setProjectDetails(this.project)    
-              this.initialLoading = false   
-        })
+        this.initialLoading = true;
+        this.projectService
+            .getOneProjectDetails({
+                id: this.projectId,
+            })
+            .subscribe((res: any) => {
+                this.project = res?.data?.project;
+                this._authService.setProjectDetails(this.project);
+                this.initialLoading = false;
+            });
     }
 
     editProject() {
@@ -68,7 +69,9 @@ export class ProjectDetailsComponent implements OnInit {
     createRepository() {
         this.router.navigate([`/projects/repository/add-repository`]);
     }
-
+    viewRepository() {
+        this.router.navigate([`/projects/repository/repository-list`]);
+    }
     assignBitbucketProject() {
         this.matDialog
             .open(AssignBitbucketProjectDialogComponent, {

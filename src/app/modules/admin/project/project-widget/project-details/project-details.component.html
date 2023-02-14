@@ -30,6 +30,13 @@
                         <span class="ml-2 mr-1">Create Repository</span>
                     </button>
                 </div>
+                <div class="d-none">
+                    <button class="ml-4" mat-flat-button [color]="'primary'" [disabled]="!project?.repoProjectId"
+                        (click)="viewRepository()">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:eye'"></mat-icon>
+                        <span class="ml-2 mr-1">View Repository</span>
+                    </button>
+                </div>
                 <!-- Actions menu (visible on xs) -->
                 <div class="sm:hidden">
                     <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
