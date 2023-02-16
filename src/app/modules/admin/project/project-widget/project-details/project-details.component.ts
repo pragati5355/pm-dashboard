@@ -26,6 +26,7 @@ export class ProjectDetailsComponent implements OnInit {
     projectId: string;
     initialLoading = false;
     project: any;
+    repoCount = 0;
     @Input() dataId: any;
     private _fuseCards!: QueryList<ElementRef>;
 
@@ -53,6 +54,7 @@ export class ProjectDetailsComponent implements OnInit {
             })
             .subscribe((res: any) => {
                 this.project = res?.data?.project;
+                this.repoCount = res?.data?.repoCount;
                 this._authService.setProjectDetails(this.project);
                 this.initialLoading = false;
             });

@@ -22,7 +22,7 @@
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
                     <span class="ml-2 mr-1">Edit Project</span>
                 </button>
-                <div [matTooltip]="!project?.repoProjectId ? 'Please assign Bitbucket project to continue' 
+                <div *ngIf="repoCount == 0" [matTooltip]="!project?.repoProjectId ? 'Please assign Bitbucket project to continue' 
                 : 'Create repository'">
                     <button class="ml-4" mat-flat-button [color]="'primary'" [disabled]="!project?.repoProjectId"
                         (click)="createRepository()">
@@ -30,7 +30,7 @@
                         <span class="ml-2 mr-1">Create Repository</span>
                     </button>
                 </div>
-                <div class="d-none">
+                <div *ngIf="repoCount > 0" [matTooltip]="'View repository'">
                     <button class="ml-4" mat-flat-button [color]="'primary'" [disabled]="!project?.repoProjectId"
                         (click)="viewRepository()">
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:eye'"></mat-icon>
