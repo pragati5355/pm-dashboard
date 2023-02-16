@@ -11,7 +11,7 @@ import { RepositoryService } from '@modules/admin/repository/common/services/rep
 export class RepositoryListComponent implements OnInit {
     initialLoading = false;
     totalRecord = 0;
-    repositories: any = [];
+    repoData: any = [];
     metricsProjectData: any;
     constructor(
         private router: Router,
@@ -20,31 +20,7 @@ export class RepositoryListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.repositories = [
-            {
-                id: 5,
-                createdAt: 1676291113505,
-                lastModifiedAt: 1676291113505,
-                isDeleted: false,
-                name: 'test14-css-admin-react-js',
-                uuid: '{aa55b440-ccb1-4fa6-90bb-6716bff73e77}',
-                metricsProjectId: 169,
-                projectKey: 'METRICS_TEST',
-                createdBy: 12,
-            },
-            {
-                id: 6,
-                createdAt: 1676291113520,
-                lastModifiedAt: 1676291113521,
-                isDeleted: false,
-                name: 'test15-css-admin-react-js',
-                uuid: '{e1ae23dd-4882-4beb-82a5-ba3ae64a561f}',
-                metricsProjectId: 169,
-                projectKey: 'METRICS_TEST',
-                createdBy: 12,
-            },
-        ];
-        this.totalRecord = 2;
+        this.setJiraProject();
     }
     createRepository() {
         this.router.navigate(['/projects/repository/add-repository']);
@@ -60,7 +36,7 @@ export class RepositoryListComponent implements OnInit {
         };
         this.RepositoryService.find(payload).subscribe((res: any) => {
             if (!res.error) {
-                this.repositories = res.data.repositories;
+                this.repoData = res.data;
                 this.totalRecord = res.data.repoCount;
             }
             this.initialLoading = false;
