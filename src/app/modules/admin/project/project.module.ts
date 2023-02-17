@@ -27,97 +27,112 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { ProjectHomeComponent } from './project-home/project-home.component';
 import { SharedModule } from 'app/core/shared.module';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 import { FormioModule, FormioAppConfig } from 'angular-formio';
 import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-popup.component';
-import { ProjectWidgetModule } from "@modules/admin/project/project-widget/project-widget.module";
+import { ProjectWidgetModule } from '@modules/admin/project/project-widget/project-widget.module';
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
 import { SprintFeedbackFormComponent } from './sprint-feedback-form/sprint-feedback-form.component';
 const routes: Routes = [
-  {
-    path: "",
-    component: ProjectHomeComponent,
-    children: [
-      {
-        path: "project-list",
-        loadChildren: () =>
-          import("../project-list/project-list.module").then(m => m.ProjectListModule)
-      },
-      {
-        path: "add-project",
-        loadChildren: () =>
-          import("../add-project/add-project.module").then(m => m.AddProjectModule)
-      },
-      {
-        path: "edit-project",
-        loadChildren: () =>
-          import("../add-project/add-project.module").then(m => m.AddProjectModule)
-      },
+    {
+        path: '',
+        component: ProjectHomeComponent,
+        children: [
+            {
+                path: 'project-list',
+                loadChildren: () =>
+                    import('../project-list/project-list.module').then(
+                        (m) => m.ProjectListModule
+                    ),
+            },
+            {
+                path: 'add-project',
+                loadChildren: () =>
+                    import('../add-project/add-project.module').then(
+                        (m) => m.AddProjectModule
+                    ),
+            },
+            {
+                path: 'edit-project',
+                loadChildren: () =>
+                    import('../add-project/add-project.module').then(
+                        (m) => m.AddProjectModule
+                    ),
+            },
 
-      {
-        path: "project",
-        loadChildren: () =>
-          import("../project/project-widget/project-widget.module").then(m => m.ProjectWidgetModule)
-      },
-      
-      {
-        path: "repository",
-        loadChildren: () =>
-          import("../repository/repository.module").then(m => m.RepositoryModule)
-      },
+            {
+                path: 'project',
+                loadChildren: () =>
+                    import(
+                        '../project/project-widget/project-widget.module'
+                    ).then((m) => m.ProjectWidgetModule),
+            },
 
-      {
-        path: "",
-        redirectTo: "project-list",
-        pathMatch: "full"
-      },
-      {
-        path: "**",
-        redirectTo: "project-list"
-      }
-    ]
-  }
+            {
+                path: 'repository',
+                loadChildren: () =>
+                    import('../repository/repository.module').then(
+                        (m) => m.RepositoryModule
+                    ),
+            },
+            {
+                path: 'project-process',
+                loadChildren: () =>
+                    import('../project-process/project-process.module').then(
+                        (m) => m.ProjectProcessModule
+                    ),
+            },
+            {
+                path: '',
+                redirectTo: 'project-list',
+                pathMatch: 'full',
+            },
+            {
+                path: '**',
+                redirectTo: 'project-list',
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  declarations: [
-    ProjectHomeComponent,
-    ConnectJiraPopupComponent,
-    SendFeedbackFormComponent,
-    SprintFeedbackFormComponent,
-  ],
-  exports: [CdkStepperModule,
-    MatStepperModule,],
-  imports: [
-    CommonModule,
-    ProjectWidgetModule,
-    SharedModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    CdkStepperModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatRadioModule,
-    MatAutocompleteModule,
-    MatProgressSpinnerModule,
-    FuseFindByKeyPipeModule,
-    FuseNavigationModule,
-    FuseScrollbarModule,
-    FuseScrollResetModule,
-    MatChipsModule,
-    FormioModule
-  ]
+    declarations: [
+        ProjectHomeComponent,
+        ConnectJiraPopupComponent,
+        SendFeedbackFormComponent,
+        SprintFeedbackFormComponent,
+    ],
+    exports: [CdkStepperModule, MatStepperModule],
+    imports: [
+        CommonModule,
+        ProjectWidgetModule,
+        SharedModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(routes),
+        CdkStepperModule,
+        MatStepperModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatSortModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatRadioModule,
+        MatAutocompleteModule,
+        MatProgressSpinnerModule,
+        FuseFindByKeyPipeModule,
+        FuseNavigationModule,
+        FuseScrollbarModule,
+        FuseScrollResetModule,
+        MatChipsModule,
+        FormioModule,
+    ],
 })
-export class ProjectModule { }
+export class ProjectModule {}
