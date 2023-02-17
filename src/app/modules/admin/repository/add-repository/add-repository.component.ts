@@ -114,6 +114,8 @@ export class AddRepositoryComponent implements OnInit {
     metricsProjectData: any;
     draftObj: any;
     draftId = null;
+
+    submitInProcess = false;
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _matStepperIntl: MatStepperIntl,
@@ -178,27 +180,18 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     getTechnology(name: any) {
-        this.formType = name;
         this.selectedIndex = 1;
         this.showStep = 2;
         this.allRepositories = [];
         this.portalNameOrMicroserviceNames = [];
-        if (
-            this.formType == 'angular' ||
-            this.formType == 'react-js' ||
-            this.formType == 'django' ||
-            this.formType == 'java'
-        ) {
-            this.createBitbucketProjectFrom.addControl(
-                'portalNameOrMicroserviceName',
-                new FormControl([], this.validateChipField)
-            );
-            this.isRepository = true;
-        } else {
-            this.isRepository = false;
-            this.createBitbucketProjectFrom.removeControl(
-                'portalNameOrMicroserviceName'
-            );
+        if (this.formType != name) {
+            this.formType = name;
+            this.initializeForm();
+            this.uploadResourceUrl = '';
+            this.codeReviewers = [];
+            this.repositories = [];
+            this.developers = [];
+            this.portalNameOrMicroserviceNames = [];
         }
     }
     //developer filter function start
@@ -612,6 +605,23 @@ export class AddRepositoryComponent implements OnInit {
             codeReviewerAndPm: [[], this.validateChipField],
             branchOrPattern: [this.branches, this.validateChipField],
         });
+        if (
+            this.formType == 'angular' ||
+            this.formType == 'react-js' ||
+            this.formType == 'django' ||
+            this.formType == 'java'
+        ) {
+            this.createBitbucketProjectFrom.addControl(
+                'portalNameOrMicroserviceName',
+                new FormControl([], this.validateChipField)
+            );
+            this.isRepository = true;
+        } else {
+            this.isRepository = false;
+            this.createBitbucketProjectFrom.removeControl(
+                'portalNameOrMicroserviceName'
+            );
+        }
         this.addBranchFilterSubscription();
     }
 
@@ -645,29 +655,33 @@ export class AddRepositoryComponent implements OnInit {
         }
     }
     submit() {
-        let newCodeReviewers = [];
+        const newCodeReviewers = [];
         this.codeReviewers.forEach((items) => {
             newCodeReviewers.push(items.uuid);
         });
         if (!this.createBitbucketProjectFrom.invalid) {
-            let payload = {
-                projectName: this.createBitbucketProjectFrom.value.projectName,
-                project_key: 'TEST_1_AMARESH_JAN_24',
-                bitbucketProjectName: 'test 1 amaresh jan 24',
+            this.submitInProcess = true;
+            const payload = {
                 repoNames: this.repositories,
-                createdBy: 'Amaresh',
                 branchName: this.branches,
                 email: this.developers,
                 mergeAccessUserUUIDs: newCodeReviewers,
+                projectKey: this.metricsProjectData.repoProject.name,
+                scriptUrl: this.uploadResourceUrl,
+                technology: this.formType,
+                metricsProjectId: this.metricsProjectData.id,
             };
             this.RepositoryService.create(payload).subscribe((res: any) => {
                 if (!res.error) {
                     this.snackBar.successSnackBar(res.message);
-                    this.selectedIndex = 2;
-                    this.showStep = 3;
+                    this._authService.removeRepositoryDraft();
+                    this.router.navigate([
+                        '/projects/repository/repository-list',
+                    ]);
                 } else {
                     this.snackBar.errorSnackBar(res.data.message);
                 }
+                this.submitInProcess = false;
                 this.initialLoading = false;
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -752,8 +766,8 @@ export class AddRepositoryComponent implements OnInit {
                     this.draftId = res.data.id;
                     const item =
                         this._authService.getRepositoryDraft().draftData;
-                    this.initializeForm();
                     this.formType = item.technology;
+                    this.initializeForm();
                     this.isFormType = true;
                     if (this.formType) {
                         this.changeProject(this.formType);
@@ -777,7 +791,7 @@ export class AddRepositoryComponent implements OnInit {
                     if (item.portal.length > 0) {
                         this.portalNameOrMicroserviceNames = item.portal;
                         this.createBitbucketProjectFrom.patchValue({
-                            portalNameOrMicroserviceNames: '',
+                            portalNameOrMicroserviceName: '',
                         });
                     }
                     if (item.uploadResourceUrl) {
@@ -817,8 +831,9 @@ export class AddRepositoryComponent implements OnInit {
             (res: any) => {
                 if (!res.error) {
                     this.snackBar.successSnackBar(res.message);
-                    // this.selectedIndex = 2;
-                    // this.showStep = 3;
+                    this.router.navigate([
+                        '/projects/repository/repository-list',
+                    ]);
                 } else {
                     this.snackBar.errorSnackBar(res.data.message);
                 }

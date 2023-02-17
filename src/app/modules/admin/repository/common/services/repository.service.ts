@@ -10,7 +10,8 @@ import { AppConstants } from '../../../../../core/constacts/constacts';
 export class RepositoryService {
     constructor(private http: HttpClient) {}
     createBitbucketRepository =
-        AppConstants['PROJECT_API_URL'] + '/create-project';
+        AppConstants['PROJECT_API_URL'] + '/create-repo';
+    getRepositories = AppConstants['PROJECT_API_URL'] + '/get-repo-list';
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     getBitbucketMember = AppConstants['PROJECT_API_URL'] + '/bitbucket-members';
     sendFile = AppConstants['PROJECT_API_URL'] + '/send-file';
@@ -20,7 +21,9 @@ export class RepositoryService {
         return this.http.post(this.createBitbucketRepository, obj);
     }
 
-    find(id: string) {}
+    find(obj: any) {
+        return this.http.post(this.getRepositories, obj);
+    }
 
     findAllDeveloperEmails() {
         return this.http.get(this.getEmails);

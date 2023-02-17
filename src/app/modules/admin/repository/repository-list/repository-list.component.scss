@@ -4,14 +4,14 @@
     grid-template-columns:  150px 60px;
   
     @screen sm {
-      grid-template-columns:  200px 150px 150px 112px 100px 80px 150px 150px1 50px;
+      grid-template-columns:  300px 250px auto 150px;
     }
   
     @screen md {
-      grid-template-columns:  200px 150px 150px 112px 130px 85px 150px 150px 150px;
+      grid-template-columns:  300px 250px auto 150px ;
     }
   
     @screen lg {
-      grid-template-columns:  200px 150px 150px 112px 150px 80px 150px 150px 150px;
+      grid-template-columns:  300px 250px auto 150px;
     }
   }
