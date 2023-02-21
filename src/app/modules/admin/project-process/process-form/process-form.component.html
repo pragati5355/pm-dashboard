@@ -1,0 +1,67 @@
+
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Project Process  </div>
+        <button
+        mat-icon-button
+        (click)="close()"
+        [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"></mat-icon>
+    </button>
+    </div>
+
+    <!-- Compose form -->
+        <div  class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+            <div  *ngIf="!initialLoading">
+                <div class="mb-2 mt-4" *ngIf="data == 'submitted'">
+                    <div class="flex flex-0 items-center justify-between" >
+                         <div>
+                                <button
+                                mat-icon-button
+                                [tabIndex]="-1" 
+                                [disabled]="perPageData == 1" 
+                                (click)="getFormDetailsPrevious()">
+                                <mat-icon
+                                    class="text-current"
+                                    [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
+                                </button>   
+                         </div> 
+                         <div class="text-2xl font-bold tracking-tight"> {{createdByName}}</div>
+                         <div> 
+                            <button
+                            mat-icon-button
+                            [tabIndex]="-1" [disabled]="perPageData == totalRecords"
+                            (click)="getFormDetailsNext()">
+                            <mat-icon
+                                class="text-current"
+                                [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
+                            </button>
+                        </div>
+                    </div >
+                </div>
+                <!-- <div class="mb-2 mt-4">
+                    <div class="text-2xl font-bold tracking-tight">{{formName | titlecase}} </div>
+                </div> -->
+                <div class="formio-render">
+                    <div *ngIf="data != 'submitted'">       
+                        <formio
+                        [form]="form"  (submit)="submit($event)"></formio>
+                    </div>
+                    <div *ngIf="data == 'submitted'">
+                        <formio
+                        [form]="form"  [submission]="formData" [readOnly]="true"></formio>
+                    </div>
+                </div>
+                
+             </div> 
+             <ng-container  *ngIf="initialLoading">
+                <div class="p-8 sm:p-16 text-2xl font-semibold tracking-tight text-center">
+                  Loading.....
+                </div>
+              </ng-container>
+        </div>
+</div>
