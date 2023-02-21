@@ -65,11 +65,11 @@
                         ></mat-icon>
                         <mat-icon
                         class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
-                        svgIcon="heroicons_outline:duplicate"
+                        svgIcon="heroicons_outline:duplicate" *ngIf="data.formType !='CHECKLIST'"
                         (click)="duplicateForm(data.id, data.formName)"
                       ></mat-icon> 
                       <mat-icon
-                      class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
+                      class="ml-6 text-gray-400 icon-size-5 cursor-pointer" *ngIf="data.formType !='CHECKLIST'"
                       svgIcon="heroicons_outline:trash"
                       (click)="deleteForm(data.id, data.projects)"
                     ></mat-icon> 

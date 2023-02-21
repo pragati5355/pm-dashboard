@@ -37,7 +37,11 @@
                         <span class="ml-2 mr-1">View Repository</span>
                     </button>
                 </div>
-                <div> <mat-checkbox class="ml-2 mr-1 mt-2"  (click)="projectProcess()" [color]="'primary'" [(ngModel)]="checked"></mat-checkbox></div>
+                <div class="ml-2"> 
+                  <button mat-mini-fab color="primary" (click)="projectProcess()" aria-label="Example icon button with a menu icon">
+                    <mat-icon>check</mat-icon>
+                  </button>
+                </div>
                 <!-- Actions menu (visible on xs) -->
                 <div class="sm:hidden">
                     <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
