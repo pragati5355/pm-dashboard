@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProcessFormComponent } from '../process-form/process-form.component';
 @Component({
     selector: 'app-project-process-list',
@@ -10,7 +11,7 @@ export class ProjectProcessListComponent implements OnInit {
     initialLoading = false;
     totalRecored = 1;
     repository: any = [];
-    constructor(private dialog: MatDialog) {}
+    constructor(private dialog: MatDialog, private router: Router) {}
 
     ngOnInit(): void {
         this.repository = [
@@ -60,5 +61,8 @@ export class ProjectProcessListComponent implements OnInit {
             if (result.result == 'success') {
             }
         });
+    }
+    goBack() {
+        window.history.back();
     }
 }

@@ -153,9 +153,6 @@ export class ProcessFormComponent implements OnInit {
             }
         );
     }
-    gotoforms() {
-        this.router.navigate([`/forms/form-list`]);
-    }
     close() {
         this.matDialogRef.close();
     }
