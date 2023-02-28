@@ -52,6 +52,7 @@ export class ProjectProcessListComponent implements OnInit {
     processForm() {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
             disableClose: true,
+            width: '90%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
@@ -67,6 +68,7 @@ export class ProjectProcessListComponent implements OnInit {
     processFormSubmitted(formResponse: any, createdByName: any, index: any) {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
             disableClose: true,
+            width: '90%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
