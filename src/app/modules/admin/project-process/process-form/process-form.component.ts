@@ -37,9 +37,15 @@ export class ProcessFormComponent implements OnInit {
     ngOnInit(): void {
         let projectData = this._authService.getProjectDetails();
         this.projectId = projectData.id;
-        console.log('data', this.data);
-        this.getForms();
-        this.getSubmittedFormDetails();
+        this.form = this.data.form.formComponent;
+        this.formId = this.data.form.id;
+        this.formData = {
+            data: this.data.formResponse,
+        };
+        this.createdByName = this.data.createdByName;
+        this.perPageData = this.data.index + 1;
+        // this.getForms();
+        // this.getSubmittedFormDetails();
     }
     getForms() {
         this.initialLoading = true;
@@ -123,11 +129,9 @@ export class ProcessFormComponent implements OnInit {
                 this.totalRecords = res.data.totalRecords;
                 this.createdByName =
                     res.data.checklistResponse[0].createdByName;
-                // this.data = res.data.formResponse;
                 this.formData = {
                     data: res.data.checklistResponse[0].checklistResponse,
                 };
-                // this.isShowEmails = false;
             }
         );
     }
@@ -154,6 +158,6 @@ export class ProcessFormComponent implements OnInit {
         );
     }
     close() {
-        this.matDialogRef.close();
+        this.matDialogRef.close('close');
     }
 }
