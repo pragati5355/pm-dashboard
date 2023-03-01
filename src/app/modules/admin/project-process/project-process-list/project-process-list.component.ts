@@ -111,7 +111,6 @@ export class ProjectProcessListComponent implements OnInit {
                 if (res.data) {
                     this.totalRecored = res.data.totalRecords;
                     this.formList = res.data.checklistResponse;
-                    console.log(this.formList);
                     this.initialLoading = false;
                 } else if (res.data == null) {
                     this.totalRecored = 0;

@@ -19,28 +19,9 @@
             <div  *ngIf="!initialLoading">
                 <div class="mb-2 mt-4" *ngIf="data.ProcessFormType == 'submitted'">
                     <div class="flex flex-0 items-center justify-between" >
-                         <!-- <div>
-                                <button
-                                mat-icon-button
-                                [tabIndex]="-1" 
-                                [disabled]="perPageData == 1" 
-                                (click)="getFormDetailsPrevious()">
-                                <mat-icon
-                                    class="text-current"
-                                    [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
-                                </button>   
-                         </div>  -->
+                    
                          <div class="text-2xl font-bold tracking-tight"> {{createdByName}}</div>
-                         <!-- <div> 
-                            <button
-                            mat-icon-button
-                            [tabIndex]="-1" [disabled]="perPageData == totalRecords"
-                            (click)="getFormDetailsNext()">
-                            <mat-icon
-                                class="text-current"
-                                [svgIcon]="'heroicons_outline:chevron-right'"></mat-icon>
-                            </button>
-                        </div> -->
+                        
                     </div >
                 </div>
                 <div class="formio-render">

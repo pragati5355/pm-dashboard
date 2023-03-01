@@ -44,30 +44,6 @@ export class ProcessFormComponent implements OnInit {
         };
         this.createdByName = this.data.createdByName;
         this.perPageData = this.data.index + 1;
-        // this.getForms();
-        // this.getSubmittedFormDetails();
-    }
-    getForms() {
-        this.initialLoading = true;
-        this.ProjectProcessService.find().subscribe((res: any) => {
-            this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
-            this.form = res.data.formComponent;
-            this.formId = res.data.id;
-            // let formdata: any = [];
-            // formdata.push(res.data.form);
-            // formdata.forEach((item: any) => {
-            //     this.formName = item.formName;
-            //     this.formComponent = item.formComponent.components;
-            //     this.formComponent = this.formComponent.filter(
-            //         (element: any) => element.key !== 'submit'
-            //     );
-            // });
-            // this.form = { components: res.data.formComponent };
-            console.log(res);
-        });
     }
 
     submit(event: any) {
@@ -77,85 +53,14 @@ export class ProcessFormComponent implements OnInit {
             projectId: this.projectId,
             formId: this.formId,
         };
-        console.log(payload);
         this.ProjectProcessService.create(payload).subscribe((res: any) => {
             if (res.error) {
                 this.snackBar.errorSnackBar(res.message);
             } else {
-                //  this.router.navigate(
-                //    [`/client-portal/feedback-submitted`]
-                //  );
                 this.snackBar.successSnackBar(res.message);
             }
             this.close();
         });
-    }
-    getFormDetailsPrevious() {
-        if (this.perPageData > 0) {
-            this.perPageData = this.perPageData - 1;
-
-            this.initialLoading = true;
-            let payload = {
-                perPageData: this.perPageData,
-                totalPerPageData: 1,
-                projectId: this.projectId,
-            };
-            this.ProjectProcessService.submittedForm(payload).subscribe(
-                (res: any) => {
-                    this.initialLoading = false;
-                    this.createdByName =
-                        res.data.checklistResponse[0].createdByName;
-                    // this.data = res.data.formResponse;
-                    this.formData = {
-                        data: res.data.checklistResponse[0].checklistResponse,
-                    };
-
-                    // this.isShowEmails = false;
-                }
-            );
-        }
-    }
-    getFormDetailsNext() {
-        this.perPageData = this.perPageData + 1;
-        this.initialLoading = true;
-        let payload = {
-            perPageData: this.perPageData,
-            totalPerPageData: 1,
-            projectId: this.projectId,
-        };
-        this.ProjectProcessService.submittedForm(payload).subscribe(
-            (res: any) => {
-                this.initialLoading = false;
-                this.totalRecords = res.data.totalRecords;
-                this.createdByName =
-                    res.data.checklistResponse[0].createdByName;
-                this.formData = {
-                    data: res.data.checklistResponse[0].checklistResponse,
-                };
-            }
-        );
-    }
-    getSubmittedFormDetails() {
-        this.initialLoading = true;
-        const payload = {
-            perPageData: this.perPageData,
-            totalPerPageData: 1,
-            projectId: this.projectId,
-        };
-        this.ProjectProcessService.submittedForm(payload).subscribe(
-            (res: any) => {
-                this.initialLoading = false;
-                this.totalRecords = res.data.totalRecords;
-                this.createdByName =
-                    res.data.checklistResponse[0].createdByName;
-                // this.data = res.data.formResponse;
-                this.formData = {
-                    data: res.data.checklistResponse[0].checklistResponse,
-                };
-                console.log(this.formData);
-                // this.isShowEmails = false;
-            }
-        );
     }
     close() {
         this.matDialogRef.close('close');
