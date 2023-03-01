@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 declare var AWS: any;
 import { AppConstants } from '../../../../../core/constacts/constacts';
 import * as moment from 'moment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
 @Injectable({
     providedIn: 'root',
 })
@@ -17,10 +18,8 @@ export class UploadServiceService {
     }
 
     upload(preSignedURL: string, file: File): Observable<any> {
-        const formData = new FormData();
-        formData.append('file', file);
-        return this.http.put(preSignedURL, formData, {
-            headers: { skipToken: 'true' },
+        return this.http.put(preSignedURL, file, {
+            headers: { skipToken: 'true', 'Content-Type': 'text/yaml' },
         });
     }
 }

@@ -183,7 +183,6 @@ export class AddRepositoryComponent implements OnInit {
         this.selectedIndex = 1;
         this.showStep = 2;
         this.allRepositories = [];
-        this.portalNameOrMicroserviceNames = [];
         if (this.formType != name) {
             this.formType = name;
             this.initializeForm();
@@ -799,6 +798,7 @@ export class AddRepositoryComponent implements OnInit {
                         this.createBitbucketProjectFrom.patchValue({
                             portalNameOrMicroserviceName: '',
                         });
+                        this.isRepository = false;
                     }
                     if (item.uploadResourceUrl) {
                         this.uploadResourceUrl = item.uploadResourceUrl;
