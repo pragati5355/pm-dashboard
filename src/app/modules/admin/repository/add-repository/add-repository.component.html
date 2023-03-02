@@ -29,42 +29,43 @@
             <div *ngIf="selectedIndex === 0 && !initialLoading" class="flex flex-col flex-auto w-full">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 mb-6 mt-4 md:grid-cols-3 gap-6 w-full min-w-0">
-                        <!-- REACT NATIVE -->
-                        <div (click)="isFormType = true" 
-                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-pointer"
-                            (click)="getTechnology('react-native')">
-                            <div>  <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
-                            <div>REACT NATIVE</div>
-                        </div>
-
-                        <!-- ANGULAR-->
-                        <div (click)="isFormType = true"  
-                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-pointer" 
-                            (click)="getTechnology('angular')">
-                            <div>  <img  class="w-20 h-20" src="/assets/mbicons/angular.png" alt=""></div>
-                            <div>ANGULAR</div>
-                        </div>
-
-                        <!-- DJANGO-->
-                        <div (click)="isFormType = true"
-                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
-                            (click)="getTechnology('django')">
-                            <div>  <img class="w-20 h-20" src="/assets/mbicons/django.png" alt=""></div>
-                            <div> DJANGO</div>
-                        </div>
-
-                        <!-- REACT JS-->
-                        <div  (click)="isFormType = true"
+                            <!-- REACT JS-->
+                            <div  (click)="isFormType = true"
                             class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('react-js')">
                             <div>  <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
                             <div> REACT JS</div>
                         </div>
+                  
+                        <!-- ANGULAR-->
+                        <div (click)="isFormType = true"  
+                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed" 
+                           >
+                            <div>  <img  class="w-20 h-20" src="/assets/mbicons/angular.png" alt=""></div>
+                            <div>ANGULAR</div>
+                        </div>
+                        <!-- REACT NATIVE -->
+                        <div (click)="isFormType = true" 
+                              class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed"
+                             >
+                              <div>  <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
+                              <div>REACT NATIVE</div>
+                        </div>
+  
+                        <!-- DJANGO-->
+                        <div (click)="isFormType = true"
+                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                           >
+                            <div>  <img class="w-20 h-20" src="/assets/mbicons/django.png" alt=""></div>
+                            <div> DJANGO</div>
+                        </div>
+
+                    
 
                         <!-- JAVA-->
                         <div  (click)="isFormType = true" 
-                            class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
-                            (click)="getTechnology('java')">
+                            class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                            >
                             <div >  <img class="w-20 h-20"  src="/assets/mbicons/java.png" alt=""></div>
                             <div>JAVA</div>
                         </div>

@@ -195,6 +195,7 @@ export class AddRepositoryComponent implements OnInit {
     }
     //developer filter function start
     _filterDevelopers(value: any) {
+        console.log(value, 'value');
         const filterValue = value.toLowerCase();
         return this.allDevelopers.filter(
             (developer: any) =>
@@ -213,31 +214,30 @@ export class AddRepositoryComponent implements OnInit {
         const value = event.value;
         // Add our developer
         this.emailInvalid = false;
-        if (typeof value == 'string') {
-            if (this.validateEmail(value)) {
-                this.newExternalDeveloper.push(value);
-                let max =
-                    Math.max.apply(
-                        Math,
-                        this.allDevelopers.map((ele) => ele.id)
-                    ) + 1;
-                this.allDevelopers.push({ id: max, email: event.value });
-                this.developers.push(value);
-                this.allNewExternalDevelopers.push({
-                    id: max,
-                    email: event.value,
-                });
-                this.emailInvalid = false;
-                if (input) {
-                    input.value = '';
-                }
-
-                this.developer.setValue('');
-                this.createBitbucketProjectFrom.get('developer')?.setValue('');
-            } else {
-                this.emailInvalid = true;
-            }
-        }
+        // if (typeof value == 'string') {
+        //     if (this.validateEmail(value)) {
+        //         this.newExternalDeveloper.push(value);
+        //         let max =
+        //             Math.max.apply(
+        //                 Math,
+        //                 this.allDevelopers.map((ele) => ele.id)
+        //             ) + 1;
+        //         this.allDevelopers.push({ id: max, email: event.value });
+        //         this.developers.push(value);
+        //         this.allNewExternalDevelopers.push({
+        //             id: max,
+        //             email: event.value,
+        //         });
+        //         this.emailInvalid = false;
+        //         if (input) {
+        //             input.value = '';
+        //         }
+        //     } else {
+        //         this.emailInvalid = true;
+        //     }
+        // }
+        this.developer.setValue('');
+        this.createBitbucketProjectFrom.get('developer')?.setValue('');
     }
 
     removeDeveloper(developer: any, selectIndex: any): void {

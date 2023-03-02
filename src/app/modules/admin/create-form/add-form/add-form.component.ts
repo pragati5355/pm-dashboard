@@ -166,9 +166,6 @@ export class AddFormComponent implements OnInit {
         this.refreshForm = new EventEmitter();
         this.getProjectList();
     }
-    onSubmit(event: any) {
-        alert('form submitted!');
-    }
 
     onChange(event: any) {
         this.jsonElement.nativeElement.innerHTML = '';
