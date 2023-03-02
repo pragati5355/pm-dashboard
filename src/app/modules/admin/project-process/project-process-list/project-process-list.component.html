@@ -1,0 +1,113 @@
+
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- Main -->
+    <div class="flex-auto">
+  
+        <!-- Header -->
+        <div
+        class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
+      >
+        <!-- Header -->
+        <div
+          class="relative flex flex-col sm:flex-row md:flex-col justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent"
+        >
+          <!-- Title -->
+          <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+          <div class="text-4xl font-extrabold tracking-tight leading-none">
+            <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="goBack()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
+            Project Process Checklist
+          </div>
+          <div class="ml-auto">
+            <button
+            [color]="'primary'"
+            class="ml-4"
+            mat-flat-button
+            (click)="processForm()"
+          >
+            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+            <span class="ml-2 mr-1"> Project Checklist </span>
+          </button>
+           </div>
+   
+           </div>
+    
+        </div>
+      
+        <!-- Main -->
+        <div class="flex flex-auto overflow-hidden">
+          <!-- formList list -->
+          <div
+          (scrolled)="handleScroll()"
+          [infiniteScrollDistance]="2"
+          [infiniteScrollThrottle]="50"
+          [scrollWindow]="false"
+          class="flex flex-col flex-auto  overflow-hidden sm:overflow-y-auto  overflow-x-auto"
+            infiniteScroll
+          >
+            <ng-container *ngIf="!initialLoading && totalRecored > 0;">
+              <div *ngIf="totalRecored > 0" class="grid ">
+                <!-- Header -->
+                <div 
+                  class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                  matSortDisableClear
+                >
+                  <div></div>
+                  <div>Submitted by</div>
+                  <div>Submitted on</div>
+                </div>
+                <!-- Rows -->
+                <ng-container *ngFor="let formList of formList;index as i">
+                  <div
+                  (click)="processFormSubmitted(formList.checklistResponse,formList.createdByName,i)"
+                    class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b cursor-pointer"
+                  >
+                    <!-- Image -->
+                    <div class="flex items-center">
+                    <ng-container *ngIf="formList.image">
+                      <img
+                        class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover w-full h-full rounded-full"
+                        [src]="formList.image"
+                        alt="Contact avatar"/>
+                    </ng-container>
+                    <ng-container *ngIf="!formList.image">
+                      <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                        {{formList.createdByName.charAt(0)}}
+                      </div>
+                    </ng-container>
+                  </div>
+                    <!-- SKU -->
+                    <div class="cursor-pointer" >
+                      <div class="truncate"
+     >
+                        {{ formList.createdByName }}
+                      </div>
+                    </div>
+      
+                    <!-- Name -->
+                    <div class="hidden md:block truncate">
+                      {{ formList.createdAt | date }}
+                    </div>
+      
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!initialLoading && totalRecored == 0;">
+              <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+              >
+               Project Process Checklist not found
+              </div>
+            </ng-container>
+            <ng-container *ngIf="initialLoading">
+              <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+              >
+               Loading......
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

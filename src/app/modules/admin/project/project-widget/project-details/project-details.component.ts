@@ -28,6 +28,7 @@ export class ProjectDetailsComponent implements OnInit {
     project: any;
     repoCount = 0;
     @Input() dataId: any;
+    checked: false;
     private _fuseCards!: QueryList<ElementRef>;
 
     constructor(
@@ -73,6 +74,9 @@ export class ProjectDetailsComponent implements OnInit {
     }
     viewRepository() {
         this.router.navigate([`/projects/repository/repository-list`]);
+    }
+    projectProcess() {
+        this.router.navigate([`/projects/project-process/list`]);
     }
     assignBitbucketProject() {
         this.matDialog

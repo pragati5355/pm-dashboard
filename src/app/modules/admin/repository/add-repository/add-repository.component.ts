@@ -183,7 +183,6 @@ export class AddRepositoryComponent implements OnInit {
         this.selectedIndex = 1;
         this.showStep = 2;
         this.allRepositories = [];
-        this.portalNameOrMicroserviceNames = [];
         if (this.formType != name) {
             this.formType = name;
             this.initializeForm();
@@ -666,27 +665,33 @@ export class AddRepositoryComponent implements OnInit {
                 branchName: this.branches,
                 email: this.developers,
                 mergeAccessUserUUIDs: newCodeReviewers,
-                projectKey: this.metricsProjectData.repoProject.name,
+                projectKey: this.metricsProjectData.repoProject.key,
                 scriptUrl: this.uploadResourceUrl,
                 technology: this.formType,
                 metricsProjectId: this.metricsProjectData.id,
             };
-            this.RepositoryService.create(payload).subscribe((res: any) => {
-                if (!res.error) {
-                    this.snackBar.successSnackBar(res.message);
-                    this._authService.removeRepositoryDraft();
-                    this.router.navigate([
-                        '/projects/repository/repository-list',
-                    ]);
-                } else {
-                    this.snackBar.errorSnackBar(res.data.message);
+            this.RepositoryService.create(payload).subscribe(
+                (res: any) => {
+                    if (!res.error) {
+                        this.snackBar.successSnackBar(res.message);
+                        this._authService.removeRepositoryDraft();
+                        this.router.navigate([
+                            '/projects/repository/repository-list',
+                        ]);
+                    } else {
+                        this.snackBar.errorSnackBar(res.data.message);
+                    }
+                    this.submitInProcess = false;
+                    this.initialLoading = false;
+                    if (res.tokenExpire == true) {
+                        this._authService.updateAndReload(window.location);
+                    }
+                },
+                (error) => {
+                    this.submitInProcess = false;
+                    this.snackBar.errorSnackBar('Internal Server Error');
                 }
-                this.submitInProcess = false;
-                this.initialLoading = false;
-                if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
-                }
-            });
+            );
         }
     }
     downloadYmlFile() {
@@ -793,6 +798,7 @@ export class AddRepositoryComponent implements OnInit {
                         this.createBitbucketProjectFrom.patchValue({
                             portalNameOrMicroserviceName: '',
                         });
+                        this.isRepository = false;
                     }
                     if (item.uploadResourceUrl) {
                         this.uploadResourceUrl = item.uploadResourceUrl;

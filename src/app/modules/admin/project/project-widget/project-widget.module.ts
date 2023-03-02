@@ -2,6 +2,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SprintDetailsComponent } from './sprint-details/sprint-details.component';
 import { ScheduleVarianceComponent } from './schedule-variance/schedule-variance.component';
@@ -94,7 +95,8 @@ const routes: Routes = [
         MatRadioModule,
         MatAutocompleteModule,
         MatTooltipModule,
-        MatProgressSpinnerModule
+        MatCheckboxModule,
+        MatProgressSpinnerModule,
     ],
     exports: [
         ProjectDetailsComponent,
