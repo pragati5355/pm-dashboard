@@ -689,7 +689,11 @@ export class AddRepositoryComponent implements OnInit {
                 },
                 (error) => {
                     this.submitInProcess = false;
-                    this.snackBar.errorSnackBar('Internal Server Error');
+                    if (error.error.message) {
+                        this.snackBar.errorSnackBar(error.error.message);
+                    } else {
+                        this.snackBar.errorSnackBar(error.error.error);
+                    }
                 }
             );
         }
