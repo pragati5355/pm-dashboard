@@ -4,8 +4,12 @@
         This project is not assigned with the Bitbucket project yet. Please
         assign it to your Bitbucket project
         <button class="ml-4" mat-button [color]="'primary'" (click)="assignBitbucketProject()">
-            <mat-icon class="icon-size-5">add_task</mat-icon>
-            <span class="ml-2 mr-1">Assign Bitbucket Project</span>
+            <mat-spinner *ngIf="isBitbucketProjectListLoading; else buttonContentRef" [diameter]="24"></mat-spinner>
+            <span *ngIf="isBitbucketProjectListLoading" class="ml-2 mr-1">Connecting to Bitbucket</span>
+            <ng-template #buttonContentRef>
+                <mat-icon class="icon-size-5">add_task</mat-icon>
+                <span class="ml-2 mr-1">Assign Bitbucket Project</span>
+            </ng-template>
         </button>
     </fuse-alert>
     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
@@ -17,8 +21,9 @@
                 {{ project?.name | titlecase }}
             </div>
             <div class="font-medium tracking-tight text-secondary"></div>
-            <div class="mt-3 flex items-center ml-6" >
-                <button [matTooltip]="'Edit Project'" class="ml-4" mat-flat-button [color]="'primary'" (click)="editProject()">
+            <div class="mt-3 flex items-center ml-6">
+                <button [matTooltip]="'Edit Project'" class="ml-4" mat-flat-button [color]="'primary'"
+                    (click)="editProject()">
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
                     <span class="ml-2 mr-1">Edit Project</span>
                 </button>
@@ -37,10 +42,11 @@
                         <span class="ml-2 mr-1">View Repository</span>
                     </button>
                 </div>
-                <div class="ml-2"  [matTooltip]="'Project Process Checklist'"> 
-                  <button class="shadow-none" mat-mini-fab color="primary" (click)="projectProcess()" aria-label="Example icon button with a menu icon">
-                    <mat-icon>check</mat-icon>
-                  </button>
+                <div class="ml-2" [matTooltip]="'Project Process Checklist'">
+                    <button class="shadow-none" mat-mini-fab color="primary" (click)="projectProcess()"
+                        aria-label="Example icon button with a menu icon">
+                        <mat-icon>check</mat-icon>
+                    </button>
                 </div>
                 <!-- Actions menu (visible on xs) -->
                 <div class="sm:hidden">
