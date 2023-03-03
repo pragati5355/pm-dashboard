@@ -108,6 +108,7 @@
                                         ">
                                         Project is mandatory
                                     </div>
+                                    <div *ngIf="createBitbucketProject['projectName'].errors['pattern']">Enter valid Project name</div>
                                 </mat-error>
                             </mat-form-field>
                             <div *ngIf="formType != 'react-native'"  class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
@@ -159,7 +160,7 @@
                                                     addOnBlurRepository
                                                 " (matChipInputTokenEnd)="
                                                     addRepository($event)
-                                                " (click)="changeProject($event)" class="w-full" />
+                                                "  class="w-full" />
                                         </mat-chip-list>
                                         <mat-autocomplete #autoRepository="matAutocomplete" (optionSelected)="
                                                 selectedRepository($event)

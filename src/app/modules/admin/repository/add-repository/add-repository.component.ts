@@ -31,6 +31,7 @@ import { RepositoryService } from '@modules/admin/repository/common/services/rep
 import { UploadServiceService } from '@modules/admin/repository/common/services/upload-service.service';
 import { SendMailComponent } from '../send-mail/send-mail.component';
 import { items } from 'app/mock-api/apps/file-manager/data';
+import { lowerCase } from 'lodash';
 export class Developer {
     constructor(public id: number, public email: string) {}
 }
@@ -196,10 +197,10 @@ export class AddRepositoryComponent implements OnInit {
     //developer filter function start
     _filterDevelopers(value: any) {
         console.log(value, 'value');
-        const filterValue = value.toLowerCase();
+        const filterValue = value?.toLowerCase();
         return this.allDevelopers.filter(
             (developer: any) =>
-                developer.email.toLowerCase().indexOf(filterValue) === 0 &&
+                developer.email?.toLowerCase().indexOf(filterValue) === 0 &&
                 !this.developers.includes(developer.email)
         );
     }
@@ -305,21 +306,33 @@ export class AddRepositoryComponent implements OnInit {
     }
     //developer filter function end
     // repository filter function start
-    changeProject(event: any) {
-        let projectName = this.createBitbucketProjectFrom.value.projectName;
+    createRepositoryList() {
+        this.allRepositories = [];
+        let projectName =
+            this.createBitbucketProjectFrom.value.projectName.toLowerCase();
+
         if (this.formType == 'react-native') {
             this.allRepositories = [
-                projectName + '-' + this.formType,
-                projectName + '-' + this.formType + '-config',
+                projectName + '-' + this.formType.toLowerCase(),
+                projectName + '-' + this.formType.toLowerCase() + '-config',
             ];
         }
         if (this.portalNameOrMicroserviceNames.length > 0) {
             this.portalNameOrMicroserviceNames.forEach((item: any) => {
                 this.allRepositories.push(
-                    projectName + '-' + item + '-' + this.formType
+                    projectName +
+                        '-' +
+                        item.toLowerCase() +
+                        '-' +
+                        this.formType.toLowerCase()
                 );
                 this.allRepositories.push(
-                    projectName + '-' + item + '-' + this.formType + '-config'
+                    projectName +
+                        '-' +
+                        item.toLowerCase() +
+                        '-' +
+                        this.formType.toLowerCase() +
+                        '-config'
                 );
             });
         }
@@ -356,6 +369,7 @@ export class AddRepositoryComponent implements OnInit {
         if (this.repositories.length == 0) {
             this.createBitbucketProjectFrom.get('repositoryName')?.setValue([]);
         }
+        this.createRepositoryList();
     }
 
     selectedRepository(event: MatAutocompleteSelectedEvent): void {
@@ -365,11 +379,11 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     private _filterRepository(value: string): string[] {
-        const filterValue = value.toLowerCase();
+        const filterValue = value?.toLowerCase();
 
         return this.allRepositories.filter(
             (repository: any) =>
-                repository.toLowerCase().indexOf(filterValue) === 0 &&
+                repository?.toLowerCase().indexOf(filterValue) === 0 &&
                 !this.repositories.includes(repository)
         );
     }
@@ -416,10 +430,10 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     private _filterBranch(value: string) {
-        const filterValue = value.toLowerCase();
+        const filterValue = value?.toLowerCase();
         return this.allBranches.filter(
             (branch: any) =>
-                branch.toLowerCase().indexOf(filterValue) === 0 &&
+                branch?.toLowerCase().indexOf(filterValue) === 0 &&
                 !this.branches.includes(branch)
         );
     }
@@ -559,7 +573,7 @@ export class AddRepositoryComponent implements OnInit {
         if (input) {
             input.value = '';
         }
-
+        this.createRepositoryList();
         this.createBitbucketProjectFrom
             .get('portalNameOrMicroserviceName')
             ?.setValue('');
@@ -579,6 +593,7 @@ export class AddRepositoryComponent implements OnInit {
         if (index >= 0) {
             this.portalNameOrMicroserviceNames.splice(index, 1);
         }
+        this.createRepositoryList();
     }
 
     private setJiraProject() {
@@ -779,7 +794,7 @@ export class AddRepositoryComponent implements OnInit {
                     this.initializeForm();
                     this.isFormType = true;
                     if (this.formType) {
-                        this.changeProject(this.formType);
+                        this.createRepositoryList();
                         this.createBitbucketProjectFrom.patchValue({
                             bitbucketProjectName: item.bitbucketProjectName
                                 ? item.bitbucketProjectName
