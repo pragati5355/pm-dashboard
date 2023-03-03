@@ -12,6 +12,8 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import { AuthService } from '@services/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AssignBitbucketProjectDialogComponent } from '../assign-bitbucket-project-dialog/assign-bitbucket-project-dialog.component';
+import { BitbucketProjectService } from '@modules/admin/repository/common/services/bitbucket-project.service';
+import { BitbucketProjectModel } from '@modules/admin/repository/common/models/bitbucket-project.model';
 
 @Component({
     selector: 'app-project-details',
@@ -27,6 +29,9 @@ export class ProjectDetailsComponent implements OnInit {
     initialLoading = false;
     project: any;
     repoCount = 0;
+    isBitbucketProjectListLoading = false;
+    allBitbucketProjects: BitbucketProjectModel[] = [];
+
     @Input() dataId: any;
     checked: false;
     private _fuseCards!: QueryList<ElementRef>;
@@ -35,6 +40,7 @@ export class ProjectDetailsComponent implements OnInit {
         private router: Router,
         private _route: ActivatedRoute,
         private projectService: CreateProjecteService,
+        private bitbucketProjectService: BitbucketProjectService,
         private matDialog: MatDialog,
         private _authService: AuthService
     ) {}
@@ -79,19 +85,34 @@ export class ProjectDetailsComponent implements OnInit {
         this.router.navigate([`/projects/project-process/list`]);
     }
     assignBitbucketProject() {
+        if (this.allBitbucketProjects?.length > 0) {
+            this.openAssignDialog(this.allBitbucketProjects);
+        } else {
+            this.isBitbucketProjectListLoading = true;
+            this.bitbucketProjectService.findAll().subscribe((response) => {
+                this.allBitbucketProjects = response;
+                this.isBitbucketProjectListLoading = false;
+                this.openAssignDialog(response);
+            });
+        }
+    }
+
+    private openAssignDialog(response: BitbucketProjectModel[]) {
         this.matDialog
             .open(AssignBitbucketProjectDialogComponent, {
                 width: '50%',
                 data: {
                     projectId: this.projectId,
                     projectName: this.project.name,
+                    allBitbucketProjects: response,
                 },
                 disableClose: true,
             })
             .afterClosed()
             .subscribe((result) => {
-                console.log('Dialog response ', result);
-                window.location.reload();
+                if (result) {
+                    window.location.reload();
+                }
             });
     }
 }
