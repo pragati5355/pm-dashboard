@@ -3,8 +3,7 @@ export const environment = {
     baseUrl: 'https://11vi8vyl44.execute-api.ap-south-1.amazonaws.com',
     jiraBaseUrl: 'https://3znje7eqrk.execute-api.ap-south-1.amazonaws.com',
     projectBaseUrl: 'https://cu1azpqty2.execute-api.ap-south-1.amazonaws.com',
-    springBootUrl:
-        'https://metrics-758789250.ap-south-1.elb.amazonaws.com/api/v1',
+    springBootUrl: 'https://dev-api.metrics.mindbowser.com/api/v1',
     bucketName: 'metrics-sproutops-bucket',
     jirasyncBaseUrl:
         ' https://us773ifzr2h6ih5h4imvu5sspy0ixbhc.lambda-url.ap-south-1.on.aws',
