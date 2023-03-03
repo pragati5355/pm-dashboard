@@ -196,13 +196,16 @@ export class AddRepositoryComponent implements OnInit {
     }
     //developer filter function start
     _filterDevelopers(value: any) {
-        console.log(value, 'value');
-        const filterValue = value?.toLowerCase();
-        return this.allDevelopers.filter(
-            (developer: any) =>
-                developer.email?.toLowerCase().indexOf(filterValue) === 0 &&
-                !this.developers.includes(developer.email)
-        );
+        if (typeof value == 'object') {
+            return this.allDevelopers;
+        } else {
+            const filterValue = value?.toLowerCase();
+            return this.allDevelopers.filter(
+                (developer: any) =>
+                    developer.email?.toLowerCase().indexOf(filterValue) === 0 &&
+                    !this.developers.includes(developer.email)
+            );
+        }
     }
     _filterDevelopersSlice() {
         this.emailInvalid = false;
@@ -215,28 +218,6 @@ export class AddRepositoryComponent implements OnInit {
         const value = event.value;
         // Add our developer
         this.emailInvalid = false;
-        // if (typeof value == 'string') {
-        //     if (this.validateEmail(value)) {
-        //         this.newExternalDeveloper.push(value);
-        //         let max =
-        //             Math.max.apply(
-        //                 Math,
-        //                 this.allDevelopers.map((ele) => ele.id)
-        //             ) + 1;
-        //         this.allDevelopers.push({ id: max, email: event.value });
-        //         this.developers.push(value);
-        //         this.allNewExternalDevelopers.push({
-        //             id: max,
-        //             email: event.value,
-        //         });
-        //         this.emailInvalid = false;
-        //         if (input) {
-        //             input.value = '';
-        //         }
-        //     } else {
-        //         this.emailInvalid = true;
-        //     }
-        // }
         this.developer.setValue('');
         this.createBitbucketProjectFrom.get('developer')?.setValue('');
     }
@@ -291,7 +272,7 @@ export class AddRepositoryComponent implements OnInit {
                     .get('developer')
                     ?.valueChanges.pipe(
                         startWith(''),
-                        map((developer: any | null) =>
+                        map((developer: any) =>
                             developer
                                 ? this._filterDevelopers(developer)
                                 : this._filterDevelopersSlice()
@@ -363,13 +344,13 @@ export class AddRepositoryComponent implements OnInit {
 
     removeRepository(repository: string): void {
         const index = this.repositories.indexOf(repository);
+        this.createRepositoryList();
         if (index >= 0) {
             this.repositories.splice(index, 1);
         }
         if (this.repositories.length == 0) {
             this.createBitbucketProjectFrom.get('repositoryName')?.setValue([]);
         }
-        this.createRepositoryList();
     }
 
     selectedRepository(event: MatAutocompleteSelectedEvent): void {
@@ -379,13 +360,17 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     private _filterRepository(value: string): string[] {
-        const filterValue = value?.toLowerCase();
+        if (typeof value == 'object') {
+            return this.allRepositories;
+        } else {
+            const filterValue = value?.toLowerCase();
 
-        return this.allRepositories.filter(
-            (repository: any) =>
-                repository?.toLowerCase().indexOf(filterValue) === 0 &&
-                !this.repositories.includes(repository)
-        );
+            return this.allRepositories.filter(
+                (repository: any) =>
+                    repository?.toLowerCase().indexOf(filterValue) === 0 &&
+                    !this.repositories.includes(repository)
+            );
+        }
     }
     _filterRepositoriesSlice() {
         return this.allRepositories.filter(
@@ -430,12 +415,16 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     private _filterBranch(value: string) {
-        const filterValue = value?.toLowerCase();
-        return this.allBranches.filter(
-            (branch: any) =>
-                branch?.toLowerCase().indexOf(filterValue) === 0 &&
-                !this.branches.includes(branch)
-        );
+        if (typeof value == 'object') {
+            return this.allBranches;
+        } else {
+            const filterValue = value?.toLowerCase();
+            return this.allBranches.filter(
+                (branch: any) =>
+                    branch?.toLowerCase().indexOf(filterValue) === 0 &&
+                    !this.branches.includes(branch)
+            );
+        }
     }
     _filterBranchSlice() {
         return this.allBranches.filter(
@@ -500,14 +489,7 @@ export class AddRepositoryComponent implements OnInit {
 
     private _filterCodeReviewer(value: any) {
         if (typeof value == 'object') {
-            return this.allCodeReviewers.filter((codeReviewer: any) =>
-                codeReviewer.display_name
-                    .toLowerCase()
-                    .includes(
-                        value.display_name.toLowerCase() &&
-                            !this.codeReviewers.includes(codeReviewer)
-                    )
-            );
+            return this.allCodeReviewers;
         } else {
             return this.allCodeReviewers.filter(
                 (codeReviewer: any) =>
@@ -613,7 +595,15 @@ export class AddRepositoryComponent implements OnInit {
                 { value: this.bitbucketRepositoryName, disabled: true },
                 [Validators.required],
             ],
-            projectName: [this.jiraProjectName, [Validators.required]],
+            projectName: [
+                this.jiraProjectName,
+                [
+                    Validators.required,
+                    Validators.pattern(
+                        ValidationConstants.WHITESPACE_VALIDATION
+                    ),
+                ],
+            ],
             repositoryName: [[], this.validateChipField],
             developer: [[], this.validateChipField],
             codeReviewerAndPm: [[], this.validateChipField],
