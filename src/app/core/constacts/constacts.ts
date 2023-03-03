@@ -63,6 +63,8 @@ export const ValidationConstants = {
         "^[a-zA-Z-',]+(s{0,1}[a-zA-Z-', ]){0,30}([a-zA-Z, ]){1,30}$",
     YEAR_VALIDATION: '^[0-9]{1,2}$',
     SALARY_VALIDATION: '^[0-9]{1,10}$',
+    WHITESPACE_VALIDATION:
+        "^[a-zA-Z-']+(s{0,1}[a-zA-Z-']){0,30}([a-zA-Z]){1,30}$",
 };
 export const ErrorMessage = {
     ERROR_FIVE_HUNDRED: 'Internal Server Error',

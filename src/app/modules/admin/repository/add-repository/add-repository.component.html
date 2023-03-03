@@ -108,6 +108,7 @@
                                         ">
                                         Project is mandatory
                                     </div>
+                                    <div *ngIf="createBitbucketProject['projectName'].errors['pattern']">Enter valid Project name</div>
                                 </mat-error>
                             </mat-form-field>
                             <div *ngIf="formType != 'react-native'"  class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
@@ -140,6 +141,7 @@
                                     <mat-error>At least add one portal name
                                     </mat-error>
                                 </mat-form-field>
+                                <div class="text-sm -mt-5 mb-4" *ngIf="createBitbucketProjectFrom.value.portalNameOrMicroserviceName">Please press enter to select portal name</div>
                             </div>
                             </div>
                             <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
@@ -159,7 +161,7 @@
                                                     addOnBlurRepository
                                                 " (matChipInputTokenEnd)="
                                                     addRepository($event)
-                                                " (click)="changeProject($event)" class="w-full" />
+                                                "  class="w-full" />
                                         </mat-chip-list>
                                         <mat-autocomplete #autoRepository="matAutocomplete" (optionSelected)="
                                                 selectedRepository($event)
@@ -365,7 +367,7 @@
                          
                             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
                                 <div class="">  <a class="text-primary .mt-8p cursor-pointer"(click)="downloadYmlFile()"> Download Template</a></div>
-                                <div class="text-left ml-auto"><a class="text-primary .mt-8p" (click)="sendEmail()"> Email Template</a></div>
+                                <div class="text-left ml-auto"><a class="text-primary .mt-8p cursor-pointer" (click)="sendEmail()"> Email Template</a></div>
                              </div>
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
