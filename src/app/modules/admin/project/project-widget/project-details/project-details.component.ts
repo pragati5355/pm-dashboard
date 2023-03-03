@@ -91,6 +91,7 @@ export class ProjectDetailsComponent implements OnInit {
             .afterClosed()
             .subscribe((result) => {
                 console.log('Dialog response ', result);
+                window.location.reload();
             });
     }
 }

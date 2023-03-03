@@ -303,14 +303,14 @@ export class AddRepositoryComponent implements OnInit {
                 this.allRepositories.push(
                     projectName +
                         '-' +
-                        item.toLowerCase() +
+                        item.toLowerCase().replace(/\s/g, '-') +
                         '-' +
                         this.formType.toLowerCase()
                 );
                 this.allRepositories.push(
                     projectName +
                         '-' +
-                        item.toLowerCase() +
+                        item.toLowerCase().replace(/\s/g, '-') +
                         '-' +
                         this.formType.toLowerCase() +
                         '-config'
