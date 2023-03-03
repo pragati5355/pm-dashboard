@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BitbucketProjectModel } from '@modules/admin/repository/common/models/bitbucket-project.model';
 import { BitbucketProjectService } from '@modules/admin/repository/common/services/bitbucket-project.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 
 function autocompleteObjectValidator(): ValidatorFn {
@@ -27,23 +28,24 @@ function autocompleteObjectValidator(): ValidatorFn {
 })
 export class AssignBitbucketProjectDialogComponent implements OnInit {
     projectType: 'new' | 'existing' = 'existing';
-    allBitbucketProjects: BitbucketProjectModel[] = [];
+    allBitbucketProjects: BitbucketProjectModel[] =
+        this.data?.allBitbucketProjects;
     filteredBitbucketProjectOptions: Observable<BitbucketProjectModel[]> | any;
     projectNameFormControl: FormControl;
     mProjectId = this.data?.projectId;
     mProjectName = this.data?.projectName;
-    isProjectListLoading = true;
     isAssigningProject = false;
 
     constructor(
         public dialogRef: MatDialogRef<AssignBitbucketProjectDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private bitbucketProjectService: BitbucketProjectService,
+        private snackBarService: SnackBar,
         private snackBar: MatSnackBar
     ) {}
 
     ngOnInit(): void {
-        this.getBitbucketProjectList();
+        this.initializeDefaultControl();
     }
 
     projectTypeChanged() {
@@ -52,14 +54,6 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
         } else {
             this.initializeDefaultControl();
         }
-    }
-
-    getBitbucketProjectList() {
-        this.bitbucketProjectService.findAll().subscribe((response) => {
-            this.allBitbucketProjects = response;
-            this.isProjectListLoading = false
-            this.initializeDefaultControl();
-        });
     }
 
     displayProjectNameFn(bitbucketProject: any) {
@@ -71,14 +65,13 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
     save() {
         this.isAssigningProject = true;
         const payload = this.getAssignPayload();
-        this.bitbucketProjectService.assign(payload)
-        .subscribe(res => {
+        this.bitbucketProjectService.assign(payload).subscribe((res) => {
             this.isAssigningProject = false;
-            this.snackBar.open(res?.message, null, {duration: 5000});
-            if(!res?.error){
+            this.snackBarService.successSnackBar(res?.message);
+            if (!res?.error) {
                 this.dialogRef.close(res);
             }
-        })
+        });
     }
 
     private getAssignPayload() {
@@ -86,16 +79,24 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
             id: this.mProjectId,
             name: null,
             uuid: null,
-            key: null
+            key: null,
         };
         this.extractDataFromFormValue(payload);
         return payload;
     }
 
-    private extractDataFromFormValue(payload: { id: any; name: any; uuid: any; key: any; }) {
+    private extractDataFromFormValue(payload: {
+        id: any;
+        name: any;
+        uuid: any;
+        key: any;
+    }) {
         if (typeof this.projectNameFormControl?.value === 'string') {
             payload.name = this.projectNameFormControl?.value;
-            payload.key = this.projectNameFormControl?.value.replace(' ', '_').toUpperCase()
+            payload.key = this.projectNameFormControl?.value
+                .split(' ')
+                .join('_')
+                .toUpperCase();
         } else {
             payload.name = this.projectNameFormControl?.value?.name;
             payload.uuid = this.projectNameFormControl?.value?.uuid;
@@ -117,9 +118,8 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
     }
 
     private filterProjectByName(projectName: string): BitbucketProjectModel[] {
-        return this.allBitbucketProjects.filter(
-            (option) =>
-                option.name.toLowerCase().includes(projectName)
+        return this.allBitbucketProjects.filter((option) =>
+            option.name.toLowerCase().includes(projectName)
         );
     }
 
@@ -127,7 +127,9 @@ export class AssignBitbucketProjectDialogComponent implements OnInit {
         this.filteredBitbucketProjectOptions =
             this.projectNameFormControl.valueChanges.pipe(
                 map((value) =>
-                    typeof value === 'string' ? value.trim().toLowerCase() : value.name.toLowerCase()
+                    typeof value === 'string'
+                        ? value.trim().toLowerCase()
+                        : value.name.toLowerCase()
                 ),
                 map((projectName) =>
                     projectName
