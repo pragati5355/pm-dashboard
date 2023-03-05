@@ -13,7 +13,7 @@
                     [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
                     <mat-step label="Choose Technology" [completed]="isFormType"> </mat-step>
 
-                    <mat-step label="Create Repository" [completed]="!createBitbucketProjectFrom.invalid"> </mat-step>
+                    <mat-step label="Create Repository" [completed]="!createBitbucketProjectFrom?.invalid"> </mat-step>
 
                     <mat-step label="Create Ansible Script" [completed]="isFileUploaded"> </mat-step>
 
@@ -230,8 +230,8 @@
                                         <mat-autocomplete #autoDeveloper="matAutocomplete" (optionSelected)="
                                                 selectedDeveloper($event)">
                                             <mat-option *ngFor="let developer of filteredDevelopers | async
-                                                " [value]="developer.email">
-                                                {{ developer.email }}
+                                                " [value]="developer?.email">
+                                                {{ developer?.email }}
                                             </mat-option>
                                         </mat-autocomplete>
                                         <mat-chip-list #chipListDeveloper class="mb-2">
@@ -248,10 +248,10 @@
                                                         let developerObj of allDevelopers
                                                     ">
                                                     <div *ngIf="
-                                                            developerObj.email ==
+                                                            developerObj?.email ==
                                                             developer
                                                         ">
-                                                        {{ developerObj.email }}
+                                                        {{ developerObj?.email }}
                                                     </div>
                                                 </div>
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
