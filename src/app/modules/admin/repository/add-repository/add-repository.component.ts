@@ -31,7 +31,6 @@ export class Developer {
 @Component({
     selector: 'app-add-repository',
     templateUrl: './add-repository.component.html',
-    styleUrls: ['./add-repository.component.scss'],
 })
 export class AddRepositoryComponent implements OnInit {
     @ViewChild('stepper', { static: false }) stepper!: MatStepper;
