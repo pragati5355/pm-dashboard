@@ -135,7 +135,6 @@ export class AddRepositoryComponent implements OnInit {
         this.setUserData();
         this.setJiraProject();
         this.setDrawerWatcher();
-        // this.initializeForm();
         this.fetchDraft();
         this.getAllDevelopers();
         this.getCodeReviewer();
@@ -146,7 +145,6 @@ export class AddRepositoryComponent implements OnInit {
     }
 
     goBack(stepper: any) {
-        // stepper.previous();
         this.selectedIndex = stepper;
         if (this.selectedIndex == 0) {
             this.showStep = 1;
@@ -214,9 +212,6 @@ export class AddRepositoryComponent implements OnInit {
         );
     }
     addDeveloper(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-        // Add our developer
         this.emailInvalid = false;
         this.developer.setValue('');
         this.createBitbucketProjectFrom.get('developer')?.setValue('');
@@ -268,16 +263,7 @@ export class AddRepositoryComponent implements OnInit {
         this.RepositoryService.findAllDeveloperEmails().subscribe(
             (res: any) => {
                 this.allDevelopers = res.data;
-                this.filteredDevelopers = this.createBitbucketProjectFrom
-                    .get('developer')
-                    ?.valueChanges.pipe(
-                        startWith(''),
-                        map((developer: any) =>
-                            developer
-                                ? this._filterDevelopers(developer)
-                                : this._filterDevelopersSlice()
-                        )
-                    );
+
                 this.initialLoading = false;
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -439,16 +425,7 @@ export class AddRepositoryComponent implements OnInit {
             res.data.forEach((item: any) => {
                 this.allCodeReviewers.push(item.user);
             });
-            this.filteredCodeReviewers = this.createBitbucketProjectFrom
-                .get('codeReviewerAndPm')
-                ?.valueChanges.pipe(
-                    startWith(null),
-                    map((codeReviewer: string | null) =>
-                        codeReviewer
-                            ? this._filterCodeReviewer(codeReviewer)
-                            : this._filterCodeReviewerSlice()
-                    )
-                );
+
             this.initialLoading = false;
             if (res.tokenExpire == true) {
                 this._authService.updateAndReload(window.location);
@@ -527,7 +504,7 @@ export class AddRepositoryComponent implements OnInit {
         return null;
     }
 
-    private addBranchFilterSubscription() {
+    private addBranchFilter() {
         this.filteredBranches = this.createBitbucketProjectFrom
             .get('branchOrPattern')
             ?.valueChanges.pipe(
@@ -605,7 +582,7 @@ export class AddRepositoryComponent implements OnInit {
                 ],
             ],
             repositoryName: [[], this.validateChipField],
-            developer: [[], this.validateChipField],
+            developer: [null, this.validateChipField],
             codeReviewerAndPm: [[], this.validateChipField],
             branchOrPattern: [this.branches, this.validateChipField],
         });
@@ -626,7 +603,9 @@ export class AddRepositoryComponent implements OnInit {
                 'portalNameOrMicroserviceName'
             );
         }
-        this.addBranchFilterSubscription();
+        this.addBranchFilter();
+        this.addDeveloperFilter();
+        this.addCodeReviewerFilter();
     }
 
     private setDrawerWatcher() {
@@ -704,16 +683,27 @@ export class AddRepositoryComponent implements OnInit {
         }
     }
     downloadYmlFile() {
-        let filePath =
+        const filePath =
             'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com' +
             '/templates/' +
             this.formType +
             '.yml';
-        var a = document.createElement('a');
-        a.href = filePath; //URL FOR DOWNLOADING
-        a.download = this.formType + '.yml';
-        a.click();
+
+        fetch(filePath)
+            .then((response) => response.blob())
+            .then((blob) => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                if (this.repositories?.length > 0) {
+                    link.download = this.repositories[0] + '.yml';
+                } else {
+                    link.download = this.formType + '.yml';
+                }
+                link.click();
+            })
+            .catch(console.error);
     }
+
     sendEmail() {
         const dialogRef = this.dialog.open(SendMailComponent, {
             disableClose: true,
@@ -727,7 +717,7 @@ export class AddRepositoryComponent implements OnInit {
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result.result == 'success') {
+            if (result?.result == 'success') {
             }
         });
     }
@@ -861,5 +851,31 @@ export class AddRepositoryComponent implements OnInit {
     }
     deleteURL() {
         this.uploadResourceUrl = '';
+    }
+
+    private addCodeReviewerFilter() {
+        this.filteredCodeReviewers = this.createBitbucketProjectFrom
+            .get('codeReviewerAndPm')
+            ?.valueChanges.pipe(
+                startWith(null),
+                map((codeReviewer: string | null) =>
+                    codeReviewer
+                        ? this._filterCodeReviewer(codeReviewer)
+                        : this._filterCodeReviewerSlice()
+                )
+            );
+    }
+
+    private addDeveloperFilter() {
+        this.filteredDevelopers = this.createBitbucketProjectFrom
+            .get('developer')
+            ?.valueChanges.pipe(
+                startWith(''),
+                map((developer: any) =>
+                    developer
+                        ? this._filterDevelopers(developer)
+                        : this._filterDevelopersSlice()
+                )
+            );
     }
 }
