@@ -317,9 +317,7 @@ export class AddRepositoryComponent implements OnInit {
             });
 
             this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
+            this.tokenExpireFun(res);
         });
     }
     addCodeReviewer(event: MatChipInputEvent): void {
@@ -445,9 +443,7 @@ export class AddRepositoryComponent implements OnInit {
                     }
                     this.submitInProcess = false;
                     this.initialLoading = false;
-                    if (res.tokenExpire == true) {
-                        this._authService.updateAndReload(window.location);
-                    }
+                    this.tokenExpireFun(res);
                 },
                 (error) => {
                     this.submitInProcess = false;
@@ -527,9 +523,7 @@ export class AddRepositoryComponent implements OnInit {
                         this.initialLoading = false;
                         this.uploadInProcess = false;
                     }
-                    if (res.tokenExpire == true) {
-                        this._authService.updateAndReload(window.location);
-                    }
+                    this.tokenExpireFun(res);
                 });
         }
     }
@@ -585,9 +579,7 @@ export class AddRepositoryComponent implements OnInit {
                     this.initializeForm();
                 }
                 this.initialLoading = false;
-                if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
-                }
+                this.tokenExpireFun(res);
             }
         );
     }
@@ -618,9 +610,7 @@ export class AddRepositoryComponent implements OnInit {
                     this.snackBar.errorSnackBar(res.data.message);
                 }
                 this.initialLoading = false;
-                if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
-                }
+                this.tokenExpireFun(res);
             }
         );
     }
