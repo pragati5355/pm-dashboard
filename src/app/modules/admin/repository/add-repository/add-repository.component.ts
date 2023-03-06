@@ -615,6 +615,7 @@ export class AddRepositoryComponent implements OnInit {
         );
     }
     deleteURL() {
+        this.fileUpload.nativeElement.value = '';
         this.uploadResourceUrl = '';
     }
 
