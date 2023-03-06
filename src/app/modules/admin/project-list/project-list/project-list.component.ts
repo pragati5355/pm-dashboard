@@ -52,7 +52,7 @@ export class ProjectListComponent implements OnInit {
         };
         this.getList(payload);
 
-        /** This handles project search input with debounce time of 1000ms */
+        /** Below code handles project search input with debounce time of 1000ms */
         this.projectSearchInput.valueChanges
             .pipe(
                 debounceTime(1000),
@@ -61,7 +61,7 @@ export class ProjectListComponent implements OnInit {
                     let payload = {
                         perPageData: this.count,
                         totalPerPageData: this.totalPageData,
-                        projectName: inputChanged,
+                        projectName: inputChanged.trim(),
                     };
                     return this.ProjectService.getProjectDetails(payload);
                 })
@@ -110,20 +110,20 @@ export class ProjectListComponent implements OnInit {
         );
     }
 
-    handleSearchInput(event: any) {
-        console.log(event.target.value);
-        this.count = 1;
-        if (this.searchValue !== event.target.value.trim()) {
-            this.searchValue = event.target.value.trim();
-            this.pagination = false;
-            let payload = {
-                perPageData: this.count,
-                totalPerPageData: this.totalPageData,
-                projectName: this.searchValue,
-            };
-            this.getList(payload);
-        }
-    }
+    // handleSearchInput(event: any) {
+    //     console.log(event.target.value);
+    //     this.count = 1;
+    //     if (this.searchValue !== event.target.value.trim()) {
+    //         this.searchValue = event.target.value.trim();
+    //         this.pagination = false;
+    //         let payload = {
+    //             perPageData: this.count,
+    //             totalPerPageData: this.totalPageData,
+    //             projectName: this.searchValue,
+    //         };
+    //         this.getList(payload);
+    //     }
+    // }
 
     handleScroll() {
         let totalcount = this.count * this.totalPageData;
