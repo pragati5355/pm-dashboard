@@ -204,9 +204,7 @@ export class AddRepositoryComponent implements OnInit {
                 this.allDevelopers = res.data;
 
                 this.initialLoading = false;
-                if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
-                }
+                this.tokenExpireFun(res);
             }
         );
     }
@@ -831,5 +829,11 @@ export class AddRepositoryComponent implements OnInit {
             };
         }
         return null;
+    }
+
+    private tokenExpireFun(res: any) {
+        if (res.tokenExpire == true) {
+            this._authService.updateAndReload(window.location);
+        }
     }
 }
