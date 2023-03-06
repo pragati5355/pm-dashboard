@@ -628,6 +628,11 @@ export class AddRepositoryComponent implements OnInit {
     deleteURL() {
         this.uploadResourceUrl = '';
     }
+
+    goBackWindow() {
+        window.history.back();
+    }
+
     private setJiraProject() {
         this.metricsProjectData = this._authService.getProjectDetails();
         let jiraProjectName = this.metricsProjectData.name.toLowerCase();

@@ -42,6 +42,10 @@ export class RepositoryListComponent implements OnInit {
         this.router.navigate(['/projects/repository/add-repository']);
     }
 
+    goBack() {
+        window.history.back();
+    }
+
     private setJiraProject() {
         this.metricsProjectData = this._authService.getProjectDetails();
         this.getList(this.metricsProjectData.id);
