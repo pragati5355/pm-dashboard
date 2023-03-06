@@ -465,7 +465,7 @@ export class AddRepositoryComponent implements OnInit {
     }
     downloadYmlFile() {
         const filePath =
-            'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com' +
+            this._uploadService.downloadFileURL +
             '/templates/' +
             this.formType +
             '.yml';
@@ -687,7 +687,6 @@ export class AddRepositoryComponent implements OnInit {
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(({ matchingAliases }) => {
-                // Set the drawerMode and drawerOpened if the given breakpoint is active
                 if (matchingAliases.includes('md')) {
                     this.drawerMode = 'side';
                     this.drawerOpened = true;

@@ -9,6 +9,8 @@ import { Content } from '@angular/compiler/src/render3/r3_ast';
     providedIn: 'root',
 })
 export class UploadServiceService {
+    downloadFileURL =
+        'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com';
     bucketName = AppConstants['S3_BUCKET_NAME'];
     preSignedURL = AppConstants['PROJECT_API_URL'] + '/url-to-upload';
     constructor(private http: HttpClient) {}
