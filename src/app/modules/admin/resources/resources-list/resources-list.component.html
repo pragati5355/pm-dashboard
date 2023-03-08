@@ -70,7 +70,7 @@
                       <input
                         [autocomplete]="'off'"
                         [placeholder]="'Search for resources'"
-                        matInput (input)="inputSearch($event)"
+                        matInput [formControl]='resourceSearchInput'
                       />
                     </mat-form-field>
                   </div>
