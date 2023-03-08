@@ -140,9 +140,7 @@ export class ProjectProcessListComponent implements OnInit {
         this.initialLoading = true;
         this.ProjectProcessService.find().subscribe((res: any) => {
             this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
+            this.tokenExpireFun(res);
             // this.formList = res.data
             this.form = res.data;
             this.formId = res.data.id;
@@ -164,9 +162,8 @@ export class ProjectProcessListComponent implements OnInit {
                 } else if (res.data == null) {
                     this.totalRecord = 0;
                     this.initialLoading = false;
-                } else if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
                 }
+                this.tokenExpireFun(res);
             },
             (error) => {
                 this.totalRecord = 0;
@@ -227,5 +224,11 @@ export class ProjectProcessListComponent implements OnInit {
             }),
             dismissible: false,
         });
+    }
+
+    private tokenExpireFun(res: any) {
+        if (res.tokenExpire == true) {
+            this._authService.updateAndReload(window.location);
+        }
     }
 }
