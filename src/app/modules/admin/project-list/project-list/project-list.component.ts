@@ -44,7 +44,7 @@ export class ProjectListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        let payload = {
+        const payload = {
             perPageData: this.count,
             totalPerPageData: this.totalPageData,
             projectKey: '',
@@ -58,7 +58,7 @@ export class ProjectListComponent implements OnInit {
                 debounceTime(1000),
                 distinctUntilChanged(),
                 switchMap((inputChanged) => {
-                    let payload = {
+                    const payload = {
                         perPageData: this.count,
                         totalPerPageData: this.totalPageData,
                         projectName: inputChanged.trim(),
@@ -66,23 +66,14 @@ export class ProjectListComponent implements OnInit {
                     return this.ProjectService.getProjectDetails(payload);
                 })
             )
-            .subscribe({
-                next: (res: any) => {
-                    this.initialLoading = false;
-                    if (res.data) {
-                        this.projectList = res.data.projects;
-                        this.totalProject = res.data.totalRecored;
-                    } else {
-                        this.totalProject = 0;
-                    }
-                    if (res.tokenExpire == true) {
-                        this._authService.updateAndReload(window.location);
-                    }
+            .subscribe(
+                (res: any) => {
+                    this.handleSearchResponse(res);
                 },
-                error: (error) => {
+                (error) => {
                     this.initialLoading = false;
-                },
-            });
+                }
+            );
     }
 
     gotoAddProject() {
@@ -91,52 +82,35 @@ export class ProjectListComponent implements OnInit {
 
     getList(payload: any) {
         this.initialLoading = true;
-        this.ProjectService.getProjectDetails(payload).subscribe(
-            (res: any) => {
+        this.ProjectService.getProjectDetails(payload).subscribe({
+            next: (res: any) => {
                 this.initialLoading = false;
-                if (res.data) {
-                    this.projectList = res.data.projects;
-                    this.totalProject = res.data.totalRecored;
+                if (res?.data) {
+                    this.projectList = res?.data?.projects;
+                    this.totalProject = res?.data?.totalRecored;
                 } else {
                     this.totalProject = 0;
                 }
-                if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
-                }
+                this.handleTokenExpiry(res);
             },
-            (error) => {
+            error: (error) => {
                 this.initialLoading = false;
-            }
-        );
+            },
+        });
     }
 
-    // handleSearchInput(event: any) {
-    //     console.log(event.target.value);
-    //     this.count = 1;
-    //     if (this.searchValue !== event.target.value.trim()) {
-    //         this.searchValue = event.target.value.trim();
-    //         this.pagination = false;
-    //         let payload = {
-    //             perPageData: this.count,
-    //             totalPerPageData: this.totalPageData,
-    //             projectName: this.searchValue,
-    //         };
-    //         this.getList(payload);
-    //     }
-    // }
-
     handleScroll() {
-        let totalcount = this.count * this.totalPageData;
+        const totalcount = this.count * this.totalPageData;
         if (!this.pagination && this.projectList.length < this.totalProject) {
             this.count = this.count + this.totalPageData;
-            let payload = {
+            const payload = {
                 perPageData: this.count,
                 totalPerPageData: this.totalPageData,
                 projectName: this.searchValue,
             };
             this.pagination = true;
-            this.ProjectService.getProjectDetails(payload).subscribe(
-                (res: any) => {
+            this.ProjectService.getProjectDetails(payload).subscribe({
+                next: (res: any) => {
                     this.pagination = false;
                     if (res) {
                         this.projectList = [
@@ -145,10 +119,10 @@ export class ProjectListComponent implements OnInit {
                         ];
                     }
                 },
-                (err: any) => {
+                error: (err: any) => {
                     this.pagination = false;
-                }
-            );
+                },
+            });
         }
     }
     goToProject(project) {
@@ -158,35 +132,49 @@ export class ProjectListComponent implements OnInit {
     }
     snycproject(event: any, id: any) {
         event.preventDefault();
-        let payload = {
+        const payload = {
             id: id,
         };
         this.submitInProcess = true;
-        this.ProjectService.syncJira(payload).subscribe(
-            (res: any) => {
+        this.ProjectService.syncJira(payload).subscribe({
+            next: (res: any) => {
                 this.submitInProcess = false;
-                if (res.data.error) {
-                    this.snackBar.errorSnackBar(res.data.Message);
+                if (res?.data?.error) {
+                    this.snackBar.errorSnackBar(res?.data?.Message);
                 }
-                if (res.data) {
-                    this.snackBar.successSnackBar(res.data);
-                    let payload = {
+                if (res?.data) {
+                    this.snackBar.successSnackBar(res?.data);
+                    const payload = {
                         perPageData: 0,
                         totalPerPageData: this.totalPageData,
                         projectKey: '',
                         projectName: this.searchValue,
                     };
-                    if (res.tokenExpire == true) {
-                        this._authService.updateAndReload(window.location);
-                    }
+                    this.handleTokenExpiry(res);
                     this.getList(payload);
                 }
             },
-            (error) => {
+            error: (error) => {
                 this.submitInProcess = false;
-
                 this.snackBar.errorSnackBar('server error');
-            }
-        );
+            },
+        });
+    }
+
+    private handleSearchResponse(res: any) {
+        this.initialLoading = false;
+        if (res?.data) {
+            this.projectList = res?.data?.projects;
+            this.totalProject = res?.data?.totalRecored;
+        } else {
+            this.totalProject = 0;
+        }
+        this.handleTokenExpiry(res);
+    }
+
+    private handleTokenExpiry(res: any) {
+        if (res?.tokenExpire == true) {
+            this._authService.updateAndReload(window.location);
+        }
     }
 }
