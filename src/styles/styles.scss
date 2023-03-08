@@ -27,3 +27,15 @@ margin-top: 8px;
 .lh-2{
 line-height: 2 !important;
 }
+.formio-render{
+  .formio-loader {
+    border: 6px solid #ffffff;
+    border-top: 6px solid #5255e5 !important;
+    border-radius: 167%;
+  }
+  .btn-primary{
+    color: #ffffff !important;
+    background: #5255e5 !important;
+    border: none;
+  }
+}
