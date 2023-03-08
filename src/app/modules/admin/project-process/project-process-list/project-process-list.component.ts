@@ -46,7 +46,7 @@ export class ProjectProcessListComponent implements OnInit {
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                ProcessFormType: 'viewForm',
+                ProcessFormType: 'fileForm',
                 form: this.form,
             },
         });
@@ -55,7 +55,12 @@ export class ProjectProcessListComponent implements OnInit {
             }
         });
     }
-    processFormSubmitted(formResponse: any, createdByName: any, index: any) {
+    processFormSubmitted(
+        formResponse: any,
+        createdByName: any,
+        index: any,
+        id: any
+    ) {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
             disableClose: true,
             width: '90%',
@@ -67,6 +72,7 @@ export class ProjectProcessListComponent implements OnInit {
                 form: this.form,
                 createdByName: createdByName,
                 index: index,
+                processFormId: id,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

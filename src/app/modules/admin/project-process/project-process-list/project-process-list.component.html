@@ -59,7 +59,7 @@
                 <!-- Rows -->
                 <ng-container *ngFor="let formList of formList;index as i">
                   <div
-                  (click)="processFormSubmitted(formList.checklistResponse,formList.createdByName,i)"
+                  (click)="processFormSubmitted(formList.checklistResponse,formList.createdByName,i,formList.id)"
                     class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b cursor-pointer"
                   >
                     <!-- Image -->

@@ -61,6 +61,24 @@ export class ProcessFormComponent implements OnInit {
             this.close();
         });
     }
+    updateSubmit(event: any) {
+        let formComponent = event.data;
+        let payload = {
+            checklistResponse: formComponent,
+            projectId: this.projectId,
+            formId: this.formId,
+            id: this.data.processFormId,
+        };
+        // console.log(payload);
+        this.ProjectProcessService.update(payload).subscribe((res: any) => {
+            if (res.error) {
+                this.snackBar.errorSnackBar(res.message);
+            } else {
+                this.snackBar.successSnackBar(res.message);
+            }
+            this.close();
+        });
+    }
     close() {
         this.matDialogRef.close('close');
     }
