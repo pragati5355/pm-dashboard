@@ -22,13 +22,7 @@ export class RepositoryListComponent implements OnInit {
     ngOnInit(): void {
         this.setJiraProject();
     }
-    createRepository() {
-        this.router.navigate(['/projects/repository/add-repository']);
-    }
-    private setJiraProject() {
-        this.metricsProjectData = this._authService.getProjectDetails();
-        this.getList(this.metricsProjectData.id);
-    }
+
     getList(id: any) {
         this.initialLoading = true;
         const payload = {
@@ -40,9 +34,26 @@ export class RepositoryListComponent implements OnInit {
                 this.totalRecord = res.data.repoCount;
             }
             this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
+            this.tokenExpireFun(res);
         });
+    }
+
+    createRepository() {
+        this.router.navigate(['/projects/repository/add-repository']);
+    }
+
+    goBack() {
+        window.history.back();
+    }
+
+    private setJiraProject() {
+        this.metricsProjectData = this._authService.getProjectDetails();
+        this.getList(this.metricsProjectData.id);
+    }
+
+    private tokenExpireFun(res: any) {
+        if (res.tokenExpire == true) {
+            this._authService.updateAndReload(window.location);
+        }
     }
 }

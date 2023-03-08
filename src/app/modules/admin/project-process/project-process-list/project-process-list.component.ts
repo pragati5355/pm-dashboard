@@ -34,16 +34,6 @@ export class ProjectProcessListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.formList = [
-            {
-                bitbucketProjectName: 'demo',
-                projectName: 'indbowser',
-            },
-            {
-                bitbucketProjectName: 'demo',
-                projectName: 'indbowser',
-            },
-        ];
         let projectData = this._authService.getProjectDetails();
         this.projectId = projectData.id;
         this.getForms();
