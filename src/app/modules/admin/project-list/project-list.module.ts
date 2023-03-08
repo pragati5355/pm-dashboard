@@ -9,7 +9,7 @@ import { FuseCardModule } from '@fuse/components/card';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -21,33 +21,39 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-const routes: Routes = [{ path: "", component: ProjectListComponent, }]
+const routes: Routes = [
+    {
+        path: '',
+        component: ProjectListComponent,
+        data: {
+            pageTitle: 'Projects',
+        },
+    },
+];
 
 @NgModule({
-  declarations: [
-    ProjectListComponent
-  ],
-  imports: [
-    SharedModule,
-    CommonModule,
-    MatMenuModule,
-    MatIconModule,
-    FuseCardModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatTooltipModule,
-    MatStepperModule,
-    CdkStepperModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatProgressBarModule,
-    InfiniteScrollModule,
-    MatButtonToggleModule,
-    MatAutocompleteModule,
-    MatProgressSpinnerModule,
-    RouterModule.forChild(routes),
-  ]
+    declarations: [ProjectListComponent],
+    imports: [
+        SharedModule,
+        CommonModule,
+        MatMenuModule,
+        MatIconModule,
+        FuseCardModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatTooltipModule,
+        MatStepperModule,
+        CdkStepperModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatProgressBarModule,
+        InfiniteScrollModule,
+        MatButtonToggleModule,
+        MatAutocompleteModule,
+        MatProgressSpinnerModule,
+        RouterModule.forChild(routes),
+    ],
 })
-export class ProjectListModule { }
+export class ProjectListModule {}
