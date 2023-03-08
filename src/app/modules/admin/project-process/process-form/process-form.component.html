@@ -29,9 +29,13 @@
                         <formio
                         [form]="form"  (submit)="submit($event)"></formio>
                     </div>
-                    <div *ngIf="data.ProcessFormType == 'submitted'">
+                    <div *ngIf="data.ProcessFormType == 'editForm'">
                         <formio
                         [form]="form"  [submission]="formData"  (submit)="updateSubmit($event)"></formio>
+                    </div>
+                    <div *ngIf="data.ProcessFormType == 'viewForm'">
+                        <formio
+                        [form]="form"  [submission]="formData"  [readOnly]="true"></formio>
                     </div>
                 </div>
                 
