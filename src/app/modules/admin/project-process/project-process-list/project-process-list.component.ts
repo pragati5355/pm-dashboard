@@ -1,11 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { ProjectProcessService } from '../common/services/project-process.service';
 import { MatDialog } from '@angular/material/dialog';
-import { StaticData } from 'app/core/constacts/static';
 import { ProcessFormComponent } from '../process-form/process-form.component';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { ErrorMessage } from 'app/core/constacts/constacts';
 @Component({
     selector: 'app-project-process-list',
     templateUrl: './project-process-list.component.html',
@@ -23,11 +25,15 @@ export class ProjectProcessListComponent implements OnInit {
     totalRecords = 0;
     count = 1;
     totalRecord: any;
-    totalPerPageData = 1;
+    totalPerPageData = 10;
+    configForm!: FormGroup;
+    configFormWithProject!: FormGroup;
     constructor(
         private dialog: MatDialog,
         private _authService: AuthService,
+        private _formBuilder: FormBuilder,
         private ProjectProcessService: ProjectProcessService,
+        private _fuseConfirmationService: FuseConfirmationService,
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
         private router: Router
@@ -95,7 +101,38 @@ export class ProjectProcessListComponent implements OnInit {
             }
         });
     }
-    deleteForm(id: any) {}
+    deleteForm(id: any) {
+        this.confirmFormFun();
+        let payload = {
+            id: id,
+        };
+        // Open the dialog and save the reference of it
+        const dialogRef = this._fuseConfirmationService.open(
+            this.configForm.value
+        );
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result == 'confirmed') {
+                this.ProjectProcessService.update(payload).subscribe(
+                    (res: any) => {
+                        if (!res.error) {
+                            this.snackBar.successSnackBar(res.data.message);
+                        } else {
+                            this.snackBar.errorSnackBar(
+                                ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                            );
+                        }
+                        this.count = 0;
+                        this.formList = [];
+                        this.getSubmittedFormDetails();
+                    },
+                    (error) => {
+                        this.snackBar.errorSnackBar('Server error');
+                    }
+                );
+            }
+        });
+    }
+
     goBack() {
         window.history.back();
     }
@@ -165,5 +202,30 @@ export class ProjectProcessListComponent implements OnInit {
                 }
             );
         }
+    }
+
+    private confirmFormFun() {
+        this.configForm = this._formBuilder.group({
+            title: 'Delete Checklist',
+            message:
+                'Are you sure you want to delete this checklist? <span class="font-medium">This action cannot be undone!</span>',
+            icon: this._formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this._formBuilder.group({
+                confirm: this._formBuilder.group({
+                    show: true,
+                    label: 'Delete',
+                    color: 'warn',
+                }),
+                cancel: this._formBuilder.group({
+                    show: true,
+                    label: 'Cancel',
+                }),
+            }),
+            dismissible: false,
+        });
     }
 }
