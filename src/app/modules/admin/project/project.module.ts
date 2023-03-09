@@ -29,6 +29,7 @@ import { ProjectHomeComponent } from './project-home/project-home.component';
 import { SharedModule } from 'app/core/shared.module';
 import { MatChipsModule } from '@angular/material/chips';
 import { FormioModule, FormioAppConfig } from 'angular-formio';
+import { AddProjectHomeComponent } from '../project/add-project-home/add-project-home.component';
 import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-popup.component';
 import { ProjectWidgetModule } from '@modules/admin/project/project-widget/project-widget.module';
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
@@ -47,17 +48,11 @@ const routes: Routes = [
             },
             {
                 path: 'add-project',
-                loadChildren: () =>
-                    import('../add-project/add-project.module').then(
-                        (m) => m.AddProjectModule
-                    ),
+                component: AddProjectHomeComponent,
             },
             {
                 path: 'edit-project',
-                loadChildren: () =>
-                    import('../add-project/add-project.module').then(
-                        (m) => m.AddProjectModule
-                    ),
+                component: AddProjectHomeComponent,
             },
 
             {
@@ -101,6 +96,7 @@ const routes: Routes = [
         ConnectJiraPopupComponent,
         SendFeedbackFormComponent,
         SprintFeedbackFormComponent,
+        AddProjectHomeComponent,
     ],
     exports: [CdkStepperModule, MatStepperModule],
     imports: [
