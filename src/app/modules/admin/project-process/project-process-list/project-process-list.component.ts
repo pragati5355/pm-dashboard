@@ -1,11 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { ProjectProcessService } from '../common/services/project-process.service';
 import { MatDialog } from '@angular/material/dialog';
-import { StaticData } from 'app/core/constacts/static';
 import { ProcessFormComponent } from '../process-form/process-form.component';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { ErrorMessage } from 'app/core/constacts/constacts';
 @Component({
     selector: 'app-project-process-list',
     templateUrl: './project-process-list.component.html',
@@ -22,19 +24,23 @@ export class ProjectProcessListComponent implements OnInit {
     pagination = false;
     totalRecords = 0;
     count = 1;
-    totalRecored: any;
-    totalPerPageData = 1;
+    totalRecord: any;
+    totalPerPageData = 10;
+    configForm!: FormGroup;
+    configFormWithProject!: FormGroup;
     constructor(
         private dialog: MatDialog,
         private _authService: AuthService,
+        private _formBuilder: FormBuilder,
         private ProjectProcessService: ProjectProcessService,
+        private _fuseConfirmationService: FuseConfirmationService,
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
         private router: Router
     ) {}
 
     ngOnInit(): void {
-        let projectData = this._authService.getProjectDetails();
+        const projectData = this._authService.getProjectDetails();
         this.projectId = projectData.id;
         this.getForms();
         this.getSubmittedFormDetails();
@@ -46,7 +52,7 @@ export class ProjectProcessListComponent implements OnInit {
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                ProcessFormType: 'viewForm',
+                ProcessFormType: 'fileForm',
                 form: this.form,
             },
         });
@@ -55,18 +61,25 @@ export class ProjectProcessListComponent implements OnInit {
             }
         });
     }
-    processFormSubmitted(formResponse: any, createdByName: any, index: any) {
+    getDialogData(
+        formResponse: any,
+        createdByName: any,
+        index: any,
+        id: any,
+        type: string
+    ) {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
             disableClose: true,
             width: '90%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                ProcessFormType: 'submitted',
+                ProcessFormType: type,
                 formResponse: formResponse,
                 form: this.form,
                 createdByName: createdByName,
                 index: index,
+                processFormId: id,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
@@ -74,6 +87,37 @@ export class ProjectProcessListComponent implements OnInit {
             }
         });
     }
+    deleteForm(id: any) {
+        this.initializeConfirmationForm();
+        const payload = {
+            id: id,
+        };
+        const dialogRef = this._fuseConfirmationService.open(
+            this.configForm.value
+        );
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result == 'confirmed') {
+                this.ProjectProcessService.update(payload).subscribe(
+                    (res: any) => {
+                        if (!res.error) {
+                            this.snackBar.successSnackBar(res.data.message);
+                        } else {
+                            this.snackBar.errorSnackBar(
+                                ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                            );
+                        }
+                        this.count = 0;
+                        this.formList = [];
+                        this.getSubmittedFormDetails();
+                    },
+                    (error) => {
+                        this.snackBar.errorSnackBar('Server error');
+                    }
+                );
+            }
+        });
+    }
+
     goBack() {
         window.history.back();
     }
@@ -81,9 +125,7 @@ export class ProjectProcessListComponent implements OnInit {
         this.initialLoading = true;
         this.ProjectProcessService.find().subscribe((res: any) => {
             this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
+            this.tokenExpireFun(res);
             // this.formList = res.data
             this.form = res.data;
             this.formId = res.data.id;
@@ -99,18 +141,17 @@ export class ProjectProcessListComponent implements OnInit {
         this.ProjectProcessService.submittedForm(payload).subscribe(
             (res: any) => {
                 if (res.data) {
-                    this.totalRecored = res.data.totalRecords;
+                    this.totalRecord = res.data.totalRecords;
                     this.formList = res.data.checklistResponse;
                     this.initialLoading = false;
                 } else if (res.data == null) {
-                    this.totalRecored = 0;
+                    this.totalRecord = 0;
                     this.initialLoading = false;
-                } else if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
                 }
+                this.tokenExpireFun(res);
             },
             (error) => {
-                this.totalRecored = 0;
+                this.totalRecord = 0;
                 this.initialLoading = false;
             }
         );
@@ -119,7 +160,7 @@ export class ProjectProcessListComponent implements OnInit {
         if (!this.pagination) {
             this.count = this.count + this.totalPerPageData;
 
-            let payload = {
+            const payload = {
                 perPageData: this.count,
                 totalPerPageData: this.totalPerPageData,
                 projectId: this.projectId,
@@ -142,6 +183,37 @@ export class ProjectProcessListComponent implements OnInit {
                     this.initialLoading = false;
                 }
             );
+        }
+    }
+
+    private initializeConfirmationForm() {
+        this.configForm = this._formBuilder.group({
+            title: 'Delete Checklist',
+            message:
+                'Are you sure you want to delete this checklist? <span class="font-medium">This action cannot be undone!</span>',
+            icon: this._formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this._formBuilder.group({
+                confirm: this._formBuilder.group({
+                    show: true,
+                    label: 'Delete',
+                    color: 'warn',
+                }),
+                cancel: this._formBuilder.group({
+                    show: true,
+                    label: 'Cancel',
+                }),
+            }),
+            dismissible: false,
+        });
+    }
+
+    private tokenExpireFun(res: any) {
+        if (res.tokenExpire == true) {
+            this._authService.updateAndReload(window.location);
         }
     }
 }

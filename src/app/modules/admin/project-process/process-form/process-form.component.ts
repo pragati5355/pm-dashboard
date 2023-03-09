@@ -34,7 +34,7 @@ export class ProcessFormComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {}
     ngOnInit(): void {
-        let projectData = this._authService.getProjectDetails();
+        const projectData = this._authService.getProjectDetails();
         this.projectId = projectData.id;
         this.form = this.data.form.formComponent;
         this.formId = this.data.form.id;
@@ -46,13 +46,31 @@ export class ProcessFormComponent implements OnInit {
     }
 
     submit(event: any) {
-        let formComponent = event.data;
-        let payload = {
+        const formComponent = event.data;
+        const payload = {
             checklistResponse: formComponent,
             projectId: this.projectId,
             formId: this.formId,
         };
-        this.ProjectProcessService.create(payload).subscribe((res: any) => {
+        this.saveAPI(payload);
+    }
+    updateSubmit(event: any) {
+        const formComponent = event.data;
+        const payload = {
+            checklistResponse: formComponent,
+            projectId: this.projectId,
+            formId: this.formId,
+            id: this.data.processFormId,
+        };
+        this.updateAPI(payload);
+    }
+
+    close() {
+        this.matDialogRef.close('close');
+    }
+
+    private updateAPI(payload: any) {
+        this.ProjectProcessService.update(payload).subscribe((res: any) => {
             if (res.error) {
                 this.snackBar.errorSnackBar(res.message);
             } else {
@@ -61,7 +79,15 @@ export class ProcessFormComponent implements OnInit {
             this.close();
         });
     }
-    close() {
-        this.matDialogRef.close('close');
+
+    private saveAPI(payload: any) {
+        this.ProjectProcessService.create(payload).subscribe((res: any) => {
+            if (res.error) {
+                this.snackBar.errorSnackBar(res.message);
+            } else {
+                this.snackBar.successSnackBar(res.message);
+            }
+            this.close();
+        });
     }
 }
