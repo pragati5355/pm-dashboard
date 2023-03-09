@@ -52,14 +52,7 @@ export class ProcessFormComponent implements OnInit {
             projectId: this.projectId,
             formId: this.formId,
         };
-        this.ProjectProcessService.create(payload).subscribe((res: any) => {
-            if (res.error) {
-                this.snackBar.errorSnackBar(res.message);
-            } else {
-                this.snackBar.successSnackBar(res.message);
-            }
-            this.close();
-        });
+        this.saveAPI(payload);
     }
     updateSubmit(event: any) {
         const formComponent = event.data;
@@ -69,6 +62,14 @@ export class ProcessFormComponent implements OnInit {
             formId: this.formId,
             id: this.data.processFormId,
         };
+        this.updateAPI(payload);
+    }
+
+    close() {
+        this.matDialogRef.close('close');
+    }
+
+    private updateAPI(payload: any) {
         this.ProjectProcessService.update(payload).subscribe((res: any) => {
             if (res.error) {
                 this.snackBar.errorSnackBar(res.message);
@@ -78,7 +79,15 @@ export class ProcessFormComponent implements OnInit {
             this.close();
         });
     }
-    close() {
-        this.matDialogRef.close('close');
+
+    private saveAPI(payload: any) {
+        this.ProjectProcessService.create(payload).subscribe((res: any) => {
+            if (res.error) {
+                this.snackBar.errorSnackBar(res.message);
+            } else {
+                this.snackBar.successSnackBar(res.message);
+            }
+            this.close();
+        });
     }
 }

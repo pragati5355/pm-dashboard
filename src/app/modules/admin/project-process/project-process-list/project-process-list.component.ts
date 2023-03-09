@@ -40,7 +40,7 @@ export class ProjectProcessListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        let projectData = this._authService.getProjectDetails();
+        const projectData = this._authService.getProjectDetails();
         this.projectId = projectData.id;
         this.getForms();
         this.getSubmittedFormDetails();
@@ -61,34 +61,20 @@ export class ProjectProcessListComponent implements OnInit {
             }
         });
     }
-    editForm(formResponse: any, createdByName: any, index: any, id: any) {
+    getDialogData(
+        formResponse: any,
+        createdByName: any,
+        index: any,
+        id: any,
+        type: string
+    ) {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
             disableClose: true,
             width: '90%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                ProcessFormType: 'editForm',
-                formResponse: formResponse,
-                form: this.form,
-                createdByName: createdByName,
-                index: index,
-                processFormId: id,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result.result == 'success') {
-            }
-        });
-    }
-    viewForm(formResponse: any, createdByName: any, index: any, id: any) {
-        const dialogRef = this.dialog.open(ProcessFormComponent, {
-            disableClose: true,
-            width: '90%',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                ProcessFormType: 'viewForm',
+                ProcessFormType: type,
                 formResponse: formResponse,
                 form: this.form,
                 createdByName: createdByName,
@@ -102,11 +88,10 @@ export class ProjectProcessListComponent implements OnInit {
         });
     }
     deleteForm(id: any) {
-        this.confirmFormFun();
-        let payload = {
+        this.initializeConfirmationForm();
+        const payload = {
             id: id,
         };
-        // Open the dialog and save the reference of it
         const dialogRef = this._fuseConfirmationService.open(
             this.configForm.value
         );
@@ -175,7 +160,7 @@ export class ProjectProcessListComponent implements OnInit {
         if (!this.pagination) {
             this.count = this.count + this.totalPerPageData;
 
-            let payload = {
+            const payload = {
                 perPageData: this.count,
                 totalPerPageData: this.totalPerPageData,
                 projectId: this.projectId,
@@ -201,7 +186,7 @@ export class ProjectProcessListComponent implements OnInit {
         }
     }
 
-    private confirmFormFun() {
+    private initializeConfirmationForm() {
         this.configForm = this._formBuilder.group({
             title: 'Delete Checklist',
             message:
