@@ -169,10 +169,11 @@
               <div class="flex flex-auto overflow-hidden">
                 <!-- Resources list -->
                 <div
-                  (scrolled)="handleScroll()"
+                  infiniteScroll 
                   [infiniteScrollDistance]="2"
                   [infiniteScrollThrottle]="50"
                   [scrollWindow]="false"
+                  (scrolled)="handleScroll()"
                   class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
                   infiniteScroll
                 >
@@ -200,12 +201,12 @@
                           <div class="flex items-center">
                           <ng-container *ngIf="resources.image">
                             <img
-                              class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover w-full h-full rounded-full"
+                              class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
                               [src]="resources.image"
                               alt="Contact avatar"/>
                           </ng-container>
                           <ng-container *ngIf="!resources.image">
-                            <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                            <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border  text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
                               {{resources.firstName.charAt(0)}}
                             </div>
                           </ng-container>
