@@ -34,7 +34,7 @@ export class ProcessFormComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {}
     ngOnInit(): void {
-        let projectData = this._authService.getProjectDetails();
+        const projectData = this._authService.getProjectDetails();
         this.projectId = projectData.id;
         this.form = this.data.form.formComponent;
         this.formId = this.data.form.id;
@@ -46,8 +46,8 @@ export class ProcessFormComponent implements OnInit {
     }
 
     submit(event: any) {
-        let formComponent = event.data;
-        let payload = {
+        const formComponent = event.data;
+        const payload = {
             checklistResponse: formComponent,
             projectId: this.projectId,
             formId: this.formId,
@@ -62,14 +62,13 @@ export class ProcessFormComponent implements OnInit {
         });
     }
     updateSubmit(event: any) {
-        let formComponent = event.data;
-        let payload = {
+        const formComponent = event.data;
+        const payload = {
             checklistResponse: formComponent,
             projectId: this.projectId,
             formId: this.formId,
             id: this.data.processFormId,
         };
-        // console.log(payload);
         this.ProjectProcessService.update(payload).subscribe((res: any) => {
             if (res.error) {
                 this.snackBar.errorSnackBar(res.message);
