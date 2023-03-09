@@ -1,4 +1,3 @@
-import { ProjectListModule } from './../project-list/project-list.module';
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -29,6 +28,11 @@ import { ProjectHomeComponent } from './project-home/project-home.component';
 import { SharedModule } from 'app/core/shared.module';
 import { MatChipsModule } from '@angular/material/chips';
 import { FormioModule, FormioAppConfig } from 'angular-formio';
+import { FuseCardModule } from '@fuse/components/card';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ProjectListComponent } from './project-list/project-list.component';
 import { AddProjectHomeComponent } from '../project/add-project-home/add-project-home.component';
 import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-popup.component';
 import { ProjectWidgetModule } from '@modules/admin/project/project-widget/project-widget.module';
@@ -41,10 +45,7 @@ const routes: Routes = [
         children: [
             {
                 path: 'project-list',
-                loadChildren: () =>
-                    import('../project-list/project-list.module').then(
-                        (m) => m.ProjectListModule
-                    ),
+                component: ProjectListComponent,
             },
             {
                 path: 'add-project',
@@ -97,6 +98,7 @@ const routes: Routes = [
         SendFeedbackFormComponent,
         SprintFeedbackFormComponent,
         AddProjectHomeComponent,
+        ProjectListComponent,
     ],
     exports: [CdkStepperModule, MatStepperModule],
     imports: [
@@ -127,8 +129,12 @@ const routes: Routes = [
         FuseNavigationModule,
         FuseScrollbarModule,
         FuseScrollResetModule,
+        FuseCardModule,
+        MatTooltipModule,
         MatChipsModule,
+        MatButtonToggleModule,
         FormioModule,
+        InfiniteScrollModule,
     ],
 })
 export class ProjectModule {}
