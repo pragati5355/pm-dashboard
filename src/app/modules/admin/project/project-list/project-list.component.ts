@@ -51,8 +51,6 @@ export class ProjectListComponent implements OnInit {
             projectName: this.searchValue,
         };
         this.getList(payload);
-
-        /** Below code handles project search input with debounce time of 1000ms */
         this.projectSearchInput.valueChanges
             .pipe(
                 debounceTime(1000),
@@ -88,6 +86,9 @@ export class ProjectListComponent implements OnInit {
                 if (res?.data) {
                     this.projectList = res?.data?.projects;
                     this.totalProject = res?.data?.totalRecored;
+                } else if (res?.data == null) {
+                    this.projectList = [];
+                    this.totalProject = 0;
                 } else {
                     this.totalProject = 0;
                 }
@@ -130,7 +131,7 @@ export class ProjectListComponent implements OnInit {
             queryParams: { id: project?.id },
         });
     }
-    snycproject(event: any, id: any) {
+    syncProject(event: any, id: any) {
         event.preventDefault();
         const payload = {
             id: id,
@@ -160,12 +161,26 @@ export class ProjectListComponent implements OnInit {
             },
         });
     }
-
+    clearSearch() {
+        this.projectSearchInput.setValue('');
+        this.count = 1;
+        this.searchValue = '';
+        const payload = {
+            perPageData: this.count,
+            totalPerPageData: this.totalPageData,
+            projectKey: '',
+            projectName: this.searchValue,
+        };
+        this.getList(payload);
+    }
     private handleSearchResponse(res: any) {
         this.initialLoading = false;
         if (res?.data) {
             this.projectList = res?.data?.projects;
             this.totalProject = res?.data?.totalRecored;
+        } else if (res?.data == null) {
+            this.projectList = [];
+            this.totalProject = 0;
         } else {
             this.totalProject = 0;
         }
