@@ -152,7 +152,6 @@ export class ResourcesListComponent implements OnInit {
             ];
             const payload = this.getDefaultSearchPayload(this.count);
             this.pagination = true;
-            this.initialLoading = true;
             this.ProjectService.getResourceMember(payload).subscribe(
                 (res: any) => {
                     this.pagination = false;
@@ -162,11 +161,9 @@ export class ResourcesListComponent implements OnInit {
                             ...res?.data?.teamMember,
                         ];
                     }
-                    this.initialLoading = false;
                 },
                 (err: any) => {
                     this.pagination = false;
-                    this.initialLoading = false;
                 }
             );
         }
