@@ -17,9 +17,10 @@ export class DashboardComponent implements OnInit {
     }
     loadUserData() {
         const user = this._authService.getUser();
-        this.userName = `${user.firstName ? user.firstName : ' '} ${
+        const fullUserName = `${user.firstName ? user.firstName : ' '} ${
             user.lastName ? user.lastName : ' '
         }`;
+        this.userName = fullUserName.trim();
         this.userImageUrl = this._authService.getUserPhoto();
     }
     goToProjects() {
