@@ -1,6 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {
+    AbstractControl,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
+import { ValidationConstants } from '../../../../core/constacts/constacts';
+import { ExprienceValidation } from '../../../../core/utils/Validations';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { ProjectProcessService } from '../common/services/project-process.service';
@@ -28,6 +36,12 @@ export class ProjectProcessListComponent implements OnInit {
     totalPerPageData = 10;
     configForm!: FormGroup;
     configFormWithProject!: FormGroup;
+    dateFilterForm!: FormGroup;
+    maxDate = new Date();
+    isShow = false;
+    get dateFilterValidForm(): { [key: string]: AbstractControl } {
+        return this.dateFilterForm.controls;
+    }
     constructor(
         private dialog: MatDialog,
         private _authService: AuthService,
@@ -44,6 +58,7 @@ export class ProjectProcessListComponent implements OnInit {
         this.projectId = projectData.id;
         this.getForms();
         this.getSubmittedFormDetails();
+        this.initializeExperienceForm();
     }
     processForm() {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
@@ -97,7 +112,7 @@ export class ProjectProcessListComponent implements OnInit {
         );
         dialogRef.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
-                this.ProjectProcessService.update(payload).subscribe(
+                this.ProjectProcessService.delete(payload).subscribe(
                     (res: any) => {
                         if (!res.error) {
                             this.snackBar.successSnackBar(res.data.message);
@@ -186,6 +201,25 @@ export class ProjectProcessListComponent implements OnInit {
         }
     }
 
+    getDate(event: Event, type: any) {
+        this.count = 1;
+        this.pagination = false;
+        console.log('formFilterDate', this.dateFilterForm.value.formFilterDate);
+        if (type == 'remove') {
+            this.dateFilterForm.patchValue({
+                formFilterDate: '',
+                toFilterDate: '',
+            });
+            this.isShow = false;
+        }
+        if (!this.dateFilterForm.invalid) {
+            this.isShow = true;
+            this.dateFilterForm.value.formFilterDate;
+            this.dateFilterForm.value.toFilterDate;
+        } else {
+            event.stopPropagation();
+        }
+    }
     private initializeConfirmationForm() {
         this.configForm = this._formBuilder.group({
             title: 'Delete Checklist',
@@ -209,6 +243,20 @@ export class ProjectProcessListComponent implements OnInit {
             }),
             dismissible: false,
         });
+    }
+
+    private initializeExperienceForm() {
+        this.dateFilterForm = this._formBuilder.group(
+            {
+                formFilterDate: [''],
+                toFilterDate: [''],
+            },
+            {
+                validator: [
+                    ExprienceValidation('formFilterDate', 'toFilterDate'),
+                ],
+            }
+        );
     }
 
     private tokenExpireFun(res: any) {
