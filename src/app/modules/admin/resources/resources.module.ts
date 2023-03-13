@@ -37,8 +37,20 @@ const routes: Routes = [
         path: '',
         component: ResourcesHomeComponent,
         children: [
-            { path: 'add-resources', component: AddResourcesComponent },
-            { path: 'edit-resources', component: AddResourcesComponent },
+            {
+                path: 'add-resources',
+                component: AddResourcesComponent,
+                data: {
+                    pageTitle: 'Add Resource',
+                },
+            },
+            {
+                path: 'edit-resources',
+                component: AddResourcesComponent,
+                data: {
+                    pageTitle: 'Edit Resource',
+                },
+            },
             {
                 path: 'resources-list',
                 component: ResourcesListComponent,
