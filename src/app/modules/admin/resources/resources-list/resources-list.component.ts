@@ -448,30 +448,66 @@ export class ResourcesListComponent implements OnInit {
                 debounceTime(1000),
                 distinctUntilChanged(),
                 switchMap((inputChanged) => {
-                    this.count = 1;
-                    this.pagination = false;
-                    const expriencePayload = [
-                        parseInt(this.exprienceForm.value.minExprience),
-                        parseInt(this.exprienceForm.value.maxExprience),
-                    ];
-                    const payload = {
-                        technology:
-                            this.technologys.value.length > 0
-                                ? this.technologys.value
+                    if (inputChanged.length == 0) {
+                        this.count = 1;
+                        this.pagination = false;
+                        const expriencePayload = [
+                            parseInt(this.exprienceForm.value.minExprience),
+                            parseInt(this.exprienceForm.value.maxExprience),
+                        ];
+                        const payload = {
+                            technology:
+                                this.technologys.value.length > 0
+                                    ? this.technologys.value
+                                    : null,
+                            experience:
+                                this.exprienceForm.value.minExprience.length >
+                                    0 &&
+                                this.exprienceForm.value.maxExprience.length > 0
+                                    ? expriencePayload
+                                    : null,
+                            projects: this.projects?.value
+                                ? [this.projects.value]
                                 : null,
-                        experience:
-                            this.exprienceForm.value.minExprience.length > 0 &&
-                            this.exprienceForm.value.maxExprience.length > 0
-                                ? expriencePayload
-                                : null,
-                        projects: this.projects?.value
-                            ? [this.projects.value]
-                            : null,
-                        perPageData: this.count,
-                        totalPerPageData: this.totalPerPageData,
-                        name: inputChanged.trim(),
-                    };
-                    return this.ProjectService.getResourceMember(payload);
+                            perPageData: this.count,
+                            totalPerPageData: this.totalPerPageData,
+                            name: inputChanged.trim(),
+                        };
+                        return this.ProjectService.getResourceMember(payload);
+                    } else {
+                        if (inputChanged.trim() != '') {
+                            this.count = 1;
+                            this.pagination = false;
+                            const expriencePayload = [
+                                parseInt(this.exprienceForm.value.minExprience),
+                                parseInt(this.exprienceForm.value.maxExprience),
+                            ];
+                            const payload = {
+                                technology:
+                                    this.technologys.value.length > 0
+                                        ? this.technologys.value
+                                        : null,
+                                experience:
+                                    this.exprienceForm.value.minExprience
+                                        .length > 0 &&
+                                    this.exprienceForm.value.maxExprience
+                                        .length > 0
+                                        ? expriencePayload
+                                        : null,
+                                projects: this.projects?.value
+                                    ? [this.projects.value]
+                                    : null,
+                                perPageData: this.count,
+                                totalPerPageData: this.totalPerPageData,
+                                name: inputChanged.trim(),
+                            };
+                            return this.ProjectService.getResourceMember(
+                                payload
+                            );
+                        } else {
+                            return ' ';
+                        }
+                    }
                 })
             )
             .subscribe(

@@ -198,24 +198,30 @@
                           class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
                         >
                           <!-- Image -->
-                          <div class="flex items-center">
+                          <div class="flex items-center cursor-pointer">
                           <ng-container *ngIf="resources.image">
-                            <img
+                            <div class="cursor-pointer" [routerLink]="['./', resources.id]">                         
+                              <img
                               class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
                               [src]="resources.image"
                               alt="Contact avatar"/>
-                          </ng-container>
-                          <ng-container *ngIf="!resources.image">
-                            <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border  text-lg uppercase bg-gray-200 text-gray-600 ">
-                              {{resources.firstName.charAt(0)}}
                             </div>
+   
+                          </ng-container>
+                          <ng-container  *ngIf="!resources.image">
+                            <div class="cursor-pointer" [routerLink]="['./', resources.id]">   
+                              <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border  text-lg uppercase bg-gray-200 text-gray-600 ">
+                                {{resources.firstName.charAt(0)}}
+                              </div>
+                            </div>
+
                           </ng-container>
                         </div>
                           <!-- SKU -->
                           <div class="cursor-pointer" [routerLink]="['./', resources.id]">
                             <div class="truncate"
                             
-                             [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedContact || selectedContact.id !== resources.id,
+                             [ngClass]="{'hover:text-primary-900 font-semibold hover:transition-all': !selectedContact || selectedContact.id !== resources.id,
                             'bg-primary-50 dark:bg-hover': selectedContact && selectedContact.id === resources.id}">
                               {{ resources.firstName }} {{ resources.lastName }}
                             </div>
@@ -262,12 +268,14 @@
                           <div class="sm:block">
                             <mat-icon
                               class="text-gray-400 icon-size-5 cursor-pointer"
+                              [matTooltip]="'Edit'"
                               svgIcon="heroicons_outline:pencil"
                               (click)="edit(resources.id)"
                             ></mat-icon>
                             <mat-icon
                               class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
                               svgIcon="heroicons_outline:trash"
+                              [matTooltip]="'Delete'"
                               (click)="deleteResource(resources.id,resources.assignedProject)"
                             ></mat-icon>
                           </div>
