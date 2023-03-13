@@ -51,27 +51,7 @@ export class ProjectListComponent implements OnInit {
             projectName: this.searchValue,
         };
         this.getList(payload);
-        this.projectSearchInput.valueChanges
-            .pipe(
-                debounceTime(1000),
-                distinctUntilChanged(),
-                switchMap((inputChanged) => {
-                    const payload = {
-                        perPageData: this.count,
-                        totalPerPageData: this.totalPageData,
-                        projectName: inputChanged.trim(),
-                    };
-                    return this.ProjectService.getProjectDetails(payload);
-                })
-            )
-            .subscribe(
-                (res: any) => {
-                    this.handleSearchResponse(res);
-                },
-                (error) => {
-                    this.initialLoading = false;
-                }
-            );
+        this.addProjectSearchValueSubscription();
     }
 
     gotoAddProject() {
@@ -191,5 +171,44 @@ export class ProjectListComponent implements OnInit {
         if (res?.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+
+    private addProjectSearchValueSubscription() {
+        this.projectSearchInput.valueChanges
+            .pipe(
+                debounceTime(1000),
+                distinctUntilChanged(),
+                switchMap((inputChanged) => {
+                    if (inputChanged.length == 0) {
+                        const payload = {
+                            perPageData: this.count,
+                            totalPerPageData: this.totalPageData,
+                            projectName: inputChanged.trim(),
+                        };
+                        return this.ProjectService.getProjectDetails(payload);
+                    } else {
+                        if (inputChanged.trim() != '') {
+                            const payload = {
+                                perPageData: this.count,
+                                totalPerPageData: this.totalPageData,
+                                projectName: inputChanged.trim(),
+                            };
+                            return this.ProjectService.getProjectDetails(
+                                payload
+                            );
+                        } else {
+                            return '';
+                        }
+                    }
+                })
+            )
+            .subscribe(
+                (res: any) => {
+                    this.handleSearchResponse(res);
+                },
+                (error) => {
+                    this.initialLoading = false;
+                }
+            );
     }
 }
