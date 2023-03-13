@@ -1,298 +1,219 @@
-
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+  <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+    <!-- Drawer -->
+    <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+      [disableClose]="true" #matDrawer>
+      <router-outlet></router-outlet>
+    </mat-drawer>
 
-  <mat-drawer-container
-      class="flex-auto h-full bg-card dark:bg-transparent"
-      >
-
-      <!-- Drawer -->
-      <mat-drawer
-          class="w-full md:w-160 dark:bg-gray-900"
-          [mode]="drawerMode"
-          [opened]="false"
-          [position]="'end'"
-          [disableClose]="true"
-          #matDrawer>
-          <router-outlet></router-outlet>
-          
-      </mat-drawer>
-
-      <mat-drawer-content class="flex flex-col">
-
-          <!-- Main -->
-          <div class="flex-auto">
-
-              <!-- Header -->
+    <mat-drawer-content class="flex flex-col">
+      <div class="flex-auto">
+        <div
+          class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+          <div
+            class="relative flex flex-col sm:flex-row md:flex-col justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
+            <div class="flex justify-between mt-4 sm:mt-0 md:mt-4">
+              <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full">
+                <mat-icon [svgIcon]="'heroicons_solid:search'" class="icon-size-5" matPrefix></mat-icon>
+                <input [autocomplete]="'off'" [placeholder]="'Search for resources'" matInput
+                  [formControl]='resourceSearchInput' />
+              </mat-form-field>
+              <mat-form-field class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full">
+                <mat-select [placeholder]="'Choose project'" (selectionChange)="selectChangeProject($event)"
+                  [formControl]="projects">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let project of projectsList" [value]="project.id">{{project.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full">
+                <mat-select (selectionChange)="selectChange()" [disableOptionCentering]="true"
+                  [formControl]="technologys" [placeholder]="'Choose technology'" multiple
+                  panelClass="multiple-select-style">
+                  <mat-select-trigger>
+                    {{ techName || ''}}
+                    <span *ngIf="(technologys.value?.length || 0) > 1" class="example-additional-selection">
+                      (+{{ (technologys.value?.length || 0) - 1 }}
+                      {{ technologys.value?.length === 2 ? "other" : "others" }})
+                    </span>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let technology of technologyLIst" [value]="technology.id">{{ technology.name
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
               <div
-              class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
-            >
-              <!-- Header -->
-              <div
-                class="relative flex flex-col sm:flex-row md:flex-col justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent"
-              >
-                <!-- Title -->
-                <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
-                <div class="text-4xl font-extrabold tracking-tight leading-none">
-                  Resources
+                class="ml-4 justify-between content-center text-gray-400 inline-flex px-3 py-2.5 rounded-full border border-gray-300 w-full"
+                *ngIf="maxExprience.length > 0">
+                <div class="flex flex-0 items-center justify-center ml-4">{{minExprience}} to {{maxExprience}} <mat-icon
+                    class="ml-4 text-gray-400 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x"
+                    (click)="getExprience($event,'remove')"></mat-icon>
                 </div>
-                   <!-- Add Resources button -->
-                 <div class="ml-auto">
-                  <button
-                  [color]="'primary'"
-                  [matMenuTriggerFor]="listCard07Menu"
-                  class="ml-4"
-                  mat-flat-button
-                >
+                <div class="mat-select-arrow-wrapper mt-2 cursor-pointer">
+                  <div class="mat-select-arrow" [matMenuTriggerFor]="beforeMenu"></div>
+                </div>
+              </div>
+              <button class="ml-4 items-center  text-gray-400 w-full" *ngIf="maxExprience?.length == 0"
+                mat-stroked-button [matMenuTriggerFor]="beforeMenu">
+                <span>Choose expriences</span>
+                <div class="mat-select-arrow-wrapper">
+                  <div class="mat-select-arrow"></div>
+                </div>
+              </button>
+              <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
+                <form [formGroup]="exprienceForm">
+                  <div class="flex items-center min-w-50 px-3 py-2">
+                    <mat-form-field class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+                      (click)="$event.stopPropagation()">
+                      <input [autocomplete]="'off'" [placeholder]="'Min'" formControlName="minExprience" matInput />
+                      <mat-error
+                        *ngIf="exprienceValidForm['minExprience'].errors && exprienceValidForm['minExprience']?.invalid && exprienceValidForm['minExprience']?.touched ">
+                        <div *ngIf="exprienceValidForm['minExprience'].errors['required']">First name is mandatory</div>
+                        <div *ngIf="exprienceValidForm['minExprience'].errors['pattern']">Enter valid first name</div>
+                      </mat-error>
+                    </mat-form-field>
+                    <span class="px-2 ">to</span>
+                    <mat-form-field class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+                      (click)="$event.stopPropagation()">
+                      <input [autocomplete]="'off'" [placeholder]="'Max'" formControlName="maxExprience" matInput />
+                      <mat-error
+                        *ngIf="exprienceValidForm['maxExprience'].errors && exprienceValidForm['maxExprience']?.invalid && exprienceValidForm['maxExprience']?.touched ">
+                        <div *ngIf="exprienceValidForm['maxExprience'].errors['required']">First name is mandatory</div>
+                        <div *ngIf="exprienceValidForm['maxExprience'].errors['pattern']">Enter valid first name</div>
+                      </mat-error>
+                    </mat-form-field>
+                    <button [color]="'primary'" class="ml-4 rounded" mat-flat-button
+                      (click)="getExprience($event,'add')">
+                      <span class="ml-2 mr-1">Apply</span>
+                    </button>
+                  </div>
+                </form>
+              </mat-menu>
+
+              <div class="w-full">
+                <button [color]="'primary'" [matMenuTriggerFor]="listCard07Menu" class="ml-4" mat-flat-button>
                   <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                   <span class="ml-2 mr-1">Add Resource</span>
                 </button>
-            
+
                 <mat-menu #listCard07Menu="matMenu">
                   <button (click)="gotoAddResources()" mat-menu-item>
                     Single Upload
                   </button>
                   <button mat-menu-item>CSV Upload</button>
                 </mat-menu>
-                 </div>
-                 </div>
-                <!-- Actions -->
-                <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
-                  <!-- Search -->
-                  <div class="flex-auto">
-                    <mat-form-field
-                      class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50"
-                    >
-                      <mat-icon
-                        [svgIcon]="'heroicons_solid:search'"
-                        class="icon-size-5"
-                        matPrefix
-                      ></mat-icon>
-                      <input
-                        [autocomplete]="'off'"
-                        [placeholder]="'Search for resources'"
-                        matInput [formControl]='resourceSearchInput'
-                      />
-                    </mat-form-field>
-                  </div>
-                  <!-- project add -->
-                  <mat-form-field class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
-                    <mat-select
-                    [placeholder]="'Choose project'"
-                    (selectionChange)="selectChangeProject($event)"
-                    [formControl]="projects" >
-                      <mat-option>None</mat-option>
-                      <mat-option *ngFor="let project of projectsList" [value]="project.id">{{project.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <!-- toggle button -->
-                  <mat-form-field
-                    class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64"
-                  >
-                    <mat-select
-                      (selectionChange)="selectChange()"
-                      [disableOptionCentering]="true"
-                      [formControl]="technologys"
-                      [placeholder]="'Choose technology'"
-                      multiple
-                      panelClass="multiple-select-style"
-                    >
-                      <mat-select-trigger>
-                        {{ techName || ''}}
-                        <span
-                          *ngIf="(technologys.value?.length || 0) > 1"
-                          class="example-additional-selection"
-                        >
-                          (+{{ (technologys.value?.length || 0) - 1 }}
-                          {{ technologys.value?.length === 2 ? "other" : "others" }})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option
-                        *ngFor="let technology of technologyLIst"
-                        [value]="technology.id"
-                        >{{ technology.name }}</mat-option
-                      >
-                    </mat-select>
-                  </mat-form-field>
-                  <!-- experience -->
-                  <div class="ml-4 items-center  text-gray-400 inline-flex px-3 py-2.5 rounded-full  border border-gray-300" *ngIf="maxExprience.length > 0">  <span  class="flex flex-0 items-center justify-center ml-4">{{minExprience}} to {{maxExprience}} <mat-icon   class="ml-4 text-gray-400 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x" (click)="getExprience($event,'remove')"></mat-icon></span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></div>
-                   <button class="ml-4 items-center  text-gray-400" *ngIf="maxExprience.length == 0" mat-stroked-button [matMenuTriggerFor]="beforeMenu"> <span >Choose expriences</span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></button>
-                    <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
-                    <form [formGroup]="exprienceForm">
-                        <div class="flex items-center min-w-50 px-3 py-2">
-                            <mat-form-field
-                            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
-                            (click)="$event.stopPropagation()" >
-                            <input
-                            [autocomplete]="'off'"
-                            [placeholder]="'Min'"
-                            formControlName="minExprience" 
-                            matInput
-                            />
-                            <mat-error
-                            *ngIf="exprienceValidForm['minExprience'].errors && exprienceValidForm['minExprience']?.invalid && exprienceValidForm['minExprience']?.touched ">
-                            <div *ngIf="exprienceValidForm['minExprience'].errors['required']">First name is mandatory</div>
-                            <div *ngIf="exprienceValidForm['minExprience'].errors['pattern']">Enter valid first name</div>
-                          </mat-error>
-                        </mat-form-field>
-                        <span class="px-2 ">to</span>
-                        <mat-form-field
-                            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
-                            (click)="$event.stopPropagation()" >
-                            <input
-                            [autocomplete]="'off'"
-                            [placeholder]="'Max'"
-                            formControlName="maxExprience" 
-                            matInput
-                            />
-                            <mat-error
-                            *ngIf="exprienceValidForm['maxExprience'].errors && exprienceValidForm['maxExprience']?.invalid && exprienceValidForm['maxExprience']?.touched ">
-                            <div *ngIf="exprienceValidForm['maxExprience'].errors['required']">First name is mandatory</div>
-                            <div *ngIf="exprienceValidForm['maxExprience'].errors['pattern']">Enter valid first name</div>
-                          </mat-error>
-                        </mat-form-field>
-                        <button
-                        [color]="'primary'"
-                        class="ml-4 rounded"
-                        mat-flat-button
-                        (click)="getExprience($event,'add')"
-                        >
-                        <span class="ml-2 mr-1">Apply</span>
-                        </button>
-                        </div>
-                     </form>
-                    </mat-menu>
-               
-                </div>
-              </div>
-            
-              <!-- Main -->
-              <div class="flex flex-auto overflow-hidden">
-                <!-- Resources list -->
-                <div
-                  infiniteScroll 
-                  [infiniteScrollDistance]="2"
-                  [infiniteScrollThrottle]="50"
-                  [scrollWindow]="false"
-                  (scrolled)="handleScroll()"
-                  class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
-                  infiniteScroll
-                >
-                  <ng-container *ngIf="!initialLoading && totalRecored > 0;">
-                    <div *ngIf="totalRecored > 0" class="grid">
-                      <!-- Header -->
-                      <div
-                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                        matSortDisableClear
-                      >
-                        <div></div>
-                        <div>Name</div>
-                        <div class="hidden md:block">Technology</div>
-                        <div class="hidden md:block">Projects</div>
-                        <div class="hidden sm:block">Team</div>
-                        <div class="hidden lg:block">Experience</div>
-                        <div>Action</div>
-                      </div>
-                      <!-- Rows -->
-                      <ng-container *ngFor="let resources of resources">
-                        <div
-                          class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
-                        >
-                          <!-- Image -->
-                          <div class="flex items-center">
-                          <ng-container *ngIf="resources.image">
-                            <img
-                              class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
-                              [src]="resources.image"
-                              alt="Contact avatar"/>
-                          </ng-container>
-                          <ng-container *ngIf="!resources.image">
-                            <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border  text-lg uppercase bg-gray-200 text-gray-600 ">
-                              {{resources.firstName.charAt(0)}}
-                            </div>
-                          </ng-container>
-                        </div>
-                          <!-- SKU -->
-                          <div class="cursor-pointer" [routerLink]="['./', resources.id]">
-                            <div class="truncate"
-                            
-                             [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedContact || selectedContact.id !== resources.id,
-                            'bg-primary-50 dark:bg-hover': selectedContact && selectedContact.id === resources.id}">
-                              {{ resources.firstName }} {{ resources.lastName }}
-                            </div>
-                            <div class="truncate">{{ resources.email }}</div>
-                          </div>
-            
-                          <!-- Name -->
-                          <div class="hidden md:block truncate">
-                            {{ resources.technologys }}
-                          </div>
-                          <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length >0">
-                            {{ resources.assignedProject }}
-                          </div>
-                          <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length == 0">
-                           -
-                          </div>
-                          <!-- Price -->
-                          <div class="hidden sm:block">
-                            {{ resources.team }}
-                          </div>
-            
-                          <!-- Stock -->
-                          <div class="hidden lg:flex items-center">
-                            <div class="min-w-4">
-                              {{
-                                resources.year > "1"
-                                  ? resources.year + " Years"
-                                  : resources.year == "1"
-                                  ? resources.year + " Year"
-                                  : ""
-                              }}
-                              {{
-                                resources.month > "1"
-                                  ? resources.month + " Months"
-                                  : resources.month == "1"
-                                  ? resources.month + " Month"
-                                  : ""
-                              }}
-                            </div>
-                            <div *ngIf="!resources.month && !resources.year">-</div>
-                          </div>
-            
-                          <!-- Active -->
-                          <div class="sm:block">
-                            <mat-icon
-                              class="text-gray-400 icon-size-5 cursor-pointer"
-                              svgIcon="heroicons_outline:pencil"
-                              (click)="edit(resources.id)"
-                            ></mat-icon>
-                            <mat-icon
-                              class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
-                              svgIcon="heroicons_outline:trash"
-                              (click)="deleteResource(resources.id,resources.assignedProject)"
-                            ></mat-icon>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngIf="!initialLoading && totalRecored == 0;">
-                    <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
-                    >
-                     Resources not found
-                    </div>
-                  </ng-container>
-                  <ng-container *ngIf="initialLoading">
-                    <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
-                    >
-                     Loading......
-                    </div>
-                  </ng-container>
-                </div>
               </div>
             </div>
           </div>
 
-      </mat-drawer-content>
+          <!-- Main -->
+          <div class="flex flex-auto overflow-hidden">
+            <!-- Resources list -->
+            <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false"
+              (scrolled)="handleScroll()" class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
+              infiniteScroll>
+              <ng-container *ngIf="!initialLoading && totalRecored > 0;">
+                <div *ngIf="totalRecored > 0" class="grid">
+                  <!-- Header -->
+                  <div
+                    class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                    matSortDisableClear>
+                    <div></div>
+                    <div>Name</div>
+                    <div class="hidden md:block">Technology</div>
+                    <div class="hidden md:block">Projects</div>
+                    <div class="hidden sm:block">Team</div>
+                    <div class="hidden lg:block">Experience</div>
+                    <div>Action</div>
+                  </div>
+                  <!-- Rows -->
+                  <ng-container *ngFor="let resources of resources">
+                    <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                      <!-- Image -->
+                      <div class="flex items-center">
+                        <ng-container *ngIf="resources.image">
+                          <img
+                            class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
+                            [src]="resources.image" alt="Contact avatar" />
+                        </ng-container>
+                        <ng-container *ngIf="!resources.image">
+                          <div
+                            class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border  text-lg uppercase bg-gray-200 text-gray-600 ">
+                            {{resources.firstName.charAt(0)}}
+                          </div>
+                        </ng-container>
+                      </div>
+                      <!-- SKU -->
+                      <div class="cursor-pointer" [routerLink]="['./', resources.id]">
+                        <div class="truncate" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedContact || selectedContact.id !== resources.id,
+                            'bg-primary-50 dark:bg-hover': selectedContact && selectedContact.id === resources.id}">
+                          {{ resources.firstName }} {{ resources.lastName }}
+                        </div>
+                        <div class="truncate">{{ resources.email }}</div>
+                      </div>
+
+                      <!-- Name -->
+                      <div class="hidden md:block truncate">
+                        {{ resources.technologys }}
+                      </div>
+                      <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length >0">
+                        {{ resources.assignedProject }}
+                      </div>
+                      <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length == 0">
+                        -
+                      </div>
+                      <!-- Price -->
+                      <div class="hidden sm:block">
+                        {{ resources.team }}
+                      </div>
+
+                      <!-- Stock -->
+                      <div class="hidden lg:flex items-center">
+                        <div class="min-w-4">
+                          {{
+                          resources.year > "1"
+                          ? resources.year + " Years"
+                          : resources.year == "1"
+                          ? resources.year + " Year"
+                          : ""
+                          }}
+                          {{
+                          resources.month > "1"
+                          ? resources.month + " Months"
+                          : resources.month == "1"
+                          ? resources.month + " Month"
+                          : ""
+                          }}
+                        </div>
+                        <div *ngIf="!resources.month && !resources.year">-</div>
+                      </div>
+
+                      <!-- Active -->
+                      <div class="sm:block">
+                        <mat-icon class="text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
+                          (click)="edit(resources.id)"></mat-icon>
+                        <mat-icon class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
+                          svgIcon="heroicons_outline:trash"
+                          (click)="deleteResource(resources.id,resources.assignedProject)"></mat-icon>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!initialLoading && totalRecored == 0;">
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                  Resources not found
+                </div>
+              </ng-container>
+              <ng-container *ngIf="initialLoading">
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                  Loading......
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </mat-drawer-content>
 
   </mat-drawer-container>
 

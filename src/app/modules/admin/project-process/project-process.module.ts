@@ -36,7 +36,13 @@ const routes: Routes = [
         path: '',
         component: ProjectProcessHomeComponent,
         children: [
-            { path: 'list', component: ProjectProcessListComponent },
+            {
+                path: 'list',
+                component: ProjectProcessListComponent,
+                data: {
+                    pageTitle: 'Project Process Checklist',
+                },
+            },
             {
                 path: '',
                 redirectTo: 'list',

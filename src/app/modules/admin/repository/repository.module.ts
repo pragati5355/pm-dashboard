@@ -6,7 +6,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -25,7 +25,7 @@ import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { SharedModule } from 'app/core/shared.module';
-import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatStepperModule } from '@angular/material/stepper';
 import { RepositoryHomeComponent } from './repository-home/repository-home.component';
 import { RepositoryListComponent } from './repository-list/repository-list.component';
@@ -33,61 +33,73 @@ import { AddRepositoryComponent } from './add-repository/add-repository.componen
 import { SendMailComponent } from './send-mail/send-mail.component';
 
 const routes: Routes = [
-  {
-    path: "",
-    component: RepositoryHomeComponent,
-    children: [
-      { path: 'repository-list', component: RepositoryListComponent },
-      { path: 'add-repository', component: AddRepositoryComponent },
-      {
-        path: "",
-        redirectTo: "repository-list",
-        pathMatch: "full"
-      },
-      {
-        path: "**",
-        redirectTo: "repository-list"
-      }
-    ]
-  }
+    {
+        path: '',
+        component: RepositoryHomeComponent,
+        children: [
+            {
+                path: 'repository-list',
+                component: RepositoryListComponent,
+                data: {
+                    pageTitle: 'Repos',
+                },
+            },
+            {
+                path: 'add-repository',
+                component: AddRepositoryComponent,
+                data: {
+                    pageTitle: 'Add Repository',
+                },
+            },
+            {
+                path: '',
+                redirectTo: 'repository-list',
+                pathMatch: 'full',
+            },
+            {
+                path: '**',
+                redirectTo: 'repository-list',
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  declarations: [
-    RepositoryHomeComponent,
-    RepositoryListComponent,
-    AddRepositoryComponent,
-    SendMailComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    MatChipsModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatTableModule,
-    MatDialogModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatRadioModule,
-    MatAutocompleteModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    FuseFindByKeyPipeModule,
-    FuseNavigationModule,
-    FuseScrollbarModule,
-    FuseScrollResetModule,
-    InfiniteScrollModule,
-    MatStepperModule
-  ]
+    declarations: [
+        RepositoryHomeComponent,
+        RepositoryListComponent,
+        AddRepositoryComponent,
+        SendMailComponent,
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(routes),
+        MatChipsModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatTableModule,
+        MatDialogModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatRadioModule,
+        MatAutocompleteModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        FuseFindByKeyPipeModule,
+        FuseNavigationModule,
+        FuseScrollbarModule,
+        FuseScrollResetModule,
+        InfiniteScrollModule,
+        MatStepperModule,
+    ],
 })
-export class RepositoryModule { }
+export class RepositoryModule {}

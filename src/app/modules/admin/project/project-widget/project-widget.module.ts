@@ -43,8 +43,20 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const routes: Routes = [
-    { path: 'project-details', component: ProjectDetailsComponent },
-    { path: 'sprint-details', component: SprintDetailsComponent },
+    {
+        path: 'project-details',
+        component: ProjectDetailsComponent,
+        data: {
+            pageTitle: 'Project Details',
+        },
+    },
+    {
+        path: 'sprint-details',
+        component: SprintDetailsComponent,
+        data: {
+            pageTitle: 'Sprint Details',
+        },
+    },
 ];
 
 @NgModule({
