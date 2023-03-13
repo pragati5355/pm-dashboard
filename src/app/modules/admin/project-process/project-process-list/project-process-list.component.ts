@@ -189,13 +189,11 @@ export class ProjectProcessListComponent implements OnInit {
         this.count = 1;
         this.pagination = false;
         if (type == 'remove') {
-            console.log('formFilterDate', type);
             this.isFilterShow = false;
             this.dateFilterForm.patchValue({
                 formFilterDate: '',
                 toFilterDate: '',
             });
-            console.log(this.isFilterShow);
         } else if (!this.dateFilterForm.invalid) {
             this.isFilterShow = true;
             this.dateFilterForm.value.formFilterDate;
@@ -203,7 +201,6 @@ export class ProjectProcessListComponent implements OnInit {
         } else {
             event.stopPropagation();
         }
-        console.log(this.isFilterShow);
     }
     private initializeConfirmationForm() {
         this.configForm = this._formBuilder.group({
