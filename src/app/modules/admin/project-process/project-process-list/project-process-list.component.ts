@@ -1,6 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {
+    AbstractControl,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
+import { ValidationConstants } from '../../../../core/constacts/constacts';
+import { ExprienceValidation } from '../../../../core/utils/Validations';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { ProjectProcessService } from '../common/services/project-process.service';
@@ -28,6 +36,12 @@ export class ProjectProcessListComponent implements OnInit {
     totalPerPageData = 10;
     configForm!: FormGroup;
     configFormWithProject!: FormGroup;
+    dateFilterForm!: FormGroup;
+    maxDate = new Date();
+    isFilterShow: boolean = false;
+    get dateFilterValidForm(): { [key: string]: AbstractControl } {
+        return this.dateFilterForm.controls;
+    }
     constructor(
         private dialog: MatDialog,
         private _authService: AuthService,
@@ -44,6 +58,7 @@ export class ProjectProcessListComponent implements OnInit {
         this.projectId = projectData.id;
         this.getForms();
         this.getSubmittedFormDetails();
+        this.initializeFilterForm();
     }
     processForm() {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
@@ -97,23 +112,7 @@ export class ProjectProcessListComponent implements OnInit {
         );
         dialogRef.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
-                this.ProjectProcessService.update(payload).subscribe(
-                    (res: any) => {
-                        if (!res.error) {
-                            this.snackBar.successSnackBar(res.data.message);
-                        } else {
-                            this.snackBar.errorSnackBar(
-                                ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-                            );
-                        }
-                        this.count = 0;
-                        this.formList = [];
-                        this.getSubmittedFormDetails();
-                    },
-                    (error) => {
-                        this.snackBar.errorSnackBar('Server error');
-                    }
-                );
+                this.deleteAPI(payload);
             }
         });
     }
@@ -186,6 +185,23 @@ export class ProjectProcessListComponent implements OnInit {
         }
     }
 
+    getDate(event: Event, type: any) {
+        this.count = 1;
+        this.pagination = false;
+        if (type == 'remove') {
+            this.isFilterShow = false;
+            this.dateFilterForm.patchValue({
+                formFilterDate: '',
+                toFilterDate: '',
+            });
+        } else if (!this.dateFilterForm.invalid) {
+            this.isFilterShow = true;
+            this.dateFilterForm.value.formFilterDate;
+            this.dateFilterForm.value.toFilterDate;
+        } else {
+            event.stopPropagation();
+        }
+    }
     private initializeConfirmationForm() {
         this.configForm = this._formBuilder.group({
             title: 'Delete Checklist',
@@ -211,9 +227,35 @@ export class ProjectProcessListComponent implements OnInit {
         });
     }
 
+    private initializeFilterForm() {
+        this.dateFilterForm = this._formBuilder.group({
+            formFilterDate: [''],
+            toFilterDate: [''],
+        });
+    }
+
     private tokenExpireFun(res: any) {
         if (res.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+    private deleteAPI(payload: any) {
+        this.ProjectProcessService.delete(payload).subscribe(
+            (res: any) => {
+                if (!res.error) {
+                    this.snackBar.successSnackBar(res.message);
+                } else {
+                    this.snackBar.errorSnackBar(
+                        ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                    );
+                }
+                this.count = 0;
+                this.formList = [];
+                this.getSubmittedFormDetails();
+            },
+            (error) => {
+                this.snackBar.errorSnackBar('Server error');
+            }
+        );
     }
 }
