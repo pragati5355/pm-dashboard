@@ -38,7 +38,7 @@ export class ProjectProcessListComponent implements OnInit {
     configFormWithProject!: FormGroup;
     dateFilterForm!: FormGroup;
     maxDate = new Date();
-    isShow = false;
+    isFilterShow: boolean = false;
     get dateFilterValidForm(): { [key: string]: AbstractControl } {
         return this.dateFilterForm.controls;
     }
@@ -58,7 +58,7 @@ export class ProjectProcessListComponent implements OnInit {
         this.projectId = projectData.id;
         this.getForms();
         this.getSubmittedFormDetails();
-        this.initializeExperienceForm();
+        this.initializeFilterForm();
     }
     processForm() {
         const dialogRef = this.dialog.open(ProcessFormComponent, {
@@ -112,23 +112,7 @@ export class ProjectProcessListComponent implements OnInit {
         );
         dialogRef.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
-                this.ProjectProcessService.delete(payload).subscribe(
-                    (res: any) => {
-                        if (!res.error) {
-                            this.snackBar.successSnackBar(res.data.message);
-                        } else {
-                            this.snackBar.errorSnackBar(
-                                ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-                            );
-                        }
-                        this.count = 0;
-                        this.formList = [];
-                        this.getSubmittedFormDetails();
-                    },
-                    (error) => {
-                        this.snackBar.errorSnackBar('Server error');
-                    }
-                );
+                this.deleteAPI(payload);
             }
         });
     }
@@ -204,21 +188,22 @@ export class ProjectProcessListComponent implements OnInit {
     getDate(event: Event, type: any) {
         this.count = 1;
         this.pagination = false;
-        console.log('formFilterDate', this.dateFilterForm.value.formFilterDate);
         if (type == 'remove') {
+            console.log('formFilterDate', type);
+            this.isFilterShow = false;
             this.dateFilterForm.patchValue({
                 formFilterDate: '',
                 toFilterDate: '',
             });
-            this.isShow = false;
-        }
-        if (!this.dateFilterForm.invalid) {
-            this.isShow = true;
+            console.log(this.isFilterShow);
+        } else if (!this.dateFilterForm.invalid) {
+            this.isFilterShow = true;
             this.dateFilterForm.value.formFilterDate;
             this.dateFilterForm.value.toFilterDate;
         } else {
             event.stopPropagation();
         }
+        console.log(this.isFilterShow);
     }
     private initializeConfirmationForm() {
         this.configForm = this._formBuilder.group({
@@ -245,23 +230,35 @@ export class ProjectProcessListComponent implements OnInit {
         });
     }
 
-    private initializeExperienceForm() {
-        this.dateFilterForm = this._formBuilder.group(
-            {
-                formFilterDate: [''],
-                toFilterDate: [''],
-            },
-            {
-                validator: [
-                    ExprienceValidation('formFilterDate', 'toFilterDate'),
-                ],
-            }
-        );
+    private initializeFilterForm() {
+        this.dateFilterForm = this._formBuilder.group({
+            formFilterDate: [''],
+            toFilterDate: [''],
+        });
     }
 
     private tokenExpireFun(res: any) {
         if (res.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+    private deleteAPI(payload: any) {
+        this.ProjectProcessService.delete(payload).subscribe(
+            (res: any) => {
+                if (!res.error) {
+                    this.snackBar.successSnackBar(res.message);
+                } else {
+                    this.snackBar.errorSnackBar(
+                        ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                    );
+                }
+                this.count = 0;
+                this.formList = [];
+                this.getSubmittedFormDetails();
+            },
+            (error) => {
+                this.snackBar.errorSnackBar('Server error');
+            }
+        );
     }
 }
