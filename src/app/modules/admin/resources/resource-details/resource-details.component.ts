@@ -27,6 +27,7 @@ import {
     Router,
     NavigationStart,
     Event as NavigationEvent,
+    ParamMap,
 } from '@angular/router';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -38,8 +39,6 @@ import { round } from 'lodash';
 @Component({
     selector: 'app-resource-details',
     templateUrl: './resource-details.component.html',
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResourceDetailsComponent implements OnInit {
     initialLoading = false;
@@ -59,21 +58,23 @@ export class ResourceDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this._resourcesListComponent.matDrawer.open();
-        const path = this.activatedRoute?.snapshot?.url[0]?.path;
-        this.fetchEditdata(path);
-        this.getResourceHappinessScore(path);
+        this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
+            const resourceId = paramMap.get('id');
+            if (resourceId) {
+                this.loadData(resourceId);
+                this.getResourceHappinessScore(resourceId);
+            }
+        });
     }
 
-    fetchEditdata(id: any) {
-        const payload = { id: id };
+    loadData(id: any) {
+        const payload = { id };
         this.initialLoading = true;
         this.ProjectService.getresource(payload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
-                console.log('Outside :', this.resourceDetails);
                 if (res.data) {
                     this.resourceDetails = res?.data;
-                    console.log('Inside :', this.resourceDetails);
                 }
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -91,10 +92,8 @@ export class ResourceDetailsComponent implements OnInit {
     }
     getResourceHappinessScore(id: any) {
         const payload = { resourceId: id };
-        this.initialLoading = true;
         this.ProjectService.getResourceHappinessScore(payload).subscribe(
             (res: any) => {
-                this.initialLoading = false;
                 if (res.data !== null) {
                     this.score = round(res?.data?.happinessScore);
                     this.outOfScore = res?.data?.outOf;
@@ -104,7 +103,6 @@ export class ResourceDetailsComponent implements OnInit {
                 }
             },
             (error) => {
-                this.initialLoading = false;
             }
         );
     }
