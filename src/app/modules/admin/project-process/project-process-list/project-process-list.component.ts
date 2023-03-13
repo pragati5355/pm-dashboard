@@ -72,7 +72,10 @@ export class ProjectProcessListComponent implements OnInit {
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result.result == 'success') {
+            if (result == 'success') {
+                this.count = 0;
+                this.formList = [];
+                this.getSubmittedFormDetails();
             }
         });
     }
@@ -98,7 +101,10 @@ export class ProjectProcessListComponent implements OnInit {
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result.result == 'success') {
+            if (result == 'success') {
+                this.count = 0;
+                this.formList = [];
+                this.getSubmittedFormDetails();
             }
         });
     }

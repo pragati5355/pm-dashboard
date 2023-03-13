@@ -76,7 +76,7 @@ export class ProcessFormComponent implements OnInit {
             } else {
                 this.snackBar.successSnackBar(res.message);
             }
-            this.close();
+            this.matDialogRef.close('success');
         });
     }
 
@@ -87,7 +87,7 @@ export class ProcessFormComponent implements OnInit {
             } else {
                 this.snackBar.successSnackBar(res.message);
             }
-            this.close();
+            this.matDialogRef.close('success');
         });
     }
 }
