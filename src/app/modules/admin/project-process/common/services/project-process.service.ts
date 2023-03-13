@@ -8,7 +8,8 @@ export class ProjectProcessService {
     constructor(private http: HttpClient) {}
     getProcessForm = AppConstants['PROJECT_API_URL'] + '/checklist-form';
     saveProcessForm = AppConstants['PROJECT_API_URL'] + '/checklist';
-    updateProcessForm = AppConstants['PROJECT_API_URL'] + '/checklist';
+    updateProcessForm = AppConstants['PROJECT_API_URL'] + '/checklist-response';
+    deleteProcessForm = AppConstants['PROJECT_API_URL'] + '/delete-checklist';
     submittedProcessForm =
         AppConstants['PROJECT_API_URL'] + '/checklist-response';
     find() {
@@ -21,6 +22,9 @@ export class ProjectProcessService {
         return this.http.post(this.saveProcessForm, obj);
     }
     update(obj: any) {
-        return this.http.post(this.updateProcessForm, obj);
+        return this.http.put(this.updateProcessForm, obj);
+    }
+    delete(obj: any) {
+        return this.http.post(this.deleteProcessForm, obj);
     }
 }
