@@ -18,10 +18,10 @@
             <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="goBack()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
             Project Process Checklist
           </div>
-          <div class="ml-auto flex">
+          <div class="ml-auto flex  items-center">
+      
             <div>
-              <div class="min-w-50 ml-4 items-center  text-gray-400 inline-flex  px-3 py-2.5 rounded-full  border border-gray-300" *ngIf="isShow">  <span  class="flex flex-0 items-center justify-center ml-4">{{startInput.value}} to {{endInput.value}} <mat-icon   class="ml-4 text-gray-400 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x" (click)="getDate($event,'remove')"></mat-icon></span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></div>
-            <button class="min-w-50 ml-4 items-center  text-gray-400" *ngIf="!isShow"  mat-stroked-button [matMenuTriggerFor]="beforeMenu"> <span >Choose dates</span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></button>
+              <div class="ml-4 cursor-pointer py-1 px-3 rounded-full font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500 ng-star-inserted justify-center" *ngIf="isFilterShow">  <span  class="flex flex-0 items-center justify-center ml-4"><span *ngIf="startInput.value" class="mr-1">From </span> {{ startInput.value }} <span *ngIf="endInput.value" class="mr-1"> to </span> {{ endInput.value}} <mat-icon   class="ml-4 text-blue-800 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x" (click)="getDate($event,'remove')"></mat-icon></span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></div>
              <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4 min-w-120">
              <form [formGroup]="dateFilterForm">
                  <div class="flex items-center min-w-120 px-3 py-2 justify-center">
@@ -74,6 +74,7 @@
               </form>
              </mat-menu>
             </div>
+            <button mat-stroked-button="isFilterShow"   mat-flat-button="!isFilterShow" class="ml-4 rounded-full border py-1 px-4 items-center border-gray-500"  [matTooltip]="'Filter'"   [matMenuTriggerFor]="beforeMenu" [ngClass]="{'rounded-full border py-1 px-4 items-center border-gray-500': !isFilterShow,'rounded-full border border-blue-800 py-1 px-4 items-center': isFilterShow}"> <mat-icon [ngClass]="{'text-blue-800': isFilterShow}" svgIcon="heroicons_outline:adjustments"></mat-icon> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></button>
             <button
             [color]="'primary'"
             class="ml-4"
