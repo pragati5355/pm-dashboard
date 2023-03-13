@@ -142,6 +142,12 @@ export class ProjectProcessListComponent implements OnInit {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             projectId: this.projectId,
+            from: this.dateFilterForm?.value.formFilterDate
+                ? this.dateFilterForm?.value.formFilterDate
+                : '',
+            to: this.dateFilterForm?.value.toFilterDate
+                ? this.dateFilterForm?.value.toFilterDate
+                : '',
         };
         this.ProjectProcessService.submittedForm(payload).subscribe(
             (res: any) => {
@@ -202,8 +208,7 @@ export class ProjectProcessListComponent implements OnInit {
             });
         } else if (!this.dateFilterForm.invalid) {
             this.isFilterShow = true;
-            this.dateFilterForm.value.formFilterDate;
-            this.dateFilterForm.value.toFilterDate;
+            this.getSubmittedFormDetails();
         } else {
             event.stopPropagation();
         }
