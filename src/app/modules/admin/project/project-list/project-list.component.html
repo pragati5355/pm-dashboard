@@ -14,7 +14,9 @@
                 <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
                     <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
                     <input matInput [formControl]='projectSearchInput' [autocomplete]="'off'"
-                        [placeholder]="'Search by project name.. etc'">
+                    #searchInputField
+                        [placeholder]="'Search by project name'">
+                        <mat-icon *ngIf="searchInputField.value" class="icon-size-5 cursor-pointer" matSuffix [svgIcon]="'heroicons_solid:x'" (click)="clearSearch()"></mat-icon>
                 </mat-form-field>
             </div>
             <div class="flex items-center ml-4 p-0.5 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
@@ -71,7 +73,7 @@
                                         </div>
                                         <span (click)="goToProject(project)" *ngIf="project.status"
                                             class=" cursor-pointer ml-auto  inline-flex items-center font-bold text-xs px-3 py-2 rounded-full tracking-wide uppercase"
-                                            [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50 bg-red-200 ':project.status == 'Sync In Progress',
+                                            [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50  ':project.status == 'Sync In Progress',
                                    'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500':project.status == 'On Track',
                                    'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500':project.status == 'At Risk',
                                    'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500':project.status == 'Off Track'}">
@@ -79,7 +81,7 @@
                                         </span>
                                         <button class=" ml-auto    inline-flex items-center"
                                             *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
-                                            (click)="snycproject($event,project.id)">
+                                            (click)="syncProject($event,project.id)">
                                             <span class="ml-2 mr-1">Sync Now</span>
                                         </button>
                                     </div>
@@ -92,7 +94,7 @@
                                         <span
                                             class=" ml-auto  inline-flex items-center font-bold  px-3 py-1 rounded-full tracking-wide">
                                             <span class="leading-relaxed whitespace-nowrap border-b-a cursor-pointer"
-                                                (click)="snycproject($event,project.id)">Sync Now</span>
+                                                (click)="syncProject($event,project.id)">Sync Now</span>
                                         </span>
                                     </div>
                                     <div (click)="goToProject(project)" class="cursor-pointer">
@@ -150,7 +152,7 @@
 
 
                                     <div *ngIf="project.done == 'NaN' || project.done <= 0"
-                                        class="mx-6 sm:mx-8 mt-2 mb-6 text-secondary text-primary dark:text-primary-500">
+                                        class="mx-6 sm:mx-8 mt-2 mb-6 text-primary dark:text-primary-500">
                                         Not sync with Jira . Project details will appear here when the sync is complete.
                                     </div>
                                 </fuse-card>
@@ -208,13 +210,13 @@
                                 {{ project.lastSyncDate ? (project.lastSyncDate | date) : '-' }}
                             </div>
                             <div class="sm:block">
-                                <div *ngIf="!project.lastSyncDate" (click)="snycproject($event,project.id)"
+                                <div *ngIf="!project.lastSyncDate" (click)="syncProject($event,project.id)"
                                     class="cursor-pointer py-1 px-3 rounded-full font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500 ng-star-inserted">
                                     Sync Now </div>
                                 <span *ngIf="project.lastSyncDate"
                                     class=" ml-auto  inline-flex items-center font-semibold py-1 rounded-full tracking-wide">
                                     <span class="leading-relaxed whitespace-nowrap border-b-a cursor-pointer"
-                                        (click)="snycproject($event,project.id)">Sync Now</span>
+                                        (click)="syncProject($event,project.id)">Sync Now</span>
                                 </span>
                             </div>
                         </div>

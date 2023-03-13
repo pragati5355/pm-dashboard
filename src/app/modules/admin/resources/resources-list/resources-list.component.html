@@ -114,7 +114,7 @@
                     </mat-select>
                   </mat-form-field>
                   <!-- experience -->
-                  <div class="ml-4 items-center  text-gray-400 inline-flex items-center  px-3 py-2.5 rounded-full  border border-gray-300" *ngIf="maxExprience.length > 0">  <span  class="flex flex-0 items-center justify-center ml-4">{{minExprience}} to {{maxExprience}} <mat-icon   class="ml-4 text-gray-400 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x" (click)="getExprience($event,'remove')"></mat-icon></span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></div>
+                  <div class="ml-4 items-center  text-gray-400 inline-flex px-3 py-2.5 rounded-full  border border-gray-300" *ngIf="maxExprience.length > 0">  <span  class="flex flex-0 items-center justify-center ml-4">{{minExprience}} to {{maxExprience}} <mat-icon   class="ml-4 text-gray-400 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x" (click)="getExprience($event,'remove')"></mat-icon></span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></div>
                    <button class="ml-4 items-center  text-gray-400" *ngIf="maxExprience.length == 0" mat-stroked-button [matMenuTriggerFor]="beforeMenu"> <span >Choose expriences</span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></button>
                     <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
                     <form [formGroup]="exprienceForm">
@@ -169,10 +169,11 @@
               <div class="flex flex-auto overflow-hidden">
                 <!-- Resources list -->
                 <div
-                  (scrolled)="handleScroll()"
+                  infiniteScroll 
                   [infiniteScrollDistance]="2"
                   [infiniteScrollThrottle]="50"
                   [scrollWindow]="false"
+                  (scrolled)="handleScroll()"
                   class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
                   infiniteScroll
                 >
@@ -186,7 +187,7 @@
                         <div></div>
                         <div>Name</div>
                         <div class="hidden md:block">Technology</div>
-                        <div class="hidden md:block">Pojects</div>
+                        <div class="hidden md:block">Projects</div>
                         <div class="hidden sm:block">Team</div>
                         <div class="hidden lg:block">Experience</div>
                         <div>Action</div>
@@ -200,12 +201,12 @@
                           <div class="flex items-center">
                           <ng-container *ngIf="resources.image">
                             <img
-                              class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover w-full h-full rounded-full"
+                              class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
                               [src]="resources.image"
                               alt="Contact avatar"/>
                           </ng-container>
                           <ng-container *ngIf="!resources.image">
-                            <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                            <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border  text-lg uppercase bg-gray-200 text-gray-600 ">
                               {{resources.firstName.charAt(0)}}
                             </div>
                           </ng-container>
