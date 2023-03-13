@@ -2,7 +2,6 @@ import {
     Component,
     ElementRef,
     OnInit,
-    QueryList,
     ViewChildren,
     ViewEncapsulation,
 } from '@angular/core';
@@ -10,10 +9,9 @@ import { AuthService } from '@services/auth/auth.service';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { Router } from '@angular/router';
 import { FuseCardComponent } from '@fuse/components/card';
-import { SessionService } from '@services/auth/session.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 @Component({
     selector: 'app-project-list',
     templateUrl: './project-list.component.html',
@@ -33,45 +31,17 @@ export class ProjectListComponent implements OnInit {
     cardList: boolean = true;
     submitInProcess: boolean = false;
     projectSearchInput = new FormControl();
-    private _fuseCards!: QueryList<ElementRef>;
 
     constructor(
         private router: Router,
         private _authService: AuthService,
-        private ProjectService: CreateProjecteService,
-        private sessionService: SessionService,
+        private projectService: CreateProjecteService,
         private snackBar: SnackBar
     ) {}
 
     ngOnInit() {
-        const payload = {
-            perPageData: this.count,
-            totalPerPageData: this.totalPageData,
-            projectKey: '',
-            projectName: this.searchValue,
-        };
-        this.getList(payload);
-        this.projectSearchInput.valueChanges
-            .pipe(
-                debounceTime(1000),
-                distinctUntilChanged(),
-                switchMap((inputChanged) => {
-                    const payload = {
-                        perPageData: this.count,
-                        totalPerPageData: this.totalPageData,
-                        projectName: inputChanged.trim(),
-                    };
-                    return this.ProjectService.getProjectDetails(payload);
-                })
-            )
-            .subscribe(
-                (res: any) => {
-                    this.handleSearchResponse(res);
-                },
-                (error) => {
-                    this.initialLoading = false;
-                }
-            );
+        this.loadData();
+        this.addProjectSearchValueSubscription();
     }
 
     gotoAddProject() {
@@ -80,7 +50,7 @@ export class ProjectListComponent implements OnInit {
 
     getList(payload: any) {
         this.initialLoading = true;
-        this.ProjectService.getProjectDetails(payload).subscribe({
+        this.projectService.getProjectDetails(payload).subscribe({
             next: (res: any) => {
                 this.initialLoading = false;
                 if (res?.data) {
@@ -110,7 +80,7 @@ export class ProjectListComponent implements OnInit {
                 projectName: this.searchValue,
             };
             this.pagination = true;
-            this.ProjectService.getProjectDetails(payload).subscribe({
+            this.projectService.getProjectDetails(payload).subscribe({
                 next: (res: any) => {
                     this.pagination = false;
                     if (res) {
@@ -137,7 +107,7 @@ export class ProjectListComponent implements OnInit {
             id: id,
         };
         this.submitInProcess = true;
-        this.ProjectService.syncJira(payload).subscribe({
+        this.projectService.syncJira(payload).subscribe({
             next: (res: any) => {
                 this.submitInProcess = false;
                 if (res?.data?.error) {
@@ -191,5 +161,49 @@ export class ProjectListComponent implements OnInit {
         if (res?.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+
+    private addProjectSearchValueSubscription() {
+        this.projectSearchInput.valueChanges
+            .pipe(
+                map((value) => value?.trim()),
+                debounceTime(1000),
+                distinctUntilChanged()
+            )
+            .subscribe((searchKey) => {
+                this.searchValue = searchKey;
+                if (searchKey) {
+                    this.getSearchResult(searchKey);
+                } else {
+                    this.clearSearch();
+                }
+            });
+    }
+
+    private getSearchResult(searchKey: any) {
+        this.count = 1;
+        const payload = {
+            perPageData: this.count,
+            totalPerPageData: this.totalPageData,
+            projectName: searchKey,
+        };
+        this.projectService.getProjectDetails(payload).subscribe(
+            (res: any) => {
+                this.handleSearchResponse(res);
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
+    private loadData() {
+        const payload = {
+            perPageData: this.count,
+            totalPerPageData: this.totalPageData,
+            // projectKey: '',
+            projectName: this.searchValue,
+        };
+        this.getList(payload);
     }
 }

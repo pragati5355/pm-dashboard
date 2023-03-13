@@ -18,7 +18,63 @@
             <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="goBack()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
             Project Process Checklist
           </div>
-          <div class="ml-auto">
+          <div class="ml-auto flex  items-center">
+      
+            <div>
+              <div class="ml-4 cursor-pointer py-1 px-3 rounded-full font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500 ng-star-inserted justify-center" *ngIf="isFilterShow">  <span  class="flex flex-0 items-center justify-center ml-4"><span *ngIf="startInput.value" class="mr-1">From </span> {{ startInput.value }} <span *ngIf="endInput.value" class="mr-1"> to </span> {{ endInput.value}} <mat-icon   class="ml-4 text-blue-800 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x" (click)="getDate($event,'remove')"></mat-icon></span> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></div>
+             <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4 min-w-120">
+             <form [formGroup]="dateFilterForm">
+                 <div class="flex items-center min-w-120 px-3 py-2 justify-center">
+                     <mat-form-field
+                     class="w-100-px fuse-mat-dense fuse-mat-no-subscript"
+                     (click)="$event.stopPropagation()" >
+                     <input
+                     matInput
+                     #startInput 
+                     [placeholder]="'Start Date'" 
+                     formControlName="formFilterDate"
+                     [matDatepicker]="startDatepicker" (focus)="startDatepicker.open()" [max]="maxDate">
+                 <mat-datepicker-toggle
+                     matSuffix
+                     [for]="startDatepicker">
+                 </mat-datepicker-toggle>
+                 <mat-datepicker #startDatepicker (closed)="startInput.blur()"> </mat-datepicker>
+                     <mat-error
+                     *ngIf="dateFilterValidForm['formFilterDate'].errors && dateFilterValidForm['formFilterDate']?.invalid && dateFilterValidForm['formFilterDate']?.touched ">
+                   </mat-error>
+                 </mat-form-field>
+                 <span class="px-2 ">to</span>
+                 <mat-form-field
+                     class="w-100-px fuse-mat-dense fuse-mat-no-subscript"
+                     (click)="$event.stopPropagation()" >
+                     <input
+                     matInput
+                     #endInput
+                     [placeholder]="'End Date'" 
+                     formControlName="toFilterDate"
+                     [matDatepicker]="endDatepicker" (focus)="endDatepicker.open()" [max]="maxDate">
+                 <mat-datepicker-toggle
+                     matSuffix
+                     [for]="endDatepicker">
+                 </mat-datepicker-toggle>
+                 <mat-datepicker #endDatepicker (closed)="endInput.blur()"> </mat-datepicker>
+                     <mat-error
+                     *ngIf="dateFilterValidForm['toFilterDate'].errors && dateFilterValidForm['toFilterDate']?.invalid && dateFilterValidForm['toFilterDate']?.touched ">
+                   </mat-error>
+                 </mat-form-field>
+                 <button
+                 [color]="'primary'"
+                 class="ml-4 rounded"
+                 mat-flat-button
+                 (click)="getDate($event,'add')"
+                 >
+                 <span class="ml-2 mr-1">Apply</span>
+                 </button>
+                 </div>
+              </form>
+             </mat-menu>
+            </div>
+            <button mat-stroked-button="isFilterShow"   mat-flat-button="!isFilterShow" class="ml-4 rounded-full border py-1 px-4 items-center border-gray-500"  [matTooltip]="'Filter'"   [matMenuTriggerFor]="beforeMenu" [ngClass]="{'rounded-full border py-1 px-4 items-center border-gray-500': !isFilterShow,'rounded-full border border-blue-800 py-1 px-4 items-center': isFilterShow}"> <mat-icon [ngClass]="{'text-blue-800': isFilterShow}" svgIcon="heroicons_outline:adjustments"></mat-icon> <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"><div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div></div></button>
             <button
             [color]="'primary'"
             class="ml-4"
