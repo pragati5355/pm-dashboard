@@ -7,8 +7,6 @@ import {
     FormGroup,
     Validators,
 } from '@angular/forms';
-import { ValidationConstants } from '../../../../core/constacts/constacts';
-import { ExprienceValidation } from '../../../../core/utils/Validations';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { ProjectProcessService } from '../common/services/project-process.service';
@@ -102,9 +100,7 @@ export class ProjectProcessListComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
-                this.count = 0;
-                this.formList = [];
-                this.getSubmittedFormDetails();
+                this.resetList();
             }
         });
     }
@@ -260,13 +256,16 @@ export class ProjectProcessListComponent implements OnInit {
                         ErrorMessage.ERROR_SOMETHING_WENT_WRONG
                     );
                 }
-                this.count = 0;
-                this.formList = [];
-                this.getSubmittedFormDetails();
+                this.resetList();
             },
             (error) => {
                 this.snackBar.errorSnackBar('Server error');
             }
         );
+    }
+    private resetList() {
+        this.count = 0;
+        this.formList = [];
+        this.getSubmittedFormDetails();
     }
 }
