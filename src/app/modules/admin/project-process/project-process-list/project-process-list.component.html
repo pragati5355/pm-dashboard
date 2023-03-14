@@ -10,7 +10,7 @@
                 class="ml-4 cursor-pointer py-1 px-3 rounded-full font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500 ng-star-inserted justify-center"
                 *ngIf="isFilterShow"> <span class="flex flex-0 items-center justify-center ml-4"><span
                     *ngIf="startInput.value" class="mr-1">From </span> {{ startInput.value }} <span
-                    *ngIf="endInput.value" class="mr-1"> to </span> {{ endInput.value}} <mat-icon
+                    *ngIf="endInput.value" class="mx-1"> To </span> {{ endInput.value}} <mat-icon
                     class="ml-4 text-blue-800 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x"
                     (click)="getDate($event,'remove')"></mat-icon></span>
                 <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu">
@@ -50,11 +50,11 @@
                 </form>
               </mat-menu>
             </div>
-            <button mat-stroked-button="isFilterShow" mat-flat-button="!isFilterShow"
+            <button mat-stroked-button
               class="ml-4 rounded-full border py-1 px-4 items-center border-gray-500" [matTooltip]="'Filter'"
               [matMenuTriggerFor]="beforeMenu"
-              [ngClass]="{'rounded-full border py-1 px-4 items-center border-gray-500': !isFilterShow,'rounded-full border border-blue-800 py-1 px-4 items-center': isFilterShow}">
-              <mat-icon [ngClass]="{'text-blue-800': isFilterShow}" svgIcon="heroicons_outline:adjustments"></mat-icon>
+             >
+              <mat-icon svgIcon="heroicons_outline:adjustments"></mat-icon>
               <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu">
                 <div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div>
               </div>
@@ -115,11 +115,11 @@
                   </div>
 
                   <div class="sm:block flex items-center">
-                    <mat-icon class=" text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:eye"
+                    <mat-icon  [matTooltip]="'View'" class=" text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:eye"
                       (click)="getDialogData(formList.checklistResponse,formList.createdByName,i,formList.id,'viewForm')"></mat-icon>
-                    <mat-icon class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
+                    <mat-icon  [matTooltip]="'Edit '" class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
                       (click)="getDialogData(formList.checklistResponse,formList.createdByName,i,formList.id,'editForm')"></mat-icon>
-                    <mat-icon class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:trash"
+                    <mat-icon  [matTooltip]="'Delete'" class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:trash"
                       (click)="deleteForm(formList.id)"></mat-icon>
 
                   </div>
