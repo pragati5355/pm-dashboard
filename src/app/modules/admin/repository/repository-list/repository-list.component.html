@@ -29,21 +29,21 @@
               <div
                 class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                 matSortDisableClear>
-                <div>Bitbucket Project Name</div>
-                <div class="hidden md:block">Metric Project Key</div>
+                <div>Repo Name</div>
+                <div class="hidden md:block">Technology</div>
                 <div class="hidden lg:block">Created At</div>
                 <div>Created By</div>
               </div>
               <ng-container *ngFor="let repository of repoData?.repositories">
                 <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-                  <div class="cursor-pointer">
+                  <div class="">
                     <div class="truncate">
-                      {{ repository?.name | titlecase }}
+                      {{ repository?.name  }}
                     </div>
                   </div>
 
                   <div class="hidden md:block truncate">
-                    {{ repoData?.repoProjectKey }}
+                    {{ repository?.technology.split('_').join(' ') | titlecase  }}
                   </div>
                   <div class="hidden lg:flex items-center">
                     <div class="min-w-4">

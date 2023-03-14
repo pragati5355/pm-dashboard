@@ -427,7 +427,7 @@ export class AddRepositoryComponent implements OnInit {
                 mergeAccessUserUUIDs: newCodeReviewers,
                 projectKey: this.metricsProjectData.repoProject.key,
                 scriptUrl: this.uploadResourceUrl,
-                technology: this.formType,
+                technology: this.formType.split('-').join('_').toUpperCase(),
                 metricsProjectId: this.metricsProjectData.id,
             };
             this.RepositoryService.create(payload).subscribe(
