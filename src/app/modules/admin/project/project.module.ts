@@ -46,14 +46,23 @@ const routes: Routes = [
             {
                 path: 'project-list',
                 component: ProjectListComponent,
+                data: {
+                    pageTitle: 'Projects List',
+                },
             },
             {
                 path: 'add-project',
                 component: AddProjectHomeComponent,
+                data: {
+                    pageTitle: 'Add New Project',
+                },
             },
             {
                 path: 'edit-project',
                 component: AddProjectHomeComponent,
+                data: {
+                    pageTitle: 'Edit Project',
+                },
             },
 
             {
