@@ -7,8 +7,6 @@ import {
     FormGroup,
     Validators,
 } from '@angular/forms';
-import { ValidationConstants } from '../../../../core/constacts/constacts';
-import { ExprienceValidation } from '../../../../core/utils/Validations';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { ProjectProcessService } from '../common/services/project-process.service';
@@ -72,7 +70,10 @@ export class ProjectProcessListComponent implements OnInit {
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result.result == 'success') {
+            if (result == 'success') {
+                this.count = 0;
+                this.formList = [];
+                this.getSubmittedFormDetails();
             }
         });
     }
@@ -98,7 +99,8 @@ export class ProjectProcessListComponent implements OnInit {
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result.result == 'success') {
+            if (result == 'success') {
+                this.resetList();
             }
         });
     }
@@ -136,6 +138,12 @@ export class ProjectProcessListComponent implements OnInit {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             projectId: this.projectId,
+            from: this.dateFilterForm?.value.formFilterDate
+                ? this.dateFilterForm?.value.formFilterDate
+                : '',
+            to: this.dateFilterForm?.value.toFilterDate
+                ? this.dateFilterForm?.value.toFilterDate
+                : '',
         };
         this.ProjectProcessService.submittedForm(payload).subscribe(
             (res: any) => {
@@ -196,8 +204,7 @@ export class ProjectProcessListComponent implements OnInit {
             });
         } else if (!this.dateFilterForm.invalid) {
             this.isFilterShow = true;
-            this.dateFilterForm.value.formFilterDate;
-            this.dateFilterForm.value.toFilterDate;
+            this.getSubmittedFormDetails();
         } else {
             event.stopPropagation();
         }
@@ -249,13 +256,16 @@ export class ProjectProcessListComponent implements OnInit {
                         ErrorMessage.ERROR_SOMETHING_WENT_WRONG
                     );
                 }
-                this.count = 0;
-                this.formList = [];
-                this.getSubmittedFormDetails();
+                this.resetList();
             },
             (error) => {
                 this.snackBar.errorSnackBar('Server error');
             }
         );
+    }
+    private resetList() {
+        this.count = 0;
+        this.formList = [];
+        this.getSubmittedFormDetails();
     }
 }
