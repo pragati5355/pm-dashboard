@@ -115,11 +115,11 @@
                   </div>
 
                   <div class="sm:block flex items-center">
-                    <mat-icon class=" text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:eye"
+                    <mat-icon  [matTooltip]="'View'" class=" text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:eye"
                       (click)="getDialogData(formList.checklistResponse,formList.createdByName,i,formList.id,'viewForm')"></mat-icon>
-                    <mat-icon class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
+                    <mat-icon  [matTooltip]="'Edit '" class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
                       (click)="getDialogData(formList.checklistResponse,formList.createdByName,i,formList.id,'editForm')"></mat-icon>
-                    <mat-icon class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:trash"
+                    <mat-icon  [matTooltip]="'Delete'" class="ml-6 text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:trash"
                       (click)="deleteForm(formList.id)"></mat-icon>
 
                   </div>
