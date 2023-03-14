@@ -1,10 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    OnInit,
-    ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import {
@@ -26,9 +20,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import {
     debounceTime,
     distinctUntilChanged,
-    filter,
-    fromEvent,
-    Observable,
+    map,
     Subject,
     switchMap,
     takeUntil,
@@ -43,9 +35,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 export class ResourcesListComponent implements OnInit {
     @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
     @ViewChild('matDrawer', { static: true }) matDrawer!: MatDrawer;
-    // contacts$!: Observable<Contact[]: any>;
 
-    /**Public variables */
     selectedContact: any;
     drawerMode!: 'side' | 'over';
     minExprience = '';
@@ -75,10 +65,8 @@ export class ResourcesListComponent implements OnInit {
     opened: any;
     resourceSearchInput = new FormControl();
 
-    /**Private Variables */
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-    /**Constructor */
     constructor(
         private _authService: AuthService,
         private ProjectService: CreateProjecteService,
@@ -367,12 +355,15 @@ export class ResourcesListComponent implements OnInit {
         }
     }
     viewResource(id: number) {
-        // Go to the new contact
         this.router.navigate(['./', id], { relativeTo: this._activatedRoute });
 
-        // Mark for check
         this._changeDetectorRef.markForCheck();
         this.opened == true;
+    }
+
+    clearSearch() {
+        this.resourceSearchInput.setValue('');
+        this.getList();
     }
 
     private handleTokenExpiry() {
@@ -512,6 +503,7 @@ export class ResourcesListComponent implements OnInit {
             )
             .subscribe(
                 (res: any) => {
+                    this.initialLoading = false;
                     this.handleGetResourceMemberResponse(res);
                 },
                 (error) => {

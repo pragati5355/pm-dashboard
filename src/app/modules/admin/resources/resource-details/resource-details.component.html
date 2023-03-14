@@ -1,10 +1,7 @@
 <div class="flex flex-col w-full">
 
-
-        <!-- Header -->
         <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
 
-            <!-- Close button -->
             <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
                 <button
                 class="bg-slate-400"
@@ -27,12 +24,11 @@
             </div>
         </div>
 
-        <!-- Contact -->
         <div *ngIf="!initialLoading; else loaderRef" class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
             <div class="w-full max-w-3xl">
-                <!-- Avatar and actions -->
+
                 <div class="flex flex-auto items-end -mt-16">
-                    <!-- Avatar -->
+
                     <div  class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
                         <div
                             class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
@@ -40,16 +36,16 @@
                             {{resourceDetails?.firstName?.charAt(0)}}
                         </div>
                     </div>
-                    <!-- Actions -->
+                
                 </div>
 
-                <!-- Name -->
+            
                 <div class="mt-3 pt-2 pb-2 text-4xl font-bold truncate">{{resourceDetails?.firstName | titlecase}} {{resourceDetails.lastName | titlecase}}</div>
 
-                <!-- Tags -->
+            
                 <ng-container *ngIf="resourceDetails.email">
                     <div class="flex flex-wrap items-center mt-2">
-                        <!-- Tag -->
+                  
                             <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
                                 <span class="text-sm font-medium whitespace-nowrap">{{resourceDetails.email}}</span>
                             </div>
@@ -57,7 +53,7 @@
                 </ng-container>
 
                 <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
-                    <!-- project -->
+          
                     <ng-container *ngIf="resourceDetails.assignedProject">
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:briefcase'"></mat-icon>
@@ -65,7 +61,7 @@
                             
                             <ng-container >
                                 <div class="flex flex-wrap items-center mt-2 ml-4">
-                                    <!-- Tag -->
+                           
                                     <ng-container *ngFor="let project of resourceDetails.assignedProject">
                                         <div *ngIf="project" class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
                                             <span class="text-sm font-medium whitespace-nowrap">{{project}}</span>
@@ -76,7 +72,7 @@
                         </div>
                     </ng-container>
 
-                    <!-- technologys -->
+            
 
                     <ng-container>
                         <div class="flex sm:items-center mt-2">
@@ -84,7 +80,7 @@
                             <span class="ml-2">Technologies:</span>
                             <ng-container *ngIf="resourceDetails?.technologys?.length > 0" >
                                 <div class="flex flex-wrap items-center mt-2 ml-4">
-                                    <!-- Tag -->
+                         
                                     <ng-container *ngFor="let technology of resourceDetails?.technologys">
                                         <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
                                             <span class="text-sm font-medium whitespace-nowrap">{{technology}}</span>
@@ -95,7 +91,7 @@
                         </div>
                     </ng-container>
                     
-                    <!-- experience -->
+         
                         
                     <ng-container>
                         <div class="flex sm:items-center">
@@ -121,7 +117,7 @@
                         </div>
                     </ng-container>
 
-                    <!-- happiness score -->
+           
 
                     <ng-container *ngIf="score>0" >
                         <div class="flex sm:items-center">
@@ -133,7 +129,6 @@
                         </div>
                     </ng-container>
 
-                    <!-- data of joining -->
 
                     <ng-container>
                         <div class="flex sm:items-center">
@@ -146,8 +141,6 @@
                     </ng-container>
 
                         
-                    <!-- team -->
-                        
                     <ng-container  >
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:users'"></mat-icon>
@@ -157,8 +150,6 @@
                                 </div>
                         </div>
                     </ng-container>
-
-                       <!-- salary -->
                         
                        <ng-container  >
                         <div class="flex sm:items-center">

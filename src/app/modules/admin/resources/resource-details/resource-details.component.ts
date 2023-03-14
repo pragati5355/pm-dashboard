@@ -1,39 +1,12 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    OnDestroy,
-    OnInit,
-    Renderer2,
-    TemplateRef,
-    ViewChild,
-    ViewContainerRef,
-    ViewEncapsulation,
-} from '@angular/core';
-import {
-    AbstractControl,
-    FormArray,
-    FormBuilder,
-    FormControl,
-    FormGroup,
-    Validators,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from '../../../../core/utils/snackBar';
-import {
-    ActivatedRoute,
-    Router,
-    NavigationStart,
-    Event as NavigationEvent,
-    ParamMap,
-} from '@angular/router';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+
 import { ResourcesListComponent } from '../resources-list/resources-list.component';
 import { round } from 'lodash';
 @Component({
@@ -102,13 +75,10 @@ export class ResourceDetailsComponent implements OnInit {
                     this._authService.updateAndReload(window.location);
                 }
             },
-            (error) => {
-            }
+            (error) => {}
         );
     }
-    /**
-     * Close the drawer
-     */
+
     closeDrawer(): Promise<MatDrawerToggleResult> {
         return this._resourcesListComponent.matDrawer.close();
     }
