@@ -1,10 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    OnInit,
-    ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import {
@@ -26,9 +20,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import {
     debounceTime,
     distinctUntilChanged,
-    filter,
-    fromEvent,
-    Observable,
+    map,
     Subject,
     switchMap,
     takeUntil,
@@ -43,9 +35,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 export class ResourcesListComponent implements OnInit {
     @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
     @ViewChild('matDrawer', { static: true }) matDrawer!: MatDrawer;
-    // contacts$!: Observable<Contact[]: any>;
 
-    /**Public variables */
     selectedContact: any;
     drawerMode!: 'side' | 'over';
     minExprience = '';
@@ -75,10 +65,8 @@ export class ResourcesListComponent implements OnInit {
     opened: any;
     resourceSearchInput = new FormControl();
 
-    /**Private Variables */
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-    /**Constructor */
     constructor(
         private _authService: AuthService,
         private ProjectService: CreateProjecteService,
@@ -367,12 +355,15 @@ export class ResourcesListComponent implements OnInit {
         }
     }
     viewResource(id: number) {
-        // Go to the new contact
         this.router.navigate(['./', id], { relativeTo: this._activatedRoute });
 
-        // Mark for check
         this._changeDetectorRef.markForCheck();
         this.opened == true;
+    }
+
+    clearSearch() {
+        this.resourceSearchInput.setValue('');
+        this.getList();
     }
 
     private handleTokenExpiry() {
@@ -448,34 +439,71 @@ export class ResourcesListComponent implements OnInit {
                 debounceTime(1000),
                 distinctUntilChanged(),
                 switchMap((inputChanged) => {
-                    this.count = 1;
-                    this.pagination = false;
-                    const expriencePayload = [
-                        parseInt(this.exprienceForm.value.minExprience),
-                        parseInt(this.exprienceForm.value.maxExprience),
-                    ];
-                    const payload = {
-                        technology:
-                            this.technologys.value.length > 0
-                                ? this.technologys.value
+                    if (inputChanged.length == 0) {
+                        this.count = 1;
+                        this.pagination = false;
+                        const expriencePayload = [
+                            parseInt(this.exprienceForm.value.minExprience),
+                            parseInt(this.exprienceForm.value.maxExprience),
+                        ];
+                        const payload = {
+                            technology:
+                                this.technologys.value.length > 0
+                                    ? this.technologys.value
+                                    : null,
+                            experience:
+                                this.exprienceForm.value.minExprience.length >
+                                    0 &&
+                                this.exprienceForm.value.maxExprience.length > 0
+                                    ? expriencePayload
+                                    : null,
+                            projects: this.projects?.value
+                                ? [this.projects.value]
                                 : null,
-                        experience:
-                            this.exprienceForm.value.minExprience.length > 0 &&
-                            this.exprienceForm.value.maxExprience.length > 0
-                                ? expriencePayload
-                                : null,
-                        projects: this.projects?.value
-                            ? [this.projects.value]
-                            : null,
-                        perPageData: this.count,
-                        totalPerPageData: this.totalPerPageData,
-                        name: inputChanged.trim(),
-                    };
-                    return this.ProjectService.getResourceMember(payload);
+                            perPageData: this.count,
+                            totalPerPageData: this.totalPerPageData,
+                            name: inputChanged.trim(),
+                        };
+                        return this.ProjectService.getResourceMember(payload);
+                    } else {
+                        if (inputChanged.trim() != '') {
+                            this.count = 1;
+                            this.pagination = false;
+                            const expriencePayload = [
+                                parseInt(this.exprienceForm.value.minExprience),
+                                parseInt(this.exprienceForm.value.maxExprience),
+                            ];
+                            const payload = {
+                                technology:
+                                    this.technologys.value.length > 0
+                                        ? this.technologys.value
+                                        : null,
+                                experience:
+                                    this.exprienceForm.value.minExprience
+                                        .length > 0 &&
+                                    this.exprienceForm.value.maxExprience
+                                        .length > 0
+                                        ? expriencePayload
+                                        : null,
+                                projects: this.projects?.value
+                                    ? [this.projects.value]
+                                    : null,
+                                perPageData: this.count,
+                                totalPerPageData: this.totalPerPageData,
+                                name: inputChanged.trim(),
+                            };
+                            return this.ProjectService.getResourceMember(
+                                payload
+                            );
+                        } else {
+                            return ' ';
+                        }
+                    }
                 })
             )
             .subscribe(
                 (res: any) => {
+                    this.initialLoading = false;
                     this.handleGetResourceMemberResponse(res);
                 },
                 (error) => {

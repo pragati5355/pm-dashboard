@@ -12,11 +12,13 @@
           class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
           <div
             class="relative flex flex-col sm:flex-row md:flex-col justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
-            <div class="flex justify-between mt-4 sm:mt-0 md:mt-4">
+            <div class="flex justify-between">
               <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full">
                 <mat-icon [svgIcon]="'heroicons_solid:search'" class="icon-size-5" matPrefix></mat-icon>
-                <input [autocomplete]="'off'" [placeholder]="'Search for resources'" matInput
+                <input [autocomplete]="'off'" [placeholder]="'Search by name'" matInput
                   [formControl]='resourceSearchInput' />
+
+                  <mat-icon *ngIf="resourceSearchInput.value" class="icon-size-5 cursor-pointer" matSuffix [svgIcon]="'heroicons_solid:x'" (click)="clearSearch()"></mat-icon>
               </mat-form-field>
               <mat-form-field class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full">
                 <mat-select [placeholder]="'Choose project'" (selectionChange)="selectChangeProject($event)"
@@ -51,7 +53,7 @@
                   <div class="mat-select-arrow" [matMenuTriggerFor]="beforeMenu"></div>
                 </div>
               </div>
-              <button class="ml-4 items-center  text-gray-400 w-full" *ngIf="maxExprience?.length == 0"
+              <button class="ml-4 items-center text-gray-400 w-full" *ngIf="maxExprience?.length == 0"
                 mat-stroked-button [matMenuTriggerFor]="beforeMenu">
                 <span>Choose expriences</span>
                 <div class="mat-select-arrow-wrapper">
@@ -89,7 +91,7 @@
               </mat-menu>
 
               <div class="w-full">
-                <button [color]="'primary'" [matMenuTriggerFor]="listCard07Menu" class="ml-4" mat-flat-button>
+                <button [color]="'primary'" [matTooltip]="'Add Resource'" [matMenuTriggerFor]="listCard07Menu" class="ml-4" mat-flat-button>
                   <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                   <span class="ml-2 mr-1">Add Resource</span>
                 </button>
@@ -128,7 +130,7 @@
                   <ng-container *ngFor="let resources of resources">
                     <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                       <!-- Image -->
-                      <div class="flex items-center">
+                      <div class="flex items-center cursor-pointer" [routerLink]="['./', resources.id]">
                         <ng-container *ngIf="resources.image">
                           <img
                             class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
@@ -143,7 +145,7 @@
                       </div>
                       <!-- SKU -->
                       <div class="cursor-pointer" [routerLink]="['./', resources.id]">
-                        <div class="truncate" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedContact || selectedContact.id !== resources.id,
+                        <div class="truncate" [ngClass]="{'hover:text-primary-900 font-medium dark:hover:bg-hover': !selectedContact || selectedContact.id !== resources.id,
                             'bg-primary-50 dark:bg-hover': selectedContact && selectedContact.id === resources.id}">
                           {{ resources.firstName }} {{ resources.lastName }}
                         </div>
@@ -188,9 +190,9 @@
 
                       <!-- Active -->
                       <div class="sm:block">
-                        <mat-icon class="text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
+                        <mat-icon [matTooltip]="'Edit Resource'" class="text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
                           (click)="edit(resources.id)"></mat-icon>
-                        <mat-icon class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
+                        <mat-icon [matTooltip]="'Delete Resource'" class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
                           svgIcon="heroicons_outline:trash"
                           (click)="deleteResource(resources.id,resources.assignedProject)"></mat-icon>
                       </div>
