@@ -22,7 +22,6 @@ import {
     distinctUntilChanged,
     map,
     Subject,
-    switchMap,
     takeUntil,
 } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
@@ -48,7 +47,7 @@ export class ResourcesListComponent implements OnInit {
     technologys = new FormControl('');
     projects = new FormControl('');
     techName: any = null;
-    technologyLIst: any = [];
+    technologyList: any = [];
     pagination = false;
     searchValue = '';
     techList: string[] = [];
@@ -112,7 +111,7 @@ export class ResourcesListComponent implements OnInit {
     getTechnologies() {
         this.ProjectService.getTechnology().subscribe(
             (res: any) => {
-                this.technologyLIst = res?.data;
+                this.technologyList = res?.data;
             },
             (error) => {}
         );
@@ -134,10 +133,7 @@ export class ResourcesListComponent implements OnInit {
     handleScroll() {
         if (!this.pagination) {
             this.count = this.count + this.totalPerPageData;
-            const expriencePayload = [
-                parseInt(this.exprienceForm?.value?.minExprience),
-                parseInt(this.exprienceForm?.value?.maxExprience),
-            ];
+            const expriencePayload = this.getExperiencePayload();
             const payload = this.getDefaultSearchPayload(this.count);
             this.pagination = true;
             this.ProjectService.getResourceMember(payload).subscribe(
@@ -161,30 +157,12 @@ export class ResourcesListComponent implements OnInit {
         this.count = 1;
         this.pagination = false;
         const tech = this.technologys?.value?.[0];
-        for (let i = 0; i < this.technologyLIst.length; i++) {
-            if (this.technologyLIst[i].id === tech) {
-                this.techName = this.technologyLIst[i]?.name;
+        for (let i = 0; i < this.technologyList.length; i++) {
+            if (this.technologyList[i].id === tech) {
+                this.techName = this.technologyList[i]?.name;
             }
         }
-        const expriencePayload = [
-            parseInt(this.exprienceForm?.value?.minExprience),
-            parseInt(this.exprienceForm?.value?.maxExprience),
-        ];
-        const payload = {
-            technology:
-                this.technologys?.value.length > 0
-                    ? this.technologys?.value
-                    : null,
-            experience:
-                this.exprienceForm?.value?.minExprience.length > 0 &&
-                this.exprienceForm?.value?.maxExprience.length > 0
-                    ? expriencePayload
-                    : null,
-            projects: this.projects?.value ? [this.projects?.value] : null,
-            perPageData: this.count,
-            totalPerPageData: this.totalPerPageData,
-            name: this.searchValue,
-        };
+        const payload = this.getDefaultSearchPayload();
         this.ProjectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
@@ -202,7 +180,6 @@ export class ResourcesListComponent implements OnInit {
             const payload = {
                 id: id,
             };
-            // Open the dialog and save the reference of it
             this.ProjectService.getresource(payload).subscribe(
                 (res: any) => {
                     this.updateDeleteObj.push(res.data);
@@ -228,7 +205,6 @@ export class ResourcesListComponent implements OnInit {
                         this.configForm.value
                     );
 
-                    // Subscribe to afterClosed from the dialog reference
                     dialogRef.afterClosed().subscribe((result) => {
                         if (result == 'confirmed') {
                             this.ProjectService.updateDeleteResource(
@@ -280,7 +256,6 @@ export class ResourcesListComponent implements OnInit {
                 this.configFormAssignedProject.value
             );
 
-            // Subscribe to afterClosed from the dialog reference
             dialogRef.afterClosed().subscribe((result) => {
                 if (result == 'confirmed') {
                 }
@@ -362,8 +337,10 @@ export class ResourcesListComponent implements OnInit {
     }
 
     clearSearch() {
+        this.count = 1;
         this.resourceSearchInput.setValue('');
-        this.getList();
+        this.searchValue = '';
+        this.pagination = false;
     }
 
     private handleTokenExpiry() {
@@ -436,95 +413,44 @@ export class ResourcesListComponent implements OnInit {
     private addSearchValueChangeSubscription() {
         this.resourceSearchInput.valueChanges
             .pipe(
+                map((value) => value?.trim()),
                 debounceTime(1000),
-                distinctUntilChanged(),
-                switchMap((inputChanged) => {
-                    if (inputChanged.length == 0) {
-                        this.count = 1;
-                        this.pagination = false;
-                        const expriencePayload = [
-                            parseInt(this.exprienceForm.value.minExprience),
-                            parseInt(this.exprienceForm.value.maxExprience),
-                        ];
-                        const payload = {
-                            technology:
-                                this.technologys.value.length > 0
-                                    ? this.technologys.value
-                                    : null,
-                            experience:
-                                this.exprienceForm.value.minExprience.length >
-                                    0 &&
-                                this.exprienceForm.value.maxExprience.length > 0
-                                    ? expriencePayload
-                                    : null,
-                            projects: this.projects?.value
-                                ? [this.projects.value]
-                                : null,
-                            perPageData: this.count,
-                            totalPerPageData: this.totalPerPageData,
-                            name: inputChanged.trim(),
-                        };
-                        return this.ProjectService.getResourceMember(payload);
-                    } else {
-                        if (inputChanged.trim() != '') {
-                            this.count = 1;
-                            this.pagination = false;
-                            const expriencePayload = [
-                                parseInt(this.exprienceForm.value.minExprience),
-                                parseInt(this.exprienceForm.value.maxExprience),
-                            ];
-                            const payload = {
-                                technology:
-                                    this.technologys.value.length > 0
-                                        ? this.technologys.value
-                                        : null,
-                                experience:
-                                    this.exprienceForm.value.minExprience
-                                        .length > 0 &&
-                                    this.exprienceForm.value.maxExprience
-                                        .length > 0
-                                        ? expriencePayload
-                                        : null,
-                                projects: this.projects?.value
-                                    ? [this.projects.value]
-                                    : null,
-                                perPageData: this.count,
-                                totalPerPageData: this.totalPerPageData,
-                                name: inputChanged.trim(),
-                            };
-                            return this.ProjectService.getResourceMember(
-                                payload
-                            );
-                        } else {
-                            return ' ';
-                        }
-                    }
-                })
+                distinctUntilChanged()
             )
-            .subscribe(
-                (res: any) => {
-                    this.initialLoading = false;
-                    this.handleGetResourceMemberResponse(res);
-                },
-                (error) => {
-                    this.totalRecored = 0;
-                    this.initialLoading = false;
+            .subscribe((searchKey) => {
+                this.searchValue = searchKey;
+                if (searchKey) {
+                    this.getSearchResult(searchKey);
+                } else {
+                    this.getList();
                 }
-            );
+            });
+    }
+
+    private getSearchResult(searchKey: any) {
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.ProjectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
     }
 
     private addWatcherSubscription() {
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(({ matchingAliases }) => {
-                // Set the drawerMode if the given breakpoint is active
                 if (matchingAliases.includes('lg')) {
                     this.drawerMode = 'side';
                 } else {
                     this.drawerMode = 'over';
                 }
 
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
     }
@@ -532,10 +458,8 @@ export class ResourcesListComponent implements OnInit {
     private addDrawerOpenChangeSubscription() {
         this.matDrawer.openedChange.subscribe((opened) => {
             if (!opened) {
-                // Remove the selected contact when drawer closed
                 this.selectedContact = null;
 
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             }
         });
