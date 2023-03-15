@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
+import { RepositoryDetailsComponent } from '../repository-details/repository-details.component';
 
 @Component({
     selector: 'app-repository-list',
@@ -16,7 +18,8 @@ export class RepositoryListComponent implements OnInit {
     constructor(
         private router: Router,
         private _authService: AuthService,
-        private RepositoryService: RepositoryService
+        private RepositoryService: RepositoryService,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -55,5 +58,17 @@ export class RepositoryListComponent implements OnInit {
         if (res.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+    repoDetails(data: any) {
+        const dialogRef = this.dialog.open(RepositoryDetailsComponent, {
+            disableClose: true,
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: data,
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result.result == 'success') {
+            }
+        });
     }
 }
