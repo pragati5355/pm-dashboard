@@ -1,5 +1,6 @@
 export const environment = {
     production: true,
+    bitbucketSource: 'https://bitbucket.org/mindbowser/',
     baseUrl: 'https://nojfzzgc12.execute-api.ap-south-1.amazonaws.com',
     jiraBaseUrl: 'https://m2xrqfnhd1.execute-api.ap-south-1.amazonaws.com',
     projectBaseUrl: 'https://s1pp7u6klg.execute-api.ap-south-1.amazonaws.com',
