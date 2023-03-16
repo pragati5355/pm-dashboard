@@ -179,54 +179,17 @@ export class ResourcesListComponent implements OnInit {
         if (assignedProjects.length == 0) {
             const payload = {
                 id: id,
+                isDeleted: true,
             };
-            this.ProjectService.getresource(payload).subscribe(
-                (res: any) => {
-                    this.updateDeleteObj.push(res.data);
-                    this.updateDeleteObj.forEach((item: any) => {
-                        this.deleteObject = {
-                            id: id,
-                            createdAt: item.createdAt,
-                            lastModifiedAt: null,
-                            isDeleted: true,
-                            firstName: item.firstName ? item.firstName : '',
-                            lastName: item.lastName ? item.lastName : '',
-                            email: item.email ? item.email : '',
-                            team: item.team ? item.team : '',
-                            month: item.month ? item.month : 0,
-                            year: item.year ? item.year : 0,
-                            technology: item.technology
-                                ? item.technology
-                                : null,
-                            assignedProjects: [0],
-                        };
-                    });
-                    const dialogRef = this._fuseConfirmationService.open(
-                        this.configForm.value
-                    );
-
-                    dialogRef.afterClosed().subscribe((result) => {
-                        if (result == 'confirmed') {
-                            this.ProjectService.updateDeleteResource(
-                                this.deleteObject
-                            ).subscribe(
-                                (res: any) => {
-                                    this.snackBar.successSnackBar(
-                                        res.data.Message
-                                    );
-                                    const payload =
-                                        this.getDefaultSearchPayload();
-                                    this.getList(payload);
-                                },
-                                (error) => {
-                                    this.snackBar.errorSnackBar('Server error');
-                                }
-                            );
-                        }
-                    });
-                },
-                (error) => {}
+            const dialogRef = this._fuseConfirmationService.open(
+                this.configForm.value
             );
+
+            dialogRef.afterClosed().subscribe((result) => {
+                if (result == 'confirmed') {
+                    this.deleteAPI(payload);
+                }
+            });
         } else {
             this.configFormAssignedProject = this._formBuilder.group({
                 title: 'Delete Resource',
@@ -488,5 +451,17 @@ export class ResourcesListComponent implements OnInit {
             }),
             dismissible: false,
         });
+    }
+    private deleteAPI(deletePayload: any) {
+        this.ProjectService.updateDeleteResource(deletePayload).subscribe(
+            (res: any) => {
+                this.snackBar.successSnackBar(res?.message);
+                const payload = this.getDefaultSearchPayload();
+                this.getList(payload);
+            },
+            (error) => {
+                this.snackBar.errorSnackBar('Server error');
+            }
+        );
     }
 }
