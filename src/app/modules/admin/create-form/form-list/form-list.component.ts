@@ -16,6 +16,11 @@ import { AuthService } from '@services/auth/auth.service';
 import { CopyFormComponent } from '../copy-form/copy-form.component';
 import { ErrorMessage } from 'app/core/constacts/constacts';
 import { result } from 'lodash';
+import {
+    BreakpointObserver,
+    Breakpoints,
+    BreakpointState,
+} from '@angular/cdk/layout';
 @Component({
     selector: 'app-form-list',
     templateUrl: './form-list.component.html',
@@ -23,15 +28,6 @@ import { result } from 'lodash';
     animations: fuseAnimations,
 })
 export class FormListComponent implements OnInit {
-    constructor(
-        private router: Router,
-        private snackBar: SnackBar,
-        private formService: AddFormService,
-        private _authService: AuthService,
-        private _formBuilder: FormBuilder,
-        private _fuseConfirmationService: FuseConfirmationService,
-        private dialog: MatDialog
-    ) {}
     formList: any = [];
     isLoading = false;
     pageNo = 1;
@@ -44,51 +40,61 @@ export class FormListComponent implements OnInit {
     configFormWithProject!: FormGroup;
     deleteProjects: any = '';
     cont: HTMLElement | any = document.getElementsByClassName('listClass');
+
+    constructor(
+        private router: Router,
+        private snackBar: SnackBar,
+        private formService: AddFormService,
+        private _authService: AuthService,
+        private _formBuilder: FormBuilder,
+        private _fuseConfirmationService: FuseConfirmationService,
+        private dialog: MatDialog,
+        public breakpointObserver: BreakpointObserver
+    ) {}
+
     ngOnInit(): void {
-        let payload = {
-            perPageData: this.count,
-            totalPerPageData: this.totalPageData,
-        };
-        this.getList(payload);
+        this.loadData();
         this.confirmFormFun();
     }
+
     gotoAddForm() {
         this.router.navigate(['/forms/add-form']);
     }
-    deleteForm(id: number, projects: any): void {
-        // this.deleteProjects=projects
 
+    deleteForm(id: number, projects: any): void {
         if (projects.length == 0) {
-            let payload = {
-                id: id,
-            };
-            // Open the dialog and save the reference of it
             const dialogRef = this._fuseConfirmationService.open(
                 this.configForm.value
             );
             dialogRef.afterClosed().subscribe((result) => {
                 if (result == 'confirmed') {
-                    this.formService.deleteForm(payload).subscribe(
-                        (res: any) => {
-                            if (!res.error) {
-                                this.snackBar.successSnackBar(res.data.message);
-                            } else {
-                                this.snackBar.errorSnackBar(
-                                    ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-                                );
+                    this.formService
+                        .deleteForm({
+                            id,
+                        })
+                        .subscribe(
+                            (res: any) => {
+                                if (!res.error) {
+                                    this.snackBar.successSnackBar(
+                                        res.data.message
+                                    );
+                                } else {
+                                    this.snackBar.errorSnackBar(
+                                        ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                                    );
+                                }
+                                this.count = 0;
+                                this.formList = [];
+                                let payload = {
+                                    perPageData: this.count,
+                                    totalPerPageData: this.totalPageData,
+                                };
+                                this.getList(payload);
+                            },
+                            (error) => {
+                                this.snackBar.errorSnackBar('Server error');
                             }
-                            this.count = 0;
-                            this.formList = [];
-                            let payload = {
-                                perPageData: this.count,
-                                totalPerPageData: this.totalPageData,
-                            };
-                            this.getList(payload);
-                        },
-                        (error) => {
-                            this.snackBar.errorSnackBar('Server error');
-                        }
-                    );
+                        );
                 }
             });
         } else {
@@ -126,13 +132,18 @@ export class FormListComponent implements OnInit {
             });
         }
     }
+
     editForm(id: number) {
         this.router.navigate([`/forms/edit-form`], { queryParams: { id: id } });
     }
+
     viewForm(id: number) {
         this.router.navigate([`/forms/view-form`], { queryParams: { id: id } });
     }
+
     handleScroll() {
+        console.log(!this.pagination && this.formList.length < this.totalForm);
+
         if (!this.pagination && this.formList.length < this.totalForm) {
             this.count = this.count + this.totalPageData;
             let payload = {
@@ -153,6 +164,7 @@ export class FormListComponent implements OnInit {
             );
         }
     }
+
     getList(payload: any) {
         this.initialLoading = true;
         this.formService.getFormList(payload).subscribe(
@@ -161,6 +173,7 @@ export class FormListComponent implements OnInit {
                 if (res.data) {
                     this.formList = res.data.forms;
                     this.totalForm = res.data.totalRecords;
+                    this.checkForLargerScreen();
                 } else {
                     this.totalForm = 0;
                 }
@@ -171,6 +184,7 @@ export class FormListComponent implements OnInit {
             }
         );
     }
+
     duplicateForm(id: number, name: any) {
         const dialogRef = this.dialog.open(CopyFormComponent, {
             disableClose: true,
@@ -199,6 +213,14 @@ export class FormListComponent implements OnInit {
         for (let i = 0; i <= arr.length - 1; i++) {
             this.deleteProjects = this.deleteProjects + arr[i] + '<br>';
         }
+    }
+
+    private loadData() {
+        const payload = {
+            perPageData: this.count,
+            totalPerPageData: this.totalPageData,
+        };
+        this.getList(payload);
     }
 
     private confirmFormFun() {
@@ -230,5 +252,16 @@ export class FormListComponent implements OnInit {
         if (res.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+
+    private checkForLargerScreen() {
+        const largeScreenSubscription = this.breakpointObserver
+            .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .subscribe((state: BreakpointState) => {
+                if (state.matches) {
+                    this.handleScroll();
+                    largeScreenSubscription.unsubscribe();
+                }
+            });
     }
 }
