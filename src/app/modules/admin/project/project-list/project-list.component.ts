@@ -132,7 +132,7 @@ export class ProjectListComponent implements OnInit {
         });
     }
     clearSearch() {
-        this.projectSearchInput.setValue('');
+        this.projectSearchInput.setValue('', { emitEvent: false });
         this.count = 1;
         this.searchValue = '';
         const payload = {
@@ -201,7 +201,7 @@ export class ProjectListComponent implements OnInit {
         const payload = {
             perPageData: this.count,
             totalPerPageData: this.totalPageData,
-            // projectKey: '',
+            projectKey: '',
             projectName: this.searchValue,
         };
         this.getList(payload);

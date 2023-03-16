@@ -53,6 +53,7 @@ export const AppConstants: ConstantsInterface = {
     GET_HAPPINESS_SCORE_BY_PROJECT: `${projectBaseUrl}/happiness-score-by-project`,
     GET_BITBUCKET_MEMBER: `${projectBaseUrl}/bitbucket-members`,
     GET_BITBUCKET_PROJECT_NAME: `${projectBaseUrl}/search-project`,
+    GET_STATISTICS_COUNT: `${projectBaseUrl}/dashboard-stats`,
 };
 export const ValidationConstants = {
     EMAIL_VALIDATION:

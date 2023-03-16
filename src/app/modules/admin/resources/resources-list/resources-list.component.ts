@@ -68,7 +68,7 @@ export class ResourcesListComponent implements OnInit {
 
     constructor(
         private _authService: AuthService,
-        private ProjectService: CreateProjecteService,
+        private projectService: CreateProjecteService,
         private router: Router,
         private _formBuilder: FormBuilder,
         private _activatedRoute: ActivatedRoute,
@@ -97,7 +97,7 @@ export class ResourcesListComponent implements OnInit {
             searchPayload = this.getDefaultSearchPayload();
         }
         this.initialLoading = true;
-        this.ProjectService.getResourceMember(searchPayload).subscribe(
+        this.projectService.getResourceMember(searchPayload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
             },
@@ -109,7 +109,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     getTechnologies() {
-        this.ProjectService.getTechnology().subscribe(
+        this.projectService.getTechnology().subscribe(
             (res: any) => {
                 this.technologyList = res?.data;
             },
@@ -136,7 +136,7 @@ export class ResourcesListComponent implements OnInit {
             const expriencePayload = this.getExperiencePayload();
             const payload = this.getDefaultSearchPayload(this.count);
             this.pagination = true;
-            this.ProjectService.getResourceMember(payload).subscribe(
+            this.projectService.getResourceMember(payload).subscribe(
                 (res: any) => {
                     this.pagination = false;
                     if (res?.data) {
@@ -163,7 +163,7 @@ export class ResourcesListComponent implements OnInit {
             }
         }
         const payload = this.getDefaultSearchPayload();
-        this.ProjectService.getResourceMember(payload).subscribe(
+        this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
                 this.initialLoading = false;
@@ -245,7 +245,7 @@ export class ResourcesListComponent implements OnInit {
             this.minExprience = this.exprienceForm.value.minExprience;
             this.maxExprience = this.exprienceForm.value.maxExprience;
             let payload = this.getDefaultSearchPayload(this.count);
-            this.ProjectService.getResourceMember(payload).subscribe(
+            this.projectService.getResourceMember(payload).subscribe(
                 (res: any) => {
                     this.handleGetResourceMemberResponse(res);
                     this.initialLoading = false;
@@ -260,22 +260,22 @@ export class ResourcesListComponent implements OnInit {
     }
     getProjectList() {
         this.initialLoading = true;
-        this.ProjectService.getProjectListWithoutPagination().subscribe(
-            (res: any) => {
+        this.projectService
+            .getProjectListWithoutPagination()
+            .subscribe((res: any) => {
                 this.projectsList = res.data;
                 this.initialLoading = false;
                 if (res.tokenExpire == true) {
                     this.handleTokenExpiry();
                 }
-            }
-        );
+            });
     }
 
     selectChangeProject(event: any) {
         this.count = 1;
         this.pagination = false;
         let payload = this.getDefaultSearchPayload(this.count);
-        this.ProjectService.getResourceMember(payload).subscribe(
+        this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
                 this.initialLoading = false;
@@ -301,9 +301,10 @@ export class ResourcesListComponent implements OnInit {
 
     clearSearch() {
         this.count = 1;
-        this.resourceSearchInput.setValue('');
+        this.resourceSearchInput.setValue('', { emitEvent: false });
         this.searchValue = '';
         this.pagination = false;
+        this.getList();
     }
 
     private handleTokenExpiry() {
@@ -394,7 +395,7 @@ export class ResourcesListComponent implements OnInit {
         this.count = 1;
         this.pagination = false;
         const payload = this.getDefaultSearchPayload();
-        this.ProjectService.getResourceMember(payload).subscribe(
+        this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
             },
@@ -453,7 +454,7 @@ export class ResourcesListComponent implements OnInit {
         });
     }
     private deleteAPI(deletePayload: any) {
-        this.ProjectService.updateDeleteResource(deletePayload).subscribe(
+        this.projectService.updateDeleteResource(deletePayload).subscribe(
             (res: any) => {
                 this.snackBar.successSnackBar(res?.message);
                 const payload = this.getDefaultSearchPayload();
