@@ -142,8 +142,6 @@ export class FormListComponent implements OnInit {
     }
 
     handleScroll() {
-        console.log(!this.pagination && this.formList.length < this.totalForm);
-
         if (!this.pagination && this.formList.length < this.totalForm) {
             this.count = this.count + this.totalPageData;
             let payload = {
