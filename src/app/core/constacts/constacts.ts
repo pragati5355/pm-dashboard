@@ -4,12 +4,10 @@ const baseUrl = environment.baseUrl;
 const jiraBaseUrl = environment.jiraBaseUrl;
 const projectBaseUrl = environment.projectBaseUrl;
 const springBootUrl = environment.springBootUrl;
-// export class AppConstants {
-//     private static AUTH_USER_API = baseUrl;
-
-// }
+const bitbucketSource = environment.bitbucketSource;
 export const AppConstants: ConstantsInterface = {
     BASE_URL: baseUrl,
+    bitbucketSource: bitbucketSource,
     PROJECT_API_URL: projectBaseUrl,
     REPO_API_URL: springBootUrl,
     S3_BUCKET_NAME: environment.bucketName,

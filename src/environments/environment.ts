@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
+    bitbucketSource: 'https://bitbucket.org/metrics-test/',
     baseUrl: 'https://11vi8vyl44.execute-api.ap-south-1.amazonaws.com',
     jiraBaseUrl: 'https://3znje7eqrk.execute-api.ap-south-1.amazonaws.com',
     projectBaseUrl: 'https://cu1azpqty2.execute-api.ap-south-1.amazonaws.com',
