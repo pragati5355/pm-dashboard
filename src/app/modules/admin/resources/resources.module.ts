@@ -31,6 +31,7 @@ import { ResourcesListComponent } from './resources-list/resources-list.componen
 import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ResourceDetailsComponent } from './resource-details/resource-details.component';
+import { DiffDatePipe } from './common/pipes/diff-date.pipe';
 
 const routes: Routes = [
     {
@@ -83,6 +84,7 @@ const routes: Routes = [
         ResourcesListComponent,
         AddResourcesComponent,
         ResourceDetailsComponent,
+        DiffDatePipe,
     ],
     imports: [
         CommonModule,
