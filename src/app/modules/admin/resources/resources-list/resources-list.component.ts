@@ -25,6 +25,13 @@ import {
     takeUntil,
 } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
+import {
+    BreakpointObserver,
+    Breakpoints,
+    BreakpointState,
+} from '@angular/cdk/layout';
+import { take } from 'rxjs/internal/operators/take';
+import moment from 'moment';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -63,7 +70,7 @@ export class ResourcesListComponent implements OnInit {
     deletePojects: any = '';
     opened: any;
     resourceSearchInput = new FormControl();
-
+    currentDate = moment();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -75,7 +82,8 @@ export class ResourcesListComponent implements OnInit {
         private _fuseConfirmationService: FuseConfirmationService,
         private snackBar: SnackBar,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _fuseMediaWatcherService: FuseMediaWatcherService
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     ngOnInit(): void {
@@ -100,6 +108,7 @@ export class ResourcesListComponent implements OnInit {
         this.projectService.getResourceMember(searchPayload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
+                this.checkForLargerScreen();
             },
             (error) => {
                 this.totalRecored = 0;
@@ -464,5 +473,16 @@ export class ResourcesListComponent implements OnInit {
                 this.snackBar.errorSnackBar('Server error');
             }
         );
+    }
+
+    private checkForLargerScreen() {
+        this.breakpointObserver
+            .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .pipe(take(1))
+            .subscribe((state: BreakpointState) => {
+                if (state.matches) {
+                    this.handleScroll();
+                }
+            });
     }
 }

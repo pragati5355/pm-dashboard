@@ -98,22 +98,9 @@
                             <mat-icon [svgIcon]="'heroicons_outline:document-text'"></mat-icon>
                             <span class="ml-2">Experience:</span>    
                             <div class="ml-4 leading-6">
-                                    {{
-                                        resourceDetails.year > "1"
-                                          ? resourceDetails.year + " Years"
-                                          : resourceDetails.year == "1"
-                                          ? resourceDetails.year + " Year"
-                                          : ""
-                                      }}
-                                      {{
-                                        resourceDetails.month > "1"
-                                          ? resourceDetails.month + " Months"
-                                          : resourceDetails.month == "1"
-                                          ? resourceDetails.month + " Month"
-                                          : ""
-                                      }}
+                                {{resourceDetails.careerStartDate  |diffDate}}
                                 </div>
-                                <div *ngIf="!resourceDetails.month && !resourceDetails.year">-</div>
+                                
                         </div>
                     </ng-container>
 

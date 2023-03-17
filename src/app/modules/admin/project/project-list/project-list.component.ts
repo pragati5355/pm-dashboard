@@ -12,6 +12,12 @@ import { FuseCardComponent } from '@fuse/components/card';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import {
+    BreakpointObserver,
+    Breakpoints,
+    BreakpointState,
+} from '@angular/cdk/layout';
+import { take } from 'rxjs/internal/operators/take';
 @Component({
     selector: 'app-project-list',
     templateUrl: './project-list.component.html',
@@ -36,7 +42,8 @@ export class ProjectListComponent implements OnInit {
         private router: Router,
         private _authService: AuthService,
         private projectService: CreateProjecteService,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     ngOnInit() {
@@ -56,6 +63,7 @@ export class ProjectListComponent implements OnInit {
                 if (res?.data) {
                     this.projectList = res?.data?.projects;
                     this.totalProject = res?.data?.totalRecored;
+                    this.checkForLargerScreen();
                 } else if (res?.data == null) {
                     this.projectList = [];
                     this.totalProject = 0;
@@ -205,5 +213,16 @@ export class ProjectListComponent implements OnInit {
             projectName: this.searchValue,
         };
         this.getList(payload);
+    }
+
+    private checkForLargerScreen() {
+        this.breakpointObserver
+            .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .pipe(take(1))
+            .subscribe((state: BreakpointState) => {
+                if (state.matches) {
+                    this.handleScroll();
+                }
+            });
     }
 }
