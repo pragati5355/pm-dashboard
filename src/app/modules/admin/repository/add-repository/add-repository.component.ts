@@ -658,7 +658,8 @@ export class AddRepositoryComponent implements OnInit {
             this.formType == 'angular' ||
             this.formType == 'react-js' ||
             this.formType == 'django' ||
-            this.formType == 'java'
+            this.formType == 'java' ||
+            this.formType == 'android-kotlin'
         ) {
             this.createBitbucketProjectFrom.addControl(
                 'portalNameOrMicroserviceName',
