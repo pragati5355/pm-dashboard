@@ -9,7 +9,7 @@ export class DiffDatePipe implements PipeTransform {
         const startDate = moment(value).format('YYYY-MM-DD HH:mm:ss');
         const year = moment().diff(startDate, 'year');
         const month = moment().diff(startDate, 'months') % 12;
-        let diffCount = '-';
+        let diffCount = 'Fresher';
         if (year > 0 && month > 0) {
             diffCount = year + ' Year ' + month + ' Month';
         } else if (year == 0 && month > 0) {
