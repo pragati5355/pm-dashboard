@@ -236,7 +236,7 @@ export class AddResourcesComponent
      * Remove the avatar
      */
     removeAvatar(): void {}
-    fetchEditdata(id: number) {
+    fetchEditData(id: number) {
         let payload = { id: id };
         this.initialLoading = true;
         this.ProjectService.getresource(payload).subscribe(
@@ -249,8 +249,33 @@ export class AddResourcesComponent
                         lastName: item.lastName ? item.lastName : '',
                         email: item.email ? item.email : '',
                         team: item.team ? item.team : '',
-                        year: item.year ? item.year : 0,
-                        month: item.month ? item.month : 0,
+                        year: moment().diff(
+                            moment(item.careerStartDate).format(
+                                'YYYY-MM-DD HH:mm:ss'
+                            ),
+                            'year'
+                        )
+                            ? moment().diff(
+                                  moment(item.careerStartDate).format(
+                                      'YYYY-MM-DD HH:mm:ss'
+                                  ),
+                                  'year'
+                              )
+                            : '',
+                        month:
+                            moment().diff(
+                                moment(item.careerStartDate).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                ),
+                                'months'
+                            ) % 12
+                                ? moment().diff(
+                                      moment(item.careerStartDate).format(
+                                          'YYYY-MM-DD HH:mm:ss'
+                                      ),
+                                      'months'
+                                  ) % 12
+                                : '',
                         salary: item.salary ? item.salary : null,
                         dateOfJoining: item.dateOfJoining
                             ? this.datePipe.transform(
@@ -494,7 +519,7 @@ export class AddResourcesComponent
         this.routeSubscribe = this._route.queryParams.subscribe(
             (checkformtype) => {
                 if (checkformtype['id']) {
-                    this.fetchEditdata(checkformtype['id']);
+                    this.fetchEditData(checkformtype['id']);
                     this.editFormId = checkformtype['id'];
                     this.pageTitle = 'Edit Resource';
                     this.formTypeAdd = false;
