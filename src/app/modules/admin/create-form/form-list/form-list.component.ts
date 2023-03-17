@@ -21,6 +21,7 @@ import {
     Breakpoints,
     BreakpointState,
 } from '@angular/cdk/layout';
+import { take } from 'rxjs/internal/operators/take';
 @Component({
     selector: 'app-form-list',
     templateUrl: './form-list.component.html',
@@ -253,12 +254,12 @@ export class FormListComponent implements OnInit {
     }
 
     private checkForLargerScreen() {
-        const largeScreenSubscription = this.breakpointObserver
+        this.breakpointObserver
             .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .pipe(take(1))
             .subscribe((state: BreakpointState) => {
                 if (state.matches) {
                     this.handleScroll();
-                    largeScreenSubscription.unsubscribe();
                 }
             });
     }

@@ -14,6 +14,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProcessFormComponent } from '../process-form/process-form.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ErrorMessage } from 'app/core/constacts/constacts';
+import {
+    BreakpointObserver,
+    Breakpoints,
+    BreakpointState,
+} from '@angular/cdk/layout';
+import { take } from 'rxjs/internal/operators/take';
+import moment from 'moment';
 @Component({
     selector: 'app-project-process-list',
     templateUrl: './project-process-list.component.html',
@@ -48,7 +55,8 @@ export class ProjectProcessListComponent implements OnInit {
         private _fuseConfirmationService: FuseConfirmationService,
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
-        private router: Router
+        private router: Router,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     ngOnInit(): void {
@@ -150,6 +158,7 @@ export class ProjectProcessListComponent implements OnInit {
                 if (res.data) {
                     this.totalRecord = res.data.totalRecords;
                     this.formList = res.data.checklistResponse;
+                    this.checkForLargerScreen();
                     this.initialLoading = false;
                 } else if (res.data == null) {
                     this.totalRecord = 0;
@@ -267,5 +276,16 @@ export class ProjectProcessListComponent implements OnInit {
         this.count = 0;
         this.formList = [];
         this.getSubmittedFormDetails();
+    }
+
+    private checkForLargerScreen() {
+        this.breakpointObserver
+            .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .pipe(take(1))
+            .subscribe((state: BreakpointState) => {
+                if (state.matches) {
+                    this.handleScroll();
+                }
+            });
     }
 }

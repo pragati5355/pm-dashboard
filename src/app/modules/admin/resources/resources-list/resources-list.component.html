@@ -168,24 +168,8 @@
                       </div>
 
                       <!-- Stock -->
-                      <div class="hidden lg:flex items-center">
-                        <div class="min-w-4">
-                          {{
-                          resources.year > "1"
-                          ? resources.year + " Years"
-                          : resources.year == "1"
-                          ? resources.year + " Year"
-                          : ""
-                          }}
-                          {{
-                          resources.month > "1"
-                          ? resources.month + " Months"
-                          : resources.month == "1"
-                          ? resources.month + " Month"
-                          : ""
-                          }}
-                        </div>
-                        <div *ngIf="!resources.month && !resources.year">-</div>
+                      <div class="hidden lg:flex items-center"> 
+                        {{resources.careerStartDate  |diffDate}}
                       </div>
 
                       <!-- Active -->
