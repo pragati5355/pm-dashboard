@@ -118,8 +118,8 @@ export class ProjectListComponent implements OnInit {
         this.projectService.syncJira(payload).subscribe({
             next: (res: any) => {
                 this.submitInProcess = false;
-                if (res?.data?.error) {
-                    this.snackBar.errorSnackBar(res?.data?.Message);
+                if (res?.error) {
+                    this.snackBar.errorSnackBar(res?.Message);
                 }
                 if (res?.data) {
                     this.snackBar.successSnackBar(res?.data);
