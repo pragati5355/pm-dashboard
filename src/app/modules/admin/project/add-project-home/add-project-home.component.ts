@@ -604,13 +604,7 @@ export class AddProjectHomeComponent
                 this.ProjectService.createProject(payload).subscribe(
                     (res: any) => {
                         this.submitInProcess = false;
-                        if (
-                            res?.data?.error === true ||
-                            res?.data?.message === 'Project already exists'
-                        ) {
-                            this.snackBar.errorSnackBar(res?.data?.message);
-                        }
-                        if (res?.data?.error === false) {
+                        if (!res.error) {
                             this.snackBar.successSnackBar(
                                 'Project created successFully'
                             );
@@ -621,8 +615,15 @@ export class AddProjectHomeComponent
                             this.teamMemberList = [];
                             this.settingProjectName = '';
                             this.router.navigate(['/projects/project-list']);
+                        } else {
+                            this.snackBar.errorSnackBar(res?.message);
+                            if (res.message == 'Project already exists') {
+                                this.selectedIndex = 2;
+                                this.projectTeam.reset();
+                                this.teamMemberList = [];
+                            }
                         }
-                        if (res?.tokenExpire == true) {
+                        if (res.tokenExpire == true) {
                             this.snackBar.errorSnackBar(
                                 ErrorMessage.ERROR_SOMETHING_WENT_WRONG
                             );
