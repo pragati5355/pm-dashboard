@@ -45,20 +45,22 @@
               <div
                 class="ml-4 justify-between content-center text-gray-400 inline-flex px-3 py-2.5 rounded-full border border-gray-300 w-full"
                 *ngIf="maxExprience.length > 0">
-                <div class="flex flex-0 items-center justify-center ml-4">{{minExprience}} to {{maxExprience}} <mat-icon
+                <div class="flex flex-0 items-center justify-center ml-4">{{minExprience}} to {{maxExprience}} 
+                </div>
+                <div class="mat-select-arrow-wrapper mt-2 cursor-pointer">
+                  <mat-icon
                     class="ml-4 text-gray-400 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x"
                     (click)="getExprience($event,'remove')"></mat-icon>
                 </div>
-                <div class="mat-select-arrow-wrapper mt-2 cursor-pointer">
-                  <div class="mat-select-arrow" [matMenuTriggerFor]="beforeMenu"></div>
-                </div>
               </div>
-              <button class="ml-4 items-center text-gray-400 w-full" *ngIf="maxExprience?.length == 0"
+              <button class="ml-4 justify-between  text-gray-400 w-full" *ngIf="maxExprience?.length == 0"
                 mat-stroked-button [matMenuTriggerFor]="beforeMenu">
-                <span>Choose expriences</span>
-                <div class="mat-select-arrow-wrapper">
+               <div class="grid grid-cols-2 items-center">
+                <div class="">Choose experiences</div>
+                <div class="mat-select-arrow-wrapper   ml-auto">
                   <div class="mat-select-arrow"></div>
                 </div>
+               </div>
               </button>
               <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4">
                 <form [formGroup]="exprienceForm">
