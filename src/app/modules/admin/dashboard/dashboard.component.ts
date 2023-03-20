@@ -7,6 +7,7 @@ import { DashboardService } from '@services/dashboard.service';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
     userName: string;
@@ -14,6 +15,7 @@ export class DashboardComponent implements OnInit {
     noOfProjects: Number = 0;
     noOfResources: Number = 0;
     noOfRepos: Number = 0;
+    showSkeletonLoader = true;
 
     constructor(
         private _authService: AuthService,
@@ -42,6 +44,7 @@ export class DashboardComponent implements OnInit {
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
             if (res?.data) {
+                this.showSkeletonLoader = false;
                 this.noOfProjects = res?.data?.projectCount;
                 this.noOfResources = res?.data?.resourceCount;
                 this.noOfRepos = res?.data?.repoCount;
