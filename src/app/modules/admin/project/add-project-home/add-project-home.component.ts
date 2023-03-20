@@ -617,13 +617,13 @@ export class AddProjectHomeComponent
                             this.router.navigate(['/projects/project-list']);
                         } else {
                             this.snackBar.errorSnackBar(res?.message);
-                            if (res.message == 'Project already exists') {
+                            if (res?.message == 'Project already exists') {
                                 this.selectedIndex = 2;
                                 this.projectTeam.reset();
                                 this.teamMemberList = [];
                             }
                         }
-                        if (res.tokenExpire == true) {
+                        if (res?.tokenExpire == true) {
                             this.snackBar.errorSnackBar(
                                 ErrorMessage.ERROR_SOMETHING_WENT_WRONG
                             );

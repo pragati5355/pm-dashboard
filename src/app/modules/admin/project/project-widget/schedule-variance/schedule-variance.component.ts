@@ -267,8 +267,8 @@ export class ScheduleVarianceComponent implements OnInit {
     getBurnDownChartData(payload: any) {
       this.isChartLoaded = true
          this.ProjectService.burndownChart(payload).subscribe((res: any) => {
-           this.burndownData = res.data;
-           if(res.data.changes){
+           this.burndownData = res?.data;
+           if(res?.data?.changes){
           
             this.getOriginalEstimate( this.burndownData.changes, this.burndownData.startTime, this.burndownData.endTime,this.burndownData.now,this.burndownData.completeTime)   
             this.renderChart.updateSeries([{name: "Time Estimate",data:this.newDataset},
@@ -278,7 +278,7 @@ export class ScheduleVarianceComponent implements OnInit {
               data: this.guidelineData
             }] )
             }
-          if(res.data.tokenExpire == true){
+          if(res?.tokenExpire == true){
             this._authService.updateAndReload(window.location);
             }
         })
