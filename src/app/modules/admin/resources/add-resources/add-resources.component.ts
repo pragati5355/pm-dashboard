@@ -249,33 +249,8 @@ export class AddResourcesComponent
                         lastName: item.lastName ? item.lastName : '',
                         email: item.email ? item.email : '',
                         team: item.team ? item.team : '',
-                        year: moment().diff(
-                            moment(item.careerStartDate).format(
-                                'YYYY-MM-DD HH:mm:ss'
-                            ),
-                            'year'
-                        )
-                            ? moment().diff(
-                                  moment(item.careerStartDate).format(
-                                      'YYYY-MM-DD HH:mm:ss'
-                                  ),
-                                  'year'
-                              )
-                            : '',
-                        month:
-                            moment().diff(
-                                moment(item.careerStartDate).format(
-                                    'YYYY-MM-DD HH:mm:ss'
-                                ),
-                                'months'
-                            ) % 12
-                                ? moment().diff(
-                                      moment(item.careerStartDate).format(
-                                          'YYYY-MM-DD HH:mm:ss'
-                                      ),
-                                      'months'
-                                  ) % 12
-                                : '',
+                        year: item.year ? item.year : '',
+                        month: item.month ? item.month : '',
                         salary: item.salary ? item.salary : null,
                         dateOfJoining: item.dateOfJoining
                             ? this.datePipe.transform(

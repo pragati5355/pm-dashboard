@@ -67,7 +67,7 @@ export class ResourcesListComponent implements OnInit {
     updateDeleteObj: any = [];
     deleteObject: any;
     projectsList: any = [];
-    deletePojects: any = '';
+    deleteProjects: any = '';
     opened: any;
     resourceSearchInput = new FormControl();
     currentDate = moment();
@@ -184,7 +184,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     deleteResource(id: number, assignedProjects: any): void {
-        this.deleteprojectstring(assignedProjects);
+        this.deleteProjectString(assignedProjects);
         if (assignedProjects.length == 0) {
             const payload = {
                 id: id,
@@ -204,7 +204,7 @@ export class ResourcesListComponent implements OnInit {
                 title: 'Delete Resource',
                 message:
                     'This resource is attached to the following projects. Remove the association of the resources from the projects in order to delete it. <div class="listClass">' +
-                    this.deletePojects +
+                    this.deleteProjects +
                     '</div>',
                 icon: this._formBuilder.group({
                     show: true,
@@ -294,11 +294,11 @@ export class ResourcesListComponent implements OnInit {
             }
         );
     }
-    deleteprojectstring(projects: any) {
-        this.deletePojects = '';
+    deleteProjectString(projects: any) {
+        this.deleteProjects = '';
         var arr = projects;
         for (let i = 0; i <= arr.length - 1; i++) {
-            this.deletePojects = this.deletePojects + arr[i] + '<br>';
+            this.deleteProjects = this.deleteProjects + arr[i] + '<br>';
         }
     }
     viewResource(id: number) {
