@@ -13,9 +13,7 @@
                     *ngIf="endInput.value" class="mx-1"> To </span> {{ endInput.value}} <mat-icon
                     class="ml-4 text-blue-800 icon-size-4 cursor-pointer " svgIcon="heroicons_outline:x"
                     (click)="getDate($event,'remove')"></mat-icon></span>
-                <div class="mat-select-arrow-wrapper ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu">
-                  <div class="mat-select-arrow ng-tns-c179-6" [matMenuTriggerFor]="beforeMenu"></div>
-                </div>
+               
               </div>
               <mat-menu #beforeMenu="matMenu" xPosition="before" class="mt-4 min-w-120">
                 <form [formGroup]="dateFilterForm">

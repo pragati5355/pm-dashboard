@@ -211,6 +211,7 @@ export class ProjectProcessListComponent implements OnInit {
                 formFilterDate: '',
                 toFilterDate: '',
             });
+            this.resetList();
         } else if (!this.dateFilterForm.invalid) {
             this.isFilterShow = true;
             this.getSubmittedFormDetails();
