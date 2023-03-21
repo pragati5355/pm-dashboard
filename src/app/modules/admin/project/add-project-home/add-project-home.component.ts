@@ -907,7 +907,7 @@ export class AddProjectHomeComponent
                             this.settingProjectName = '';
                             this.router.navigate(['/projects/project-list']);
                         } else {
-                            this.snackBar.errorSnackBar(res?.data?.message);
+                            this.snackBar.errorSnackBar(res?.message);
                         }
                         if (res?.tokenExpire == true) {
                             this.snackBar.errorSnackBar(
