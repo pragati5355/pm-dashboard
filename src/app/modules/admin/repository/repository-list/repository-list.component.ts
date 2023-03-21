@@ -71,4 +71,10 @@ export class RepositoryListComponent implements OnInit {
             }
         });
     }
+
+    editDraft(id: number) {
+        this.router.navigate([`/projects/repository/add-repository`], {
+            queryParams: { id: id },
+        });
+    }
 }

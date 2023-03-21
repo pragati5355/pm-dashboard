@@ -36,24 +36,24 @@
                 <div>Action</div>
               </div>
               <ng-container *ngFor="let repository of repoData?.repositories">
-                <div (click)="repoDetails(repository)" class="cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-                  <div class="">
+                <div  class="cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                  <div class="" (click)="repoDetails(repository)">
                     <div class="truncate">
                       {{ repository?.name  }}
                     </div>
                   </div>
 
-                  <div class="hidden md:block truncate">
+                  <div class="hidden md:block truncate" (click)="repoDetails(repository)">
                     {{ repository?.technology.split('_').join(' ') | titlecase  }}
                   </div>
-                  <div class="hidden lg:flex items-center">
+                  <div class="hidden lg:flex items-center" (click)="repoDetails(repository)">
                     <div class="min-w-4">
                       {{
                       repository?.createdAt | date
                       }}
                     </div>
                   </div>
-                  <div class="sm:block">
+                  <div class="sm:block" (click)="repoDetails(repository)">
                     <div class="min-w-4">
                       {{
                       repository?.createdByName
@@ -71,7 +71,7 @@
                         Draft
                       </span>
                     <span class="">
-                      <mat-icon [matTooltip]="'Edit Draft'" class="text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
+                      <mat-icon (click)="editDraft(repository?.id)" [matTooltip]="'Edit Draft'" class="text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
                           ></mat-icon>
                     </span>
                     </div>
