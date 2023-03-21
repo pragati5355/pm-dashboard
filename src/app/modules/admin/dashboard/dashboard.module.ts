@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
+
 const dashboardRoutes: Route[] = [
     {
         path: '',

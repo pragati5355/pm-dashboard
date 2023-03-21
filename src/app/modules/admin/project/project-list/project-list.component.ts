@@ -28,7 +28,7 @@ export class ProjectListComponent implements OnInit {
     @ViewChildren(FuseCardComponent, { read: ElementRef })
     pageNo = 1;
     pagination = false;
-    initialLoading = false;
+    initialLoading = true;
     searchValue = '';
     projectList: any = [];
     count = 1;

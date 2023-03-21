@@ -9,7 +9,7 @@
 
         </div>
 
-        <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+        <div class="flex items-center">
             <div class="flex-auto">
                 <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
                     <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
@@ -160,10 +160,20 @@
                         </ng-container>
                     </ng-container>
 
-                </div>
-                <ng-container *ngIf="initialLoading ">
-                    <div class="p-8 sm:p-16  text-4xl font-semibold tracking-tight text-center"> Loading......</div>
-                </ng-container>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+
+                </div> 
                 <ng-container *ngIf="!initialLoading && projectList.length == 0">
                     <div class="p-8 sm:p-16  text-4xl font-semibold tracking-tight text-center"> Projects not found
                     </div>
