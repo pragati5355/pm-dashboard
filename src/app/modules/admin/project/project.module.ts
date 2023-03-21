@@ -38,6 +38,7 @@ import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-pop
 import { ProjectWidgetModule } from '@modules/admin/project/project-widget/project-widget.module';
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
 import { SprintFeedbackFormComponent } from './sprint-feedback-form/sprint-feedback-form.component';
+import { SkeletonComponent } from './common/skeleton/skeleton.component';
 const routes: Routes = [
     {
         path: '',
@@ -108,6 +109,7 @@ const routes: Routes = [
         SprintFeedbackFormComponent,
         AddProjectHomeComponent,
         ProjectListComponent,
+        SkeletonComponent,
     ],
     exports: [CdkStepperModule, MatStepperModule],
     imports: [

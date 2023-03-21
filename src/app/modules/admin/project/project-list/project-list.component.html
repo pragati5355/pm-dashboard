@@ -160,10 +160,20 @@
                         </ng-container>
                     </ng-container>
 
-                </div>
-                <ng-container *ngIf="initialLoading ">
-                    <div class="p-8 sm:p-16  text-4xl font-semibold tracking-tight text-center"> Loading......</div>
-                </ng-container>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+                    <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
+                        <app-skeleton></app-skeleton>
+                    </div>
+
+                </div> 
                 <ng-container *ngIf="!initialLoading && projectList.length == 0">
                     <div class="p-8 sm:p-16  text-4xl font-semibold tracking-tight text-center"> Projects not found
                     </div>
