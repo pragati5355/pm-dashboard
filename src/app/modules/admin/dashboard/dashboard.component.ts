@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
     noOfProjects: Number = 0;
     noOfResources: Number = 0;
     noOfRepos: Number = 0;
-    showSkeletonLoader = true;
+    isLoading = true;
 
     constructor(
         private _authService: AuthService,
@@ -44,10 +44,13 @@ export class DashboardComponent implements OnInit {
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
             if (res?.data) {
-                this.showSkeletonLoader = false;
+                this.isLoading = false;
                 this.noOfProjects = res?.data?.projectCount;
                 this.noOfResources = res?.data?.resourceCount;
                 this.noOfRepos = res?.data?.repoCount;
+            }
+            if (res?.tokenExpire) {
+                this._authService.updateAndReload(window.location);
             }
         });
     }
