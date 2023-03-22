@@ -114,24 +114,21 @@
             <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false"
               (scrolled)="handleScroll()" class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
               infiniteScroll>
+              <div
+              class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+              matSortDisableClear>
+              <div></div>
+              <div>Name</div>
+              <div class="hidden md:block">Technology</div>
+              <div class="hidden md:block">Projects</div>
+              <div class="hidden sm:block">Team</div>
+              <div class="hidden lg:block">Experience</div>
+              <div>Action</div>
+            </div>
               <ng-container *ngIf="!initialLoading && totalRecored > 0;">
                 <div *ngIf="totalRecored > 0" class="grid">
-                  <!-- Header -->
-                  <div
-                    class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                    matSortDisableClear>
-                    <div></div>
-                    <div>Name</div>
-                    <div class="hidden md:block">Technology</div>
-                    <div class="hidden md:block">Projects</div>
-                    <div class="hidden sm:block">Team</div>
-                    <div class="hidden lg:block">Experience</div>
-                    <div>Action</div>
-                  </div>
-                  <!-- Rows -->
                   <ng-container *ngFor="let resources of resources">
                     <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-                      <!-- Image -->
                       <div class="flex items-center cursor-pointer" [routerLink]="['./', resources.id]">
                         <ng-container *ngIf="resources.image">
                           <img
@@ -145,7 +142,6 @@
                           </div>
                         </ng-container>
                       </div>
-                      <!-- SKU -->
                       <div class="cursor-pointer" [routerLink]="['./', resources.id]">
                         <div class="truncate" [ngClass]="{'hover:text-primary-900 font-medium dark:hover:bg-hover': !selectedContact || selectedContact.id !== resources.id,
                             'bg-primary-50 dark:bg-hover': selectedContact && selectedContact.id === resources.id}">
@@ -154,7 +150,6 @@
                         <div class="truncate">{{ resources.email }}</div>
                       </div>
 
-                      <!-- Name -->
                       <div class="hidden md:block truncate">
                         {{ resources.technologys }}
                       </div>
@@ -164,17 +159,14 @@
                       <div class="hidden md:block truncate" *ngIf="resources.assignedProject.length == 0">
                         -
                       </div>
-                      <!-- Price -->
                       <div class="hidden sm:block">
                         {{ resources.team }}
                       </div>
 
-                      <!-- Stock -->
                       <div class="hidden lg:flex items-center"> 
                         {{resources.careerStartDate  |diffDate}}
                       </div>
 
-                      <!-- Active -->
                       <div class="sm:block">
                         <mat-icon [matTooltip]="'Edit Resource'" class="text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
                           (click)="edit(resources.id)"></mat-icon>
@@ -192,9 +184,16 @@
                 </div>
               </ng-container>
               <ng-container *ngIf="initialLoading">
-                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
-                  Loading......
-                </div>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
+                  <app-table-skeleton></app-table-skeleton>
               </ng-container>
             </div>
           </div>

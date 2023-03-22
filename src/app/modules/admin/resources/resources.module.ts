@@ -32,7 +32,7 @@ import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ResourceDetailsComponent } from './resource-details/resource-details.component';
 import { DiffDatePipe } from './common/pipes/diff-date.pipe';
-
+import { TableSkeletonComponent } from './common/table-skeleton/table-skeleton.component';
 const routes: Routes = [
     {
         path: '',
@@ -85,6 +85,7 @@ const routes: Routes = [
         AddResourcesComponent,
         ResourceDetailsComponent,
         DiffDatePipe,
+        TableSkeletonComponent,
     ],
     imports: [
         CommonModule,
