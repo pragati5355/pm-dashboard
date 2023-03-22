@@ -64,13 +64,13 @@
                    <!-- Active -->
                    <div class="sm:block">
                     <div class="min-w-4">
-                      <span *ngIf="repository?.status == 'active'" class="cursor-pointer py-1 px-3 rounded-full font-semibold text-white bg-green-800 ng-star-inserted">
+                      <span *ngIf="repository?.status == 'ACTIVE'" class="cursor-pointer py-1 px-3 rounded-full font-semibold text-white bg-green-800 ng-star-inserted">
                           Active
                       </span>
-                      <span *ngIf="repository?.status == 'draft'" class="cursor-pointer py-1 px-3 rounded-full font-semibold text-white bg-orange-600 ng-star-inserted">
+                      <span *ngIf="repository?.status == 'DRAFT'" class="cursor-pointer py-1 px-3 rounded-full font-semibold text-white bg-orange-600 ng-star-inserted">
                         Draft
                       </span>
-                    <span class="">
+                    <span class="" *ngIf="repository?.status == 'draft'" >
                       <mat-icon (click)="editDraft(repository?.id)" [matTooltip]="'Edit Draft'" class="text-gray-400 icon-size-5 cursor-pointer" svgIcon="heroicons_outline:pencil"
                           ></mat-icon>
                     </span>

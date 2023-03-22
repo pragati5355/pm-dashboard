@@ -115,7 +115,7 @@ export class AddRepositoryComponent implements OnInit {
         this.setUserData();
         this.setJiraProject();
         this.setDrawerWatcher();
-        this.fetchDraft();
+        this.initializeData();
         this.getAllDevelopers();
         this.getCodeReviewer();
     }
@@ -413,22 +413,41 @@ export class AddRepositoryComponent implements OnInit {
             this.isFileUploaded = false;
         }
     }
-    submit() {
+    submit(status: any) {
         const newCodeReviewers = [];
         this.codeReviewers.forEach((items) => {
             newCodeReviewers.push(items.uuid);
         });
         if (!this.createBitbucketProjectFrom.invalid) {
             this.submitInProcess = true;
+            // const payload = {
+            //     repoNames: this.repositories,
+            //     branchName: this.branches,
+            //     email: this.developers,
+            //     mergeAccessUserUUIDs: newCodeReviewers,
+            //     projectKey: this.metricsProjectData.repoProject.key,
+            //     scriptUrl: this.uploadResourceUrl,
+            //     technology: this.formType.split('-').join('_').toUpperCase(),
+            //     metricsProjectId: this.metricsProjectData.id,
+            // };
             const payload = {
-                repoNames: this.repositories,
-                branchName: this.branches,
-                email: this.developers,
-                mergeAccessUserUUIDs: newCodeReviewers,
-                projectKey: this.metricsProjectData.repoProject.key,
-                scriptUrl: this.uploadResourceUrl,
-                technology: this.formType.split('-').join('_').toUpperCase(),
-                metricsProjectId: this.metricsProjectData.id,
+                metadata: {
+                    bitbucketProjectName: this.bitbucketRepositoryName,
+                    projectName:
+                        this.createBitbucketProjectFrom.value.projectName,
+                    repoNames: this.repositories,
+                    branchName: this.branches,
+                    email: this.developers,
+                    codeReviewer: this.codeReviewers,
+                    mergeAccessUserUUIDs: newCodeReviewers,
+                    portal: this.portalNameOrMicroserviceNames,
+                    scriptUrl: this.uploadResourceUrl,
+                    projectKey: this.metricsProjectData.repoProject.key,
+                    technology: this.formType,
+                    metricsProjectId: this.metricsProjectData.id,
+                },
+                draftId: this.draftId,
+                status: status,
             };
             this.RepositoryService.create(payload).subscribe(
                 (res: any) => {
@@ -530,13 +549,13 @@ export class AddRepositoryComponent implements OnInit {
     fetchDraft() {
         const payload = {
             metricsProjectId: this.metricsProjectData.id,
+            id: this.draftId,
         };
         this.initialLoading = true;
         this.RepositoryService.getDraftRepository(payload).subscribe(
             (res: any) => {
                 if (res.data) {
                     this._authService.setRepositoryDraft(res.data);
-                    this.draftId = res.data.id;
                     const item =
                         this._authService.getRepositoryDraft().draftData;
                     this.formType = item.technology;
@@ -569,7 +588,7 @@ export class AddRepositoryComponent implements OnInit {
                         this.isRepository = false;
                     }
                     if (item.uploadResourceUrl) {
-                        this.uploadResourceUrl = item.uploadResourceUrl;
+                        this.uploadResourceUrl = item.scriptUrl;
                         this.isFileUploaded = true;
                     }
                     this.isFileUploaded = true;
@@ -585,7 +604,7 @@ export class AddRepositoryComponent implements OnInit {
     }
     saveAsDraft() {
         const payload = {
-            draftData: {
+            metadata: {
                 bitbucketProjectName: this.bitbucketRepositoryName,
                 projectName: this.createBitbucketProjectFrom.value.projectName,
                 repoNames: this.repositories,
@@ -595,9 +614,10 @@ export class AddRepositoryComponent implements OnInit {
                 portal: this.portalNameOrMicroserviceNames,
                 uploadResourceUrl: this.uploadResourceUrl,
                 technology: this.formType,
+                metricsProjectId: this.metricsProjectData.id,
             },
-            metricsProjectId: this.metricsProjectData.id,
             id: this.draftId,
+            status: 'ACTIVE',
         };
         this.RepositoryService.saveAsDraftRepository(payload).subscribe(
             (res: any) => {
@@ -831,5 +851,14 @@ export class AddRepositoryComponent implements OnInit {
         if (res.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+
+    private initializeData() {
+        this.routeSubscribe = this._route.queryParams.subscribe((res) => {
+            if (res['id']) {
+                this.draftId = res['id'];
+                this.fetchDraft();
+            }
+        });
     }
 }
