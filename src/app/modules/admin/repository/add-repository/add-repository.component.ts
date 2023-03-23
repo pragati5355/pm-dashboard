@@ -453,7 +453,7 @@ export class AddRepositoryComponent implements OnInit {
                 (res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.message);
-                        this._authService.removeRepositoryDraft();
+                        // this._authService.removeRepositoryDraft();
                         this.router.navigate([
                             '/projects/repository/repository-list',
                         ]);
@@ -548,16 +548,14 @@ export class AddRepositoryComponent implements OnInit {
     }
     fetchDraft() {
         const payload = {
-            metricsProjectId: this.metricsProjectData.id,
+            // metricsProjectId: this.metricsProjectData.id,
             id: this.draftId,
         };
         this.initialLoading = true;
         this.RepositoryService.getDraftRepository(payload).subscribe(
             (res: any) => {
                 if (res.data) {
-                    this._authService.setRepositoryDraft(res.data);
-                    const item =
-                        this._authService.getRepositoryDraft().draftData;
+                    const item = res.data.metadata;
                     this.formType = item.technology;
                     this.initializeForm();
                     this.isFormType = true;
@@ -587,7 +585,7 @@ export class AddRepositoryComponent implements OnInit {
                         });
                         this.isRepository = false;
                     }
-                    if (item.uploadResourceUrl) {
+                    if (item.scriptUrl) {
                         this.uploadResourceUrl = item.scriptUrl;
                         this.isFileUploaded = true;
                     }
