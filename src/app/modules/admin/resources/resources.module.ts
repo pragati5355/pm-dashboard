@@ -32,7 +32,8 @@ import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ResourceDetailsComponent } from './resource-details/resource-details.component';
 import { DiffDatePipe } from './common/pipes/diff-date.pipe';
-import { TableSkeletonComponent } from './common/table-skeleton/table-skeleton.component';
+import { TableSkeletonComponent } from 'app/core/modules/skeleton/table-skeleton/table-skeleton.component';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 const routes: Routes = [
     {
         path: '',
@@ -85,13 +86,11 @@ const routes: Routes = [
         AddResourcesComponent,
         ResourceDetailsComponent,
         DiffDatePipe,
-        TableSkeletonComponent,
     ],
     imports: [
         CommonModule,
         SharedModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes),
         MatChipsModule,
         MatButtonModule,
         MatDividerModule,
@@ -115,6 +114,8 @@ const routes: Routes = [
         FuseScrollbarModule,
         FuseScrollResetModule,
         InfiniteScrollModule,
+        SkeletonModule,
+        RouterModule.forChild(routes),
     ],
     providers: [DatePipe],
 })
