@@ -1,0 +1,31 @@
+.profile-photo {
+    background: #e5e5e5;
+    flex: 1;
+    height: 100%;
+    max-width: 50px;
+    border-radius: 50%;
+}
+.resource_name {
+    background: #e5e5e5;
+    flex: 2;
+    height: 100%;
+}
+.skeleton-loader * {
+    background: linear-gradient(
+        120deg,
+        #e5e5e5 30%,
+        #f0f0f0 38%,
+        #f0f0f0 40%,
+        #e5e5e5 48%
+    );
+    height: 50px !important;
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    animation: run 2s infinite;
+}
+
+@keyframes run {
+    100% {
+        background-position: -100% 0;
+    }
+}
