@@ -115,9 +115,9 @@ export class AddRepositoryComponent implements OnInit {
         this.setUserData();
         this.setJiraProject();
         this.setDrawerWatcher();
-        this.initializeData();
         this.getAllDevelopers();
         this.getCodeReviewer();
+        this.initializeData();
     }
 
     toggle() {
@@ -172,7 +172,6 @@ export class AddRepositoryComponent implements OnInit {
             this.portalNameOrMicroserviceNames = [];
         }
     }
-    //developer filter function start
     addDeveloper(event: MatChipInputEvent): void {
         this.emailInvalid = false;
         this.developer.setValue('');
@@ -420,16 +419,6 @@ export class AddRepositoryComponent implements OnInit {
         });
         if (!this.createBitbucketProjectFrom.invalid) {
             this.submitInProcess = true;
-            // const payload = {
-            //     repoNames: this.repositories,
-            //     branchName: this.branches,
-            //     email: this.developers,
-            //     mergeAccessUserUUIDs: newCodeReviewers,
-            //     projectKey: this.metricsProjectData.repoProject.key,
-            //     scriptUrl: this.uploadResourceUrl,
-            //     technology: this.formType.split('-').join('_').toUpperCase(),
-            //     metricsProjectId: this.metricsProjectData.id,
-            // };
             const payload = {
                 metadata: {
                     bitbucketProjectName: this.bitbucketRepositoryName,
@@ -453,7 +442,6 @@ export class AddRepositoryComponent implements OnInit {
                 (res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.message);
-                        // this._authService.removeRepositoryDraft();
                         this.router.navigate([
                             '/projects/repository/repository-list',
                         ]);
