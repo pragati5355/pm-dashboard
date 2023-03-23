@@ -37,16 +37,6 @@ export class AuthService {
     setRefreshToken(refreshToken: any) {
         this.storage.set('refreshToken', refreshToken);
     }
-
-    setRepositoryDraft(draft: any) {
-        this.storage.set('repositoryDraft', draft);
-    }
-    getRepositoryDraft() {
-        return this.storage.get('repositoryDraft');
-    }
-    removeRepositoryDraft() {
-        this.storage.remove('repositoryDraft');
-    }
     getRefreshToken() {
         return this.storage.get('refreshToken');
     }

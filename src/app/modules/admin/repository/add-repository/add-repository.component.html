@@ -375,7 +375,7 @@
                                         Back
                                     </button>
                                     <button type="button" class="min-w-30 order-first sm:order-last ml-4"
-                                        mat-flat-button [color]="'accent'" (click)="saveAsDraft()">
+                                        mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
                                         Save as Draft
                                     </button>
                                     <button class="min-w-30  order-first sm:order-last ml-4" mat-flat-button
@@ -496,7 +496,7 @@
                                         Back
                                     </button>
                                     <button class="min-w-30 order-first sm:order-last ml-4" mat-flat-button
-                                        [color]="'primary'" (click)="submit()">
+                                        [color]="'primary'" (click)="submit('ACTIVE')">
                                         <span *ngIf="!submitInProcess">Submit</span>
                                         <mat-progress-spinner *ngIf="submitInProcess" [diameter]="24"
                                             [mode]="'indeterminate'" class="px-2"></mat-progress-spinner>
