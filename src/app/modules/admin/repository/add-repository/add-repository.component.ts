@@ -115,9 +115,9 @@ export class AddRepositoryComponent implements OnInit {
         this.setUserData();
         this.setJiraProject();
         this.setDrawerWatcher();
-        this.fetchDraft();
         this.getAllDevelopers();
         this.getCodeReviewer();
+        this.initializeData();
     }
 
     toggle() {
@@ -172,7 +172,6 @@ export class AddRepositoryComponent implements OnInit {
             this.portalNameOrMicroserviceNames = [];
         }
     }
-    //developer filter function start
     addDeveloper(event: MatChipInputEvent): void {
         this.emailInvalid = false;
         this.developer.setValue('');
@@ -413,7 +412,7 @@ export class AddRepositoryComponent implements OnInit {
             this.isFileUploaded = false;
         }
     }
-    submit() {
+    submit(status: any) {
         const newCodeReviewers = [];
         this.codeReviewers.forEach((items) => {
             newCodeReviewers.push(items.uuid);
@@ -421,20 +420,28 @@ export class AddRepositoryComponent implements OnInit {
         if (!this.createBitbucketProjectFrom.invalid) {
             this.submitInProcess = true;
             const payload = {
-                repoNames: this.repositories,
-                branchName: this.branches,
-                email: this.developers,
-                mergeAccessUserUUIDs: newCodeReviewers,
-                projectKey: this.metricsProjectData.repoProject.key,
-                scriptUrl: this.uploadResourceUrl,
-                technology: this.formType.split('-').join('_').toUpperCase(),
-                metricsProjectId: this.metricsProjectData.id,
+                metadata: {
+                    bitbucketProjectName: this.bitbucketRepositoryName,
+                    projectName:
+                        this.createBitbucketProjectFrom.value.projectName,
+                    repoNames: this.repositories,
+                    branchName: this.branches,
+                    email: this.developers,
+                    codeReviewer: this.codeReviewers,
+                    mergeAccessUserUUIDs: newCodeReviewers,
+                    portal: this.portalNameOrMicroserviceNames,
+                    scriptUrl: this.uploadResourceUrl,
+                    projectKey: this.metricsProjectData.repoProject.key,
+                    technology: this.formType,
+                    metricsProjectId: this.metricsProjectData.id,
+                },
+                draftId: this.draftId,
+                status: status,
             };
             this.RepositoryService.create(payload).subscribe(
                 (res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.message);
-                        this._authService.removeRepositoryDraft();
                         this.router.navigate([
                             '/projects/repository/repository-list',
                         ]);
@@ -529,16 +536,14 @@ export class AddRepositoryComponent implements OnInit {
     }
     fetchDraft() {
         const payload = {
-            metricsProjectId: this.metricsProjectData.id,
+            // metricsProjectId: this.metricsProjectData.id,
+            id: this.draftId,
         };
         this.initialLoading = true;
         this.RepositoryService.getDraftRepository(payload).subscribe(
             (res: any) => {
                 if (res.data) {
-                    this._authService.setRepositoryDraft(res.data);
-                    this.draftId = res.data.id;
-                    const item =
-                        this._authService.getRepositoryDraft().draftData;
+                    const item = res.data.metadata;
                     this.formType = item.technology;
                     this.initializeForm();
                     this.isFormType = true;
@@ -568,8 +573,8 @@ export class AddRepositoryComponent implements OnInit {
                         });
                         this.isRepository = false;
                     }
-                    if (item.uploadResourceUrl) {
-                        this.uploadResourceUrl = item.uploadResourceUrl;
+                    if (item.scriptUrl) {
+                        this.uploadResourceUrl = item.scriptUrl;
                         this.isFileUploaded = true;
                     }
                     this.isFileUploaded = true;
@@ -577,37 +582,6 @@ export class AddRepositoryComponent implements OnInit {
                     this.showStep = 3;
                 } else {
                     this.initializeForm();
-                }
-                this.initialLoading = false;
-                this.tokenExpireFun(res);
-            }
-        );
-    }
-    saveAsDraft() {
-        const payload = {
-            draftData: {
-                bitbucketProjectName: this.bitbucketRepositoryName,
-                projectName: this.createBitbucketProjectFrom.value.projectName,
-                repoNames: this.repositories,
-                branchName: this.branches,
-                email: this.developers,
-                codeReviewer: this.codeReviewers,
-                portal: this.portalNameOrMicroserviceNames,
-                uploadResourceUrl: this.uploadResourceUrl,
-                technology: this.formType,
-            },
-            metricsProjectId: this.metricsProjectData.id,
-            id: this.draftId,
-        };
-        this.RepositoryService.saveAsDraftRepository(payload).subscribe(
-            (res: any) => {
-                if (!res.error) {
-                    this.snackBar.successSnackBar(res.message);
-                    this.router.navigate([
-                        '/projects/repository/repository-list',
-                    ]);
-                } else {
-                    this.snackBar.errorSnackBar(res.data.message);
                 }
                 this.initialLoading = false;
                 this.tokenExpireFun(res);
@@ -831,5 +805,14 @@ export class AddRepositoryComponent implements OnInit {
         if (res.tokenExpire == true) {
             this._authService.updateAndReload(window.location);
         }
+    }
+
+    private initializeData() {
+        this.routeSubscribe = this._route.queryParams.subscribe((res) => {
+            if (res['id']) {
+                this.draftId = res['id'];
+                this.fetchDraft();
+            }
+        });
     }
 }
