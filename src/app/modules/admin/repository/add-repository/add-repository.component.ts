@@ -600,38 +600,6 @@ export class AddRepositoryComponent implements OnInit {
             }
         );
     }
-    saveAsDraft() {
-        const payload = {
-            metadata: {
-                bitbucketProjectName: this.bitbucketRepositoryName,
-                projectName: this.createBitbucketProjectFrom.value.projectName,
-                repoNames: this.repositories,
-                branchName: this.branches,
-                email: this.developers,
-                codeReviewer: this.codeReviewers,
-                portal: this.portalNameOrMicroserviceNames,
-                uploadResourceUrl: this.uploadResourceUrl,
-                technology: this.formType,
-                metricsProjectId: this.metricsProjectData.id,
-            },
-            id: this.draftId,
-            status: 'ACTIVE',
-        };
-        this.RepositoryService.saveAsDraftRepository(payload).subscribe(
-            (res: any) => {
-                if (!res.error) {
-                    this.snackBar.successSnackBar(res.message);
-                    this.router.navigate([
-                        '/projects/repository/repository-list',
-                    ]);
-                } else {
-                    this.snackBar.errorSnackBar(res.data.message);
-                }
-                this.initialLoading = false;
-                this.tokenExpireFun(res);
-            }
-        );
-    }
     deleteURL() {
         this.fileUpload.nativeElement.value = '';
         this.uploadResourceUrl = '';

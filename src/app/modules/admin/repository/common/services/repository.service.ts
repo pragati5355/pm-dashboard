@@ -15,7 +15,6 @@ export class RepositoryService {
     getBitbucketMember = AppConstants['PROJECT_API_URL'] + '/bitbucket-members';
     sendFile = AppConstants['PROJECT_API_URL'] + '/send-file';
     getDraft = AppConstants['PROJECT_API_URL'] + '/get-draft';
-    saveDraft = AppConstants['PROJECT_API_URL'] + '/draft';
     create(obj: any) {
         return this.http.post(this.createBitbucketRepository, obj);
     }
@@ -37,8 +36,5 @@ export class RepositoryService {
     }
     getDraftRepository(obj: any) {
         return this.http.post(this.getDraft, obj);
-    }
-    saveAsDraftRepository(obj: any) {
-        return this.http.post(this.saveDraft, obj);
     }
 }
