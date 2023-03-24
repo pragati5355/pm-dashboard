@@ -185,16 +185,17 @@
         <div (scrolled)="handleScroll()" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
             [scrollWindow]="false" class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
             infiniteScroll *ngIf="!cardList">
+            <div class="grid">
+                <div class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                    matSortDisableClear>
+                    <div>Name</div>
+                    <div class="hidden md:block">Description</div>
+                    <div class="hidden sm:block">Start Date</div>
+                    <div class="hidden lg:block">Last updated </div>
+                    <div>Action</div>
+                </div>
             <ng-container *ngIf="!initialLoading && projectList.length > 0">
-                <div class="grid">
-                    <div class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                        matSortDisableClear>
-                        <div>Name</div>
-                        <div class="hidden md:block">Description</div>
-                        <div class="hidden sm:block">Start Date</div>
-                        <div class="hidden lg:block">Last updated </div>
-                        <div>Action</div>
-                    </div>
+
                     <ng-container *ngFor="let project of projectList">
                         <div class="inventory-grid grid  items-center gap-4 py-3 px-6 md:px-8 border-b">
                             <div (click)="goToProject(project)" class="cursor-pointer">
@@ -231,10 +232,10 @@
                             </div>
                         </div>
                     </ng-container>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="initialLoading ">
-                <div class="p-8 sm:p-16  text-4xl font-semibold tracking-tight text-center"> Loading......</div>
+                </ng-container>
+            </div>
+            <ng-container *ngIf="initialLoading">
+                <app-table-skeleton [skeletonData]="requiredProjectListSkeletonData"></app-table-skeleton>
             </ng-container>
             <ng-container *ngIf="!initialLoading && projectList.length == 0">
                 <div class="p-8 sm:p-16  text-4xl font-semibold tracking-tight text-center"> Projects not found</div>

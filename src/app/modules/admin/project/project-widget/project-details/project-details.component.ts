@@ -31,7 +31,6 @@ export class ProjectDetailsComponent implements OnInit {
     repoCount = 0;
     isBitbucketProjectListLoading = false;
     allBitbucketProjects: BitbucketProjectModel[] = [];
-
     @Input() dataId: any;
     checked: false;
     private _fuseCards!: QueryList<ElementRef>;

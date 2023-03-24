@@ -71,6 +71,10 @@ export class ResourcesListComponent implements OnInit {
     opened: any;
     resourceSearchInput = new FormControl();
     currentDate = moment();
+    requiredSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: true,
+    };
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(

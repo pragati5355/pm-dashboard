@@ -28,6 +28,7 @@ import { AddFormComponent } from './add-form/add-form.component';
 import { SharedModule } from 'app/core/shared.module';
 import { ViewFormComponent } from './view-form/view-form.component';
 import { CopyFormComponent } from './copy-form/copy-form.component';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 const routes: Routes = [
     {
         path: '',
@@ -106,6 +107,7 @@ const routes: Routes = [
         MatSidenavModule,
         MatTooltipModule,
         InfiniteScrollModule,
+        SkeletonModule
     ],
     providers: [],
 })

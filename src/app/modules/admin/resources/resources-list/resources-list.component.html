@@ -438,7 +438,7 @@
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="initialLoading">
-                                <app-table-skeleton></app-table-skeleton>
+                                <app-table-skeleton [skeletonData]="requiredSkeletonData"></app-table-skeleton>
                             </ng-container>
                         </div>
                     </div>
