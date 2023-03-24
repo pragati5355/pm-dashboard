@@ -41,6 +41,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 
 const routes: Routes = [
     {
@@ -109,6 +110,7 @@ const routes: Routes = [
         MatTooltipModule,
         MatCheckboxModule,
         MatProgressSpinnerModule,
+        SkeletonModule
     ],
     exports: [
         ProjectDetailsComponent,

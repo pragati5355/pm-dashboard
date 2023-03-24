@@ -41,7 +41,10 @@ export class FormListComponent implements OnInit {
     configFormWithProject!: FormGroup;
     deleteProjects: any = '';
     cont: HTMLElement | any = document.getElementsByClassName('listClass');
-
+    requiredFormSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: false,
+    };
     constructor(
         private router: Router,
         private snackBar: SnackBar,

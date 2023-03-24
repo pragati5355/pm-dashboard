@@ -72,6 +72,7 @@ export class AuthSignInComponent implements OnInit
             )
       }) 
       .catch(error => {
+          console.log(error)
           this.alert = {
               type   : 'error',
               message: 'Something went wrong'

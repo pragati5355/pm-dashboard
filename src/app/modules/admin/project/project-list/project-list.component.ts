@@ -37,6 +37,10 @@ export class ProjectListComponent implements OnInit {
     cardList: boolean = true;
     submitInProcess: boolean = false;
     projectSearchInput = new FormControl();
+    requiredProjectListSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: false,
+    };
 
     constructor(
         private router: Router,

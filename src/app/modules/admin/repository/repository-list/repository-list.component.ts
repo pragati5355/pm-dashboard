@@ -15,6 +15,10 @@ export class RepositoryListComponent implements OnInit {
     totalRecord = 0;
     repoData: any = [];
     metricsProjectData: any;
+    requiredReposSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: false,
+    };
     constructor(
         private router: Router,
         private _authService: AuthService,

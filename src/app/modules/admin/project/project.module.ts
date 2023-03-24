@@ -39,6 +39,7 @@ import { ProjectWidgetModule } from '@modules/admin/project/project-widget/proje
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
 import { SprintFeedbackFormComponent } from './sprint-feedback-form/sprint-feedback-form.component';
 import { SkeletonComponent } from './common/skeleton/skeleton.component';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 const routes: Routes = [
     {
         path: '',
@@ -146,6 +147,7 @@ const routes: Routes = [
         MatButtonToggleModule,
         FormioModule,
         InfiniteScrollModule,
+        SkeletonModule
     ],
 })
 export class ProjectModule {}

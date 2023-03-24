@@ -32,6 +32,7 @@ import { RepositoryListComponent } from './repository-list/repository-list.compo
 import { AddRepositoryComponent } from './add-repository/add-repository.component';
 import { SendMailComponent } from './send-mail/send-mail.component';
 import { RepositoryDetailsComponent } from './repository-details/repository-details.component';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 
 const routes: Routes = [
     {
@@ -102,6 +103,7 @@ const routes: Routes = [
         FuseScrollResetModule,
         InfiniteScrollModule,
         MatStepperModule,
+        SkeletonModule
     ],
 })
 export class RepositoryModule {}
