@@ -32,6 +32,7 @@ import { RepositoryListComponent } from './repository-list/repository-list.compo
 import { AddRepositoryComponent } from './add-repository/add-repository.component';
 import { SendMailComponent } from './send-mail/send-mail.component';
 import { RepositoryDetailsComponent } from './repository-details/repository-details.component';
+import { CommandLineComponent } from './command-line/command-line.component';
 
 const routes: Routes = [
     {
@@ -72,6 +73,7 @@ const routes: Routes = [
         AddRepositoryComponent,
         SendMailComponent,
         RepositoryDetailsComponent,
+        CommandLineComponent,
     ],
     imports: [
         CommonModule,
