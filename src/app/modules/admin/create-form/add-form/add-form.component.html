@@ -30,6 +30,9 @@
                 <div class="mt-4 sm:mt-0">
 
                   <!-- Add task button -->
+                  <button (click)="gotoBack()" mat-stroked-button type="button" class="px-6">
+                    Cancel
+                  </button>
                   <button *ngIf="formTypeAdd" class="ml-3" mat-flat-button [color]="'primary'" (click)="addForm()">
                     <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                     <span class="ml-2 mr-1 ">Save Form</span>

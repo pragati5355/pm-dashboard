@@ -236,6 +236,9 @@ export class AddFormComponent implements OnInit {
             this.snackBar.errorSnackBar('Enter form name');
         }
     }
+    gotoBack(){
+        this.router.navigate(['/forms/form-list']);
+    }
     getFormDetails(payload: any) {
         this.initialLoading = true;
         this.formService.getFormDetails(payload).subscribe((res: any) => {
