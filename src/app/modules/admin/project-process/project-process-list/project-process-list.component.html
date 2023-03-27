@@ -78,7 +78,8 @@
                 matSortDisableClear>
                 <div></div>
                 <div>Submitted by</div>
-                <div>Submitted on</div>
+                <div>Submitted on</div> 
+                <div>Sprint no</div>                       
                 <div>Actions</div>
               </div>
 
@@ -107,6 +108,10 @@
 
                   <div class="hidden md:block truncate">
                     {{ formList.createdAt | date }}
+                  </div>
+
+                  <div class="hidden md:block truncate">
+                    {{ formList?.checklistResponse?.sprintNo }}
                   </div>
 
                   <div class="sm:block flex items-center">
