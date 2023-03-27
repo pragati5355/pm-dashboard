@@ -70,18 +70,18 @@
         <div (scrolled)="handleScroll()" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
           [scrollWindow]="false" class="flex flex-col flex-auto  overflow-hidden sm:overflow-y-auto  overflow-x-auto"
           infiniteScroll>
+          <div
+            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+            matSortDisableClear>
+            <div></div>
+            <div>Submitted by</div>
+            <div>Submitted on</div> 
+            <div>Sprint no</div>                       
+            <div>Actions</div>
+          </div>
           <ng-container *ngIf="!initialLoading && totalRecord > 0;">
             <div *ngIf="totalRecord > 0" class="grid ">
 
-              <div
-                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                matSortDisableClear>
-                <div></div>
-                <div>Submitted by</div>
-                <div>Submitted on</div> 
-                <div>Sprint no</div>                       
-                <div>Actions</div>
-              </div>
 
               <ng-container *ngFor="let formList of formList;index as i">
                 <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
@@ -134,9 +134,7 @@
             </div>
           </ng-container>
           <ng-container *ngIf="initialLoading">
-            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
-              Loading......
-            </div>
+            <app-table-skeleton [skeletonData]="requiredSkeletonData"></app-table-skeleton>
           </ng-container>
         </div>
       </div>

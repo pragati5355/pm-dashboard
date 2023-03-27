@@ -31,6 +31,7 @@ import { FormioModule, FormioAppConfig } from 'angular-formio';
 import { ProjectProcessListComponent } from './project-process-list/project-process-list.component';
 import { ProjectProcessHomeComponent } from './project-process-home/project-process-home.component';
 import { ProcessFormComponent } from './process-form/process-form.component';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 const routes: Routes = [
     {
         path: '',
@@ -91,6 +92,7 @@ const routes: Routes = [
         InfiniteScrollModule,
         MatStepperModule,
         FormioModule,
+        SkeletonModule
     ],
 })
 export class ProjectProcessModule {}

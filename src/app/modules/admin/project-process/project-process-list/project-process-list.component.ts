@@ -44,6 +44,10 @@ export class ProjectProcessListComponent implements OnInit {
     dateFilterForm!: FormGroup;
     maxDate = new Date();
     isFilterShow: boolean = false;
+    requiredSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: true,
+    };
     get dateFilterValidForm(): { [key: string]: AbstractControl } {
         return this.dateFilterForm.controls;
     }
