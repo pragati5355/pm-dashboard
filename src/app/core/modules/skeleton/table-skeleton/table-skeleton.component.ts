@@ -1,16 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    OnInit,
+    SimpleChanges,
+} from '@angular/core';
+
+interface skeletonDataType {
+    rowsToDisplay: number;
+    displayProfilePicture: boolean;
+}
 
 @Component({
     selector: 'app-table-skeleton',
     templateUrl: './table-skeleton.component.html',
     styleUrls: ['./table-skeleton.component.scss'],
 })
-export class TableSkeletonComponent implements OnInit {
+export class TableSkeletonComponent implements OnInit, OnChanges {
+    @Input() skeletonData: skeletonDataType;
+
     noOfSkeletonRows: number[];
 
-    constructor() {
-        this.noOfSkeletonRows = Array(10).fill(0);
-    }
+    constructor() {}
 
     ngOnInit(): void {}
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['skeletonData']) {
+            this.noOfSkeletonRows = Array(this.skeletonData.rowsToDisplay).fill(
+                0
+            );
+        }
+    }
 }

@@ -3,16 +3,17 @@
 <div class="flex flex-auto overflow-hidden">
   <!-- Project member list -->
   <div class="flex flex-col flex-auto  overflow-hidden sm:overflow-y-auto">
+    <div
+      class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+      matSortDisableClear>
+      <div>Name</div>
+      <div class="hidden sm:block">Email</div>
+      <div class="hidden lg:block">Role</div>
+    </div>
     <ng-container *ngIf="!initialLoading && totalRecored > 0">
       <div *ngIf="totalRecored > 0" class="grid">
         <!-- Header -->
-        <div
-          class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-          matSortDisableClear>
-          <div>Name</div>
-          <div class="hidden sm:block">Email</div>
-          <div class="hidden lg:block">Role</div>
-        </div>
+
         <!-- Rows -->
         <ng-container *ngFor="let team of teamMember">
           <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
@@ -57,9 +58,7 @@
       </div>
     </ng-container>
     <ng-container *ngIf="initialLoading">
-      <div class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">
-        Loading.....
-      </div>
+      <app-table-skeleton [skeletonData]="requiredMembersSkeletonData"></app-table-skeleton>
     </ng-container>
   </div>
 </div>
