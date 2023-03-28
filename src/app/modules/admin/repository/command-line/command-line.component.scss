@@ -1,0 +1,70 @@
+body {
+	background-color: #114e36;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh
+}
+.btnLoader {
+	display: flex;
+    padding-bottom: 6px;
+	// justify-content: center;
+	// align-items: end;
+	gap: 0.2rem;
+	background-color: inherit;
+	// width: 100%;
+}
+.btnLoader span {
+  --dot1: #6bcf90;
+  --dot2: #38b867;
+  --dot3: #16a349;
+  --dot4: #086e2e;
+  --duration: 700ms;
+  --easing: linear;
+  --delay: 1ms;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+}
+.btnLoader span:nth-child(1) {
+  background-color: var(--dot1);
+  animation: var(--duration) var(--easing) var(--delay) infinite normal flash1;
+}
+.btnLoader span:nth-child(2) {
+  background-color: var(--dot2);
+  animation: var(--duration) var(--easing) var(--delay) infinite normal flash2;
+}
+.btnLoader span:nth-child(3) {
+  background-color: var(--dot3);
+  animation: var(--duration) var(--easing) var(--delay) infinite normal flash3;
+}
+.btnLoader span:nth-child(4) {
+  background-color: var(--dot4);
+  animation: var(--duration) var(--easing) var(--delay) infinite normal flash4;
+}
+
+@keyframes flash1 {
+  0%, 100% { background-color: var(--dot1) }
+  25% { background-color: var(--dot2) }
+  50% { background-color: var(--dot3) }
+  75% { background-color: var(--dot4) }
+}
+@keyframes flash2 {
+  0%, 100% { background-color: var(--dot4) }
+  25% { background-color: var(--dot1) }
+  50% { background-color: var(--dot2) }
+  75% { background-color: var(--dot3) }
+}
+@keyframes flash3 {
+  0%, 100% { background-color: var(--dot3) }
+  25% { background-color: var(--dot4) }
+  50% { background-color: var(--dot1) }
+  75% { background-color: var(--dot2) }
+}
+@keyframes flash4 {
+  0%, 100% { background-color: var(--dot2) }
+  25% { background-color: var(--dot3) }
+  50% { background-color: var(--dot4) }
+  75% { background-color: var(--dot1) }
+}
+      

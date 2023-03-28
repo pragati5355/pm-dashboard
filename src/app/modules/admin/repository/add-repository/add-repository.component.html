@@ -413,8 +413,8 @@
                 </div>
             </div>
             <!-- Review your project -->
-            <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full h-full">
-                <div  class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4 h-full">
+            <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full  mb-8">
+                <div  class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4 h-full ">
                     <div *ngIf="!submitInProcess"  class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
                         <!-- Review form -->
                         <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
@@ -529,7 +529,7 @@
                             </div>
                         </div>
                     </div>
-                    <app-command-line *ngIf="submitInProcess" class="w-full p-6 sm:p-8"></app-command-line>
+                    <app-command-line *ngIf="submitInProcess" class="w-full h-full mt-4 bg-black mb-4"></app-command-line>
                 </div>
             </div>
         </div>

@@ -1,4 +1,13 @@
-<div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card bg-black text-sm text-green-600 h-full max-h-full mb-4 pb-4">
- <p>Hello</p>
- <p>Hello</p>
+<div  class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4 max-h-full overflow-y-auto">
+    <div id="scroll" class=" w-full  bg-black text-sm text-green-600  ">
+        <div class="message-container flex items-end" *ngFor="let message of messages last as last">
+            <div>{{ message }}</div>
+            <div *ngIf="last" class="btnLoader "  id="elId" #target>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
 </div>

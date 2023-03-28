@@ -438,29 +438,29 @@ export class AddRepositoryComponent implements OnInit {
                 draftId: this.draftId,
                 status: status,
             };
-            this.RepositoryService.create(payload).subscribe(
-                (res: any) => {
-                    if (!res.error) {
-                        this.snackBar.successSnackBar(res.message);
-                        this.router.navigate([
-                            '/projects/repository/repository-list',
-                        ]);
-                    } else {
-                        this.snackBar.errorSnackBar(res.data.message);
-                    }
-                    this.submitInProcess = false;
-                    this.initialLoading = false;
-                    this.tokenExpireFun(res);
-                },
-                (error) => {
-                    this.submitInProcess = false;
-                    if (error.error.message) {
-                        this.snackBar.errorSnackBar(error.error.message);
-                    } else {
-                        this.snackBar.errorSnackBar(error.error.error);
-                    }
-                }
-            );
+            // this.RepositoryService.create(payload).subscribe(
+            //     (res: any) => {
+            //         if (!res.error) {
+            //             this.snackBar.successSnackBar(res.message);
+            //             this.router.navigate([
+            //                 '/projects/repository/repository-list',
+            //             ]);
+            //         } else {
+            //             this.snackBar.errorSnackBar(res.data.message);
+            //         }
+            //         this.submitInProcess = false;
+            //         this.initialLoading = false;
+            //         this.tokenExpireFun(res);
+            //     },
+            //     (error) => {
+            //         this.submitInProcess = false;
+            //         if (error.error.message) {
+            //             this.snackBar.errorSnackBar(error.error.message);
+            //         } else {
+            //             this.snackBar.errorSnackBar(error.error.error);
+            //         }
+            //     }
+            // );
         }
     }
     downloadYmlFile() {
