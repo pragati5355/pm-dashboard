@@ -8,11 +8,8 @@ body {
 .btnLoader {
 	display: flex;
     padding-bottom: 6px;
-	// justify-content: center;
-	// align-items: end;
 	gap: 0.2rem;
 	background-color: inherit;
-	// width: 100%;
 }
 .btnLoader span {
   --dot1: #6bcf90;
@@ -22,8 +19,8 @@ body {
   --duration: 700ms;
   --easing: linear;
   --delay: 1ms;
-  width: 1px;
-  height: 1px;
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
 }
 .btnLoader span:nth-child(1) {

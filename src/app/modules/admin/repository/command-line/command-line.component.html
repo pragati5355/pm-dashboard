@@ -1,6 +1,6 @@
 <div  class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4 max-h-full overflow-y-auto">
     <div id="scroll" class=" w-full  bg-black text-sm text-green-600  ">
-        <div class="message-container flex items-end" *ngFor="let message of messages last as last">
+        <div class="message-container items-end" *ngFor="let message of messages last as last">
             <div>{{ message }}</div>
             <div *ngIf="last" class="btnLoader "  id="elId" #target>
                 <span></span>
