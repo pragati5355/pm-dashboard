@@ -54,6 +54,7 @@ export const AppConstants: ConstantsInterface = {
     GET_BITBUCKET_MEMBER: `${projectBaseUrl}/bitbucket-members`,
     GET_BITBUCKET_PROJECT_NAME: `${projectBaseUrl}/search-project`,
     GET_STATISTICS_COUNT: `${projectBaseUrl}/dashboard-stats`,
+    CREATE_PLATFORM_USER: `${projectBaseUrl}/`,
 };
 export const ValidationConstants = {
     EMAIL_VALIDATION:
