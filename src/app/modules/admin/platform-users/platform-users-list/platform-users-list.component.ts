@@ -57,7 +57,6 @@ export class PlatformUsersListComponent implements OnInit {
             data: {},
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            console.log(result);
             if (result == 'success') {
                 this.userList = [];
                 this.totalRecords = 0;
