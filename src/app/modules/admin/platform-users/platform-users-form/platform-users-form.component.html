@@ -74,6 +74,7 @@
             type="button"
             class="px-6 mr-2"
             (click)="cancel()"
+            [disabled]="submitInProcess"
         >
             Cancel
         </button>
@@ -82,8 +83,11 @@
             mat-flat-button
             [color]="'primary'"
             (click)="submitUserData()"
+            [disabled]="submitInProcess"
         >
-            <span class="ml-2 mr-1">Submit</span>
+            <span class="mx-2">Submit</span>
+            <mat-progress-spinner *ngIf="submitInProcess" [diameter]="18"
+            [mode]="'indeterminate'"></mat-progress-spinner>
         </button>
     </div>
 </form>

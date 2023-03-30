@@ -27,11 +27,7 @@
 
             <div class="flex flex-auto overflow-hidden">
                 <div
-                    [infiniteScrollDistance]="2"
-                    [infiniteScrollThrottle]="50"
-                    [scrollWindow]="false"
                     class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
-                    infiniteScroll
                 >
                     <div
                         class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
@@ -40,48 +36,126 @@
                         <div>First Name</div>
                         <div>Last Name</div>
                         <div>Role</div>
+                        <div>Status</div>
                         <div>Actions</div>
                     </div>
-                    <ng-container *ngIf="true">
-                        <div *ngIf="true" class="grid">
+                    <ng-container *ngIf="!false && userList.length > 0">
+                        <div class="grid">
                             <ng-container
-                                *ngFor="let formList of [1, 2, 3]; index as i"
+                                *ngFor="let list of userList; index as i"
                             >
                                 <div
                                     class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
                                 >
                                     <div class="cursor-pointer">
-                                        <div class="truncate">rohan</div>
+                                        <div class="truncate">
+                                            {{ list?.firstName }}
+                                        </div>
                                     </div>
 
                                     <div class="hidden md:block truncate">
-                                        rohan
+                                        {{ list?.lastName }}
                                     </div>
 
                                     <div class="hidden md:block truncate">
-                                        Admin
+                                        {{ list?.role }}
                                     </div>
 
-                                    <div class="sm:block flex items-center">
+                                    <!-- Status -->
+                                    <div class="sm:block">
+                                        <div class="min-w-4">
+                                            <span
+                                                *ngIf="
+                                                    list?.status == 'ACTIVATED'
+                                                "
+                                                class="py-1 px-3 rounded-full font-semibold text-white bg-green-500 ng-star-inserted"
+                                            >
+                                                Activated
+                                            </span>
+                                            <span
+                                                *ngIf="
+                                                    list?.status ==
+                                                    'PENDING_ACTIVATION'
+                                                "
+                                                class="py-1 px-3 rounded-full font-semibold text-white bg-yellow-500 ng-star-inserted"
+                                            >
+                                                Pending
+                                            </span>
+                                            <span
+                                                *ngIf="
+                                                    list?.status ==
+                                                    'DEACTIVATED'
+                                                "
+                                                class="py-1 px-3 rounded-full font-semibold text-white bg-red-500 ng-star-inserted"
+                                            >
+                                                Deactivated
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="sm:block flex flex-row items-center w-full cursor-pointer"
+                                    >
                                         <mat-icon
-                                            [matTooltip]="'Delete'"
-                                            class="text-gray-400 icon-size-5 cursor-pointer"
+                                            [matTooltip]="
+                                                'Deactivate this user'
+                                            "
+                                            *ngIf="list?.status == 'ACTIVATED'"
+                                            svgIcon="mat_outline:block"
+                                            (click)="
+                                                changeStatus(
+                                                    list?.id,
+                                                    list?.status
+                                                )
+                                            "
+                                        ></mat-icon>
+                                        <mat-icon
+                                            [matTooltip]="
+                                                'Delete this invitation'
+                                            "
+                                            *ngIf="
+                                                list?.status ==
+                                                'PENDING_ACTIVATION'
+                                            "
                                             svgIcon="heroicons_outline:trash"
+                                            (click)="
+                                                changeStatus(
+                                                    list?.id,
+                                                    list?.status
+                                                )
+                                            "
+                                        ></mat-icon>
+                                        <mat-icon
+                                            [matTooltip]="'Active this user'"
+                                            *ngIf="
+                                                list?.status == 'DEACTIVATED'
+                                            "
+                                            svgIcon="mat_outline:check_circle"
+                                            (click)="
+                                                changeStatus(
+                                                    list?.id,
+                                                    list?.status
+                                                )
+                                            "
                                         ></mat-icon>
                                     </div>
                                 </div>
                             </ng-container>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="false">
+                    <ng-container
+                        *ngIf="!initialLoading && userList.length < 1"
+                    >
                         <div
                             class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
                         >
                             Checklist not found
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="false">
-                        <app-table-skeleton [skeletonData]="requiredSkeletonData"></app-table-skeleton>
+                    <ng-container *ngIf="initialLoading">
+                        <app-table-skeleton
+                            [skeletonData]="requiredSkeletonData"
+                        ></app-table-skeleton>
                     </ng-container>
                 </div>
             </div>

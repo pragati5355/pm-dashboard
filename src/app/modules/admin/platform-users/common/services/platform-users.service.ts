@@ -6,9 +6,20 @@ import { createUser } from '../../models';
     providedIn: 'root',
 })
 export class PlatformUsersService {
+    createUser = AppConstants['PROJECT_API_URL'] + '/platform-user';
+    getAllUsers = AppConstants['PROJECT_API_URL'] + '/user-list';
+    changeStatusUrl = AppConstants['PROJECT_API_URL'] + '/';
     constructor(private http: HttpClient) {}
 
     create(obj: createUser) {
-        return this.http.post(AppConstants['CREATE_PLATFORM_USER'], obj);
+        return this.http.post(this.createUser, obj);
+    }
+
+    getUsers() {
+        return this.http.get(this.getAllUsers);
+    }
+
+    changeStatus(obj: any) {
+        return this.http.post(this.changeStatusUrl, obj);
     }
 }
