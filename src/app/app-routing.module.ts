@@ -68,6 +68,13 @@ export const appRoutes: Routes = [
                         './modules/admin/create-form/create-form.module'
                     ).then((m) => m.CreateFormModule),
             },
+            {
+                path: 'platform-users',
+                loadChildren: () =>
+                    import('./modules/admin/platform-users/platform-users.module').then(
+                        (m) => m.PlatformUsersModule
+                    ),
+            },
         ],
     },
     {
