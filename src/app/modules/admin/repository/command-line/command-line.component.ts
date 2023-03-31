@@ -1,4 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    AfterViewInit,
+    Input,
+    SimpleChanges,
+} from '@angular/core';
 
 @Component({
     selector: 'app-command-line',
@@ -6,6 +12,14 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
     styleUrls: ['./command-line.component.scss'],
 })
 export class CommandLineComponent implements OnInit {
+    // messages: any;
+    // @Input()
+    // set messagesArray(value) {
+    //     if (value) {
+    //         this.messages = value;
+    //     }
+    // }
+    @Input() message: any;
     messages = [
         'Remote:~ user$ authenticate',
         'Checking stored credentials...',
@@ -16,16 +30,26 @@ export class CommandLineComponent implements OnInit {
         this.initializeDetails;
     }
 
-    ngOnInit(): void {}
-
-    ngAfterViewInit() {
-        setInterval(() => {
-            this.initializeDetails();
-        }, 1000);
+    ngOnInit(): void {
+        console.log(this.messages);
+        this.messages.push(this.message);
     }
+
+    // ngAfterViewInit() {
+    //     setInterval(() => {
+    //         this.initializeDetails();
+    //     }, 1000);
+    // }
     initializeDetails() {
         this.messages.push('Remote:~ user$ ' + 'helloo');
         this.scrollToBottom();
+    }
+    ngOnChanges(changes: SimpleChanges) {
+        console.log('OnChanges');
+        console.log(JSON.stringify(changes));
+
+        // tslint:disable-next-line:forin
+        this.initializeDetails();
     }
 
     scrollToBottom() {

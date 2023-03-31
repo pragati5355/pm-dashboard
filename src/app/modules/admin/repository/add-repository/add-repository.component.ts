@@ -95,6 +95,7 @@ export class AddRepositoryComponent implements OnInit {
     draftObj: any;
     draftId = null;
     submitInProcess = false;
+    messages = 'authenticate';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
@@ -814,5 +815,10 @@ export class AddRepositoryComponent implements OnInit {
                 this.fetchDraft();
             }
         });
+    }
+    ngAfterViewInit() {
+        setInterval(() => {
+            this.messages = 'every changes';
+        }, 1000);
     }
 }
