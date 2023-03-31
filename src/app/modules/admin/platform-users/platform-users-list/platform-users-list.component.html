@@ -102,12 +102,7 @@
                                             "
                                             *ngIf="list?.status == 'ACTIVATED'"
                                             svgIcon="mat_outline:block"
-                                            (click)="
-                                                changeStatus(
-                                                    list?.id,
-                                                    list?.status
-                                                )
-                                            "
+                                            (click)="changeStatus(list)"
                                         ></mat-icon>
                                         <mat-icon
                                             [matTooltip]="
@@ -118,12 +113,7 @@
                                                 'PENDING_ACTIVATION'
                                             "
                                             svgIcon="heroicons_outline:trash"
-                                            (click)="
-                                                changeStatus(
-                                                    list?.id,
-                                                    list?.status
-                                                )
-                                            "
+                                            (click)="changeStatus(list)"
                                         ></mat-icon>
                                         <mat-icon
                                             [matTooltip]="'Active this user'"
@@ -131,12 +121,7 @@
                                                 list?.status == 'DEACTIVATED'
                                             "
                                             svgIcon="mat_outline:check_circle"
-                                            (click)="
-                                                changeStatus(
-                                                    list?.id,
-                                                    list?.status
-                                                )
-                                            "
+                                            (click)="changeStatus(list)"
                                         ></mat-icon>
                                     </div>
                                 </div>

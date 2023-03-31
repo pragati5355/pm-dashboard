@@ -6,13 +6,13 @@ import { createUser } from '../../models';
     providedIn: 'root',
 })
 export class PlatformUsersService {
-    createUser = AppConstants['PROJECT_API_URL'] + '/platform-user';
+    createOrUpdateUser = AppConstants['PROJECT_API_URL'] + '/platform-user';
     getAllUsers = AppConstants['PROJECT_API_URL'] + '/user-list';
-    changeStatusUrl = AppConstants['PROJECT_API_URL'] + '/';
+    changeStatusUrl = AppConstants['PROJECT_API_URL'] + '/platform-user';
     constructor(private http: HttpClient) {}
 
     create(obj: createUser) {
-        return this.http.post(this.createUser, obj);
+        return this.http.post(this.createOrUpdateUser, obj);
     }
 
     getUsers() {
@@ -20,6 +20,6 @@ export class PlatformUsersService {
     }
 
     changeStatus(obj: any) {
-        return this.http.post(this.changeStatusUrl, obj);
+        return this.http.put(this.changeStatusUrl, obj);
     }
 }
