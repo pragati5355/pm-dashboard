@@ -59,7 +59,6 @@ export class AuthSignInComponent implements OnInit {
                         this.router.navigate(['/dashboard']);
                     },
                     (error) => {
-                        console.log(error);
                         this.submitInProcess = false;
                         this.alert = {
                             type: 'error',
@@ -70,7 +69,6 @@ export class AuthSignInComponent implements OnInit {
                 );
             })
             .catch((error) => {
-                console.log(error);
                 this.alert = {
                     type: 'error',
                     message: 'Something went wrong',
