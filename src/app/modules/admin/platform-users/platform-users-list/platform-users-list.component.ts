@@ -65,24 +65,26 @@ export class PlatformUsersListComponent implements OnInit {
         });
     }
 
-    changeStatus(id: any, status: any) {
+    changeStatus(list: any) {
         const payload = {
-            id: id,
+            id: list.id,
+            email: list.email,
+            firstName: list.firstName,
+            lastName: list.lastName,
             status:
-                status == 'ACTIVATED'
+                list.status == 'ACTIVATED'
                     ? 'DEACTIVATED'
-                    : status == 'PENDING_ACTIVATION'
+                    : list.status == 'PENDING_ACTIVATION'
                     ? 'DEACTIVATED'
                     : 'ACTIVATED',
             isDeleted:
-                status == 'ACTIVATED'
+                list.status == 'ACTIVATED'
                     ? false
-                    : status == 'PENDING_ACTIVATION'
+                    : list.status == 'PENDING_ACTIVATION'
                     ? true
                     : false,
         };
-        console.log(status);
-        this.initailizeConfirmationFormPopup(status);
+        this.initailizeConfirmationFormPopup(list.status);
         const dialogRef = this._fuseConfirmationService.open(
             this.configFormStatus.value
         );
@@ -142,10 +144,14 @@ export class PlatformUsersListComponent implements OnInit {
         });
     }
     statusChangeApi(payload: any) {
+        this.userList = [];
+        this.initialLoading = true;
         this.platformUsersService
             .changeStatus(payload)
             .subscribe((res: any) => {
+                this.initialLoading = false;
                 if (!res?.error) {
+                    this.getList();
                     this.snackBar.successSnackBar(res?.message);
                 } else {
                     this.snackBar.errorSnackBar(res?.message);
