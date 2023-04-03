@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Route, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { PlatformUsersHomeComponent } from './platform-users-home/platform-users-home.component';
 import { PlatformUsersListComponent } from './platform-users-list/platform-users-list.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -25,12 +25,12 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
-import { SharedModule } from 'app/core/shared.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatStepperModule } from '@angular/material/stepper';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { PlatformUsersFormComponent } from './platform-users-form/platform-users-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SearchPipe } from './common/pipes/search.pipe';
 
 const routes: Routes = [
     {
@@ -58,7 +58,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [PlatformUsersHomeComponent, PlatformUsersListComponent, PlatformUsersFormComponent],
+    declarations: [
+        PlatformUsersHomeComponent,
+        PlatformUsersListComponent,
+        PlatformUsersFormComponent,
+        SearchPipe,
+    ],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
@@ -87,7 +92,7 @@ const routes: Routes = [
         InfiniteScrollModule,
         MatStepperModule,
         SkeletonModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
 })
 export class PlatformUsersModule {}
