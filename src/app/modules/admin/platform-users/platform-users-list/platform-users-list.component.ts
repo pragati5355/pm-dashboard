@@ -6,7 +6,6 @@ import { PlatformUsersFormComponent } from '../platform-users-form/platform-user
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
     selector: 'app-platform-users-list',
