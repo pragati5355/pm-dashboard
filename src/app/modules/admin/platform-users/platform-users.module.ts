@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from 'app/core/shared.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Route, RouterModule, Routes } from '@angular/router';
+import { PlatformUsersHomeComponent } from './platform-users-home/platform-users-home.component';
+import { PlatformUsersListComponent } from './platform-users-list/platform-users-list.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,48 +25,42 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
+import { SharedModule } from 'app/core/shared.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatStepperModule } from '@angular/material/stepper';
-import { Route, RouterModule, Routes } from '@angular/router';
-import { FormioModule, FormioAppConfig } from 'angular-formio';
-import { ProjectProcessListComponent } from './project-process-list/project-process-list.component';
-import { ProjectProcessHomeComponent } from './project-process-home/project-process-home.component';
-import { ProcessFormComponent } from './process-form/process-form.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
+import { PlatformUsersFormComponent } from './platform-users-form/platform-users-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 const routes: Routes = [
     {
         path: '',
-        component: ProjectProcessHomeComponent,
+        component: PlatformUsersHomeComponent,
         children: [
             {
-                path: 'list',
-                component: ProjectProcessListComponent,
+                path: '',
+                component: PlatformUsersListComponent,
                 data: {
-                    pageTitle: 'Project Process Checklist',
+                    pageTitle: 'Platform Users',
                 },
             },
             {
                 path: '',
-                redirectTo: 'list',
+                redirectTo: '',
                 pathMatch: 'full',
             },
             {
                 path: '**',
-                redirectTo: 'list',
+                redirectTo: '',
             },
         ],
     },
 ];
+
 @NgModule({
-    declarations: [
-        ProjectProcessListComponent,
-        ProjectProcessHomeComponent,
-        ProcessFormComponent,
-    ],
+    declarations: [PlatformUsersHomeComponent, PlatformUsersListComponent, PlatformUsersFormComponent],
     imports: [
         CommonModule,
-        SharedModule,
-        ReactiveFormsModule,
         RouterModule.forChild(routes),
         MatChipsModule,
         MatButtonModule,
@@ -91,8 +86,8 @@ const routes: Routes = [
         FuseScrollResetModule,
         InfiniteScrollModule,
         MatStepperModule,
-        FormioModule,
-        SkeletonModule
+        SkeletonModule,
+        ReactiveFormsModule
     ],
 })
-export class ProjectProcessModule {}
+export class PlatformUsersModule {}

@@ -37,13 +37,17 @@ export class ProjectProcessListComponent implements OnInit {
     pagination = false;
     totalRecords = 0;
     count = 1;
-    totalRecord: any;
+    totalRecord: number = 0;
     totalPerPageData = 10;
     configForm!: FormGroup;
     configFormWithProject!: FormGroup;
     dateFilterForm!: FormGroup;
     maxDate = new Date();
     isFilterShow: boolean = false;
+    requiredSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: true,
+    };
     get dateFilterValidForm(): { [key: string]: AbstractControl } {
         return this.dateFilterForm.controls;
     }
@@ -173,7 +177,7 @@ export class ProjectProcessListComponent implements OnInit {
         );
     }
     handleScroll() {
-        if (!this.pagination) {
+        if (!this.pagination && this.formList.length < this.totalRecord) {
             this.count = this.count + this.totalPerPageData;
 
             const payload = {

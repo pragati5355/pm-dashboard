@@ -1,0 +1,149 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex-auto">
+        <div
+            class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
+        >
+            <div
+                class="relative flex flex-col sm:flex-row md:flex-col justify-between p-6 border-b bg-card dark:bg-transparent"
+            >
+                <div class="flex items-center">
+                    <div class="ml-auto flex items-center">
+                        <div></div>
+                        <button
+                            [color]="'primary'"
+                            [matTooltip]="'Add User'"
+                            class="ml-4"
+                            mat-flat-button
+                            (click)="openDialog()"
+                        >
+                            <mat-icon
+                                [svgIcon]="'heroicons_outline:plus'"
+                            ></mat-icon>
+                            <span class="ml-2 mr-1">Add User</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-auto overflow-hidden">
+                <div
+                    class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
+                >
+                    <div
+                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        matSortDisableClear
+                    >
+                        <div>First Name</div>
+                        <div>Last Name</div>
+                        <div>Role</div>
+                        <div>Status</div>
+                        <div>Actions</div>
+                    </div>
+                    <ng-container *ngIf="!false && userList.length > 0">
+                        <div class="grid">
+                            <ng-container
+                                *ngFor="let list of userList; index as i"
+                            >
+                                <div
+                                    class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
+                                >
+                                    <div class="cursor-pointer">
+                                        <div class="truncate">
+                                            {{ list?.firstName }}
+                                        </div>
+                                    </div>
+
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.lastName }}
+                                    </div>
+
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.role }}
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div class="sm:block">
+                                        <div class="min-w-4">
+                                            <span
+                                                *ngIf="
+                                                    list?.status == 'ACTIVATED'
+                                                "
+                                                class="py-1 px-3 rounded-full font-semibold text-white bg-green-500 ng-star-inserted"
+                                            >
+                                                Activated
+                                            </span>
+                                            <span
+                                                *ngIf="
+                                                    list?.status ==
+                                                    'PENDING_ACTIVATION'
+                                                "
+                                                class="py-1 px-3 rounded-full font-semibold text-white bg-yellow-500 ng-star-inserted"
+                                            >
+                                                Pending
+                                            </span>
+                                            <span
+                                                *ngIf="
+                                                    list?.status ==
+                                                    'DEACTIVATED'
+                                                "
+                                                class="py-1 px-3 rounded-full font-semibold text-white bg-red-500 ng-star-inserted"
+                                            >
+                                                Deactivated
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="sm:block flex flex-row items-center w-full cursor-pointer"
+                                    >
+                                        <mat-icon
+                                            [matTooltip]="
+                                                'Deactivate this user'
+                                            "
+                                            *ngIf="list?.status == 'ACTIVATED'"
+                                            svgIcon="mat_outline:block"
+                                            (click)="changeStatus(list)"
+                                        ></mat-icon>
+                                        <mat-icon
+                                            [matTooltip]="
+                                                'Delete this invitation'
+                                            "
+                                            *ngIf="
+                                                list?.status ==
+                                                'PENDING_ACTIVATION'
+                                            "
+                                            svgIcon="heroicons_outline:trash"
+                                            (click)="changeStatus(list)"
+                                        ></mat-icon>
+                                        <mat-icon
+                                            [matTooltip]="'Active this user'"
+                                            *ngIf="
+                                                list?.status == 'DEACTIVATED'
+                                            "
+                                            svgIcon="mat_outline:check_circle"
+                                            (click)="changeStatus(list)"
+                                        ></mat-icon>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <ng-container
+                        *ngIf="!initialLoading && userList.length < 1"
+                    >
+                        <div
+                            class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+                        >
+                            Checklist not found
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="initialLoading">
+                        <app-table-skeleton
+                            [skeletonData]="requiredSkeletonData"
+                        ></app-table-skeleton>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
