@@ -67,6 +67,15 @@
         >
             <div>Invalid Email</div>
         </mat-error>
+        <mat-error
+            *ngIf="
+                addUserForm?.get('email')?.hasError('pattern') &&
+                !addUserForm?.get('email')?.hasError('required') &&
+                !addUserForm?.get('email')?.hasError('email')
+            "
+        >
+            <div>Only mindbowser email is allowed</div>
+        </mat-error>
     </mat-form-field>
     <div class="flex justify-end">
         <button
@@ -86,8 +95,11 @@
             [disabled]="submitInProcess"
         >
             <span class="mx-2">Submit</span>
-            <mat-progress-spinner *ngIf="submitInProcess" [diameter]="18"
-            [mode]="'indeterminate'"></mat-progress-spinner>
+            <mat-progress-spinner
+                *ngIf="submitInProcess"
+                [diameter]="18"
+                [mode]="'indeterminate'"
+            ></mat-progress-spinner>
         </button>
     </div>
 </form>
