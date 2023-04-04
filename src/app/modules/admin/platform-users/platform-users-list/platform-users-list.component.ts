@@ -4,7 +4,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { PlatformUsersService } from '../common/services/platform-users.service';
 import { PlatformUsersFormComponent } from '../platform-users-form/platform-users-form.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SnackBar } from 'app/core/utils/snackBar';
 
 @Component({
@@ -14,6 +14,7 @@ import { SnackBar } from 'app/core/utils/snackBar';
 })
 export class PlatformUsersListComponent implements OnInit {
     userList: any[] = [];
+    searchValue: string = '';
     requiredSkeletonData = {
         rowsToDisplay: 10,
         displayProfilePicture: false,
@@ -21,6 +22,7 @@ export class PlatformUsersListComponent implements OnInit {
     initialLoading: boolean = false;
     configFormStatus!: FormGroup;
     totalRecords: number = 0;
+    platformSearchInput = new FormControl();
     constructor(
         private dialog: MatDialog,
         private platformUsersService: PlatformUsersService,
@@ -46,6 +48,10 @@ export class PlatformUsersListComponent implements OnInit {
                 this._authService.updateAndReload(window.location);
             }
         });
+    }
+
+    clearSearch() {
+        this.searchValue = '';
     }
 
     openDialog() {
