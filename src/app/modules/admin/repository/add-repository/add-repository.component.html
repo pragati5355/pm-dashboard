@@ -1,7 +1,7 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
     <div *ngIf="!initialLoading" class="flex flex-row w-full h-full overflow-y-auto">
         <div class="w-1/4 border-r-0 bg-default sticky top-0">
-            <div class="p-6 lg:py-8 lg:pl-4 lg:pr-0 h-full">
+            <div class="p-4 h-full">
                 <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
                     [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
                     <mat-step label="Choose Technology" [completed]="isFormType"> </mat-step>
@@ -14,16 +14,16 @@
                 </mat-vertical-stepper>
             </div>
         </div>
-        <div class="flex flex-col flex-auto">
+        <div class="flex flex-col flex-auto py-4 pr-4 ">
             <button mat-icon-button class="hidden" (click)="toggle()">
                 <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
             </button>
             <!-- Choose Technology -->
             <div *ngIf="selectedIndex === 0 && !initialLoading" class="flex flex-col flex-auto w-full">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 mb-6 mt-4 md:grid-cols-3 gap-6 w-full min-w-0">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 mb-6  md:grid-cols-3 gap-6 w-full min-w-0">
                         <!-- REACT JS-->
-                        <div (click)="isFormType = true"
+                        <div (click)="isFormType = true" [matTooltip]="'React Js '"
                             class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('react-js')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
@@ -31,7 +31,7 @@
                         </div>
 
                         <!-- ANGULAR-->
-                        <div (click)="isFormType = true"
+                        <div (click)="isFormType = true" [matTooltip]="'Angular '"
                             class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('angular')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/angular.png" alt=""></div>
@@ -40,7 +40,8 @@
 
                          <!-- JAVA-->
                          <div [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                         >
                             <div> <img class="w-20 h-20" src="/assets/mbicons/java.png" alt=""></div>
                             <div>JAVA</div>
                           </div>
@@ -55,37 +56,41 @@
                         
 
                         <!-- ANDROID JAVA-->
-                         <div [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                         <div (click)="isFormType = true" [matTooltip]="'Android Java'"
+                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed" 
+                         (click)="getTechnology('android-java')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/android-java.png" alt=""></div>
                             <div>ANDROID JAVA</div>
                           </div>
 
                         <!-- DJANGO-->
-                        <div [matTooltip]="'Coming Soon '"
-                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                        <div (click)="isFormType = true" [matTooltip]="'Django '"
+                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed" 
+                            (click)="getTechnology('django')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/django.png" alt=""></div>
                             <div> DJANGO</div>
                         </div>
                        
                         
                         <!-- REACT NATIVE -->
-                        <div [matTooltip]="'Coming Soon '"
-                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed">
+                        <div (click)="isFormType = true" [matTooltip]="'React Native '"
+                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed" 
+                            (click)="getTechnology('react-native')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
                             <div>REACT NATIVE</div>
                         </div>
 
                          <!-- IOS-->
-                         <div [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                         <div  [matTooltip]="'Coming Soon '"
+                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                         >
                             <div> <img class="w-20 h-20" src="/assets/mbicons/ios.png" alt=""></div>
                             <div>IOS</div>
                           </div>
 
 
                             <!-- NODE JS-->
-                         <div [matTooltip]="'Coming Soon '"
+                         <div  [matTooltip]="'Coming Soon '"
                          class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/node-js.png" alt=""></div>
                             <div>NODE JS</div>
@@ -96,8 +101,8 @@
             </div>
             <!-- Create Bitbucket Project -->
             <div *ngIf="selectedIndex === 1" class="flex flex-col flex-auto w-full">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto  min-h-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full  bg-card dark:bg-transparent">
                         <form [formGroup]="createBitbucketProjectFrom"
                             class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                             <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
@@ -136,9 +141,9 @@
                                 <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
                                     <mat-form-field [floatLabel]="'always'" appearance="fill"
                                         class="example-chip-list w-full flex-0 mb-2">
-                                        <mat-label>Portal Name *</mat-label>
+                                        <mat-label>{{currentPortalType | titlecase}} Name *</mat-label>
                                         <mat-chip-list #portalChipList formControlName="portalNameOrMicroserviceName">
-                                            <input placeholder="New Portal Name..." #portalNameOrMicroserviceNameInput
+                                            <input placeholder="New {{currentPortalType | titlecase}} Name..." #portalNameOrMicroserviceNameInput
                                                 formControlName="portalNameOrMicroserviceName"
                                                 [matChipInputFor]="portalChipList"
                                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -155,11 +160,11 @@
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                             </mat-chip>
                                         </mat-chip-list>
-                                        <mat-error>At least add one portal name
+                                        <mat-error>At least add one {{currentPortalType}} name
                                         </mat-error>
                                     </mat-form-field>
                                     <div class="text-sm -mt-5 mb-4" *ngIf="portalNameOrMicroserviceNameInput.value">
-                                        Please press enter to select portal name</div>
+                                        Please press enter to select {{currentPortalType}} name</div>
                                 </div>
                             </div>
                             <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
@@ -341,11 +346,15 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(0)">
                                         Back
                                     </button>
+                                    <button type="button" class="min-w-30 order-first sm:order-last ml-4"
+                                    mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
+                                    Save as Draft
+                                </button>
                                     <button class="min-w-30 order-first sm:order-last ml-4" mat-flat-button
                                         [color]="'primary'" (click)="submitBitbucketProject()">
                                         Next
@@ -359,9 +368,9 @@
 
             <!-- Ansible Script -->
 
-            <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full overflow-y-auto">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
+            <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full overflow-y-auto ">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
                         <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
 
                             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 ">
@@ -390,10 +399,10 @@
                             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
                                 <div class=""> <a class="text-primary .mt-8p cursor-pointer"
                                         (click)="downloadYmlFile()"> Download Template</a></div>
-                                <div class="text-left ml-auto"><a class="text-primary .mt-8p cursor-pointer"
+                                <div class="text-left ml-4"><a class="text-primary .mt-8p cursor-pointer"
                                         (click)="sendEmail()"> Email Template</a></div>
                             </div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between  mt-auto">
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(1)">
                                         Back
@@ -414,8 +423,8 @@
             </div>
             <!-- Review your project -->
             <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full overflow-y-auto">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full  bg-card dark:bg-transparent">
                         <!-- Review form -->
                         <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                             <ng-container>
@@ -513,11 +522,15 @@
                                 </div>
                             </ng-container>
 
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
 
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(2)">
                                         Back
+                                    </button>
+                                    <button type="button" class="min-w-30 order-first sm:order-last ml-4"
+                                    mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
+                                    Save as Draft
                                     </button>
                                     <button class="min-w-30 order-first sm:order-last ml-4" mat-flat-button
                                         [color]="'primary'" (click)="submit('ACTIVE')">

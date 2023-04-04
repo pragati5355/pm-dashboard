@@ -99,6 +99,7 @@ export class AddRepositoryComponent implements OnInit {
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
     }
+    currentPortalType = 'portal';
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder,
@@ -162,6 +163,7 @@ export class AddRepositoryComponent implements OnInit {
         this.selectedIndex = 1;
         this.showStep = 2;
         this.allRepositories = [];
+        this.changePortalName(name);
         if (this.formType != name) {
             this.formType = name;
             this.initializeForm();
@@ -365,7 +367,6 @@ export class AddRepositoryComponent implements OnInit {
         const input = event.input;
         const value = event.value;
         this.isRepository = false;
-        // Add our portalNameOrMicroserviceName
         if ((value || '').trim()) {
             this.portalNameOrMicroserviceNames.push(value.trim());
         }
@@ -536,7 +537,6 @@ export class AddRepositoryComponent implements OnInit {
     }
     fetchDraft() {
         const payload = {
-            // metricsProjectId: this.metricsProjectData.id,
             id: this.draftId,
         };
         this.initialLoading = true;
@@ -633,7 +633,10 @@ export class AddRepositoryComponent implements OnInit {
             this.formType == 'react-js' ||
             this.formType == 'django' ||
             this.formType == 'java' ||
-            this.formType == 'android-kotlin'
+            this.formType == 'android-kotlin' ||
+            this.formType == 'ios' ||
+            this.formType == 'android-java' ||
+            this.formType == 'node-js'
         ) {
             this.createBitbucketProjectFrom.addControl(
                 'portalNameOrMicroserviceName',
@@ -814,5 +817,19 @@ export class AddRepositoryComponent implements OnInit {
                 this.fetchDraft();
             }
         });
+    }
+
+    changePortalName(name) {
+        if (name == 'angular' || name == 'react-js' || name == 'node-js') {
+            this.currentPortalType = 'portal';
+        } else if (name == 'django' || name == 'java') {
+            this.currentPortalType = 'microservice';
+        } else if (
+            name == 'android-kotlin' ||
+            name == 'ios' ||
+            name == 'android-java'
+        ) {
+            this.currentPortalType = 'app';
+        }
     }
 }
