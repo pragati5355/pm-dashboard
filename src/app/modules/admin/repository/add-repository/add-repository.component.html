@@ -141,9 +141,9 @@
                                 <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
                                     <mat-form-field [floatLabel]="'always'" appearance="fill"
                                         class="example-chip-list w-full flex-0 mb-2">
-                                        <mat-label>Portal Name *</mat-label>
+                                        <mat-label>{{currentPortalType | titlecase}} Name *</mat-label>
                                         <mat-chip-list #portalChipList formControlName="portalNameOrMicroserviceName">
-                                            <input placeholder="New Portal Name..." #portalNameOrMicroserviceNameInput
+                                            <input placeholder="New {{currentPortalType | titlecase}} Name..." #portalNameOrMicroserviceNameInput
                                                 formControlName="portalNameOrMicroserviceName"
                                                 [matChipInputFor]="portalChipList"
                                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -160,11 +160,11 @@
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                             </mat-chip>
                                         </mat-chip-list>
-                                        <mat-error>At least add one portal name
+                                        <mat-error>At least add one {{currentPortalType}} name
                                         </mat-error>
                                     </mat-form-field>
                                     <div class="text-sm -mt-5 mb-4" *ngIf="portalNameOrMicroserviceNameInput.value">
-                                        Please press enter to select portal name</div>
+                                        Please press enter to select {{currentPortalType}} name</div>
                                 </div>
                             </div>
                             <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">

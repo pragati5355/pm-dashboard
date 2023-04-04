@@ -99,6 +99,7 @@ export class AddRepositoryComponent implements OnInit {
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
     }
+    currentPortalType = 'portal';
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder,
@@ -162,6 +163,7 @@ export class AddRepositoryComponent implements OnInit {
         this.selectedIndex = 1;
         this.showStep = 2;
         this.allRepositories = [];
+        this.changePortalName(name);
         if (this.formType != name) {
             this.formType = name;
             this.initializeForm();
@@ -817,5 +819,19 @@ export class AddRepositoryComponent implements OnInit {
                 this.fetchDraft();
             }
         });
+    }
+
+    changePortalName(name) {
+        if (name == 'angular' || name == 'react-js' || name == 'node-js') {
+            this.currentPortalType = 'portal';
+        } else if (name == 'django' || name == 'java') {
+            this.currentPortalType = 'microservice';
+        } else if (
+            name == 'android-kotlin' ||
+            name == 'ios' ||
+            name == 'android-java'
+        ) {
+            this.currentPortalType = 'app';
+        }
     }
 }
