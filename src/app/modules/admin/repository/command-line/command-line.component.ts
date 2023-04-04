@@ -12,49 +12,28 @@ import {
     styleUrls: ['./command-line.component.scss'],
 })
 export class CommandLineComponent implements OnInit {
-    // messages: any;
-    // @Input()
-    // set messagesArray(value) {
-    //     if (value) {
-    //         this.messages = value;
-    //     }
-    // }
     @Input() message: any;
-    messages = [
-        'Remote:~ user$ authenticate',
-        'Checking stored credentials...',
-        'Authentication successful.',
-    ];
+    messages = [];
 
     constructor() {
         this.initializeDetails;
     }
 
     ngOnInit(): void {
-        console.log(this.messages);
-        this.messages.push(this.message);
+        if (this.message) {
+            this.initializeDetails();
+        }
     }
-
-    // ngAfterViewInit() {
-    //     setInterval(() => {
-    //         this.initializeDetails();
-    //     }, 1000);
-    // }
     initializeDetails() {
-        this.messages.push('Remote:~ user$ ' + 'helloo');
+        this.messages.push(this.message);
         this.scrollToBottom();
     }
     ngOnChanges(changes: SimpleChanges) {
-        console.log('OnChanges');
-        console.log(JSON.stringify(changes));
-
-        // tslint:disable-next-line:forin
         this.initializeDetails();
     }
 
     scrollToBottom() {
         setTimeout(() => {
-            // window.scrollTo(0, document.getElementById('scroll').scrollHeight);
             document
                 .getElementById('elId')
                 .scrollIntoView({ behavior: 'smooth' });

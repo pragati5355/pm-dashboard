@@ -95,7 +95,7 @@ export class AddRepositoryComponent implements OnInit {
     draftObj: any;
     draftId = null;
     submitInProcess = false;
-    messages = 'authenticate';
+    messages = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
@@ -439,29 +439,29 @@ export class AddRepositoryComponent implements OnInit {
                 draftId: this.draftId,
                 status: status,
             };
-            // this.RepositoryService.create(payload).subscribe(
-            //     (res: any) => {
-            //         if (!res.error) {
-            //             this.snackBar.successSnackBar(res.message);
-            //             this.router.navigate([
-            //                 '/projects/repository/repository-list',
-            //             ]);
-            //         } else {
-            //             this.snackBar.errorSnackBar(res.data.message);
-            //         }
-            //         this.submitInProcess = false;
-            //         this.initialLoading = false;
-            //         this.tokenExpireFun(res);
-            //     },
-            //     (error) => {
-            //         this.submitInProcess = false;
-            //         if (error.error.message) {
-            //             this.snackBar.errorSnackBar(error.error.message);
-            //         } else {
-            //             this.snackBar.errorSnackBar(error.error.error);
-            //         }
-            //     }
-            // );
+            this.RepositoryService.create(payload).subscribe(
+                (res: any) => {
+                    if (!res.error) {
+                        this.snackBar.successSnackBar(res.message);
+                        this.router.navigate([
+                            '/projects/repository/repository-list',
+                        ]);
+                    } else {
+                        this.snackBar.errorSnackBar(res.data.message);
+                    }
+                    this.submitInProcess = false;
+                    this.initialLoading = false;
+                    this.tokenExpireFun(res);
+                },
+                (error) => {
+                    this.submitInProcess = false;
+                    if (error.error.message) {
+                        this.snackBar.errorSnackBar(error.error.message);
+                    } else {
+                        this.snackBar.errorSnackBar(error.error.error);
+                    }
+                }
+            );
         }
     }
     downloadYmlFile() {
@@ -817,8 +817,10 @@ export class AddRepositoryComponent implements OnInit {
         });
     }
     ngAfterViewInit() {
+        let i = 0;
         setInterval(() => {
-            this.messages = 'every changes';
+            this.messages = 'every changes' + i;
+            i = i + 1;
         }, 1000);
     }
 }
