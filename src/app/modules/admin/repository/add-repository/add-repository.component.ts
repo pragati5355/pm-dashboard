@@ -367,7 +367,6 @@ export class AddRepositoryComponent implements OnInit {
         const input = event.input;
         const value = event.value;
         this.isRepository = false;
-        // Add our portalNameOrMicroserviceName
         if ((value || '').trim()) {
             this.portalNameOrMicroserviceNames.push(value.trim());
         }
@@ -538,7 +537,6 @@ export class AddRepositoryComponent implements OnInit {
     }
     fetchDraft() {
         const payload = {
-            // metricsProjectId: this.metricsProjectData.id,
             id: this.draftId,
         };
         this.initialLoading = true;
