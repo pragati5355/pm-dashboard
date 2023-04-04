@@ -23,7 +23,7 @@
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 mb-6 mt-4 md:grid-cols-3 gap-6 w-full min-w-0">
                         <!-- REACT JS-->
-                        <div (click)="isFormType = true"
+                        <div (click)="isFormType = true" [matTooltip]="'React Js '"
                             class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('react-js')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
@@ -31,7 +31,7 @@
                         </div>
 
                         <!-- ANGULAR-->
-                        <div (click)="isFormType = true"
+                        <div (click)="isFormType = true" [matTooltip]="'Angular '"
                             class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-pointer"
                             (click)="getTechnology('angular')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/angular.png" alt=""></div>
@@ -40,7 +40,8 @@
 
                          <!-- JAVA-->
                          <div [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                         >
                             <div> <img class="w-20 h-20" src="/assets/mbicons/java.png" alt=""></div>
                             <div>JAVA</div>
                           </div>
@@ -55,37 +56,41 @@
                         
 
                         <!-- ANDROID JAVA-->
-                         <div [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                         <div (click)="isFormType = true" [matTooltip]="'Android Java'"
+                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed" 
+                         (click)="getTechnology('android-java')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/android-java.png" alt=""></div>
                             <div>ANDROID JAVA</div>
                           </div>
 
                         <!-- DJANGO-->
-                        <div [matTooltip]="'Coming Soon '"
-                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                        <div (click)="isFormType = true" [matTooltip]="'Django '"
+                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed" 
+                            (click)="getTechnology('django')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/django.png" alt=""></div>
                             <div> DJANGO</div>
                         </div>
                        
                         
                         <!-- REACT NATIVE -->
-                        <div [matTooltip]="'Coming Soon '"
-                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed">
+                        <div (click)="isFormType = true" [matTooltip]="'React Native '"
+                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed" 
+                            (click)="getTechnology('react-native')">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
                             <div>REACT NATIVE</div>
                         </div>
 
                          <!-- IOS-->
-                         <div [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
+                         <div  [matTooltip]="'Coming Soon '"
+                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                         >
                             <div> <img class="w-20 h-20" src="/assets/mbicons/ios.png" alt=""></div>
                             <div>IOS</div>
                           </div>
 
 
                             <!-- NODE JS-->
-                         <div [matTooltip]="'Coming Soon '"
+                         <div  [matTooltip]="'Coming Soon '"
                          class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
                             <div> <img class="w-20 h-20" src="/assets/mbicons/node-js.png" alt=""></div>
                             <div>NODE JS</div>
