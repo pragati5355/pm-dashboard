@@ -152,17 +152,7 @@ export class AddFormComponent implements OnInit {
             formType: ['', [Validators.required]],
         });
         this.form = { components: [] };
-        this.routeSubscribe = this._route.queryParams.subscribe((formtype) => {
-            if (formtype['id']) {
-                this.getFormDetails({ id: formtype['id'] });
-                this.editFormId = formtype['id'];
-                this.pageTitle = 'Edit Form';
-                this.formTypeAdd = false;
-            } else {
-                this.pageTitle = 'Add Form';
-                this.formTypeAdd = true;
-            }
-        });
+        this.initialData();
         this.refreshForm = new EventEmitter();
         this.getProjectList();
     }
@@ -195,7 +185,7 @@ export class AddFormComponent implements OnInit {
                             this.snackBar.errorSnackBar(res.data);
                         }
                     }
-                    this.router.navigate(['/forms/form-list']);
+                    this.router.navigate(['/forms/']);
                 });
             }
         } else {
@@ -220,7 +210,7 @@ export class AddFormComponent implements OnInit {
                 this.formService.updateForm(payload).subscribe((res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.data.message);
-                        this.router.navigate(['/forms/form-list']);
+                        this.router.navigate(['/forms/']);
                     } else {
                         this.snackBar.errorSnackBar(res.data.message);
                     }
@@ -236,8 +226,8 @@ export class AddFormComponent implements OnInit {
             this.snackBar.errorSnackBar('Enter form name');
         }
     }
-    gotoBack(){
-        this.router.navigate(['/forms/form-list']);
+    gotoBack() {
+        this.router.navigate(['/forms/']);
     }
     getFormDetails(payload: any) {
         this.initialLoading = true;
@@ -405,5 +395,18 @@ export class AddFormComponent implements OnInit {
             return false;
         }
         return true;
+    }
+    initialData() {
+        this.routeSubscribe = this._route.params.subscribe((formType) => {
+            if (formType['id']) {
+                this.getFormDetails({ id: formType['id'] });
+                this.editFormId = formType['id'];
+                this.pageTitle = 'Edit Form';
+                this.formTypeAdd = false;
+            } else {
+                this.pageTitle = 'Add Form';
+                this.formTypeAdd = true;
+            }
+        });
     }
 }
