@@ -75,10 +75,10 @@ export class ProjectDetailsComponent implements OnInit {
         this.router.navigate([`/projects/project-list`]);
     }
     createRepository() {
-        this.router.navigate([`/projects/repository/add-repository`]);
+        this.router.navigate([`/projects/repository/add`]);
     }
     viewRepository() {
-        this.router.navigate([`/projects/repository/repository-list`]);
+        this.router.navigate([`/projects/repository`]);
     }
     projectProcess() {
         this.router.navigate([`/projects/project-process/list`]);
