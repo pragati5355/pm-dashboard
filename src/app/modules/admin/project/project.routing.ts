@@ -22,7 +22,7 @@ export const projectRoutes: Route[] = [
                 },
             },
             {
-                path: 'edit-project',
+                path: 'edit/:id',
                 component: AddProjectHomeComponent,
                 data: {
                     pageTitle: 'Edit Project',

@@ -67,9 +67,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     editProject() {
-        this.router.navigate([`/projects/edit-project`], {
-            queryParams: { id: this.projectId },
-        });
+        this.router.navigate([`/projects/edit/${this.projectId}`]);
     }
     gotoProject() {
         this.router.navigate([`/projects/`]);

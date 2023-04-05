@@ -1071,19 +1071,17 @@ export class AddProjectHomeComponent
     }
 
     private routeSubscribeAndExtractInfo() {
-        this.routeSubscribe = this._route.queryParams.subscribe(
-            (projecteditId) => {
-                if (projecteditId['id']) {
-                    this.fetchEditproject(projecteditId['id']);
-                    this.editProjectId = projecteditId['id'];
-                    this.pageTitle = 'edit';
-                    this.editProject = true;
-                } else {
-                    this.pageTitle = 'add';
-                    this.editProject = false;
-                }
+        this.routeSubscribe = this._route.params.subscribe((projectEditId) => {
+            if (projectEditId['id']) {
+                this.fetchEditproject(projectEditId['id']);
+                this.editProjectId = projectEditId['id'];
+                this.pageTitle = 'edit';
+                this.editProject = true;
+            } else {
+                this.pageTitle = 'add';
+                this.editProject = false;
             }
-        );
+        });
     }
 
     private initializeProjectTeamForm() {
