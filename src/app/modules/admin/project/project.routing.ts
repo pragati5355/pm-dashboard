@@ -15,7 +15,7 @@ export const projectRoutes: Route[] = [
                 },
             },
             {
-                path: 'add-project',
+                path: 'add',
                 component: AddProjectHomeComponent,
                 data: {
                     pageTitle: 'Add New Project',

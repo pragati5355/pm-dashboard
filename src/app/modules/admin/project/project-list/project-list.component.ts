@@ -56,7 +56,7 @@ export class ProjectListComponent implements OnInit {
     }
 
     gotoAddProject() {
-        this.router.navigate(['/projects/add-project']);
+        this.router.navigate(['/projects/add']);
     }
 
     getList(payload: any) {
