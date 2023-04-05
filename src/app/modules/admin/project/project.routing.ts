@@ -8,7 +8,7 @@ export const projectRoutes: Route[] = [
         component: ProjectHomeComponent,
         children: [
             {
-                path: 'project-list',
+                path: '',
                 component: ProjectListComponent,
                 data: {
                     pageTitle: 'Projects List',
@@ -53,12 +53,12 @@ export const projectRoutes: Route[] = [
             },
             {
                 path: '',
-                redirectTo: 'project-list',
+                redirectTo: '',
                 pathMatch: 'full',
             },
             {
                 path: '**',
-                redirectTo: 'project-list',
+                redirectTo: '',
             },
         ],
     },

@@ -614,7 +614,7 @@ export class AddProjectHomeComponent
                             this.projectTeam.reset();
                             this.teamMemberList = [];
                             this.settingProjectName = '';
-                            this.router.navigate(['/projects/project-list']);
+                            this.router.navigate(['/projects/']);
                         } else {
                             this.snackBar.errorSnackBar(res?.message);
                             if (res?.message == 'Project already exists') {
@@ -642,7 +642,7 @@ export class AddProjectHomeComponent
         }
     }
     goToList() {
-        this.router.navigate(['/projects/project-list']);
+        this.router.navigate(['/projects/']);
     }
     getTeamMember() {
         let payload = {
@@ -905,7 +905,7 @@ export class AddProjectHomeComponent
                             this.projectTeam.reset();
                             this.teamMemberList = [];
                             this.settingProjectName = '';
-                            this.router.navigate(['/projects/project-list']);
+                            this.router.navigate(['/projects/']);
                         } else {
                             this.snackBar.errorSnackBar(res?.message);
                         }

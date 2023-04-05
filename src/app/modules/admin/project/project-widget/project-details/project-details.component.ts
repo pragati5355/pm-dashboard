@@ -72,7 +72,7 @@ export class ProjectDetailsComponent implements OnInit {
         });
     }
     gotoProject() {
-        this.router.navigate([`/projects/project-list`]);
+        this.router.navigate([`/projects/`]);
     }
     createRepository() {
         this.router.navigate([`/projects/repository/add-repository`]);
