@@ -45,7 +45,7 @@ import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 
 const routes: Routes = [
     {
-        path: 'project-details',
+        path: 'project-details/:id',
         component: ProjectDetailsComponent,
         data: {
             pageTitle: 'Project Details',
@@ -110,7 +110,7 @@ const routes: Routes = [
         MatTooltipModule,
         MatCheckboxModule,
         MatProgressSpinnerModule,
-        SkeletonModule
+        SkeletonModule,
     ],
     exports: [
         ProjectDetailsComponent,
