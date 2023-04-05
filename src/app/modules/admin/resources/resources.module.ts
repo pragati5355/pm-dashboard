@@ -34,50 +34,7 @@ import { ResourceDetailsComponent } from './resource-details/resource-details.co
 import { DiffDatePipe } from './common/pipes/diff-date.pipe';
 import { TableSkeletonComponent } from 'app/core/modules/skeleton/table-skeleton/table-skeleton.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
-const routes: Routes = [
-    {
-        path: '',
-        component: ResourcesHomeComponent,
-        children: [
-            {
-                path: 'add-resources',
-                component: AddResourcesComponent,
-                data: {
-                    pageTitle: 'Add Resource',
-                },
-            },
-            {
-                path: 'edit-resources',
-                component: AddResourcesComponent,
-                data: {
-                    pageTitle: 'Edit Resource',
-                },
-            },
-            {
-                path: 'resources-list',
-                component: ResourcesListComponent,
-                data: {
-                    pageTitle: 'Resourses',
-                },
-                children: [
-                    {
-                        path: ':id',
-                        component: ResourceDetailsComponent,
-                    },
-                ],
-            },
-            {
-                path: '',
-                redirectTo: 'resources-list',
-                pathMatch: 'full',
-            },
-            {
-                path: '**',
-                redirectTo: 'resources-list',
-            },
-        ],
-    },
-];
+import { resourcesRoutes } from './resources.routing';
 
 @NgModule({
     declarations: [
@@ -115,7 +72,7 @@ const routes: Routes = [
         FuseScrollResetModule,
         InfiniteScrollModule,
         SkeletonModule,
-        RouterModule.forChild(routes),
+        RouterModule.forChild(resourcesRoutes),
     ],
     providers: [DatePipe],
 })

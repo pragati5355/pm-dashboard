@@ -59,9 +59,7 @@ export class ResourceDetailsComponent implements OnInit {
         );
     }
     edit(id: number) {
-        this.router.navigate([`/resources/edit-resources`], {
-            queryParams: { id: id },
-        });
+        this.router.navigate([`/resources/edit/${id}`]);
     }
     getResourceHappinessScore(id: any) {
         const payload = { resourceId: id };
