@@ -29,52 +29,7 @@ import { SharedModule } from 'app/core/shared.module';
 import { ViewFormComponent } from './view-form/view-form.component';
 import { CopyFormComponent } from './copy-form/copy-form.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
-const routes: Routes = [
-    {
-        path: '',
-        component: CreateFormHomeComponent,
-        children: [
-            {
-                path: 'add-form',
-                component: AddFormComponent,
-                data: {
-                    pageTitle: 'Add Form',
-                },
-            },
-            {
-                path: 'edit-form',
-                component: AddFormComponent,
-                data: {
-                    pageTitle: 'Edit Form',
-                },
-            },
-            {
-                path: 'view-form',
-                component: ViewFormComponent,
-                data: {
-                    pageTitle: 'View Form',
-                },
-            },
-            {
-                path: 'form-list',
-                component: FormListComponent,
-                data: {
-                    pageTitle: 'Forms List',
-                },
-            },
-            {
-                path: '',
-                redirectTo: 'form-list',
-                pathMatch: 'full',
-            },
-            {
-                path: '**',
-                redirectTo: 'form-list',
-            },
-        ],
-    },
-];
-
+import { createFormRoutes } from './create-form.routing';
 @NgModule({
     declarations: [
         CreateFormHomeComponent,
@@ -87,7 +42,7 @@ const routes: Routes = [
         CommonModule,
         SharedModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes),
+        RouterModule.forChild(createFormRoutes),
         FormioModule,
         DragDropModule,
         MatAutocompleteModule,
@@ -107,7 +62,7 @@ const routes: Routes = [
         MatSidenavModule,
         MatTooltipModule,
         InfiniteScrollModule,
-        SkeletonModule
+        SkeletonModule,
     ],
     providers: [],
 })
