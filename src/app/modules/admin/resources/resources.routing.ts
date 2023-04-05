@@ -23,26 +23,26 @@ export const resourcesRoutes: Route[] = [
                 },
             },
             {
-                path: 'list',
+                path: '',
                 component: ResourcesListComponent,
                 data: {
                     pageTitle: 'Resources',
                 },
                 children: [
                     {
-                        path: ':id',
+                        path: 'view/:id',
                         component: ResourceDetailsComponent,
                     },
                 ],
             },
             {
                 path: '',
-                redirectTo: 'list',
+                redirectTo: '',
                 pathMatch: 'full',
             },
             {
                 path: '**',
-                redirectTo: 'list',
+                redirectTo: '',
             },
         ],
     },

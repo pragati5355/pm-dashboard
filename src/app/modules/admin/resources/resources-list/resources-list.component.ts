@@ -304,8 +304,9 @@ export class ResourcesListComponent implements OnInit {
         }
     }
     viewResource(id: number) {
-        this.router.navigate(['./', id], { relativeTo: this._activatedRoute });
-        console.log;
+        const rpit = this.router.navigate(['./view/', id], {
+            relativeTo: this._activatedRoute,
+        });
         this._changeDetectorRef.markForCheck();
         this.opened == true;
     }

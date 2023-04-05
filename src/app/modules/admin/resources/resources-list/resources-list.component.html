@@ -336,10 +336,7 @@
                                             </div>
                                             <div
                                                 class="cursor-pointer"
-                                                [routerLink]="[
-                                                    './',
-                                                    resources.id
-                                                ]"
+                                                (click)="viewResource(resources.id)"
                                             >
                                                 <div
                                                     class="truncate"

@@ -144,7 +144,7 @@ export class AddResourcesComponent
         }
     }
     gotoBack() {
-        this.router.navigate(['/resources/list']);
+        this.router.navigate(['/resources']);
     }
     getTechnology() {
         this.initialLoading = true;
@@ -343,7 +343,7 @@ export class AddResourcesComponent
                         } else {
                             this.snackBar.successSnackBar(res.message);
                             this.resourcesForm.reset();
-                            this.router.navigate(['/resources/list']);
+                            this.router.navigate(['/resources']);
                         }
                         if (res.tokenExpire == true) {
                             this.snackBar.errorSnackBar(
@@ -519,7 +519,7 @@ export class AddResourcesComponent
                 } else {
                     this.snackBar.successSnackBar('Successfully Added');
                     this.resourcesForm.reset();
-                    this.router.navigate(['/resources/list']);
+                    this.router.navigate(['/resources']);
                 }
             },
             (error) => {
