@@ -144,7 +144,7 @@ export class AddResourcesComponent
         }
     }
     gotoBack() {
-        this.router.navigate(['/resources/resources-list']);
+        this.router.navigate(['/resources/list']);
     }
     getTechnology() {
         this.initialLoading = true;
@@ -343,7 +343,7 @@ export class AddResourcesComponent
                         } else {
                             this.snackBar.successSnackBar(res.message);
                             this.resourcesForm.reset();
-                            this.router.navigate(['/resources/resources-list']);
+                            this.router.navigate(['/resources/list']);
                         }
                         if (res.tokenExpire == true) {
                             this.snackBar.errorSnackBar(
@@ -491,19 +491,18 @@ export class AddResourcesComponent
     }
 
     private initializeData() {
-        this.routeSubscribe = this._route.queryParams.subscribe(
-            (checkformtype) => {
-                if (checkformtype['id']) {
-                    this.fetchEditData(checkformtype['id']);
-                    this.editFormId = checkformtype['id'];
-                    this.pageTitle = 'Edit Resource';
-                    this.formTypeAdd = false;
-                } else {
-                    this.pageTitle = 'Add Resource';
-                    this.formTypeAdd = true;
-                }
+        this.routeSubscribe = this._route.params.subscribe((checkformtype) => {
+            console.log(checkformtype);
+            if (checkformtype['id']) {
+                this.fetchEditData(checkformtype['id']);
+                this.editFormId = checkformtype['id'];
+                this.pageTitle = 'Edit Resource';
+                this.formTypeAdd = false;
+            } else {
+                this.pageTitle = 'Add Resource';
+                this.formTypeAdd = true;
             }
-        );
+        });
     }
     private addResourceAPI(payload: any) {
         this.ProjectService.addresources(payload).subscribe(
@@ -520,7 +519,7 @@ export class AddResourcesComponent
                 } else {
                     this.snackBar.successSnackBar('Successfully Added');
                     this.resourcesForm.reset();
-                    this.router.navigate(['/resources/resources-list']);
+                    this.router.navigate(['/resources/list']);
                 }
             },
             (error) => {

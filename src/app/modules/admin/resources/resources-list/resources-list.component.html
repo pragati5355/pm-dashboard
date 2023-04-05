@@ -309,10 +309,7 @@
                                         >
                                             <div
                                                 class="flex items-center cursor-pointer"
-                                                [routerLink]="[
-                                                    './',
-                                                    resources.id
-                                                ]"
+                                               (click)="viewResource(resources.id)"
                                             >
                                                 <ng-container
                                                     *ngIf="resources.image"

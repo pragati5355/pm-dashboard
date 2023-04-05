@@ -9,21 +9,21 @@ export const resourcesRoutes: Route[] = [
         component: ResourcesHomeComponent,
         children: [
             {
-                path: 'add-resources',
+                path: 'add',
                 component: AddResourcesComponent,
                 data: {
                     pageTitle: 'Add Resource',
                 },
             },
             {
-                path: 'edit-resources',
+                path: 'edit/:id',
                 component: AddResourcesComponent,
                 data: {
                     pageTitle: 'Edit Resource',
                 },
             },
             {
-                path: 'resources-list',
+                path: 'list',
                 component: ResourcesListComponent,
                 data: {
                     pageTitle: 'Resources',
@@ -37,12 +37,12 @@ export const resourcesRoutes: Route[] = [
             },
             {
                 path: '',
-                redirectTo: 'resources-list',
+                redirectTo: 'list',
                 pathMatch: 'full',
             },
             {
                 path: '**',
-                redirectTo: 'resources-list',
+                redirectTo: 'list',
             },
         ],
     },

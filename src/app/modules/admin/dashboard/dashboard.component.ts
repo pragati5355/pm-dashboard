@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(['/projects/project-list']);
     }
     goToResources() {
-        this.router.navigate(['/resources/resources-list']);
+        this.router.navigate(['/resources/list']);
     }
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
