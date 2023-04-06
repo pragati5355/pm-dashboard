@@ -109,9 +109,7 @@ export class ProjectListComponent implements OnInit {
         }
     }
     goToProject(project) {
-        this.router.navigate([
-            `/projects/project/project-details/${project?.id}`,
-        ]);
+        this.router.navigate([`projects/${project.id}/details`]);
     }
     syncProject(event: any, id: any) {
         event.preventDefault();

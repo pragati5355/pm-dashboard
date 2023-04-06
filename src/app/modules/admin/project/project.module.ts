@@ -40,7 +40,7 @@ import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-fo
 import { SprintFeedbackFormComponent } from './sprint-feedback-form/sprint-feedback-form.component';
 import { SkeletonComponent } from './common/skeleton/skeleton.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
-import { projectRoutes } from './project.routing';
+import { ProjectRoutingModule } from './project.routing';
 
 @NgModule({
     declarations: [
@@ -57,8 +57,8 @@ import { projectRoutes } from './project.routing';
         CommonModule,
         ProjectWidgetModule,
         SharedModule,
+        ProjectRoutingModule,
         ReactiveFormsModule,
-        RouterModule.forChild(projectRoutes),
         CdkStepperModule,
         MatStepperModule,
         MatButtonModule,

@@ -58,8 +58,8 @@ export class SprintsListComponent implements OnInit {
         );
     }
     goToSprint(id: number, name: any) {
-        this.router.navigate([`/projects/project/sprint-details`], {
-            queryParams: { id: id, name: name },
-        });
+        this.router.navigate([
+            `/projects/${this.dataId}/sprint-details/${id}/${name}`,
+        ]);
     }
 }

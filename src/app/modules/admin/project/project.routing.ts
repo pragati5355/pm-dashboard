@@ -1,19 +1,13 @@
-import { Route, Routes } from '@angular/router';
+import { Route, Router, RouterModule, Routes } from '@angular/router';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { AddProjectHomeComponent } from '../project/add-project-home/add-project-home.component';
 import { ProjectHomeComponent } from './project-home/project-home.component';
+import { NgModule } from '@angular/core';
 export const projectRoutes: Route[] = [
     {
         path: '',
         component: ProjectHomeComponent,
         children: [
-            {
-                path: '',
-                component: ProjectListComponent,
-                data: {
-                    pageTitle: 'Projects List',
-                },
-            },
             {
                 path: 'add',
                 component: AddProjectHomeComponent,
@@ -28,9 +22,8 @@ export const projectRoutes: Route[] = [
                     pageTitle: 'Edit Project',
                 },
             },
-
             {
-                path: 'project',
+                path: ':id',
                 loadChildren: () =>
                     import(
                         '../project/project-widget/project-widget.module'
@@ -53,8 +46,10 @@ export const projectRoutes: Route[] = [
             },
             {
                 path: '',
-                redirectTo: '',
-                pathMatch: 'full',
+                component: ProjectListComponent,
+                data: {
+                    pageTitle: 'Projects List',
+                },
             },
             {
                 path: '**',
@@ -63,3 +58,8 @@ export const projectRoutes: Route[] = [
         ],
     },
 ];
+@NgModule({
+    imports: [RouterModule.forChild(projectRoutes)],
+    exports: [RouterModule],
+})
+export class ProjectRoutingModule {}
