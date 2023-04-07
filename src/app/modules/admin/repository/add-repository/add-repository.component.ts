@@ -510,7 +510,7 @@ export class AddRepositoryComponent implements OnInit {
         if (target.files[0]) {
             const file = target.files[0];
             const payload = {
-                fileName: file.name,
+                fileName: this.repositories[0] + '.yml',
             };
             this._uploadService
                 .getPreSignedURL(payload)

@@ -9,7 +9,6 @@ import { ScheduleVarianceComponent } from './schedule-variance/schedule-variance
 import { DefectLeakageComponent } from './defect-leakage/defect-leakage.component';
 import { RetestRatioComponent } from './retest-ratio/retest-ratio.component';
 import { CustomerHappinessScoreComponent } from './customer-happiness-score/customer-happiness-score.component';
-import { Routes, RouterModule } from '@angular/router';
 import { ProjectTimelineChartComponent } from './project-timeline-chart/project-timeline-chart.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,7 +29,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { OverallProjectScoreComponent } from './overall-project-score/overall-project-score.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatRippleModule } from '@angular/material/core';
-import { TranslocoModule } from '@ngneat/transloco';
 import { SprintIssuesComponent } from './sprint-issues/sprint-issues.component';
 import { SprintStoryPointsComponent } from './sprint-story-points/sprint-story-points.component';
 import { SprintIssuesTypeComponent } from './sprint-issues-type/sprint-issues-type.component';
@@ -42,23 +40,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
-
-const routes: Routes = [
-    {
-        path: 'project-details',
-        component: ProjectDetailsComponent,
-        data: {
-            pageTitle: 'Project Details',
-        },
-    },
-    {
-        path: 'sprint-details',
-        component: SprintDetailsComponent,
-        data: {
-            pageTitle: 'Sprint Details',
-        },
-    },
-];
+import { ProjectWidgetRoutingModule } from './project-widget.routing';
 
 @NgModule({
     declarations: [
@@ -80,10 +62,11 @@ const routes: Routes = [
     ],
     imports: [
         FormsModule,
-        SharedModule,
         CommonModule,
+        SharedModule,
         MatIconModule,
         MatMenuModule,
+        ProjectWidgetRoutingModule,
         MatInputModule,
         MatButtonModule,
         MatSelectModule,
@@ -91,7 +74,6 @@ const routes: Routes = [
         InfiniteScrollModule,
         MatProgressBarModule,
         NgApexchartsModule,
-        RouterModule.forChild(routes),
         FuseCardModule,
         MatButtonModule,
         MatButtonToggleModule,
@@ -110,7 +92,7 @@ const routes: Routes = [
         MatTooltipModule,
         MatCheckboxModule,
         MatProgressSpinnerModule,
-        SkeletonModule
+        SkeletonModule,
     ],
     exports: [
         ProjectDetailsComponent,

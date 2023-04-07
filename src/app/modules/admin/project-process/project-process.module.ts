@@ -32,30 +32,7 @@ import { ProjectProcessListComponent } from './project-process-list/project-proc
 import { ProjectProcessHomeComponent } from './project-process-home/project-process-home.component';
 import { ProcessFormComponent } from './process-form/process-form.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
-const routes: Routes = [
-    {
-        path: '',
-        component: ProjectProcessHomeComponent,
-        children: [
-            {
-                path: 'list',
-                component: ProjectProcessListComponent,
-                data: {
-                    pageTitle: 'Project Process Checklist',
-                },
-            },
-            {
-                path: '',
-                redirectTo: 'list',
-                pathMatch: 'full',
-            },
-            {
-                path: '**',
-                redirectTo: 'list',
-            },
-        ],
-    },
-];
+import { ProjectProcessRoutingModule } from './project-process.routing';
 @NgModule({
     declarations: [
         ProjectProcessListComponent,
@@ -66,7 +43,7 @@ const routes: Routes = [
         CommonModule,
         SharedModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes),
+        ProjectProcessRoutingModule,
         MatChipsModule,
         MatButtonModule,
         MatDividerModule,
@@ -92,7 +69,7 @@ const routes: Routes = [
         InfiniteScrollModule,
         MatStepperModule,
         FormioModule,
-        SkeletonModule
+        SkeletonModule,
     ],
 })
 export class ProjectProcessModule {}
