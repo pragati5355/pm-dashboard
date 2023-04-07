@@ -31,9 +31,9 @@ export class SprintFeedbackFormComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {}
     ngOnInit(): void {
-        this._route.queryParams.subscribe((sprintId: any) => {
-            if (sprintId['id'] && sprintId['name']) {
-                this.sprintId = parseInt(sprintId['id']);
+        this._route.params.subscribe((sprintId: any) => {
+            if (sprintId['sprintId'] && sprintId['name']) {
+                this.sprintId = parseInt(sprintId['sprintId']);
                 this.sprintName = sprintId['name'];
             }
         });
