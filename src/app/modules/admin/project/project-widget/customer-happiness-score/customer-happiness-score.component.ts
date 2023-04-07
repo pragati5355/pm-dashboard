@@ -50,9 +50,9 @@ export class CustomerHappinessScoreComponent implements OnInit {
     ngOnInit() {
       let projectData= this._authService.getProjectDetails()
       this.projectId = projectData.id
-      this._route.queryParams.subscribe((sprintId: any) => {
-        if (sprintId['id'] && sprintId['name']) {
-            this.sprintId = parseInt(sprintId['id'])
+      this._route.params.subscribe((sprintId: any) => {
+        if (sprintId['sprintId'] && sprintId['name']) {
+            this.sprintId = parseInt(sprintId['sprintId'])
             let payload={
               projectId : this.projectId,
               sprintId:this.sprintId
