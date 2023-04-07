@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
         this.userImageUrl = this._authService.getUserPhoto();
     }
     goToProjects() {
-        this.router.navigate(['/projects/project-list']);
+        this.router.navigate(['/projects/']);
     }
     goToResources() {
         this.router.navigate(['/resources']);

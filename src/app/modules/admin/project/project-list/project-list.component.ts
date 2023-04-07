@@ -56,7 +56,7 @@ export class ProjectListComponent implements OnInit {
     }
 
     gotoAddProject() {
-        this.router.navigate(['/projects/add-project']);
+        this.router.navigate(['/projects/add']);
     }
 
     getList(payload: any) {
@@ -109,9 +109,7 @@ export class ProjectListComponent implements OnInit {
         }
     }
     goToProject(project) {
-        this.router.navigate([`/projects/project/project-details`], {
-            queryParams: { id: project?.id },
-        });
+        this.router.navigate([`projects/${project.id}/details`]);
     }
     syncProject(event: any, id: any) {
         event.preventDefault();
