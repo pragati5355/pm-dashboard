@@ -33,38 +33,7 @@ import { AddRepositoryComponent } from './add-repository/add-repository.componen
 import { SendMailComponent } from './send-mail/send-mail.component';
 import { RepositoryDetailsComponent } from './repository-details/repository-details.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
-
-const routes: Routes = [
-    {
-        path: '',
-        component: RepositoryHomeComponent,
-        children: [
-            {
-                path: 'repository-list',
-                component: RepositoryListComponent,
-                data: {
-                    pageTitle: 'Repos',
-                },
-            },
-            {
-                path: 'add-repository',
-                component: AddRepositoryComponent,
-                data: {
-                    pageTitle: 'Add Repository',
-                },
-            },
-            {
-                path: '',
-                redirectTo: 'repository-list',
-                pathMatch: 'full',
-            },
-            {
-                path: '**',
-                redirectTo: 'repository-list',
-            },
-        ],
-    },
-];
+import { repositoryRoutes } from './repository.routing';
 
 @NgModule({
     declarations: [
@@ -78,7 +47,7 @@ const routes: Routes = [
         CommonModule,
         SharedModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes),
+        RouterModule.forChild(repositoryRoutes),
         MatChipsModule,
         MatButtonModule,
         MatDividerModule,
@@ -103,7 +72,7 @@ const routes: Routes = [
         FuseScrollResetModule,
         InfiniteScrollModule,
         MatStepperModule,
-        SkeletonModule
+        SkeletonModule,
     ],
 })
 export class RepositoryModule {}
