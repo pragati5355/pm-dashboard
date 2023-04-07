@@ -443,7 +443,7 @@ export class AddRepositoryComponent implements OnInit {
                 (res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.message);
-                        this.router.navigate(['/projects/repository']);
+                        this.router.navigate(['/projects/repository/list']);
                     } else {
                         this.snackBar.errorSnackBar(res.data.message);
                     }

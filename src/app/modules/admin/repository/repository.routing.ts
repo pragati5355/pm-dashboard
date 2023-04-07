@@ -8,7 +8,7 @@ export const repositoryRoutes: Route[] = [
         component: RepositoryHomeComponent,
         children: [
             {
-                path: '',
+                path: 'list',
                 component: RepositoryListComponent,
                 data: {
                     pageTitle: 'Repos',
@@ -22,7 +22,7 @@ export const repositoryRoutes: Route[] = [
                 },
             },
             {
-                path: '',
+                path: 'list',
                 redirectTo: '',
                 pathMatch: 'full',
             },
