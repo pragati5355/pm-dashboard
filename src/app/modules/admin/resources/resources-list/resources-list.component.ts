@@ -144,7 +144,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     handleScroll() {
-        if (!this.pagination) {
+        if (!this.pagination && this.resources.length < this.totalRecored) {
             this.count = this.count + this.totalPerPageData;
             const expriencePayload = this.getExperiencePayload();
             const payload = this.getDefaultSearchPayload(this.count);
@@ -470,6 +470,9 @@ export class ResourcesListComponent implements OnInit {
             (res: any) => {
                 this.snackBar.successSnackBar(res?.message);
                 const payload = this.getDefaultSearchPayload();
+                payload.perPageData = 1;
+                this.resources = [];
+                this.count = 1;
                 this.getList(payload);
             },
             (error) => {

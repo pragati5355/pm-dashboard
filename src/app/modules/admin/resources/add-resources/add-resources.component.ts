@@ -462,9 +462,8 @@ export class AddResourcesComponent
                     '',
                     [
                         Validators.required,
-                        Validators.pattern(
-                            ValidationConstants.EMAIL_VALIDATION
-                        ),
+                        Validators.email,
+                        Validators.pattern(/@mindbowser.com\s*$/),
                     ],
                 ],
                 team: ['', [Validators.required]],
