@@ -4,8 +4,8 @@
         <mat-drawer class="w-2/3 sm:w-72 lg:w-56 border-r-0 bg-default" [mode]="drawerMode" [opened]="!drawerOpened"
             #drawer>
 
-            <div class="p-6 lg:py-8 lg:pl-4 lg:pr-0">
-                <mat-vertical-stepper class="pr-sidebar" [linear]="true" #verticalStepper
+            <div class="p-4 h-full">
+                <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
                     [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
                     <mat-step label="Project Details" [completed]="!projectDetails.invalid">
 
@@ -28,16 +28,16 @@
             </div>
 
         </mat-drawer>
-        <mat-drawer-content class="flex flex-col overflow-y-auto">
+        <mat-drawer-content class="flex flex-col flex-auto py-4 pr-4">
 
             <button mat-icon-button class="hidden" (click)="toggle()">
                 <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
             </button>
 
             <div *ngIf="showStep === 1 && !initialLoading" class="flex flex-col flex-auto w-full ">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto  min-h-full">
 
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
                         <form [formGroup]="projectDetails" class="flex flex-col flex-auto px-6 sm:p-8 overflow-y-auto">
 
                             <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 " [floatLabel]="'always'">
@@ -53,7 +53,7 @@
                                         name</div>
                                 </mat-error>
                             </mat-form-field>
-                            <mat-form-field class="fuse-mat-textarea flex-auto w-full sm:w-140 mb-2 mt-4 sm:mt-0"
+                            <mat-form-field class="fuse-mat-textarea w-full sm:w-140 mb-2 mt-4 sm:mt-0"
                                 [floatLabel]="'always'">
                                 <mat-label>Project Description</mat-label>
                                 <textarea matInput required maxlength="150" trim="blur" rows="2" style="resize:none"
@@ -86,7 +86,7 @@
                                         mandatory</div>
                                 </mat-error>
                             </mat-form-field>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto ">
 
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button mat-stroked-button type="button" (click)="goToList()">
@@ -106,9 +106,9 @@
 
             </div>
             <div *ngIf="showStep === 2" class="flex flex-col flex-auto w-full ">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
 
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
                         <form [formGroup]="clientDetials" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
                             <div class="w-full">
                                 <h2 class="text-3xl font-semibold tracking-tight leading-8">{{pageTitle | titlecase}}
@@ -251,9 +251,9 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
 
-                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                                <div class="flex items-center ml-auto ">
                                     <button mat-stroked-button type="button" (click)="goBack(0)">
                                         Back
                                     </button>
@@ -275,9 +275,9 @@
 
             <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full  overflow-y-auto ">
 
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
 
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
                         <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto" [formGroup]="projectSetting">
                             <h2 class="text-3xl font-semibold tracking-tight leading-8">PM Tool Settings</h2>
                             <mat-form-field class="w-full sm:w-140 mb-2 mt-4 sm:mt-0 " [floatLabel]="'always'">
@@ -333,14 +333,14 @@
                                         (click)="editProject?'':send()">Change Project</span>
                                 </div>
                             </div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
 
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button mat-stroked-button type="button" (click)="goBack(1)">
                                         Back
                                     </button>
                                     <!-- Send -->
-                                    <button *ngIf="!settingProjectName" class="order-first sm:order-last ml-4"
+                                    <button *ngIf="!settingProjectName" class="order-first sm:order-last ml-4 min-w-12"
                                         mat-flat-button [color]="'primary'" (click)="send()">
                                         <span *ngIf="!submitInProcess">
                                             Fetch Project
@@ -367,8 +367,8 @@
 
             </div>
             <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full overflow-y-auto">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
                         <form [formGroup]="projectTeam" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
                             <div class="w-full">
                                 <h2 class="text-3xl font-semibold tracking-tight leading-8">Team</h2>
@@ -565,7 +565,7 @@
 
                                 </div>
                             </div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
 
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
                                     <button mat-stroked-button type="button" (click)="goBack(2)">

@@ -1,20 +1,20 @@
 <div class="flex flex-col flex-auto w-full" *ngIf="!initialLoading">
-    <div class="w-full max-w-screen-xl mx-auto p-6 md:p-8">
-        <fuse-alert *ngIf="!project?.repoProjectId" [type]="'warning'">
-            <span fuseAlertTitle>Warning alert</span>
-            <div class="flex flex-wrap items-center">
-                This project is not assigned with the Bitbucket project yet. Please
-                assign it to your Bitbucket project
-                <button class="ml-4" mat-button [color]="'primary'" (click)="assignBitbucketProject()">
-                    <mat-spinner *ngIf="isBitbucketProjectListLoading; else buttonContentRef" [diameter]="24"></mat-spinner>
-                    <span *ngIf="isBitbucketProjectListLoading" class="ml-2 mr-1">Connecting to Bitbucket</span>
-                    <ng-template #buttonContentRef>
-                        <mat-icon class="icon-size-5">add_task</mat-icon>
-                        <span class="ml-2 mr-1">Assign Bitbucket Project</span>
-                    </ng-template>
-                </button>
-            </div>
-        </fuse-alert>
+    <div class="w-full max-w-screen-xl mx-auto p-6 md:p-8" *ngIf="!project?.repoProjectId">
+            <fuse-alert [type]="'warning'">
+                <span fuseAlertTitle>Warning alert</span>
+                <div class="flex flex-wrap items-center">
+                    This project is not assigned with the Bitbucket project yet. Please
+                    assign it to your Bitbucket project
+                    <button class="ml-4" mat-button [color]="'primary'" (click)="assignBitbucketProject()">
+                        <mat-spinner *ngIf="isBitbucketProjectListLoading; else buttonContentRef" [diameter]="24"></mat-spinner>
+                        <span *ngIf="isBitbucketProjectListLoading" class="ml-2 mr-1">Connecting to Bitbucket</span>
+                        <ng-template #buttonContentRef>
+                            <mat-icon class="icon-size-5">add_task</mat-icon>
+                            <span class="ml-2 mr-1">Assign Bitbucket Project</span>
+                        </ng-template>
+                    </button>
+                </div>
+            </fuse-alert>
     </div>
     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
         <!-- Title and action buttons -->
