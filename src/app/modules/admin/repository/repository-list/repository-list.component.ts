@@ -46,7 +46,7 @@ export class RepositoryListComponent implements OnInit {
     }
 
     createRepository() {
-        this.router.navigate(['/projects/repository/add-repository']);
+        this.router.navigate(['/projects/repository/add']);
     }
 
     goBack() {
@@ -77,7 +77,7 @@ export class RepositoryListComponent implements OnInit {
     }
 
     editDraft(id: number) {
-        this.router.navigate([`/projects/repository/add-repository`], {
+        this.router.navigate([`/projects/repository/add`], {
             queryParams: { id: id },
         });
     }

@@ -62,7 +62,7 @@ export class FormListComponent implements OnInit {
     }
 
     gotoAddForm() {
-        this.router.navigate(['/forms/add-form']);
+        this.router.navigate(['/forms/add']);
     }
 
     deleteForm(id: number, projects: any): void {
@@ -138,11 +138,11 @@ export class FormListComponent implements OnInit {
     }
 
     editForm(id: number) {
-        this.router.navigate([`/forms/edit-form`], { queryParams: { id: id } });
+        this.router.navigate([`/forms/edit/${id}`]);
     }
 
     viewForm(id: number) {
-        this.router.navigate([`/forms/view-form`], { queryParams: { id: id } });
+        this.router.navigate([`/forms/view/${id}`]);
     }
 
     handleScroll() {

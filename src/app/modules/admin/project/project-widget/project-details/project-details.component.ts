@@ -45,7 +45,7 @@ export class ProjectDetailsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.routeSubscribe = this._route.queryParams.subscribe((projectId) => {
+        this.routeSubscribe = this._route.params.subscribe((projectId) => {
             if (projectId['id']) {
                 this.projectId = projectId['id'];
                 this.getProjectDetails();
@@ -67,18 +67,16 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     editProject() {
-        this.router.navigate([`/projects/edit-project`], {
-            queryParams: { id: this.projectId },
-        });
+        this.router.navigate([`/projects/edit/${this.projectId}`]);
     }
     gotoProject() {
-        this.router.navigate([`/projects/project-list`]);
+        this.router.navigate([`/projects/`]);
     }
     createRepository() {
-        this.router.navigate([`/projects/repository/add-repository`]);
+        this.router.navigate([`/projects/repository/add`]);
     }
     viewRepository() {
-        this.router.navigate([`/projects/repository/repository-list`]);
+        this.router.navigate([`/projects/repository/list`]);
     }
     projectProcess() {
         this.router.navigate([`/projects/project-process/list`]);

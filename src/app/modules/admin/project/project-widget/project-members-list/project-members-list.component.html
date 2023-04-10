@@ -16,36 +16,36 @@
 
         <!-- Rows -->
         <ng-container *ngFor="let team of teamMember">
-          <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+          <div *ngIf="team?.email" class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
             <!-- Image -->
             <div class="flex items-center">
-              <ng-container *ngIf="team.image">
-                <img [src]="team.image" alt="Contact avatar"
+              <ng-container *ngIf="team?.image">
+                <img [src]="team?.image" alt="Contact avatar"
                   class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover " />
                 <div class="truncate">
-                  {{ team.name | titlecase }}
+                  {{ team?.name | titlecase }}
                 </div>
 
               </ng-container>
-              <ng-container *ngIf="!team.image">
+              <ng-container *ngIf="!team?.image">
                 <div
                   class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border flex items-center justify-center   rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                  {{team.name.charAt(0)}}
+                  {{team?.name.charAt(0)}}
                 </div>
                 <div class="truncate">
-                  {{ team.name | titlecase }}
+                  {{ team?.name | titlecase }}
                 </div>
               </ng-container>
             </div>
 
             <!-- Email -->
             <div class="hidden md:block truncate">
-              {{ team.email}}
+              {{ team?.email}}
             </div>
 
             <!-- Role -->
             <div class="hidden sm:block">
-              {{ team.role | titlecase }}
+              {{ team?.role | titlecase }}
             </div>
 
           </div>
