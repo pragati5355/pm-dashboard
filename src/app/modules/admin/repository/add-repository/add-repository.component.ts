@@ -9,7 +9,7 @@ import {
     FormGroup,
     Validators,
 } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Observable } from 'rxjs';
@@ -95,6 +95,7 @@ export class AddRepositoryComponent implements OnInit {
     draftObj: any;
     draftId = null;
     submitInProcess = false;
+    messages = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
@@ -439,6 +440,7 @@ export class AddRepositoryComponent implements OnInit {
                 draftId: this.draftId,
                 status: status,
             };
+            this.showMessage();
             this.RepositoryService.create(payload).subscribe(
                 (res: any) => {
                     if (!res.error) {
@@ -816,7 +818,6 @@ export class AddRepositoryComponent implements OnInit {
             }
         });
     }
-
     changePortalName(name) {
         if (name == 'angular' || name == 'react-js' || name == 'node-js') {
             this.currentPortalType = 'portal';
@@ -829,5 +830,24 @@ export class AddRepositoryComponent implements OnInit {
         ) {
             this.currentPortalType = 'app';
         }
+    }
+
+    showMessage() {
+        const messageArray = [
+            'Creating Repositories',
+            'Creating branches',
+            'Applying branch restrictions',
+            'Cloning the boilerplate repository',
+            'Creating Jenkins file',
+            'Initializing the git',
+            'Committing new project changes',
+            'Pushing code to new repository',
+            'Processing your request',
+        ];
+        from(messageArray)
+            .pipe(concatMap((item) => of(item).pipe(delay(2000))))
+            .subscribe((message) => {
+                this.messages = 'Remote:~ user$ ' + message;
+            });
     }
 }

@@ -32,6 +32,7 @@ import { RepositoryListComponent } from './repository-list/repository-list.compo
 import { AddRepositoryComponent } from './add-repository/add-repository.component';
 import { SendMailComponent } from './send-mail/send-mail.component';
 import { RepositoryDetailsComponent } from './repository-details/repository-details.component';
+import { CommandLineComponent } from './command-line/command-line.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { repositoryRoutes } from './repository.routing';
 
@@ -42,6 +43,7 @@ import { repositoryRoutes } from './repository.routing';
         AddRepositoryComponent,
         SendMailComponent,
         RepositoryDetailsComponent,
+        CommandLineComponent,
     ],
     imports: [
         CommonModule,

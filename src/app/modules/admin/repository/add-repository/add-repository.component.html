@@ -424,7 +424,7 @@
             <!-- Review your project -->
             <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full overflow-y-auto">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full  bg-card dark:bg-transparent">
+                    <div *ngIf="!submitInProcess" class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full  bg-card dark:bg-transparent">
                         <!-- Review form -->
                         <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
                             <ng-container>
@@ -542,6 +542,7 @@
                             </div>
                         </div>
                     </div>
+                    <app-command-line message="{{ messages }}" *ngIf="submitInProcess" class="w-full  bg-black"></app-command-line>
                 </div>
             </div>
         </div>
