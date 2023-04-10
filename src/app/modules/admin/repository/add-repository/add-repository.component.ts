@@ -818,11 +818,24 @@ export class AddRepositoryComponent implements OnInit {
         });
     }
     ngAfterViewInit() {
+        const messageArray = [
+            'Creating Repositories',
+            'Creating branches',
+            'Applying branch restrictions',
+            'Cloning the boilerplate repo',
+            'Creating Jenkins file',
+            'Initialising the repository',
+            'Committing new project changes',
+            'git push to new repository',
+        ];
         let i = 0;
         setInterval(() => {
-            this.messages = 'every changes' + i;
-            i = i + 1;
-        }, 1000);
+            if (i < messageArray.length && this.submitInProcess == true) {
+                console.log(i, messageArray.length);
+                this.messages = 'Remote:~ user$ ' + messageArray[i];
+                i = i + 1;
+            }
+        }, 2000);
     }
     changePortalName(name) {
         if (name == 'angular' || name == 'react-js' || name == 'node-js') {
