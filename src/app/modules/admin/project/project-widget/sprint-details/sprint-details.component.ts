@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from '@services/auth/auth.service';
 import { SendFeedbackFormComponent } from '../../send-feedback-form/send-feedback-form.component';
 @Component({
     selector: 'app-sprint-details',
@@ -23,14 +24,18 @@ export class SprintDetailsComponent implements OnInit {
     qulitychare = ['defectLeakage', 'qualityPercentage'];
     routeSubscribe: any;
     sprintId = 0;
+    projectId = 0;
     initialLoading = false;
     @Input() dataId: any;
     @Input() data: any = {};
     isLoading = false;
+    projectData: any = null;
+    formData: any = null;
     constructor(
         private router: Router,
         private dialog: MatDialog,
         private _route: ActivatedRoute,
+        private _authService: AuthService,
         private ProjectService: CreateProjecteService
     ) {}
 
@@ -40,7 +45,10 @@ export class SprintDetailsComponent implements OnInit {
                 this.sprintId = sprintId['sprintId'];
                 this.sprint_name = sprintId['name'];
             }
+            this.projectId = sprintId['id'];
         });
+        this.projectData = this._authService.getProjectDetails();
+        this.formData = this.projectData.form;
     }
     goBack() {
         window.history.back();
@@ -60,5 +68,9 @@ export class SprintDetailsComponent implements OnInit {
             if (result.result == 'success') {
             }
         });
+    }
+
+    attachForm() {
+        this.router.navigate([`/forms`]);
     }
 }
