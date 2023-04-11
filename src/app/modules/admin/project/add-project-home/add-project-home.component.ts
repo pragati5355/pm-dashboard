@@ -1165,7 +1165,7 @@ export class AddProjectHomeComponent
                         TextRegexValidator(RegexConstants.Text_Area),
                     ],
                 ],
-                feedback_form: ['', [Validators.required]],
+                feedback_form: [''],
             },
             {
                 validator: [noWhitespaceValidator('projectDescription')],
