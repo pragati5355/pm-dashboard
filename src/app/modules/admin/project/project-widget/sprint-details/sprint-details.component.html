@@ -11,8 +11,11 @@
             </div>
             <div class="mt-3 flex items-center ml-6">
 
-              <button class="ml-4" mat-flat-button [color]="'primary'" (click)="feedbackForm()">
+              <button [disabled]="!this.formData" class="ml-4" mat-flat-button [color]="'primary'" (click)="feedbackForm()">
                 <span class="ml-2 mr-1">Send Feedback Form</span>
+              </button>
+              <button  *ngIf="!this.formData" [matTooltip]="'Add Feedback Form'" class="ml-4" mat-flat-button [color]="'primary'" (click)="editProject()">
+                <span class="ml-2 mr-1">Feedback Form</span>
               </button>
               <div class="sm:hidden">
                 <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
