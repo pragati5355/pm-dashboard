@@ -14,8 +14,8 @@
               <button [disabled]="!this.formData" class="ml-4" mat-flat-button [color]="'primary'" (click)="feedbackForm()">
                 <span class="ml-2 mr-1">Send Feedback Form</span>
               </button>
-              <button  *ngIf="!this.formData" [matTooltip]="'Add Feedback Form'" class="ml-4" mat-flat-button [color]="'primary'" (click)="editProject()">
-                <span class="ml-2 mr-1">Feedback Form</span>
+              <button  *ngIf="!this.formData" [matTooltip]="'Attach Feedback Form'" class="ml-4" mat-flat-button [color]="'primary'" (click)="attachForm()">
+                <span class="ml-2 mr-1">Attach Form</span>
               </button>
               <div class="sm:hidden">
                 <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>

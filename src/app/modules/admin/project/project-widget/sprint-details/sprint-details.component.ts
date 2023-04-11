@@ -70,8 +70,7 @@ export class SprintDetailsComponent implements OnInit {
         });
     }
 
-    editProject() {
-        // this.router.navigate([`/projects/edit/${this.projectId}`]);
+    attachForm() {
         this.router.navigate([`/forms`]);
     }
 }
