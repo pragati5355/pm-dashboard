@@ -1,0 +1,595 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <mat-drawer-container class="flex-auto h-full">
+
+        <mat-drawer class="w-2/3 sm:w-72 lg:w-56 border-r-0 bg-default" [mode]="drawerMode" [opened]="!drawerOpened"
+            #drawer>
+
+            <div class="p-4 h-full">
+                <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
+                    [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
+                    <mat-step label="Project Details" [completed]="!projectDetails.invalid">
+
+                    </mat-step>
+
+                    <mat-step label="Client Details" [completed]="!clientDetials.invalid">
+
+                    </mat-step>
+
+                    <mat-step label="PM Tool Settings"
+                        [completed]="!projectSetting.invalid && settingProjectName.length !==0">
+
+                    </mat-step>
+
+                    <mat-step label="Team">
+
+                    </mat-step>
+                </mat-vertical-stepper>
+
+            </div>
+
+        </mat-drawer>
+        <mat-drawer-content class="flex flex-col flex-auto py-4 pr-4">
+
+            <button mat-icon-button class="hidden" (click)="toggle()">
+                <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+            </button>
+
+            <div *ngIf="showStep === 1 && !initialLoading" class="flex flex-col flex-auto w-full ">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto  min-h-full">
+
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
+                        <form [formGroup]="projectDetails" class="flex flex-col flex-auto px-6 sm:p-8 overflow-y-auto">
+
+                            <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 " [floatLabel]="'always'">
+                                <mat-label>Project Name</mat-label>
+                                <input matInput [placeholder]="'Project Name here.'" required id="projectName"
+                                    #projectDetailsProjectName formControlName="projectName" maxlength="50">
+                                <mat-error *ngIf="projectDetailsForm['projectName'].errors &&
+                                        projectDetailsForm['projectName']?.invalid &&
+                                        projectDetailsForm['projectName']?.touched ">
+                                    <div *ngIf="projectDetailsForm['projectName'].errors['required']">Project name is
+                                        mandatory</div>
+                                    <div *ngIf="projectDetailsForm['projectName'].errors['pattern']">Enter valid project
+                                        name</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="fuse-mat-textarea w-full sm:w-140 mb-2 mt-4 sm:mt-0"
+                                [floatLabel]="'always'">
+                                <mat-label>Project Description</mat-label>
+                                <textarea matInput required maxlength="150" trim="blur" rows="2" style="resize:none"
+                                    formControlName="projectDescription"
+                                    [placeholder]="'Add project description here...'"></textarea>
+                                <mat-error *ngIf="projectDetailsForm['projectDescription'].errors &&
+                                    projectDetailsForm['projectDescription']?.invalid &&
+                                    projectDetailsForm['projectDescription']?.touched ">
+                                    <div *ngIf="projectDetailsForm['projectDescription'].errors['required']">Project
+                                        Description is mandatory</div>
+                                    <div
+                                        *ngIf="projectDetailsForm['projectDescription'].invalid && !projectDetailsForm['projectDescription'].errors['required']">
+                                        Enter valid project Description</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 select-form"
+                                [floatLabel]="'always'">
+                                <mat-label>Choose feedback form </mat-label>
+                                <mat-select panelClass="select-form-option" formControlName="feedback_form" type="text"
+                                    placeholder="Choose feedback form" [disableOptionCentering]="true"
+                                    (selectionChange)="selectChangeProject($event)">
+                                    <mat-option *ngFor="let form of selectFomList" [value]="form.id">
+                                        {{ form.formName }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="projectDetailsForm['feedback_form'].errors &&
+                                    projectDetailsForm['feedback_form']?.invalid &&
+                                    projectDetailsForm['feedback_form']?.touched ">
+                                    <div *ngIf="projectDetailsForm['feedback_form'].errors['required']">Feedback form is
+                                        mandatory</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto ">
+
+                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                                    <button mat-stroked-button type="button" (click)="goToList()">
+                                        Back
+                                    </button>
+                                    <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                        (click)="submitProjectDetails()">
+                                        Next Step
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div *ngIf="showStep === 2" class="flex flex-col flex-auto w-full ">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
+
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
+                        <form [formGroup]="clientDetials" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
+                            <div class="w-full">
+                                <h2 class="text-3xl font-semibold tracking-tight leading-8">{{pageTitle | titlecase}}
+                                    Client Details</h2>
+                            </div>
+                            <div class=" flex flex-col mb-2 sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                <div class="mt-25p tracking-tight ng-tns-c274-3859">
+                                    <span
+                                        class="flex items-center justify-center w-12 h-12 rounded bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary"><mat-icon
+                                            role="img" class="mat-icon notranslate icon-size-6 mat-icon-no-color"
+                                            aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="user-add"
+                                            data-mat-icon-namespace="heroicons_outline"><svg
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" fit="" height="100%" width="100%"
+                                                preserveAspectRatio="xMidYMid meet" focusable="false">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                                                </path>
+                                            </svg></mat-icon>
+
+                                    </span>
+                                </div>
+                                <div class=" w-full sm:w-60  font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
+                                    <mat-form-field class="w-full " [floatLabel]="'always'">
+                                        <mat-label>First Name</mat-label>
+                                        <input matInput placeholder="First Name" maxlength="50" required
+                                            formControlName="firstName">
+                                        <mat-error *ngIf="clientDetailForm['firstName'].errors &&
+                                                    clientDetailForm['firstName']?.invalid &&
+                                                    clientDetailForm['firstName']?.touched ">
+                                            <div *ngIf="clientDetailForm['firstName'].errors['required']">First name is
+                                                mandatory</div>
+                                            <div *ngIf="clientDetailForm['firstName'].errors['pattern']">Enter valid
+                                                First name</div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+                                    <mat-form-field class="w-full  " [floatLabel]="'always'">
+                                        <mat-label>Last Name</mat-label>
+                                        <input matInput placeholder="Last Name" maxlength="50" required
+                                            formControlName="lastName">
+                                        <mat-error *ngIf="clientDetailForm['lastName'].errors &&
+                                                        clientDetailForm['lastName']?.invalid &&
+                                                        clientDetailForm['lastName']?.touched ">
+                                            <div *ngIf="clientDetailForm['lastName'].errors['required']">Last name is
+                                                mandatory</div>
+                                            <div *ngIf="clientDetailForm['lastName'].errors['pattern']">Enter valid Last
+                                                name</div>
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                            <div class=" flex flex-col mb-2 sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                <div class="mt-25p tracking-tight ng-tns-c274-3859">
+                                    <span
+                                        class="flex items-center justify-center w-12 h-12 rounded bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary"><mat-icon
+                                            role="img" class="mat-icon notranslate icon-size-6 mat-icon-no-color"
+                                            aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="user-add"
+                                            data-mat-icon-namespace="heroicons_outline"><svg
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" fit="" height="100%" width="100%"
+                                                preserveAspectRatio="xMidYMid meet" focusable="false">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                                                </path>
+                                            </svg></mat-icon>
+
+                                    </span>
+                                </div>
+                                <div class=" w-full sm:w-60  font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
+                                    <mat-form-field class="w-full " [floatLabel]="'always'">
+                                        <mat-label>First Name</mat-label>
+                                        <input matInput placeholder="First Name" maxlength="50"
+                                            formControlName="firstName2">
+                                        <mat-error *ngIf="clientDetailForm['firstName2'].errors &&
+                                                    clientDetailForm['firstName2']?.invalid &&
+                                                    clientDetailForm['firstName2']?.touched ">
+                                            <div *ngIf="clientDetailForm['firstName2'].errors['pattern']">Enter valid
+                                                First name</div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+                                    <mat-form-field class="w-full  " [floatLabel]="'always'">
+                                        <mat-label>Last Name</mat-label>
+                                        <input matInput placeholder="Last Name" maxlength="50"
+                                            formControlName="lastName2">
+                                        <mat-error *ngIf="clientDetailForm['lastName2'].errors &&
+                                                    clientDetailForm['lastName2']?.invalid &&
+                                                    clientDetailForm['lastName2']?.touched ">
+                                            <div *ngIf="clientDetailForm['lastName2'].errors['pattern']">Enter valid
+                                                Last name</div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class=" flex flex-col mb-2 sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                <div class="mt-25p tracking-tight ng-tns-c274-3859">
+                                    <span
+                                        class="flex items-center justify-center w-12 h-12 rounded bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary"><mat-icon
+                                            role="img" class="mat-icon notranslate icon-size-6 mat-icon-no-color"
+                                            aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="user-add"
+                                            data-mat-icon-namespace="heroicons_outline"><svg
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" fit="" height="100%" width="100%"
+                                                preserveAspectRatio="xMidYMid meet" focusable="false">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                                                </path>
+                                            </svg></mat-icon>
+
+                                    </span>
+                                </div>
+                                <div class=" w-full sm:w-60  font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
+                                    <mat-form-field class="w-full " [floatLabel]="'always'">
+                                        <mat-label>First Name</mat-label>
+                                        <input matInput placeholder="First Name" maxlength="50"
+                                            formControlName="firstName3">
+                                        <mat-error *ngIf="clientDetailForm['firstName3'].errors &&
+                                                    clientDetailForm['firstName3']?.invalid &&
+                                                    clientDetailForm['firstName3']?.touched ">
+                                            <div *ngIf="clientDetailForm['firstName3'].errors['pattern']">Enter valid
+                                                First name</div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+                                    <mat-form-field class="w-full  " [floatLabel]="'always'">
+                                        <mat-label>Last Name</mat-label>
+                                        <input placeholder="Last Name" matInput maxlength="50"
+                                            formControlName="lastName3">
+                                        <mat-error *ngIf="clientDetailForm['lastName3'].errors &&
+                                                    clientDetailForm['lastName3']?.invalid &&
+                                                    clientDetailForm['lastName3']?.touched ">
+                                            <div *ngIf="clientDetailForm['lastName3'].errors['pattern']">Enter valid
+                                                Last name</div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
+
+                                <div class="flex items-center ml-auto ">
+                                    <button mat-stroked-button type="button" (click)="goBack(0)">
+                                        Back
+                                    </button>
+                                    <button class="order-first sm:order-last ml-4" mat-flat-button [color]="'primary'"
+                                        (click)="submitProjectClientDetails()">
+                                        Next Step
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full  overflow-y-auto ">
+
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
+
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
+                        <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto" [formGroup]="projectSetting">
+                            <h2 class="text-3xl font-semibold tracking-tight leading-8">PM Tool Settings</h2>
+                            <mat-form-field class="w-full sm:w-140 mb-2 mt-4 sm:mt-0 " [floatLabel]="'always'">
+                                <mat-label>Base Url</mat-label>
+                                <input matInput formControlName="url" [readonly]="editProject" placeholder="Base Url">
+                                <span matPrefix>https://</span>
+                                <span matSuffix>.atlassian.net</span>
+                                <mat-error *ngIf="projectSettingsForm['url'].errors &&
+                                projectSettingsForm['url']?.invalid &&
+                                projectSettingsForm['url']?.touched ">
+                                    <div *ngIf="projectSettingsForm['url'].errors['required']">Base Url is mandatory
+                                    </div>
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="w-full sm:w-140 mt-4  mb-2 sm:mt-0 " [floatLabel]="'always'">
+                                <mat-label>Admin Email</mat-label>
+                                <input matInput formControlName="email" [readonly]="editProject"
+                                    placeholder="Email Address">
+                                <mat-error *ngIf="projectSettingsForm['email'].errors &&
+                                projectSettingsForm['email']?.invalid &&
+                                projectSettingsForm['email']?.touched ">
+                                    <div *ngIf="projectSettingsForm['email'].errors['required']">Email is mandatory
+                                    </div>
+                                    <div *ngIf="projectSettingsForm['email'].errors['pattern']">Enter valid email</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <div class=" flex flex-col mb-2 sm:flex-row flex-0 sm:items-center ">
+                                <mat-form-field class="w-full sm:w-100 mt-4 sm:mt-0 " [floatLabel]="'always'">
+                                    <mat-label>API Token</mat-label>
+                                    <input matInput formControlName="token" [readonly]="editProject"
+                                        placeholder="API Token">
+                                    <mat-error *ngIf="projectSettingsForm['token'].errors &&
+                                        projectSettingsForm['token']?.invalid &&
+                                        projectSettingsForm['token']?.touched ">
+                                        <div *ngIf="projectSettingsForm['token'].errors['required']">Token is mandatory
+                                        </div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
+                                    <a class="text-primary .mt-8p" href=" https://id.atlassian.com/manage/api-tokens"
+                                        target="_blank"> How to get Token</a>
+                                </div>
+                            </div>
+                            <div *ngIf="settingProjectName"
+                                class=" flex flex-col mb-2 sm:flex-row flex-0 sm:items-center ">
+                                <mat-form-field class="w-full sm:w-100 mt-4 sm:mt-0 " [floatLabel]="'always'">
+                                    <mat-label>Project Name</mat-label>
+                                    <input matInput type="text" formControlName="project" placeholder="Project Name"
+                                        [readonly]="editProject" (click)="editProject?'':send()">
+                                </mat-form-field>
+                                <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
+                                    <span class="text-primary cursor-pointer .mt-8p"
+                                        (click)="editProject?'':send()">Change Project</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
+
+                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                                    <button mat-stroked-button type="button" (click)="goBack(1)">
+                                        Back
+                                    </button>
+                                    <!-- Send -->
+                                    <button *ngIf="!settingProjectName" class="order-first sm:order-last ml-4 min-w-12"
+                                        mat-flat-button [color]="'primary'" (click)="send()">
+                                        <span *ngIf="!submitInProcess">
+                                            Fetch Project
+                                        </span>
+
+                                        <mat-progress-spinner *ngIf="submitInProcess" [diameter]="24"
+                                            [mode]="'indeterminate'"></mat-progress-spinner>
+                                    </button>
+                                    <button *ngIf="settingProjectName" class="order-first sm:order-last ml-4"
+                                        mat-flat-button [color]="'primary'" (click)="submitProjectSetting()">
+                                        <span *ngIf="!submitInProcess">
+                                            Next Step
+                                        </span>
+                                        <mat-progress-spinner *ngIf="submitInProcess" [diameter]="24"
+                                            [mode]="'indeterminate'"></mat-progress-spinner>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full overflow-y-auto">
+                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
+                        <form [formGroup]="projectTeam" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
+                            <div class="w-full">
+                                <h2 class="text-3xl font-semibold tracking-tight leading-8">Team</h2>
+                            </div>
+                            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+
+                                <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                                    <mat-form-field class="w-full  " [floatLabel]="'always'">
+                                        <mat-label>Project Lead/Manager</mat-label>
+                                        <input type="text" placeholder="Project Lead/Manager"
+                                            formControlName="project_manager" aria-label="managerList"
+                                            [matAutocomplete]="autoManagerList" maxlength="50" matInput>
+                                        <mat-error *ngIf="projectTeamForm['project_manager'].errors &&
+                                                    projectTeamForm['project_manager']?.invalid &&
+                                                    projectTeamForm['project_manager']?.touched ">
+                                            <div *ngIf="projectTeamForm['project_manager'].errors['required']">Project
+                                                manager name is mandatory</div>
+                                            <div
+                                                *ngIf="projectTeamForm['project_manager'].invalid && !projectTeamForm['project_manager'].errors['required']">
+                                                Choose valid project manager name</div>
+                                        </mat-error>
+                                        <mat-autocomplete #autoManagerList="matAutocomplete" [displayWith]="displayFn"
+                                            (optionSelected)="selectedManagerOption($event)">
+                                            <mat-option
+                                                *ngFor="let managerList of filteredManagerLists | async, let i=index"
+                                                [value]="managerList">
+
+                                                <span>{{ managerList.firstName +" "+managerList.lastName }}</span>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+                                <div class=" w-full sm:w-90 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+                                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                                        <mat-label>Map Jira Username</mat-label>
+                                        <input matInput type="text" placeholder="Jira User Name" maxlength="50"
+                                            aria-label="JiraUser" [matAutocomplete]="autojiraUser"
+                                            formControlName="jira_user">
+                                        <mat-error *ngIf="projectTeamForm['jira_user'].errors &&
+                                                    projectTeamForm['jira_user']?.invalid &&
+                                                    projectTeamForm['jira_user']?.touched ">
+                                            <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name
+                                                is mandatory</div>
+                                            <div
+                                                *ngIf="projectTeamForm['jira_user'].invalid && !projectTeamForm['jira_user'].errors['required']">
+                                                Choose valid user name</div>
+                                        </mat-error>
+                                        <mat-autocomplete #autojiraUser="matAutocomplete"
+                                            [displayWith]="displayFnJiraManager"
+                                            (optionSelected)="selectedJiraUserOption($event)">
+                                            <mat-option *ngFor="let jiraUser of filteredJiraUsers | async, let i=index"
+                                                [value]="jiraUser">
+
+                                                <span>{{ jiraUser.displayName }}</span>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="  flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                <div class="sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                                    <div class=" w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                                            <mat-label>Team Member *</mat-label>
+                                            <input matInput type="text" placeholder="Team Member" maxlength="50"
+                                                aria-label="teamMember" [matAutocomplete]="auto"
+                                                formControlName="team_member">
+                                            <mat-error *ngIf="projectTeamForm['team_member'].errors &&
+                                            projectTeamForm['team_member']?.invalid &&
+                                            projectTeamForm['team_member']?.touched ">
+                                                <div *ngIf="projectTeamForm['team_member'].errors['required']">Team
+                                                    member name is mandatory</div>
+                                                <div *ngIf="projectTeamForm['team_member'].invalid">Choose valid team
+                                                    member name</div>
+                                            </mat-error>
+                                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnTeam">
+                                                <mat-option *ngFor="let teamMember of filteredTeamMembers | async"
+                                                    [value]="teamMember">
+
+                                                    <span>{{ teamMember.firstName +" "+teamMember.lastName}} </span>
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </div>
+                                    <div
+                                        class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+
+                                        <mat-form-field [floatLabel]="'always'" class="w-full">
+                                            <mat-label>Select Role *</mat-label>
+                                            <mat-select formControlName="select_role" type="text"
+                                                placeholder="Select Role" [disableOptionCentering]="true">
+                                                <mat-option *ngFor="let role of selectRoleList" [value]="role.value">
+                                                    {{ role.viewValue }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="projectTeamForm['select_role'].errors &&
+                                            projectTeamForm['select_role']?.invalid &&
+                                            projectTeamForm['select_role']?.touched ">
+                                                <div *ngIf="projectTeamForm['select_role'].errors['required']">Role is
+                                                    mandatory</div>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div
+                                        class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+                                        <mat-form-field [floatLabel]="'always'" class="w-full">
+                                            <mat-label>Map Jira Username *</mat-label>
+                                            <input matInput type="text" placeholder="Jira User Name" maxlength="50"
+                                                aria-label="JiraTeamUser" [matAutocomplete]="autojiraTeamUser"
+                                                formControlName="team_jira_user">
+                                            <mat-error *ngIf="projectTeamForm['team_jira_user'].errors &&
+                                            projectTeamForm['team_jira_user']?.invalid &&
+                                            projectTeamForm['team_jira_user']?.touched ">
+                                                <div *ngIf="projectTeamForm['team_jira_user'].errors['required']">Jira
+                                                    User name is mandatory</div>
+                                                <div *ngIf="projectTeamForm['team_jira_user'].invalid">Choose valid user
+                                                    name</div>
+
+                                            </mat-error>
+
+                                            <mat-autocomplete #autojiraTeamUser="matAutocomplete"
+                                                [displayWith]="displayFnJiraTeam">
+                                                <mat-option *ngFor="let jiraTeamUser of filteredTeamJiraUsers | async"
+                                                    [value]="jiraTeamUser">
+
+                                                    <span>{{ jiraTeamUser.displayName }}</span>
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
+                                    <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">Add</span>
+                                </div>
+                            </div>
+                            <div class=" w-full sm:w-140 mt-8">
+                                <div class="flex flex-col flex-auto  sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                                    <ng-container>
+                                        <ng-container *ngIf="teamMemberList.length > 0">
+                                            <div class="grid">
+                                                <div
+                                                    class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5">
+                                                    <div>
+                                                        Team Member
+                                                    </div>
+                                                    <div>Role</div>
+                                                    <div>Jira Username</div>
+                                                    <div>
+                                                        Active
+                                                    </div>
+                                                </div>
+                                                <ng-container>
+                                                    <ng-container *ngFor="let teamMember of teamMemberList;index as i">
+                                                        <ng-container *ngIf="teamMember.role !== 'Manager'">
+                                                            <div
+                                                                class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                                                <div class="hidden md:block truncate">
+                                                                    <ng-container *ngFor="let member of teamMembers">
+                                                                        <ng-container
+                                                                            *ngIf="member.id == teamMember.teamMemberId">{{member.firstName+
+                                                                            " "+member.lastName |
+                                                                            titlecase}}</ng-container>
+                                                                    </ng-container>
+                                                                </div>
+
+                                                                <div class="truncate">
+                                                                    <div *ngFor="let role of selectRoleList">
+                                                                        <div *ngIf="role.value == teamMember.role">
+                                                                            {{role.viewValue}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="hidden md:block truncate">
+                                                                    {{teamMember.jiraUser | titlecase}}
+                                                                </div>
+                                                                <div class="hidden lg:block">
+                                                                    <ng-container>
+                                                                        <mat-icon
+                                                                            class="text-gray-400 icon-size-5 cursor-pointer"
+                                                                            (click)="deleteTeamMember(i,teamMember.teamMemberId,teamMember.jiraUser)"
+                                                                            [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                                                                    </ng-container>
+                                                                </div>
+
+                                                            </div>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </div>
+
+                                        </ng-container>
+                                    </ng-container>
+
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
+
+                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
+                                    <button mat-stroked-button type="button" (click)="goBack(2)">
+                                        Back
+                                    </button>
+                                    <button class="order-first sm:order-last ml-4" mat-flat-button *ngIf="!editProject"
+                                        [color]="'primary'" (click)="createProject()">
+                                        Create Project
+                                    </button>
+                                    <button class="order-first sm:order-last ml-4" mat-flat-button *ngIf="editProject"
+                                        [color]="'primary'" (click)="updateProject()">
+                                        Update Project
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

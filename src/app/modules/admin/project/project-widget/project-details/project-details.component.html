@@ -1,17 +1,57 @@
 <div class="flex flex-col flex-auto w-full" *ngIf="!initialLoading">
+    <div class="w-full max-w-screen-xl mx-auto p-6 md:p-8" *ngIf="!project?.repoProjectId">
+            <fuse-alert [type]="'warning'">
+                <span fuseAlertTitle>Warning alert</span>
+                <div class="flex flex-wrap items-center">
+                    This project is not assigned with the Bitbucket project yet. Please
+                    assign it to your Bitbucket project
+                    <button class="ml-4" mat-button [color]="'primary'" (click)="assignBitbucketProject()">
+                        <mat-spinner *ngIf="isBitbucketProjectListLoading; else buttonContentRef" [diameter]="24"></mat-spinner>
+                        <span *ngIf="isBitbucketProjectListLoading" class="ml-2 mr-1">Connecting to Bitbucket</span>
+                        <ng-template #buttonContentRef>
+                            <mat-icon class="icon-size-5">add_task</mat-icon>
+                            <span class="ml-2 mr-1">Assign Bitbucket Project</span>
+                        </ng-template>
+                    </button>
+                </div>
+            </fuse-alert>
+    </div>
     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
         <!-- Title and action buttons -->
         <div class="flex items-center justify-between w-full">
-            <div class=" ">
-                <div class="flex items-center justify-between text-3xl font-semibold tracking-tight leading-8">   <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="gotoProject()" [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon> {{project_name | titlecase}}</div>
-                <div class="font-medium tracking-tight text-secondary"> </div>
+            <div class="flex items-center justify-between text-3xl font-semibold tracking-tight leading-8">
+                <mat-icon class="icon-size-6 text-3xl cursor-pointer text-black" (click)="gotoProject()"
+                    [svgIcon]="'heroicons_outline:chevron-left'"></mat-icon>
+                {{ project?.name | titlecase }}
             </div>
+            <div class="font-medium tracking-tight text-secondary"></div>
             <div class="mt-3 flex items-center ml-6">
-                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="editProject()">
-                    <mat-icon class=" icon-size-5" [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
+                <button [matTooltip]="'Edit Project'" class="ml-4" mat-flat-button [color]="'primary'"
+                    (click)="editProject()">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
                     <span class="ml-2 mr-1">Edit Project</span>
                 </button>
-
+                <div *ngIf="repoCount == 0" [matTooltip]="!project?.repoProjectId ? 'Please assign Bitbucket project to continue' 
+                : 'Create repository'">
+                    <button class="ml-4" mat-flat-button [color]="'primary'" [disabled]="!project?.repoProjectId"
+                        (click)="createRepository()">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                        <span class="ml-2 mr-1">Create Repository</span>
+                    </button>
+                </div>
+                <div *ngIf="repoCount > 0" [matTooltip]="'View repository'">
+                    <button class="ml-4" mat-flat-button [color]="'primary'" [disabled]="!project?.repoProjectId"
+                        (click)="viewRepository()">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:eye'"></mat-icon>
+                        <span class="ml-2 mr-1">View Repository</span>
+                    </button>
+                </div>
+                <div class="ml-2" [matTooltip]="'Project Process Checklist'">
+                    <button class="shadow-none" mat-mini-fab color="primary" (click)="projectProcess()"
+                        aria-label="Example icon button with a menu icon">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                </div>
                 <!-- Actions menu (visible on xs) -->
                 <div class="sm:hidden">
                     <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
@@ -24,35 +64,39 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="project_progres > 0" class="flex items-center mt-5 mb-6  justify-between w-full">
-            <mat-progress-bar class="my-2" [value]="project_progres"></mat-progress-bar>
-            <div class="max-w-10 w-full text-right"> {{project_progres | number: '0.0-0'}}%</div>
+        <div *ngIf="project?.progress > 0" class="flex items-center mt-5 mb-6 justify-between w-full">
+            <mat-progress-bar class="my-2" [value]="project?.progress"></mat-progress-bar>
+            <div class="max-w-10 w-full text-right">
+                {{ project?.progress | number : "0.0-0" }}%
+            </div>
         </div>
 
         <!-- Main Section On -->
-        <div class="grid  xl:grid-cols-3 gap-2 w-full mt-8">
-            <div class="grid gap-4 md:grid-cols-2  col-start-1 col-end-7 sm:grid-flow-col xl:grid-flow-row">
-                <div class="relative rounded-md flex flex-col flex-auto bg-card  shadow overflow-hidden">
+        <div class="grid xl:grid-cols-3 gap-2 w-full mt-8">
+            <div class="grid gap-4 md:grid-cols-2 col-start-1 col-end-7 sm:grid-flow-col xl:grid-flow-row">
+                <div class="relative rounded-md flex flex-col flex-auto bg-card shadow overflow-hidden">
                     <app-overall-project-score></app-overall-project-score>
                 </div>
-                <div class="relative  rounded-md flex flex-col flex-auto bg-card  shadow overflow-hidden">
+                <div class="relative rounded-md flex flex-col flex-auto bg-card shadow overflow-hidden">
                     <app-customer-happiness-score></app-customer-happiness-score>
                 </div>
             </div>
         </div>
         <!-- Sprint Data -->
-        <div class="flex flex-col  rounded-md flex-auto mt-8 bg-card w-full shadow overflow-hidden" *ngIf="sprints">
+        <div class="flex flex-col rounded-md flex-auto mt-8 bg-card w-full shadow overflow-hidden" *ngIf="sprints">
             <app-sprints-list [dataId]="projectId"></app-sprints-list>
         </div>
         <!-- time line chart -->
-        <div class="flex flex-col  rounded-md flex-auto mt-8 bg-card shadow w-full overflow-hidden">
+        <div class="flex flex-col rounded-md flex-auto mt-8 bg-card shadow w-full overflow-hidden">
             <app-project-timeline-chart></app-project-timeline-chart>
         </div>
         <!-- Member List Data -->
         <div class="flex flex-col flex-auto mt-8 w-full overflow-hidden" *ngIf="members">
-            <div class="text-3xl pb-2 font-semibold  tracking-tight leading-none">Members</div>
+            <div class="text-3xl pb-2 font-semibold tracking-tight leading-none">
+                Members
+            </div>
         </div>
-        <div class="flex flex-col    rounded-md flex-auto mt-2 bg-card shadow w-full overflow-hidden" *ngIf="members">
+        <div class="flex flex-col rounded-md flex-auto mt-2 bg-card shadow w-full overflow-hidden" *ngIf="members">
             <app-project-members-list [dataId]="projectId"></app-project-members-list>
         </div>
     </div>

@@ -1,29 +1,48 @@
 @import "styles/overidefuse.scss";
-*{
-  font-family: 'Inter var';
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-  font-named-instance: 'Regular';
+* {
+    font-family: "Inter var";
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+    font-named-instance: "Regular";
 }
-.min-h-362{
-min-height: 362px;
+.min-h-362 {
+    min-height: 362px;
 }
-.min-h-313{
-min-height: 313px;
+.min-h-313 {
+    min-height: 313px;
 }
-.ml--4{
-  margin-left: -4px !important;
+.ml--4 {
+    margin-left: -4px !important;
 }
-.mt-25p{
-margin-top: 25px;
+.mt-25p {
+    margin-top: 25px;
 }
-.mt--3{
-margin-top: -3px !important;
+.mt--3 {
+    margin-top: -3px !important;
 }
-.mt-8p{
-margin-top: 8px;
+.mt-8p {
+    margin-top: 8px;
 }
-.lh-2{
-line-height: 2 !important;
+.lh-2 {
+    line-height: 2 !important;
+}
+.formio-render {
+    .formio-loader {
+        border: 6px solid #ffffff;
+        border-top: 6px solid #5255e5 !important;
+        border-radius: 167%;
+    }
+    .btn-primary {
+        color: #ffffff !important;
+        background: #5255e5 !important;
+        border: none;
+    }
+}
+.submit_btn_right {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+.alert-success {
+    display: none !important;
 }

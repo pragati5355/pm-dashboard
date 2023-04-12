@@ -20,7 +20,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import * as moment from 'moment';
 import { CreateFormHomeComponent } from './create-form-home/create-form-home.component';
 import { FormListComponent } from './form-list/form-list.component';
@@ -28,43 +28,23 @@ import { AddFormComponent } from './add-form/add-form.component';
 import { SharedModule } from 'app/core/shared.module';
 import { ViewFormComponent } from './view-form/view-form.component';
 import { CopyFormComponent } from './copy-form/copy-form.component';
-const routes: Routes = [
-  {
-    path: "",
-    component: CreateFormHomeComponent,
-    children: [
-      { path: 'add-form', component: AddFormComponent },
-      { path: 'edit-form', component: AddFormComponent },
-      { path: 'view-form', component: ViewFormComponent },
-      { path: 'form-list', component: FormListComponent },
-      {
-        path: "",
-        redirectTo: "form-list",
-        pathMatch: "full"
-      },
-      {
-        path: "**",
-        redirectTo: "form-list"
-      }
-    ]
-  }
-];
-
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
+import { createFormRoutes } from './create-form.routing';
 @NgModule({
-  declarations: [
-    CreateFormHomeComponent,
-    FormListComponent,
-    AddFormComponent,
-    ViewFormComponent,
-    CopyFormComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    FormioModule,
-    DragDropModule,
+    declarations: [
+        CreateFormHomeComponent,
+        FormListComponent,
+        AddFormComponent,
+        ViewFormComponent,
+        CopyFormComponent,
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(createFormRoutes),
+        FormioModule,
+        DragDropModule,
         MatAutocompleteModule,
         MatButtonModule,
         MatCheckboxModule,
@@ -82,7 +62,8 @@ const routes: Routes = [
         MatSidenavModule,
         MatTooltipModule,
         InfiniteScrollModule,
-  ],
-  providers:    [  ]
+        SkeletonModule,
+    ],
+    providers: [],
 })
-export class CreateFormModule { }
+export class CreateFormModule {}

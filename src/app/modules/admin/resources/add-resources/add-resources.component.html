@@ -1,26 +1,19 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
-  <div
-    class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b bg-card dark:bg-transparent">
-    <div class="text-4xl font-extrabold tracking-tight">{{pageTitle}}</div>
-
-  </div>
   <div class="flex flex-col flex-auto w-full overflow-y-auto">
     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-
       <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4  bg-card dark:bg-transparent">
         <div class="">
-          <form [formGroup]="resourcesForm" *ngIf="!initialLoading" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
+          <form [formGroup]="resourcesForm" *ngIf="!initialLoading"
+            class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto ">
             <div class="w-full">
               <h2 class="text-3xl font-semibold tracking-tight leading-8">Resource details</h2>
             </div>
-
             <div class="flex flex-auto items-end mb-6">
               <div
                 class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
                 <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
                 <div class="absolute inset-0 flex items-center justify-center z-20">
                   <div>
-
                     <input #avatarFileInput (change)="uploadAvatar()" [accept]="'image/jpeg, image/png'"
                       [multiple]="false" class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
                       id="avatar-file-input" type="file">
@@ -42,7 +35,7 @@
               <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
                 <mat-form-field [floatLabel]="'always'" class="w-full">
                   <mat-label>First Name</mat-label>
-                  <input  formControlName="firstName" [(ngModel)]="firstName" matInput maxlength="50"
+                  <input formControlName="firstName" [(ngModel)]="firstName" matInput maxlength="50"
                     placeholder="First Name" type="text">
                   <mat-error
                     *ngIf="resourcesValidForm['firstName'].errors && resourcesValidForm['firstName']?.invalid && resourcesValidForm['firstName']?.touched ">
@@ -68,11 +61,54 @@
                 <mat-form-field [floatLabel]="'always'" class="w-full  ">
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput maxlength="50" placeholder="Email" type="text">
+                  <mat-error *ngIf="resourcesForm?.get('email')?.hasError('required')">
+                    <div>Email is mandatory</div>
+                </mat-error>
+                <mat-error
+                    *ngIf="
+                        resourcesForm?.get('email')?.hasError('email') &&
+                        !resourcesForm?.get('email')?.hasError('required')
+                    "
+                >
+                    <div>Invalid Email</div>
+                </mat-error>
+                <mat-error
+                    *ngIf="
+                        resourcesForm?.get('email')?.hasError('pattern') &&
+                        !resourcesForm?.get('email')?.hasError('required') &&
+                        !resourcesForm?.get('email')?.hasError('email')
+                    "
+                >
+                    <div>Only Mindbowser email is allowed </div>
+                </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+              <div class=" w-full  mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                <mat-form-field [floatLabel]="'always'" class="w-full  ">
+                  <mat-label>Salary</mat-label>
+                  <input matInput maxlength="50" placeholder="Salary" type="text" formControlName="salary">
+                  <span matPrefix> <mat-icon [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon></span>
                   <mat-error
-                    *ngIf="resourcesValidForm['email'].errors && resourcesValidForm['email']?.invalid && resourcesValidForm['email']?.touched ">
-                    <div *ngIf="resourcesValidForm['email'].errors['required']">Email is mandatory</div>
-                    <div *ngIf="resourcesValidForm['email'].errors['pattern']">Enter valid email</div>
+                    *ngIf="resourcesValidForm['salary'].errors && resourcesValidForm['salary']?.invalid && resourcesValidForm['salary']?.touched ">
+                    <div *ngIf="resourcesValidForm['salary'].errors['required']">Salary is mandatory</div>
+                    <div *ngIf="resourcesValidForm['salary'].errors['pattern']">Enter valid salary</div>
                   </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+              <div class=" w-full  mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                <mat-form-field [floatLabel]="'always'" class="w-full  ">
+                  <mat-label>Date of joining</mat-label>
+                  <input matInput #inputJoining [placeholder]="'Date of joining'"
+                    formControlName="dateOfJoining" [matDatepicker]="dateOfJoiningDatepicker"
+                    (focus)="dateOfJoiningDatepicker.open()" [max]="currentDate">
+                  <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #dateOfJoiningDatepicker (closed)="inputJoining.blur()"> </mat-datepicker>
+
                 </mat-form-field>
               </div>
             </div>
@@ -81,15 +117,16 @@
                 <div class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859 ">
                   <mat-form-field [floatLabel]="'always'" appearance="fill" class="w-full">
                     <mat-label>Team</mat-label>
-                    <mat-select formControlName="team" placeholder="Select Team" type="text" [disableOptionCentering]="true">
+                    <mat-select formControlName="team" placeholder="Select Team" type="text"
+                      [disableOptionCentering]="true">
                       <mat-option *ngFor="let role of selectTeamList" [value]="role.value">
                         {{ role.viewValue }}
                       </mat-option>
                     </mat-select>
                     <mat-error
-                    *ngIf="resourcesValidForm['team'].errors && resourcesValidForm['team']?.invalid && resourcesValidForm['team']?.touched ">
-                    <div *ngIf="resourcesValidForm['team'].errors['required']">team is mandatory</div>
-                  </mat-error>
+                      *ngIf="resourcesValidForm['team'].errors && resourcesValidForm['team']?.invalid && resourcesValidForm['team']?.touched ">
+                      <div *ngIf="resourcesValidForm['team'].errors['required']">team is mandatory</div>
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div class=" w-full sm:w-60   mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
@@ -106,12 +143,14 @@
                 </div>
                 <div class=" w-full sm:w-60 mb-2 mt-6 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
                   <mat-form-field [floatLabel]="'always'" class="w-full">
-                    <input class="" formControlName="month" InputFormatter="numeric" matInput  placeholder="Month" type="text">
+                    <input class="" formControlName="month" InputFormatter="numeric" matInput placeholder="Month"
+                      type="text">
                     <span matPrefix>MM</span>
                     <mat-error
                       *ngIf="resourcesValidForm['month'].errors && resourcesValidForm['month']?.invalid && resourcesValidForm['month']?.touched ">
                       <div *ngIf="resourcesValidForm['month'].errors['required']">Month is mandatory</div>
-                      <div *ngIf="resourcesValidForm['month'].errors['pattern'] || resourcesValidForm['month'].errors">Enter valid month</div>
+                      <div *ngIf="resourcesValidForm['month'].errors['pattern'] || resourcesValidForm['month'].errors">
+                        Enter valid month</div>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -119,19 +158,22 @@
             </div>
             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
               <div class="chip-input w-full  font-extrabold tracking-tight ng-tns-c274-3859">
-                <mat-form-field  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
+                <mat-form-field [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
                   <mat-label>Technology</mat-label>
                   <mat-chip-list #chipList>
-                    <input placeholder="New technology..." #technologyInput [formControl]="technology"  formControlName="technology" [matAutocomplete]="auto" [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)" class="w-full">
+                    <input placeholder="New technology..." #technologyInput [formControl]="technology"
+                      formControlName="technology" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                      (matChipInputTokenEnd)="add($event)" class="w-full">
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let technology of filteredtechnologys | async" [value]="technology.id">
+                    <mat-option *ngFor="let technology of filteredTechnologies | async" [value]="technology.id">
                       {{technology.name}}
                     </mat-option>
                   </mat-autocomplete>
                   <mat-chip-list #chipList class="mb-2">
-                    <mat-chip *ngFor="let technology of technologys;let selectIndex=index;" [selectable]="selectable" [removable]="removable" (removed)="remove(technology,selectIndex)">
+                    <mat-chip *ngFor="let technology of technologys;let selectIndex=index;" [selectable]="selectable"
+                      [removable]="removable" (removed)="remove(technology,selectIndex)">
                       <div *ngFor="let technologyi of alltechnologys ">
                         <div *ngIf="technologyi.id == technology">
                           {{technologyi.name}}
@@ -145,20 +187,21 @@
             </div>
             <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
               <div class="chip-input w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                 <div class="mb-2">
-                  <button   class="fuse-mat-button-rounded bg-accent-700"
-                  mat-flat-button
-                  [color]="'accent'"
-                  (click)="isShow=!isShow">
+                <div class="mb-2">
+                  <button class="fuse-mat-button-rounded bg-accent-700" mat-flat-button [color]="'accent'"
+                    (click)="isShow=!isShow">
                     <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                     External Project
                   </button>
-                 </div>
-                <mat-form-field  *ngIf="isShow"  [floatLabel]="'always'" appearance="fill" class="example-chip-list w-full flex-0 mb-2">
-                  <mat-label >Project</mat-label>
+                </div>
+                <mat-form-field *ngIf="isShow" [floatLabel]="'always'" appearance="fill"
+                  class="example-chip-list w-full flex-0 mb-2">
+                  <mat-label>Project</mat-label>
                   <mat-chip-list #chipListproject>
-                    <input placeholder="Project..." #projectInput [formControl]="project"  formControlName="project" [matAutocomplete]="autoProject" [matChipInputFor]="chipListproject"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addProject($event)" class="w-full">
+                    <input placeholder="Project..." #projectInput [formControl]="project" formControlName="project"
+                      [matAutocomplete]="autoProject" [matChipInputFor]="chipListproject"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                      (matChipInputTokenEnd)="addProject($event)" class="w-full">
                   </mat-chip-list>
                   <mat-autocomplete #autoProject="matAutocomplete" (optionSelected)="selectedProject($event)">
                     <mat-option *ngFor="let project of filteredprojects | async" [value]="project.id">
@@ -166,7 +209,8 @@
                     </mat-option>
                   </mat-autocomplete>
                   <mat-chip-list #chipListproject class="mb-2">
-                    <mat-chip *ngFor="let project of projects;let selectIndex=index;" [selectable]="selectable" [removable]="removable" (removed)="removeProject(project,selectIndex)">
+                    <mat-chip *ngFor="let project of projects;let selectIndex=index;" [selectable]="selectable"
+                      [removable]="removable" (removed)="removeProject(project,selectIndex)">
                       <div *ngFor="let projecti of allprojects ">
                         <div *ngIf="projecti.id == project">
                           {{projecti.name}}
@@ -183,10 +227,12 @@
                 <button (click)="gotoBack()" mat-stroked-button type="button">
                   Cancel
                 </button>
-                <button *ngIf="formTypeAdd" (click)="submit()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
+                <button *ngIf="formTypeAdd" (click)="submit()" [color]="'primary'"
+                  class="order-first sm:order-last ml-4" mat-flat-button>
                   Save
                 </button>
-                <button *ngIf="!formTypeAdd" (click)="editresource()" [color]="'primary'" class="order-first sm:order-last ml-4" mat-flat-button>
+                <button *ngIf="!formTypeAdd" (click)="editResource()" [color]="'primary'"
+                  class="order-first sm:order-last ml-4" mat-flat-button>
                   Update
                 </button>
               </div>

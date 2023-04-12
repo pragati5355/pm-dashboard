@@ -29,6 +29,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:pencil-alt',
         link : '/forms'
+    },
+    {
+        id   : 'platform-users',
+        title: 'Platform Users',
+        type : 'basic',
+        icon : 'heroicons_outline:users',
+        link : '/platform-users'
     }
 ];
 export const compactNavigation: FuseNavigationItem[] = [

@@ -15,6 +15,10 @@ export class ProjectMembersListComponent implements OnInit {
   totalPerPageData = StaticData.PER_PAGE_DATA;
   totalRecored = 0;
   teamMember: any = [];
+  requiredMembersSkeletonData = {
+    rowsToDisplay: 5,
+    displayProfilePicture: true,
+  };
   @Input() dataId: any ;
   constructor(private ProjectService: CreateProjecteService, private router: Router) {
   }

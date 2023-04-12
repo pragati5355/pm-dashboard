@@ -1,4 +1,3 @@
-import { ProjectListModule } from './../project-list/project-list.module';
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -27,91 +26,68 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { ProjectHomeComponent } from './project-home/project-home.component';
 import { SharedModule } from 'app/core/shared.module';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 import { FormioModule, FormioAppConfig } from 'angular-formio';
+import { FuseCardModule } from '@fuse/components/card';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ProjectListComponent } from './project-list/project-list.component';
+import { AddProjectHomeComponent } from '../project/add-project-home/add-project-home.component';
 import { ConnectJiraPopupComponent } from './connect-jira-popup/connect-jira-popup.component';
-import { ProjectWidgetModule } from "@modules/admin/project/project-widget/project-widget.module";
+import { ProjectWidgetModule } from '@modules/admin/project/project-widget/project-widget.module';
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
 import { SprintFeedbackFormComponent } from './sprint-feedback-form/sprint-feedback-form.component';
-const routes: Routes = [
-  {
-    path: "",
-    component: ProjectHomeComponent,
-    children: [
-      {
-        path: "project-list",
-        loadChildren: () =>
-          import("../project-list/project-list.module").then(m => m.ProjectListModule)
-      },
-      {
-        path: "add-project",
-        loadChildren: () =>
-          import("../add-project/add-project.module").then(m => m.AddProjectModule)
-      },
-      {
-        path: "edit-project",
-        loadChildren: () =>
-          import("../add-project/add-project.module").then(m => m.AddProjectModule)
-      },
-
-      {
-        path: "project",
-        loadChildren: () =>
-          import("../project/project-widget/project-widget.module").then(m => m.ProjectWidgetModule)
-      },
-
-      {
-        path: "",
-        redirectTo: "project-list",
-        pathMatch: "full"
-      },
-      {
-        path: "**",
-        redirectTo: "project-list"
-      }
-    ]
-  }
-];
+import { SkeletonComponent } from './common/skeleton/skeleton.component';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
+import { ProjectRoutingModule } from './project.routing';
 
 @NgModule({
-  declarations: [
-    ProjectHomeComponent,
-    ConnectJiraPopupComponent,
-    SendFeedbackFormComponent,
-    SprintFeedbackFormComponent,
-  ],
-  exports: [CdkStepperModule,
-    MatStepperModule,],
-  imports: [
-    CommonModule,
-    ProjectWidgetModule,
-    SharedModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    CdkStepperModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatRadioModule,
-    MatAutocompleteModule,
-    MatProgressSpinnerModule,
-    FuseFindByKeyPipeModule,
-    FuseNavigationModule,
-    FuseScrollbarModule,
-    FuseScrollResetModule,
-    MatChipsModule,
-    FormioModule
-  ]
+    declarations: [
+        ProjectHomeComponent,
+        ConnectJiraPopupComponent,
+        SendFeedbackFormComponent,
+        SprintFeedbackFormComponent,
+        AddProjectHomeComponent,
+        ProjectListComponent,
+        SkeletonComponent,
+    ],
+    exports: [CdkStepperModule, MatStepperModule],
+    imports: [
+        CommonModule,
+        ProjectWidgetModule,
+        SharedModule,
+        ProjectRoutingModule,
+        ReactiveFormsModule,
+        CdkStepperModule,
+        MatStepperModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatSortModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatRadioModule,
+        MatAutocompleteModule,
+        MatProgressSpinnerModule,
+        FuseFindByKeyPipeModule,
+        FuseNavigationModule,
+        FuseScrollbarModule,
+        FuseScrollResetModule,
+        FuseCardModule,
+        MatTooltipModule,
+        MatChipsModule,
+        MatButtonToggleModule,
+        FormioModule,
+        InfiniteScrollModule,
+        SkeletonModule,
+    ],
 })
-export class ProjectModule { }
+export class ProjectModule {}
