@@ -101,7 +101,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     gotoAddResources() {
-        this.router.navigate(['/resources/add-resources']);
+        this.router.navigate(['/resources/add']);
     }
 
     getList(searchPayload?: any) {
@@ -144,7 +144,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     handleScroll() {
-        if (!this.pagination) {
+        if (!this.pagination && this.resources.length < this.totalRecored) {
             this.count = this.count + this.totalPerPageData;
             const expriencePayload = this.getExperiencePayload();
             const payload = this.getDefaultSearchPayload(this.count);
@@ -240,9 +240,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     edit(id: number) {
-        this.router.navigate([`/resources/edit-resources`], {
-            queryParams: { id: id },
-        });
+        this.router.navigate([`/resources/edit/${id}`]);
     }
 
     getExprience(event: Event, type: any) {
@@ -306,8 +304,9 @@ export class ResourcesListComponent implements OnInit {
         }
     }
     viewResource(id: number) {
-        this.router.navigate(['./', id], { relativeTo: this._activatedRoute });
-
+        const rpit = this.router.navigate(['./view/', id], {
+            relativeTo: this._activatedRoute,
+        });
         this._changeDetectorRef.markForCheck();
         this.opened == true;
     }
@@ -471,6 +470,9 @@ export class ResourcesListComponent implements OnInit {
             (res: any) => {
                 this.snackBar.successSnackBar(res?.message);
                 const payload = this.getDefaultSearchPayload();
+                payload.perPageData = 1;
+                this.resources = [];
+                this.count = 1;
                 this.getList(payload);
             },
             (error) => {

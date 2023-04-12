@@ -36,10 +36,10 @@ export class DashboardComponent implements OnInit {
         this.userImageUrl = this._authService.getUserPhoto();
     }
     goToProjects() {
-        this.router.navigate(['/projects/project-list']);
+        this.router.navigate(['/projects/']);
     }
     goToResources() {
-        this.router.navigate(['/resources/resources-list']);
+        this.router.navigate(['/resources']);
     }
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {

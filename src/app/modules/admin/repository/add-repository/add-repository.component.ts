@@ -9,7 +9,7 @@ import {
     FormGroup,
     Validators,
 } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Observable } from 'rxjs';
@@ -95,10 +95,12 @@ export class AddRepositoryComponent implements OnInit {
     draftObj: any;
     draftId = null;
     submitInProcess = false;
+    messages = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
     }
+    currentPortalType = 'portal';
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder,
@@ -162,6 +164,7 @@ export class AddRepositoryComponent implements OnInit {
         this.selectedIndex = 1;
         this.showStep = 2;
         this.allRepositories = [];
+        this.changePortalName(name);
         if (this.formType != name) {
             this.formType = name;
             this.initializeForm();
@@ -365,7 +368,6 @@ export class AddRepositoryComponent implements OnInit {
         const input = event.input;
         const value = event.value;
         this.isRepository = false;
-        // Add our portalNameOrMicroserviceName
         if ((value || '').trim()) {
             this.portalNameOrMicroserviceNames.push(value.trim());
         }
@@ -438,13 +440,12 @@ export class AddRepositoryComponent implements OnInit {
                 draftId: this.draftId,
                 status: status,
             };
+            this.showMessage();
             this.RepositoryService.create(payload).subscribe(
                 (res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.message);
-                        this.router.navigate([
-                            '/projects/repository/repository-list',
-                        ]);
+                        this.router.navigate(['/projects/repository/list']);
                     } else {
                         this.snackBar.errorSnackBar(res.data.message);
                     }
@@ -511,7 +512,7 @@ export class AddRepositoryComponent implements OnInit {
         if (target.files[0]) {
             const file = target.files[0];
             const payload = {
-                fileName: file.name,
+                fileName: this.repositories[0] + '.yml',
             };
             this._uploadService
                 .getPreSignedURL(payload)
@@ -536,7 +537,6 @@ export class AddRepositoryComponent implements OnInit {
     }
     fetchDraft() {
         const payload = {
-            // metricsProjectId: this.metricsProjectData.id,
             id: this.draftId,
         };
         this.initialLoading = true;
@@ -633,7 +633,10 @@ export class AddRepositoryComponent implements OnInit {
             this.formType == 'react-js' ||
             this.formType == 'django' ||
             this.formType == 'java' ||
-            this.formType == 'android-kotlin'
+            this.formType == 'android-kotlin' ||
+            this.formType == 'ios' ||
+            this.formType == 'android-java' ||
+            this.formType == 'node-js'
         ) {
             this.createBitbucketProjectFrom.addControl(
                 'portalNameOrMicroserviceName',
@@ -814,5 +817,37 @@ export class AddRepositoryComponent implements OnInit {
                 this.fetchDraft();
             }
         });
+    }
+    changePortalName(name) {
+        if (name == 'angular' || name == 'react-js' || name == 'node-js') {
+            this.currentPortalType = 'portal';
+        } else if (name == 'django' || name == 'java') {
+            this.currentPortalType = 'microservice';
+        } else if (
+            name == 'android-kotlin' ||
+            name == 'ios' ||
+            name == 'android-java'
+        ) {
+            this.currentPortalType = 'app';
+        }
+    }
+
+    showMessage() {
+        const messageArray = [
+            'Creating Repositories',
+            'Creating branches',
+            'Applying branch restrictions',
+            'Cloning the boilerplate repository',
+            'Creating Jenkins file',
+            'Initializing the git',
+            'Committing new project changes',
+            'Pushing code to new repository',
+            'Processing your request',
+        ];
+        from(messageArray)
+            .pipe(concatMap((item) => of(item).pipe(delay(2000))))
+            .subscribe((message) => {
+                this.messages = 'Remote:~ user$ ' + message;
+            });
     }
 }

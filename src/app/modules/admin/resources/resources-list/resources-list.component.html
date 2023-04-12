@@ -49,6 +49,7 @@
                             >
                                 <mat-select
                                     [placeholder]="'Choose project'"
+                                    [disableOptionCentering]="true"
                                     (selectionChange)="
                                         selectChangeProject($event)
                                     "
@@ -309,10 +310,7 @@
                                         >
                                             <div
                                                 class="flex items-center cursor-pointer"
-                                                [routerLink]="[
-                                                    './',
-                                                    resources.id
-                                                ]"
+                                               (click)="viewResource(resources.id)"
                                             >
                                                 <ng-container
                                                     *ngIf="resources.image"
@@ -339,10 +337,7 @@
                                             </div>
                                             <div
                                                 class="cursor-pointer"
-                                                [routerLink]="[
-                                                    './',
-                                                    resources.id
-                                                ]"
+                                                (click)="viewResource(resources.id)"
                                             >
                                                 <div
                                                     class="truncate"

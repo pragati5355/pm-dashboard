@@ -614,7 +614,7 @@ export class AddProjectHomeComponent
                             this.projectTeam.reset();
                             this.teamMemberList = [];
                             this.settingProjectName = '';
-                            this.router.navigate(['/projects/project-list']);
+                            this.router.navigate(['/projects/']);
                         } else {
                             this.snackBar.errorSnackBar(res?.message);
                             if (res?.message == 'Project already exists') {
@@ -642,7 +642,7 @@ export class AddProjectHomeComponent
         }
     }
     goToList() {
-        this.router.navigate(['/projects/project-list']);
+        this.router.navigate(['/projects/']);
     }
     getTeamMember() {
         let payload = {
@@ -905,7 +905,7 @@ export class AddProjectHomeComponent
                             this.projectTeam.reset();
                             this.teamMemberList = [];
                             this.settingProjectName = '';
-                            this.router.navigate(['/projects/project-list']);
+                            this.router.navigate(['/projects/']);
                         } else {
                             this.snackBar.errorSnackBar(res?.message);
                         }
@@ -1071,19 +1071,17 @@ export class AddProjectHomeComponent
     }
 
     private routeSubscribeAndExtractInfo() {
-        this.routeSubscribe = this._route.queryParams.subscribe(
-            (projecteditId) => {
-                if (projecteditId['id']) {
-                    this.fetchEditproject(projecteditId['id']);
-                    this.editProjectId = projecteditId['id'];
-                    this.pageTitle = 'edit';
-                    this.editProject = true;
-                } else {
-                    this.pageTitle = 'add';
-                    this.editProject = false;
-                }
+        this.routeSubscribe = this._route.params.subscribe((projectEditId) => {
+            if (projectEditId['id']) {
+                this.fetchEditproject(projectEditId['id']);
+                this.editProjectId = projectEditId['id'];
+                this.pageTitle = 'edit';
+                this.editProject = true;
+            } else {
+                this.pageTitle = 'add';
+                this.editProject = false;
             }
-        );
+        });
     }
 
     private initializeProjectTeamForm() {
@@ -1167,7 +1165,7 @@ export class AddProjectHomeComponent
                         TextRegexValidator(RegexConstants.Text_Area),
                     ],
                 ],
-                feedback_form: ['', [Validators.required]],
+                feedback_form: [''],
             },
             {
                 validator: [noWhitespaceValidator('projectDescription')],

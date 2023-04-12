@@ -70,7 +70,7 @@ export const StaticData = {
     PER_PAGE_DATA: 10,
     FORM_TYPE: [
         { value: 'CHECKLIST', viewValue: 'Check List' },
-        { value: 'FEEDBACK_FORM', viewValue: 'Feedback Form' },
+        { value: 'PROJECT_FEEDBACK', viewValue: 'Project Feedback' },
     ],
 };
 

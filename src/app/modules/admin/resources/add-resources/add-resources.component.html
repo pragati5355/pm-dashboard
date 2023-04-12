@@ -61,11 +61,26 @@
                 <mat-form-field [floatLabel]="'always'" class="w-full  ">
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput maxlength="50" placeholder="Email" type="text">
-                  <mat-error
-                    *ngIf="resourcesValidForm['email'].errors && resourcesValidForm['email']?.invalid && resourcesValidForm['email']?.touched ">
-                    <div *ngIf="resourcesValidForm['email'].errors['required']">Email is mandatory</div>
-                    <div *ngIf="resourcesValidForm['email'].errors['pattern']">Enter valid email</div>
-                  </mat-error>
+                  <mat-error *ngIf="resourcesForm?.get('email')?.hasError('required')">
+                    <div>Email is mandatory</div>
+                </mat-error>
+                <mat-error
+                    *ngIf="
+                        resourcesForm?.get('email')?.hasError('email') &&
+                        !resourcesForm?.get('email')?.hasError('required')
+                    "
+                >
+                    <div>Invalid Email</div>
+                </mat-error>
+                <mat-error
+                    *ngIf="
+                        resourcesForm?.get('email')?.hasError('pattern') &&
+                        !resourcesForm?.get('email')?.hasError('required') &&
+                        !resourcesForm?.get('email')?.hasError('email')
+                    "
+                >
+                    <div>Only Mindbowser email is allowed </div>
+                </mat-error>
                 </mat-form-field>
               </div>
             </div>
