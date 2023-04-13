@@ -11,13 +11,14 @@ import { Navigation } from 'app/core/navigation/navigation.types';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
-
+import packageJson from '../../../../../../package.json';
 @Component({
     selector: 'classy-layout',
     templateUrl: './classy.component.html',
     encapsulation: ViewEncapsulation.None,
 })
 export class ClassyLayoutComponent implements OnInit, OnDestroy {
+    appVersion = packageJson?.version;
     isScreenSmall: boolean | undefined;
     navigation!: Navigation;
     user!: User;
