@@ -73,7 +73,7 @@ pipeline{
            }//when
                steps{
                    slack_send("Development: Building :coding: ")
-                   sh 'ng build'
+                   sh 'ng build --configuration=development'
                    slack_send("Development: Uploading build to S3. :s3: ")
                    withAWS(credentials: 'aws-key', region: "${dev_bucket_region}" ) {
                    sh "aws s3 sync ${build_directory} s3://${dev_bucket_name}  --delete --exclude '*.svg' --exclude '*.jpg' --cache-control 'public,max-age=86400'"
