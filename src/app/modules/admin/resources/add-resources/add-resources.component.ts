@@ -408,6 +408,10 @@ export class AddResourcesComponent
         this.resourcesForm.get('project')?.setValue('');
     }
 
+    selectedTeamOption(event:any){
+        console.log(event?.option?.value)
+    }
+
     removeProject(project: number, selectIndex: any): void {
         this.projects.splice(selectIndex, 1);
         const found = this.newExternalProjectsId.some(
@@ -475,7 +479,7 @@ export class AddResourcesComponent
                     '',
                     [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
                 ],
-                dateOfJoining: [''],
+                dateOfJoining: ['', [Validators.required]],
                 salary: [
                     '',
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
