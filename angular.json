@@ -78,6 +78,14 @@
                                     "with": "src/environments/environment.dev.ts"
                                 }
                             ]
+                        },
+                        "local": {
+                            "buildOptimizer": false,
+                            "optimization": false,
+                            "vendorChunk": true,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
                         }
                     }
                 },
@@ -91,7 +99,7 @@
                             "browserTarget": "Metrics-PM-Dashboard-Web:build:development"
                         },
                         "local": {
-                            "browserTarget": "Metrics-PM-Dashboard-Web:build"
+                            "browserTarget": "Metrics-PM-Dashboard-Web:build:local"
                         }
                     },
                     "defaultConfiguration": "local"
