@@ -7,6 +7,7 @@ export const StaticData = {
         { value: 'DevOps', viewValue: 'DevOps' },
         { value: 'Dot Net', viewValue: 'Dot Net' },
         { value: 'Frontend Dev', viewValue: 'Frontend Dev' },
+        { value: 'Flutter', viewValue: 'Flutter Dev' },
         {
             value: 'Full Stack (Java + Angular)',
             viewValue: 'Full Stack (Java + Angular)',
