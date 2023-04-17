@@ -42,26 +42,7 @@
                   </button>
                 </div>
               </div>
-              <div
-                class="flex sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
-                <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 select-form" [floatLabel]="'always'">
-                  <mat-label>Form Type </mat-label>
-                  <mat-select panelClass="select-form-option" formControlName="formType" type="text"
-                    placeholder="Choose form type" [disableOptionCentering]="true">
-                    <mat-option *ngFor="let type of selectFormType" [value]="type.value">
-                      {{ type.viewValue | titlecase }}
-                    </mat-option>
-                  </mat-select>
-
-                  <mat-error *ngIf="formDetailsValidation['formType'].errors &&
-                  formDetailsValidation['formType']?.invalid &&
-                  formDetailsValidation['formType']?.touched ">
-                    <div *ngIf="formDetailsValidation['formType'].errors['required']"> Form Type is mandatory</div>
-                  </mat-error>
-
-                </mat-form-field>
-              </div>
-              <div
+              <div *ngIf="formType != 'CHECKLIST'"
                 class="flex sm:flex-row items-start sm:items-center sm:justify-between   bg-card dark:bg-transparent">
                 <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 select-form" [floatLabel]="'always'">
                   <mat-label>Project </mat-label>
@@ -83,11 +64,11 @@
                 </mat-form-field>
               </div>
 
-              <small class="mb-4">Choose a project to use the Survey Component below</small>
+              <small *ngIf="formType != 'CHECKLIST'" class="mb-4">Choose a project to use the Survey Component below</small>
               <!-- Actions -->
 
             </div>
-            <div #activeList="cdkDropList" class="box-list-component" cdkDropList cdkDropListOrientation="vertical"
+            <div *ngIf="formType != 'CHECKLIST'"  #activeList="cdkDropList" class="box-list-component" cdkDropList cdkDropListOrientation="vertical"
               [cdkDropListData]="activeCustomers" (cdkDropListDropped)="drop($event)">
               <button class="drag-box" cdkDrag [disabled]="teammemberQuestion.length == 0">
                 Survey component
