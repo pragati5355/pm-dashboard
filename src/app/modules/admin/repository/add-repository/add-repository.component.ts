@@ -483,7 +483,7 @@ export class AddRepositoryComponent implements OnInit {
                 }
                 link.click();
             })
-            .catch(console.error);
+            .catch();
     }
 
     sendEmail() {
@@ -624,7 +624,7 @@ export class AddRepositoryComponent implements OnInit {
                 ],
             ],
             repositoryName: [[], this.validateChipField],
-            developer: [null, this.validateChipField],
+            developer: [[], this.validateChipField],
             codeReviewerAndPm: [[], this.validateChipField],
             branchOrPattern: [this.branches, this.validateChipField],
         });
