@@ -16,6 +16,10 @@ export class SprintIssuesTypeComponent implements OnInit {
     totalPerPageData = StaticData.PER_PAGE_DATA;
     sprintId: any;
     issueTypeList: any[] = [];
+    requiredSkeletonData = {
+        rowsToDisplay: 3,
+        displayProfilePicture: false,
+    };
 
     constructor(
         private _authService: AuthService,
