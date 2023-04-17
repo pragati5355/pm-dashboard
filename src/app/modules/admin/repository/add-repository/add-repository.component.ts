@@ -483,7 +483,7 @@ export class AddRepositoryComponent implements OnInit {
                 }
                 link.click();
             })
-            .catch(console.error);
+            .catch();
     }
 
     sendEmail() {
