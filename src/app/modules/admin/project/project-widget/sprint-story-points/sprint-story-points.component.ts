@@ -15,6 +15,10 @@ export class SprintStoryPointsComponent implements OnInit {
     totalPerPageData = StaticData.PER_PAGE_DATA;
     sprintId: any;
     storyPointList: any[] = [];
+    requiredSkeletonData = {
+        rowsToDisplay: 3,
+        displayProfilePicture: false,
+    };
 
     constructor(
         private _authService: AuthService,
