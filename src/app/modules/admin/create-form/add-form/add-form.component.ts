@@ -131,7 +131,7 @@ export class AddFormComponent implements OnInit {
     routeSubscribe: any;
     initialLoading = false;
     selectFomList: any = [];
-    selectFormType: any = StaticData.FORM_TYPE;
+    formType = 'PROJECT_FEEDBACK';
     constructor(
         private snackBar: SnackBar,
         private formService: AddFormService,
@@ -146,13 +146,12 @@ export class AddFormComponent implements OnInit {
         return this.formDetails.controls;
     }
     ngOnInit(): void {
+        this.initialData();
         this.formDetails = this._formBuilder.group({
             formName: ['', [Validators.required]],
             project_name: [''],
-            formType: ['', [Validators.required]],
         });
         this.form = { components: [] };
-        this.initialData();
         this.refreshForm = new EventEmitter();
         this.getProjectList();
     }
@@ -170,7 +169,7 @@ export class AddFormComponent implements OnInit {
         let payload = {
             formName: this.formDetails.value.formName,
             formComponent: this.form,
-            formType: this.formDetails.value.formType,
+            formType: this.formType,
         };
         let formcompoent: [] = this.form?.components;
         if (this.formDetails.value.formName) {
@@ -199,7 +198,7 @@ export class AddFormComponent implements OnInit {
         let payload = {
             id: this.editFormId,
             formName: this.formDetails.value.formName,
-            formType: this.formDetails.value.formType,
+            formType: this.formType,
             formComponent: this.form,
         };
         let formcompoent: [] = this.form?.components;
@@ -238,8 +237,8 @@ export class AddFormComponent implements OnInit {
             formdata.forEach((item: any) => {
                 this.formDetails.patchValue({
                     formName: item.formName,
-                    formType: item.formType,
                 });
+                this.formType = item.formType;
                 this.form = item.formComponent;
             });
         });
@@ -397,10 +396,10 @@ export class AddFormComponent implements OnInit {
         return true;
     }
     initialData() {
-        this.routeSubscribe = this._route.params.subscribe((formType) => {
-            if (formType['id']) {
-                this.getFormDetails({ id: formType['id'] });
-                this.editFormId = formType['id'];
+        this.routeSubscribe = this._route.params.subscribe((res) => {
+            if (res['id']) {
+                this.getFormDetails({ id: res['id'] });
+                this.editFormId = res['id'];
                 this.pageTitle = 'Edit Form';
                 this.formTypeAdd = false;
             } else {

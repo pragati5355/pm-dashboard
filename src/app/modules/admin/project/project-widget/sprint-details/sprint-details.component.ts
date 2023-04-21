@@ -65,7 +65,7 @@ export class SprintDetailsComponent implements OnInit {
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result.result == 'success') {
+            if (result?.result == 'success') {
             }
         });
     }

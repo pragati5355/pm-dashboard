@@ -3,6 +3,7 @@
     "compileOnSave": false,
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
         "baseUrl": "./src",
         "paths": {
             "@angular/*": ["./node_modules/@angular/*"],
