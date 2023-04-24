@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 import { RepositoryDetailsComponent } from '../repository-details/repository-details.component';
+import { MessagingService } from '../common/services/messaging.service';
 
 @Component({
     selector: 'app-repository-list',
@@ -23,11 +24,14 @@ export class RepositoryListComponent implements OnInit {
         private router: Router,
         private _authService: AuthService,
         private RepositoryService: RepositoryService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private messageService: MessagingService
     ) {}
 
     ngOnInit(): void {
         this.setJiraProject();
+
+        this.messageService.getMessage()
     }
 
     getList(id: any) {
