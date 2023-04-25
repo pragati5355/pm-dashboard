@@ -25,6 +25,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 import { UploadServiceService } from '@modules/admin/repository/common/services/upload-service.service';
 import { SendMailComponent } from '../send-mail/send-mail.component';
+import { MessagingService } from '../common/services/messaging.service';
 export class Developer {
     constructor(public id: number, public email: string) {}
 }
@@ -95,7 +96,7 @@ export class AddRepositoryComponent implements OnInit {
     draftObj: any;
     draftId = null;
     submitInProcess = false;
-    messages = '';
+    messages: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
@@ -110,7 +111,8 @@ export class AddRepositoryComponent implements OnInit {
         private RepositoryService: RepositoryService,
         private snackBar: SnackBar,
         private _route: ActivatedRoute,
-        private _uploadService: UploadServiceService
+        private _uploadService: UploadServiceService,
+        private messageService: MessagingService
     ) {}
 
     ngOnInit(): void {
@@ -440,7 +442,12 @@ export class AddRepositoryComponent implements OnInit {
                 draftId: this.draftId,
                 status: status,
             };
-            this.showMessage();
+            this.messageService
+                .getMessage(payload.metadata.projectKey)
+                .subscribe((message) => {
+                    this.messages = message;
+                });
+            // this.showMessage();
             this.RepositoryService.create(payload).subscribe(
                 (res: any) => {
                     if (!res.error) {

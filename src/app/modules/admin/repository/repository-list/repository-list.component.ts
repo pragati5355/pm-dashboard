@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 import { RepositoryDetailsComponent } from '../repository-details/repository-details.component';
 import { MessagingService } from '../common/services/messaging.service';
+import { Database, onValue, ref, object } from '@angular/fire/database';
 
 @Component({
     selector: 'app-repository-list',
@@ -20,6 +21,7 @@ export class RepositoryListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: false,
     };
+
     constructor(
         private router: Router,
         private _authService: AuthService,
@@ -31,7 +33,9 @@ export class RepositoryListComponent implements OnInit {
     ngOnInit(): void {
         this.setJiraProject();
 
-        this.messageService.getMessage()
+        this.messageService
+            .getMessage('METRICS_TEST_APRIL_19')
+            .subscribe((res) => console.log(res));
     }
 
     getList(id: any) {

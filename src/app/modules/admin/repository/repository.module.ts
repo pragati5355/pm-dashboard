@@ -35,6 +35,10 @@ import { RepositoryDetailsComponent } from './repository-details/repository-deta
 import { CommandLineComponent } from './command-line/command-line.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { repositoryRoutes } from './repository.routing';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { environment } from 'environments/environment';
+import { MessagingService } from './common/services/messaging.service';
 
 @NgModule({
     declarations: [
@@ -75,6 +79,9 @@ import { repositoryRoutes } from './repository.routing';
         InfiniteScrollModule,
         MatStepperModule,
         SkeletonModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireDatabaseModule,
     ],
+    providers: [MessagingService],
 })
 export class RepositoryModule {}
