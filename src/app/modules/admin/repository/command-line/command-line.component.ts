@@ -5,6 +5,7 @@ import {
     Input,
     SimpleChanges,
 } from '@angular/core';
+import { CommandLineModel } from '../common/models/command-line-model';
 
 @Component({
     selector: 'app-command-line',
@@ -13,7 +14,13 @@ import {
 })
 export class CommandLineComponent implements OnInit {
     @Input() message: any;
-    messages = [];
+    messages: CommandLineModel[] = [
+        {
+            message: 'The repository creation process has begun....',
+            completed: false,
+            error: false,
+        },
+    ];
 
     constructor() {
         this.initializeDetails;

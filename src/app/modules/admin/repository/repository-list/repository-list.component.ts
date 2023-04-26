@@ -32,10 +32,6 @@ export class RepositoryListComponent implements OnInit {
 
     ngOnInit(): void {
         this.setJiraProject();
-
-        this.messageService
-            .getMessage('METRICS_TEST_APRIL_19')
-            .subscribe((res) => console.log(res));
     }
 
     getList(id: any) {
