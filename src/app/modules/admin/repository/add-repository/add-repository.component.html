@@ -546,7 +546,7 @@
                             </div>
                         </div>
                     </div>
-                    <app-command-line message="{{ messages }}" *ngIf="submitInProcess" class="w-full  bg-black"></app-command-line>
+                    <app-command-line *ngIf="submitInProcess" [data]="commandLineModel" class="w-full bg-black"></app-command-line>
                 </div>
             </div>
         </div>

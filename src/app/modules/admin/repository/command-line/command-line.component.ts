@@ -13,7 +13,7 @@ import { CommandLineModel } from '../common/models/command-line-model';
     styleUrls: ['./command-line.component.scss'],
 })
 export class CommandLineComponent implements OnInit {
-    @Input() message: any;
+    @Input() data: CommandLineModel;
     messages: CommandLineModel[] = [
         {
             message: 'The repository creation process has begun....',
@@ -27,12 +27,12 @@ export class CommandLineComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (this.message) {
+        if (this.data) {
             this.initializeDetails();
         }
     }
     initializeDetails() {
-        this.messages.push(this.message);
+        this.messages.push(this.data);
         this.scrollToBottom();
     }
     ngOnChanges(changes: SimpleChanges) {

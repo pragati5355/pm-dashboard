@@ -2,10 +2,10 @@
     <div id="scroll" class="w-full bg-black text-sm text-green-600">
         <div
             class="message-container items-end"
-            *ngFor="let message of messages; last as last"
+            *ngFor="let item of messages; last as last"
         >
-            <div>{{ message.message }}</div>
-            <div *ngIf="last" class="btnLoader" id="elId" #target>
+            <div>{{ item?.message }}</div>
+            <div *ngIf="!item.completed" class="btnLoader" id="elId" #target>
                 <span></span>
                 <span></span>
                 <span></span>
