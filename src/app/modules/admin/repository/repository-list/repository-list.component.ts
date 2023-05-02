@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 import { RepositoryDetailsComponent } from '../repository-details/repository-details.component';
+import { MessagingService } from '../common/services/messaging.service';
+import { Database, onValue, ref, object } from '@angular/fire/database';
 
 @Component({
     selector: 'app-repository-list',
@@ -19,11 +21,13 @@ export class RepositoryListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: false,
     };
+
     constructor(
         private router: Router,
         private _authService: AuthService,
         private RepositoryService: RepositoryService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private messageService: MessagingService
     ) {}
 
     ngOnInit(): void {

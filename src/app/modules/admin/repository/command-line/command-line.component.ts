@@ -5,6 +5,7 @@ import {
     Input,
     SimpleChanges,
 } from '@angular/core';
+import { CommandLineModel } from '../common/models/command-line-model';
 
 @Component({
     selector: 'app-command-line',
@@ -12,20 +13,26 @@ import {
     styleUrls: ['./command-line.component.scss'],
 })
 export class CommandLineComponent implements OnInit {
-    @Input() message: any;
-    messages = [];
+    @Input() data: CommandLineModel;
+    messages: CommandLineModel[] = [
+        {
+            message: 'The repository creation process has begun....',
+            completed: false,
+            error: false,
+        },
+    ];
 
     constructor() {
         this.initializeDetails;
     }
 
     ngOnInit(): void {
-        if (this.message) {
+        if (this.data) {
             this.initializeDetails();
         }
     }
     initializeDetails() {
-        this.messages.push(this.message);
+        this.messages.push(this.data);
         this.scrollToBottom();
     }
     ngOnChanges(changes: SimpleChanges) {

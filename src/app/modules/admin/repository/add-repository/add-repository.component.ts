@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidationConstants } from '../../../../core/constacts/constacts';
@@ -9,7 +9,15 @@ import {
     FormGroup,
     Validators,
 } from '@angular/forms';
-import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
+import {
+    concatMap,
+    delay,
+    from,
+    of,
+    Subject,
+    Subscription,
+    takeUntil,
+} from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Observable } from 'rxjs';
@@ -25,6 +33,8 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { RepositoryService } from '@modules/admin/repository/common/services/repository.service';
 import { UploadServiceService } from '@modules/admin/repository/common/services/upload-service.service';
 import { SendMailComponent } from '../send-mail/send-mail.component';
+import { MessagingService } from '../common/services/messaging.service';
+import { CommandLineModel } from '../common/models/command-line-model';
 export class Developer {
     constructor(public id: number, public email: string) {}
 }
@@ -32,7 +42,7 @@ export class Developer {
     selector: 'app-add-repository',
     templateUrl: './add-repository.component.html',
 })
-export class AddRepositoryComponent implements OnInit {
+export class AddRepositoryComponent implements OnInit, OnDestroy {
     @ViewChild('stepper', { static: false }) stepper!: MatStepper;
     @ViewChild('drawer') drawer!: MatDrawer;
     @ViewChild('repositoryInput') repositoryInput!: ElementRef;
@@ -95,7 +105,9 @@ export class AddRepositoryComponent implements OnInit {
     draftObj: any;
     draftId = null;
     submitInProcess = false;
-    messages = '';
+    commandLineModel: CommandLineModel;
+    subscriptions: Subscription = new Subscription();
+
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
@@ -110,12 +122,14 @@ export class AddRepositoryComponent implements OnInit {
         private RepositoryService: RepositoryService,
         private snackBar: SnackBar,
         private _route: ActivatedRoute,
-        private _uploadService: UploadServiceService
+        private _uploadService: UploadServiceService,
+        private messageService: MessagingService
     ) {}
 
     ngOnInit(): void {
         this.setUserData();
         this.setJiraProject();
+        this.firebaseMessagingRef();
         this.setDrawerWatcher();
         this.getAllDevelopers();
         this.getCodeReviewer();
@@ -440,7 +454,6 @@ export class AddRepositoryComponent implements OnInit {
                 draftId: this.draftId,
                 status: status,
             };
-            this.showMessage();
             this.RepositoryService.create(payload).subscribe(
                 (res: any) => {
                     if (!res.error) {
@@ -595,6 +608,20 @@ export class AddRepositoryComponent implements OnInit {
 
     goBackWindow() {
         window.history.back();
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    private firebaseMessagingRef() {
+        const messageSubscription = this.messageService
+            .getMessage(this.metricsProjectData?.repoProject?.key)
+            .subscribe((commandLineModel) => {
+                this.commandLineModel = commandLineModel;
+            });
+
+        this.subscriptions.add(messageSubscription);
     }
 
     private setJiraProject() {
@@ -830,24 +857,5 @@ export class AddRepositoryComponent implements OnInit {
         ) {
             this.currentPortalType = 'app';
         }
-    }
-
-    showMessage() {
-        const messageArray = [
-            'Creating Repositories',
-            'Creating branches',
-            'Applying branch restrictions',
-            'Cloning the boilerplate repository',
-            'Creating Jenkins file',
-            'Initializing the git',
-            'Committing new project changes',
-            'Pushing code to new repository',
-            'Processing your request',
-        ];
-        from(messageArray)
-            .pipe(concatMap((item) => of(item).pipe(delay(2000))))
-            .subscribe((message) => {
-                this.messages = 'Remote:~ user$ ' + message;
-            });
     }
 }

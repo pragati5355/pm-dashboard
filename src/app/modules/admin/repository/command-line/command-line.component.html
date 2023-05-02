@@ -1,8 +1,23 @@
-<div  class="flex flex-wrap w-full max-w-screen-xl mx-auto ">
-    <div id="scroll" class=" w-full  bg-black text-sm text-green-600  ">
-        <div class="message-container items-end" *ngFor="let message of messages last as last">
-            <div>{{ message }}</div>
-            <div *ngIf="last" class="btnLoader "  id="elId" #target>
+<div class="flex flex-wrap w-full max-w-screen-xl mx-auto">
+    <div id="scroll" class="w-full bg-black text-sm">
+        <div
+            class="message-container items-end"
+            *ngFor="let item of messages; last as last"
+        >
+            <div
+                [ngClass]="{
+                    'text-green-600': !item?.error,
+                    'text-red-600': item?.error
+                }"
+            >
+                {{ item?.message }}
+            </div>
+            <div
+                *ngIf="!item?.completed"
+                class="btnLoader text-green-600"
+                id="elId"
+                #target
+            >
                 <span></span>
                 <span></span>
                 <span></span>

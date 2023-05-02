@@ -10,4 +10,14 @@ export const environment = {
         ' https://us773ifzr2h6ih5h4imvu5sspy0ixbhc.lambda-url.ap-south-1.on.aws',
     GoogleClientId:
         '348103697312-ibthsgsun4vi3mcpa6i078f513ed6sq3.apps.googleusercontent.com',
+    firebaseConfig: {
+        apiKey: 'AIzaSyCvUTve06ORYyN8x_njKDMHdmLskWWCfJs',
+        authDomain: 'metrics-development-11eef.firebaseapp.com',
+        databaseURL:
+            'https://metrics-development-11eef-default-rtdb.asia-southeast1.firebasedatabase.app',
+        projectId: 'metrics-development-11eef',
+        storageBucket: 'metrics-development-11eef.appspot.com',
+        messagingSenderId: '140253399225',
+        appId: '1:140253399225:web:7aaedf0426db191eabf368',
+    },
 };
