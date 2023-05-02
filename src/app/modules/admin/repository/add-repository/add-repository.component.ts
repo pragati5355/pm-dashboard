@@ -458,7 +458,7 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
                 (res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.message);
-                        this.router.navigate(['/projects/repository/list']);
+                        // this.router.navigate(['/projects/repository/list']);
                     } else {
                         this.snackBar.errorSnackBar(res.data.message);
                     }
