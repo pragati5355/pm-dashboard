@@ -12,17 +12,17 @@
             >
                 {{ item?.message }}
             </div>
-            <div
-                *ngIf="!item?.completed"
-                class="btnLoader text-green-600"
-                id="elId"
-                #target
-            >
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+        </div>
+        <div
+            *ngIf="!isCompleted"
+            class="btnLoader text-green-600"
+            id="elId"
+            #target
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </div>
 </div>

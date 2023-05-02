@@ -1,3 +1,4 @@
+import { F } from '@angular/cdk/keycodes';
 import {
     Component,
     OnInit,
@@ -14,6 +15,7 @@ import { CommandLineModel } from '../common/models/command-line-model';
 })
 export class CommandLineComponent implements OnInit {
     @Input() data: CommandLineModel;
+    isCompleted: boolean = false;
     messages: CommandLineModel[] = [
         {
             message: 'The repository creation process has begun....',
@@ -32,6 +34,7 @@ export class CommandLineComponent implements OnInit {
         }
     }
     initializeDetails() {
+        this.isCompleted = this.data?.completed;
         this.messages.push(this.data);
         this.scrollToBottom();
     }
