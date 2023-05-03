@@ -1,4 +1,4 @@
-<div class="flex flex-wrap w-full max-w-screen-xl mx-auto">
+<div class="flex flex-wrap w-full h-full max-w-screen-xl mx-auto">
     <div id="scroll" class="w-full bg-black text-sm">
         <div
             class="message-container items-end"
@@ -13,18 +13,13 @@
                 {{ item?.message }}
             </div>
         </div>
-        <div
-            *ngIf="!isCompleted"
-            class="btnLoader text-green-600"
-            id="elId"
-            #target
-        >
+        <div *ngIf="true" class="btnLoader text-green-600" id="elId" #target>
             <span></span>
             <span></span>
             <span></span>
             <span></span>
         </div>
-        <div *ngIf="isCompleted">
+        <div *ngIf="isCompleted && !isError">
             <pre class="text-green-800 font-bold">
 ____                     ____                _           _ 
 |  _ \ ___ _ __   ___    / ___|_ __ ___  __ _| |_ ___  __| |
@@ -34,5 +29,18 @@ ____                     ____                _           _
           |_|    
             </pre>
         </div>
+    </div>
+    <div
+        *ngIf="isCompleted && !isError"
+        class="flex justify-end items-center w-full m-3"
+    >
+        <button
+            class="min-w-30 order-first sm:order-last ml-4"
+            mat-flat-button
+            [color]="'primary'"
+            (click)="redirectToRepoList()"
+        >
+            <span>View Repo List</span>
+        </button>
     </div>
 </div>
