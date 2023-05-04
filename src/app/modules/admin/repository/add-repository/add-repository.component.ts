@@ -107,6 +107,7 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
     submitInProcess = false;
     commandLineModel: CommandLineModel;
     subscriptions: Subscription = new Subscription();
+    isRepoCreationError: boolean = false;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     get createBitbucketProject(): { [key: string]: AbstractControl } {
@@ -141,6 +142,16 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
     }
 
     goBack(stepper: any) {
+        if (this.submitInProcess) {
+            this.submitInProcess = false;
+        }
+        if (this.isRepoCreationError) {
+            this.isRepoCreationError = false;
+        }
+        if (this.initialLoading) {
+            this.initialLoading = false;
+        }
+
         this.selectedIndex = stepper;
         if (this.selectedIndex == 0) {
             this.showStep = 1;
@@ -414,6 +425,9 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
     }
 
     submitBitbucketProject() {
+        if (this.isRepoCreationError) {
+            this.isRepoCreationError = false;
+        }
         if (!this.createBitbucketProjectFrom.invalid) {
             this.selectedIndex = 2;
             this.showStep = 3;
@@ -458,16 +472,15 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
                 (res: any) => {
                     if (!res.error) {
                         this.snackBar.successSnackBar(res.message);
-                        this.router.navigate(['/projects/repository/list']);
+                        // this.router.navigate(['/projects/repository/list']);
                     } else {
                         this.snackBar.errorSnackBar(res.data.message);
                     }
-                    this.submitInProcess = false;
-                    this.initialLoading = false;
                     this.tokenExpireFun(res);
                 },
                 (error) => {
-                    this.submitInProcess = false;
+                    this.isRepoCreationError = true;
+                    this.initialLoading = false;
                     if (error.error.message) {
                         this.snackBar.errorSnackBar(error.error.message);
                     } else {
@@ -618,6 +631,10 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
         const messageSubscription = this.messageService
             .getMessage(this.metricsProjectData?.repoProject?.key)
             .subscribe((commandLineModel) => {
+                if (commandLineModel.error) {
+                    this.isRepoCreationError =
+                        commandLineModel.error && commandLineModel.completed;
+                }
                 this.commandLineModel = commandLineModel;
             });
 

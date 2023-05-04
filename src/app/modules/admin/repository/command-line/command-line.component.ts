@@ -1,10 +1,5 @@
-import {
-    Component,
-    OnInit,
-    AfterViewInit,
-    Input,
-    SimpleChanges,
-} from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommandLineModel } from '../common/models/command-line-model';
 
 @Component({
@@ -14,6 +9,8 @@ import { CommandLineModel } from '../common/models/command-line-model';
 })
 export class CommandLineComponent implements OnInit {
     @Input() data: CommandLineModel;
+    isCompleted: boolean = false;
+    isError: boolean = false;
     messages: CommandLineModel[] = [
         {
             message: 'The repository creation process has begun....',
@@ -22,7 +19,7 @@ export class CommandLineComponent implements OnInit {
         },
     ];
 
-    constructor() {
+    constructor(private router: Router) {
         this.initializeDetails;
     }
 
@@ -32,6 +29,8 @@ export class CommandLineComponent implements OnInit {
         }
     }
     initializeDetails() {
+        this.isCompleted = this.data?.completed;
+        this.isError = this.data?.error;
         this.messages.push(this.data);
         this.scrollToBottom();
     }
@@ -45,5 +44,9 @@ export class CommandLineComponent implements OnInit {
                 .getElementById('elId')
                 .scrollIntoView({ behavior: 'smooth' });
         }, 50);
+    }
+
+    redirectToRepoList() {
+        this.router.navigate(['/projects/repository/list']);
     }
 }

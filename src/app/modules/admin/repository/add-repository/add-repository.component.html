@@ -546,7 +546,18 @@
                             </div>
                         </div>
                     </div>
-                    <app-command-line *ngIf="submitInProcess" [data]="commandLineModel" class="w-full bg-black"></app-command-line>
+                    <app-command-line *ngIf="submitInProcess" [data]="commandLineModel" class="w-full"></app-command-line>
+                    <div *ngIf="isRepoCreationError" class="p-4 flex flex-col sm:flex-row sm:items-center justify-end mt-auto w-full">
+                        <div class="flex items-center justify-end ml-auto mt-4 sm:mt-0">
+                            <button class="min-w-30 " [color]="'primary'" mat-flat-button type="button" (click)="goBack(2)">
+                                Back
+                            </button>
+                            <button type="button" class="min-w-30 order-first sm:order-last ml-4"
+                            mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
+                            Save as Draft
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
