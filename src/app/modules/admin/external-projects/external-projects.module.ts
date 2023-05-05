@@ -24,10 +24,12 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatStepperModule } from '@angular/material/stepper';
+import { FuseCardModule } from '@fuse/components/card';
 
 import { ExternalProjectsRoutingModule } from './external-projects-routing.module';
 import { ExternalProjectsHomeComponent } from './external-projects-home/external-projects-home.component';
 import { ExternalProjectsListComponent } from './external-projects-list/external-projects-list.component';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 
 @NgModule({
     declarations: [
@@ -61,6 +63,8 @@ import { ExternalProjectsListComponent } from './external-projects-list/external
         FuseScrollResetModule,
         InfiniteScrollModule,
         MatStepperModule,
+        FuseCardModule,
+        SkeletonModule
     ],
 })
 export class ExternalProjectsModule {}

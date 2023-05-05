@@ -27,7 +27,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'external-projects',
         title: 'External Projects',
         type: 'basic',
-        icon: 'heroicons_outline:user-add',
+        icon: 'heroicons_outline:view-grid-add',
         link: '/external-projects',
     },
     {
