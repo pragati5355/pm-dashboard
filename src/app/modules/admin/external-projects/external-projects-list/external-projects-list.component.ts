@@ -10,7 +10,14 @@ export class ExternalProjectsListComponent implements OnInit {
         {
             projectName: 'Metrics',
             technologys: ['Java', 'Angular', 'Microservices', 'Node Js'],
-            teamMembers: ['Amaresh', 'Rohit', 'Rohan kadam'],
+            teamMembers: [
+                'Amaresh',
+                'Rohit',
+                'Rohan kadam',
+                'Amaresh',
+                'Rohit',
+                'Rohan kadam',
+            ],
             clientDetails: [
                 { name: 'Rohan Kadam', email: 'rohan.kadam@mindbowser.com' },
                 {
@@ -31,6 +38,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 'Microservices',
                 'Node Js',
             ],
+            teamMembers: ['Amaresh', 'Rohit'],
             clientDetails: [
                 { name: 'Rohan Kadam', email: 'rohan.kadam@mindbowser.com' },
                 {
@@ -47,6 +55,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 'Microservices',
                 'Node Js',
             ],
+            teamMembers: ['Amaresh', 'Rohit', 'Rohan kadam'],
             clientDetails: [
                 { name: 'Rohan Kadam', email: 'rohan.kadam@mindbowser.com' },
                 {

@@ -41,14 +41,16 @@
                             class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:gap-x-16 w-full mt-12 sm:mt-16"
                         >
                             <ng-container *ngIf="!initialLoading">
-                                <ng-container *ngFor="let project of projectList">
+                                <ng-container
+                                    *ngFor="let project of projectList"
+                                >
                                     <div>
                                         <fuse-card
-                                            class="min-h-96 flex flex-col max-w-140 w-full filter-post filter-interactive"
+                                            class="min-h-64 flex flex-col max-w-140 w-full filter-post filter-interactive"
                                             #expandableCard02="fuseCard"
                                         >
                                             <div
-                                                class="flex items-center mx-6 sm:mx-8 mt-6 mb-4"
+                                                class="flex justify-between items-center mx-6 sm:mx-8 mt-6 mb-4"
                                             >
                                                 <div
                                                     class="flex flex-col cursor-pointer"
@@ -61,6 +63,27 @@
                                                         }}</span
                                                     >
                                                 </div>
+
+                                                <div class="flex items-center">
+                                                    <div></div>
+                                                    <button
+                                                        [color]="'primary'"
+                                                        [matTooltip]="
+                                                            'Add Resource'
+                                                        "
+                                                        class="ml-4"
+                                                        mat-flat-button
+                                                    >
+                                                        <mat-icon
+                                                            [svgIcon]="
+                                                                'heroicons_outline:plus'
+                                                            "
+                                                        ></mat-icon>
+                                                        <span class="ml-2 mr-1"
+                                                            >Add Resource</span
+                                                        >
+                                                    </button>
+                                                </div>
                                             </div>
                                             <div
                                                 class="flex flex-col mx-6 sm:mx-8 mb-4"
@@ -69,7 +92,11 @@
                                                     <span class="mr-1"
                                                         >Technologies</span
                                                     >
-                                                    <mat-icon [svgIcon]="'heroicons_outline:code'"></mat-icon>
+                                                    <mat-icon
+                                                        [svgIcon]="
+                                                            'heroicons_outline:code'
+                                                        "
+                                                    ></mat-icon>
                                                 </div>
                                                 <div
                                                     class="flex items-center py-2 flex-wrap"
@@ -83,19 +110,48 @@
                                                     >
                                                 </div>
                                             </div>
-                                            <div class="flex justify-end px-6">
+                                            <div class="flex px-8">
                                                 <div class="flex flex-col">
                                                     <span>Team</span>
                                                     <div class="flex">
-                                                        <ng-container *ngIf="project.clientDetails.length > 0">
-                                                            <ng-container *ngFor="let client of project.clientDetails;index as i">
-                                                                <ng-container *ngIf="client.name !== null">
+                                                        <ng-container
+                                                            *ngIf="
+                                                                project
+                                                                    ?.teamMembers
+                                                                    ?.length > 0
+                                                            "
+                                                        >
+                                                            <ng-container
+                                                                *ngFor="
+                                                                    let teamMember of project?.teamMembers;
+                                                                    index as i
+                                                                "
+                                                            >
+                                                                <ng-container
+                                                                    *ngIf="
+                                                                        teamMember !==
+                                                                        null
+                                                                    "
+                                                                >
                                                                     <div
                                                                         class="cursor-pointer w-8 h-8 m-0.5 rounded-full items-center justify-center text-card ring-2 ring-bg-card bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
-                                                                        [ngClass]="{'-ml-3': i !== 0}" [matTooltip]="client.name">
-                                                                        <div class="rounded-full text-center uppercase text-1xl  mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                                                            >
-                                                                            {{client.name.charAt(0)}}
+                                                                        [ngClass]="{
+                                                                            '-ml-3':
+                                                                                i !==
+                                                                                0
+                                                                        }"
+                                                                        [matTooltip]="
+                                                                            teamMember
+                                                                        "
+                                                                    >
+                                                                        <div
+                                                                            class="rounded-full text-center uppercase text-1xl mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                                                        >
+                                                                            {{
+                                                                                teamMember.charAt(
+                                                                                    0
+                                                                                )
+                                                                            }}
                                                                         </div>
                                                                     </div>
                                                                 </ng-container>
@@ -104,58 +160,43 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="">
-                                                <div class="mx-6 sm:mx-8 mt-2 mb-6">
-                                                    <span
-                                                        class="leading-none"
-                                                        >Client Details</span
-                                                    >
-                                                    <div
-                                                        class="flex items-center flex-wrap mt-1"
-                                                    >
-                                                     <div
-                                                            *ngFor="
-                                                                let client of project.clientDetails
-                                                            "
-                                                            class="inline-block w-[220px] mr-3"
-                                                        >
-                                                            <span class="">{{
-                                                                client.name
-                                                            }}</span>
-                                                            <span
-                                                                [matTooltip]="client.email"
-                                                                class="rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700 p-2 truncate block"
-                                                                >{{
-                                                                    client.email
-                                                                }}</span
-                                                            >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </fuse-card>
                                     </div>
                                 </ng-container>
                             </ng-container>
-                            
-                            <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
-                                <app-card-skeleton></app-card-skeleton>
-                            </div>
-                            <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
-                                <app-card-skeleton></app-card-skeleton>
-                            </div>
-                            <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
-                                <app-card-skeleton></app-card-skeleton>
-                            </div>
-                            <div *ngIf="initialLoading" class="min-h-344 flex flex-col max-w-140 w-full">
-                                <app-card-skeleton></app-card-skeleton>
-                            </div>
 
+                            <div
+                                *ngIf="initialLoading"
+                                class="min-h-64 flex flex-col max-w-140 w-full"
+                            >
+                                <app-card-skeleton></app-card-skeleton>
+                            </div>
+                            <div
+                                *ngIf="initialLoading"
+                                class="min-h-64 flex flex-col max-w-140 w-full"
+                            >
+                                <app-card-skeleton></app-card-skeleton>
+                            </div>
+                            <div
+                                *ngIf="initialLoading"
+                                class="min-h-64 flex flex-col max-w-140 w-full"
+                            >
+                                <app-card-skeleton></app-card-skeleton>
+                            </div>
+                            <div
+                                *ngIf="initialLoading"
+                                class="min-h-64 flex flex-col max-w-140 w-full"
+                            >
+                                <app-card-skeleton></app-card-skeleton>
+                            </div>
                         </div>
                     </div>
 
                     <ng-container *ngIf="projectList.length == 0">
-                        <div class="p-8 sm:p-16  text-4xl font-semibold tracking-tight text-center">External Projects not found
+                        <div
+                            class="p-8 sm:p-16 text-4xl font-semibold tracking-tight text-center"
+                        >
+                            External Projects not found
                         </div>
                     </ng-container>
                 </div>
