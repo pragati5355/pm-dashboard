@@ -11,13 +11,13 @@ export const environment = {
     GoogleClientId:
         '634085334801-2qo990of3dib17r84cdqa1rn2h5ur0ju.apps.googleusercontent.com',
     firebaseConfig: {
-        apiKey: 'AIzaSyCvUTve06ORYyN8x_njKDMHdmLskWWCfJs',
-        authDomain: 'metrics-development-11eef.firebaseapp.com',
-        databaseURL:
-            'https://metrics-development-11eef-default-rtdb.asia-southeast1.firebasedatabase.app',
-        projectId: 'metrics-development-11eef',
-        storageBucket: 'metrics-development-11eef.appspot.com',
-        messagingSenderId: '140253399225',
-        appId: '1:140253399225:web:7aaedf0426db191eabf368',
+        apiKey: 'AIzaSyAINQqjeIGjKSoFjlyb0lZUDT6LrPx3B_M',
+        authDomain: 'metrics-dev-acdc5.firebaseapp.com',
+        databaseURL: 'https://metrics-dev-acdc5-default-rtdb.firebaseio.com',
+        projectId: 'metrics-dev-acdc5',
+        storageBucket: 'metrics-dev-acdc5.appspot.com',
+        messagingSenderId: '154633398807',
+        appId: '1:154633398807:web:6601a32fe33ce8f9118a52',
+        measurementId: 'G-TQMZ0ZKWYM',
     },
 };
