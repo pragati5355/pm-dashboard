@@ -106,7 +106,6 @@ export class AddResourcesComponent
         this.initializeForm();
         this.initializeData();
         this.getTechnology();
-        this.getProjectList();
         this.userData = this._authService.getUser();
     }
 
@@ -125,13 +124,6 @@ export class AddResourcesComponent
                         ? this.resourcesForm.value.month
                         : 0,
                     technology: this.technologys,
-                    assignedProjects: this.projects
-                        ? this.projects.filter(
-                              (project: any) =>
-                                  !this.newExternalProjectsId.includes(project)
-                          )
-                        : [],
-                    newExternalProjects: this.newExternalProjects,
                     salary: this.resourcesForm.value.salary,
                     dateOfJoining: this.resourcesForm.value.dateOfJoining,
                 };
@@ -262,9 +254,6 @@ export class AddResourcesComponent
                     this.createdAt = item.createdAt;
                     this.firstName = item.firstName ? item.firstName : '';
                     this.technologys = item.technology;
-                    this.projects = item.assignedProjects
-                        ? item.assignedProjects
-                        : '';
                     this.filteredTechnologies = this.resourcesForm
                         .get('technology')
                         ?.valueChanges.pipe(
@@ -275,19 +264,7 @@ export class AddResourcesComponent
                                     : this._filterslice()
                             )
                         );
-                    this.filteredprojects = this.resourcesForm
-                        .get('project')
-                        ?.valueChanges.pipe(
-                            startWith(''),
-                            map((project: any | null) =>
-                                project
-                                    ? this._filterProject(project)
-                                    : this._filtersliceProject()
-                            )
-                        );
-                    if (this.projects.length > 0) {
-                        this.isShow = true;
-                    }
+                    
                 });
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -324,13 +301,6 @@ export class AddResourcesComponent
                         ? this.resourcesForm.value.month
                         : 0,
                     technology: this.technologys,
-                    assignedProjects: this.projects
-                        ? this.projects.filter(
-                              (project: any) =>
-                                  !this.newExternalProjectsId.includes(project)
-                          )
-                        : [],
-                    newExternalProjects: this.newExternalProjects,
                     salary: this.resourcesForm.value.salary,
                     dateOfJoining: this.resourcesForm.value.dateOfJoining,
                 };
@@ -363,86 +333,9 @@ export class AddResourcesComponent
             }
         }
     }
-    getProjectList() {
-        this.initialLoading = true;
-        this.ProjectService.getExternalProjectList().subscribe((res: any) => {
-            this.allprojects = res.data;
-            this.filteredprojects = this.resourcesForm
-                .get('project')
-                ?.valueChanges.pipe(
-                    startWith(''),
-                    map((project: any | null) =>
-                        project
-                            ? this._filterProject(project)
-                            : this._filtersliceProject()
-                    )
-                );
-            this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
-        });
-    }
-    addProject(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-        // Add our project
-        if (typeof event.value == 'string') {
-            this.newExternalProjects.push(event.value);
-            let max =
-                Math.max.apply(
-                    Math,
-                    this.allprojects.map((ele) => ele.id)
-                ) + 1;
-            this.allprojects.push({ id: max, name: event.value });
-            this.projects.push(max);
-            this.newExternalProjectsId.push(max);
-            this.allNewExternalProjects.push({ id: max, name: event.value });
-        }
-
-        if (input) {
-            input.value = '';
-        }
-
-        this.project.setValue('');
-        this.resourcesForm.get('project')?.setValue('');
-    }
 
     selectedTeamOption(event:any){
         console.log(event?.option?.value)
-    }
-
-    removeProject(project: number, selectIndex: any): void {
-        this.projects.splice(selectIndex, 1);
-        const found = this.newExternalProjectsId.some(
-            (el: any) => el === project
-        );
-        if (found) {
-            this.newExternalProjectsId.splice(selectIndex, 1);
-            let filteredExternalProject: any =
-                this.allNewExternalProjects.filter(
-                    (item: any) => item.id === project
-                );
-            this.newExternalProjects.forEach((element: any, index: any) => {
-                if (element == filteredExternalProject[0].name)
-                    this.newExternalProjects.splice(index, 1);
-            });
-            this.allprojects.forEach((element: any, index: any) => {
-                if (element.id == project) this.allprojects.splice(index, 1);
-            });
-            this.allNewExternalProjects.forEach((element: any, index: any) => {
-                if (element.id == project)
-                    this.allNewExternalProjects.splice(index, 1);
-            });
-        }
-        this.resourcesForm.get('project')?.setValue('');
-    }
-
-    selectedProject(event: MatAutocompleteSelectedEvent): void {
-        this.projects.push(event.option.value);
-        this.projectInput.nativeElement.value = '';
-        this.project.setValue('');
-        this.resourcesForm.get('project')?.setValue('');
     }
 
     private initializeForm() {
@@ -485,7 +378,7 @@ export class AddResourcesComponent
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
                 ],
                 technology: [''],
-                project: [''],
+                
             },
             {
                 validator: [MonthValdation('month')],
