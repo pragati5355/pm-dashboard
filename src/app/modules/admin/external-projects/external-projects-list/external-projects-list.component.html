@@ -58,7 +58,7 @@
                                                     <span
                                                         class="text-lg font-semibold leading-none"
                                                         >{{
-                                                            project.projectName
+                                                            project?.projectName
                                                                 | titlecase
                                                         }}</span
                                                     >
@@ -103,7 +103,7 @@
                                                 >
                                                     <span
                                                         *ngFor="
-                                                            let technology of project.technologys
+                                                            let technology of project?.technologys
                                                         "
                                                         class="font-medium whitespace-nowrap py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
                                                         >{{ technology }}</span
@@ -148,7 +148,7 @@
                                                                             class="rounded-full text-center uppercase text-1xl mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
                                                                         >
                                                                             {{
-                                                                                teamMember.charAt(
+                                                                                teamMember?.charAt(
                                                                                     0
                                                                                 )
                                                                             }}
@@ -192,7 +192,9 @@
                         </div>
                     </div>
 
-                    <ng-container *ngIf="projectList.length == 0">
+                    <ng-container
+                        *ngIf="projectList?.length == 0 && !initialLoading"
+                    >
                         <div
                             class="p-8 sm:p-16 text-4xl font-semibold tracking-tight text-center"
                         >
