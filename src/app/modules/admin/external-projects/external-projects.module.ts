@@ -30,11 +30,13 @@ import { ExternalProjectsRoutingModule } from './external-projects-routing.modul
 import { ExternalProjectsHomeComponent } from './external-projects-home/external-projects-home.component';
 import { ExternalProjectsListComponent } from './external-projects-list/external-projects-list.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
+import { ExternalProjectDetailsComponent } from './external-project-details/external-project-details.component';
 
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
         ExternalProjectsListComponent,
+        ExternalProjectDetailsComponent,
     ],
     imports: [
         CommonModule,

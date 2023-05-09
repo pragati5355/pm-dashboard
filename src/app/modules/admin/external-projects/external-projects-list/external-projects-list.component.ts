@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-external-projects-list',
@@ -67,7 +68,11 @@ export class ExternalProjectsListComponent implements OnInit {
     ];
 
     initialLoading: boolean = false;
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit(): void {}
+
+    goToExternalProjectDetails(id: number) {
+        this.router.navigate([`/external-projects/details/${id}`]);
+    }
 }
