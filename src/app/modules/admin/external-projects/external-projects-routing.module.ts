@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ExternalProjectDetailsComponent } from './external-project-details/external-project-details.component';
 import { ExternalProjectsHomeComponent } from './external-projects-home/external-projects-home.component';
 import { ExternalProjectsListComponent } from './external-projects-list/external-projects-list.component';
 
@@ -13,6 +14,13 @@ const routes: Routes = [
                 component: ExternalProjectsListComponent,
                 data: {
                     pageTitle: 'External Projects',
+                },
+            },
+            {
+                path: 'details/:id',
+                component: ExternalProjectDetailsComponent,
+                data: {
+                    pageTitle: 'External Project Details',
                 },
             },
             {
