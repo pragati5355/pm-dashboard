@@ -31,12 +31,15 @@ import { ExternalProjectsHomeComponent } from './external-projects-home/external
 import { ExternalProjectsListComponent } from './external-projects-list/external-projects-list.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { ExternalProjectDetailsComponent } from './external-project-details/external-project-details.component';
+import { CreateExternalProjectComponent } from './create-external-project/create-external-project.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
         ExternalProjectsListComponent,
         ExternalProjectDetailsComponent,
+        CreateExternalProjectComponent,
     ],
     imports: [
         CommonModule,
@@ -66,7 +69,9 @@ import { ExternalProjectDetailsComponent } from './external-project-details/exte
         InfiniteScrollModule,
         MatStepperModule,
         FuseCardModule,
-        SkeletonModule
+        SkeletonModule,
+        FormsModule,
+        ReactiveFormsModule,
     ],
 })
 export class ExternalProjectsModule {}
