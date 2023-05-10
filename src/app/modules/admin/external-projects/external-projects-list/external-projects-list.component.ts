@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 
 @Component({
     selector: 'app-external-projects-list',
@@ -68,9 +70,19 @@ export class ExternalProjectsListComponent implements OnInit {
     ];
 
     initialLoading: boolean = false;
-    constructor(private router: Router) {}
+    constructor(private router: Router, private matDialog: MatDialog) {}
 
     ngOnInit(): void {}
+
+    addNew() {
+        this.matDialog
+            .open(CreateExternalProjectComponent, {
+                width: '60%',
+                height: 'auto',
+            })
+            .afterClosed()
+            .subscribe((result) => {});
+    }
 
     goToExternalProjectDetails(id: number) {
         this.router.navigate([`/external-projects/details/${id}`]);
