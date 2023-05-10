@@ -6,6 +6,7 @@ import {
     ElementRef,
     ViewEncapsulation,
     HostListener,
+    AfterViewInit,
 } from '@angular/core';
 import {
     AbstractControl,
@@ -30,6 +31,7 @@ import { SnackBar } from '../../../../core/utils/snackBar';
 import { ErrorMessage } from 'app/core/constacts/constacts';
 import { DatePipe } from '@angular/common';
 import moment from 'moment';
+import { ResourcesService } from '../common/services/resources.service';
 export class Technology {
     constructor(public id: number, public name: string) {}
 }
@@ -41,7 +43,7 @@ export class Project {
     templateUrl: './add-resources.component.html',
 })
 export class AddResourcesComponent
-    implements OnInit, OnDestroy, IDeactivateComponent
+    implements OnInit, OnDestroy, IDeactivateComponent, AfterViewInit
 {
     @HostListener('window:beforeunload', ['$event'])
     public onPageUnload($event: BeforeUnloadEvent) {
@@ -49,6 +51,7 @@ export class AddResourcesComponent
             $event.returnValue = true;
         }
     }
+    @ViewChild('emailInput') emailInput;
     formTypeAdd = true;
     currentDate = moment();
     editFormId = 0;
@@ -71,6 +74,11 @@ export class AddResourcesComponent
     alltechnologys: Technology[] = [];
     routeSubscribe: any;
     updateDeleteObj: any = [];
+    showHideExperience: boolean = true;
+    pmMentorFormControl: FormControl;
+    filteredEmails: Observable<any[]>;
+
+    emailList: any[] = [];
 
     @ViewChild('technologyInput')
     technologyInput!: ElementRef;
@@ -84,6 +92,8 @@ export class AddResourcesComponent
     newExternalProjects: any = [];
     newExternalProjectsId: any = [];
     allNewExternalProjects: any = [];
+    loadingAllEmails: boolean = false;
+
     constructor(
         private _formBuilder: FormBuilder,
         private router: Router,
@@ -91,7 +101,8 @@ export class AddResourcesComponent
         private _authService: AuthService,
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private resourceService: ResourcesService
     ) {}
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
@@ -108,13 +119,14 @@ export class AddResourcesComponent
         this.getTechnology();
         this.userData = this._authService.getUser();
     }
-
+    ngAfterViewInit(): void {}
     submit() {
         if (!this.resourcesForm.invalid) {
             if (
                 this.resourcesForm.get('team').value === 'PM' ||
                 this.technologys.length > 0
             ) {
+                console.log(this.resourcesForm.value);
                 const payload = {
                     firstName: this.resourcesForm.value.firstName,
                     lastName: this.resourcesForm.value.lastName,
@@ -131,7 +143,7 @@ export class AddResourcesComponent
                     dateOfJoining: this.resourcesForm.value.dateOfJoining,
                 };
                 this.submitInProcess = true;
-                this.addResourceAPI(payload);
+                // this.addResourceAPI(payload);
             } else {
                 this.submitInProcess = false;
                 this.snackBar.errorSnackBar('Choose technology');
@@ -140,6 +152,9 @@ export class AddResourcesComponent
     }
     gotoBack() {
         this.router.navigate(['/resources']);
+    }
+    onCheckBoxChange(value: boolean) {
+        this.showHideExperience = !value;
     }
     getTechnology() {
         this.initialLoading = true;
@@ -340,7 +355,18 @@ export class AddResourcesComponent
         console.log(event?.option?.value);
     }
 
+    filterEmails(email: string) {
+        let arr = this.emailList.filter(
+            (item) =>
+                item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
+        );
+
+        return arr.length ? arr : [{ email: 'No Emails found' }];
+    }
+
     private initializeForm() {
+        this.pmMentorFilterInitialization();
+
         this.resourcesForm = this._formBuilder.group(
             {
                 firstName: [
@@ -380,6 +406,7 @@ export class AddResourcesComponent
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
                 ],
                 technology: [''],
+                pmMentorEmail: [''],
             },
             {
                 validator: [MonthValdation('month')],
@@ -387,9 +414,24 @@ export class AddResourcesComponent
         );
     }
 
+    private pmMentorFilterInitialization() {
+        this.pmMentorFormControl = new FormControl();
+        this.filteredEmails = this.pmMentorFormControl.valueChanges.pipe(
+            startWith(null),
+            map((email) =>
+                email ? this.filterEmails(email) : this.emailList.slice()
+            )
+        );
+        this.resourceService.findAllDeveloperEmails().subscribe((res: any) => {
+            this.loadingAllEmails = true;
+            if (res?.data) {
+                this.emailList = res?.data;
+            }
+        });
+    }
+
     private initializeData() {
         this.routeSubscribe = this._route.params.subscribe((checkformtype) => {
-            console.log(checkformtype);
             if (checkformtype['id']) {
                 this.fetchEditData(checkformtype['id']);
                 this.editFormId = checkformtype['id'];
