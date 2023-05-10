@@ -111,7 +111,10 @@ export class AddResourcesComponent
 
     submit() {
         if (!this.resourcesForm.invalid) {
-            if (this.technologys.length > 0) {
+            if (
+                this.resourcesForm.get('team').value === 'PM' ||
+                this.technologys.length > 0
+            ) {
                 const payload = {
                     firstName: this.resourcesForm.value.firstName,
                     lastName: this.resourcesForm.value.lastName,
@@ -264,7 +267,6 @@ export class AddResourcesComponent
                                     : this._filterslice()
                             )
                         );
-                    
                 });
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -334,8 +336,8 @@ export class AddResourcesComponent
         }
     }
 
-    selectedTeamOption(event:any){
-        console.log(event?.option?.value)
+    selectedTeamOption(event: any) {
+        console.log(event?.option?.value);
     }
 
     private initializeForm() {
@@ -378,7 +380,6 @@ export class AddResourcesComponent
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
                 ],
                 technology: [''],
-                
             },
             {
                 validator: [MonthValdation('month')],
