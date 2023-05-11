@@ -571,6 +571,15 @@
                                     </mat-option>
                                 </mat-autocomplete>
                             </mat-form-field>
+                            <mat-error
+                                *ngIf="
+                                    resourcesForm
+                                        ?.get('pmMentorEmail')
+                                        ?.hasError('required')
+                                "
+                            >
+                                <div>PM/mentor is mandatory</div>
+                            </mat-error>
                         </div>
                         <div
                             class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"

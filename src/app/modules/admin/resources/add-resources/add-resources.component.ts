@@ -411,6 +411,21 @@ export class AddResourcesComponent
                 validator: [MonthValdation('month')],
             }
         );
+        this.resourcesForm.get('team').valueChanges.subscribe((res: any) => {
+            if (res != 'PM') {
+                this.resourcesForm
+                    .get('pmMentorEmail')
+                    .setValidators(Validators.required);
+                this.resourcesForm
+                    .get('pmMentorEmail')
+                    .updateValueAndValidity();
+            } else {
+                this.resourcesForm.get('pmMentorEmail').clearValidators();
+                this.resourcesForm
+                    .get('pmMentorEmail')
+                    .updateValueAndValidity();
+            }
+        });
         this.pmMentorFilterInitialization();
     }
 
