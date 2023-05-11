@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
@@ -32,9 +32,9 @@ import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ResourceDetailsComponent } from './resource-details/resource-details.component';
 import { DiffDatePipe } from './common/pipes/diff-date.pipe';
-import { TableSkeletonComponent } from 'app/core/modules/skeleton/table-skeleton/table-skeleton.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { resourcesRoutes } from './resources.routing';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -72,6 +72,7 @@ import { resourcesRoutes } from './resources.routing';
         FuseScrollResetModule,
         InfiniteScrollModule,
         SkeletonModule,
+        MatCheckboxModule,
         RouterModule.forChild(resourcesRoutes),
     ],
     providers: [DatePipe],
