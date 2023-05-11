@@ -411,6 +411,11 @@ export class AddResourcesComponent
                 validator: [MonthValdation('month')],
             }
         );
+        this.dynamicFieldValidation();
+        this.pmMentorFilterInitialization();
+    }
+
+    private dynamicFieldValidation() {
         this.resourcesForm.get('team').valueChanges.subscribe((res: any) => {
             if (res != 'PM') {
                 this.resourcesForm
@@ -426,7 +431,6 @@ export class AddResourcesComponent
                     .updateValueAndValidity();
             }
         });
-        this.pmMentorFilterInitialization();
     }
 
     private pmMentorFilterInitialization() {
