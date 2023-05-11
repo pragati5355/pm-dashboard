@@ -121,29 +121,29 @@ export class AddResourcesComponent
     }
     ngAfterViewInit(): void {}
     submit() {
-        if (!this.resourcesForm.invalid) {
+        if (!this.resourcesForm?.invalid) {
             if (
-                this.resourcesForm.get('team').value === 'PM' ||
-                this.technologys.length > 0
+                this.resourcesForm?.get('team')?.value === 'PM' ||
+                this.technologys?.length > 0
             ) {
-                console.log(this.resourcesForm.value);
                 const payload = {
-                    firstName: this.resourcesForm.value.firstName,
-                    lastName: this.resourcesForm.value.lastName,
-                    email: this.resourcesForm.value.email,
-                    year: this.resourcesForm.value.year
-                        ? this.resourcesForm.value.year
+                    firstName: this.resourcesForm?.value?.firstName,
+                    lastName: this.resourcesForm?.value?.lastName,
+                    email: this.resourcesForm?.value?.email,
+                    year: this.resourcesForm?.value?.year
+                        ? this.resourcesForm?.value?.year
                         : 0,
-                    team: this.resourcesForm.value.team,
-                    month: this.resourcesForm.value.month
-                        ? this.resourcesForm.value.month
+                    team: this.resourcesForm?.value?.team,
+                    month: this.resourcesForm?.value?.month
+                        ? this.resourcesForm?.value?.month
                         : 0,
                     technology: this.technologys,
-                    salary: this.resourcesForm.value.salary,
-                    dateOfJoining: this.resourcesForm.value.dateOfJoining,
+                    salary: this.resourcesForm?.value?.salary,
+                    dateOfJoining: this.resourcesForm?.value?.dateOfJoining,
+                    pmMentorEmail: this.resourcesForm?.value?.pmMentorEmail,
                 };
                 this.submitInProcess = true;
-                // this.addResourceAPI(payload);
+                this.addResourceAPI(payload);
             } else {
                 this.submitInProcess = false;
                 this.snackBar.errorSnackBar('Choose technology');
@@ -307,19 +307,20 @@ export class AddResourcesComponent
                 const payload = {
                     id: this.editFormId,
                     isDeleted: false,
-                    firstName: this.resourcesForm.value.firstName,
-                    lastName: this.resourcesForm.value.lastName,
-                    email: this.resourcesForm.value.email,
-                    year: this.resourcesForm.value.year
-                        ? this.resourcesForm.value.year
+                    firstName: this.resourcesForm?.value?.firstName,
+                    lastName: this.resourcesForm?.value?.lastName,
+                    email: this.resourcesForm?.value?.email,
+                    year: this.resourcesForm?.value?.year
+                        ? this.resourcesForm?.value?.year
                         : 0,
-                    team: this.resourcesForm.value.team,
-                    month: this.resourcesForm.value.month
-                        ? this.resourcesForm.value.month
+                    team: this.resourcesForm?.value?.team,
+                    month: this.resourcesForm?.value?.month
+                        ? this.resourcesForm?.value?.month
                         : 0,
                     technology: this.technologys,
-                    salary: this.resourcesForm.value.salary,
-                    dateOfJoining: this.resourcesForm.value.dateOfJoining,
+                    salary: this.resourcesForm?.value?.salary,
+                    dateOfJoining: this.resourcesForm?.value?.dateOfJoining,
+                    pmMentorEmail: this.resourcesForm?.value?.pmMentorEmail,
                 };
                 this.submitInProcess = true;
                 this.ProjectService.updateDeleteResource(payload).subscribe(
@@ -365,8 +366,6 @@ export class AddResourcesComponent
     }
 
     private initializeForm() {
-        this.pmMentorFilterInitialization();
-
         this.resourcesForm = this._formBuilder.group(
             {
                 firstName: [
@@ -412,16 +411,19 @@ export class AddResourcesComponent
                 validator: [MonthValdation('month')],
             }
         );
+        this.pmMentorFilterInitialization();
     }
 
     private pmMentorFilterInitialization() {
         this.pmMentorFormControl = new FormControl();
-        this.filteredEmails = this.pmMentorFormControl.valueChanges.pipe(
-            startWith(null),
-            map((email) =>
-                email ? this.filterEmails(email) : this.emailList.slice()
-            )
-        );
+        this.filteredEmails = this.resourcesForm
+            .get('pmMentorEmail')
+            .valueChanges.pipe(
+                startWith(null),
+                map((email) =>
+                    email ? this.filterEmails(email) : this.emailList.slice()
+                )
+            );
         this.resourceService.findAllDeveloperEmails().subscribe((res: any) => {
             this.loadingAllEmails = true;
             if (res?.data) {
