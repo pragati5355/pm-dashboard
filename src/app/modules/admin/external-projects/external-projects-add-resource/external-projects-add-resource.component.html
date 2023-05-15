@@ -1,0 +1,161 @@
+<div
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
+>
+    <div class="text-lg font-medium">Add Resource</div>
+    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"
+        ></mat-icon>
+    </button>
+</div>
+<form [formGroup]="addResourceForm" class="mt-12">
+    <div class="w-full flex flex-1">
+        <div class="w-full mr-3">
+            <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
+                <mat-label class="">Email</mat-label>
+                <input
+                    matInput
+                    [placeholder]="'Email'"
+                    aria-label="email"
+                    #emailInput
+                    [matAutocomplete]="auto1"
+                    formControlName="email"
+                />
+                <mat-autocomplete #auto1="matAutocomplete">
+                    <mat-option
+                        *ngFor="let item of filteredEmails | async"
+                        [value]="item?.email"
+                    >
+                        <span>{{ item?.email }}</span>
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error
+                    *ngIf="addResourceForm?.get('email')?.hasError('required')"
+                >
+                    <div>Email is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="w-full">
+            <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
+                <mat-label class="">Role</mat-label>
+                <input
+                    matInput
+                    [placeholder]="'Role'"
+                    aria-label="role"
+                    formControlName="role"
+                />
+                <mat-error
+                    *ngIf="addResourceForm?.get('role')?.hasError('required')"
+                >
+                    <div>Role is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="w-full flex flex-1 mt-3">
+        <div class="w-full mr-3">
+            <mat-form-field [floatLabel]="'always'" class="w-full">
+                <mat-label>Start Date</mat-label>
+                <input
+                    matInput
+                    #inputJoining
+                    [placeholder]="'Start Date'"
+                    formControlName="startDate"
+                    [matDatepicker]="dateOfJoiningDatepicker"
+                    (focus)="dateOfJoiningDatepicker.open()"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="dateOfJoiningDatepicker"
+                >
+                </mat-datepicker-toggle>
+                <mat-datepicker
+                    #dateOfJoiningDatepicker
+                    (closed)="inputJoining.blur()"
+                >
+                </mat-datepicker>
+                <mat-error
+                    *ngIf="
+                        addResourceForm?.get('startDate')?.hasError('required')
+                    "
+                >
+                    <div>Start Date is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="w-full">
+            <mat-form-field [floatLabel]="'always'" class="w-full">
+                <mat-label>End Date</mat-label>
+                <input
+                    matInput
+                    #inputJoining
+                    [placeholder]="'End Date'"
+                    formControlName="endStart"
+                    [matDatepicker]="dateOfJoiningDatepicker1"
+                    (focus)="dateOfJoiningDatepicker1.open()"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="dateOfJoiningDatepicker1"
+                >
+                </mat-datepicker-toggle>
+                <mat-datepicker
+                    #dateOfJoiningDatepicker1
+                    (closed)="inputJoining.blur()"
+                >
+                </mat-datepicker>
+                <mat-error
+                    *ngIf="
+                        addResourceForm?.get('endStart')?.hasError('required')
+                    "
+                >
+                    <div>End Date is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="w-full flex flex-col">
+        <label class="font-semibold -mb-0">Utilization</label>
+        <mat-radio-group
+            aria-labelledby="example-radio-group-label"
+            class="example-radio-group"
+            [(ngModel)]="utilizationValue"
+            [ngModelOptions]="{ standalone: true }"
+        >
+            <mat-radio-button
+                class="example-radio-button"
+                *ngFor="let value of utilizationValues"
+                [value]="value"
+            >
+                {{ value }}
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div class="flex justify-end mt-3">
+        <button
+            mat-stroked-button
+            type="button"
+            class="px-6 mr-2"
+            (click)="cancel()"
+            [disabled]="submitInProcess"
+        >
+            Cancel
+        </button>
+        <button
+            class="ml-3"
+            mat-flat-button
+            [color]="'primary'"
+            (click)="submitResourceData()"
+            [disabled]="submitInProcess"
+        >
+            <span class="mx-2">Add</span>
+            <mat-progress-spinner
+                *ngIf="submitInProcess"
+                [diameter]="18"
+                [mode]="'indeterminate'"
+            ></mat-progress-spinner>
+        </button>
+    </div>
+</form>
