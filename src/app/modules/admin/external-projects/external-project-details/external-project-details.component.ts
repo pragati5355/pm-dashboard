@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
+import { ExternalProjectsAddResourceComponent } from '../external-projects-add-resource/external-projects-add-resource.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -6,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./external-project-details.component.scss'],
 })
 export class ExternalProjectDetailsComponent implements OnInit {
+    developerEmailList: any[];
+    isLoadingDevelopersEmail: boolean = false;
     projectDetails = {
         projectName: 'Metrics',
         technologys: ['Java', 'Angular', 'Microservices', 'Node Js'],
@@ -56,7 +61,46 @@ export class ExternalProjectDetailsComponent implements OnInit {
         ],
     };
 
-    constructor() {}
+    constructor(
+        private dialog: MatDialog,
+        private externalProjectsService: ExternalProjectsApiService
+    ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.loadDeveloperEmails();
+    }
+
+    openDialog() {
+        const dialogRef = this.dialog.open(
+            ExternalProjectsAddResourceComponent,
+            {
+                disableClose: true,
+                width: '50%',
+                panelClass: 'warn-dialog-content',
+                autoFocus: false,
+                data: {
+                    developerEmails: this.developerEmailList,
+                },
+            }
+        );
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
+    }
+
+    private loadDeveloperEmails() {
+        this.isLoadingDevelopersEmail = true;
+        this.externalProjectsService.findAllDeveloperEmails().subscribe(
+            (res: any) => {
+                this.isLoadingDevelopersEmail = false;
+                if (res?.data) {
+                    this.developerEmailList = res?.data;
+                }
+            },
+            (err) => {
+                this.isLoadingDevelopersEmail = false;
+            }
+        );
+    }
 }
