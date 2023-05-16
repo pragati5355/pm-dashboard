@@ -32,8 +32,11 @@
                                             class="min-h-64 flex flex-col max-w-140 w-full filter-post filter-interactive"
                                             #expandableCard02="fuseCard">
                                             <div class="flex justify-between items-center mx-6 sm:mx-8 mt-6 mb-4">
-                                                <div class="flex flex-col cursor-pointer"
-                                                    (click)="goToExternalProjectDetails(12)">
+                                                <div class="flex flex-col cursor-pointer" (click)="
+                                                        goToExternalProjectDetails(
+                                                            12
+                                                        )
+                                                    ">
                                                     <span class="text-lg font-semibold leading-none">{{
                                                         project?.projectName
                                                         | titlecase
@@ -42,7 +45,9 @@
 
                                                 <div class="flex items-center">
                                                     <div></div>
-                                                    <button [color]="'primary'" [matTooltip]="
+                                                    <button [disabled]="
+                                                            isLoadingDeveloperEmails
+                                                        " (click)="openDialog()" [color]="'primary'" [matTooltip]="
                                                             'Add Resource'
                                                         " class="ml-4" mat-flat-button>
                                                         <mat-icon [svgIcon]="
@@ -52,7 +57,11 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex flex-col mx-6 sm:mx-8 mb-4">
+                                            <div class="flex flex-col mx-6 sm:mx-8 mb-4 cursor-pointer" (click)="
+                                                    goToExternalProjectDetails(
+                                                        12
+                                                    )
+                                                ">
                                                 <div class="flex items-center">
                                                     <span class="mr-1">Technologies</span>
                                                     <mat-icon [svgIcon]="
@@ -67,7 +76,11 @@
                                                         technology }}</span>
                                                 </div>
                                             </div>
-                                            <div class="flex px-8">
+                                            <div class="flex px-8 cursor-pointer" (click)="
+                                                    goToExternalProjectDetails(
+                                                        12
+                                                    )
+                                                ">
                                                 <div class="flex flex-col">
                                                     <span>Team</span>
                                                     <div class="flex">

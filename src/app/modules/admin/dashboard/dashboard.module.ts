@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const dashboardRoutes: Route[] = [
@@ -22,6 +24,8 @@ const dashboardRoutes: Route[] = [
         CommonModule,
         MatIconModule,
         MatMenuModule,
+        MatTooltipModule,
+        MatButtonModule,
         RouterModule.forChild(dashboardRoutes),
     ],
 })

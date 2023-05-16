@@ -49,10 +49,12 @@
 
     <div class="flex justify-end my-5">
         <button
+            (click)="openDialog()"
             [color]="'primary'"
             [matTooltip]="'Add Resource'"
             class="ml-4"
             mat-flat-button
+            [disabled]="isLoadingDevelopersEmail"
         >
             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
             <span class="ml-2 mr-1">Add Resource</span>

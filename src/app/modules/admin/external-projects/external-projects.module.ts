@@ -34,12 +34,14 @@ import { ExternalProjectDetailsComponent } from './external-project-details/exte
 import { CreateExternalProjectComponent } from './create-external-project/create-external-project.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ExternalProjectsAddResourceComponent } from './external-projects-add-resource/external-projects-add-resource.component';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
         ExternalProjectsListComponent,
         ExternalProjectDetailsComponent,
         CreateExternalProjectComponent,
+        ExternalProjectsAddResourceComponent,
     ],
     imports: [
         CommonModule,
