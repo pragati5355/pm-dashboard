@@ -25,20 +25,22 @@ import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FuseCardModule } from '@fuse/components/card';
-import { FormsModule } from '@angular/forms';
 
 import { ExternalProjectsRoutingModule } from './external-projects-routing.module';
 import { ExternalProjectsHomeComponent } from './external-projects-home/external-projects-home.component';
 import { ExternalProjectsListComponent } from './external-projects-list/external-projects-list.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { ExternalProjectDetailsComponent } from './external-project-details/external-project-details.component';
+import { CreateExternalProjectComponent } from './create-external-project/create-external-project.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { ExternalProjectsAddResourceComponent } from './external-projects-add-resource/external-projects-add-resource.component';
-import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
         ExternalProjectsListComponent,
         ExternalProjectDetailsComponent,
+        CreateExternalProjectComponent,
         ExternalProjectsAddResourceComponent,
     ],
     imports: [
@@ -70,8 +72,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatStepperModule,
         FuseCardModule,
         SkeletonModule,
-        ReactiveFormsModule,
         FormsModule,
+        ReactiveFormsModule,
     ],
 })
 export class ExternalProjectsModule {}
