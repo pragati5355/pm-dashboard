@@ -14,65 +14,7 @@ import { CreateExternalProjectComponent } from '../create-external-project/creat
 export class ExternalProjectsListComponent implements OnInit {
     developerEmailList: any[];
     isLoadingDeveloperEmails: boolean = false;
-    projectList = [
-        {
-            projectName: 'Metrics',
-            technologys: ['Java', 'Angular', 'Microservices', 'Node Js'],
-            teamMembers: [
-                'Amaresh',
-                'Rohit',
-                'Rohan kadam',
-                'Amaresh',
-                'Rohit',
-                'Rohan kadam',
-            ],
-            clientDetails: [
-                { name: 'Rohan Kadam', email: 'rohan.kadam@mindbowser.com' },
-                {
-                    name: 'Amaresh Joshi',
-                    email: 'amaresh.joshiasdasdasd@mindbowser.com',
-                },
-                {
-                    name: 'Amaresh Joshi',
-                    email: 'amaresh.joshi@mindbowser.com',
-                },
-            ],
-        },
-        {
-            projectName: 'Foxnfork Food Network',
-            technologys: [
-                'React-Native',
-                'Angular',
-                'Microservices',
-                'Node Js',
-            ],
-            teamMembers: ['Amaresh', 'Rohit'],
-            clientDetails: [
-                { name: 'Rohan Kadam', email: 'rohan.kadam@mindbowser.com' },
-                {
-                    name: 'Amaresh Joshi',
-                    email: 'amaresh.joshi@mindbowser.com',
-                },
-            ],
-        },
-        {
-            projectName: 'Foxnfork Food Network',
-            technologys: [
-                'React-Native',
-                'Angular',
-                'Microservices',
-                'Node Js',
-            ],
-            teamMembers: ['Amaresh', 'Rohit', 'Rohan kadam'],
-            clientDetails: [
-                { name: 'Rohan Kadam', email: 'rohan.kadam@mindbowser.com' },
-                {
-                    name: 'Amaresh Joshi',
-                    email: 'amaresh.joshi@mindbowser.com',
-                },
-            ],
-        },
-    ];
+    projectList = [];
 
     initialLoading: boolean = false;
     constructor(
@@ -112,6 +54,19 @@ export class ExternalProjectsListComponent implements OnInit {
             .subscribe((result) => {});
     }
 
+    edit(project) {
+        this.matDialog
+            .open(CreateExternalProjectComponent, {
+                width: '60%',
+                height: 'auto',
+                data: {
+                    projectModel: project,
+                },
+            })
+            .afterClosed()
+            .subscribe((result) => {});
+    }
+
     goToExternalProjectDetails(id: number) {
         this.router.navigate([`/external-projects/details/${id}`]);
     }
@@ -142,6 +97,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.error === false) {
                     console.log(res?.data);
+                    this.projectList = res?.data;
                 }
                 if (res?.tokenExpire) {
                     this._authService.updateAndReload(window.location);

@@ -14,7 +14,7 @@ import { ExternalProjectService } from '../common/services/external-project.serv
     styleUrls: ['./create-external-project.component.scss'],
 })
 export class CreateExternalProjectComponent implements OnInit {
-    technologies: string[] = [];
+    technologies: string[] = this.data?.projectModel?.technologies;
 
     isLoading = false;
     mode: 'create' | 'update' = 'create';
@@ -62,16 +62,24 @@ export class CreateExternalProjectComponent implements OnInit {
     }
     getClientsControl(): FormArray {
         if (this.mode === 'create') {
-            return this.fb.array([this.getEmptyClientControl()]);
+            return this.fb.array([this.getClientSingleControl(null)]);
         } else {
-            return this.fb.array([]);
+            return this.fb.array(
+                this.projectModel?.clients?.map((client) =>
+                    this.getClientSingleControl(client)
+                )
+            );
         }
     }
-    getEmptyClientControl(): FormGroup {
+    getClientSingleControl(client): FormGroup {
         return this.fb.group({
-            firstName: this.fb.control(null, [Validators.required]),
-            lastName: this.fb.control(null, [Validators.required]),
-            emailId: this.fb.control(null, [
+            firstName: this.fb.control(client?.firstName || null, [
+                Validators.required,
+            ]),
+            lastName: this.fb.control(client?.lastName || null, [
+                Validators.required,
+            ]),
+            emailId: this.fb.control(client?.emailId || null, [
                 Validators.required,
                 Validators.email,
             ]),
@@ -89,7 +97,7 @@ export class CreateExternalProjectComponent implements OnInit {
     }
 
     addNewClient() {
-        this.clients.push(this.getEmptyClientControl());
+        this.clients.push(this.getClientSingleControl(null));
     }
 
     removeClient(index: number) {
