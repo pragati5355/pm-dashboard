@@ -74,7 +74,21 @@
         </div>
     </div>
 
-    <div class="flex-auto p-6 sm:p-10">
+    <div class="w-full px-6 mt-6 flex justify-end">
+        <button
+            [color]="'primary'"
+            [matTooltip]="'Download Resource Utilization Report'"
+            class="ml-4"
+            mat-flat-button
+        >
+            <mat-icon
+                [svgIcon]="'heroicons_outline:arrow-circle-down'"
+            ></mat-icon>
+            <span class="ml-2 mr-1">Resource Utilization Report</span>
+        </button>
+    </div>
+
+    <div class="flex-auto p-6">
         <div class="flex flex-col bg-white p-6 rounded-xl shadow">
             <div class="text-3xl font-semibold">Statistics</div>
             <div
