@@ -2,7 +2,12 @@
     class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
 >
     <div class="text-lg font-medium">Add Resource</div>
-    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+    <button
+        mat-icon-button
+        (click)="cancel()"
+        [tabIndex]="-1"
+        [disabled]="submitInProcess"
+    >
         <mat-icon
             class="text-current"
             [svgIcon]="'heroicons_outline:x'"
@@ -38,14 +43,13 @@
             </mat-form-field>
         </div>
         <div class="w-full">
-            <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
+            <mat-form-field [floatLabel]="'always'" class="w-full mt-2">
                 <mat-label class="">Role</mat-label>
-                <input
-                    matInput
-                    [placeholder]="'Role'"
-                    aria-label="role"
-                    formControlName="role"
-                />
+                <mat-select placeholder="Select role" formControlName="role">
+                    <mat-option *ngFor="let role of ROLE_LIST" [value]="role">
+                        {{ role }}
+                    </mat-option>
+                </mat-select>
                 <mat-error
                     *ngIf="addResourceForm?.get('role')?.hasError('required')"
                 >
@@ -92,7 +96,7 @@
                     matInput
                     #inputJoining
                     [placeholder]="'End Date'"
-                    formControlName="endStart"
+                    formControlName="endDate"
                     [matDatepicker]="dateOfJoiningDatepicker1"
                     (focus)="dateOfJoiningDatepicker1.open()"
                 />
@@ -108,7 +112,7 @@
                 </mat-datepicker>
                 <mat-error
                     *ngIf="
-                        addResourceForm?.get('endStart')?.hasError('required')
+                        addResourceForm?.get('endDate')?.hasError('required')
                     "
                 >
                     <div>End Date is mandatory</div>

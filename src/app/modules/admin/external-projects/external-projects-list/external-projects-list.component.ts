@@ -82,6 +82,7 @@ export class ExternalProjectsListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.loadExternalProjectsList();
         this.loadDeveloperEmailList();
     }
 
@@ -92,9 +93,6 @@ export class ExternalProjectsListComponent implements OnInit {
                 this.isLoadingDeveloperEmails = false;
                 if (res?.data) {
                     this.developerEmailList = res?.data;
-                }
-                if (res?.tokenExpire) {
-                    this._authService.updateAndReload(window.location);
                 }
             },
             (err) => {
@@ -124,5 +122,23 @@ export class ExternalProjectsListComponent implements OnInit {
             if (result == 'success') {
             }
         });
+    }
+
+    private loadExternalProjectsList() {
+        this.initialLoading = true;
+        this.externalProjectsService.getExternalProjectsList().subscribe(
+            (res: any) => {
+                this.initialLoading = false;
+                if (res?.error === false) {
+                    console.log(res?.data);
+                }
+                if (res?.tokenExpire) {
+                    this._authService.updateAndReload(window.location);
+                }
+            },
+            (err) => {
+                this.initialLoading = false;
+            }
+        );
     }
 }
