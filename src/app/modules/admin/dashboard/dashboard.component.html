@@ -21,71 +21,21 @@
                 </div>
                 <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
                     <button
-                        mat-flat-button=""
-                        class="mat-focus-indicator ml-4 mat-flat-button mat-button-base mat-primary"
-                        ng-reflect-color="primary"
-                        (click)="goToProjects()"
+                        [color]="'primary'"
+                        [matTooltip]="'Download Resource Utilization Report'"
+                        class="ml-4"
+                        mat-flat-button
                     >
-                        <span class="mat-button-wrapper"></span>
                         <mat-icon
-                            role="img"
-                            class="mat-icon notranslate icon-size-5 mat-icon-no-color"
-                            aria-hidden="true"
-                            ng-reflect-svg-icon="heroicons_outline:eye"
-                            data-mat-icon-type="svg"
-                            data-mat-icon-name="eye"
-                            data-mat-icon-namespace="heroicons_outline"
-                            ><svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                fit=""
-                                height="100%"
-                                width="100%"
-                                preserveAspectRatio="xMidYMid meet"
-                                focusable="false"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                ></path>
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                ></path></svg
+                            [svgIcon]="'heroicons_outline:arrow-circle-down'"
                         ></mat-icon>
-                        <span class="ml-2 mr-1">View Projects</span>
-                        <span
-                            matripple=""
-                            class="mat-ripple mat-button-ripple"
-                            ng-reflect-disabled="false"
-                            ng-reflect-centered="false"
-                            ng-reflect-trigger="[object HTMLButtonElement]"
-                        ></span
-                        ><span class="mat-button-focus-overlay"></span>
+                        <span class="ml-2 mr-1"
+                            >Resource Utilization Report</span
+                        >
                     </button>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="w-full px-6 mt-6 flex justify-end">
-        <button
-            [color]="'primary'"
-            [matTooltip]="'Download Resource Utilization Report'"
-            class="ml-4"
-            mat-flat-button
-        >
-            <mat-icon
-                [svgIcon]="'heroicons_outline:arrow-circle-down'"
-            ></mat-icon>
-            <span class="ml-2 mr-1">Resource Utilization Report</span>
-        </button>
     </div>
 
     <div class="flex-auto p-6">

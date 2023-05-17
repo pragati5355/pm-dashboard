@@ -96,7 +96,6 @@ export class ExternalProjectsListComponent implements OnInit {
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.error === false) {
-                    console.log(res?.data);
                     this.projectList = res?.data;
                 }
                 if (res?.tokenExpire) {
