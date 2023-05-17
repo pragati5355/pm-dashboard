@@ -14,12 +14,13 @@ import { ExternalProjectService } from '../common/services/external-project.serv
     styleUrls: ['./create-external-project.component.scss'],
 })
 export class CreateExternalProjectComponent implements OnInit {
-    technologies: string[] = this.data?.projectModel?.technologies;
+    technologies: string[] = this.data?.projectModel?.technology || [];
 
     isLoading = false;
     mode: 'create' | 'update' = 'create';
     loggedInUser: any;
     projectModel = this.data?.projectModel;
+    clientModels = this.data?.clientModels;
     projectForm: FormGroup;
     separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -55,7 +56,7 @@ export class CreateExternalProjectComponent implements OnInit {
             description: this.fb.control(
                 this.projectModel?.description || null
             ),
-            technologies: this.fb.control(null),
+            technology: this.fb.control(null),
             clients: this.getClientsControl(),
             addedBy: this.loggedInUser?.userId,
         });
@@ -65,14 +66,14 @@ export class CreateExternalProjectComponent implements OnInit {
             return this.fb.array([this.getClientSingleControl(null)]);
         } else {
             return this.fb.array(
-                this.projectModel?.clients?.map((client) =>
+                this.clientModels?.map((client) =>
                     this.getClientSingleControl(client)
                 )
             );
         }
     }
     getClientSingleControl(client): FormGroup {
-        return this.fb.group({
+        const control = this.fb.group({
             firstName: this.fb.control(client?.firstName || null, [
                 Validators.required,
             ]),
@@ -85,11 +86,17 @@ export class CreateExternalProjectComponent implements OnInit {
             ]),
             deleted: this.fb.control(false),
         });
+
+        if (client?.id) {
+            control.addControl('id', this.fb.control(client?.id));
+        }
+
+        return control;
     }
     addTechnology($event: MatChipInputEvent) {
         this.technologies.push($event?.value?.trim());
         $event.chipInput!.clear();
-        this.projectForm?.get('technologies')?.reset();
+        this.projectForm?.get('technology')?.reset();
     }
 
     removeTechnology(index: number) {
@@ -101,9 +108,11 @@ export class CreateExternalProjectComponent implements OnInit {
     }
 
     removeClient(index: number) {
-        const clientControl = this.clients.at(index)?.get('deleted');
+        const clientControl = this.clients.at(index);
+        console.log(clientControl?.value);
+
         if (clientControl?.value?.id) {
-            clientControl?.setValue(true);
+            clientControl?.get('deleted').setValue(true);
         } else {
             this.clients.removeAt(index);
         }
@@ -111,7 +120,7 @@ export class CreateExternalProjectComponent implements OnInit {
 
     add() {
         const formValue = this.projectForm?.value;
-        formValue.technologies = this.technologies;
+        formValue.technology = this.technologies;
         if (this.projectForm?.valid) {
             if (this.mode === 'create') {
                 delete formValue.id;
@@ -123,8 +132,13 @@ export class CreateExternalProjectComponent implements OnInit {
     }
 
     private callCreateUpdateApi(requestBody: any) {
+        this.isLoading = true;
         this.externalProjectService.create(requestBody).subscribe((result) => {
-            console.log(result);
+            this.isLoading = false;
+            this.snackBarService.successSnackBar(result?.message);
+            if (!result?.error) {
+                this.dialogRef.close(result);
+            }
         });
     }
 
