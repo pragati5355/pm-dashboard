@@ -6,6 +6,7 @@ import { map, Observable, startWith } from 'rxjs';
 import { ROLE_LIST, UTILIZATION_VALUES } from '../common/constants';
 import { AuthService } from '@services/auth/auth.service';
 import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-external-projects-add-resource',
@@ -24,13 +25,16 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     userID: Number;
     projectId: any = this.data?.projectId;
     currentCapacity: any;
+    mode: string;
+    patchData: [] | null;
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private snackBar: SnackBar,
         private _authService: AuthService,
-        private externalProjectsService: ExternalProjectsApiService
+        private externalProjectsService: ExternalProjectsApiService,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -100,6 +104,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     private loadData() {
         this.emailList = this.data?.developerEmails;
+        this.mode = this.data?.mode;
+        this.patchData = this.data?.editData;
+        console.log(this.patchData);
         this.userID = this._authService.getUser()?.userId;
     }
 
@@ -126,8 +133,26 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]],
         });
-
+        this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
+    }
+
+    private patchValuesInEditMode() {
+        if (this.mode === 'EDIT') {
+            this.addResourceForm.patchValue({
+                email: this.data?.editData?.email,
+                role: this.data?.editData?.role,
+                startDate: this.datePipe.transform(
+                    this.data?.editData?.startDate,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                ),
+                endDate: this.datePipe.transform(
+                    this.data?.editData?.endDate,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                ),
+            });
+            this.utilizationValue = String(this.data?.editData?.utilization);
+        }
     }
 
     private addEmailFilteringAndSubscription() {

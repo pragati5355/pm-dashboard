@@ -165,7 +165,7 @@
             (click)="submitResourceData()"
             [disabled]="submitInProcess"
         >
-            <span class="mx-2">Add</span>
+            <span class="mx-2">{{mode === "EDIT" ? "Update" : "Add"}}</span>
             <mat-progress-spinner
                 *ngIf="submitInProcess"
                 [diameter]="18"

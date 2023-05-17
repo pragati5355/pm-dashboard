@@ -61,7 +61,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             });
     }
 
-    openDialog() {
+    openDialog(mode: String, data: any) {
         const dialogRef = this.dialog.open(
             ExternalProjectsAddResourceComponent,
             {
@@ -72,6 +72,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 data: {
                     developerEmails: this.developerEmailList,
                     projectId: this.projectId,
+                    mode: mode,
+                    editData: data,
                 },
             }
         );
