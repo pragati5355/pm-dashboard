@@ -22,6 +22,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     ROLE_LIST: string[] = ROLE_LIST;
     resourceId: Number;
     userID: Number;
+    projectId: any = this.data?.projectId;
     currentCapacity: any;
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
@@ -39,10 +40,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     cancel() {
         this.matDialogRef.close();
-    }
-
-    getSelectedEmail(email: string) {
-        this.findResourceCapacity(email);
     }
 
     submitResourceData() {
@@ -81,7 +78,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         return value[0]?.id;
     }
 
-    findResourceCapacity(email: any) {
+    getSelectedEmail(email: string) {
+        this.getResourceCapacity(email);
+    }
+
+    getResourceCapacity(email: string) {
         const value = this.emailList.filter((item: any) => {
             return item?.email === email;
         });
@@ -107,7 +108,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.addResourceForm?.value?.email
         );
         return {
-            projectId: 1,
+            projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
             endDate: this.addResourceForm?.value?.endDate,
