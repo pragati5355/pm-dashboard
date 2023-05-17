@@ -49,7 +49,8 @@
                                                     <div></div>
                                                     <button [disabled]="
                                                             isLoadingDeveloperEmails
-                                                        " (click)="openDialog()" [color]="'primary'" [matTooltip]="
+                                                        " (click)="openDialog(project?.id)" [color]="'primary'"
+                                                        [matTooltip]="
                                                             'Add Resource'
                                                         " class="ml-4" mat-flat-button>
                                                         <mat-icon [svgIcon]="
@@ -57,10 +58,6 @@
                                                             "></mat-icon>
                                                         <span class="ml-2 mr-1">Add Resource</span>
                                                     </button>
-                                                    <!-- <button mat-mini-fab color="primary" matTooltip="Edit project"
-                                                        (click)="edit(project)">
-                                                        <mat-icon>edit</mat-icon>
-                                                    </button> -->
                                                 </div>
                                             </div>
                                             <div class="flex flex-col mx-6 sm:mx-8 mb-4 cursor-pointer" (click)="
@@ -92,29 +89,28 @@
                                                     <div class="flex">
                                                         <ng-container *ngIf="
                                                                 project
-                                                                    ?.teamMembers
+                                                                    ?.team
                                                                     ?.length > 0
                                                             ">
                                                             <ng-container *ngFor="
-                                                                    let teamMember of project?.teamMembers;
+                                                                    let teamMember of project?.team;
                                                                     index as i
                                                                 ">
                                                                 <ng-container *ngIf="
                                                                         teamMember !==
-                                                                        null
-                                                                    ">
+                                                                        null">
                                                                     <div class="cursor-pointer w-8 h-8 m-0.5 rounded-full items-center justify-center text-card ring-2 ring-bg-card bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
                                                                         [ngClass]="{
                                                                             '-ml-3':
                                                                                 i !==
                                                                                 0
                                                                         }" [matTooltip]="
-                                                                            teamMember
+                                                                            teamMember?.firstName + ' ' + teamMember?.lastName
                                                                         ">
                                                                         <div
                                                                             class="rounded-full text-center uppercase text-1xl mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
                                                                             {{
-                                                                            teamMember?.charAt(
+                                                                            teamMember?.firstName?.charAt(
                                                                             0
                                                                             )
                                                                             }}
@@ -123,8 +119,8 @@
                                                                 </ng-container>
                                                             </ng-container>
                                                         </ng-container>
-                                                        <div *ngIf="!project?.teamMembers ||
-                                                        project?.teamMembers
+                                                        <div *ngIf="!project?.team ||
+                                                        project?.team
                                                         ?.length ===  0"
                                                             class="text-sm font-normal text-gray-600 mt-2">
                                                             No resource assigned to this project

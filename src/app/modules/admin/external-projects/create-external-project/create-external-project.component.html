@@ -25,11 +25,11 @@
                         {{technology}}
                         <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
-                    <input placeholder="New Technology" #emailInput formControlName="technologies"
+                    <input placeholder="New Technology" #emailInput formControlName="technology"
                         [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                         (matChipInputTokenEnd)="addTechnology($event)">
                 </mat-chip-list>
-                <mat-hint *ngIf="projectForm?.value?.technologies">Press Enter or , to add a technology</mat-hint>
+                <mat-hint *ngIf="projectForm?.value?.technology">Press Enter or , to add a technology</mat-hint>
             </mat-form-field>
         </div>
         <mat-form-field class="w-full userlist" id="userlist" [floatLabel]="'always'">
@@ -83,7 +83,7 @@
         <mat-icon class="mr-2">close</mat-icon>
         Cancel
     </button>
-    <button mat-flat-button color="primary" [disabled]="" (click)="add()">
+    <button mat-flat-button color="primary" [disabled]="isLoading" (click)="add()">
         <mat-icon *ngIf="!isLoading" class="mr-2">add</mat-icon>
         <mat-progress-spinner *ngIf="isLoading" class="mr-2" mode="indeterminate" diameter="24"></mat-progress-spinner>
         {{ mode === "create" ? "Add" : "Update" }}

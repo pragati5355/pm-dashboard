@@ -51,27 +51,18 @@ export class ExternalProjectsListComponent implements OnInit {
                 height: 'auto',
             })
             .afterClosed()
-            .subscribe((result) => {});
-    }
-
-    edit(project) {
-        this.matDialog
-            .open(CreateExternalProjectComponent, {
-                width: '60%',
-                height: 'auto',
-                data: {
-                    projectModel: project,
-                },
-            })
-            .afterClosed()
-            .subscribe((result) => {});
+            .subscribe((result) => {
+                if (result) {
+                    window.location.reload();
+                }
+            });
     }
 
     goToExternalProjectDetails(id: number) {
         this.router.navigate([`/external-projects/details/${id}`]);
     }
 
-    openDialog() {
+    openDialog(projectId) {
         const dialogRef = this.matDialog.open(
             ExternalProjectsAddResourceComponent,
             {
@@ -81,6 +72,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 autoFocus: false,
                 data: {
                     developerEmails: this.developerEmailList,
+                    projectId,
                 },
             }
         );

@@ -1,5 +1,8 @@
+import { I } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { CreateProjecteService } from '@services/create-projecte.service';
 import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 import { ExternalProjectsAddResourceComponent } from '../external-projects-add-resource/external-projects-add-resource.component';
@@ -12,63 +15,32 @@ import { ExternalProjectsAddResourceComponent } from '../external-projects-add-r
 export class ExternalProjectDetailsComponent implements OnInit {
     developerEmailList: any[];
     isLoadingDevelopersEmail: boolean = false;
-    projectDetails = {
-        projectName: 'Metrics',
-        technologys: ['Java', 'Angular', 'Microservices', 'Node Js'],
-        teamMembers: [
-            'Amaresh',
-            'Rohit',
-            'Rohan kadam',
-            'Amaresh',
-            'Rohit',
-            'Rohan kadam',
-        ],
-        clientDetails: [
-            { name: 'Rohan Kadam', email: 'rohan.kadam@mindbowser.com' },
-            {
-                name: 'Amaresh Joshi',
-                email: 'amaresh.joshiasdasdasd@mindbowser.com',
-            },
-            {
-                name: 'Amaresh Joshi',
-                email: 'amaresh.joshi@mindbowser.com',
-            },
-        ],
-        resourceDetails: [
-            {
-                name: 'Rohan kadam',
-                Utilization: 0.5,
-                startDate: 1682812800000,
-                endDate: 1682812800000,
-            },
-            {
-                name: 'Rohan kadam',
-                Utilization: 0.5,
-                startDate: 1682812800000,
-                endDate: 1682812800000,
-            },
-            {
-                name: 'Rohan kadam',
-                Utilization: 0.5,
-                startDate: 1682812800000,
-                endDate: 1682812800000,
-            },
-            {
-                name: 'Rohan kadam',
-                Utilization: 0.5,
-                startDate: 1682812800000,
-                endDate: 1682812800000,
-            },
-        ],
-    };
+    projectId: any;
+    projectDetails: any;
+    isLoading = false;
 
     constructor(
         private dialog: MatDialog,
+        private route: ActivatedRoute,
+        private projectService: CreateProjecteService,
         private externalProjectsService: ExternalProjectsApiService
     ) {}
 
     ngOnInit(): void {
+        this.isLoading = true;
+        this.setProjectIdSubscription();
         this.loadDeveloperEmails();
+    }
+
+    getProjectDetails() {
+        this.projectService
+            .getOneProjectDetails({
+                id: this.projectId,
+            })
+            .subscribe((res: any) => {
+                this.projectDetails = res?.data;
+                this.isLoading = false;
+            });
     }
 
     edit() {
@@ -76,9 +48,17 @@ export class ExternalProjectDetailsComponent implements OnInit {
             .open(CreateExternalProjectComponent, {
                 width: '60%',
                 height: 'auto',
+                data: {
+                    projectModel: this.projectDetails?.project,
+                    clientModels: this.projectDetails?.clientModels,
+                },
             })
             .afterClosed()
-            .subscribe((result) => {});
+            .subscribe((result) => {
+                if (result) {
+                    window.location.reload();
+                }
+            });
     }
 
     openDialog() {
@@ -91,11 +71,22 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 autoFocus: false,
                 data: {
                     developerEmails: this.developerEmailList,
+                    projectId: this.projectId,
                 },
             }
         );
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
+            }
+        });
+    }
+
+    private setProjectIdSubscription() {
+        this.route.paramMap.subscribe((paramMap) => {
+            const projectId = paramMap.get('id');
+            if (projectId) {
+                this.projectId = projectId;
+                this.getProjectDetails();
             }
         });
     }

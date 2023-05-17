@@ -22,6 +22,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     ROLE_LIST: string[] = ROLE_LIST;
     resourceId: Number;
     userID: Number;
+    projectId: any = this.data?.projectId;
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
@@ -95,7 +96,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.addResourceForm?.value?.email
         );
         return {
-            projectId: 1,
+            projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
             endDate: this.addResourceForm?.value?.endDate,
