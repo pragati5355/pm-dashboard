@@ -53,7 +53,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         }
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
-            const payload = this.getCreateResourcePayload();
+            let payload = this.getCreateResourcePayload();
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
@@ -104,6 +104,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     private loadData() {
         this.emailList = this.data?.developerEmails;
+        console.log(this.emailList);
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         console.log(this.patchData);
@@ -114,7 +115,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.resourceId = this.findResourceId(
             this.addResourceForm?.value?.email
         );
-        return {
+        let payload = {
             projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
@@ -124,6 +125,20 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
         };
+        if (this.mode === 'EDIT') {
+            return {
+                id: this.data?.editData?.projectResourceMapId,
+                projectId: this.projectId,
+                resourceId: this.resourceId,
+                startDate: this.addResourceForm?.value?.startDate,
+                endDate: this.addResourceForm?.value?.endDate,
+                utilization: Number(this.utilizationValue),
+                isDeleted: false,
+                assignedBy: this.userID,
+                role: this.addResourceForm?.value?.role,
+            };
+        }
+        return payload;
     }
 
     private initializeFormGroup() {
@@ -151,6 +166,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
                 ),
             });
+            this.getResourceCapacity(this.data?.editData?.email);
             this.utilizationValue = String(this.data?.editData?.utilization);
         }
     }
