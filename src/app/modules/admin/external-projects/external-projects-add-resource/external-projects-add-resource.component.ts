@@ -106,10 +106,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     private loadData() {
         this.emailList = this.data?.developerEmails;
-        console.log(this.emailList);
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
-        console.log(this.patchData);
         this.userID = this._authService.getUser()?.userId;
     }
 

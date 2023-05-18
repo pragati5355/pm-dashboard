@@ -23,6 +23,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
     projectDetails: any;
     isLoading = false;
     configFormStatus: FormGroup;
+    currentProjectEmail: any[];
 
     constructor(
         private dialog: MatDialog,
@@ -132,6 +133,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
     }
 
     openDialog(mode: String, data: any) {
+        const emailList = this.filterOutAlreadyAssignedEmails();
+
         const dialogRef = this.dialog.open(
             ExternalProjectsAddResourceComponent,
             {
@@ -140,7 +143,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 panelClass: 'warn-dialog-content',
                 autoFocus: false,
                 data: {
-                    developerEmails: this.developerEmailList,
+                    developerEmails: emailList,
                     projectId: this.projectId,
                     mode: mode,
                     editData: data,
@@ -154,6 +157,15 @@ export class ExternalProjectDetailsComponent implements OnInit {
             }
             console.log(result);
         });
+    }
+
+    private filterOutAlreadyAssignedEmails() {
+        return this.developerEmailList.filter(
+            (obj) =>
+                !this.projectDetails?.teamModel?.some(
+                    ({ email }) => obj.email === email
+                )
+        );
     }
 
     private setProjectIdSubscription() {
