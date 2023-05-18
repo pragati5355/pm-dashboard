@@ -27,7 +27,10 @@
                     [matAutocomplete]="auto1"
                     formControlName="email"
                 />
-                <mat-autocomplete #auto1="matAutocomplete">
+                <mat-autocomplete
+                    #auto1="matAutocomplete"
+                    (optionSelected)="getSelectedEmail($event.option.value)"
+                >
                     <mat-option
                         *ngFor="let item of filteredEmails | async"
                         [value]="item?.email"
@@ -130,7 +133,15 @@
         >
             <mat-radio-button
                 class="example-radio-button"
+                [color]="'primary'"
                 *ngFor="let value of utilizationValues"
+                [disabled]="
+                    currentCapacity === null
+                        ? false
+                        : value > currentCapacity
+                        ? true
+                        : false
+                "
                 [value]="value"
             >
                 {{ value }}
@@ -154,7 +165,7 @@
             (click)="submitResourceData()"
             [disabled]="submitInProcess"
         >
-            <span class="mx-2">Add</span>
+            <span class="mx-2">{{mode === "EDIT" ? "Update" : "Add"}}</span>
             <mat-progress-spinner
                 *ngIf="submitInProcess"
                 [diameter]="18"

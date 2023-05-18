@@ -6,6 +6,7 @@ import { map, Observable, startWith } from 'rxjs';
 import { ROLE_LIST, UTILIZATION_VALUES } from '../common/constants';
 import { AuthService } from '@services/auth/auth.service';
 import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-external-projects-add-resource',
@@ -23,13 +24,17 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     resourceId: Number;
     userID: Number;
     projectId: any = this.data?.projectId;
+    currentCapacity: any;
+    mode: string;
+    patchData: [] | null;
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private snackBar: SnackBar,
         private _authService: AuthService,
-        private externalProjectsService: ExternalProjectsApiService
+        private externalProjectsService: ExternalProjectsApiService,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -48,12 +53,14 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         }
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
-            const payload = this.getCreateResourcePayload();
+            let payload = this.getCreateResourcePayload();
+            console.log(payload);
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
+                        this.matDialogRef.close('success');
                         this.cancel();
                     }
                     if (res?.error === true) {
@@ -77,6 +84,17 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         return value[0]?.id;
     }
 
+    getSelectedEmail(email: string) {
+        this.getResourceCapacity(email);
+    }
+
+    getResourceCapacity(email: string) {
+        const value = this.emailList.filter((item: any) => {
+            return item?.email === email;
+        });
+        this.currentCapacity = value[0]?.capacity;
+    }
+
     filterEmails(email: string) {
         let arr = this.emailList.filter(
             (item) =>
@@ -88,6 +106,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     private loadData() {
         this.emailList = this.data?.developerEmails;
+        this.mode = this.data?.mode;
+        this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
     }
 
@@ -95,7 +115,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.resourceId = this.findResourceId(
             this.addResourceForm?.value?.email
         );
-        return {
+        let payload = {
             projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
@@ -105,6 +125,20 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
         };
+        if (this.mode === 'EDIT') {
+            return {
+                id: this.data?.editData?.projectResourceMapId,
+                projectId: this.projectId,
+                resourceId: this.resourceId,
+                startDate: this.addResourceForm?.value?.startDate,
+                endDate: this.addResourceForm?.value?.endDate,
+                utilization: Number(this.utilizationValue),
+                isDeleted: false,
+                assignedBy: this.userID,
+                role: this.addResourceForm?.value?.role,
+            };
+        }
+        return payload;
     }
 
     private initializeFormGroup() {
@@ -114,8 +148,27 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]],
         });
-
+        this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
+    }
+
+    private patchValuesInEditMode() {
+        if (this.mode === 'EDIT') {
+            this.addResourceForm.patchValue({
+                email: this.data?.editData?.email,
+                role: this.data?.editData?.role,
+                startDate: this.datePipe.transform(
+                    this.data?.editData?.startDate,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                ),
+                endDate: this.datePipe.transform(
+                    this.data?.editData?.endDate,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                ),
+            });
+            this.getResourceCapacity(this.data?.editData?.email);
+            this.utilizationValue = String(this.data?.editData?.utilization);
+        }
     }
 
     private addEmailFilteringAndSubscription() {
