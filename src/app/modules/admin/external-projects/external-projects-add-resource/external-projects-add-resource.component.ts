@@ -54,14 +54,12 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
-            console.log(payload);
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
-                        this.matDialogRef.close('success');
-                        this.cancel();
+                        this.matDialogRef.close(true);
                     }
                     if (res?.error === true) {
                         this.snackBar.errorSnackBar(res?.message);
@@ -124,6 +122,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             isDeleted: false,
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
+            projectType: 'EXTERNAL',
         };
         if (this.mode === 'EDIT') {
             return {
