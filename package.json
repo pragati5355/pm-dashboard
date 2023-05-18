@@ -28,7 +28,6 @@
         "@formio/angular": "^5.3.0",
         "@formio/angular-material": "^2.0.0",
         "@ngneat/transloco": "3.1.4",
-        "alasql": "^4.0.0",
         "angular-formio": "^4.11.5",
         "angular-web-storage": "^13.0.0",
         "angular-webstorage-service": "^1.0.2",
@@ -51,7 +50,6 @@
         "rxjs": "7.5.4",
         "save-as": "^0.1.8",
         "tslib": "^2.3.1",
-        "xlsx": "^0.18.5",
         "zone.js": "0.11.4"
     },
     "devDependencies": {
