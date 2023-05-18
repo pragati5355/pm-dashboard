@@ -63,9 +63,8 @@ export class ExternalProjectsListComponent implements OnInit {
     }
 
     openDialog(projectId) {
-        const dialogRef = this.matDialog.open(
-            ExternalProjectsAddResourceComponent,
-            {
+        this.matDialog
+            .open(ExternalProjectsAddResourceComponent, {
                 disableClose: true,
                 width: '50%',
                 panelClass: 'warn-dialog-content',
@@ -74,12 +73,15 @@ export class ExternalProjectsListComponent implements OnInit {
                     developerEmails: this.developerEmailList,
                     projectId,
                 },
-            }
-        );
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result == 'success') {
-            }
-        });
+            })
+            .afterClosed()
+            .subscribe((result: any) => {
+                console.log(result);
+
+                if (result) {
+                    window.location.reload();
+                }
+            });
     }
 
     private loadExternalProjectsList() {
