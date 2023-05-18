@@ -33,8 +33,6 @@ export class ConnectJiraPopupComponent implements OnInit {
     }
 
     save() {
-        console.log('here', this.connectJiraForm.value);
-
         if (!this.connectJiraForm.invalid) {
             this.matDialogRef.close({
                 project: this.connectJiraForm.value.name,
