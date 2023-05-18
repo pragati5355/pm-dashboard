@@ -82,7 +82,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.externalProjectsService
                     .mapResource({
                         id: id,
-                        isDeleted: true,
+                        deleted: true,
                     })
                     .subscribe(
                         (res: any) => {
