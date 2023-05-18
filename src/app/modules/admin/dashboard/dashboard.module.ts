@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
-
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 const dashboardRoutes: Route[] = [
     {
         path: '',
@@ -26,6 +26,8 @@ const dashboardRoutes: Route[] = [
         MatMenuModule,
         MatTooltipModule,
         MatButtonModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
         RouterModule.forChild(dashboardRoutes),
     ],
 })

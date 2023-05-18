@@ -33,7 +33,7 @@ import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { ExternalProjectDetailsComponent } from './external-project-details/external-project-details.component';
 import { CreateExternalProjectComponent } from './create-external-project/create-external-project.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { DatePipe } from '@angular/common';
 import { ExternalProjectsAddResourceComponent } from './external-projects-add-resource/external-projects-add-resource.component';
 @NgModule({
     declarations: [
@@ -75,5 +75,6 @@ import { ExternalProjectsAddResourceComponent } from './external-projects-add-re
         FormsModule,
         ReactiveFormsModule,
     ],
+    providers: [DatePipe],
 })
 export class ExternalProjectsModule {}
