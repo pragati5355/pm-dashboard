@@ -76,8 +76,6 @@ export class ExternalProjectsListComponent implements OnInit {
             })
             .afterClosed()
             .subscribe((result: any) => {
-                console.log(result);
-
                 if (result) {
                     window.location.reload();
                 }
