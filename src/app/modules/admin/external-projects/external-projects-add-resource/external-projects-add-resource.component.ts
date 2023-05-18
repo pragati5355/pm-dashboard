@@ -54,11 +54,13 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
+            console.log(payload);
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
+                        this.matDialogRef.close('success');
                         this.cancel();
                     }
                     if (res?.error === true) {

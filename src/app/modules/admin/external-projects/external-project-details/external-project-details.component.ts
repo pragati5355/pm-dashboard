@@ -78,21 +78,31 @@ export class ExternalProjectDetailsComponent implements OnInit {
 
         confirmPopDialog.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
+                this.isLoading = true;
                 this.externalProjectsService
                     .mapResource({
                         id: id,
                         isDeleted: true,
                     })
-                    .subscribe((res: any) => {
-                        if (res?.error === false) {
-                            this.snackBar.successSnackBar(res?.message);
-                        } else {
-                            this.snackBar.errorSnackBar(res?.message);
+                    .subscribe(
+                        (res: any) => {
+                            this.isLoading = false;
+                            if (res?.error === false) {
+                                this.snackBar.successSnackBar(res?.message);
+                                this.getProjectDetails();
+                            } else {
+                                this.snackBar.errorSnackBar(res?.message);
+                            }
+                            if (res?.tokenExpire) {
+                                this._authService.updateAndReload(
+                                    window.location
+                                );
+                            }
+                        },
+                        (err) => {
+                            this.isLoading = false;
                         }
-                        if (res?.tokenExpire) {
-                            this._authService.updateAndReload(window.location);
-                        }
-                    });
+                    );
             }
         });
     }
@@ -139,7 +149,10 @@ export class ExternalProjectDetailsComponent implements OnInit {
         );
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
+                console.log('result :', result);
+                this.getProjectDetails();
             }
+            console.log(result);
         });
     }
 

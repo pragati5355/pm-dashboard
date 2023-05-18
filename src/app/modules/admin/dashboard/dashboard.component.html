@@ -25,6 +25,8 @@
                         [matTooltip]="'Download Resource Utilization Report'"
                         class="ml-4"
                         mat-flat-button
+                        [disabled]="submitInProcess"
+                        (click)="downloadExcelReport()"
                     >
                         <mat-icon
                             [svgIcon]="'heroicons_outline:arrow-circle-down'"
@@ -32,6 +34,11 @@
                         <span class="ml-2 mr-1"
                             >Resource Utilization Report</span
                         >
+                        <mat-progress-spinner
+                            *ngIf="submitInProcess"
+                            [diameter]="18"
+                            [mode]="'indeterminate'"
+                        ></mat-progress-spinner>
                     </button>
                 </div>
             </div>
