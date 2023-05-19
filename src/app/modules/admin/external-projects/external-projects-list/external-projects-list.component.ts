@@ -62,7 +62,8 @@ export class ExternalProjectsListComponent implements OnInit {
         this.router.navigate([`/external-projects/details/${id}`]);
     }
 
-    openDialog(projectId) {
+    openDialog(projectId, team: any) {
+        const filteredEmailList = this.filterOutAlreadyAssignedEmails(team);
         this.matDialog
             .open(ExternalProjectsAddResourceComponent, {
                 disableClose: true,
@@ -70,7 +71,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 panelClass: 'warn-dialog-content',
                 autoFocus: false,
                 data: {
-                    developerEmails: this.developerEmailList,
+                    developerEmails: filteredEmailList,
                     projectId,
                 },
             })
@@ -80,6 +81,12 @@ export class ExternalProjectsListComponent implements OnInit {
                     window.location.reload();
                 }
             });
+    }
+
+    private filterOutAlreadyAssignedEmails(team: any) {
+        return this.developerEmailList.filter(
+            (obj) => !team?.some(({ email }) => obj.email === email)
+        );
     }
 
     private loadExternalProjectsList() {

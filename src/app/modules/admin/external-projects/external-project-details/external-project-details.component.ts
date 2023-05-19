@@ -152,9 +152,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
         );
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
-                window.location.reload();
+                this.getProjectDetails();
             }
-            console.log(result);
         });
     }
 
