@@ -1,7 +1,12 @@
 <div
     class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
 >
-    <div class="text-lg font-medium">Add Resource</div>
+    <div *ngIf="!disableEmailField" class="text-lg font-medium">
+        Add Resource
+    </div>
+    <div *ngIf="disableEmailField" class="text-lg font-medium">
+        Update Resource
+    </div>
     <button
         mat-icon-button
         (click)="cancel()"
@@ -165,7 +170,7 @@
             (click)="submitResourceData()"
             [disabled]="submitInProcess"
         >
-            <span class="mx-2">{{mode === "EDIT" ? "Update" : "Add"}}</span>
+            <span class="mx-2">{{ mode === "EDIT" ? "Update" : "Add" }}</span>
             <mat-progress-spinner
                 *ngIf="submitInProcess"
                 [diameter]="18"

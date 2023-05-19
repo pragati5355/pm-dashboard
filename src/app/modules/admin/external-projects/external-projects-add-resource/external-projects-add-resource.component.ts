@@ -27,6 +27,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     currentCapacity: any;
     mode: string;
     patchData: [] | null;
+    disableEmailField: boolean = false;
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
@@ -54,6 +55,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
+            console.log(payload);
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
@@ -106,20 +108,25 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.emailList = this.data?.developerEmails;
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
+        console.log(this.data?.editData);
         this.userID = this._authService.getUser()?.userId;
+        if (this.mode === 'EDIT') {
+            this.disableEmailField = true;
+        }
     }
 
     private getCreateResourcePayload() {
         this.resourceId = this.findResourceId(
             this.addResourceForm?.value?.email
         );
+
         let payload = {
             projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
             endDate: this.addResourceForm?.value?.endDate,
             utilization: Number(this.utilizationValue),
-            isDeleted: false,
+            deleted: false,
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
             projectType: 'EXTERNAL',
@@ -128,11 +135,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return {
                 id: this.data?.editData?.projectResourceMapId,
                 projectId: this.projectId,
-                resourceId: this.resourceId,
+                resourceId: this.data?.editData?.id,
                 startDate: this.addResourceForm?.value?.startDate,
                 endDate: this.addResourceForm?.value?.endDate,
                 utilization: Number(this.utilizationValue),
-                isDeleted: false,
+                deleted: false,
                 assignedBy: this.userID,
                 role: this.addResourceForm?.value?.role,
             };
@@ -149,6 +156,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         });
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
+        if (this.mode === 'EDIT') {
+            this.addResourceForm.controls['email'].disable();
+        }
     }
 
     private patchValuesInEditMode() {

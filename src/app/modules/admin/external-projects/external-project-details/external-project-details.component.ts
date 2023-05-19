@@ -71,7 +71,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             });
     }
 
-    deleteResource(id: any) {
+    deleteResource(member: any) {
         this.initailizeConfirmationFormPopup();
         const confirmPopDialog = this._fuseConfirmationService.open(
             this.configFormStatus.value
@@ -80,30 +80,34 @@ export class ExternalProjectDetailsComponent implements OnInit {
         confirmPopDialog.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
                 this.isLoading = true;
-                this.externalProjectsService
-                    .mapResource({
-                        id: id,
-                        deleted: true,
-                    })
-                    .subscribe(
-                        (res: any) => {
-                            this.isLoading = false;
-                            if (res?.error === false) {
-                                this.snackBar.successSnackBar(res?.message);
-                                this.getProjectDetails();
-                            } else {
-                                this.snackBar.errorSnackBar(res?.message);
-                            }
-                            if (res?.tokenExpire) {
-                                this._authService.updateAndReload(
-                                    window.location
-                                );
-                            }
-                        },
-                        (err) => {
-                            this.isLoading = false;
+                const payload = {
+                    id: member?.projectResourceMapId,
+                    projectId: member?.projectId,
+                    resourceId: member?.id,
+                    startDate: member?.startDate,
+                    endDate: member?.endDate,
+                    utilization: member?.utilization,
+                    deleted: true,
+                    assignedBy: member?.assignedBy,
+                    role: member?.role,
+                };
+                this.externalProjectsService.mapResource(payload).subscribe(
+                    (res: any) => {
+                        this.isLoading = false;
+                        if (res?.error === false) {
+                            this.snackBar.successSnackBar(res?.message);
+                            this.getProjectDetails();
+                        } else {
+                            this.snackBar.errorSnackBar(res?.message);
                         }
-                    );
+                        if (res?.tokenExpire) {
+                            this._authService.updateAndReload(window.location);
+                        }
+                    },
+                    (err) => {
+                        this.isLoading = false;
+                    }
+                );
             }
         });
     }
