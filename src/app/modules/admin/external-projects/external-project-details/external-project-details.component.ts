@@ -154,7 +154,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
             if (result) {
                 window.location.reload();
             }
-            console.log(result);
         });
     }
 
