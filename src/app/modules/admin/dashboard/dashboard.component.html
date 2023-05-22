@@ -19,27 +19,77 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
-                    <button
-                        [color]="'primary'"
-                        [matTooltip]="'Download Resource Utilization Report'"
-                        class="ml-4"
-                        mat-flat-button
-                        [disabled]="submitInProcess"
-                        (click)="downloadExcelReport()"
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-auto p-6">
+        <div class="flex flex-col bg-white p-6 rounded-xl shadow">
+            <div class="text-3xl font-semibold">Reports</div>
+            <div *ngIf="!isLoading" class="flex-auto grid gap-4 mt-5">
+                <div
+                    class="flex items-center py-2 px-4 justify-between rounded-2xl bg-indigo-50 text-black dark:bg-white dark:bg-opacity-5 dark:text-black cursor-pointer"
+                >
+                    <div class="mt-1 text-md sm:text-lg font-medium">
+                        Resource Utilization Report
+                    </div>
+                    <div
+                        class="flex items-center pl-5 mt-6 sm:mt-0 sm:ml-2 space-x-3"
                     >
-                        <mat-icon
-                            [svgIcon]="'heroicons_outline:arrow-circle-down'"
-                        ></mat-icon>
-                        <span class="ml-2 mr-1"
-                            >Resource Utilization Report</span
+                        <button
+                            [color]="'primary'"
+                            [matTooltip]="
+                                'Download Resource Utilization Report'
+                            "
+                            class="ml-4"
+                            mat-flat-button
+                            [disabled]="submitInProcess"
+                            (click)="downloadExcelReport()"
                         >
-                        <mat-progress-spinner
-                            *ngIf="submitInProcess"
-                            [diameter]="18"
-                            [mode]="'indeterminate'"
-                        ></mat-progress-spinner>
-                    </button>
+                            <mat-icon
+                                [svgIcon]="
+                                    'heroicons_outline:arrow-circle-down'
+                                "
+                            ></mat-icon>
+                            <span class="ml-2 mr-1">Download</span>
+                            <mat-progress-spinner
+                                *ngIf="submitInProcess"
+                                [diameter]="18"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="flex items-center py-2 px-4 justify-between rounded-2xl bg-indigo-50 text-black dark:bg-white dark:bg-opacity-5 dark:text-black cursor-pointer"
+                >
+                    <div class="mt-1 text-md sm:text-lg font-medium">
+                        Resource Availablity report
+                    </div>
+                    <div
+                        class="flex items-center pl-5 mt-6 sm:mt-0 sm:ml-2 space-x-3"
+                    >
+                        <button
+                            [color]="'primary'"
+                            [matTooltip]="'Resource Availablity report'"
+                            class="ml-4"
+                            mat-flat-button
+                            [disabled]="submitInProcess2"
+                            (click)="downloadExcelAvailablityReport()"
+                        >
+                            <mat-icon
+                                [svgIcon]="
+                                    'heroicons_outline:arrow-circle-down'
+                                "
+                            ></mat-icon>
+                            <span class="ml-2 mr-1">Download</span>
+                            <mat-progress-spinner
+                                *ngIf="submitInProcess2"
+                                [diameter]="18"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
