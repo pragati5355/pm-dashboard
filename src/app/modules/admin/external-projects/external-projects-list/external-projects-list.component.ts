@@ -72,6 +72,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 autoFocus: false,
                 data: {
                     developerEmails: filteredEmailList,
+                    allResources: this.developerEmailList,
                     projectId,
                 },
             })
