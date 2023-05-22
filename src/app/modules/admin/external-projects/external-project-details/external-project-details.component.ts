@@ -97,6 +97,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                         if (res?.error === false) {
                             this.snackBar.successSnackBar(res?.message);
                             this.getProjectDetails();
+                            this.loadDeveloperEmails();
                         } else {
                             this.snackBar.errorSnackBar(res?.message);
                         }
