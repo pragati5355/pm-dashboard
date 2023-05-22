@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackBar } from '../../../../core/utils/snackBar';
@@ -19,12 +19,12 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     filteredEmails: Observable<any[]>;
     emailList: any[] = [];
     utilizationValue: string;
-    utilizationValues: string[] = UTILIZATION_VALUES;
+    utilizationValues: number[] = UTILIZATION_VALUES;
     ROLE_LIST: string[] = ROLE_LIST;
     resourceId: Number;
     userID: Number;
     projectId: any = this.data?.projectId;
-    currentCapacity: any;
+    currentCapacity: number;
     mode: string;
     patchData: [] | null;
     disableEmailField: boolean = false;
@@ -36,7 +36,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         private snackBar: SnackBar,
         private _authService: AuthService,
         private externalProjectsService: ExternalProjectsApiService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private cd: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
@@ -49,7 +50,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     submitResourceData() {
-        if (this.utilizationValue === undefined) {
+        if (this.addResourceForm?.value?.utilization === null) {
             this.snackBar.errorSnackBar('Choose Utilization');
             return;
         }
@@ -87,6 +88,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     getSelectedEmail(email: string) {
         this.getResourceCapacity(email);
         this.utilizationValue = '';
+        this.getAlreadyAssignedProjectsData(email);
     }
 
     getResourceCapacity(email: string) {
@@ -94,11 +96,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return item?.email === email;
         });
         this.currentCapacity = value[0]?.capacity;
-
-        this.getAlreadyAssignedProjectsData(email);
     }
 
-    getCurrentResourceCapacity(email: string) {
+    getCurrentResourceCapacity(email: string): number {
         const value = this.data?.allResources?.filter((item: any) => {
             return item?.email === email;
         });
@@ -124,6 +124,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.currentCapacity =
                 this.getCurrentResourceCapacity(this.data?.editData?.email) +
                 this.data?.editData?.utilization;
+            this.cd.detectChanges();
             console.log('edit mode current cap :', this.currentCapacity);
         }
     }
@@ -145,7 +146,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
             endDate: this.addResourceForm?.value?.endDate,
-            utilization: Number(this.utilizationValue),
+            utilization: this.addResourceForm?.value?.utilization,
             deleted: false,
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
@@ -158,7 +159,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 resourceId: this.data?.editData?.id,
                 startDate: this.addResourceForm?.value?.startDate,
                 endDate: this.addResourceForm?.value?.endDate,
-                utilization: Number(this.utilizationValue),
+                utilization: this.addResourceForm?.value?.utilization,
                 deleted: false,
                 assignedBy: this.userID,
                 role: this.addResourceForm?.value?.role,
@@ -173,6 +174,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             role: ['', [Validators.required]],
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]],
+            utilization: [null, [Validators.required]],
         });
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
@@ -194,9 +196,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                     this.data?.editData?.endDate,
                     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
                 ),
+                utilization: this.data?.editData?.utilization,
             });
-            this.getResourceCapacity(this.data?.editData?.email);
-            this.utilizationValue = String(this.data?.editData?.utilization);
+            this.getAlreadyAssignedProjectsData(this.data?.editData?.email);
         }
     }
 

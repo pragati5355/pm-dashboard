@@ -81,7 +81,6 @@ export class CreateExternalProjectComponent implements OnInit {
                 Validators.required,
             ]),
             emailId: this.fb.control(client?.emailId || null, [
-                Validators.required,
                 Validators.email,
             ]),
             deleted: this.fb.control(false),
