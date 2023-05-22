@@ -7,4 +7,4 @@ export const ROLE_LIST = [
     'QA',
 ];
 
-export const UTILIZATION_VALUES = ['0.25', '0.5', '1'];
+export const UTILIZATION_VALUES = [0.25, 0.5, 1];
