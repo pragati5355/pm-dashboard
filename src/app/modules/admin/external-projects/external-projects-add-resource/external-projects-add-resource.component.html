@@ -19,7 +19,7 @@
         ></mat-icon>
     </button>
 </div>
-<form [formGroup]="addResourceForm" class="mt-12">
+<form *ngIf="addResourceForm" [formGroup]="addResourceForm" class="mt-12">
     <div class="w-full flex flex-1">
         <div class="w-full mr-3">
             <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
@@ -140,14 +140,13 @@
         <mat-radio-group
             aria-labelledby="example-radio-group-label"
             class="example-radio-group"
-            [(ngModel)]="utilizationValue"
-            [ngModelOptions]="{ standalone: true }"
+            formControlName="utilization"
         >
             <mat-radio-button
                 class="example-radio-button"
                 [color]="'primary'"
                 *ngFor="let value of utilizationValues"
-                [disabled]="value > currentCapacity ? true : false"
+                [disabled]="value > currentCapacity"
                 [value]="value"
             >
                 {{ value }}
@@ -209,6 +208,7 @@
             [color]="'primary'"
             (click)="submitResourceData()"
             [disabled]="submitInProcess"
+            [disabled]="currentCapacity === 0 ? true : false"
         >
             <span class="mx-2">{{ mode === "EDIT" ? "Update" : "Add" }}</span>
             <mat-progress-spinner
