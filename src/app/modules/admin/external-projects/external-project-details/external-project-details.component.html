@@ -127,11 +127,7 @@
                                     class="mr-2"
                                     [matTooltip]="'Delete this resource'"
                                     svgIcon="heroicons_outline:trash"
-                                    (click)="
-                                        deleteResource(
-                                            member?.projectResourceMapId
-                                        )
-                                    "
+                                    (click)="deleteResource(member)"
                                 ></mat-icon>
 
                                 <mat-icon

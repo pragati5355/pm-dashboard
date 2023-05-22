@@ -27,6 +27,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     currentCapacity: any;
     mode: string;
     patchData: [] | null;
+    disableEmailField: boolean = false;
+    alreadyAssignedProjects: any[];
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
@@ -84,6 +86,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     getSelectedEmail(email: string) {
         this.getResourceCapacity(email);
+        this.utilizationValue = '';
     }
 
     getResourceCapacity(email: string) {
@@ -91,6 +94,15 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return item?.email === email;
         });
         this.currentCapacity = value[0]?.capacity;
+
+        this.getAlreadyAssignedProjectsData(email);
+    }
+
+    getCurrentResourceCapacity(email: string) {
+        const value = this.data?.allResources?.filter((item: any) => {
+            return item?.email === email;
+        });
+        return value[0]?.capacity;
     }
 
     filterEmails(email: string) {
@@ -107,19 +119,34 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
+        if (this.mode === 'EDIT') {
+            this.disableEmailField = true;
+            this.currentCapacity =
+                this.getCurrentResourceCapacity(this.data?.editData?.email) +
+                this.data?.editData?.utilization;
+            console.log('edit mode current cap :', this.currentCapacity);
+        }
+    }
+
+    private getAlreadyAssignedProjectsData(email: string) {
+        const obj = this.data?.allResources?.filter((item: any) => {
+            return item?.email === email;
+        });
+        this.alreadyAssignedProjects = obj[0]?.projectUtilizationDetails;
     }
 
     private getCreateResourcePayload() {
         this.resourceId = this.findResourceId(
             this.addResourceForm?.value?.email
         );
+
         let payload = {
             projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
             endDate: this.addResourceForm?.value?.endDate,
             utilization: Number(this.utilizationValue),
-            isDeleted: false,
+            deleted: false,
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
             projectType: 'EXTERNAL',
@@ -128,11 +155,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return {
                 id: this.data?.editData?.projectResourceMapId,
                 projectId: this.projectId,
-                resourceId: this.resourceId,
+                resourceId: this.data?.editData?.id,
                 startDate: this.addResourceForm?.value?.startDate,
                 endDate: this.addResourceForm?.value?.endDate,
                 utilization: Number(this.utilizationValue),
-                isDeleted: false,
+                deleted: false,
                 assignedBy: this.userID,
                 role: this.addResourceForm?.value?.role,
             };
@@ -149,6 +176,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         });
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
+        if (this.mode === 'EDIT') {
+            this.addResourceForm.controls['email'].disable();
+        }
     }
 
     private patchValuesInEditMode() {
