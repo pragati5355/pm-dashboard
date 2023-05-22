@@ -107,6 +107,7 @@
                     formControlName="endDate"
                     [matDatepicker]="dateOfJoiningDatepicker1"
                     (focus)="dateOfJoiningDatepicker1.open()"
+                    [min]="addResourceForm.get('startDate').value"
                 />
                 <mat-datepicker-toggle
                     matSuffix
@@ -140,19 +141,49 @@
                 class="example-radio-button"
                 [color]="'primary'"
                 *ngFor="let value of utilizationValues"
-                [disabled]="
-                    currentCapacity === null
-                        ? false
-                        : value > currentCapacity
-                        ? true
-                        : false
-                "
+                [disabled]="value > currentCapacity ? true : false"
                 [value]="value"
             >
                 {{ value }}
             </mat-radio-button>
         </mat-radio-group>
     </div>
+
+    <div
+        class="flex flex-auto overflow-hidden"
+        *ngIf="alreadyAssignedProjects?.length > 0"
+    >
+        <div
+            class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
+        >
+            <div
+                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                matSortDisableClear
+            >
+                <div>Project Name</div>
+                <div>Utilization</div>
+            </div>
+            <ng-container *ngIf="true">
+                <div class="grid shadow">
+                    <ng-container
+                        *ngFor="let project of alreadyAssignedProjects"
+                    >
+                        <div
+                            class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
+                        >
+                            <div class="hidden md:block truncate">
+                                {{ project?.projectName }}
+                            </div>
+                            <div class="hidden md:block truncate">
+                                {{ project?.utilization }}
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
     <div class="flex justify-end mt-3">
         <button
             mat-stroked-button

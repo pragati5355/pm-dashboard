@@ -148,6 +148,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 autoFocus: false,
                 data: {
                     developerEmails: emailList,
+                    allResources: this.developerEmailList,
                     projectId: this.projectId,
                     mode: mode,
                     editData: data,
@@ -157,6 +158,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
                 this.getProjectDetails();
+                this.loadDeveloperEmails();
             }
         });
     }
@@ -176,6 +178,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             if (projectId) {
                 this.projectId = projectId;
                 this.getProjectDetails();
+                this.loadDeveloperEmails();
             }
         });
     }

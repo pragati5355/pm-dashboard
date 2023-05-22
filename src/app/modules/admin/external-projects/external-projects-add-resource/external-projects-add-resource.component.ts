@@ -28,6 +28,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     mode: string;
     patchData: [] | null;
     disableEmailField: boolean = false;
+    alreadyAssignedProjects: any[];
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
@@ -55,7 +56,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
-            console.log(payload);
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
@@ -86,6 +86,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     getSelectedEmail(email: string) {
         this.getResourceCapacity(email);
+        this.utilizationValue = '';
     }
 
     getResourceCapacity(email: string) {
@@ -93,6 +94,15 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return item?.email === email;
         });
         this.currentCapacity = value[0]?.capacity;
+
+        this.getAlreadyAssignedProjectsData(email);
+    }
+
+    getCurrentResourceCapacity(email: string) {
+        const value = this.data?.allResources?.filter((item: any) => {
+            return item?.email === email;
+        });
+        return value[0]?.capacity;
     }
 
     filterEmails(email: string) {
@@ -108,11 +118,21 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.emailList = this.data?.developerEmails;
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
-        console.log(this.data?.editData);
         this.userID = this._authService.getUser()?.userId;
         if (this.mode === 'EDIT') {
             this.disableEmailField = true;
+            this.currentCapacity =
+                this.getCurrentResourceCapacity(this.data?.editData?.email) +
+                this.data?.editData?.utilization;
+            console.log('edit mode current cap :', this.currentCapacity);
         }
+    }
+
+    private getAlreadyAssignedProjectsData(email: string) {
+        const obj = this.data?.allResources?.filter((item: any) => {
+            return item?.email === email;
+        });
+        this.alreadyAssignedProjects = obj[0]?.projectUtilizationDetails;
     }
 
     private getCreateResourcePayload() {
