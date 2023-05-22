@@ -150,14 +150,17 @@
     </div>
 
     <div
-        class="flex flex-auto overflow-hidden"
+        class="flex flex-col flex-auto overflow-hidden mt-4"
         *ngIf="alreadyAssignedProjects?.length > 0"
     >
+        <span class="text-l text-gray-500 mb-1"
+            >Current Resource Utilization</span
+        >
         <div
             class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
         >
             <div
-                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
                 matSortDisableClear
             >
                 <div>Project Name</div>
@@ -169,7 +172,7 @@
                         *ngFor="let project of alreadyAssignedProjects"
                     >
                         <div
-                            class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
+                            class="inventory-grid grid items-center gap-4 py-3 border-b bg-white px-2"
                         >
                             <div class="hidden md:block truncate">
                                 {{ project?.projectName }}
