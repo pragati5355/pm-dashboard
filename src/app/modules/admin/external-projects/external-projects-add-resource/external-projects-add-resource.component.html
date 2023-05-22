@@ -53,7 +53,11 @@
         <div class="w-full">
             <mat-form-field [floatLabel]="'always'" class="w-full mt-2">
                 <mat-label class="">Role</mat-label>
-                <mat-select placeholder="Select role" formControlName="role">
+                <mat-select
+                    placeholder="Select role"
+                    formControlName="role"
+                    [disabled]="currentCapacity === 0 ? true : false"
+                >
                     <mat-option *ngFor="let role of ROLE_LIST" [value]="role">
                         {{ role }}
                     </mat-option>
@@ -77,6 +81,7 @@
                     formControlName="startDate"
                     [matDatepicker]="dateOfJoiningDatepicker"
                     (focus)="dateOfJoiningDatepicker.open()"
+                    [disabled]="currentCapacity === 0 ? true : false"
                 />
                 <mat-datepicker-toggle
                     matSuffix
@@ -107,6 +112,7 @@
                     formControlName="endDate"
                     [matDatepicker]="dateOfJoiningDatepicker1"
                     (focus)="dateOfJoiningDatepicker1.open()"
+                    [disabled]="currentCapacity === 0 ? true : false"
                     [min]="addResourceForm.get('startDate').value"
                 />
                 <mat-datepicker-toggle
