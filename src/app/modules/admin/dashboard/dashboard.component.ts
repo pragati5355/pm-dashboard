@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
     isLoading = true;
     submitInProcess: boolean = false;
     submitInProcess2: boolean = false;
+    submitInProcess3: boolean = false;
 
     constructor(
         private _authService: AuthService,
@@ -95,6 +96,13 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    downloadGenericFile(b64encodedString: string) {
+        if (b64encodedString) {
+            var blob = this.base64ToBlob(b64encodedString, 'text/plain');
+            saveAs(blob, 'resource-generic-report.xlsx');
+        }
+    }
+
     downloadExcelReport() {
         this.submitInProcess = true;
         this.dashboardApiService
@@ -109,12 +117,26 @@ export class DashboardComponent implements OnInit {
             });
     }
 
-    downloadExcelAvailablityReport(){
+    downloadExcelGenericReport(){
         this.submitInProcess2 = true;
+        this.dashboardApiService
+            .getGenericExcelReport()
+            .subscribe((res: any) => {
+                this.submitInProcess2 = false;
+                if (res?.error === false) {
+                    this.downloadGenericFile(res?.data);
+                } else {
+                    this.snackbar.errorSnackBar(res?.message);
+                }
+        });
+    }
+
+    downloadExcelAvailablityReport(){
+        this.submitInProcess3 = true;
         this.dashboardApiService
             .getAvailabilityExcelReport()
             .subscribe((res: any) => {
-                this.submitInProcess2 = false;
+                this.submitInProcess3 = false;
                 if (res?.error === false) {
                     this.downloadAvailabilityFile(res?.data);
                 } else {

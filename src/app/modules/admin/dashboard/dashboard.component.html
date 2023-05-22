@@ -64,18 +64,18 @@
                     class="flex items-center py-2 px-4 justify-between rounded-2xl bg-indigo-50 text-black dark:bg-white dark:bg-opacity-5 dark:text-black cursor-pointer"
                 >
                     <div class="mt-1 text-md sm:text-lg font-medium">
-                        Resource Availablity Report
+                        Resource Generic Report
                     </div>
                     <div
                         class="flex items-center pl-5 mt-6 sm:mt-0 sm:ml-2 space-x-3"
                     >
                         <button
                             [color]="'primary'"
-                            [matTooltip]="'Resource Availablity report'"
+                            [matTooltip]="'Download Resource Generic report'"
                             class="ml-4"
                             mat-flat-button
                             [disabled]="submitInProcess2"
-                            (click)="downloadExcelAvailablityReport()"
+                            (click)="downloadExcelGenericReport()"
                         >
                             <mat-icon
                                 [svgIcon]="
@@ -85,6 +85,39 @@
                             <span class="ml-2 mr-1">Download</span>
                             <mat-progress-spinner
                                 *ngIf="submitInProcess2"
+                                [diameter]="18"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="flex items-center py-2 px-4 justify-between rounded-2xl bg-indigo-50 text-black dark:bg-white dark:bg-opacity-5 dark:text-black cursor-pointer"
+                >
+                    <div class="mt-1 text-md sm:text-lg font-medium">
+                        Resource Availablity Report
+                    </div>
+                    <div
+                        class="flex items-center pl-5 mt-6 sm:mt-0 sm:ml-2 space-x-3"
+                    >
+                        <button
+                            [color]="'primary'"
+                            [matTooltip]="
+                                'Download Resource Availablity report'
+                            "
+                            class="ml-4"
+                            mat-flat-button
+                            [disabled]="submitInProcess3"
+                            (click)="downloadExcelAvailablityReport()"
+                        >
+                            <mat-icon
+                                [svgIcon]="
+                                    'heroicons_outline:arrow-circle-down'
+                                "
+                            ></mat-icon>
+                            <span class="ml-2 mr-1">Download</span>
+                            <mat-progress-spinner
+                                *ngIf="submitInProcess3"
                                 [diameter]="18"
                                 [mode]="'indeterminate'"
                             ></mat-progress-spinner>

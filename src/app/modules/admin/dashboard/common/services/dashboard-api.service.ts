@@ -9,12 +9,20 @@ export class DashboardApiService {
         AppConstants['PROJECT_API_URL'] + '/resource-utilization-report';
 
     downloadExcelAvailabilityUrl = 
+        AppConstants['PROJECT_API_URL'] ;
+
+    downloadExcelGenericUrl = 
         AppConstants['PROJECT_API_URL'] + '/resource-report';
+    
 
     constructor(private http: HttpClient) {}
 
     getUtilisationExcelReport() {
         return this.http.get(this.downloadExcelUrl);
+    }
+
+    getGenericExcelReport(){
+        return this.http.get(this.downloadExcelAvailabilityUrl);
     }
 
     getAvailabilityExcelReport(){
