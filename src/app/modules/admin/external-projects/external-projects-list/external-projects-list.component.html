@@ -8,10 +8,10 @@
                     <div class="flex w-full items-center ml-2">
                         <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full">
                             <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                            <input matInput [autocomplete]="'off'" #searchInputField
+                            <input matInput [autocomplete]="'off'" #searchInputField [formControl]="searchControl"
                                 [placeholder]="'Search by project name'" />
-                            <mat-icon *ngIf="true" class="icon-size-5 cursor-pointer" matSuffix
-                                [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                            <mat-icon *ngIf="searchControl?.value" class="icon-size-5 cursor-pointer" matSuffix
+                                [svgIcon]="'heroicons_solid:x'" (click)="searchControl?.reset()"></mat-icon>
                         </mat-form-field>
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="addNew()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
