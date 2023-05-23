@@ -631,32 +631,35 @@
                                                         <ng-container *ngIf="teamMember.role !== 'PM'">
                                                             <div
                                                                 class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-                                                                <div class="hidden md:block truncate">
+                                                                <!-- <div class="hidden md:block truncate">
                                                                     <ng-container *ngFor="let member of teamMembers">
                                                                         <ng-container
                                                                             *ngIf="member?.id == teamMember?.resourceId">{{member.firstName+
                                                                             " "+member.lastName |
                                                                             titlecase}}</ng-container>
                                                                     </ng-container>
+                                                                </div> -->
+                                                                <div class="truncate">
+                                                                    {{teamMember?.firstName}}
                                                                 </div>
 
                                                                 <div class="truncate">
-                                                                    {{teamMember.role}}
+                                                                    {{teamMember?.role}}
                                                                 </div>
                                                                 <div class="hidden md:block truncate">
-                                                                    {{teamMember.utilization}}
+                                                                    {{teamMember?.utilization}}
                                                                 </div>
                                                                 <div class="hidden md:block truncate">
-                                                                    {{teamMember.startDate | date}}
+                                                                    {{teamMember?.startDate | date}}
                                                                 </div>
                                                                 <div class="hidden md:block truncate">
-                                                                    {{teamMember.endDate | date}}
+                                                                    {{teamMember?.endDate | date}}
                                                                 </div>
                                                                 <div class="hidden lg:block">
                                                                     <ng-container>
                                                                         <mat-icon
                                                                             class="text-gray-400 icon-size-5 cursor-pointer"
-                                                                            (click)="deleteTeamMember(i,teamMember.teamMemberId,teamMember.jiraUser)"
+                                                                            (click)="deleteTeamMember(i,teamMember?.teamMemberId,teamMember?.jiraUser)"
                                                                             [svgIcon]="'heroicons_solid:x'"></mat-icon>
                                                                     </ng-container>
                                                                 </div>
