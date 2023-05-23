@@ -44,6 +44,7 @@ import {
     JiraUser,
     JiraTeamUser,
 } from './model/add-project-models';
+
 @Component({
     selector: 'app-add-project-home',
     templateUrl: './add-project-home.component.html',
@@ -125,6 +126,14 @@ export class AddProjectHomeComponent
     clientDtailsList: any = [];
     routeSubscribe: any;
     changeForm: number = 0;
+    ROLE_LIST: string[] = [
+        'FRONTEND_DEV',
+        'BACKEND_DEV',
+        'FULL_STACK',
+        'PM',
+        'DEVOPS',
+        'QA',
+    ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -485,18 +494,20 @@ export class AddProjectHomeComponent
             if (
                 this.projectTeam.value.team_member &&
                 this.projectTeam.value.select_role &&
-                this.projectTeam.value.team_jira_user
+                this.projectTeam.value.team_jira_user &&
+                this.projectTeam.value.tm_utilization &&
+                this.projectTeam.value.startDate &&
+                this.projectTeam.value.endDate
             ) {
                 this.teamMemberList = [
                     ...this.teamMemberList,
                     {
-                        teamMemberId: this.projectTeam?.value?.team_member?.id,
+                        resourceId: this.projectTeam?.value?.team_member?.id,
+                        startDate: this.projectTeam?.value?.startDate,
+                        endDate: this.projectTeam?.value?.endDate,
                         role: this.projectTeam?.value?.select_role,
-                        jiraUser:
-                            this.projectTeam?.value?.team_jira_user
-                                ?.displayName,
-                        isManager: false,
-                        isDeleted: false,
+                        utilization: this.projectTeam?.value?.tm_utilization,
+                        deleted: false,
                     },
                 ];
                 this.selectedJiraUser = [
@@ -510,6 +521,9 @@ export class AddProjectHomeComponent
                 this.projectTeam.controls['team_member'].reset();
                 this.projectTeam.controls['select_role'].reset();
                 this.projectTeam.controls['team_jira_user'].reset();
+                this.projectTeam.controls['startDate'].reset();
+                this.projectTeam.controls['endDate'].reset();
+                this.projectTeam.controls['tm_utilization'].reset();
             }
         }
     }
@@ -538,14 +552,20 @@ export class AddProjectHomeComponent
                 {
                     firstName: this.clientDetials?.value?.firstName,
                     lastName: this.clientDetials?.value?.lastName,
+                    emailId: this.clientDetials?.value?.email,
+                    deleted: false,
                 },
                 {
                     firstName: this.clientDetials?.value?.firstName2,
                     lastName: this.clientDetials?.value?.lastName2,
+                    emailId: this.clientDetials?.value?.email2,
+                    deleted: false,
                 },
                 {
                     firstName: this.clientDetials?.value?.firstName3,
                     lastName: this.clientDetials?.value?.lastName3,
+                    emailId: this.clientDetials?.value?.email3,
+                    deleted: false,
                 },
             ];
             this.clientDtailsList = this.clientDtailsList.filter(
@@ -567,12 +587,15 @@ export class AddProjectHomeComponent
                 this.teamMemberList = [
                     ...this.teamMemberList,
                     {
-                        teamMemberId:
+                        resourceId:
                             this.projectTeam?.value?.project_manager?.id,
-                        role: 'Manager',
+                        role: 'PM',
+                        utilization: this.projectTeam?.value?.pm_utilization,
                         jiraUser:
                             this.projectTeam?.value?.jira_user?.displayName,
-                        isManager: true,
+                        startDate: this.teamMemberList[0]?.startDate,
+                        endDate: this.teamMemberList[0]?.endDate,
+                        deleted: false,
                     },
                 ];
                 let payload = {
@@ -580,12 +603,10 @@ export class AddProjectHomeComponent
                         name: this.projectDetails?.value?.projectName,
                         description:
                             this.projectDetails?.value?.projectDescription,
-                        key: this.projectSetting?.value?.project,
-                        entityId: this.jiraProjectList[0]?.entityId,
-                        uuid: this.jiraProjectList[0]?.uuid,
-                        orgId: this.jiraProjectList[0]?.orgId,
+                        jiraKey: this.projectSetting?.value?.project,
+                        jiraUuid: this.jiraProjectList[0]?.uuid,
                         private: this.jiraProjectList[0]?.private,
-                        id: this.jiraProjectList[0]?.id,
+                        jiraProjectId: this.jiraProjectList[0]?.id,
                         formId: this.projectDetails?.value?.feedback_form,
                     },
                     clientDetails: this.clientDtailsList,
@@ -595,12 +616,11 @@ export class AddProjectHomeComponent
                         '.atlassian.net',
                     apiKey: this.projectSetting?.value?.token,
                     adminEmail: this.projectSetting?.value?.email,
-                    orgId: 1,
                     addedBy: this.userData?.userId,
-                    jiraProjectKey: this.projectSetting?.value?.project,
                     teamDetails: this.teamMemberList,
                 };
                 this.submitInProcess = true;
+
                 this.ProjectService.createProject(payload).subscribe(
                     (res: any) => {
                         this.submitInProcess = false;
@@ -1089,9 +1109,13 @@ export class AddProjectHomeComponent
             {
                 project_manager: ['', [Validators.required]],
                 jira_user: ['', [Validators.required]],
+                pm_utilization: ['', [Validators.required]],
                 team_member: [''],
                 select_role: [''],
                 team_jira_user: [''],
+                tm_utilization: [''],
+                startDate: [''],
+                endDate: [''],
             },
             {
                 validator: [
@@ -1135,6 +1159,7 @@ export class AddProjectHomeComponent
                     Validators.pattern(ValidationConstants.NAME_VALIDATION),
                 ],
             ],
+            email: ['', [Validators.required, Validators.email]],
             firstName2: [
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
@@ -1143,6 +1168,7 @@ export class AddProjectHomeComponent
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
             ],
+            email2: ['', [Validators.email]],
             firstName3: [
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
@@ -1151,6 +1177,7 @@ export class AddProjectHomeComponent
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
             ],
+            email3: ['', [Validators.email]],
         });
     }
 

@@ -76,24 +76,32 @@ export class ExternalProjectsListComponent implements OnInit {
         this.router.navigate([`/external-projects/details/${id}`]);
     }
 
-    openDialog(projectId) {
-        const dialogRef = this.matDialog.open(
-            ExternalProjectsAddResourceComponent,
-            {
+    openDialog(projectId, team: any) {
+        const filteredEmailList = this.filterOutAlreadyAssignedEmails(team);
+        this.matDialog
+            .open(ExternalProjectsAddResourceComponent, {
                 disableClose: true,
                 width: '50%',
                 panelClass: 'warn-dialog-content',
                 autoFocus: false,
                 data: {
-                    developerEmails: this.developerEmailList,
+                    developerEmails: filteredEmailList,
+                    allResources: this.developerEmailList,
                     projectId,
                 },
-            }
+            })
+            .afterClosed()
+            .subscribe((result: any) => {
+                if (result) {
+                    window.location.reload();
+                }
+            });
+    }
+
+    private filterOutAlreadyAssignedEmails(team: any) {
+        return this.developerEmailList.filter(
+            (obj) => !team?.some(({ email }) => obj.email === email)
         );
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result == 'success') {
-            }
-        });
     }
 
     private loadExternalProjectsList() {
@@ -102,7 +110,6 @@ export class ExternalProjectsListComponent implements OnInit {
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.error === false) {
-                    console.log(res?.data);
                     this.projectList = res?.data;
                     this.filteredProjectList = res?.data;
                 }

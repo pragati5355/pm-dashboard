@@ -160,8 +160,19 @@
                                                 name</div>
                                         </mat-error>
                                     </mat-form-field>
-
                                 </div>
+                                <mat-form-field class="w-1/2 ml-4 sm:mt-0 userlist" id="userlist"
+                                    [floatLabel]="'always'">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput placeholder="Email" formControlName="email" class="inputlist" />
+                                    <mat-error *ngIf="clientDetailForm['email']?.hasError('required')">
+                                        <div>Email is mandatory</div>
+                                    </mat-error>
+                                    <mat-error *ngIf="clientDetailForm['email']?.hasError('email') &&
+                                !clientDetailForm['email']?.hasError('required')">
+                                        <div>Invalid Email</div>
+                                    </mat-error>
+                                </mat-form-field>
                             </div>
                             <div class=" flex flex-col mb-2 sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
                                 <div class="mt-25p tracking-tight ng-tns-c274-3859">
@@ -206,6 +217,18 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
+                                <mat-form-field class="w-1/2 ml-4 sm:mt-0 userlist" id="userlist"
+                                    [floatLabel]="'always'">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput placeholder="Email" formControlName="email2" class="inputlist" />
+                                    <mat-error *ngIf="clientDetailForm['email2']?.hasError('required')">
+                                        <div>Email is mandatory</div>
+                                    </mat-error>
+                                    <mat-error *ngIf="clientDetailForm['email2']?.hasError('email') &&
+                                !clientDetailForm['email2']?.hasError('required')">
+                                        <div>Invalid Email</div>
+                                    </mat-error>
+                                </mat-form-field>
                             </div>
                             <div class=" flex flex-col mb-2 sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
                                 <div class="mt-25p tracking-tight ng-tns-c274-3859">
@@ -250,6 +273,18 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
+                                <mat-form-field class="w-1/2 ml-4 sm:mt-0 userlist" id="userlist"
+                                    [floatLabel]="'always'">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput placeholder="Email" formControlName="email3" class="inputlist" />
+                                    <mat-error *ngIf="clientDetailForm['email3']?.hasError('required')">
+                                        <div>Email is mandatory</div>
+                                    </mat-error>
+                                    <mat-error *ngIf="clientDetailForm['email3']?.hasError('email') &&
+                                !clientDetailForm['email3']?.hasError('required')">
+                                        <div>Invalid Email</div>
+                                    </mat-error>
+                                </mat-form-field>
                             </div>
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
 
@@ -373,9 +408,9 @@
                             <div class="w-full">
                                 <h2 class="text-3xl font-semibold tracking-tight leading-8">Team</h2>
                             </div>
-                            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
+                            <div class="w-full flex flex-row flex-0 justify-between">
 
-                                <div class=" w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                                <div class="w-full mb-2 font-extrabold tracking-tight">
                                     <mat-form-field class="w-full  " [floatLabel]="'always'">
                                         <mat-label>Project Lead/Manager</mat-label>
                                         <input type="text" placeholder="Project Lead/Manager"
@@ -401,7 +436,7 @@
                                         </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
-                                <div class=" w-full sm:w-90 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+                                <div class="w-full font-extrabold tracking-tight sm:ml-4">
                                     <mat-form-field [floatLabel]="'always'" class="w-full">
                                         <mat-label>Map Jira Username</mat-label>
                                         <input matInput type="text" placeholder="Jira User Name" maxlength="50"
@@ -427,10 +462,28 @@
                                         </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
+                                <div class="w-full font-extrabold tracking-tight sm:ml-4">
+
+                                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                                        <mat-label>Utilization *</mat-label>
+                                        <mat-select formControlName="pm_utilization" type="text"
+                                            placeholder="Select Role" [disableOptionCentering]="true">
+                                            <mat-option *ngFor="let u of [0.25, 0.5, 1]" [value]="u">
+                                                {{ u }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="projectTeamForm['pm_utilization'].errors &&
+                                    projectTeamForm['pm_utilization']?.invalid &&
+                                    projectTeamForm['pm_utilization']?.touched ">
+                                            <div *ngIf="projectTeamForm['pm_utilization'].errors['required']">Role is
+                                                mandatory</div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
                             </div>
-                            <div class="  flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-                                <div class="sm:w-140 flex flex-col sm:flex-row flex-0  col-span-4 sm:col-span-4 ">
-                                    <div class=" w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
+                            <div class="flex flex-col flex-0  col-span-4 sm:col-span-4 ">
+                                <div class="w-full flex flex-row justify-between flex-0  col-span-4 sm:col-span-4 ">
+                                    <div class="w-full mb-2 font-extrabold tracking-tight">
                                         <mat-form-field class="w-full" [floatLabel]="'always'">
                                             <mat-label>Team Member *</mat-label>
                                             <input matInput type="text" placeholder="Team Member" maxlength="50"
@@ -453,15 +506,13 @@
                                             </mat-autocomplete>
                                         </mat-form-field>
                                     </div>
-                                    <div
-                                        class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
-
+                                    <div class="w-full font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
                                         <mat-form-field [floatLabel]="'always'" class="w-full">
                                             <mat-label>Select Role *</mat-label>
                                             <mat-select formControlName="select_role" type="text"
                                                 placeholder="Select Role" [disableOptionCentering]="true">
-                                                <mat-option *ngFor="let role of selectRoleList" [value]="role.value">
-                                                    {{ role.viewValue }}
+                                                <mat-option *ngFor="let role of ROLE_LIST" [value]="role">
+                                                    {{ role }}
                                                 </mat-option>
                                             </mat-select>
                                             <mat-error *ngIf="projectTeamForm['select_role'].errors &&
@@ -472,8 +523,7 @@
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
-                                    <div
-                                        class=" w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
+                                    <div class="w-full font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
                                         <mat-form-field [floatLabel]="'always'" class="w-full">
                                             <mat-label>Map Jira Username *</mat-label>
                                             <input matInput type="text" placeholder="Jira User Name" maxlength="50"
@@ -499,51 +549,108 @@
                                             </mat-autocomplete>
                                         </mat-form-field>
                                     </div>
+
                                 </div>
-                                <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
-                                    <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">Add</span>
+                                <div class="flex flex-row">
+                                    <div class="w-full font-extrabold tracking-tight ng-tns-c274-3859">
+
+                                        <mat-form-field [floatLabel]="'always'" class="w-full">
+                                            <mat-label>Utilization *</mat-label>
+                                            <mat-select formControlName="tm_utilization" type="text"
+                                                placeholder="Select Role" [disableOptionCentering]="true">
+                                                <mat-option *ngFor="let u of [0.25, 0.5, 1]" [value]="u"
+                                                    [disabled]="u > projectTeamForm['team_member']?.value?.capacity">
+                                                    {{ u }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="projectTeamForm['tm_utilization'].errors &&
+                                    projectTeamForm['tm_utilization']?.invalid &&
+                                    projectTeamForm['tm_utilization']?.touched ">
+                                                <div *ngIf="projectTeamForm['tm_utilization'].errors['required']">Role
+                                                    is
+                                                    mandatory</div>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="w-full mx-3">
+                                        <mat-form-field [floatLabel]="'always'" class="w-full">
+                                            <mat-label>Start Date</mat-label>
+                                            <input matInput #inputJoining [placeholder]="'Start Date'"
+                                                formControlName="startDate" [matDatepicker]="dateOfJoiningDatepicker"
+                                                (focus)="dateOfJoiningDatepicker.open()" />
+                                            <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #dateOfJoiningDatepicker (closed)="inputJoining.blur()">
+                                            </mat-datepicker>
+                                            <mat-error *ngIf="
+                                                projectTeamForm['startDate']?.hasError('required')
+                                                ">
+                                                <div>Start Date is mandatory</div>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="w-full">
+                                        <mat-form-field [floatLabel]="'always'" class="w-full">
+                                            <mat-label>End Date</mat-label>
+                                            <input matInput #inputJoining [placeholder]="'End Date'"
+                                                formControlName="endDate" [matDatepicker]="dateOfJoiningDatepicker1"
+                                                (focus)="dateOfJoiningDatepicker1.open()" />
+                                            <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker1">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #dateOfJoiningDatepicker1 (closed)="inputJoining.blur()">
+                                            </mat-datepicker>
+                                            <mat-error *ngIf="
+                                                projectTeamForm['endDate']?.hasError('required')
+                                                ">
+                                                <div>End Date is mandatory</div>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
                                 </div>
+
                             </div>
-                            <div class=" w-full sm:w-140 mt-8">
-                                <div class="flex flex-col flex-auto  sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                            <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
+                                <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">Add</span>
+                            </div>
+                            <div class="w-full mt-8">
+                                <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
                                     <ng-container>
                                         <ng-container *ngIf="teamMemberList.length > 0">
                                             <div class="grid">
                                                 <div
                                                     class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5">
-                                                    <div>
-                                                        Team Member
-                                                    </div>
+                                                    <div>Team Member</div>
                                                     <div>Role</div>
-                                                    <div>Jira Username</div>
-                                                    <div>
-                                                        Actions
-                                                    </div>
+                                                    <div>Utilization</div>
+                                                    <div>Start Date</div>
+                                                    <div>End Date</div>
+                                                    <div>Actions</div>
                                                 </div>
                                                 <ng-container>
                                                     <ng-container *ngFor="let teamMember of teamMemberList;index as i">
-                                                        <ng-container *ngIf="teamMember.role !== 'Manager'">
+                                                        <ng-container *ngIf="teamMember.role !== 'PM'">
                                                             <div
                                                                 class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                                                                 <div class="hidden md:block truncate">
                                                                     <ng-container *ngFor="let member of teamMembers">
                                                                         <ng-container
-                                                                            *ngIf="member.id == teamMember.teamMemberId">{{member.firstName+
+                                                                            *ngIf="member?.id == teamMember?.resourceId">{{member.firstName+
                                                                             " "+member.lastName |
                                                                             titlecase}}</ng-container>
                                                                     </ng-container>
                                                                 </div>
 
                                                                 <div class="truncate">
-                                                                    <div *ngFor="let role of selectRoleList">
-                                                                        <div *ngIf="role.value == teamMember.role">
-                                                                            {{role.viewValue}}
-                                                                        </div>
-                                                                    </div>
+                                                                    {{teamMember.role}}
                                                                 </div>
-
                                                                 <div class="hidden md:block truncate">
-                                                                    {{teamMember.jiraUser | titlecase}}
+                                                                    {{teamMember.utilization}}
+                                                                </div>
+                                                                <div class="hidden md:block truncate">
+                                                                    {{teamMember.startDate | date}}
+                                                                </div>
+                                                                <div class="hidden md:block truncate">
+                                                                    {{teamMember.endDate | date}}
                                                                 </div>
                                                                 <div class="hidden lg:block">
                                                                     <ng-container>

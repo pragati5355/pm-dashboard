@@ -1,7 +1,12 @@
 <div
     class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
 >
-    <div class="text-lg font-medium">Add Resource</div>
+    <div *ngIf="!disableEmailField" class="text-lg font-medium">
+        Add Resource
+    </div>
+    <div *ngIf="disableEmailField" class="text-lg font-medium">
+        Update Resource
+    </div>
     <button
         mat-icon-button
         (click)="cancel()"
@@ -14,7 +19,7 @@
         ></mat-icon>
     </button>
 </div>
-<form [formGroup]="addResourceForm" class="mt-12">
+<form *ngIf="addResourceForm" [formGroup]="addResourceForm" class="mt-12">
     <div class="w-full flex flex-1">
         <div class="w-full mr-3">
             <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
@@ -27,7 +32,10 @@
                     [matAutocomplete]="auto1"
                     formControlName="email"
                 />
-                <mat-autocomplete #auto1="matAutocomplete">
+                <mat-autocomplete
+                    #auto1="matAutocomplete"
+                    (optionSelected)="getSelectedEmail($event.option.value)"
+                >
                     <mat-option
                         *ngFor="let item of filteredEmails | async"
                         [value]="item?.email"
@@ -45,7 +53,11 @@
         <div class="w-full">
             <mat-form-field [floatLabel]="'always'" class="w-full mt-2">
                 <mat-label class="">Role</mat-label>
-                <mat-select placeholder="Select role" formControlName="role">
+                <mat-select
+                    placeholder="Select role"
+                    formControlName="role"
+                    [disabled]="currentCapacity === 0 ? true : false"
+                >
                     <mat-option *ngFor="let role of ROLE_LIST" [value]="role">
                         {{ role }}
                     </mat-option>
@@ -69,6 +81,7 @@
                     formControlName="startDate"
                     [matDatepicker]="dateOfJoiningDatepicker"
                     (focus)="dateOfJoiningDatepicker.open()"
+                    [disabled]="currentCapacity === 0 ? true : false"
                 />
                 <mat-datepicker-toggle
                     matSuffix
@@ -99,6 +112,8 @@
                     formControlName="endDate"
                     [matDatepicker]="dateOfJoiningDatepicker1"
                     (focus)="dateOfJoiningDatepicker1.open()"
+                    [disabled]="currentCapacity === 0 ? true : false"
+                    [min]="addResourceForm.get('startDate').value"
                 />
                 <mat-datepicker-toggle
                     matSuffix
@@ -125,18 +140,58 @@
         <mat-radio-group
             aria-labelledby="example-radio-group-label"
             class="example-radio-group"
-            [(ngModel)]="utilizationValue"
-            [ngModelOptions]="{ standalone: true }"
+            formControlName="utilization"
         >
             <mat-radio-button
                 class="example-radio-button"
+                [color]="'primary'"
                 *ngFor="let value of utilizationValues"
+                [disabled]="value > currentCapacity"
                 [value]="value"
             >
                 {{ value }}
             </mat-radio-button>
         </mat-radio-group>
     </div>
+
+    <div
+        class="flex flex-col flex-auto overflow-hidden mt-4"
+        *ngIf="alreadyAssignedProjects?.length > 0"
+    >
+        <span class="text-l text-gray-500 mb-1"
+            >Current Resource Utilization</span
+        >
+        <div
+            class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
+        >
+            <div
+                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
+                matSortDisableClear
+            >
+                <div>Project Name</div>
+                <div>Utilization</div>
+            </div>
+            <ng-container *ngIf="true">
+                <div class="grid shadow">
+                    <ng-container
+                        *ngFor="let project of alreadyAssignedProjects"
+                    >
+                        <div
+                            class="inventory-grid grid items-center gap-4 py-3 border-b bg-white px-2"
+                        >
+                            <div class="hidden md:block truncate">
+                                {{ project?.projectName }}
+                            </div>
+                            <div class="hidden md:block truncate">
+                                {{ project?.utilization }}
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
     <div class="flex justify-end mt-3">
         <button
             mat-stroked-button
@@ -153,8 +208,9 @@
             [color]="'primary'"
             (click)="submitResourceData()"
             [disabled]="submitInProcess"
+            [disabled]="currentCapacity === 0 ? true : false"
         >
-            <span class="mx-2">Add</span>
+            <span class="mx-2">{{ mode === "EDIT" ? "Update" : "Add" }}</span>
             <mat-progress-spinner
                 *ngIf="submitInProcess"
                 [diameter]="18"
