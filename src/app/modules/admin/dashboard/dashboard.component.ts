@@ -105,43 +105,55 @@ export class DashboardComponent implements OnInit {
 
     downloadExcelReport() {
         this.submitInProcess = true;
-        this.dashboardApiService
-            .getUtilisationExcelReport()
-            .subscribe((res: any) => {
+        this.dashboardApiService.getUtilisationExcelReport().subscribe(
+            (res: any) => {
                 this.submitInProcess = false;
                 if (res?.error === false) {
                     this.downloadFile(res?.data);
                 } else {
                     this.snackbar.errorSnackBar(res?.message);
                 }
-            });
+            },
+            (err) => {
+                this.submitInProcess = false;
+                this.snackbar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
-    downloadExcelGenericReport(){
+    downloadExcelGenericReport() {
         this.submitInProcess2 = true;
-        this.dashboardApiService
-            .getGenericExcelReport()
-            .subscribe((res: any) => {
+        this.dashboardApiService.getGenericExcelReport().subscribe(
+            (res: any) => {
                 this.submitInProcess2 = false;
                 if (res?.error === false) {
                     this.downloadGenericFile(res?.data);
                 } else {
                     this.snackbar.errorSnackBar(res?.message);
                 }
-        });
+            },
+            (err) => {
+                this.submitInProcess2 = false;
+                this.snackbar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
-    downloadExcelAvailablityReport(){
+    downloadExcelAvailablityReport() {
         this.submitInProcess3 = true;
-        this.dashboardApiService
-            .getAvailabilityExcelReport()
-            .subscribe((res: any) => {
+        this.dashboardApiService.getAvailabilityExcelReport().subscribe(
+            (res: any) => {
                 this.submitInProcess3 = false;
                 if (res?.error === false) {
                     this.downloadAvailabilityFile(res?.data);
                 } else {
                     this.snackbar.errorSnackBar(res?.message);
                 }
-        });
+            },
+            (err) => {
+                this.submitInProcess3 = false;
+                this.snackbar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 }
