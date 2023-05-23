@@ -6,6 +6,7 @@ import { ExternalProjectsApiService } from '../common/services/external-projects
 import { AuthService } from '@services/auth/auth.service';
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 import { FormControl } from '@angular/forms';
+import { project } from 'app/mock-api/dashboards/project/data';
 
 @Component({
     selector: 'app-external-projects-list',
@@ -35,8 +36,13 @@ export class ExternalProjectsListComponent implements OnInit {
 
     addSearchListener() {
         this.searchControl?.valueChanges.subscribe((searchKey: string) => {
-            searchKey = searchKey?.trim();
+            searchKey = searchKey?.trim()?.toLowerCase();
             if (searchKey) {
+                this.filteredProjectList = this.projectList.filter(
+                    (project) =>
+                        project?.name?.toLowerCase()?.includes(searchKey) ||
+                        project?.description?.toLowerCase()?.includes(searchKey)
+                );
             } else {
                 this.filteredProjectList = this.projectList;
             }
