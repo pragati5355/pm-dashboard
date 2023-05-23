@@ -5,6 +5,8 @@ import { ExternalProjectsAddResourceComponent } from '../external-projects-add-r
 import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
 import { AuthService } from '@services/auth/auth.service';
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
+import { FormControl } from '@angular/forms';
+import { project } from 'app/mock-api/dashboards/project/data';
 
 @Component({
     selector: 'app-external-projects-list',
@@ -15,6 +17,8 @@ export class ExternalProjectsListComponent implements OnInit {
     developerEmailList: any[];
     isLoadingDeveloperEmails: boolean = false;
     projectList = [];
+    filteredProjectList = [];
+    searchControl = new FormControl();
 
     initialLoading: boolean = false;
     constructor(
@@ -25,8 +29,24 @@ export class ExternalProjectsListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.addSearchListener();
         this.loadExternalProjectsList();
         this.loadDeveloperEmailList();
+    }
+
+    addSearchListener() {
+        this.searchControl?.valueChanges.subscribe((searchKey: string) => {
+            searchKey = searchKey?.trim()?.toLowerCase();
+            if (searchKey) {
+                this.filteredProjectList = this.projectList.filter(
+                    (project) =>
+                        project?.name?.toLowerCase()?.includes(searchKey) ||
+                        project?.description?.toLowerCase()?.includes(searchKey)
+                );
+            } else {
+                this.filteredProjectList = this.projectList;
+            }
+        });
     }
 
     loadDeveloperEmailList() {
@@ -97,6 +117,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.error === false) {
                     this.projectList = res?.data;
+                    this.filteredProjectList = res?.data;
                 }
                 if (res?.tokenExpire) {
                     this._authService.updateAndReload(window.location);
