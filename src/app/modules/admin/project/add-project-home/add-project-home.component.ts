@@ -1159,7 +1159,7 @@ export class AddProjectHomeComponent
                     Validators.pattern(ValidationConstants.NAME_VALIDATION),
                 ],
             ],
-            email: ['', [Validators.required, Validators.email]],
+            email: ['', [Validators.email]],
             firstName2: [
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
