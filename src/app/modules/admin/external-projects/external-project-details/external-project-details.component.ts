@@ -81,9 +81,9 @@ export class ExternalProjectDetailsComponent implements OnInit {
             if (result == 'confirmed') {
                 this.isLoading = true;
                 const payload = {
-                    id: member?.projectResourceMapId,
+                    id: member?.id,
                     projectId: member?.projectId,
-                    resourceId: member?.id,
+                    resourceId: member?.resourceId,
                     startDate: member?.startDate,
                     endDate: member?.endDate,
                     utilization: member?.utilization,
@@ -139,7 +139,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
 
     openDialog(mode: String, data: any) {
         const emailList = this.filterOutAlreadyAssignedEmails();
-
+        console.log(data);
         const dialogRef = this.dialog.open(
             ExternalProjectsAddResourceComponent,
             {

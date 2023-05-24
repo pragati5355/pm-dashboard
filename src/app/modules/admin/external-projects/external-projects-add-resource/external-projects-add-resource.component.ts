@@ -154,9 +154,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         };
         if (this.mode === 'EDIT') {
             return {
-                id: this.data?.editData?.projectResourceMapId,
+                id: this.data?.editData?.id,
                 projectId: this.projectId,
-                resourceId: this.data?.editData?.id,
+                resourceId: this.data?.editData?.resourceId,
                 startDate: this.addResourceForm?.value?.startDate,
                 endDate: this.addResourceForm?.value?.endDate,
                 utilization: this.addResourceForm?.value?.utilization,
