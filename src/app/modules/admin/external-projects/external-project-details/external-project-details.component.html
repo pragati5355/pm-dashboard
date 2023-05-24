@@ -1,0 +1,163 @@
+<div *ngIf="!isLoading" class="p-8 w-full flex flex-col">
+    <div class="flex flex-row justify-between items-center mb-4">
+        <div
+            class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
+            [routerLink]="['../']"
+        >
+            <mat-icon
+                class="icon-size-6 text-3xl text-black"
+                [svgIcon]="'heroicons_outline:chevron-left'"
+            ></mat-icon>
+            {{ projectDetails?.project?.name | titlecase }}
+        </div>
+        <button
+            mat-mini-fab
+            color="primary"
+            matTooltip="Edit project"
+            (click)="edit()"
+        >
+            <mat-icon>edit</mat-icon>
+        </button>
+    </div>
+    <div class="w-full bg-white shadow rounded p-8">
+        <div class="mb-4">
+            <div>
+                <span>Project Name</span>
+            </div>
+            <span class="text-2xl font-semibold">{{
+                projectDetails?.project?.name
+            }}</span>
+        </div>
+        <div class="flex flex-col mb-4">
+            <div class="flex items-center">
+                <span>Technologies</span>
+                <mat-icon [svgIcon]="'heroicons_outline:code'"></mat-icon>
+            </div>
+            <div class="flex items-center py-2 flex-wrap">
+                <span
+                    *ngFor="
+                        let technology of projectDetails?.project?.technology
+                    "
+                    class="font-medium whitespace-nowrap py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                    >{{ technology }}</span
+                >
+            </div>
+        </div>
+
+        <div class="flex flex-col">
+            <div class="flex items-center">
+                <span>Client Details</span>
+            </div>
+            <div class="flex items-center pt-2 flex-wrap">
+                <span
+                    *ngFor="let client of projectDetails?.clientModels"
+                    [matTooltip]="client?.email"
+                    class="font-medium whitespace-nowrap py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                    >{{ client?.firstName + " " + client?.lastName }}</span
+                >
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-end my-5">
+        <button
+            (click)="openDialog('ADD', null)"
+            [color]="'primary'"
+            [matTooltip]="'Add Resource'"
+            class="ml-4"
+            mat-flat-button
+            [disabled]="isLoadingDevelopersEmail"
+        >
+            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+            <span class="ml-2 mr-1">Add Resource</span>
+        </button>
+    </div>
+
+    <div class="flex flex-auto overflow-hidden pl-1">
+        <div
+            class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
+        >
+            <div
+                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-white dark:bg-black dark:bg-opacity-5"
+                matSortDisableClear
+            >
+                <div>Name</div>
+                <div>Utilization</div>
+                <div>Start Date</div>
+                <div>End Date</div>
+                <div>Actions</div>
+            </div>
+            <ng-container *ngIf="projectDetails?.teamModel?.length > 0">
+                <div class="grid shadow">
+                    <ng-container
+                        *ngFor="
+                            let member of projectDetails?.teamModel;
+                            index as i
+                        "
+                    >
+                        <div
+                            class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b bg-white"
+                        >
+                            <div class="cursor-pointer">
+                                <div class="truncate">
+                                    {{
+                                        member?.firstName +
+                                            " " +
+                                            member?.lastName
+                                    }}
+                                </div>
+                            </div>
+
+                            <div class="hidden md:block truncate">
+                                {{ member?.utilization }}
+                            </div>
+
+                            <div class="hidden md:block truncate">
+                                {{ member?.startDate | date }}
+                            </div>
+
+                            <div class="hidden md:block truncate">
+                                {{ member?.endDate | date }}
+                            </div>
+
+                            <div
+                                class="sm:block flex flex-row items-center w-full cursor-pointer"
+                            >
+                                <mat-icon
+                                    class="mr-2"
+                                    [matTooltip]="'Delete this resource'"
+                                    svgIcon="heroicons_outline:trash"
+                                    (click)="deleteResource(member)"
+                                ></mat-icon>
+
+                                <mat-icon
+                                    [matTooltip]="'Edit this resource'"
+                                    svgIcon="heroicons_outline:pencil"
+                                    (click)="openDialog('EDIT', member)"
+                                ></mat-icon>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="projectDetails?.teamModel?.length === 0">
+                <div class="flex justify-center mt-6">
+                    <span class="text-2xl"
+                        >No Resource Assigned To This Project</span
+                    >
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="w-full h-full flex justify-center items-center">
+    <span class="text-2xl flex"
+        >Getting everything ready
+        <div class="btnLoader text-green-600 -ml-0 mt-4">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span></div
+    ></span>
+</div>

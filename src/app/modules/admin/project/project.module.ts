@@ -41,6 +41,8 @@ import { SprintFeedbackFormComponent } from './sprint-feedback-form/sprint-feedb
 import { SkeletonComponent } from './common/skeleton/skeleton.component';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { ProjectRoutingModule } from './project.routing';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 @NgModule({
     declarations: [
@@ -88,6 +90,8 @@ import { ProjectRoutingModule } from './project.routing';
         FormioModule,
         InfiniteScrollModule,
         SkeletonModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
     ],
 })
 export class ProjectModule {}

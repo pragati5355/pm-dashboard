@@ -31,6 +31,8 @@ export class ProjectDetailsComponent implements OnInit {
     repoCount = 0;
     isBitbucketProjectListLoading = false;
     allBitbucketProjects: BitbucketProjectModel[] = [];
+    teamMembers = [];
+
     @Input() dataId: any;
     checked: false;
     private _fuseCards!: QueryList<ElementRef>;
@@ -60,6 +62,7 @@ export class ProjectDetailsComponent implements OnInit {
             })
             .subscribe((res: any) => {
                 this.project = res?.data?.project;
+                this.teamMembers = res?.data?.teamModel;
                 this.repoCount = res?.data?.repoCount;
                 this._authService.setProjectDetails(this.project);
                 this.initialLoading = false;

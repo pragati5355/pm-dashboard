@@ -71,9 +71,16 @@ export const appRoutes: Routes = [
             {
                 path: 'platform-users',
                 loadChildren: () =>
-                    import('./modules/admin/platform-users/platform-users.module').then(
-                        (m) => m.PlatformUsersModule
-                    ),
+                    import(
+                        './modules/admin/platform-users/platform-users.module'
+                    ).then((m) => m.PlatformUsersModule),
+            },
+            {
+                path: 'external-projects',
+                loadChildren: () =>
+                    import(
+                        './modules/admin/external-projects/external-projects.module'
+                    ).then((m) => m.ExternalProjectsModule),
             },
         ],
     },

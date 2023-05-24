@@ -1,13 +1,46 @@
-<div  class="flex flex-wrap w-full max-w-screen-xl mx-auto ">
-    <div id="scroll" class=" w-full  bg-black text-sm text-green-600  ">
-        <div class="message-container items-end" *ngFor="let message of messages last as last">
-            <div>{{ message }}</div>
-            <div *ngIf="last" class="btnLoader "  id="elId" #target>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+<div class="flex flex-wrap w-full h-full max-w-screen-xl mx-auto">
+    <div id="scroll" class="w-full bg-black text-sm">
+        <div
+            class="message-container items-end"
+            *ngFor="let item of messages; last as last"
+        >
+            <div
+                [ngClass]="{
+                    'text-green-600': !item?.error,
+                    'text-red-600': item?.error
+                }"
+            >
+                {{ item?.message }}
             </div>
         </div>
+        <div *ngIf="true" class="btnLoader text-green-600" id="elId" #target>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div *ngIf="isCompleted && !isError">
+            <pre class="text-green-800 font-bold">
+____                     ____                _           _ 
+|  _ \ ___ _ __   ___    / ___|_ __ ___  __ _| |_ ___  __| |
+| |_) / _ \ '_ \ / _ \  | |   | '__/ _ \/ _` | __/ _ \/ _` |
+|  _ <  __/ |_) | (_) | | |___| | |  __/ (_| | ||  __/ (_| |
+|_| \_\___| .__/ \___/   \____|_|  \___|\__,_|\__\___|\__,_|
+          |_|    
+            </pre>
+        </div>
+    </div>
+    <div
+        *ngIf="isCompleted && !isError"
+        class="flex justify-end items-center w-full m-3"
+    >
+        <button
+            class="min-w-30 order-first sm:order-last ml-4"
+            mat-flat-button
+            [color]="'primary'"
+            (click)="redirectToRepoList()"
+        >
+            <span>View Repo List</span>
+        </button>
     </div>
 </div>

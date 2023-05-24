@@ -44,6 +44,7 @@ import {
     JiraUser,
     JiraTeamUser,
 } from './model/add-project-models';
+
 @Component({
     selector: 'app-add-project-home',
     templateUrl: './add-project-home.component.html',
@@ -125,6 +126,14 @@ export class AddProjectHomeComponent
     clientDtailsList: any = [];
     routeSubscribe: any;
     changeForm: number = 0;
+    ROLE_LIST: string[] = [
+        'FRONTEND_DEV',
+        'BACKEND_DEV',
+        'FULL_STACK',
+        'PM',
+        'DEVOPS',
+        'QA',
+    ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -485,18 +494,22 @@ export class AddProjectHomeComponent
             if (
                 this.projectTeam.value.team_member &&
                 this.projectTeam.value.select_role &&
-                this.projectTeam.value.team_jira_user
+                this.projectTeam.value.team_jira_user &&
+                this.projectTeam.value.tm_utilization &&
+                this.projectTeam.value.startDate &&
+                this.projectTeam.value.endDate
             ) {
                 this.teamMemberList = [
                     ...this.teamMemberList,
                     {
-                        teamMemberId: this.projectTeam?.value?.team_member?.id,
+                        resourceId: this.projectTeam?.value?.team_member?.id,
+                        firstName:
+                            this.projectTeam?.value?.team_member?.firstName,
+                        startDate: this.projectTeam?.value?.startDate,
+                        endDate: this.projectTeam?.value?.endDate,
                         role: this.projectTeam?.value?.select_role,
-                        jiraUser:
-                            this.projectTeam?.value?.team_jira_user
-                                ?.displayName,
-                        isManager: false,
-                        isDeleted: false,
+                        utilization: this.projectTeam?.value?.tm_utilization,
+                        deleted: false,
                     },
                 ];
                 this.selectedJiraUser = [
@@ -510,19 +523,27 @@ export class AddProjectHomeComponent
                 this.projectTeam.controls['team_member'].reset();
                 this.projectTeam.controls['select_role'].reset();
                 this.projectTeam.controls['team_jira_user'].reset();
+                this.projectTeam.controls['startDate'].reset();
+                this.projectTeam.controls['endDate'].reset();
+                this.projectTeam.controls['tm_utilization'].reset();
             }
         }
     }
-    deleteTeamMember(index: any, teamMemberId: any, jiraUser: string) {
-        this.teamMemberList.splice(index, 1);
-        this.projectTeam.controls['team_member'].reset();
-        this.projectTeam.controls['select_role'].reset();
-        this.projectTeam.controls['team_jira_user'].reset();
+    deleteTeamMember(index: any, teamMember: any) {
+        if (teamMember?.id) {
+            this.teamMemberList[index]['deleted'] = true;
+        } else {
+            this.teamMemberList.splice(index, 1);
+        }
+
+        // this.projectTeam.controls['team_member'].reset();
+        // this.projectTeam.controls['select_role'].reset();
+        // this.projectTeam.controls['team_jira_user'].reset();
         this.selectedJiraUser = this.selectedJiraUser.filter(
-            (arrayItem: any) => arrayItem !== jiraUser
+            (arrayItem: any) => arrayItem !== teamMember?.teamMemberId
         );
         this.selectedTeamMember = this.selectedTeamMember.filter(
-            (arrayItem: any) => arrayItem !== teamMemberId
+            (arrayItem: any) => arrayItem !== teamMember?.jiraUser
         );
         this.filterFunctions();
     }
@@ -538,54 +559,56 @@ export class AddProjectHomeComponent
                 {
                     firstName: this.clientDetials?.value?.firstName,
                     lastName: this.clientDetials?.value?.lastName,
+                    emailId: this.clientDetials?.value?.email,
+                    id: this.clientDetials?.value?.id,
+                    deleted: false,
                 },
                 {
                     firstName: this.clientDetials?.value?.firstName2,
                     lastName: this.clientDetials?.value?.lastName2,
+                    emailId: this.clientDetials?.value?.email2,
+                    id: this.clientDetials?.value?.id2,
+                    deleted: false,
                 },
                 {
                     firstName: this.clientDetials?.value?.firstName3,
                     lastName: this.clientDetials?.value?.lastName3,
+                    emailId: this.clientDetials?.value?.email3,
+                    id: this.clientDetials?.value?.id3,
+                    deleted: false,
                 },
             ];
-            this.clientDtailsList = this.clientDtailsList.filter(
-                (item: any) =>
-                    (item?.firstName !== '' || item?.lastName !== '') &&
-                    (item?.firstName !== null || item?.lastName !== null)
-            );
+            this.clientDtailsList = this.clientDtailsList
+                .filter(
+                    (item: any) =>
+                        (item?.firstName !== '' || item?.lastName !== '') &&
+                        (item?.firstName !== null || item?.lastName !== null)
+                )
+                .map((item) => {
+                    if (!item?.id) {
+                        delete item?.id;
+                    }
+                    return item;
+                });
         }
     }
     submitProjectSetting() {
         if (!this.projectSetting.invalid) {
             this.selectedIndex = 3;
-            // this.getTeamMember()
         }
     }
     createProject() {
         if (!this.projectTeam.invalid) {
             if (this.teamMemberList.length > 0) {
-                this.teamMemberList = [
-                    ...this.teamMemberList,
-                    {
-                        teamMemberId:
-                            this.projectTeam?.value?.project_manager?.id,
-                        role: 'Manager',
-                        jiraUser:
-                            this.projectTeam?.value?.jira_user?.displayName,
-                        isManager: true,
-                    },
-                ];
                 let payload = {
                     projectDetails: {
                         name: this.projectDetails?.value?.projectName,
                         description:
                             this.projectDetails?.value?.projectDescription,
-                        key: this.projectSetting?.value?.project,
-                        entityId: this.jiraProjectList[0]?.entityId,
-                        uuid: this.jiraProjectList[0]?.uuid,
-                        orgId: this.jiraProjectList[0]?.orgId,
+                        jiraKey: this.projectSetting?.value?.project,
+                        jiraUuid: this.jiraProjectList[0]?.uuid,
                         private: this.jiraProjectList[0]?.private,
-                        id: this.jiraProjectList[0]?.id,
+                        jiraProjectId: this.jiraProjectList[0]?.id,
                         formId: this.projectDetails?.value?.feedback_form,
                     },
                     clientDetails: this.clientDtailsList,
@@ -595,12 +618,11 @@ export class AddProjectHomeComponent
                         '.atlassian.net',
                     apiKey: this.projectSetting?.value?.token,
                     adminEmail: this.projectSetting?.value?.email,
-                    orgId: 1,
                     addedBy: this.userData?.userId,
-                    jiraProjectKey: this.projectSetting?.value?.project,
                     teamDetails: this.teamMemberList,
                 };
                 this.submitInProcess = true;
+
                 this.ProjectService.createProject(payload).subscribe(
                     (res: any) => {
                         this.submitInProcess = false;
@@ -750,83 +772,124 @@ export class AddProjectHomeComponent
         this.ProjectService.getOneProjectDetails(payload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
-                this.projectData = [res?.data?.project];
-                this.clientData.push(res?.data?.clientModels);
-                let projectsetting = [];
-                projectsetting.push(res?.data?.authUser);
-                let projectTeam = res?.data?.teamModel;
-                this.projectData.forEach((item: any) => {
-                    this.projectDetails.patchValue({
-                        projectName: item?.name ? item?.name : '',
-                        projectDescription: item?.description
-                            ? item?.description
-                            : '',
-                        feedback_form: item?.formId ? item?.formId : '',
-                    });
-                    this.settingProjectName = item?.key ? item?.key : '';
+                this.projectData = res?.data?.project;
+                this.clientData = res?.data?.clientModels;
+                this.settingProjectName = res?.data?.project?.jiraKey;
+
+                const projectsetting = res?.data?.authUser;
+
+                this.projectDetails.patchValue({
+                    projectName: this.projectData?.name
+                        ? this.projectData?.name
+                        : '',
+                    projectDescription: this.projectData?.description
+                        ? this.projectData?.description
+                        : '',
+                    feedback_form: this.projectData?.formId
+                        ? this.projectData?.formId
+                        : '',
                 });
-                this.clientData.forEach((item: any) => {
-                    this.clientDetials.patchValue({
-                        firstName:
-                            item?.length > 0
-                                ? item[0]?.firstName
-                                    ? item[0]?.firstName
-                                    : ''
-                                : null,
-                        lastName:
-                            item?.length > 0
-                                ? item[0]?.lastName
-                                    ? item[0]?.lastName
-                                    : ''
-                                : null,
-                        firstName2:
-                            item?.length > 1
-                                ? item[1]?.firstName
-                                    ? item[1]?.firstName
-                                    : ''
-                                : null,
-                        lastName2:
-                            item?.length > 1
-                                ? item[1]?.lastName
-                                    ? item[1]?.lastName
-                                    : ''
-                                : null,
-                        firstName3:
-                            item?.length > 2
-                                ? item[2]?.firstName
-                                    ? item[2]?.firstName
-                                    : ''
-                                : null,
-                        lastName3:
-                            item?.length > 2
-                                ? item[2]?.lastName
-                                    ? item[2]?.lastName
-                                    : ''
-                                : null,
-                    });
-                });
-                projectsetting.forEach((item: any) => {
-                    this.projectSetting.patchValue({
-                        url: item?.baseUrl
-                            ? item?.baseUrl.slice(8).slice(0, -14)
+
+                this.clientDetials.patchValue({
+                    id:
+                        this.clientData?.length > 0
+                            ? this.clientData[0]?.id
+                                ? this.clientData[0]?.id
+                                : ''
                             : null,
-                        email: item?.email ? item?.email : '',
-                        token: item?.apiKey ? item?.apiKey : '',
-                        project: this.settingProjectName,
+                    firstName:
+                        this.clientData?.length > 0
+                            ? this.clientData[0]?.firstName
+                                ? this.clientData[0]?.firstName
+                                : ''
+                            : null,
+                    lastName:
+                        this.clientData?.length > 0
+                            ? this.clientData[0]?.lastName
+                                ? this.clientData[0]?.lastName
+                                : ''
+                            : null,
+                    email:
+                        this.clientData?.length > 0
+                            ? this.clientData[0]?.emailId
+                                ? this.clientData[0]?.emailId
+                                : ''
+                            : null,
+                    id2:
+                        this.clientData?.length > 0
+                            ? this.clientData[1]?.id
+                                ? this.clientData[1]?.id
+                                : ''
+                            : null,
+                    firstName2:
+                        this.clientData?.length > 1
+                            ? this.clientData[1]?.firstName
+                                ? this.clientData[1]?.firstName
+                                : ''
+                            : null,
+                    lastName2:
+                        this.clientData?.length > 1
+                            ? this.clientData[1]?.lastName
+                                ? this.clientData[1]?.lastName
+                                : ''
+                            : null,
+                    email2:
+                        this.clientData?.length > 1
+                            ? this.clientData[1]?.emailId
+                                ? this.clientData[1]?.emailId
+                                : ''
+                            : null,
+                    id3:
+                        this.clientData?.length > 0
+                            ? this.clientData[2]?.id
+                                ? this.clientData[2]?.id
+                                : ''
+                            : null,
+                    firstName3:
+                        this.clientData?.length > 2
+                            ? this.clientData[2]?.firstName
+                                ? this.clientData[2]?.firstName
+                                : ''
+                            : null,
+                    lastName3:
+                        this.clientData?.length > 2
+                            ? this.clientData[2]?.lastName
+                                ? this.clientData[2]?.lastName
+                                : ''
+                            : null,
+                    email3:
+                        this.clientData?.length > 2
+                            ? this.clientData[2]?.emailId
+                                ? this.clientData[2]?.emailId
+                                : ''
+                            : null,
+                });
+
+                // this.clientData.forEach((item: any) => {
+
+                // });
+                // projectsetting.forEach((item: any) => {
+                this.projectSetting.patchValue({
+                    url: projectsetting?.baseUrl
+                        ? projectsetting?.baseUrl.slice(8).slice(0, -14)
+                        : null,
+                    email: projectsetting?.email ? projectsetting?.email : '',
+                    token: projectsetting?.apiKey ? projectsetting?.apiKey : '',
+                    project: this.settingProjectName,
+                });
+                const projectTeam = res?.data?.teamModel;
+
+                const pm = projectTeam.filter((item) => item.role === 'PM');
+
+                if (pm?.length > 0) {
+                    this.projectTeam.patchValue({
+                        project_manager: pm[0]?.id,
+                        jira_user: '',
+                        pm_utilization: pm[0]?.utilization,
                     });
-                });
-                projectTeam.forEach((item: any) => {
-                    this.teamMemberList = [
-                        ...this.teamMemberList,
-                        {
-                            teamMemberId: item?.teamMemberId,
-                            role: item?.role,
-                            jiraUser: item?.jiraUser,
-                            isManager: item?.isManager,
-                            isDeleted: false,
-                        },
-                    ];
-                });
+                }
+
+                this.teamMemberList = projectTeam;
                 this.managerEditTeamLIst = projectTeam.filter(
                     (item: any) => item?.role == 'Manager'
                 );
@@ -857,75 +920,73 @@ export class AddProjectHomeComponent
         );
     }
     updateProject() {
-        this.filterEditTeamMember();
-        this.filterEditClientList();
-        if (!this.projectTeam.invalid) {
-            if (this.filteredTeamMember.length > 0) {
-                let payload = {
-                    projectDetails: {
-                        name: this.projectDetails?.value?.projectName,
-                        description:
-                            this.projectDetails?.value?.projectDescription,
-                        key: this.projectSetting?.value?.project,
-                        entityId: this.jiraProjectList[0]?.entityId,
-                        uuid: this.jiraProjectList[0]?.uuid,
-                        orgId: this.jiraProjectList[0]?.orgId,
-                        private: this.jiraProjectList[0]?.private,
-                        id: parseInt(this.editProjectId),
-                        isDeleted: false,
-                        projectId: this.jiraProjectList[0]?.id,
-                        isPrivate: false,
-                        userId: this.userData?.userId,
-                        formId: this.projectDetails?.value?.feedback_form,
-                    },
-                    clientDetails: this.filteredEditClientList,
-                    baseUrl:
-                        'https://' +
-                        this.projectSetting?.value?.url +
-                        '.atlassian.net',
-                    apiKey: this.projectSetting?.value?.token,
-                    adminEmail: this.projectSetting?.value?.email,
-                    orgId: 1,
+        // this.filterEditTeamMember();
+        // this.filterEditClientList();
+        if (this.teamMemberList?.length > 0) {
+            // if (this.filteredTeamMember.length > 0) {
+            let payload = {
+                projectDetails: {
+                    name: this.projectDetails?.value?.projectName,
+                    description: this.projectDetails?.value?.projectDescription,
+                    jiraKey: this.projectSetting?.value?.project,
+                    jiraUuid: this.jiraProjectList[0]?.uuid,
+                    private: this.jiraProjectList[0]?.private,
+                    id: parseInt(this.editProjectId),
+                    deleted: false,
+                    projectId: this.jiraProjectList[0]?.id,
+                    isPrivate: false,
                     addedBy: this.userData?.userId,
-                    jiraProjectKey: this.projectSetting?.value?.project,
-                    teamDetails: this.filteredTeamMember,
-                };
-                //update feature changes
-                this.submitInProcess = true;
-                this.ProjectService.updateProject(payload).subscribe(
-                    (res: any) => {
-                        this.submitInProcess = false;
-                        if (!res?.error) {
-                            this.snackBar.successSnackBar(
-                                'Project updated successFully'
-                            );
-                            this.projectDetails.reset();
-                            this.clientDetials.reset();
-                            this.projectSetting.reset();
-                            this.projectTeam.reset();
-                            this.teamMemberList = [];
-                            this.settingProjectName = '';
-                            this.router.navigate(['/projects/']);
-                        } else {
-                            this.snackBar.errorSnackBar(res?.message);
-                        }
-                        if (res?.tokenExpire == true) {
-                            this.snackBar.errorSnackBar(
-                                ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-                            );
-                            this._authService.updateAndReload(window.location);
-                        }
-                    },
-                    (error) => {
-                        this.submitInProcess = false;
-
-                        this.snackBar.errorSnackBar('server error');
+                    entityId: this.jiraProjectList[0]?.entityId,
+                    formId: this.projectDetails?.value?.feedback_form,
+                    orgId: this.jiraProjectList[0]?.orgId,
+                    userId: this.userData?.userId,
+                },
+                clientDetails: this.clientDtailsList,
+                baseUrl:
+                    'https://' +
+                    this.projectSetting?.value?.url +
+                    '.atlassian.net',
+                apiKey: this.projectSetting?.value?.token,
+                adminEmail: this.projectSetting?.value?.email,
+                orgId: 1,
+                addedBy: this.userData?.userId,
+                jiraProjectKey: this.projectSetting?.value?.project,
+                teamDetails: this.teamMemberList,
+            };
+            this.submitInProcess = true;
+            this.ProjectService.updateProject(payload).subscribe(
+                (res: any) => {
+                    this.submitInProcess = false;
+                    if (!res?.error) {
+                        this.snackBar.successSnackBar(
+                            'Project updated successFully'
+                        );
+                        this.projectDetails.reset();
+                        this.clientDetials.reset();
+                        this.projectSetting.reset();
+                        this.projectTeam.reset();
+                        this.teamMemberList = [];
+                        this.settingProjectName = '';
+                        this.router.navigate(['/projects/']);
+                    } else {
+                        this.snackBar.errorSnackBar(res?.message);
                     }
-                );
-            } else {
-                this.isAddTeam = false;
-                this.snackBar.errorSnackBar('Add team member and role');
-            }
+                    if (res?.tokenExpire == true) {
+                        this.snackBar.errorSnackBar(
+                            ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                        );
+                        this._authService.updateAndReload(window.location);
+                    }
+                },
+                (error) => {
+                    this.submitInProcess = false;
+
+                    this.snackBar.errorSnackBar('server error');
+                }
+            );
+        } else {
+            this.isAddTeam = false;
+            this.snackBar.errorSnackBar('Add team member and role');
         }
     }
     filterEditTeamMember() {
@@ -1083,20 +1144,24 @@ export class AddProjectHomeComponent
             }
         });
     }
+    // project_manager: ['', [Validators.required]],
+    // jira_user: ['', [Validators.required]],
+    // pm_utilization: ['', [Validators.required]],
+    // ObjectValidation('project_manager'),
+    // ObjectValidation('jira_user'),
 
     private initializeProjectTeamForm() {
         this.projectTeam = this._formBuilder.group(
             {
-                project_manager: ['', [Validators.required]],
-                jira_user: ['', [Validators.required]],
                 team_member: [''],
                 select_role: [''],
                 team_jira_user: [''],
+                tm_utilization: [''],
+                startDate: [''],
+                endDate: [''],
             },
             {
                 validator: [
-                    ObjectValidation('project_manager'),
-                    ObjectValidation('jira_user'),
                     ObjectValidation('team_member'),
                     ObjectValidation('team_jira_user'),
                 ],
@@ -1121,6 +1186,7 @@ export class AddProjectHomeComponent
 
     private initializeClientsDetailsForm() {
         this.clientDetials = this._formBuilder.group({
+            id: [null],
             firstName: [
                 '',
                 [
@@ -1135,6 +1201,8 @@ export class AddProjectHomeComponent
                     Validators.pattern(ValidationConstants.NAME_VALIDATION),
                 ],
             ],
+            id2: [null],
+            email: ['', [Validators.email]],
             firstName2: [
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
@@ -1143,6 +1211,8 @@ export class AddProjectHomeComponent
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
             ],
+            email2: ['', [Validators.email]],
+            id3: [null],
             firstName3: [
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
@@ -1151,6 +1221,7 @@ export class AddProjectHomeComponent
                 '',
                 [Validators.pattern(ValidationConstants.NAME_VALIDATION)],
             ],
+            email3: ['', [Validators.email]],
         });
     }
 

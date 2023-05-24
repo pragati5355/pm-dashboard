@@ -6,6 +6,7 @@ import {
     ElementRef,
     ViewEncapsulation,
     HostListener,
+    AfterViewInit,
 } from '@angular/core';
 import {
     AbstractControl,
@@ -30,6 +31,7 @@ import { SnackBar } from '../../../../core/utils/snackBar';
 import { ErrorMessage } from 'app/core/constacts/constacts';
 import { DatePipe } from '@angular/common';
 import moment from 'moment';
+import { ResourcesService } from '../common/services/resources.service';
 export class Technology {
     constructor(public id: number, public name: string) {}
 }
@@ -41,7 +43,7 @@ export class Project {
     templateUrl: './add-resources.component.html',
 })
 export class AddResourcesComponent
-    implements OnInit, OnDestroy, IDeactivateComponent
+    implements OnInit, OnDestroy, IDeactivateComponent, AfterViewInit
 {
     @HostListener('window:beforeunload', ['$event'])
     public onPageUnload($event: BeforeUnloadEvent) {
@@ -49,6 +51,7 @@ export class AddResourcesComponent
             $event.returnValue = true;
         }
     }
+    @ViewChild('emailInput') emailInput;
     formTypeAdd = true;
     currentDate = moment();
     editFormId = 0;
@@ -71,6 +74,11 @@ export class AddResourcesComponent
     alltechnologys: Technology[] = [];
     routeSubscribe: any;
     updateDeleteObj: any = [];
+    showHideExperience: boolean = true;
+    pmMentorFormControl: FormControl;
+    filteredEmails: Observable<any[]>;
+
+    emailList: any[] = [];
 
     @ViewChild('technologyInput')
     technologyInput!: ElementRef;
@@ -84,6 +92,8 @@ export class AddResourcesComponent
     newExternalProjects: any = [];
     newExternalProjectsId: any = [];
     allNewExternalProjects: any = [];
+    loadingAllEmails: boolean = false;
+
     constructor(
         private _formBuilder: FormBuilder,
         private router: Router,
@@ -91,7 +101,8 @@ export class AddResourcesComponent
         private _authService: AuthService,
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private resourceService: ResourcesService
     ) {}
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
@@ -106,34 +117,30 @@ export class AddResourcesComponent
         this.initializeForm();
         this.initializeData();
         this.getTechnology();
-        this.getProjectList();
         this.userData = this._authService.getUser();
     }
-
+    ngAfterViewInit(): void {}
     submit() {
-        if (!this.resourcesForm.invalid) {
-            if (this.technologys.length > 0) {
+        if (!this.resourcesForm?.invalid) {
+            if (
+                this.resourcesForm?.get('team')?.value === 'PM' ||
+                this.technologys?.length > 0
+            ) {
                 const payload = {
-                    firstName: this.resourcesForm.value.firstName,
-                    lastName: this.resourcesForm.value.lastName,
-                    email: this.resourcesForm.value.email,
-                    year: this.resourcesForm.value.year
-                        ? this.resourcesForm.value.year
+                    firstName: this.resourcesForm?.value?.firstName,
+                    lastName: this.resourcesForm?.value?.lastName,
+                    email: this.resourcesForm?.value?.email,
+                    year: this.resourcesForm?.value?.year
+                        ? this.resourcesForm?.value?.year
                         : 0,
-                    team: this.resourcesForm.value.team,
-                    month: this.resourcesForm.value.month
-                        ? this.resourcesForm.value.month
+                    team: this.resourcesForm?.value?.team,
+                    month: this.resourcesForm?.value?.month
+                        ? this.resourcesForm?.value?.month
                         : 0,
                     technology: this.technologys,
-                    assignedProjects: this.projects
-                        ? this.projects.filter(
-                              (project: any) =>
-                                  !this.newExternalProjectsId.includes(project)
-                          )
-                        : [],
-                    newExternalProjects: this.newExternalProjects,
-                    salary: this.resourcesForm.value.salary,
-                    dateOfJoining: this.resourcesForm.value.dateOfJoining,
+                    salary: this.resourcesForm?.value?.salary,
+                    dateOfJoining: this.resourcesForm?.value?.dateOfJoining,
+                    pmMentorEmail: this.resourcesForm?.value?.pmMentorEmail,
                 };
                 this.submitInProcess = true;
                 this.addResourceAPI(payload);
@@ -145,6 +152,9 @@ export class AddResourcesComponent
     }
     gotoBack() {
         this.router.navigate(['/resources']);
+    }
+    onCheckBoxChange(value: boolean) {
+        this.showHideExperience = !value;
     }
     getTechnology() {
         this.initialLoading = true;
@@ -262,9 +272,6 @@ export class AddResourcesComponent
                     this.createdAt = item.createdAt;
                     this.firstName = item.firstName ? item.firstName : '';
                     this.technologys = item.technology;
-                    this.projects = item.assignedProjects
-                        ? item.assignedProjects
-                        : '';
                     this.filteredTechnologies = this.resourcesForm
                         .get('technology')
                         ?.valueChanges.pipe(
@@ -275,19 +282,6 @@ export class AddResourcesComponent
                                     : this._filterslice()
                             )
                         );
-                    this.filteredprojects = this.resourcesForm
-                        .get('project')
-                        ?.valueChanges.pipe(
-                            startWith(''),
-                            map((project: any | null) =>
-                                project
-                                    ? this._filterProject(project)
-                                    : this._filtersliceProject()
-                            )
-                        );
-                    if (this.projects.length > 0) {
-                        this.isShow = true;
-                    }
                 });
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -313,26 +307,20 @@ export class AddResourcesComponent
                 const payload = {
                     id: this.editFormId,
                     isDeleted: false,
-                    firstName: this.resourcesForm.value.firstName,
-                    lastName: this.resourcesForm.value.lastName,
-                    email: this.resourcesForm.value.email,
-                    year: this.resourcesForm.value.year
-                        ? this.resourcesForm.value.year
+                    firstName: this.resourcesForm?.value?.firstName,
+                    lastName: this.resourcesForm?.value?.lastName,
+                    email: this.resourcesForm?.value?.email,
+                    year: this.resourcesForm?.value?.year
+                        ? this.resourcesForm?.value?.year
                         : 0,
-                    team: this.resourcesForm.value.team,
-                    month: this.resourcesForm.value.month
-                        ? this.resourcesForm.value.month
+                    team: this.resourcesForm?.value?.team,
+                    month: this.resourcesForm?.value?.month
+                        ? this.resourcesForm?.value?.month
                         : 0,
                     technology: this.technologys,
-                    assignedProjects: this.projects
-                        ? this.projects.filter(
-                              (project: any) =>
-                                  !this.newExternalProjectsId.includes(project)
-                          )
-                        : [],
-                    newExternalProjects: this.newExternalProjects,
-                    salary: this.resourcesForm.value.salary,
-                    dateOfJoining: this.resourcesForm.value.dateOfJoining,
+                    salary: this.resourcesForm?.value?.salary,
+                    dateOfJoining: this.resourcesForm?.value?.dateOfJoining,
+                    pmMentorEmail: this.resourcesForm?.value?.pmMentorEmail,
                 };
                 this.submitInProcess = true;
                 this.ProjectService.updateDeleteResource(payload).subscribe(
@@ -363,86 +351,18 @@ export class AddResourcesComponent
             }
         }
     }
-    getProjectList() {
-        this.initialLoading = true;
-        this.ProjectService.getExternalProjectList().subscribe((res: any) => {
-            this.allprojects = res.data;
-            this.filteredprojects = this.resourcesForm
-                .get('project')
-                ?.valueChanges.pipe(
-                    startWith(''),
-                    map((project: any | null) =>
-                        project
-                            ? this._filterProject(project)
-                            : this._filtersliceProject()
-                    )
-                );
-            this.initialLoading = false;
-            if (res.tokenExpire == true) {
-                this._authService.updateAndReload(window.location);
-            }
-        });
-    }
-    addProject(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-        // Add our project
-        if (typeof event.value == 'string') {
-            this.newExternalProjects.push(event.value);
-            let max =
-                Math.max.apply(
-                    Math,
-                    this.allprojects.map((ele) => ele.id)
-                ) + 1;
-            this.allprojects.push({ id: max, name: event.value });
-            this.projects.push(max);
-            this.newExternalProjectsId.push(max);
-            this.allNewExternalProjects.push({ id: max, name: event.value });
-        }
 
-        if (input) {
-            input.value = '';
-        }
-
-        this.project.setValue('');
-        this.resourcesForm.get('project')?.setValue('');
+    selectedTeamOption(event: any) {
+        console.log(event?.option?.value);
     }
 
-    selectedTeamOption(event:any){
-        console.log(event?.option?.value)
-    }
-
-    removeProject(project: number, selectIndex: any): void {
-        this.projects.splice(selectIndex, 1);
-        const found = this.newExternalProjectsId.some(
-            (el: any) => el === project
+    filterEmails(email: string) {
+        let arr = this.emailList.filter(
+            (item) =>
+                item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
         );
-        if (found) {
-            this.newExternalProjectsId.splice(selectIndex, 1);
-            let filteredExternalProject: any =
-                this.allNewExternalProjects.filter(
-                    (item: any) => item.id === project
-                );
-            this.newExternalProjects.forEach((element: any, index: any) => {
-                if (element == filteredExternalProject[0].name)
-                    this.newExternalProjects.splice(index, 1);
-            });
-            this.allprojects.forEach((element: any, index: any) => {
-                if (element.id == project) this.allprojects.splice(index, 1);
-            });
-            this.allNewExternalProjects.forEach((element: any, index: any) => {
-                if (element.id == project)
-                    this.allNewExternalProjects.splice(index, 1);
-            });
-        }
-        this.resourcesForm.get('project')?.setValue('');
-    }
 
-    selectedProject(event: MatAutocompleteSelectedEvent): void {
-        this.projects.push(event.option.value);
-        this.projectInput.nativeElement.value = '';
-        this.project.setValue('');
-        this.resourcesForm.get('project')?.setValue('');
+        return arr.length ? arr : [{ email: 'No Emails found' }];
     }
 
     private initializeForm() {
@@ -485,17 +405,54 @@ export class AddResourcesComponent
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
                 ],
                 technology: [''],
-                project: [''],
+                pmMentorEmail: [''],
             },
             {
                 validator: [MonthValdation('month')],
             }
         );
+        this.dynamicFieldValidation();
+        this.pmMentorFilterInitialization();
+    }
+
+    private dynamicFieldValidation() {
+        this.resourcesForm.get('team').valueChanges.subscribe((res: any) => {
+            if (res != 'PM') {
+                this.resourcesForm
+                    .get('pmMentorEmail')
+                    .setValidators(Validators.required);
+                this.resourcesForm
+                    .get('pmMentorEmail')
+                    .updateValueAndValidity();
+            } else {
+                this.resourcesForm.get('pmMentorEmail').clearValidators();
+                this.resourcesForm
+                    .get('pmMentorEmail')
+                    .updateValueAndValidity();
+            }
+        });
+    }
+
+    private pmMentorFilterInitialization() {
+        this.pmMentorFormControl = new FormControl();
+        this.filteredEmails = this.resourcesForm
+            .get('pmMentorEmail')
+            .valueChanges.pipe(
+                startWith(null),
+                map((email) =>
+                    email ? this.filterEmails(email) : this.emailList.slice()
+                )
+            );
+        this.resourceService.findAllDeveloperEmails().subscribe((res: any) => {
+            this.loadingAllEmails = true;
+            if (res?.data) {
+                this.emailList = res?.data;
+            }
+        });
     }
 
     private initializeData() {
         this.routeSubscribe = this._route.params.subscribe((checkformtype) => {
-            console.log(checkformtype);
             if (checkformtype['id']) {
                 this.fetchEditData(checkformtype['id']);
                 this.editFormId = checkformtype['id'];

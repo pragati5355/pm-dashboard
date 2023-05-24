@@ -3,47 +3,48 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
-        id   : 'dashboard',
+        id: 'dashboard',
         title: 'Dashboard',
-        type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
-        link : '/dashboard'
+        type: 'basic',
+        icon: 'heroicons_outline:chart-pie',
+        link: '/dashboard',
     },
     {
-        id   : 'project',
+        id: 'project',
         title: 'Project',
-        type : 'basic',
-        icon : 'heroicons_outline:table',
-        link : '/projects'
+        type: 'basic',
+        icon: 'heroicons_outline:table',
+        link: '/projects',
     },
     {
-        id   : 'resources',
+        id: 'resources',
         title: 'Resources',
-        type : 'basic',
-        icon : 'heroicons_outline:user-add',
-        link : '/resources'
+        type: 'basic',
+        icon: 'heroicons_outline:user-add',
+        link: '/resources',
     },
     {
-        id   : 'forms',
+        id: 'external-projects',
+        title: 'External Projects',
+        type: 'basic',
+        icon: 'heroicons_outline:view-grid-add',
+        link: '/external-projects',
+    },
+    {
+        id: 'forms',
         title: 'Forms',
-        type : 'basic',
-        icon : 'heroicons_outline:pencil-alt',
-        link : '/forms'
+        type: 'basic',
+        icon: 'heroicons_outline:pencil-alt',
+        link: '/forms',
     },
     {
-        id   : 'platform-users',
+        id: 'platform-users',
         title: 'Platform Users',
-        type : 'basic',
-        icon : 'heroicons_outline:users',
-        link : '/platform-users'
-    }
+        type: 'basic',
+        icon: 'heroicons_outline:users',
+        link: '/platform-users',
+    },
 ];
-export const compactNavigation: FuseNavigationItem[] = [
-
-];
-export const futuristicNavigation: FuseNavigationItem[] = [
-
-];
-export const horizontalNavigation: FuseNavigationItem[] = [
-
-];
+export const compactNavigation: FuseNavigationItem[] = [];
+export const futuristicNavigation: FuseNavigationItem[] = [];
+export const horizontalNavigation: FuseNavigationItem[] = [];
