@@ -19,9 +19,27 @@ export class ResourceUploadCsvComponent implements OnInit {
     @ViewChild('fileUpload') fileUpload: ElementRef;
     submitInProgress: boolean = false;
     uploadFileName: string | null = null;
-    resourceUploadSuccessCount: number = 0;
-    resourceUploadSkipCount: number = 0;
+    resourceUploadSuccessCount: number = 5;
+    resourceUploadSkipCount: number = 4;
     csvFileToBeUploaded: File;
+    skippedResources: any[] = [
+        {
+            name: 'Rohan kadam',
+            email: 'r@mindbowser.com',
+        },
+        {
+            name: 'Amaresh Joshi',
+            email: 'amaresh@mindbowser.com',
+        },
+        {
+            name: 'Rahul Dudhane',
+            email: 'rahul_12@mindbowser.com',
+        },
+        {
+            name: 'Pragati',
+            email: 'pragati@mindbowser.com',
+        },
+    ];
     constructor(
         public dialogRef: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
