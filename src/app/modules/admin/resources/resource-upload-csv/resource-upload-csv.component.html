@@ -26,12 +26,6 @@
         *ngIf="uploadFileName === null"
     >
         <span>Upload</span>
-        <mat-progress-spinner
-            *ngIf="submitInProgress"
-            [diameter]="24"
-            [mode]="'indeterminate'"
-            class="px-2"
-        ></mat-progress-spinner>
     </button>
     <div *ngIf="uploadFileName !== null" class="flex item-center">
         <span class="text-primary font-semibold text-xl">{{

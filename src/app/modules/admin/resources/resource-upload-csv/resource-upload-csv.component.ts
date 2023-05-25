@@ -19,27 +19,10 @@ export class ResourceUploadCsvComponent implements OnInit {
     @ViewChild('fileUpload') fileUpload: ElementRef;
     submitInProgress: boolean = false;
     uploadFileName: string | null = null;
-    resourceUploadSuccessCount: number = 5;
-    resourceUploadSkipCount: number = 4;
-    csvFileToBeUploaded: File;
-    skippedResources: any[] = [
-        {
-            name: 'Rohan kadam',
-            email: 'r@mindbowser.com',
-        },
-        {
-            name: 'Amaresh Joshi',
-            email: 'amaresh@mindbowser.com',
-        },
-        {
-            name: 'Rahul Dudhane',
-            email: 'rahul_12@mindbowser.com',
-        },
-        {
-            name: 'Pragati',
-            email: 'pragati@mindbowser.com',
-        },
-    ];
+    resourceUploadSuccessCount: number = 0;
+    resourceUploadSkipCount: number = 0;
+    csvFileToBeUploaded: File | null = null;
+    skippedResources: any[] = [];
     constructor(
         public dialogRef: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -67,6 +50,30 @@ export class ResourceUploadCsvComponent implements OnInit {
 
     submit() {
         if (this.csvFileToBeUploaded) {
+            this.submitInProgress = true;
+            // setTimeout(() => {
+            //     this.resourceUploadSkipCount = 4;
+            //     this.resourceUploadSuccessCount = 5;
+            //     this.skippedResources = [
+            //         {
+            //             name: 'Rohan kadam',
+            //             email: 'r@mindbowser.com',
+            //         },
+            //         {
+            //             name: 'Amaresh Joshi',
+            //             email: 'amaresh@mindbowser.com',
+            //         },
+            //         {
+            //             name: 'Rahul Dudhane',
+            //             email: 'rahul_12@mindbowser.com',
+            //         },
+            //         {
+            //             name: 'Pragati',
+            //             email: 'pragati@mindbowser.com',
+            //         },
+            //     ];
+            //     this.submitInProgress = false;
+            // }, 5000);
             this.resourceService.uploadCsv(this.csvFileToBeUploaded).subscribe(
                 (res: any) => {
                     this.submitInProgress = false;
@@ -94,5 +101,6 @@ export class ResourceUploadCsvComponent implements OnInit {
     removeUploadedFile() {
         this.fileUpload.nativeElement.value = '';
         this.uploadFileName = null;
+        this.csvFileToBeUploaded = null;
     }
 }
