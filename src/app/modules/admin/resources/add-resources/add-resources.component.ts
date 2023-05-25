@@ -72,6 +72,9 @@ export class AddResourcesComponent
     filteredTechnologies: Observable<any[]> | undefined;
     technologys: any = [];
     alltechnologys: Technology[] = [];
+    newTechnology: any = [];
+    newTechnologysId: any = [];
+    allNewTechnology : any = [];
     routeSubscribe: any;
     updateDeleteObj: any = [];
     showHideExperience: boolean = true;
@@ -84,14 +87,9 @@ export class AddResourcesComponent
     technologyInput!: ElementRef;
     project = new FormControl();
     filteredprojects: Observable<any[]> | undefined;
-    projects: any = [];
-    allprojects: Project[] = [];
     @ViewChild('projectInput')
     projectInput!: ElementRef;
-    isShow = false;
-    newExternalProjects: any = [];
-    newExternalProjectsId: any = [];
-    allNewExternalProjects: any = [];
+    isShow = false;    
     loadingAllEmails: boolean = false;
 
     constructor(
@@ -197,22 +195,23 @@ export class AddResourcesComponent
             (alltechnologys) => !this.technologys.includes(alltechnologys.id)
         );
     }
-    _filterProject(value: any) {
-        return this.allprojects.filter(
-            (allprojects: any) =>
-                allprojects.name.toLowerCase().indexOf(value) === 0 &&
-                !this.projects.includes(allprojects.id)
-        );
-    }
-    _filtersliceProject() {
-        return this.allprojects.filter(
-            (allprojects) => !this.projects.includes(allprojects.id)
-        );
-    }
+
     add(event: MatChipInputEvent): void {
         const input = event.input;
         const value = event.value;
         // Add our technology
+        if (typeof event.value == 'string') {
+                    this.newTechnology.push(event.value);
+                    let max =
+                        Math.max.apply(
+                            Math,
+                            this.alltechnologys.map((ele) => ele.id)
+                        ) + 1;
+                    this.alltechnologys.push({ id: max, name: event.value });
+                    this.technologys.push(max);
+                    this.newTechnologysId.push(max);
+                    this.allNewTechnology.push({ id: max, name: event.value });
+        }
 
         if (input) {
             input.value = '';
@@ -224,6 +223,27 @@ export class AddResourcesComponent
 
     remove(technology: any, selectIndex: any): void {
         this.technologys.splice(selectIndex, 1);
+        const found = this.newTechnologysId.some(
+                    (el: any) => el === technology
+        );
+        if (found) {
+                    this.newTechnologysId.splice(selectIndex, 1);
+                    let filteredExternalProject: any =
+                        this.allNewTechnology.filter(
+                            (item: any) => item.id === technology
+                        );
+                    this.newTechnology.forEach((element: any, index: any) => {
+                        if (element == filteredExternalProject[0].name)
+                            this.newTechnology.splice(index, 1);
+                    });
+                    this.alltechnologys.forEach((element: any, index: any) => {
+                        if (element.id == technology) this.alltechnologys.splice(index, 1);
+                    });
+                    this.allNewTechnology.forEach((element: any, index: any) => {
+                        if (element.id == technology)
+                            this.allNewTechnology.splice(index, 1);
+                    });
+        }
         this.resourcesForm.get('technology')?.setValue('');
     }
 

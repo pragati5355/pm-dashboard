@@ -293,7 +293,9 @@
                                 <div></div>
                                 <div>Name</div>
                                 <div class="hidden md:block">Technology</div>
-                                <div class="hidden md:block">Projects</div>
+                                <div class="hidden md:block">
+                                    Active Projects
+                                </div>
                                 <div class="hidden sm:block">Team</div>
                                 <div class="hidden lg:block">Experience</div>
                                 <div>Action</div>
@@ -310,7 +312,9 @@
                                         >
                                             <div
                                                 class="flex items-center cursor-pointer"
-                                               (click)="viewResource(resources.id)"
+                                                (click)="
+                                                    viewResource(resources.id)
+                                                "
                                             >
                                                 <ng-container
                                                     *ngIf="resources.image"
@@ -337,7 +341,9 @@
                                             </div>
                                             <div
                                                 class="cursor-pointer"
-                                                (click)="viewResource(resources.id)"
+                                                (click)="
+                                                    viewResource(resources.id)
+                                                "
                                             >
                                                 <div
                                                     class="truncate"
@@ -433,7 +439,9 @@
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="initialLoading">
-                                <app-table-skeleton [skeletonData]="requiredSkeletonData"></app-table-skeleton>
+                                <app-table-skeleton
+                                    [skeletonData]="requiredSkeletonData"
+                                ></app-table-skeleton>
                             </ng-container>
                         </div>
                     </div>
