@@ -9,7 +9,9 @@ export class ResourcesService {
     csvDownloadTempletUrl = AppConstants['CSV_TEMPLATE_URL'];
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     uploadCsvUrl = AppConstants['PROJECT_API_URL'];
-    csvPreSignedUrl = AppConstants['PROJECT_API_URL'];
+    csvPreSignedUrl = AppConstants['PROJECT_API_URL'] + '/upload-resources-csv';
+    csvBulkUploadUrl =
+        AppConstants['PROJECT_API_URL'] + '/bulk-upload-resource';
 
     constructor(private http: HttpClient) {}
 
@@ -17,8 +19,8 @@ export class ResourcesService {
         return this.http.get(this.getEmails);
     }
 
-    uploadCsv(preSignedURL: string, file: File) {
-        return this.http.post(preSignedURL, file);
+    csvBulkUpload(obj: any) {
+        return this.http.post(this.csvBulkUploadUrl, obj);
     }
 
     getCsvPreSignedUrl(obj: any) {

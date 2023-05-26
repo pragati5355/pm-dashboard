@@ -25,6 +25,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     skippedResources: any[] = [];
     csvPreSignedUrl: string | null = null;
     csvTemplateUrl: string;
+    resourceUrl: string | null = null;
     constructor(
         public matDialog: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -75,10 +76,14 @@ export class ResourceUploadCsvComponent implements OnInit {
             this.resourceService.getCsvPreSignedUrl(payload).subscribe(
                 (res: any) => {
                     this.submitInProgress = false;
-                    if (res?.data?.preSignedURL) {
+                    if (res?.error === false) {
                         this.csvPreSignedUrl = res?.data?.preSignedURL;
+                        this.resourceUrl = res?.data?.resourceUrl;
                     } else {
                         this.snackBar.errorSnackBar('Somethin went wrong');
+                    }
+                    if (res?.tokenExpire) {
+                        this.authService.updateAndReload(window.location);
                     }
                 },
                 (err) => {
@@ -90,33 +95,33 @@ export class ResourceUploadCsvComponent implements OnInit {
     }
 
     submit() {
-        if (this.csvPreSignedUrl) {
-            this.resourceService
-                .uploadCsv(this.csvPreSignedUrl, this.csvFileToBeUploaded)
-                .subscribe(
-                    (res: any) => {
-                        this.submitInProgress = false;
-                        if (res?.error === false) {
-                            this.snackBar.successSnackBar(res?.message);
-                        }
-                        if (res?.error === true) {
-                            this.snackBar.errorSnackBar(res?.message);
-                        }
-                        if (res?.tokenExpire) {
-                            this.authService.updateAndReload(window.location);
-                        }
-                    },
-                    (err) => {
-                        this.submitInProgress = false;
-                        this.snackBar.errorSnackBar('Something Went Wrong');
+        if (this.csvPreSignedUrl && this.resourceUrl) {
+            this.submitInProgress = true;
+            const payload = {
+                resourceCsvUrl: this.resourceUrl,
+            };
+            this.resourceService.csvBulkUpload(payload).subscribe(
+                (res: any) => {
+                    this.submitInProgress = false;
+                    if (res?.error === false) {
+                        this.snackBar.successSnackBar(res?.message);
                     }
-                );
+                    if (res?.error === true) {
+                        this.snackBar.errorSnackBar(res?.message);
+                    }
+                    if (res?.tokenExpire) {
+                        this.authService.updateAndReload(window.location);
+                    }
+                },
+                (err) => {
+                    this.submitInProgress = false;
+                    this.snackBar.errorSnackBar('Something Went Wrong');
+                }
+            );
         } else {
             this.snackBar.errorSnackBar('Please select a file');
         }
     }
-
-    downloadCsvTemplate() {}
 
     removeUploadedFile() {
         this.fileUpload.nativeElement.value = '';
