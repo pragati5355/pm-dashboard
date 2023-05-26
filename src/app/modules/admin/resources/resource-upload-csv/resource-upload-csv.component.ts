@@ -23,6 +23,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     resourceUploadSkipCount: number = 0;
     csvFileToBeUploaded: File | null = null;
     skippedResources: any[] = [];
+    csvPreSignedUrl: string | null = null;
     constructor(
         public dialogRef: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,7 +32,28 @@ export class ResourceUploadCsvComponent implements OnInit {
         private authService: AuthService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        // this.resourceUploadSkipCount = 4;
+        // this.resourceUploadSuccessCount = 5;
+        // this.skippedResources = [
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        // ];
+    }
 
     cancel() {
         this.dialogRef.close();
@@ -43,56 +65,50 @@ export class ResourceUploadCsvComponent implements OnInit {
 
     uploadChange({ target }: any) {
         if (target?.files[0]) {
-            this.uploadFileName = target?.files[0]?.name;
-            this.csvFileToBeUploaded = target?.files[0];
-        }
-    }
-
-    submit() {
-        if (this.csvFileToBeUploaded) {
             this.submitInProgress = true;
-            // setTimeout(() => {
-            //     this.resourceUploadSkipCount = 4;
-            //     this.resourceUploadSuccessCount = 5;
-            //     this.skippedResources = [
-            //         {
-            //             name: 'Rohan kadam',
-            //             email: 'r@mindbowser.com',
-            //         },
-            //         {
-            //             name: 'Amaresh Joshi',
-            //             email: 'amaresh@mindbowser.com',
-            //         },
-            //         {
-            //             name: 'Rahul Dudhane',
-            //             email: 'rahul_12@mindbowser.com',
-            //         },
-            //         {
-            //             name: 'Pragati',
-            //             email: 'pragati@mindbowser.com',
-            //         },
-            //     ];
-            //     this.submitInProgress = false;
-            // }, 5000);
-            this.resourceService.uploadCsv(this.csvFileToBeUploaded).subscribe(
+            this.csvFileToBeUploaded = target?.files[0];
+            const payload = {
+                fileName: target?.files[0]?.name,
+            };
+            this.resourceService.getCsvPreSignedUrl(payload).subscribe(
                 (res: any) => {
                     this.submitInProgress = false;
-                    this.uploadFileName = null;
-                    if (res?.error === false) {
-                        this.snackBar.successSnackBar(res?.message);
-                    }
-                    if (res?.error === true) {
-                        this.snackBar.errorSnackBar(res?.message);
-                    }
-                    if (res?.tokenExpire) {
-                        this.authService.updateAndReload(window.location);
+                    if (res?.data?.preSignedURL) {
+                        this.csvPreSignedUrl = res?.data?.preSignedURL;
+                    } else {
+                        this.snackBar.errorSnackBar('Somethin went wrong');
                     }
                 },
                 (err) => {
                     this.submitInProgress = false;
-                    this.snackBar.errorSnackBar('Something Went Wrong');
+                    this.snackBar.errorSnackBar('Somethin went wrong');
                 }
             );
+        }
+    }
+
+    submit() {
+        if (this.csvPreSignedUrl) {
+            this.resourceService
+                .uploadCsv(this.csvPreSignedUrl, this.csvFileToBeUploaded)
+                .subscribe(
+                    (res: any) => {
+                        this.submitInProgress = false;
+                        if (res?.error === false) {
+                            this.snackBar.successSnackBar(res?.message);
+                        }
+                        if (res?.error === true) {
+                            this.snackBar.errorSnackBar(res?.message);
+                        }
+                        if (res?.tokenExpire) {
+                            this.authService.updateAndReload(window.location);
+                        }
+                    },
+                    (err) => {
+                        this.submitInProgress = false;
+                        this.snackBar.errorSnackBar('Something Went Wrong');
+                    }
+                );
         } else {
             this.snackBar.errorSnackBar('Please select a file');
         }
@@ -102,5 +118,6 @@ export class ResourceUploadCsvComponent implements OnInit {
         this.fileUpload.nativeElement.value = '';
         this.uploadFileName = null;
         this.csvFileToBeUploaded = null;
+        this.csvPreSignedUrl = null;
     }
 }

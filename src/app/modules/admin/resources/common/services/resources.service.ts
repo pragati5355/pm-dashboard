@@ -8,6 +8,7 @@ import { AppConstants } from 'app/core/constacts/constacts';
 export class ResourcesService {
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     uploadCsvUrl = AppConstants['PROJECT_API_URL'];
+    csvPreSignedUrl = AppConstants['PROJECT_API_URL'];
 
     constructor(private http: HttpClient) {}
 
@@ -15,7 +16,11 @@ export class ResourcesService {
         return this.http.get(this.getEmails);
     }
 
-    uploadCsv(file: File) {
-        return this.http.post(this.uploadCsvUrl, file);
+    uploadCsv(preSignedURL: string, file: File) {
+        return this.http.post(preSignedURL, file);
+    }
+
+    getCsvPreSignedUrl(obj: any) {
+        return this.http.post(this.csvPreSignedUrl, obj);
     }
 }

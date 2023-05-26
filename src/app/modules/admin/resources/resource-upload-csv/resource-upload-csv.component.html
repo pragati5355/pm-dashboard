@@ -23,15 +23,22 @@
         mat-raised-button
         color="primary"
         (click)="onClick($event)"
-        *ngIf="uploadFileName === null"
+        *ngIf="csvPreSignedUrl === null"
+        [disabled]="submitInProgress"
     >
         <span>Upload</span>
+        <mat-progress-spinner
+            *ngIf="submitInProgress"
+            [diameter]="24"
+            [mode]="'indeterminate'"
+            class="px-3 ml-3"
+        ></mat-progress-spinner>
     </button>
-    <div *ngIf="uploadFileName !== null" class="flex item-center">
-        <span class="text-primary font-semibold text-xl">{{
-            uploadFileName
+    <div *ngIf="csvPreSignedUrl !== null" class="flex item-center">
+        <span class="text-primary font-semibold">{{
+            csvPreSignedUrl
         }}</span>
-        <div class="ml-2 cursor-pointer">
+        <div class="cursor-pointer">
             <mat-icon
                 class="text-primary"
                 [svgIcon]="'heroicons_outline:x'"
@@ -122,12 +129,12 @@
         [disabled]="submitInProgress"
         (click)="submit()"
     >
+        Submit
         <mat-progress-spinner
             *ngIf="submitInProgress"
-            class="mr-2"
+            class="ml-3"
             mode="indeterminate"
             diameter="24"
         ></mat-progress-spinner>
-        Submit
     </button>
 </div>
