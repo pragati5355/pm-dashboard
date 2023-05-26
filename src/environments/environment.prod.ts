@@ -20,4 +20,6 @@ export const environment = {
         messagingSenderId: '140253399225',
         appId: '1:140253399225:web:7aaedf0426db191eabf368',
     },
+    csvTemplateUrl:
+        'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/resources-csv/template/resources-bulk-upload.csv',
 };

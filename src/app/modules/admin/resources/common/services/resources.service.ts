@@ -6,6 +6,7 @@ import { AppConstants } from 'app/core/constacts/constacts';
     providedIn: 'root',
 })
 export class ResourcesService {
+    csvDownloadTempletUrl = AppConstants['CSV_TEMPLATE_URL'];
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
     uploadCsvUrl = AppConstants['PROJECT_API_URL'];
     csvPreSignedUrl = AppConstants['PROJECT_API_URL'];

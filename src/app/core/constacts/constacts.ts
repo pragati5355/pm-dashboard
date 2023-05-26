@@ -7,6 +7,7 @@ const springBootUrl = environment.springBootUrl;
 const bitbucketSource = environment.bitbucketSource;
 export const AppConstants: ConstantsInterface = {
     BASE_URL: baseUrl,
+    CSV_TEMPLATE_URL: environment.csvTemplateUrl,
     bitbucketSource: bitbucketSource,
     PROJECT_API_URL: projectBaseUrl,
     REPO_API_URL: springBootUrl,

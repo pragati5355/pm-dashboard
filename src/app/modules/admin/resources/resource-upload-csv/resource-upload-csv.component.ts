@@ -24,6 +24,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     csvFileToBeUploaded: File | null = null;
     skippedResources: any[] = [];
     csvPreSignedUrl: string | null = null;
+    csvTemplateUrl: string;
     constructor(
         public dialogRef: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -33,6 +34,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.csvTemplateUrl = this.resourceService.csvDownloadTempletUrl;
         // this.resourceUploadSkipCount = 4;
         // this.resourceUploadSuccessCount = 5;
         // this.skippedResources = [
@@ -113,6 +115,8 @@ export class ResourceUploadCsvComponent implements OnInit {
             this.snackBar.errorSnackBar('Please select a file');
         }
     }
+
+    downloadCsvTemplate() {}
 
     removeUploadedFile() {
         this.fileUpload.nativeElement.value = '';
