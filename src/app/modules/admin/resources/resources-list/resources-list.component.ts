@@ -288,13 +288,15 @@ export class ResourcesListComponent implements OnInit {
     uploadCsvDialog() {
         this.matDialog
             .open(ResourceUploadCsvComponent, {
+                disableClose: true,
                 width: '50%',
                 height: 'auto',
             })
             .afterClosed()
-            .subscribe((result) => {
+            .subscribe((result: any) => {
+                console.log(result);
                 if (result) {
-                    window.location.reload();
+                    this.loadData();
                 }
             });
     }

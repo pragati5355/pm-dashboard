@@ -26,7 +26,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     csvPreSignedUrl: string | null = null;
     csvTemplateUrl: string;
     constructor(
-        public dialogRef: MatDialogRef<ResourceUploadCsvComponent>,
+        public matDialog: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private resourceService: ResourcesService,
         private snackBar: SnackBar,
@@ -58,7 +58,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     }
 
     cancel() {
-        this.dialogRef.close();
+        this.matDialog.close(true);
     }
 
     onClick(event) {
