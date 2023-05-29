@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import {
     AbstractControl,
+    FormArray,
     FormBuilder,
     FormControl,
     FormGroup,
@@ -32,6 +33,8 @@ import { ErrorMessage } from 'app/core/constacts/constacts';
 import { DatePipe } from '@angular/common';
 import moment from 'moment';
 import { ResourcesService } from '../common/services/resources.service';
+import { findIndex } from 'lodash';
+import { mode } from 'crypto-js';
 export class Technology {
     constructor(public id: number, public name: string) {}
 }
@@ -58,6 +61,7 @@ export class AddResourcesComponent
     pageTitle = '';
     submitInProcess: boolean = false;
     resourcesForm!: FormGroup;
+    technologyForm! : FormGroup
     firstName = '';
     selectTeamList = StaticData.ROLE_LIST;
     visible = true;
@@ -72,14 +76,16 @@ export class AddResourcesComponent
     filteredTechnologies: Observable<any[]> | undefined;
     technologys: any = [];
     alltechnologys: Technology[] = [];
+    assignedtechnologys : any = []
     newTechnology: any = [];
-    newTechnologysId: any = [];
-    allNewTechnology : any = [];
     routeSubscribe: any;
     updateDeleteObj: any = [];
     showHideExperience: boolean = true;
+    showTechnologyTable: boolean = false;
+    removeTechnologys: boolean = false;
     pmMentorFormControl: FormControl;
     filteredEmails: Observable<any[]>;
+    mode : 'edit' | 'add';
 
     emailList: any[] = [];
 
@@ -100,11 +106,19 @@ export class AddResourcesComponent
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
         private datePipe: DatePipe,
-        private resourceService: ResourcesService
+        private resourceService: ResourcesService,
     ) {}
+
+    get technologyi(){
+        return this.resourcesForm?.get('technologies') as FormArray;
+    }
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
+    }
+
+    get technologyValidForm(): {[key: string]: AbstractControl}{
+        return this.technologyForm.controls;
     }
 
     getAvtarInit() {
@@ -116,9 +130,45 @@ export class AddResourcesComponent
         this.initializeData();
         this.getTechnology();
         this.userData = this._authService.getUser();
+        this._route.params.subscribe((id:any)=> {
+            if(id['id']){
+                this.mode = 'edit';
+            }else{
+                this.mode = 'add';
+            }
+        })
     }
     ngAfterViewInit(): void {}
+
+    getTechnologyControls(): FormArray{
+        console.log(this.mode)
+        if(this.mode === 'add'){
+            return this._formBuilder.array([this.getTechnologySingleControl(null)])
+        } else {
+            return null;
+        }
+    }
+
+    getTechnologySingleControl(data):FormGroup {
+        const controls = this._formBuilder.group({
+            technologyName : this._formBuilder.control(data?.name,[]),
+            experienceYear : this._formBuilder.control(data?.experienceYear || null,[Validators.pattern(ValidationConstants.YEAR_VALIDATION)]),
+            experienceMonth : this._formBuilder.control(data?.experienceMonth || null,[Validators.pattern(ValidationConstants.YEAR_VALIDATION)]),
+            deleted : this._formBuilder.control(false),
+        });
+
+        return controls;
+    }
+
+    removeTechnology(index : number){
+
+    }
+
+
+
     submit() {
+        console.log("this.resourcesForm",this.resourcesForm)
+        return
         if (!this.resourcesForm?.invalid) {
             if (
                 this.resourcesForm?.get('team')?.value === 'PM' ||
@@ -135,7 +185,7 @@ export class AddResourcesComponent
                     month: this.resourcesForm?.value?.month
                         ? this.resourcesForm?.value?.month
                         : 0,
-                    technology: this.technologys,
+                    technologies: this.technologys,
                     salary: this.resourcesForm?.value?.salary,
                     dateOfJoining: this.resourcesForm?.value?.dateOfJoining,
                     pmMentorEmail: this.resourcesForm?.value?.pmMentorEmail,
@@ -161,7 +211,7 @@ export class AddResourcesComponent
                 this.submitInProcess = false;
                 this.alltechnologys = res.data;
                 this.filteredTechnologies = this.resourcesForm
-                    .get('technology')
+                    .get('technologies')
                     ?.valueChanges.pipe(
                         startWith(''),
                         map((technology: any | null) =>
@@ -201,16 +251,18 @@ export class AddResourcesComponent
         const value = event.value;
         // Add our technology
         if (typeof event.value == 'string') {
-                    this.newTechnology.push(event.value);
+                    this.technologys.push(event.value);
+                    console.log("Selected ----> ", event.value)
                     let max =
                         Math.max.apply(
                             Math,
                             this.alltechnologys.map((ele) => ele.id)
                         ) + 1;
-                    this.alltechnologys.push({ id: max, name: event.value });
-                    this.technologys.push(max);
-                    this.newTechnologysId.push(max);
-                    this.allNewTechnology.push({ id: max, name: event.value });
+                        const data = {name : event?.value , experienceYear : null , experienceMonth : null};
+                        console.log("data", data);
+                        this.technologyi.push(this.getTechnologySingleControl(data));    
+                    this.assignedtechnologys.push({ id: null, name: event.value });
+                    console.log(this.assignedtechnologys);
         }
 
         if (input) {
@@ -218,45 +270,40 @@ export class AddResourcesComponent
         }
 
         this.technology.setValue('');
-        this.resourcesForm.get('technology')?.setValue('');
+        this.resourcesForm.get('technologies')?.setValue('');
     }
 
-    remove(technology: any, selectIndex: any): void {
-        this.technologys.splice(selectIndex, 1);
-        const found = this.newTechnologysId.some(
-                    (el: any) => el === technology
-        );
-        if (found) {
-                    this.newTechnologysId.splice(selectIndex, 1);
-                    let filteredExternalProject: any =
-                        this.allNewTechnology.filter(
-                            (item: any) => item.id === technology
-                        );
-                    this.newTechnology.forEach((element: any, index: any) => {
-                        if (element == filteredExternalProject[0].name)
-                            this.newTechnology.splice(index, 1);
-                    });
-                    this.alltechnologys.forEach((element: any, index: any) => {
-                        if (element.id == technology) this.alltechnologys.splice(index, 1);
-                    });
-                    this.allNewTechnology.forEach((element: any, index: any) => {
-                        if (element.id == technology)
-                            this.allNewTechnology.splice(index, 1);
-                    });
-        }
-        this.resourcesForm.get('technology')?.setValue('');
+    remove(technology: any): void {
+
+        this.assignedtechnologys.forEach((value,index)=>{
+            if(value.name == technology){
+                this.assignedtechnologys.splice(index,1);
+            }
+        });
+
+        console.log(this.assignedtechnologys);
+
+        this.resourcesForm.get('technologies')?.setValue('');
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
-        this.technologys.push(event.option.value);
+        const data = {name : event?.option?.value?.name , experienceYear : null , experienceMonth : null};
+        console.log("data", data);
+        this.technologyi.push(this.getTechnologySingleControl(data));
+        this.technologys.push(event.option.value.name);
+        this.assignedtechnologys.push({ id:event.option.value.id , name: event.option.value.name });
+        
+        console.log(this.technologyi);
+        
         this.technologyInput.nativeElement.value = '';
         this.technology.setValue('');
-        this.resourcesForm.get('technology')?.setValue('');
+        this.resourcesForm.get('technologies')?.setValue('');
     }
     /**
      * Upload avatar
      *
      * @param fileList
+     * 
      */
     uploadAvatar(): void {
         // Return if canceled
@@ -293,7 +340,7 @@ export class AddResourcesComponent
                     this.firstName = item.firstName ? item.firstName : '';
                     this.technologys = item.technology;
                     this.filteredTechnologies = this.resourcesForm
-                        .get('technology')
+                        .get('technologies')
                         ?.valueChanges.pipe(
                             startWith(''),
                             map((technology: any | null) =>
@@ -333,11 +380,11 @@ export class AddResourcesComponent
                     year: this.resourcesForm?.value?.year
                         ? this.resourcesForm?.value?.year
                         : 0,
-                    team: this.resourcesForm?.value?.team,
+                    role: this.resourcesForm?.value?.team,
                     month: this.resourcesForm?.value?.month
                         ? this.resourcesForm?.value?.month
                         : 0,
-                    technology: this.technologys,
+                    technologies: this.technologys,
                     salary: this.resourcesForm?.value?.salary,
                     dateOfJoining: this.resourcesForm?.value?.dateOfJoining,
                     pmMentorEmail: this.resourcesForm?.value?.pmMentorEmail,
@@ -424,7 +471,14 @@ export class AddResourcesComponent
                     '',
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
                 ],
-                technology: [''],
+                technologies: this._formBuilder.array([
+                    this._formBuilder.group({
+                        technologyId: [''],
+                        name: [''],
+                        experinceYear: [''],
+                        experinceMonth: []
+                    })
+                ]),
                 pmMentorEmail: [''],
             },
             {

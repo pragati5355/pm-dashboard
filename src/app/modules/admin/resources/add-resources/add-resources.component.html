@@ -503,6 +503,9 @@
                                 <div>PM/mentor is mandatory</div>
                             </mat-error>
                         </div>
+
+                        <!-- technologies form -->
+
                         <div
                             class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
                         >
@@ -520,7 +523,7 @@
                                             placeholder="New technology..."
                                             #technologyInput
                                             [formControl]="technology"
-                                            formControlName="technology"
+                                            formControlName="technologies"
                                             [matAutocomplete]="auto"
                                             [matChipInputFor]="chipList"
                                             [matChipInputSeparatorKeyCodes]="
@@ -540,7 +543,7 @@
                                                 let technology of filteredTechnologies
                                                     | async
                                             "
-                                            [value]="technology.id"
+                                            [value]="technology"
                                         >
                                             {{ technology.name }}
                                         </mat-option>
@@ -548,87 +551,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="flex w-2/4 flex-col overflow-hidden mt-4">
-                            <span class="text-l text-gray-500 mb-1"
-                                >Add Technology Experience</span
-                            >
-                            <div
-                                class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
-                            >
-                                <div
-                                    class="inventory-grid z-10 sticky top-0 grid grid-cols-3 gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
-                                    matSortDisableClear
-                                >
-                                    <div>Technology Name</div>
-                                    <div>Experience</div>
-                                    <div>Action</div>
-                                </div>
-                                <ng-container *ngIf="true">
-                                    <div class="grid shadow">
-                                        <ng-container>
-                                            <div
-                                                class="inventory-grid grid grid-cols-3 items-center gap-4 py-3 border-b bg-white px-2"
-                                            >
-                                                <mat-chip-list
-                                                    #chipList
-                                                    class="mb-2"
-                                                >
-                                                    <mat-chip
-                                                        *ngFor="
-                                                            let technology of technologys;
-                                                            let selectIndex = index
-                                                        "
-                                                        [selectable]="
-                                                            selectable
-                                                        "
-                                                        [removable]="removable"
-                                                        (removed)="
-                                                            remove(
-                                                                technology,
-                                                                selectIndex
-                                                            )
-                                                        "
-                                                    >
-                                                        <div
-                                                            *ngFor="
-                                                                let technologyi of alltechnologys
-                                                            "
-                                                        >
-                                                            <div
-                                                                *ngIf="
-                                                                    technologyi.id ==
-                                                                    technology
-                                                                "
-                                                            >
-                                                                {{
-                                                                    technologyi.name
-                                                                }}
-                                                            </div>
-                                                        </div>
-                                                        <mat-icon
-                                                            matChipRemove
-                                                            *ngIf="removable"
-                                                            >cancel</mat-icon
-                                                        >
-                                                    </mat-chip>
-                                                </mat-chip-list>
 
-                                                <!-- <div
-                                                    class="hidden md:block truncate"
-                                                >
-                                                    Fall Bright
-                                                </div>
-                                                <div
-                                                    class="hidden md:block truncate"
-                                                >
-                                                    1
-                                                </div> -->
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </div>
                         <div
                             class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"
                         >
