@@ -138,7 +138,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
     }
 
     openDialog(mode: String, data: any) {
-        // const emailList = this.filterOutAlreadyAssignedEmails();
+        const emailList = this.filterOutAlreadyAssignedEmails();
         console.log(data);
         const dialogRef = this.dialog.open(
             ExternalProjectsAddResourceComponent,
@@ -148,7 +148,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 panelClass: 'warn-dialog-content',
                 autoFocus: false,
                 data: {
-                    // developerEmails: emailList,
+                    developerEmails: emailList,
                     allResources: this.developerEmailList,
                     projectId: this.projectId,
                     mode: mode,
