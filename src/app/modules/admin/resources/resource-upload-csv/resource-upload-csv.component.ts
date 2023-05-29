@@ -26,6 +26,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     csvPreSignedUrl: string | null = null;
     csvTemplateUrl: string;
     resourceUrl: string | null = null;
+    reloadResourcesList: boolean = false;
     constructor(
         public matDialog: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -36,33 +37,33 @@ export class ResourceUploadCsvComponent implements OnInit {
 
     ngOnInit(): void {
         this.csvTemplateUrl = this.resourceService.csvDownloadTempletUrl;
-        // this.resourceUploadSkipCount = 4;
-        // this.resourceUploadSuccessCount = 5;
-        // this.skippedResources = [
-        //     {
-        //         name: 'Rohan kadam',
-        //         email: 'r@mindbowser.com',
-        //     },
-        //     {
-        //         name: 'Amaresh Joshi',
-        //         email: 'amaresh@mindbowser.com',
-        //     },
-        //     {
-        //         name: 'Rahul Dudhane',
-        //         email: 'rahul_12@mindbowser.com',
-        //     },
-        //     {
-        //         name: 'Pragati',
-        //         email: 'pragati@mindbowser.com',
-        //     },
-        // ];
+        this.resourceUploadSkipCount = 4;
+        this.resourceUploadSuccessCount = 5;
+        this.skippedResources = [
+            {
+                name: 'Rohan kadam',
+                email: 'r@mindbowser.com',
+            },
+            {
+                name: 'Amaresh Joshi',
+                email: 'amaresh@mindbowser.com',
+            },
+            {
+                name: 'Rahul Dudhane',
+                email: 'rahul_12@mindbowser.com',
+            },
+            {
+                name: 'Pragati',
+                email: 'pragati@mindbowser.com',
+            },
+        ];
     }
 
     cancel() {
-        this.matDialog.close(true);
+        this.matDialog.close(this.reloadResourcesList);
     }
 
-    onClick(event) {
+    onClick() {
         if (this.fileUpload) this.fileUpload.nativeElement.click();
     }
 
@@ -97,6 +98,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     submit() {
         if (this.csvPreSignedUrl && this.resourceUrl) {
             this.submitInProgress = true;
+            this.reloadResourcesList = false;
             const payload = {
                 resourceCsvUrl: this.resourceUrl,
             };
@@ -105,6 +107,7 @@ export class ResourceUploadCsvComponent implements OnInit {
                     this.submitInProgress = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
+                        this.reloadResourcesList = true;
                     }
                     if (res?.error === true) {
                         this.snackBar.errorSnackBar(res?.message);
