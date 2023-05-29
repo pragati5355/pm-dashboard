@@ -325,7 +325,7 @@ export class AddResourcesComponent
                         firstName: item.firstName ? item.firstName : '',
                         lastName: item.lastName ? item.lastName : '',
                         email: item.email ? item.email : '',
-                        team: item.team ? item.team : '',
+                        role: item.team ? item.team : '',
                         year: item.year ? item.year : '',
                         month: item.month ? item.month : '',
                         salary: item.salary ? item.salary : null,
