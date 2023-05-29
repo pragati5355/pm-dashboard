@@ -27,6 +27,8 @@ export class ResourcesService {
         return this.http.post(this.csvPreSignedUrl, obj);
     }
     uploadCsvFileToS3(url: string, file: File) {
-        return this.http.post(url, file);
+        return this.http.post(url, file, {
+            headers: { 'Content-Type': 'text/csv' },
+        });
     }
 }
