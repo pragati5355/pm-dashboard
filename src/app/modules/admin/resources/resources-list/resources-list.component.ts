@@ -32,6 +32,8 @@ import {
 } from '@angular/cdk/layout';
 import { take } from 'rxjs/internal/operators/take';
 import moment from 'moment';
+import { MatDialog } from '@angular/material/dialog';
+import { ResourceUploadCsvComponent } from '../resource-upload-csv/resource-upload-csv.component';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -87,7 +89,8 @@ export class ResourcesListComponent implements OnInit {
         private snackBar: SnackBar,
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        public breakpointObserver: BreakpointObserver
+        public breakpointObserver: BreakpointObserver,
+        private matDialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -278,6 +281,22 @@ export class ResourcesListComponent implements OnInit {
                 this.initialLoading = false;
                 if (res.tokenExpire == true) {
                     this.handleTokenExpiry();
+                }
+            });
+    }
+
+    uploadCsvDialog() {
+        this.matDialog
+            .open(ResourceUploadCsvComponent, {
+                disableClose: true,
+                width: '50%',
+                height: 'auto',
+            })
+            .afterClosed()
+            .subscribe((result: any) => {
+                console.log(result);
+                if (result) {
+                    this.loadData();
                 }
             });
     }
