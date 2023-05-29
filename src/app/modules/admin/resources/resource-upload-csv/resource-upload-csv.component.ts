@@ -27,6 +27,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     csvTemplateUrl: string;
     resourceUrl: string | null = null;
     reloadResourcesList: boolean = false;
+    isFileUploadedToS3: boolean = false;
     constructor(
         public matDialog: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -80,6 +81,27 @@ export class ResourceUploadCsvComponent implements OnInit {
                     if (res?.error === false) {
                         this.csvPreSignedUrl = res?.data?.preSignedURL;
                         this.resourceUrl = res?.data?.resourceUrl;
+
+                        if (this.csvPreSignedUrl) {
+                            this.submitInProgress = true;
+                            this.resourceService
+                                .uploadCsvFileToS3(
+                                    this.csvPreSignedUrl,
+                                    this.csvFileToBeUploaded
+                                )
+                                .subscribe(
+                                    (res: any) => {
+                                        this.isFileUploadedToS3 = true;
+                                        this.submitInProgress = false;
+                                    },
+                                    (err) => {
+                                        this.submitInProgress = false;
+                                        this.snackBar.errorSnackBar(
+                                            'Somethin went wrong'
+                                        );
+                                    }
+                                );
+                        }
                     } else {
                         this.snackBar.errorSnackBar('Somethin went wrong');
                     }
@@ -96,7 +118,11 @@ export class ResourceUploadCsvComponent implements OnInit {
     }
 
     submit() {
-        if (this.csvPreSignedUrl && this.resourceUrl) {
+        if (
+            this.csvPreSignedUrl &&
+            this.resourceUrl &&
+            this.isFileUploadedToS3
+        ) {
             this.submitInProgress = true;
             this.reloadResourcesList = false;
             const payload = {
