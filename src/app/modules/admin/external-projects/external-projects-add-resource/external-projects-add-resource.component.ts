@@ -87,6 +87,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     getSelectedEmail(email: string) {
         this.getResourceCapacity(email);
+        this.getCurrentResourceTechnology(email);
         this.utilizationValue = '';
         this.getAlreadyAssignedProjectsData(email);
     }
@@ -103,6 +104,13 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return item?.email === email;
         });
         return value[0]?.capacity;
+    }
+
+    getCurrentResourceTechnology(email:string){
+        const value = this.data?.allResources?.filters((item:any)=> {
+            return item?.email === email;
+        })
+        return value[0]?.technology;
     }
 
     filterEmails(email: string) {
