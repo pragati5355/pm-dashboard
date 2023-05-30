@@ -48,6 +48,7 @@ export class ResourceDetailsComponent implements OnInit {
                 this.initialLoading = false;
                 if (res.data) {
                     this.resourceDetails = res?.data;
+                    console.log(this.resourceDetails);
                 }
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
