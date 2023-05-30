@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -49,6 +49,7 @@ import { ResourceUploadCsvComponent } from './resource-upload-csv/resource-uploa
     imports: [
         CommonModule,
         SharedModule,
+        FormsModule,
         ReactiveFormsModule,
         MatChipsModule,
         MatButtonModule,
