@@ -135,31 +135,90 @@
             </mat-form-field>
         </div>
     </div>
-    <div class="w-full flex flex-1 mt-2">
+    <div class="w-full flex mt-2">
         <div class="w-full mr-3">
-            <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
-                <mat-label class="">Technology</mat-label>
-                <input
-                    matInput
-                    [placeholder]="'Technology'"
-                    aria-label="technology"
-                    [matAutocomplete]="auto1"
-                    formControlName="technology"
-                />
-                <mat-error
-                    *ngIf="
-                        addResourceForm?.get('technology')?.hasError('required')
-                    "
+            <mat-form-field
+                [floatLabel]="'always'"
+                appearance="fill"
+                class="example-chip-list w-full flex-0 mb-2"
+            >
+                <mat-label>Technology *</mat-label>
+                <mat-chip-list #chipList>
+                    <input
+                        placeholder="New technology..."
+                        #technologyInput
+                        formControlName="technology"
+                        [matAutocomplete]="auto"
+                        [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="addOnBlur"
+                        (matChipInputTokenEnd)="add($event)"
+                        class="w-full"
+                    />
+                </mat-chip-list>
+                <mat-autocomplete
+                    #auto="matAutocomplete"
+                    (optionSelected)="selected($event)"
                 >
-                    <div>Technology is mandatory</div>
-                </mat-error>
+                    <mat-option
+                        *ngFor="let technology of filteredTechnologies | async"
+                        [value]="technology.id"
+                    >
+                        {{ technology.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-chip-list #chipList class="mb-2">
+                    <mat-chip
+                        *ngFor="
+                            let technology of technologys;
+                            let selectIndex = index
+                        "
+                        [selectable]="selectable"
+                        [removable]="removable"
+                        (removed)="remove(technology, selectIndex)"
+                    >
+                        <div *ngFor="let technologyi of alltechnologys">
+                            <div *ngIf="technologyi?.id == technology">
+                                {{ technologyi?.name }}
+                            </div>
+                        </div>
+                        <mat-icon matChipRemove *ngIf="removable"
+                            >cancel</mat-icon
+                        >
+                    </mat-chip>
+                </mat-chip-list>
             </mat-form-field>
         </div>
-        <div class="w-full mt-2 ml-1">
-            <label class="font-semibold -mb-0">Utilization</label>
+    </div>
+
+    <div class="flex flex-1 items-baseline">
+        <div class="flex w-full items-center mt-2">
+            <div class="mb-4 mr-8">
+                <mat-checkbox
+                    [color]="'primary'"
+                    [checked]="markResourceAsBench"
+                    (change)="resourceOnBench($event?.checked)"
+                    ><span class="font-semibold">On Bench?</span></mat-checkbox
+                >
+            </div>
+
+            <div class="mb-4">
+                <mat-checkbox
+                    [color]="'primary'"
+                    [checked]="markResourceAsShadow"
+                    (change)="shadowResource($event?.checked)"
+                    ><span class="font-semibold"
+                        >Shadow Resource?</span
+                    ></mat-checkbox
+                >
+            </div>
+        </div>
+
+        <div class="w-full ml-1">
+            <label class="font-semibold">Utilization *</label>
             <mat-radio-group
                 aria-labelledby="example-radio-group-label"
-                class="ml-3 mt-2 example-radio-group"
+                class="example-radio-group"
                 formControlName="utilization"
             >
                 <mat-radio-button
@@ -176,7 +235,7 @@
     </div>
 
     <div
-        class="flex flex-col flex-auto overflow-hidden mt-4"
+        class="flex flex-col flex-1 overflow-hidden mt-4"
         *ngIf="alreadyAssignedProjects?.length > 0"
     >
         <span class="text-l text-gray-500 mb-1"
@@ -210,28 +269,6 @@
                     </ng-container>
                 </div>
             </ng-container>
-        </div>
-    </div>
-
-    <div class="mt-4 flex items-center">
-        <div class="mb-4 mr-8">
-            <mat-checkbox
-                [color]="'primary'"
-                [checked]="markResourceAsBench"
-                (change)="resourceOnBench($event?.checked)"
-                ><span class="font-semibold">On Bench?</span></mat-checkbox
-            >
-        </div>
-
-        <div class="mb-4">
-            <mat-checkbox
-                [color]="'primary'"
-                [checked]="markResourceAsShadow"
-                (change)="shadowResource($event?.checked)"
-                ><span class="font-semibold"
-                    >Shadow Resource?</span
-                ></mat-checkbox
-            >
         </div>
     </div>
 

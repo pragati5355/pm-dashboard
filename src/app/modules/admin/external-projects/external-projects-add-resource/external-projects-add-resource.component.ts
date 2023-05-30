@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    Inject,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackBar } from '../../../../core/utils/snackBar';
@@ -7,6 +14,9 @@ import { ROLE_LIST, UTILIZATION_VALUES } from '../common/constants';
 import { AuthService } from '@services/auth/auth.service';
 import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
 import { DatePipe } from '@angular/common';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
     selector: 'app-external-projects-add-resource',
@@ -14,6 +24,9 @@ import { DatePipe } from '@angular/common';
     styleUrls: ['./external-projects-add-resource.component.scss'],
 })
 export class ExternalProjectsAddResourceComponent implements OnInit {
+    @ViewChild('technologyInput')
+    technologyInput!: ElementRef;
+
     addResourceForm: FormGroup;
     submitInProcess = false;
     filteredEmails: Observable<any[]>;
@@ -33,6 +46,14 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     isShadowResource: boolean = false;
     markResourceAsBench: boolean = false;
     markResourceAsShadow: boolean = false;
+    selectable = true;
+    removable = true;
+    addOnBlur = false;
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+    technologys: any = [];
+    filteredTechnologies: Observable<any[]> | undefined;
+    alltechnologys: any[] = [];
+
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
@@ -59,6 +80,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return;
         }
 
+        if (this.technologys?.length < 1) {
+            this.snackBar.errorSnackBar('Add Technologys');
+            return;
+        }
+
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
@@ -81,6 +107,23 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 }
             );
         }
+    }
+
+    add(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = event.value;
+        // Add our technology
+
+        if (input) {
+            input.value = '';
+        }
+        this.addResourceForm.get('technology')?.setValue('');
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        this.technologys.push(event?.option?.value);
+        this.technologyInput.nativeElement.value = '';
+        this.addResourceForm.get('technology')?.setValue('');
     }
 
     findResourceId(email: string) {
@@ -136,6 +179,86 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     private loadData() {
+        this.alltechnologys = [
+            {
+                id: 1,
+                name: 'Java',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 2,
+                name: 'SpringBoot',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 3,
+                name: 'Microservices',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 4,
+                name: 'AWS',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 5,
+                name: 'Angular',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 6,
+                name: 'HTML',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 7,
+                name: 'React',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 8,
+                name: 'CSS',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 9,
+                name: 'JavaScript',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 10,
+                name: 'NodeJs',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 42,
+                name: 'flutter',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 43,
+                name: 'Next Js',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+            {
+                id: 44,
+                name: 'view js',
+                experinceYear: null,
+                experinceMonth: null,
+            },
+        ];
         this.emailList = this.data?.developerEmails;
         this.loadCheckBoxData();
         this.mode = this.data?.mode;
@@ -209,12 +332,41 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
+            technology: [''],
         });
+
+        this.filteredTechnologies = this.addResourceForm
+            .get('technology')
+            ?.valueChanges.pipe(
+                startWith(''),
+                map((technology: any | null) =>
+                    technology ? this._filter(technology) : this._filterslice()
+                )
+            );
+
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
         if (this.mode === 'EDIT') {
             this.addResourceForm.controls['email'].disable();
         }
+    }
+
+    _filter(value: any) {
+        return this.alltechnologys?.filter(
+            (alltechnologys: any) =>
+                alltechnologys?.name?.toLowerCase()?.indexOf(value) === 0 &&
+                !this.technologys?.includes(alltechnologys.id)
+        );
+    }
+    _filterslice() {
+        return this.alltechnologys?.filter(
+            (alltechnologys) => !this.technologys?.includes(alltechnologys?.id)
+        );
+    }
+
+    remove(technology: any, selectIndex: any): void {
+        this.technologys.splice(selectIndex, 1);
+        this.addResourceForm.get('technology')?.setValue('');
     }
 
     private patchValuesInEditMode() {
