@@ -34,6 +34,7 @@ import { take } from 'rxjs/internal/operators/take';
 import moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { ResourceUploadCsvComponent } from '../resource-upload-csv/resource-upload-csv.component';
+import { ResourceModel } from '../common/models/resource.model';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -61,7 +62,7 @@ export class ResourcesListComponent implements OnInit {
     searchValue = '';
     techList: string[] = [];
     count = 1;
-    resources: any[] = [];
+    resources: ResourceModel[] = [];
     initialLoading: boolean = false;
     totalRecored: any;
     totalPerPageData = StaticData.PER_PAGE_DATA;
