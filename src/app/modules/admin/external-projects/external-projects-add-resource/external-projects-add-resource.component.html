@@ -135,25 +135,23 @@
             </mat-form-field>
         </div>
     </div>
-    <div class="w-full flex flex-1 mt-2">
-        <div class="w-full mr-3">
-            <label class="font-semibold -mb-0">Utilization</label>
-            <mat-radio-group
-                aria-labelledby="example-radio-group-label"
-                class="ml-3 mt-2 example-radio-group"
-                formControlName="utilization"
+    <div class="w-full flex flex-col">
+        <label class="font-semibold -mb-0">Utilization</label>
+        <mat-radio-group
+            aria-labelledby="example-radio-group-label"
+            class="example-radio-group"
+            formControlName="utilization"
+        >
+            <mat-radio-button
+                class="example-radio-button"
+                [color]="'primary'"
+                *ngFor="let value of utilizationValues"
+                [disabled]="value > currentCapacity"
+                [value]="value"
             >
-                <mat-radio-button
-                    class="example-radio-button"
-                    [color]="'primary'"
-                    *ngFor="let value of utilizationValues"
-                    [disabled]="value > currentCapacity"
-                    [value]="value"
-                >
-                    {{ value }}
-                </mat-radio-button>
-            </mat-radio-group>
-        </div>
+                {{ value }}
+            </mat-radio-button>
+        </mat-radio-group>
     </div>
 
     <div
