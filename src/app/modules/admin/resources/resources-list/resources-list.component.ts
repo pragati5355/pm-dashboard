@@ -137,6 +137,7 @@ export class ResourcesListComponent implements OnInit {
         if (res.data) {
             this.totalRecored = res?.data?.totalRecored;
             this.resources = res?.data?.teamMember;
+            console.log("Team Members",this.resources);
             this.initialLoading = false;
         } else if (res?.data == null) {
             this.totalRecored = 0;
