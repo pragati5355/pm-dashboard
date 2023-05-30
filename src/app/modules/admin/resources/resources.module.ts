@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -51,6 +51,7 @@ import { JoinPipe } from './common/pipes/join-tech.pipe';
     imports: [
         CommonModule,
         SharedModule,
+        FormsModule,
         ReactiveFormsModule,
         MatChipsModule,
         MatButtonModule,

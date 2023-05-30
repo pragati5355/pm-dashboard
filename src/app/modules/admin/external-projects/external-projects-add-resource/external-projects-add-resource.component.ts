@@ -175,6 +175,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
+            technology : ['',[Validators.required]]
         });
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
