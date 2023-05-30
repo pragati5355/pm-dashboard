@@ -53,6 +53,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     technologys: any = [];
     filteredTechnologies: Observable<any[]> | undefined;
     alltechnologys: any[] = [];
+    currentResourceTechnologyList: any[] = [];
 
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
@@ -86,26 +87,27 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         }
 
         if (!this.addResourceForm.invalid) {
-            this.submitInProcess = true;
+            // this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
-            this.externalProjectsService.mapResource(payload).subscribe(
-                (res: any) => {
-                    this.submitInProcess = false;
-                    if (res?.error === false) {
-                        this.snackBar.successSnackBar(res?.message);
-                        this.matDialogRef.close(true);
-                    }
-                    if (res?.error === true) {
-                        this.snackBar.errorSnackBar(res?.message);
-                    }
-                    if (res?.tokenExpire) {
-                        this._authService.updateAndReload(window.location);
-                    }
-                },
-                (err) => {
-                    this.submitInProcess = false;
-                }
-            );
+            console.log(payload)
+            // this.externalProjectsService.mapResource(payload).subscribe(
+            //     (res: any) => {
+            //         this.submitInProcess = false;
+            //         if (res?.error === false) {
+            //             this.snackBar.successSnackBar(res?.message);
+            //             this.matDialogRef.close(true);
+            //         }
+            //         if (res?.error === true) {
+            //             this.snackBar.errorSnackBar(res?.message);
+            //         }
+            //         if (res?.tokenExpire) {
+            //             this._authService.updateAndReload(window.location);
+            //         }
+            //     },
+            //     (err) => {
+            //         this.submitInProcess = false;
+            //     }
+            // );
         }
     }
 
@@ -142,6 +144,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     getSelectedEmail(email: string) {
+        this.alltechnologys = [];
+        this.technologys = [];
+        this.technologyInput.nativeElement.value = '';
+        this.addResourceForm.get('technology')?.setValue('');
         this.getResourceCapacity(email);
         this.getCurrentResourceTechnology(email);
         this.utilizationValue = '';
@@ -163,10 +169,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     getCurrentResourceTechnology(email: string) {
-        const value = this.data?.allResources?.filters((item: any) => {
+        const value = this.data?.allResources?.filter((item: any) => {
             return item?.email === email;
         });
-        return value[0]?.technology;
+        this.alltechnologys = value[0]?.technologies;
+        console.log('this.alltechnologys :', this.alltechnologys);
     }
 
     filterEmails(email: string) {
@@ -179,86 +186,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     private loadData() {
-        this.alltechnologys = [
-            {
-                id: 1,
-                name: 'Java',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 2,
-                name: 'SpringBoot',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 3,
-                name: 'Microservices',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 4,
-                name: 'AWS',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 5,
-                name: 'Angular',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 6,
-                name: 'HTML',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 7,
-                name: 'React',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 8,
-                name: 'CSS',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 9,
-                name: 'JavaScript',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 10,
-                name: 'NodeJs',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 42,
-                name: 'flutter',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 43,
-                name: 'Next Js',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-            {
-                id: 44,
-                name: 'view js',
-                experinceYear: null,
-                experinceMonth: null,
-            },
-        ];
         this.emailList = this.data?.developerEmails;
         this.loadCheckBoxData();
         this.mode = this.data?.mode;
@@ -308,6 +235,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             projectType: 'EXTERNAL',
             isBench: this.isResourceOnBench,
             isShadow: this.isShadowResource,
+            technologies: this.technologys,
         };
         if (this.mode === 'EDIT') {
             return {
@@ -332,7 +260,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
-            technology : ['',[Validators.required]]
+            technology: [''],
         });
 
         this.filteredTechnologies = this.addResourceForm
