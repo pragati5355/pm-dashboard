@@ -20,4 +20,6 @@ export const environment = {
         appId: '1:154633398807:web:6601a32fe33ce8f9118a52',
         measurementId: 'G-TQMZ0ZKWYM',
     },
+    csvTemplateUrl:
+        'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/resources-csv/template/resources-bulk-upload.csv',
 };
