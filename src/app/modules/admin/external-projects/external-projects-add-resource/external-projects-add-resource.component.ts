@@ -31,8 +31,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alreadyAssignedProjects: any[];
     isResourceOnBench: boolean = false;
     isShadowResource: boolean = false;
-    markResourceAsBench: boolean = true;
-    markResourceAsShadow: boolean = true;
+    markResourceAsBench: boolean = false;
+    markResourceAsShadow: boolean = false;
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
@@ -92,12 +92,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     resourceOnBench(value: boolean) {
         this.isResourceOnBench = value ? true : false;
-        console.log('this.isResourceOnBench ', this.isResourceOnBench);
     }
 
     shadowResource(value: boolean) {
         this.isShadowResource = value ? true : false;
-        console.log('this.isShadowResource ', this.isShadowResource);
     }
 
     getSelectedEmail(email: string) {
@@ -139,17 +137,28 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     private loadData() {
         this.emailList = this.data?.developerEmails;
+        this.loadCheckBoxData();
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
+        this.checkEditMode();
+    }
+
+    private checkEditMode() {
         if (this.mode === 'EDIT') {
             this.disableEmailField = true;
             this.currentCapacity =
                 this.getCurrentResourceCapacity(this.data?.editData?.email) +
                 this.data?.editData?.utilization;
             this.cd.detectChanges();
-            console.log('edit mode current cap :', this.currentCapacity);
         }
+    }
+
+    private loadCheckBoxData() {
+        this.isResourceOnBench = this.data?.isBench || false;
+        this.isShadowResource = this.data?.isShadow || false;
+        this.markResourceAsBench = this.data?.isBench || false;
+        this.markResourceAsShadow = this.data?.isShadow || false;
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
