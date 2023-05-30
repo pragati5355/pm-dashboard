@@ -89,7 +89,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         if (!this.addResourceForm.invalid) {
             // this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
-            console.log(payload)
+            console.log(payload);
             // this.externalProjectsService.mapResource(payload).subscribe(
             //     (res: any) => {
             //         this.submitInProcess = false;
@@ -123,6 +123,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
+        console.log(event?.option?.value);
         this.technologys.push(event?.option?.value);
         this.technologyInput.nativeElement.value = '';
         this.addResourceForm.get('technology')?.setValue('');
@@ -280,15 +281,13 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     _filter(value: any) {
-        return this.alltechnologys?.filter(
-            (alltechnologys: any) =>
-                alltechnologys?.name?.toLowerCase()?.indexOf(value) === 0 &&
-                !this.technologys?.includes(alltechnologys.id)
+        return this.alltechnologys.filter(
+            (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );
     }
     _filterslice() {
-        return this.alltechnologys?.filter(
-            (alltechnologys) => !this.technologys?.includes(alltechnologys?.id)
+        return this.alltechnologys.filter(
+            (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );
     }
 

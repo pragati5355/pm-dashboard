@@ -162,7 +162,7 @@
                 >
                     <mat-option
                         *ngFor="let technology of filteredTechnologies | async"
-                        [value]="technology.id"
+                        [value]="technology"
                     >
                         {{ technology.name }}
                     </mat-option>
@@ -178,7 +178,7 @@
                         (removed)="remove(technology, selectIndex)"
                     >
                         <div *ngFor="let technologyi of alltechnologys">
-                            <div *ngIf="technologyi?.id == technology">
+                            <div *ngIf="technologyi?.id == technology?.id">
                                 {{ technologyi?.name }}
                             </div>
                         </div>
