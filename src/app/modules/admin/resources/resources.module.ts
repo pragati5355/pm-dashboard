@@ -36,6 +36,7 @@ import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { resourcesRoutes } from './resources.routing';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ResourceUploadCsvComponent } from './resource-upload-csv/resource-upload-csv.component';
+import { JoinPipe } from './common/pipes/join-tech.pipe';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { ResourceUploadCsvComponent } from './resource-upload-csv/resource-uploa
         ResourceDetailsComponent,
         DiffDatePipe,
         ResourceUploadCsvComponent,
+        JoinPipe
     ],
     imports: [
         CommonModule,

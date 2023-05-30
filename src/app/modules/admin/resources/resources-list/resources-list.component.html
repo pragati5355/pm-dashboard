@@ -268,7 +268,12 @@
                                     >
                                         Single Upload
                                     </button>
-                                    <button (click)="uploadCsvDialog()" mat-menu-item>CSV Upload</button>
+                                    <button
+                                        (click)="uploadCsvDialog()"
+                                        mat-menu-item
+                                    >
+                                        CSV Upload
+                                    </button>
                                 </mat-menu>
                             </div>
                         </div>
@@ -358,19 +363,28 @@
                                                                 resources.id
                                                     }"
                                                 >
-                                                    {{ resources.firstName }}
-                                                    {{ resources.lastName }}
+                                                    {{ resources?.firstName }}
+                                                    {{ resources?.lastName }}
                                                 </div>
                                                 <div class="truncate">
-                                                    {{ resources.email }}
+                                                    {{ resources?.email }}
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="grid-flow-row md:flex truncate"
+                                                [matTooltip]="
+                                                    resources.resourceTechnologyModel
+                                                        | join
+                                                "
+                                            >
+                                                <div>
+                                                    {{
+                                                        resources.resourceTechnologyModel
+                                                            | join
+                                                    }}
                                                 </div>
                                             </div>
 
-                                            <div
-                                                class="hidden md:block truncate"
-                                            >
-                                                {{ resources.technologys }}
-                                            </div>
                                             <div
                                                 class="hidden md:block truncate"
                                                 *ngIf="
@@ -390,7 +404,7 @@
                                                 -
                                             </div>
                                             <div class="hidden sm:block">
-                                                {{ resources.team }}
+                                                {{ resources?.team }}
                                             </div>
 
                                             <div
