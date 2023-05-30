@@ -551,6 +551,225 @@
                                 </mat-form-field>
                             </div>
                         </div>
+                        <div
+                            class="flex w-2/4 sm:w-1/2 flex-col overflow-hidden mt-4"
+                            *ngIf="assignedtechnologys?.length > 0"
+                        >
+                            <span class="text-l text-gray-500 mb-1"
+                                >Technology Experience</span
+                            >
+                            <div
+                                class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
+                            >
+                                <div
+                                    class="inventory-grid z-10 sticky top-0 grid grid-cols-4 gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
+                                    matSortDisableClear
+                                >
+                                    <div>Technology Name</div>
+                                    <div class="col-span-2">Experience</div>
+                                    <div class="ml-4">Action</div>
+                                </div>
+                                <ng-container *ngIf="true">
+                                    <div
+                                        formArrayName="technology"
+                                        class="grid shadow"
+                                    >
+                                        <ng-container
+                                            *ngFor="
+                                                let addTechnology of technologyi?.controls;
+                                                let i = index;
+                                                let last = last
+                                            "
+                                        >
+                                            <form
+                                                *ngIf="
+                                                    !addTechnology?.value
+                                                        ?.deleted
+                                                "
+                                                class="flex flex-row justify-center items-center"
+                                                [formGroupName]="i"
+                                            >
+                                                {{ addTechnology }}
+                                                <!-- <div
+                                                    class="items-center gap-4 pt-2 border-b bg-white px-2"
+                                                >
+                                                    <div
+                                                        class="inventory-grid grid grid-cols-4 md:grid-cols-4 gap-4 pt-1 items-center"
+                                                    >
+                                                        <div class="col-span-1">
+                                                            <div
+                                                                *ngFor="
+                                                                    let technologyi of assignedtechnologys
+                                                                "
+                                                            >
+                                                                <div
+                                                                    class="hidden md:block truncate"
+                                                                    *ngIf="
+                                                                        technologyi.name ==
+                                                                        technology
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        technologyi?.name
+                                                                    }}
+                                                                </div>
+                                                                <mat-form-field
+                                                                    [floatLabel]="
+                                                                        'always'
+                                                                    "
+                                                                    class="w-full"
+                                                                >
+                                                                    <input
+                                                                        formControlName="experienceYear"
+                                                                        matInput
+                                                                        placeholder="Year"
+                                                                        InputFormatter="numeric"
+                                                                        type="text"
+                                                                    />
+                                                                    <span
+                                                                        matPrefix
+                                                                        >YY</span
+                                                                    >
+                                                                    <mat-error
+                                                                        *ngIf="
+                                                                            technologyValidForm[
+                                                                                'year'
+                                                                            ]
+                                                                                .errors &&
+                                                                            technologyValidForm[
+                                                                                'year'
+                                                                            ]
+                                                                                ?.invalid &&
+                                                                            technologyValidForm[
+                                                                                'year'
+                                                                            ]
+                                                                                ?.touched
+                                                                        "
+                                                                    >
+                                                                        <div
+                                                                            *ngIf="
+                                                                                technologyValidForm[
+                                                                                    'year'
+                                                                                ]
+                                                                                    .errors[
+                                                                                    'required'
+                                                                                ]
+                                                                            "
+                                                                        >
+                                                                            Year
+                                                                            is
+                                                                            mandatory
+                                                                        </div>
+                                                                        <div
+                                                                            *ngIf="
+                                                                                technologyValidForm[
+                                                                                    'year'
+                                                                                ]
+                                                                                    .errors[
+                                                                                    'pattern'
+                                                                                ]
+                                                                            "
+                                                                        >
+                                                                            Enter
+                                                                            valid
+                                                                            Year
+                                                                        </div>
+                                                                    </mat-error>
+                                                                </mat-form-field>
+
+                                                                <mat-form-field
+                                                                    [floatLabel]="
+                                                                        'always'
+                                                                    "
+                                                                    class="w-full"
+                                                                >
+                                                                    <input
+                                                                        class=""
+                                                                        formControlName="experienceMonth"
+                                                                        InputFormatter="numeric"
+                                                                        matInput
+                                                                        placeholder="Month"
+                                                                        type="text"
+                                                                    />
+                                                                    <span
+                                                                        matPrefix
+                                                                        >MM</span
+                                                                    >
+                                                                    <mat-error
+                                                                        *ngIf="
+                                                                            technologyValidForm[
+                                                                                'month'
+                                                                            ]
+                                                                                .errors &&
+                                                                            technologyValidForm[
+                                                                                'month'
+                                                                            ]
+                                                                                ?.invalid &&
+                                                                            technologyValidForm[
+                                                                                'month'
+                                                                            ]
+                                                                                ?.touched
+                                                                        "
+                                                                    >
+                                                                        <div
+                                                                            *ngIf="
+                                                                                technologyValidForm[
+                                                                                    'month'
+                                                                                ]
+                                                                                    .errors[
+                                                                                    'required'
+                                                                                ]
+                                                                            "
+                                                                        >
+                                                                            Month
+                                                                            is
+                                                                            mandatory
+                                                                        </div>
+                                                                        <div
+                                                                            *ngIf="
+                                                                                technologyValidForm[
+                                                                                    'month'
+                                                                                ]
+                                                                                    .errors[
+                                                                                    'pattern'
+                                                                                ] ||
+                                                                                technologyValidForm[
+                                                                                    'month'
+                                                                                ]
+                                                                                    .errors
+                                                                            "
+                                                                        >
+                                                                            Enter
+                                                                            valid
+                                                                            month
+                                                                        </div>
+                                                                    </mat-error>
+                                                                </mat-form-field>
+
+                                                                <mat-icon
+                                                                    *ngIf="
+                                                                        i != 0
+                                                                    "
+                                                                    class="cursor-pointer"
+                                                                    color="warn"
+                                                                    matTooltip="Remove"
+                                                                    (click)="
+                                                                        removeTechnology(
+                                                                            i
+                                                                        )
+                                                                    "
+                                                                    >cancle</mat-icon
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                            </form>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
 
                         <div
                             class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"
