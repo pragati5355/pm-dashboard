@@ -332,7 +332,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             startDate: ['', [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
-            technology: [''],
+            technology : ['',[Validators.required]]
         });
 
         this.filteredTechnologies = this.addResourceForm
