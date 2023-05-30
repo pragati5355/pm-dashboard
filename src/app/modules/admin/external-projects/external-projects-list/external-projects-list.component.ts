@@ -105,7 +105,7 @@ export class ExternalProjectsListComponent implements OnInit {
     }
 
     private filterOutAlreadyAssignedEmails(team: any) {
-        return this.developerEmailList.filter(
+        return this.developerEmailList?.filter(
             (obj) => !team?.some(({ email }) => obj.email === email)
         );
     }

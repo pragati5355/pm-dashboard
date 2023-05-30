@@ -29,6 +29,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     patchData: [] | null;
     disableEmailField: boolean = false;
     alreadyAssignedProjects: any[];
+    isResourceOnBench: boolean = false;
+    isShadowResource: boolean = false;
+    markResourceAsBench: boolean = true;
+    markResourceAsShadow: boolean = true;
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
         private _formBuilder: FormBuilder,
@@ -54,6 +58,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.snackBar.errorSnackBar('Choose Utilization');
             return;
         }
+
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
@@ -85,6 +90,16 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         return value[0]?.id;
     }
 
+    resourceOnBench(value: boolean) {
+        this.isResourceOnBench = value ? true : false;
+        console.log('this.isResourceOnBench ', this.isResourceOnBench);
+    }
+
+    shadowResource(value: boolean) {
+        this.isShadowResource = value ? true : false;
+        console.log('this.isShadowResource ', this.isShadowResource);
+    }
+
     getSelectedEmail(email: string) {
         this.getResourceCapacity(email);
         this.getCurrentResourceTechnology(email);
@@ -106,10 +121,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         return value[0]?.capacity;
     }
 
-    getCurrentResourceTechnology(email:string){
-        const value = this.data?.allResources?.filters((item:any)=> {
+    getCurrentResourceTechnology(email: string) {
+        const value = this.data?.allResources?.filters((item: any) => {
             return item?.email === email;
-        })
+        });
         return value[0]?.technology;
     }
 
@@ -159,6 +174,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
             projectType: 'EXTERNAL',
+            isBench: this.isResourceOnBench,
+            isShadow: this.isShadowResource,
         };
         if (this.mode === 'EDIT') {
             return {

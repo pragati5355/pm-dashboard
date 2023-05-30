@@ -155,7 +155,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="w-full mt-3 ml-1">
+        <div class="w-full mt-2 ml-1">
             <label class="font-semibold -mb-0">Utilization</label>
             <mat-radio-group
                 aria-labelledby="example-radio-group-label"
@@ -210,6 +210,28 @@
                     </ng-container>
                 </div>
             </ng-container>
+        </div>
+    </div>
+
+    <div class="mt-4 flex items-center">
+        <div class="mb-4 mr-8">
+            <mat-checkbox
+                [color]="'primary'"
+                
+                (change)="resourceOnBench($event?.checked)"
+                ><span class="font-semibold">On Bench?</span></mat-checkbox
+            >
+        </div>
+
+        <div class="mb-4">
+            <mat-checkbox
+                [color]="'primary'"
+                
+                (change)="shadowResource($event?.checked)"
+                ><span class="font-semibold"
+                    >Shadow Resource?</span
+                ></mat-checkbox
+            >
         </div>
     </div>
 

@@ -25,6 +25,7 @@ import { FuseScrollResetModule } from '@fuse/directives/scroll-reset';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FuseCardModule } from '@fuse/components/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ExternalProjectsRoutingModule } from './external-projects-routing.module';
 import { ExternalProjectsHomeComponent } from './external-projects-home/external-projects-home.component';
@@ -73,6 +74,7 @@ import { ExternalProjectsAddResourceComponent } from './external-projects-add-re
         FuseCardModule,
         SkeletonModule,
         FormsModule,
+        MatCheckboxModule,
         ReactiveFormsModule,
     ],
     providers: [DatePipe],
