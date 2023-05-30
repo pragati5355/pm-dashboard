@@ -10,7 +10,6 @@ export class ExternalProjectsApiService {
     mapResourceUrl = AppConstants['PROJECT_API_URL'] + '/map-resource';
     externalProjectsListUrl =
         AppConstants['PROJECT_API_URL'] + '/get-external-project';
-    getUserTechnologyUrl = AppConstants['PROJECT_API_URL']+ '';
 
     constructor(private http: HttpClient) {}
 
@@ -24,9 +23,5 @@ export class ExternalProjectsApiService {
 
     getExternalProjectsList() {
         return this.http.get(this.externalProjectsListUrl);
-    }
-
-    getUserTechnologyList(){
-        return this.http.get(this.getUserTechnologyUrl);
     }
 }

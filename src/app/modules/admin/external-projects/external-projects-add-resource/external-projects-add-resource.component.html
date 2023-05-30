@@ -137,36 +137,6 @@
     </div>
     <div class="w-full flex flex-1 mt-2">
         <div class="w-full mr-3">
-            <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
-                <mat-label class="">Technology</mat-label>
-                <input
-                    matInput
-                    [placeholder]="'Technology'"
-                    aria-label="technology"
-                    [matAutocomplete]="auto1"
-                    formControlName="technology"
-                />
-                <mat-autocomplete
-                    #auto1="matAutocomplete"
-                    (optionSelected)="getSelectedEmail($event.option.value)"
-                >
-                    <mat-option
-                        *ngFor="let item of filteredEmails | async"
-                        [value]="item?.email"
-                    >
-                        <span>{{ item?.email }}</span>
-                    </mat-option>
-                </mat-autocomplete>
-                <mat-error
-                    *ngIf="
-                        addResourceForm?.get('technology')?.hasError('required')
-                    "
-                >
-                    <div>Technology is mandatory</div>
-                </mat-error>
-            </mat-form-field>
-        </div>
-        <div class="w-full mt-3 ml-1">
             <label class="font-semibold -mb-0">Utilization</label>
             <mat-radio-group
                 aria-labelledby="example-radio-group-label"
