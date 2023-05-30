@@ -268,7 +268,12 @@
                                     >
                                         Single Upload
                                     </button>
-                                    <button (click)="uploadCsvDialog()" mat-menu-item>CSV Upload</button>
+                                    <button
+                                        (click)="uploadCsvDialog()"
+                                        mat-menu-item
+                                    >
+                                        CSV Upload
+                                    </button>
                                 </mat-menu>
                             </div>
                         </div>
@@ -310,7 +315,9 @@
                                         >
                                             <div
                                                 class="flex items-center cursor-pointer"
-                                               (click)="viewResource(resources.id)"
+                                                (click)="
+                                                    viewResource(resources.id)
+                                                "
                                             >
                                                 <ng-container
                                                     *ngIf="resources.image"
@@ -337,7 +344,9 @@
                                             </div>
                                             <div
                                                 class="cursor-pointer"
-                                                (click)="viewResource(resources.id)"
+                                                (click)="
+                                                    viewResource(resources.id)
+                                                "
                                             >
                                                 <div
                                                     class="truncate"
@@ -352,19 +361,28 @@
                                                                 resources.id
                                                     }"
                                                 >
-                                                    {{ resources.firstName }}
-                                                    {{ resources.lastName }}
+                                                    {{ resources?.firstName }}
+                                                    {{ resources?.lastName }}
                                                 </div>
                                                 <div class="truncate">
-                                                    {{ resources.email }}
+                                                    {{ resources?.email }}
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="grid-flow-row md:flex truncate"
+                                                [matTooltip]="
+                                                    resources.resourceTechnologyModel
+                                                        | join
+                                                "
+                                            >
+                                                <div>
+                                                    {{
+                                                        resources.resourceTechnologyModel
+                                                            | join
+                                                    }}
                                                 </div>
                                             </div>
 
-                                            <div
-                                                class="hidden md:block truncate"
-                                            >
-                                                {{ resources.technologys }}
-                                            </div>
                                             <div
                                                 class="hidden md:block truncate"
                                                 *ngIf="
@@ -384,7 +402,7 @@
                                                 -
                                             </div>
                                             <div class="hidden sm:block">
-                                                {{ resources.team }}
+                                                {{ resources?.team }}
                                             </div>
 
                                             <div
@@ -433,7 +451,9 @@
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="initialLoading">
-                                <app-table-skeleton [skeletonData]="requiredSkeletonData"></app-table-skeleton>
+                                <app-table-skeleton
+                                    [skeletonData]="requiredSkeletonData"
+                                ></app-table-skeleton>
                             </ng-container>
                         </div>
                     </div>
