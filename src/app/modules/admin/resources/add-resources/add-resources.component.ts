@@ -110,14 +110,12 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         if (this.mode === 'edit') {
             this.editResource();
         } else {
-            console.log('this.resourcesForm', this.resourcesForm?.value);
             if (this.resourcesForm?.valid) {
                 if (
                     this.resourcesForm?.get('team')?.value === 'PM' ||
                     this.resourcesForm?.value?.technologies?.length > 0
                 ) {
                     const payload = this.resourcesForm?.value;
-                    console.log(payload);
                     this.submitInProcess = true;
                     this.addResourceAPI(payload);
                 } else {
@@ -345,10 +343,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         }
     }
 
-    selectedTeamOption(event: any) {
-        console.log(event?.option?.value);
-    }
-
     filterEmails(email: string) {
         let arr = this.emailList.filter(
             (item) =>
@@ -482,7 +476,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         this.resourceService.findAllDeveloperEmails().subscribe((res: any) => {
             if (res?.data) {
                 this.emailList = res?.data;
-                console.log(this.emailList);
             }
             this.getTechnologiesList();
         });
