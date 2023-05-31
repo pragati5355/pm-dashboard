@@ -78,6 +78,8 @@ export class ResourcesListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: true,
     };
+    showTechnologies: any[];
+    selectedProject: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -180,6 +182,9 @@ export class ResourcesListComponent implements OnInit {
             }
         }
         const payload = this.getDefaultSearchPayload();
+        this.showTechnologies = this.technologyList.filter((obj) =>
+            this.technologys?.value?.some((id) => obj.id === id)
+        );
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
@@ -306,6 +311,23 @@ export class ResourcesListComponent implements OnInit {
         this.count = 1;
         this.pagination = false;
         let payload = this.getDefaultSearchPayload(this.count);
+        this.selectedProject = true;
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+    clearProjectSearch() {
+        this.projects.setValue('');
+        this.count = 1;
+        this.pagination = false;
+        let payload = this.getDefaultSearchPayload(this.count);
+        this.selectedProject = false;
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
