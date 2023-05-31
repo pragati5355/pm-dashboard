@@ -44,6 +44,7 @@ import {
     JiraUser,
     JiraTeamUser,
 } from './model/add-project-models';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-add-project-home',
@@ -134,6 +135,7 @@ export class AddProjectHomeComponent
         'DEVOPS',
         'QA',
     ];
+    editMemberMode = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -146,7 +148,8 @@ export class AddProjectHomeComponent
         private ProjectService: CreateProjecteService,
         private snackBar: SnackBar,
         private _route: ActivatedRoute,
-        private formService: AddFormService
+        private formService: AddFormService,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -173,6 +176,51 @@ export class AddProjectHomeComponent
                 this.initialLoading = false;
             });
     }
+
+    editMember(index: number, teamMember: any) {
+        this.editMemberMode = true;
+        this.projectTeam.patchValue({
+            team_member: this.findTeamMember(teamMember?.resourceId),
+            select_role: teamMember?.role,
+            team_jira_user: '',
+            tm_utilization: teamMember?.utilization,
+            startDate: teamMember?.startDate
+                ? this.datePipe.transform(
+                      teamMember?.startDate,
+                      "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                  )
+                : null,
+            endDate: teamMember?.endDate
+                ? this.datePipe.transform(
+                      teamMember?.endDate,
+                      "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                  )
+                : null,
+        });
+    }
+
+    getAvailableCapacity(teamMember: any) {
+        const selectedMember = this.teamMemberList.filter(
+            (item) => item?.resourceId === teamMember?.id
+        );
+        if (selectedMember?.length > 0) {
+            return teamMember?.capacity + selectedMember[0]?.utilization;
+        } else {
+            return teamMember?.capacity;
+        }
+    }
+
+    private findTeamMember(id) {
+        const selectedTeamMember = this.teamMembers?.filter(
+            (item) => item?.id === id
+        );
+        if (selectedTeamMember?.length > 0) {
+            return selectedTeamMember[0];
+        } else {
+            return null;
+        }
+    }
+
     filterFunctions() {
         this.filteredTeamMembers = this.projectTeam
             .get('team_member')
@@ -484,42 +532,65 @@ export class AddProjectHomeComponent
         }
     }
     addTeamMember() {
-        if (
-            !this.projectTeam.controls['team_member'].invalid &&
-            !this.projectTeam.controls['team_jira_user'].invalid
-        ) {
-            if (!this.projectTeam.value.team_jira_user) {
-                this.teamJiraUser = true;
-            }
+        if (this.projectTeam.controls['team_member'].valid) {
+            // if (!this.projectTeam.value.team_jira_user) {
+            //     this.teamJiraUser = true;
+            // this.projectTeam.value.team_jira_user &&
+
+            // }
             if (
                 this.projectTeam.value.team_member &&
                 this.projectTeam.value.select_role &&
-                this.projectTeam.value.team_jira_user &&
                 this.projectTeam.value.tm_utilization &&
                 this.projectTeam.value.startDate &&
                 this.projectTeam.value.endDate
             ) {
-                this.teamMemberList = [
-                    ...this.teamMemberList,
-                    {
-                        resourceId: this.projectTeam?.value?.team_member?.id,
-                        firstName:
-                            this.projectTeam?.value?.team_member?.firstName,
-                        startDate: this.projectTeam?.value?.startDate,
-                        endDate: this.projectTeam?.value?.endDate,
-                        role: this.projectTeam?.value?.select_role,
-                        utilization: this.projectTeam?.value?.tm_utilization,
-                        deleted: false,
-                    },
-                ];
-                this.selectedJiraUser = [
-                    ...this.selectedJiraUser,
-                    this.projectTeam?.value?.team_jira_user?.displayName,
-                ];
-                this.selectedTeamMember = [
-                    ...this.selectedTeamMember,
-                    this.projectTeam?.value?.team_member?.id,
-                ];
+                if (this.editMemberMode) {
+                    this.teamMemberList.map((item) => {
+                        if (
+                            item?.resourceId ===
+                            this.projectTeam?.value?.team_member?.id
+                        ) {
+                            item.resourceId =
+                                this.projectTeam?.value?.team_member?.id;
+                            item.firstName =
+                                this.projectTeam?.value?.team_member?.firstName;
+                            item.startDate = this.projectTeam?.value?.startDate;
+                            item.endDate = this.projectTeam?.value?.endDate;
+                            item.role = this.projectTeam?.value?.select_role;
+                            item.utilization =
+                                this.projectTeam?.value?.tm_utilization;
+                            item.deleted = false;
+                        }
+                        return item;
+                    });
+                } else {
+                    this.teamMemberList = [
+                        ...this.teamMemberList,
+                        {
+                            resourceId:
+                                this.projectTeam?.value?.team_member?.id,
+                            firstName:
+                                this.projectTeam?.value?.team_member?.firstName,
+                            startDate: this.projectTeam?.value?.startDate,
+                            endDate: this.projectTeam?.value?.endDate,
+                            role: this.projectTeam?.value?.select_role,
+                            utilization:
+                                this.projectTeam?.value?.tm_utilization,
+                            deleted: false,
+                        },
+                    ];
+                    this.selectedJiraUser = [
+                        ...this.selectedJiraUser,
+                        this.projectTeam?.value?.team_jira_user?.displayName,
+                    ];
+                    this.selectedTeamMember = [
+                        ...this.selectedTeamMember,
+                        this.projectTeam?.value?.team_member?.id,
+                    ];
+                }
+
+                this.editMemberMode = false;
                 this.projectTeam.controls['team_member'].reset();
                 this.projectTeam.controls['select_role'].reset();
                 this.projectTeam.controls['team_jira_user'].reset();
@@ -967,7 +1038,9 @@ export class AddProjectHomeComponent
                         this.projectTeam.reset();
                         this.teamMemberList = [];
                         this.settingProjectName = '';
-                        this.router.navigate(['/projects/']);
+                        this.router.navigate([
+                            '/projects/' + this.editProjectId + '/details',
+                        ]);
                     } else {
                         this.snackBar.errorSnackBar(res?.message);
                     }
