@@ -48,6 +48,13 @@
                 >
                     <div>Email is mandatory</div>
                 </mat-error>
+                <mat-icon
+                *ngIf="isEmailSelected"
+                class="icon-size-5 cursor-pointer"
+                matSuffix
+                [svgIcon]="'heroicons_solid:x'"
+                (click)="$event.stopPropagation();clearSelectedEmail()"
+            ></mat-icon>
             </mat-form-field>
         </div>
         <div class="w-full">

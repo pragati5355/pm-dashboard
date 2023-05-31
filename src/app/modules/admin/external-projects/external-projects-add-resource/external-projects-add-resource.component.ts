@@ -54,6 +54,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     filteredTechnologies: Observable<any[]> | undefined;
     alltechnologys: any[] = [];
     currentResourceTechnologyList: any[] = [];
+    isEmailSelected: boolean = false;
 
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
@@ -145,6 +146,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     getSelectedEmail(email: string) {
+        this.addResourceForm.get('utilization').setValue(null);
+        this.isEmailSelected = true;
         this.alltechnologys = [];
         this.technologys = [];
         this.technologyInput.nativeElement.value = '';
@@ -153,6 +156,15 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.getCurrentResourceTechnology(email);
         this.utilizationValue = '';
         this.getAlreadyAssignedProjectsData(email);
+    }
+    clearSelectedEmail() {
+        this.alltechnologys = [];
+        this.technologys = [];
+        this.technologyInput.nativeElement.value = '';
+        this.addResourceForm.get('technology')?.setValue('');
+        this.isEmailSelected = false;
+        this.addResourceForm.get('utilization').setValue(null);
+        this.addResourceForm.get('email').setValue('');
     }
 
     getResourceCapacity(email: string) {
