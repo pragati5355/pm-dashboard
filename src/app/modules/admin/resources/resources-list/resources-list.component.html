@@ -261,12 +261,27 @@
                                 </form>
                             </mat-menu>
 
+                            <mat-form-field
+                                class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
+                            >
+                                <mat-select
+                                    (selectionChange)="resourceBenchShadow($event?.value)"
+                                    [disableOptionCentering]="true"
+                                    [placeholder]="'Bench/Shadow Resource'"
+                                    multiple
+                                    panelClass="multiple-select-style"
+                                >
+                                    <mat-option [value]="0">Bench</mat-option>
+                                    <mat-option [value]="1">Shadow</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
                             <div class="w-full">
                                 <button
                                     [color]="'primary'"
                                     [matTooltip]="'Add Resource'"
                                     [matMenuTriggerFor]="listCard07Menu"
-                                    class="ml-4"
+                                    class="ml-2"
                                     mat-flat-button
                                 >
                                     <mat-icon

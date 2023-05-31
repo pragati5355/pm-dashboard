@@ -80,6 +80,8 @@ export class ResourcesListComponent implements OnInit {
     };
     showTechnologies: any[];
     selectedProject: boolean = false;
+    isBench: boolean = false;
+    isShadow: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -321,6 +323,10 @@ export class ResourcesListComponent implements OnInit {
                 this.initialLoading = false;
             }
         );
+    }
+    resourceBenchShadow(value: number[]) {
+        this.isBench = value?.includes(0);
+        this.isShadow = value?.includes(1);
     }
     clearProjectSearch() {
         this.projects.setValue('');
