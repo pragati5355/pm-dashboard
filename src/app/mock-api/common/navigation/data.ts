@@ -11,7 +11,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     },
     {
         id: 'project',
-        title: 'Project',
+        title: 'Projects',
         type: 'basic',
         icon: 'heroicons_outline:table',
         link: '/projects',
