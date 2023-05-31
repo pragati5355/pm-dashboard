@@ -1,123 +1,201 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
     <div class="flex flex-col flex-auto w-full overflow-y-auto">
         <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-            <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
+            <div
+                class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent"
+            >
                 <div class="">
-                    <form [formGroup]="resourcesForm" *ngIf="!initialLoading && resourcesForm"
-                        class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+                    <form
+                        [formGroup]="resourcesForm"
+                        *ngIf="!initialLoading && resourcesForm"
+                        class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
+                    >
                         <div class="w-full">
-                            <h2 class="text-3xl font-semibold tracking-tight leading-8">
+                            <h2
+                                class="text-3xl font-semibold tracking-tight leading-8"
+                            >
                                 Resource details
                             </h2>
                         </div>
                         <div class="flex flex-auto items-end mb-6">
                             <div
-                                class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
-                                <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
-                                <div class="absolute inset-0 flex items-center justify-center z-20">
+                                class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card"
+                            >
+                                <div
+                                    class="absolute inset-0 bg-black bg-opacity-50 z-10"
+                                ></div>
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center z-20"
+                                >
                                     <div>
-                                        <input #avatarFileInput (change)="uploadAvatar()"
-                                            [accept]="'image/jpeg, image/png'" [multiple]="false"
+                                        <input
+                                            #avatarFileInput
+                                            (change)="uploadAvatar()"
+                                            [accept]="'image/jpeg, image/png'"
+                                            [multiple]="false"
                                             class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
-                                            id="avatar-file-input" type="file" />
+                                            id="avatar-file-input"
+                                            type="file"
+                                        />
                                         <label
                                             class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
-                                            for="avatar-file-input" matRipple>
-                                            <mat-icon [svgIcon]="
+                                            for="avatar-file-input"
+                                            matRipple
+                                        >
+                                            <mat-icon
+                                                [svgIcon]="
                                                     'heroicons_outline:photograph'
-                                                " class="text-white"></mat-icon>
+                                                "
+                                                class="text-white"
+                                            ></mat-icon>
                                         </label>
                                     </div>
                                     <div></div>
                                 </div>
                                 <div
-                                    class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                    {{ resourcesForm?.get('firstName')?.value?.charAt(0) }}
+                                    class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                >
+                                    {{
+                                        resourcesForm
+                                            ?.get("firstName")
+                                            ?.value?.charAt(0)
+                                    }}
                                 </div>
                             </div>
                         </div>
-                        <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                            <div class="w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                                <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <div
+                            class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                        >
+                            <div
+                                class="w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+                            >
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    class="w-full"
+                                >
                                     <mat-label>First Name</mat-label>
-                                    <input formControlName="firstName" matInput maxlength="50" placeholder="First Name"
-                                        type="text" />
-                                    <mat-error *ngIf="
+                                    <input
+                                        formControlName="firstName"
+                                        matInput
+                                        maxlength="50"
+                                        placeholder="First Name"
+                                        type="text"
+                                    />
+                                    <mat-error
+                                        *ngIf="
                                             resourcesValidForm['firstName']
                                                 .errors &&
                                             resourcesValidForm['firstName']
                                                 ?.invalid &&
                                             resourcesValidForm['firstName']
                                                 ?.touched
-                                        ">
-                                        <div *ngIf="
+                                        "
+                                    >
+                                        <div
+                                            *ngIf="
                                                 resourcesValidForm['firstName']
                                                     .errors['required']
-                                            ">
+                                            "
+                                        >
                                             First name is mandatory
                                         </div>
-                                        <div *ngIf="
+                                        <div
+                                            *ngIf="
                                                 resourcesValidForm['firstName']
                                                     .errors['pattern']
-                                            ">
+                                            "
+                                        >
                                             Enter valid first name
                                         </div>
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                            <div class="w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
-                                <mat-form-field [floatLabel]="'always'" class="w-full">
+                            <div
+                                class="w-full sm:w-90 mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4"
+                            >
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    class="w-full"
+                                >
                                     <mat-label>Last Name</mat-label>
-                                    <input formControlName="lastName" matInput maxlength="50" placeholder="Last Name"
-                                        type="text" />
-                                    <mat-error *ngIf="
+                                    <input
+                                        formControlName="lastName"
+                                        matInput
+                                        maxlength="50"
+                                        placeholder="Last Name"
+                                        type="text"
+                                    />
+                                    <mat-error
+                                        *ngIf="
                                             resourcesValidForm['lastName']
                                                 .errors &&
                                             resourcesValidForm['lastName']
                                                 ?.invalid &&
                                             resourcesValidForm['lastName']
                                                 ?.touched
-                                        ">
-                                        <div *ngIf="
+                                        "
+                                    >
+                                        <div
+                                            *ngIf="
                                                 resourcesValidForm['lastName']
                                                     .errors['required']
-                                            ">
+                                            "
+                                        >
                                             Last name is mandatory
                                         </div>
-                                        <div *ngIf="
+                                        <div
+                                            *ngIf="
                                                 resourcesValidForm['lastName']
                                                     .errors['pattern']
-                                            ">
+                                            "
+                                        >
                                             Enter valid last name
                                         </div>
                                     </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                            <div class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                                <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <div
+                            class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                        >
+                            <div
+                                class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+                            >
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    class="w-full"
+                                >
                                     <mat-label>Email</mat-label>
-                                    <input formControlName="email" matInput maxlength="50" placeholder="Email"
-                                        type="text" />
-                                    <mat-error *ngIf="
+                                    <input
+                                        formControlName="email"
+                                        matInput
+                                        maxlength="50"
+                                        placeholder="Email"
+                                        type="text"
+                                    />
+                                    <mat-error
+                                        *ngIf="
                                             resourcesForm
                                                 ?.get('email')
                                                 ?.hasError('required')
-                                        ">
+                                        "
+                                    >
                                         <div>Email is mandatory</div>
                                     </mat-error>
-                                    <mat-error *ngIf="
+                                    <mat-error
+                                        *ngIf="
                                             resourcesForm
                                                 ?.get('email')
                                                 ?.hasError('email') &&
                                             !resourcesForm
                                                 ?.get('email')
                                                 ?.hasError('required')
-                                        ">
+                                        "
+                                    >
                                         <div>Invalid Email</div>
                                     </mat-error>
-                                    <mat-error *ngIf="
+                                    <mat-error
+                                        *ngIf="
                                             resourcesForm
                                                 ?.get('email')
                                                 ?.hasError('pattern') &&
@@ -127,7 +205,8 @@
                                             !resourcesForm
                                                 ?.get('email')
                                                 ?.hasError('email')
-                                        ">
+                                        "
+                                    >
                                         <div>
                                             Only Mindbowser email is allowed
                                         </div>
@@ -135,34 +214,55 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                            <div class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                                <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <div
+                            class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                        >
+                            <div
+                                class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+                            >
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    class="w-full"
+                                >
                                     <mat-label>Salary</mat-label>
-                                    <input matInput maxlength="50" placeholder="Salary" type="text"
-                                        formControlName="salary" />
+                                    <input
+                                        matInput
+                                        maxlength="50"
+                                        placeholder="Salary"
+                                        type="text"
+                                        formControlName="salary"
+                                    />
                                     <span matPrefix>
-                                        <mat-icon [svgIcon]="
+                                        <mat-icon
+                                            [svgIcon]="
                                                 'heroicons_outline:currency-dollar'
-                                            "></mat-icon></span>
-                                    <mat-error *ngIf="
+                                            "
+                                        ></mat-icon
+                                    ></span>
+                                    <mat-error
+                                        *ngIf="
                                             resourcesValidForm['salary']
                                                 .errors &&
                                             resourcesValidForm['salary']
                                                 ?.invalid &&
                                             resourcesValidForm['salary']
                                                 ?.touched
-                                        ">
-                                        <div *ngIf="
+                                        "
+                                    >
+                                        <div
+                                            *ngIf="
                                                 resourcesValidForm['salary']
                                                     .errors['required']
-                                            ">
+                                            "
+                                        >
                                             Salary is mandatory
                                         </div>
-                                        <div *ngIf="
+                                        <div
+                                            *ngIf="
                                                 resourcesValidForm['salary']
                                                     .errors['pattern']
-                                            ">
+                                            "
+                                        >
                                             Enter valid salary
                                         </div>
                                     </mat-error>
@@ -170,23 +270,45 @@
                             </div>
                         </div>
 
-                        <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                            <div class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859">
-                                <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <div
+                            class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                        >
+                            <div
+                                class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+                            >
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    class="w-full"
+                                >
                                     <mat-label>Date of joining</mat-label>
-                                    <input matInput #inputJoining [placeholder]="'Date of joining'"
-                                        formControlName="dateOfJoining" [matDatepicker]="
+                                    <input
+                                        matInput
+                                        #inputJoining
+                                        [placeholder]="'Date of joining'"
+                                        formControlName="dateOfJoining"
+                                        [matDatepicker]="
                                             dateOfJoiningDatepicker
-                                        " (focus)="dateOfJoiningDatepicker.open()" [max]="currentDate" />
-                                    <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker">
+                                        "
+                                        (focus)="dateOfJoiningDatepicker.open()"
+                                        [max]="currentDate"
+                                    />
+                                    <mat-datepicker-toggle
+                                        matSuffix
+                                        [for]="dateOfJoiningDatepicker"
+                                    >
                                     </mat-datepicker-toggle>
-                                    <mat-datepicker #dateOfJoiningDatepicker (closed)="inputJoining.blur()">
+                                    <mat-datepicker
+                                        #dateOfJoiningDatepicker
+                                        (closed)="inputJoining.blur()"
+                                    >
                                     </mat-datepicker>
-                                    <mat-error *ngIf="
+                                    <mat-error
+                                        *ngIf="
                                             resourcesForm
                                                 ?.get('dateOfJoining')
                                                 ?.hasError('required')
-                                        ">
+                                        "
+                                    >
                                         <div>Date of joining is mandatory</div>
                                     </mat-error>
                                 </mat-form-field>
@@ -194,97 +316,163 @@
                         </div>
 
                         <div class="mb-4">
-                            <mat-checkbox (change)="onCheckBoxChange($event.checked)"
-                                [checked]="existingResource?.month === 0 && existingResource?.year === 0">
-                                <span class="font-semibold">First Company</span></mat-checkbox>
+                            <mat-checkbox
+                                (change)="onCheckBoxChange($event.checked)"
+                                [checked]="
+                                    existingResource?.month === 0 &&
+                                    existingResource?.year === 0
+                                "
+                            >
+                                <span class="font-semibold"
+                                    >First Company</span
+                                ></mat-checkbox
+                            >
                         </div>
-                        <div class="flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                            <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                                <div class="w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859">
-                                    <mat-form-field [floatLabel]="'always'" appearance="fill" class="w-full">
+                        <div
+                            class="flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                        >
+                            <div
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div
+                                    class="w-full sm:w-60 font-extrabold tracking-tight ng-tns-c274-3859"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        appearance="fill"
+                                        class="w-full"
+                                    >
                                         <mat-label>Team</mat-label>
-                                        <mat-select formControlName="role" placeholder="Select Team" type="text"
-                                            [disableOptionCentering]="true">
-                                            <mat-option *ngFor="
+                                        <mat-select
+                                            formControlName="role"
+                                            placeholder="Select Team"
+                                            type="text"
+                                            [disableOptionCentering]="true"
+                                        >
+                                            <mat-option
+                                                *ngFor="
                                                     let role of selectTeamList
-                                                " [value]="role">
+                                                "
+                                                [value]="role"
+                                            >
                                                 {{ role }}
                                             </mat-option>
                                         </mat-select>
-                                        <mat-error *ngIf="
+                                        <mat-error
+                                            *ngIf="
                                                 resourcesValidForm['role']
                                                     .errors &&
                                                 resourcesValidForm['role']
                                                     ?.invalid &&
                                                 resourcesValidForm['role']
                                                     ?.touched
-                                            ">
-                                            <div *ngIf="
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="
                                                     resourcesValidForm['role']
                                                         .errors['required']
-                                                ">
+                                                "
+                                            >
                                                 Team is mandatory
                                             </div>
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
 
-                                <div *ngIf="showHideExperience"
-                                    class="w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
-                                    <mat-form-field [floatLabel]="'always'" class="w-full">
-                                        <mat-label>Previous Experience</mat-label>
-                                        <input formControlName="year" matInput placeholder="Year"
-                                            InputFormatter="numeric" type="number" min="0" />
+                                <div
+                                    *ngIf="showHideExperience"
+                                    class="w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        class="w-full"
+                                    >
+                                        <mat-label
+                                            >Previous Experience</mat-label
+                                        >
+                                        <input
+                                            formControlName="year"
+                                            matInput
+                                            placeholder="Year"
+                                            InputFormatter="numeric"
+                                            type="number"
+                                            min="0"
+                                        />
                                         <span matPrefix>YY</span>
-                                        <mat-error *ngIf="
+                                        <mat-error
+                                            *ngIf="
                                                 resourcesValidForm['year']
                                                     .errors &&
                                                 resourcesValidForm['year']
                                                     ?.invalid &&
                                                 resourcesValidForm['year']
                                                     ?.touched
-                                            ">
-                                            <div *ngIf="
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="
                                                     resourcesValidForm['year']
                                                         .errors['required']
-                                                ">
+                                                "
+                                            >
                                                 Year is mandatory
                                             </div>
-                                            <div *ngIf="
+                                            <div
+                                                *ngIf="
                                                     resourcesValidForm['year']
                                                         .errors['pattern']
-                                                ">
+                                                "
+                                            >
                                                 Enter valid Year
                                             </div>
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div *ngIf="showHideExperience"
-                                    class="w-full sm:w-60 mb-2 mt-6 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4">
-                                    <mat-form-field [floatLabel]="'always'" class="w-full">
-                                        <input class="" formControlName="month" InputFormatter="numeric" matInput
-                                            placeholder="Month" type="number" min="0" />
+                                <div
+                                    *ngIf="showHideExperience"
+                                    class="w-full sm:w-60 mb-2 mt-6 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        class="w-full"
+                                    >
+                                        <input
+                                            class=""
+                                            formControlName="month"
+                                            InputFormatter="numeric"
+                                            matInput
+                                            placeholder="Month"
+                                            type="number"
+                                            min="0"
+                                        />
                                         <span matPrefix>MM</span>
-                                        <mat-error *ngIf="
+                                        <mat-error
+                                            *ngIf="
                                                 resourcesValidForm['month']
                                                     .errors &&
                                                 resourcesValidForm['month']
                                                     ?.invalid &&
                                                 resourcesValidForm['month']
                                                     ?.touched
-                                            ">
-                                            <div *ngIf="
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="
                                                     resourcesValidForm['month']
                                                         .errors['required']
-                                                ">
+                                                "
+                                            >
                                                 Month is mandatory
                                             </div>
-                                            <div *ngIf="
+                                            <div
+                                                *ngIf="
                                                     resourcesValidForm['month']
                                                         .errors['pattern'] ||
                                                     resourcesValidForm['month']
                                                         .errors
-                                                ">
+                                                "
+                                            >
                                                 Enter valid month
                                             </div>
                                         </mat-error>
@@ -295,99 +483,192 @@
                         <div class="w-140">
                             <mat-label class="mb-2">PM/Mentor</mat-label>
                             <mat-form-field class="w-full mt-2">
-                                <input matInput [placeholder]="'PM/Mentor'" aria-label="PM/Mentor" #emailInput
-                                    [matAutocomplete]="selectPm" formControlName="pmMentorEmail" />
+                                <input
+                                    matInput
+                                    [placeholder]="'PM/Mentor'"
+                                    aria-label="PM/Mentor"
+                                    #emailInput
+                                    [matAutocomplete]="selectPm"
+                                    formControlName="pmMentorEmail"
+                                />
                                 <mat-autocomplete #selectPm="matAutocomplete">
-                                    <mat-option *ngFor="let item of filteredEmails | async" [value]="item?.email">
+                                    <mat-option
+                                        *ngFor="
+                                            let item of filteredEmails | async
+                                        "
+                                        [value]="item?.email"
+                                    >
                                         <span>{{ item?.email }}</span>
                                     </mat-option>
                                 </mat-autocomplete>
-                                <mat-error *ngIf="
-                                resourcesForm
-                                    ?.get('pmMentorEmail')
-                                    ?.hasError('required')
-                            ">
+                                <mat-error
+                                    *ngIf="
+                                        resourcesForm
+                                            ?.get('pmMentorEmail')
+                                            ?.hasError('required')
+                                    "
+                                >
                                     <div>PM/mentor is mandatory</div>
                                 </mat-error>
                             </mat-form-field>
-
                         </div>
 
                         <!-- technologies form -->
 
-                        <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                            <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
-                                <mat-form-field [floatLabel]="'always'" appearance="fill"
-                                    class="example-chip-list w-full flex-0 mb-2">
+                        <div
+                            class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                        >
+                            <div
+                                class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
+                            >
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    appearance="fill"
+                                    class="example-chip-list w-full flex-0 mb-2"
+                                >
                                     <mat-label>Technology</mat-label>
                                     <mat-chip-list #chipList>
-                                        <input #technologyInput placeholder="New technology..."
-                                            formControlName="technology" [matAutocomplete]="auto"
+                                        <input
+                                            #technologyInput
+                                            placeholder="New technology..."
+                                            formControlName="technology"
+                                            [matAutocomplete]="auto"
                                             [matChipInputFor]="chipList"
-                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                            [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)"
-                                            class="w-full" />
+                                            [matChipInputSeparatorKeyCodes]="
+                                                separatorKeysCodes
+                                            "
+                                            [matChipInputAddOnBlur]="addOnBlur"
+                                            (matChipInputTokenEnd)="add($event)"
+                                            class="w-full"
+                                        />
                                     </mat-chip-list>
-                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                        <mat-option *ngFor="
+                                    <mat-autocomplete
+                                        #auto="matAutocomplete"
+                                        (optionSelected)="selected($event)"
+                                    >
+                                        <mat-option
+                                            *ngFor="
                                                 let technology of filteredTechnologies
                                                     | async
-                                            " [value]="technology">
+                                            "
+                                            [value]="technology"
+                                        >
                                             {{ technology?.name }}
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div *ngIf="technologies?.length > 0" class="flex w-2/4 sm:w-1/2 flex-col overflow-hidden mt-4">
-                            <div class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto">
-                                <div class="inventory-grid z-10 sticky top-0 grid grid-cols-4 gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
-                                    matSortDisableClear>
+                        <div
+                            *ngIf="technologies?.length > 0"
+                            class="flex w-2/4 sm:w-1/2 flex-col overflow-hidden mt-4"
+                        >
+                            <div
+                                class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
+                            >
+                                <div
+                                    class="inventory-grid z-10 sticky top-0 grid grid-cols-4 gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
+                                    matSortDisableClear
+                                >
                                     <div>Technology Name</div>
                                     <div class="col-span-2">Experience</div>
                                     <div class="ml-4">Action</div>
                                 </div>
                                 <ng-container>
-                                    <div formArrayName="technologies" class="grid shadow">
-                                        <ng-container *ngFor="
+                                    <div
+                                        formArrayName="technologies"
+                                        class="grid shadow"
+                                    >
+                                        <ng-container
+                                            *ngFor="
                                                 let technology of technologies?.controls;
                                                 let i = index;
                                                 let last = last
-                                            ">
-                                            <form *ngIf="!technology?.value?.deleted"
+                                            "
+                                        >
+                                            <form
+                                                *ngIf="
+                                                    !technology?.value?.deleted
+                                                "
                                                 class="flex flex-row items-center justify-center gap-4 pt-2 border-b bg-white px-2"
-                                                [formGroupName]="i">
-
+                                                [formGroupName]="i"
+                                            >
                                                 <div
-                                                    class="inventory-grid grid grid-cols-4 md:grid-cols-4 gap-4 pt-1 items-center">
-                                                    <div class="hidden md:block truncate -mt-5">
-                                                        {{technology?.value?.name}}
+                                                    class="inventory-grid grid grid-cols-4 md:grid-cols-4 gap-4 pt-1 items-center"
+                                                >
+                                                    <div
+                                                        class="hidden md:block truncate -mt-5"
+                                                    >
+                                                        {{
+                                                            technology?.value
+                                                                ?.name
+                                                        }}
                                                     </div>
-                                                    <mat-form-field [floatLabel]="'always'" class="w-full">
-                                                        <input formControlName="experienceYear" matInput
-                                                            placeholder="Year" InputFormatter="numeric" type="number"
-                                                            min="0" />
-                                                        <span matPrefix>YY</span>
-                                                        <mat-error *ngIf="technology.get('experienceYear')?.invalid">
+                                                    <mat-form-field
+                                                        [floatLabel]="'always'"
+                                                        class="w-full"
+                                                    >
+                                                        <input
+                                                            formControlName="experienceYear"
+                                                            matInput
+                                                            placeholder="Year"
+                                                            InputFormatter="numeric"
+                                                            type="number"
+                                                            min="0"
+                                                        />
+                                                        <span matPrefix
+                                                            >YY</span
+                                                        >
+                                                        <mat-error
+                                                            *ngIf="
+                                                                technology.get(
+                                                                    'experienceYear'
+                                                                )?.invalid
+                                                            "
+                                                        >
                                                             Enter valid Year
                                                         </mat-error>
                                                     </mat-form-field>
 
-                                                    <mat-form-field [floatLabel]="
-                                                                        'always'
-                                                                    " class="w-full">
-                                                        <input class="" formControlName="experienceMonth"
-                                                            InputFormatter="numeric" matInput placeholder="Month"
-                                                            min="0" type="number" />
-                                                        <span matPrefix>MM</span>
-                                                        <mat-error *ngIf="technology.get('experienceMonth')?.invalid">
+                                                    <mat-form-field
+                                                        [floatLabel]="'always'"
+                                                        class="w-full"
+                                                    >
+                                                        <input
+                                                            class=""
+                                                            formControlName="experienceMonth"
+                                                            InputFormatter="numeric"
+                                                            matInput
+                                                            placeholder="Month"
+                                                            min="0"
+                                                            type="number"
+                                                        />
+                                                        <span matPrefix
+                                                            >MM</span
+                                                        >
+                                                        <mat-error
+                                                            *ngIf="
+                                                                technology.get(
+                                                                    'experienceMonth'
+                                                                )?.invalid
+                                                            "
+                                                        >
                                                             Enter valid Month
                                                         </mat-error>
                                                     </mat-form-field>
 
-                                                    <mat-icon class="cursor-pointer -mt-5" color="warn"
+                                                    <mat-icon
+                                                        class="cursor-pointer -mt-5 ml-6"
+                                                        color="warn"
                                                         matTooltip="Remove"
-                                                        (click)="removeTechnology(i, technology?.value)">cancel</mat-icon>
+                                                        (click)="
+                                                            removeTechnology(
+                                                                i,
+                                                                technology?.value
+                                                            )
+                                                        "
+                                                        >cancel</mat-icon
+                                                    >
                                                 </div>
                                             </form>
                                         </ng-container>
@@ -395,16 +676,24 @@
                                 </ng-container>
                             </div>
                         </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"
+                        >
                             <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                <button (click)="gotoBack()" mat-stroked-button type="button">
+                                <button
+                                    (click)="gotoBack()"
+                                    mat-stroked-button
+                                    type="button"
+                                >
                                     Cancel
                                 </button>
-                                <button (click)="submit()" [color]="'primary'" class="order-first sm:order-last ml-4"
-                                    mat-flat-button>
-                                    <span *ngIf="mode === 'add'">
-                                        Save
-                                    </span>
+                                <button
+                                    (click)="submit()"
+                                    [color]="'primary'"
+                                    class="order-first sm:order-last ml-4"
+                                    mat-flat-button
+                                >
+                                    <span *ngIf="mode === 'add'"> Save </span>
                                     <span *ngIf="mode === 'edit'">
                                         Update
                                     </span>
