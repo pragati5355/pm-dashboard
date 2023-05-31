@@ -327,6 +327,18 @@ export class ResourcesListComponent implements OnInit {
     resourceBenchShadow(value: number[]) {
         this.isBench = value?.includes(0);
         this.isShadow = value?.includes(1);
+
+        const payload = this.getDefaultSearchPayload();
+        this.initialLoading = true;
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
     }
     clearProjectSearch() {
         this.projects.setValue('');
@@ -394,6 +406,8 @@ export class ResourcesListComponent implements OnInit {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             name: this.searchValue,
+            isBench: this.isBench,
+            isShadow: this.isShadow,
         };
     }
 
