@@ -84,22 +84,25 @@ export class DashboardComponent implements OnInit {
 
     downloadFile(b64encodedString: string) {
         if (b64encodedString) {
+            var today = new Date();
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-utilization-report.xlsx');
+            saveAs(blob, 'resource-utilization-report' + '-'+ today.getDate() + '-' + (today.getMonth()+1) + '-' + today.getFullYear() + '.xls');
         }
     }
 
     downloadAvailabilityFile(b64encodedString: string) {
         if (b64encodedString) {
+            var today = new Date();
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-availability-report.xlsx');
+            saveAs(blob, 'resource-availability-report' + '-'+ today.getDate() + '-' + (today.getMonth()+1) + '-' + today.getFullYear() +'.xlsx');
         }
     }
 
     downloadGenericFile(b64encodedString: string) {
         if (b64encodedString) {
+            var today = new Date();
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-generic-report.xlsx');
+            saveAs(blob, 'resource-generic-report'+ '-'+ today.getDate() + '-' + (today.getMonth()+1) + '-' + today.getFullYear() +'.xlsx');
         }
     }
 

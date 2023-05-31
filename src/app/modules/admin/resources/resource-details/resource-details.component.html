@@ -103,15 +103,12 @@
                         ></mat-icon>
                         <span class="ml-2">Technologies:</span>
                         <ng-container
-                            *ngIf="
-                                resourceDetails?.resourceTechnologyModel
-                                    ?.length > 0
-                            "
+                            *ngIf="resourceDetails?.technologies?.length > 0"
                         >
                             <div class="flex flex-wrap items-center mt-2 ml-4">
                                 <ng-container
                                     *ngFor="
-                                        let technology of resourceDetails?.resourceTechnologyModel
+                                        let technology of resourceDetails?.technologies
                                     "
                                 >
                                     <div
