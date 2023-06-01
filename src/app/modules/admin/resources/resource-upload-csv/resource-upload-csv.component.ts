@@ -38,26 +38,26 @@ export class ResourceUploadCsvComponent implements OnInit {
 
     ngOnInit(): void {
         this.csvTemplateUrl = this.resourceService.csvDownloadTempletUrl;
-        this.resourceUploadSkipCount = 4;
-        this.resourceUploadSuccessCount = 5;
-        this.skippedResources = [
-            {
-                name: 'Rohan kadam',
-                email: 'r@mindbowser.com',
-            },
-            {
-                name: 'Amaresh Joshi',
-                email: 'amaresh@mindbowser.com',
-            },
-            {
-                name: 'Rahul Dudhane',
-                email: 'rahul_12@mindbowser.com',
-            },
-            {
-                name: 'Pragati',
-                email: 'pragati@mindbowser.com',
-            },
-        ];
+        // this.resourceUploadSkipCount = 4;
+        // this.resourceUploadSuccessCount = 5;
+        // this.skippedResources = [
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        // ];
     }
 
     cancel() {
@@ -72,6 +72,15 @@ export class ResourceUploadCsvComponent implements OnInit {
         if (target?.files[0]) {
             this.submitInProgress = true;
             this.csvFileToBeUploaded = target?.files[0];
+            const file = target?.files[0];
+
+            const uploadedFile = new FormData();
+            uploadedFile.append(
+                'file',
+                this.csvFileToBeUploaded,
+                this.csvFileToBeUploaded?.name
+            );
+
             const payload = {
                 fileName: target?.files[0]?.name,
             };
@@ -133,6 +142,7 @@ export class ResourceUploadCsvComponent implements OnInit {
                     this.submitInProgress = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
+                        this.skippedResources = res?.data;
                         this.reloadResourcesList = true;
                     }
                     if (res?.error === true) {
@@ -157,5 +167,8 @@ export class ResourceUploadCsvComponent implements OnInit {
         this.uploadFileName = null;
         this.csvFileToBeUploaded = null;
         this.csvPreSignedUrl = null;
+        this.resourceUrl = null;
+        this.isFileUploadedToS3 = false;
+        this.skippedResources = [];
     }
 }

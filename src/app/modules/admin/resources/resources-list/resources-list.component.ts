@@ -56,6 +56,7 @@ export class ResourcesListComponent implements OnInit {
     configFormAssignedProject!: FormGroup;
     technologys = new FormControl('');
     projects = new FormControl('');
+    isShadowIsBench = new FormControl('');
     techName: any = null;
     technologyList: any = [];
     pagination = false;
@@ -78,6 +79,10 @@ export class ResourcesListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: true,
     };
+    showTechnologies: any[];
+    selectedProject: boolean = false;
+    isBench: boolean = false;
+    isShadow: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -180,6 +185,9 @@ export class ResourcesListComponent implements OnInit {
             }
         }
         const payload = this.getDefaultSearchPayload();
+        this.showTechnologies = this.technologyList.filter((obj) =>
+            this.technologys?.value?.some((id) => obj.id === id)
+        );
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
@@ -306,6 +314,7 @@ export class ResourcesListComponent implements OnInit {
         this.count = 1;
         this.pagination = false;
         let payload = this.getDefaultSearchPayload(this.count);
+        this.selectedProject = true;
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
@@ -316,6 +325,39 @@ export class ResourcesListComponent implements OnInit {
             }
         );
     }
+    resourceBenchShadow() {
+        this.isBench = this.isShadowIsBench?.value?.includes(0);
+        this.isShadow = this.isShadowIsBench?.value?.includes(1);
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.initialLoading = true;
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearBenchShadowSearch() {
+        this.isBench = false;
+        this.isShadow = false;
+        this.isShadowIsBench.setValue('');
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearProjectSearch() {
+        this.projects.setValue('');
+        this.count = 1;
+        let payload = this.getDefaultSearchPayload(this.count);
+        this.selectedProject = false;
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearTechnologySearch() {
+        this.showTechnologies = [];
+        this.technologys.setValue('');
+        this.count = 1;
+        let payload = this.getDefaultSearchPayload(this.count);
+        this.loadDataWithFilterPayload(payload);
+    }
+
     deleteProjectString(projects: any) {
         this.deleteProjects = '';
         var arr = projects;
@@ -339,15 +381,31 @@ export class ResourcesListComponent implements OnInit {
         this.getList();
     }
 
+    private loadDataWithFilterPayload(payload: any) {
+        this.initialLoading = true;
+        this.pagination = false;
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
     private handleTokenExpiry() {
         this._authService.updateAndReload(window.location);
     }
 
     private getExperiencePayload() {
-        return [
-            parseInt(this.exprienceForm?.value?.minExprience),
-            parseInt(this.exprienceForm?.value?.maxExprience),
-        ];
+        const exp = {
+            minExp: parseInt(this.exprienceForm?.value?.minExprience),
+            maxExp: parseInt(this.exprienceForm?.value?.maxExprience),
+        };
+
+        return exp;
     }
 
     private getDefaultSearchPayload(count?: any) {
@@ -366,6 +424,8 @@ export class ResourcesListComponent implements OnInit {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             name: this.searchValue,
+            isBench: this.isBench,
+            isShadow: this.isShadow,
         };
     }
 

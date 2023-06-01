@@ -109,11 +109,7 @@
                                 }}
                             </div>
                             <div class="hidden md:block truncate">
-                                {{
-                                    resource?.email
-                                        ? resource?.email
-                                        : "Not Available"
-                                }}
+                                {{ resource ? resource : "Not Available" }}
                             </div>
                         </div>
                     </ng-container>
