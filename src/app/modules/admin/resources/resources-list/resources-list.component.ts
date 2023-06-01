@@ -400,10 +400,12 @@ export class ResourcesListComponent implements OnInit {
     }
 
     private getExperiencePayload() {
-        return [
-            parseInt(this.exprienceForm?.value?.minExprience),
-            parseInt(this.exprienceForm?.value?.maxExprience),
-        ];
+        const exp = {
+            minExp: parseInt(this.exprienceForm?.value?.minExprience),
+            maxExp: parseInt(this.exprienceForm?.value?.maxExprience),
+        };
+
+        return exp;
     }
 
     private getDefaultSearchPayload(count?: any) {
