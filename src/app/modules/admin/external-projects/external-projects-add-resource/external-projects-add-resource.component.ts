@@ -88,27 +88,27 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         }
 
         if (!this.addResourceForm.invalid) {
-            // this.submitInProcess = true;
+            this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
             console.log(payload);
-            // this.externalProjectsService.mapResource(payload).subscribe(
-            //     (res: any) => {
-            //         this.submitInProcess = false;
-            //         if (res?.error === false) {
-            //             this.snackBar.successSnackBar(res?.message);
-            //             this.matDialogRef.close(true);
-            //         }
-            //         if (res?.error === true) {
-            //             this.snackBar.errorSnackBar(res?.message);
-            //         }
-            //         if (res?.tokenExpire) {
-            //             this._authService.updateAndReload(window.location);
-            //         }
-            //     },
-            //     (err) => {
-            //         this.submitInProcess = false;
-            //     }
-            // );
+            this.externalProjectsService.mapResource(payload).subscribe(
+                (res: any) => {
+                    this.submitInProcess = false;
+                    if (res?.error === false) {
+                        this.snackBar.successSnackBar(res?.message);
+                        this.matDialogRef.close(true);
+                    }
+                    if (res?.error === true) {
+                        this.snackBar.errorSnackBar(res?.message);
+                    }
+                    if (res?.tokenExpire) {
+                        this._authService.updateAndReload(window.location);
+                    }
+                },
+                (err) => {
+                    this.submitInProcess = false;
+                }
+            );
         }
     }
 
@@ -205,7 +205,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
         this.checkEditMode();
-        console.log(this.data?.allResources)
+        console.log('this.data?.editData :', this.data?.editData);
     }
 
     private checkEditMode() {
@@ -219,10 +219,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     private loadCheckBoxData() {
-        this.isResourceOnBench = this.data?.isBench || false;
-        this.isShadowResource = this.data?.isShadow || false;
-        this.markResourceAsBench = this.data?.isBench || false;
-        this.markResourceAsShadow = this.data?.isShadow || false;
+        this.isResourceOnBench = this.data?.editData?.isBench || false;
+        this.isShadowResource = this.data?.editData?.isShadow || false;
+        this.markResourceAsBench = this.data?.editData?.isBench || false;
+        this.markResourceAsShadow = this.data?.editData?.isShadow || false;
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
@@ -327,7 +327,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 ),
                 utilization: this.data?.editData?.utilization,
             });
-            this.getCurrentResourceTechnology(this.data?.editData?.email)
+            this.technologys = this.data?.editData?.technologies;
+            this.getCurrentResourceTechnology(this.data?.editData?.email);
             this.getAlreadyAssignedProjectsData(this.data?.editData?.email);
         }
     }

@@ -38,26 +38,26 @@ export class ResourceUploadCsvComponent implements OnInit {
 
     ngOnInit(): void {
         this.csvTemplateUrl = this.resourceService.csvDownloadTempletUrl;
-        this.resourceUploadSkipCount = 4;
-        this.resourceUploadSuccessCount = 5;
-        this.skippedResources = [
-            {
-                name: 'Rohan kadam',
-                email: 'r@mindbowser.com',
-            },
-            {
-                name: 'Amaresh Joshi',
-                email: 'amaresh@mindbowser.com',
-            },
-            {
-                name: 'Rahul Dudhane',
-                email: 'rahul_12@mindbowser.com',
-            },
-            {
-                name: 'Pragati',
-                email: 'pragati@mindbowser.com',
-            },
-        ];
+        // this.resourceUploadSkipCount = 4;
+        // this.resourceUploadSuccessCount = 5;
+        // this.skippedResources = [
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        // ];
     }
 
     cancel() {
