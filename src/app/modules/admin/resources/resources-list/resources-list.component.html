@@ -89,24 +89,6 @@
                                         >
                                             <span>{{ tech?.name + ", " }}</span>
                                         </ng-container>
-                                        <!-- {{ techName || "" }}
-                                        <span
-                                            *ngIf="
-                                                (technologys.value?.length ||
-                                                    0) > 1
-                                            "
-                                            class="example-additional-selection"
-                                        >
-                                            (+{{
-                                                (technologys.value?.length ||
-                                                    0) - 1
-                                            }}
-                                            {{
-                                                technologys.value?.length === 2
-                                                    ? "other"
-                                                    : "others"
-                                            }})
-                                        </span> -->
                                     </mat-select-trigger>
                                     <mat-option
                                         *ngFor="
@@ -116,6 +98,13 @@
                                         >{{ technology.name }}</mat-option
                                     >
                                 </mat-select>
+                                <mat-icon
+                                    *ngIf="showTechnologies?.length > 0"
+                                    class="icon-size-5 cursor-pointer"
+                                    matSuffix
+                                    [svgIcon]="'heroicons_solid:x'"
+                                    (click)="clearTechnologySearch()"
+                                ></mat-icon>
                             </mat-form-field>
                             <div
                                 class="ml-4 justify-between content-center text-gray-400 inline-flex px-3 py-2.5 rounded-full border border-gray-300 w-full"
@@ -265,15 +254,25 @@
                                 class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
                             >
                                 <mat-select
-                                    (selectionChange)="resourceBenchShadow($event?.value)"
+                                    (selectionChange)="
+                                        resourceBenchShadow()
+                                    "
                                     [disableOptionCentering]="true"
                                     [placeholder]="'Bench/Shadow Resource'"
                                     multiple
                                     panelClass="multiple-select-style"
+                                    [formControl]="isShadowIsBench"
                                 >
                                     <mat-option [value]="0">Bench</mat-option>
                                     <mat-option [value]="1">Shadow</mat-option>
                                 </mat-select>
+                                <mat-icon
+                                    *ngIf="isBench || isShadow"
+                                    class="icon-size-5 cursor-pointer"
+                                    matSuffix
+                                    [svgIcon]="'heroicons_solid:x'"
+                                    (click)="clearBenchShadowSearch()"
+                                ></mat-icon>
                             </mat-form-field>
 
                             <div class="w-full">

@@ -56,6 +56,7 @@ export class ResourcesListComponent implements OnInit {
     configFormAssignedProject!: FormGroup;
     technologys = new FormControl('');
     projects = new FormControl('');
+    isShadowIsBench = new FormControl('');
     techName: any = null;
     technologyList: any = [];
     pagination = false;
@@ -324,38 +325,39 @@ export class ResourcesListComponent implements OnInit {
             }
         );
     }
-    resourceBenchShadow(value: number[]) {
-        this.isBench = value?.includes(0);
-        this.isShadow = value?.includes(1);
-
+    resourceBenchShadow() {
+        this.isBench = this.isShadowIsBench?.value?.includes(0);
+        this.isShadow = this.isShadowIsBench?.value?.includes(1);
+        this.count = 1;
+        this.pagination = false;
         const payload = this.getDefaultSearchPayload();
         this.initialLoading = true;
-        this.projectService.getResourceMember(payload).subscribe(
-            (res: any) => {
-                this.handleGetResourceMemberResponse(res);
-                this.initialLoading = false;
-            },
-            (error) => {
-                this.initialLoading = false;
-            }
-        );
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearBenchShadowSearch() {
+        this.isBench = false;
+        this.isShadow = false;
+        this.isShadowIsBench.setValue('');
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.loadDataWithFilterPayload(payload);
     }
     clearProjectSearch() {
         this.projects.setValue('');
         this.count = 1;
-        this.pagination = false;
         let payload = this.getDefaultSearchPayload(this.count);
         this.selectedProject = false;
-        this.projectService.getResourceMember(payload).subscribe(
-            (res: any) => {
-                this.handleGetResourceMemberResponse(res);
-                this.initialLoading = false;
-            },
-            (error) => {
-                this.initialLoading = false;
-            }
-        );
+        this.loadDataWithFilterPayload(payload);
     }
+    clearTechnologySearch() {
+        this.showTechnologies = [];
+        this.technologys.setValue('');
+        this.count = 1;
+        let payload = this.getDefaultSearchPayload(this.count);
+        this.loadDataWithFilterPayload(payload);
+    }
+
     deleteProjectString(projects: any) {
         this.deleteProjects = '';
         var arr = projects;
@@ -377,6 +379,20 @@ export class ResourcesListComponent implements OnInit {
         this.searchValue = '';
         this.pagination = false;
         this.getList();
+    }
+
+    private loadDataWithFilterPayload(payload: any) {
+        this.initialLoading = true;
+        this.pagination = false;
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
     }
 
     private handleTokenExpiry() {

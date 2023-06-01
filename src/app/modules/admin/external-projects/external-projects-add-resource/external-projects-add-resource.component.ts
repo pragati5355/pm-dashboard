@@ -205,6 +205,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
         this.checkEditMode();
+        console.log(this.data?.allResources)
     }
 
     private checkEditMode() {
@@ -261,6 +262,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 deleted: false,
                 assignedBy: this.userID,
                 role: this.addResourceForm?.value?.role,
+                isBench: this.isResourceOnBench,
+                isShadow: this.isShadowResource,
+                technologies: this.technologys,
             };
         }
         return payload;
@@ -323,6 +327,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 ),
                 utilization: this.data?.editData?.utilization,
             });
+            this.getCurrentResourceTechnology(this.data?.editData?.email)
             this.getAlreadyAssignedProjectsData(this.data?.editData?.email);
         }
     }
