@@ -74,9 +74,12 @@ export class ResourceUploadCsvComponent implements OnInit {
             this.csvFileToBeUploaded = target?.files[0];
             const file = target?.files[0];
 
-
             const uploadedFile = new FormData();
-            uploadedFile.append( 'file', this.csvFileToBeUploaded, this.csvFileToBeUploaded?.name);
+            uploadedFile.append(
+                'file',
+                this.csvFileToBeUploaded,
+                this.csvFileToBeUploaded?.name
+            );
 
             const payload = {
                 fileName: target?.files[0]?.name,
@@ -87,14 +90,13 @@ export class ResourceUploadCsvComponent implements OnInit {
                     if (res?.error === false) {
                         this.csvPreSignedUrl = res?.data?.preSignedURL;
                         this.resourceUrl = res?.data?.resourceUrl;
-                
 
                         if (this.csvPreSignedUrl) {
                             this.submitInProgress = true;
                             this.resourceService
                                 .uploadCsvFileToS3(
                                     this.csvPreSignedUrl,
-                                    uploadedFile
+                                    this.csvFileToBeUploaded
                                 )
                                 .subscribe(
                                     (res: any) => {
@@ -140,7 +142,7 @@ export class ResourceUploadCsvComponent implements OnInit {
                     this.submitInProgress = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
-                        this.skippedResources = res?.data
+                        this.skippedResources = res?.data;
                         this.reloadResourcesList = true;
                     }
                     if (res?.error === true) {
@@ -167,5 +169,6 @@ export class ResourceUploadCsvComponent implements OnInit {
         this.csvPreSignedUrl = null;
         this.resourceUrl = null;
         this.isFileUploadedToS3 = false;
+        this.skippedResources = [];
     }
 }

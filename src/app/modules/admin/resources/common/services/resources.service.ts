@@ -28,7 +28,7 @@ export class ResourcesService {
     }
     uploadCsvFileToS3(url: string, file: any) {
         return this.http.put(url, file, {
-            headers: { skipToken: 'true' },
+            headers: { skipToken: 'true', 'Content-Type': 'text/csv' },
         });
     }
 }
