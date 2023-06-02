@@ -159,38 +159,6 @@
                                                 formControlName="minExprience"
                                                 matInput
                                             />
-                                            <mat-error
-                                                *ngIf="
-                                                    exprienceValidForm[
-                                                        'minExprience'
-                                                    ].errors &&
-                                                    exprienceValidForm[
-                                                        'minExprience'
-                                                    ]?.invalid &&
-                                                    exprienceValidForm[
-                                                        'minExprience'
-                                                    ]?.touched
-                                                "
-                                            >
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'minExprience'
-                                                        ].errors['required']
-                                                    "
-                                                >
-                                                    First name is mandatory
-                                                </div>
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'minExprience'
-                                                        ].errors['pattern']
-                                                    "
-                                                >
-                                                    Enter valid first name
-                                                </div>
-                                            </mat-error>
                                         </mat-form-field>
                                         <span class="px-2">to</span>
                                         <mat-form-field
@@ -203,38 +171,6 @@
                                                 formControlName="maxExprience"
                                                 matInput
                                             />
-                                            <mat-error
-                                                *ngIf="
-                                                    exprienceValidForm[
-                                                        'maxExprience'
-                                                    ]?.errors &&
-                                                    exprienceValidForm[
-                                                        'maxExprience'
-                                                    ]?.invalid &&
-                                                    exprienceValidForm[
-                                                        'maxExprience'
-                                                    ]?.touched
-                                                "
-                                            >
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'maxExprience'
-                                                        ]?.errors['required']
-                                                    "
-                                                >
-                                                    First name is mandatory
-                                                </div>
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'maxExprience'
-                                                        ]?.errors['pattern']
-                                                    "
-                                                >
-                                                    Enter valid first name
-                                                </div>
-                                            </mat-error>
                                         </mat-form-field>
                                         <button
                                             [color]="'primary'"
@@ -403,7 +339,8 @@
                                             >
                                                 <div>
                                                     {{
-                                                        resources?.technologies || '-'
+                                                        resources?.technologies ||
+                                                            "-"
                                                     }}
                                                 </div>
                                             </div>
@@ -411,7 +348,7 @@
                                             <div
                                                 class="hidden lg:block truncate"
                                             >
-                                                {{ resources?.projects || '-' }}
+                                                {{ resources?.projects || "-" }}
                                             </div>
                                             <div class="hidden sm:block">
                                                 {{ resources?.role }}

@@ -6,7 +6,7 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
@@ -55,6 +55,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alltechnologys: any[] = [];
     currentResourceTechnologyList: any[] = [];
     isEmailSelected: boolean = false;
+    isTechnology = new FormControl('');
 
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
@@ -123,9 +124,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.addResourceForm.get('technology')?.setValue('');
     }
 
-    selected(event: MatAutocompleteSelectedEvent): void {
-        console.log(event?.option?.value);
-        this.technologys.push(event?.option?.value);
+    selected(): void {
+        // console.log(event?.option?.value);
+        // this.technologys.push(event?.option?.value);
+        console.log("--------------------------------")
         this.technologyInput.nativeElement.value = '';
         this.addResourceForm.get('technology')?.setValue('');
     }
@@ -150,7 +152,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isEmailSelected = true;
         this.alltechnologys = [];
         this.technologys = [];
-        this.technologyInput.nativeElement.value = '';
         this.addResourceForm.get('technology')?.setValue('');
         this.getResourceCapacity(email);
         this.getCurrentResourceTechnology(email);
@@ -165,6 +166,14 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isEmailSelected = false;
         this.addResourceForm.get('utilization').setValue(null);
         this.addResourceForm.get('email').setValue('');
+    }
+
+    selectTechnology(){
+
+    }
+
+    clearTechnologySearch(){
+
     }
 
     getResourceCapacity(email: string) {
@@ -247,8 +256,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
             projectType: 'EXTERNAL',
-            isBench: this.isResourceOnBench,
-            isShadow: this.isShadowResource,
+            bench : this.isResourceOnBench,
+            shadow: this.isShadowResource,
             technologies: this.technologys,
         };
         if (this.mode === 'EDIT') {
@@ -262,8 +271,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 deleted: false,
                 assignedBy: this.userID,
                 role: this.addResourceForm?.value?.role,
-                isBench: this.isResourceOnBench,
-                isShadow: this.isShadowResource,
+                bench: this.isResourceOnBench,
+                shadow: this.isShadowResource,
                 technologies: this.technologys,
             };
         }
@@ -274,10 +283,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.addResourceForm = this._formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
             role: ['', [Validators.required]],
-            startDate: ['', [Validators.required]],
+            startDate: [new Date(), [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
-            technology: [''],
+            technology: [{disabled: true}],
         });
 
         this.filteredTechnologies = this.addResourceForm
@@ -286,9 +295,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 startWith(''),
                 map((technology: any | null) =>
                     technology ? this._filter(technology) : this._filterslice()
+                    
                 )
-            );
-
+        );
+        
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
         if (this.mode === 'EDIT') {
@@ -297,11 +307,13 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     _filter(value: any) {
+        console.log("AllTechnology : "+this.alltechnologys);
         return this.alltechnologys.filter(
             (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );
     }
     _filterslice() {
+        console.log("allTechnology : "+this.alltechnologys);
         return this.alltechnologys.filter(
             (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );

@@ -5,6 +5,8 @@ import { DashboardService } from '@services/dashboard.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import saveAs from 'save-as';
 import { DashboardApiService } from './common/services/dashboard-api.service';
+import { DatePipe, formatDate } from '@angular/common';
+import moment from 'moment';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -26,7 +28,8 @@ export class DashboardComponent implements OnInit {
         private router: Router,
         private dashboardService: DashboardService,
         private dashboardApiService: DashboardApiService,
-        private snackbar: SnackBar
+        private snackbar: SnackBar,
+        public datePipe : DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -85,24 +88,27 @@ export class DashboardComponent implements OnInit {
     downloadFile(b64encodedString: string) {
         if (b64encodedString) {
             var today = new Date();
+            var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-utilization-report' + '-'+ today.getDate() + '-' + (today.getMonth()+1) + '-' + today.getFullYear() + '.xls');
+            saveAs(blob, 'resource-utilization-report' + '-'+ dateobj + '.xls');
         }
     }
 
     downloadAvailabilityFile(b64encodedString: string) {
         if (b64encodedString) {
             var today = new Date();
+            var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-availability-report' + '-'+ today.getDate() + '-' + (today.getMonth()+1) + '-' + today.getFullYear() +'.xlsx');
+            saveAs(blob, 'resource-availability-report' + '-' + dateobj);
         }
     }
 
     downloadGenericFile(b64encodedString: string) {
         if (b64encodedString) {
             var today = new Date();
+            var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-generic-report'+ '-'+ today.getDate() + '-' + (today.getMonth()+1) + '-' + today.getFullYear() +'.xlsx');
+            saveAs(blob, 'resource-generic-report'+ '-'+ dateobj+'.xlsx');
         }
     }
 
