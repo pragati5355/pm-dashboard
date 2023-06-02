@@ -415,11 +415,8 @@ export class ResourcesListComponent implements OnInit {
                 this.technologys?.value.length > 0
                     ? this.technologys?.value
                     : null,
-            experience:
-                this.exprienceForm?.value?.minExprience.length > 0 &&
-                this.exprienceForm?.value?.maxExprience.length > 0
-                    ? expriencePayload
-                    : null,
+            minExp: expriencePayload?.minExp,
+            maxExp: expriencePayload?.maxExp,
             projects: this.projects?.value ? [this.projects.value] : null,
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
