@@ -414,10 +414,10 @@ export class ResourcesListComponent implements OnInit {
             technology:
                 this.technologys?.value.length > 0
                     ? this.technologys?.value
-                    : null,
+                    : [],
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,
-            projects: this.projects?.value ? [this.projects.value] : null,
+            projects: this.projects?.value ? [this.projects.value] : [],
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             name: this.searchValue,
