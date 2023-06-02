@@ -63,7 +63,7 @@ export class ResourcesListComponent implements OnInit {
     searchValue = '';
     techList: string[] = [];
     count = 1;
-    resources: ResourceModel[] = [];
+    resources: any[] = [];
     initialLoading: boolean = false;
     totalRecored: any;
     totalPerPageData = StaticData.PER_PAGE_DATA;
@@ -414,13 +414,10 @@ export class ResourcesListComponent implements OnInit {
             technology:
                 this.technologys?.value.length > 0
                     ? this.technologys?.value
-                    : null,
-            experience:
-                this.exprienceForm?.value?.minExprience.length > 0 &&
-                this.exprienceForm?.value?.maxExprience.length > 0
-                    ? expriencePayload
-                    : null,
-            projects: this.projects?.value ? [this.projects.value] : null,
+                    : [],
+            minExp: expriencePayload?.minExp,
+            maxExp: expriencePayload?.maxExp,
+            projects: this.projects?.value ? [this.projects.value] : [],
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             name: this.searchValue,

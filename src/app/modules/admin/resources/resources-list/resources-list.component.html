@@ -207,7 +207,7 @@
                                                 *ngIf="
                                                     exprienceValidForm[
                                                         'maxExprience'
-                                                    ].errors &&
+                                                    ]?.errors &&
                                                     exprienceValidForm[
                                                         'maxExprience'
                                                     ]?.invalid &&
@@ -220,7 +220,7 @@
                                                     *ngIf="
                                                         exprienceValidForm[
                                                             'maxExprience'
-                                                        ].errors['required']
+                                                        ]?.errors['required']
                                                     "
                                                 >
                                                     First name is mandatory
@@ -229,7 +229,7 @@
                                                     *ngIf="
                                                         exprienceValidForm[
                                                             'maxExprience'
-                                                        ].errors['pattern']
+                                                        ]?.errors['pattern']
                                                     "
                                                 >
                                                     Enter valid first name
@@ -254,9 +254,7 @@
                                 class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
                             >
                                 <mat-select
-                                    (selectionChange)="
-                                        resourceBenchShadow()
-                                    "
+                                    (selectionChange)="resourceBenchShadow()"
                                     [disableOptionCentering]="true"
                                     [placeholder]="'Bench/Shadow Resource'"
                                     multiple
@@ -346,7 +344,7 @@
                                             <div
                                                 class="flex items-center cursor-pointer"
                                                 (click)="
-                                                    viewResource(resources.id)
+                                                    viewResource(resources?.id)
                                                 "
                                             >
                                                 <ng-container
@@ -367,7 +365,7 @@
                                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600"
                                                     >
                                                         {{
-                                                            resources.firstName.charAt(
+                                                            resources?.firstname?.charAt(
                                                                 0
                                                             )
                                                         }}
@@ -393,8 +391,8 @@
                                                                 resources?.id
                                                     }"
                                                 >
-                                                    {{ resources?.firstName }}
-                                                    {{ resources?.lastName }}
+                                                    {{ resources?.firstname }}
+                                                    {{ resources?.lastname }}
                                                 </div>
                                                 <div class="truncate">
                                                     {{ resources?.email }}
@@ -405,31 +403,15 @@
                                             >
                                                 <div>
                                                     {{
-                                                        resources?.technologies
-                                                            | join
+                                                        resources?.technologies || '-'
                                                     }}
                                                 </div>
                                             </div>
 
                                             <div
                                                 class="hidden lg:block truncate"
-                                                *ngIf="
-                                                    resources['assignedProject']
-                                                        ?.length > 0
-                                                "
                                             >
-                                                {{
-                                                    resources["assignedProject"]
-                                                }}
-                                            </div>
-                                            <div
-                                                class="hidden lg:block truncate"
-                                                *ngIf="
-                                                    resources['assignedProject']
-                                                        .length == 0
-                                                "
-                                            >
-                                                -
+                                                {{ resources?.projects || '-' }}
                                             </div>
                                             <div class="hidden sm:block">
                                                 {{ resources?.role }}
@@ -439,7 +421,7 @@
                                                 class="hidden md:flex items-center"
                                             >
                                                 {{
-                                                    resources["careerStartDate"]
+                                                    resources?.careerstartdate
                                                         | diffDate
                                                 }}
                                             </div>
@@ -465,7 +447,7 @@
                                                         deleteResource(
                                                             resources?.id,
                                                             resources[
-                                                                'assignedProject'
+                                                                'projects'
                                                             ]
                                                         )
                                                     "
