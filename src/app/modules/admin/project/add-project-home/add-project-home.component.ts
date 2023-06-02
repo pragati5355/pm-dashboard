@@ -267,27 +267,27 @@ export class AddProjectHomeComponent
         if (typeof value == 'object') {
             return this.teamMembers.filter(
                 (teamMember: any) =>
-                    teamMember.firstName
-                        .toLowerCase()
-                        .indexOf(value?.firstName.toLowerCase()) === 0 &&
-                    !this.selectedTeamMember.includes(teamMember.id) &&
+                    teamMember.firstname
+                        ?.toLowerCase()
+                        ?.indexOf(value?.firstname.toLowerCase()) === 0 &&
+                    !this.selectedTeamMember?.includes(teamMember.id) &&
                     teamMember.id !==
                         this.projectTeam?.value?.project_manager?.id
             );
         } else {
-            return this.teamMembers.filter(
+            return this.teamMembers?.filter(
                 (teamMember: any) =>
-                    teamMember.firstName
-                        .toLowerCase()
-                        .indexOf(value.toLowerCase()) === 0 &&
-                    !this.selectedTeamMember.includes(teamMember?.id) &&
+                    teamMember?.firstname
+                        ?.toLowerCase()
+                        ?.indexOf(value?.toLowerCase()) === 0 &&
+                    !this.selectedTeamMember?.includes(teamMember?.id) &&
                     teamMember?.id !==
                         this.projectTeam?.value?.project_manager?.id
             );
         }
     }
     filterTeamMemberSlice() {
-        return this.teamMembers.filter(
+        return this.teamMembers?.filter(
             (TeamMember) =>
                 !this.selectedTeamMember.includes(TeamMember.id) &&
                 TeamMember?.id !== this.projectTeam?.value?.project_manager?.id
@@ -553,8 +553,8 @@ export class AddProjectHomeComponent
                         ) {
                             item.resourceId =
                                 this.projectTeam?.value?.team_member?.id;
-                            item.firstName =
-                                this.projectTeam?.value?.team_member?.firstName;
+                            item.firstname =
+                                this.projectTeam?.value?.team_member?.firstname;
                             item.startDate = this.projectTeam?.value?.startDate;
                             item.endDate = this.projectTeam?.value?.endDate;
                             item.role = this.projectTeam?.value?.select_role;
@@ -570,8 +570,8 @@ export class AddProjectHomeComponent
                         {
                             resourceId:
                                 this.projectTeam?.value?.team_member?.id,
-                            firstName:
-                                this.projectTeam?.value?.team_member?.firstName,
+                            firstname:
+                                this.projectTeam?.value?.team_member?.firstname,
                             startDate: this.projectTeam?.value?.startDate,
                             endDate: this.projectTeam?.value?.endDate,
                             role: this.projectTeam?.value?.select_role,
@@ -739,11 +739,15 @@ export class AddProjectHomeComponent
     }
     getTeamMember() {
         let payload = {
-            technology: null,
-            experience: null,
+            technology: [],
+            minExp: null,
+            maxExp: null,
+            projects: [],
             perPageData: 0,
             totalPerPageData: 0,
             name: '',
+            isBench: false,
+            isShadow: false,
         };
         this.initialLoading = true;
         this.ProjectService.getTeamMember(payload).subscribe(
@@ -753,16 +757,18 @@ export class AddProjectHomeComponent
                 this.managerLists = res?.data?.teamMember;
                 this.filterFunctions();
                 if (this.editProject == true) {
-                    let projectManagerdata = this.managerLists.filter(
+                    let projectManagerdata = this.managerLists?.filter(
                         (ManagerList: any) =>
                             ManagerList.id ==
                             this.managerEditTeamLIst[0]?.teamMemberId
                     );
-                    this.projectTeam.patchValue({
-                        project_manager: projectManagerdata[0]
-                            ? projectManagerdata[0]
-                            : null,
-                    });
+                    if (projectManagerdata) {
+                        this.projectTeam.patchValue({
+                            project_manager: projectManagerdata[0]
+                                ? projectManagerdata[0]
+                                : null,
+                        });
+                    }
                 }
             },
             (error) => {
@@ -824,10 +830,10 @@ export class AddProjectHomeComponent
             : val?.trim();
     }
     displayFn(user?: ManagerList): string | any {
-        return user ? user?.firstName + ' ' + user?.lastName : null;
+        return user ? user?.firstname + ' ' + user?.lastname : null;
     }
     displayFnTeam(user?: TeamMember): string | any {
-        return user ? user?.firstName + ' ' + user?.lastName : null;
+        return user ? user?.firstname + ' ' + user?.lastname : null;
     }
     displayFnJiraManager(user?: JiraTeamUser): string | any {
         return user ? user?.displayName : null;

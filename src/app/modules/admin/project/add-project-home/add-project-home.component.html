@@ -501,7 +501,7 @@
                                                 <mat-option *ngFor="let teamMember of filteredTeamMembers | async"
                                                     [value]="teamMember">
 
-                                                    <span>{{ teamMember.firstName +" "+teamMember.lastName}} </span>
+                                                    <span>{{ teamMember?.firstname +" "+teamMember?.lastname}} </span>
                                                 </mat-option>
                                             </mat-autocomplete>
                                         </mat-form-field>
@@ -637,7 +637,7 @@
                                                             <div
                                                                 class="team-member-table grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                                                                 <div class="truncate">
-                                                                    {{teamMember?.firstName}}
+                                                                    {{teamMember?.firstname}}
                                                                 </div>
 
                                                                 <div class="truncate">
