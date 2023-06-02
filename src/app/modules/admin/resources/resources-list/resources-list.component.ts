@@ -63,7 +63,7 @@ export class ResourcesListComponent implements OnInit {
     searchValue = '';
     techList: string[] = [];
     count = 1;
-    resources: ResourceModel[] = [];
+    resources: any[] = [];
     initialLoading: boolean = false;
     totalRecored: any;
     totalPerPageData = StaticData.PER_PAGE_DATA;
