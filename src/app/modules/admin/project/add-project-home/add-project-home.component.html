@@ -484,7 +484,7 @@
                             <div class="flex flex-col flex-0  col-span-4 sm:col-span-4 ">
                                 <div class="w-full flex flex-row justify-between flex-0  col-span-4 sm:col-span-4 ">
                                     <div class="w-full mb-2 font-extrabold tracking-tight">
-                                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                                        <!-- <mat-form-field class="w-full" [floatLabel]="'always'">
                                             <mat-label>Team Member *</mat-label>
                                             <input matInput type="text" placeholder="Team Member" maxlength="50"
                                                 aria-label="teamMember" [matAutocomplete]="auto"
@@ -504,6 +504,42 @@
                                                     <span>{{ teamMember?.firstname +" "+teamMember?.lastname}} </span>
                                                 </mat-option>
                                             </mat-autocomplete>
+                                        </mat-form-field> -->
+
+                                        <mat-form-field [floatLabel]="'always'" class="w-full h-4">
+                                            <mat-label class="">Email</mat-label>
+                                            <input
+                                                matInput
+                                                [placeholder]="'Email'"
+                                                aria-label="email"
+                                                #emailInput
+                                                [matAutocomplete]="auto1"
+                                                formControlName="team_member"
+                                            />
+                                            <mat-autocomplete
+                                                #auto1="matAutocomplete"
+                                                [displayWith]="displayFnResource"
+                                                (optionSelected)="getSelectedEmail($event.option.value)"
+                                            >
+                                                <mat-option
+                                                    *ngFor="let item of filteredEmails | async"
+                                                    [value]="item"
+                                                >
+                                                    <span>{{ item?.email }}</span>
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                            <mat-error
+                                                *ngIf="projectTeam?.get('email')?.hasError('required')"
+                                            >
+                                                <div>Email is mandatory</div>
+                                            </mat-error>
+                                            <!-- <mat-icon
+                                                *ngIf="isEmailSelected"
+                                                class="icon-size-5 cursor-pointer"
+                                                matSuffix
+                                                [svgIcon]="'heroicons_solid:x'"
+                                                (click)="$event.stopPropagation(); clearSelectedEmail()"
+                                            ></mat-icon> -->
                                         </mat-form-field>
                                     </div>
                                     <div class="w-full font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
@@ -559,7 +595,7 @@
                                             <mat-select formControlName="tm_utilization" type="text"
                                                 placeholder="Select Utilization" [disableOptionCentering]="true">
                                                 <mat-option *ngFor="let u of [0.25, 0.5, 1]" [value]="u"
-                                                    [disabled]="u > getAvailableCapacity(projectTeamForm['team_member']?.value)">
+                                                    [disabled]="u > getAvailableCapacity(projectTeamForm['email']?.value)">
                                                     {{ u }}
                                                 </mat-option>
                                             </mat-select>
@@ -607,14 +643,61 @@
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
-                                </div>
 
+                                </div>
+                                <div class="w-full flex">
+                                        <mat-form-field
+                                        class="w-full mr-3"
+                                    >
+                                    <mat-label>Technology *</mat-label>
+                                        <mat-select
+                                            [disableOptionCentering]="true"
+                                            [(ngModel)]="resourceTechnologyList"
+                                            [ngModelOptions]="{standalone: true}"
+                                            [placeholder]="'Select technology'"
+                                            multiple
+                                            panelClass="multiple-select-style"
+                                        >
+                                            <mat-option *ngFor="let tech of resourceSpecificTechnologies" [value]="tech">
+                                                {{tech?.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <div class="flex w-full items-center">
+                                        <div class="flex w-full items-center">
+                                            <div class="mr-8">
+                                                <mat-checkbox
+                                                    [color]="'primary'"
+                                                    [(ngModel)]="markResourceAsBench"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    ><span class="font-semibold">On Bench</span></mat-checkbox
+                                                >
+                                            </div>
+                                
+                                            <div class="">
+                                                <mat-checkbox
+                                                    [color]="'primary'"
+                                                    [(ngModel)]="markResourceAsShadow"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    ><span class="font-semibold"
+                                                        >Shadow Resource</span
+                                                    ></mat-checkbox
+                                                >
+                                            </div>
+                                        </div>
+                            
+                                    </div>
+                                    <div class="w-full">
+
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
                                 <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">
                                     {{editMemberMode ? 'Save' : 'Add'}}</span>
 
-                                <span class="text-primary cursor-pointer mt-8p ml-4" (click)="projectTeam?.reset()">
+                                <span class="text-primary cursor-pointer mt-8p ml-4" (click)="clearProjectTeam()">
                                     Clear</span>
                             </div>
                             <div class="w-full mt-8">
@@ -624,9 +707,10 @@
                                             <div class="grid">
                                                 <div
                                                     class="team-member-table z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5">
-                                                    <div>Team Member</div>
+                                                    <div>Email</div>
                                                     <div>Role</div>
                                                     <div>Utilization</div>
+                                                    <div>Type</div>
                                                     <div>Start Date</div>
                                                     <div>End Date</div>
                                                     <div>Actions</div>
@@ -637,7 +721,7 @@
                                                             <div
                                                                 class="team-member-table grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                                                                 <div class="truncate">
-                                                                    {{teamMember?.firstname}}
+                                                                    {{teamMember?.email}}
                                                                 </div>
 
                                                                 <div class="truncate">
@@ -645,6 +729,11 @@
                                                                 </div>
                                                                 <div class="hidden md:block truncate">
                                                                     {{teamMember?.utilization}}
+                                                                </div>
+                                                                <div class="truncate">
+                                                                    <span *ngIf="teamMember?.bench"> {{teamMember?.bench ? 'On Bench' : null}}</span>
+                                                                    <span *ngIf="teamMember?.shadow && teamMember?.bench"> {{' And '}}</span>
+                                                                    <span *ngIf="teamMember?.shadow"> {{teamMember?.shadow ? 'Shadow' : null}}</span>
                                                                 </div>
                                                                 <div class="hidden md:block truncate">
                                                                     {{teamMember?.startDate | date}}
