@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
             var today = new Date();
             var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-availability-report' + '-' + dateobj);
+            saveAs(blob, 'resource-availability-report' + '-' + dateobj+ '.xlsx');
         }
     }
 

@@ -55,7 +55,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alltechnologys: any[] = [];
     currentResourceTechnologyList: any[] = [];
     isEmailSelected: boolean = false;
-    isTechnology = new FormControl('');
 
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
@@ -167,14 +166,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.addResourceForm.get('email').setValue('');
     }
 
-    selectTechnology(){
-
-    }
-
-    clearTechnologySearch(){
-
-    }
-
     getResourceCapacity(email: string) {
         const value = this.emailList.filter((item: any) => {
             return item?.email === email;
@@ -194,7 +185,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return item?.email === email;
         });
         this.alltechnologys = value[0]?.technologies;
-        console.log('this.alltechnologys :', this.alltechnologys);
     }
 
     filterEmails(email: string) {
