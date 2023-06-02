@@ -429,20 +429,9 @@ export class ResourcesListComponent implements OnInit {
     private initializeExperienceForm() {
         this.exprienceForm = this._formBuilder.group(
             {
-                minExprience: [
-                    '',
-                    [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
-                ],
-                maxExprience: [
-                    '',
-                    [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
-                ],
+                minExprience: [''],
+                maxExprience: [''],
             },
-            {
-                validator: [
-                    ExprienceValidation('minExprience', 'maxExprience'),
-                ],
-            }
         );
     }
 

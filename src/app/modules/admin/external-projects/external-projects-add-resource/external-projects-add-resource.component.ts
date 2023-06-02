@@ -6,7 +6,7 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
@@ -150,7 +150,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isEmailSelected = true;
         this.alltechnologys = [];
         this.technologys = [];
-        this.technologyInput.nativeElement.value = '';
         this.addResourceForm.get('technology')?.setValue('');
         this.getResourceCapacity(email);
         this.getCurrentResourceTechnology(email);
@@ -186,7 +185,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return item?.email === email;
         });
         this.alltechnologys = value[0]?.technologies;
-        console.log('this.alltechnologys :', this.alltechnologys);
     }
 
     filterEmails(email: string) {
@@ -247,8 +245,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
             projectType: 'EXTERNAL',
-            isBench: this.isResourceOnBench,
-            isShadow: this.isShadowResource,
+            bench : this.isResourceOnBench,
+            shadow: this.isShadowResource,
             technologies: this.technologys,
         };
         if (this.mode === 'EDIT') {
@@ -262,8 +260,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 deleted: false,
                 assignedBy: this.userID,
                 role: this.addResourceForm?.value?.role,
-                isBench: this.isResourceOnBench,
-                isShadow: this.isShadowResource,
+                bench: this.isResourceOnBench,
+                shadow: this.isShadowResource,
                 technologies: this.technologys,
             };
         }
@@ -274,7 +272,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.addResourceForm = this._formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
             role: ['', [Validators.required]],
-            startDate: ['', [Validators.required]],
+            startDate: [new Date(), [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
             technology: [''],
@@ -286,9 +284,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 startWith(''),
                 map((technology: any | null) =>
                     technology ? this._filter(technology) : this._filterslice()
+                    
                 )
-            );
-
+        );
+        
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
         if (this.mode === 'EDIT') {
@@ -297,11 +296,13 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     _filter(value: any) {
+        console.log("AllTechnology : "+this.alltechnologys);
         return this.alltechnologys.filter(
             (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );
     }
     _filterslice() {
+        console.log("allTechnology : "+this.alltechnologys);
         return this.alltechnologys.filter(
             (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );
