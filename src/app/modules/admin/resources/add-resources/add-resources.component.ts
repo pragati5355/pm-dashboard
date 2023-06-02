@@ -393,7 +393,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 ],
                 technology: [],
                 technologies: this._formBuilder.array([]),
-                pmMentorEmail: [''],
+                pmOrMentorEmail: [''],
             },
             {
                 validator: [MonthValdation('month')],
@@ -407,15 +407,15 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         this.resourcesForm.get('role').valueChanges.subscribe((res: any) => {
             if (res != 'PM') {
                 this.resourcesForm
-                    .get('pmMentorEmail')
+                    .get('pmOrMentorEmail')
                     .setValidators(Validators.required);
                 this.resourcesForm
-                    .get('pmMentorEmail')
+                    .get('pmOrMentorEmail')
                     .updateValueAndValidity();
             } else {
-                this.resourcesForm.get('pmMentorEmail').clearValidators();
+                this.resourcesForm.get('pmOrMentorEmail').clearValidators();
                 this.resourcesForm
-                    .get('pmMentorEmail')
+                    .get('pmOrMentorEmail')
                     .updateValueAndValidity();
             }
         });
@@ -423,7 +423,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
 
     private pmMentorFilterInitialization() {
         this.filteredEmails = this.resourcesForm
-            .get('pmMentorEmail')
+            .get('pmOrMentorEmail')
             .valueChanges.pipe(
                 startWith(null),
                 map((email) =>
