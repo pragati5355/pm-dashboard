@@ -148,34 +148,7 @@
     </div>
     <div class="w-full flex mt-2">
         <div class="w-full">
-            <mat-form-field class="w-full flex-0 mb-2">
-                <mat-label>Technology *</mat-label>
-                <mat-select
-                    (selectionChange)="selected()"
-                    [disableOptionCentering]="true"
-                    placeholder="Select technology..."
-                    #technologyInput
-                    formControlName="technology"
-                    multiple
-                    panelClass="multiple-select-style"
-                    [formControl]="isTechnology"
-                >
-                    <mat-option
-                        *ngFor="let technology of filteredTechnologies | async"
-                        [value]="technology.id"
-                    >
-                        {{ technology.name }}
-                    </mat-option>
-                </mat-select>
-                <!-- <mat-icon
-                    class="icon-size-5 cursor-pointer"
-                    matSuffix
-                    [svgIcon]="'heroicons_solid:x'"
-                    (click)="clearTechnologySearch()"
-                ></mat-icon> -->
-            </mat-form-field>
-
-            <!-- <mat-form-field
+            <mat-form-field
                 [floatLabel]="'always'"
                 appearance="fill"
                 class="example-chip-list w-full flex-0 mb-2"
@@ -234,7 +207,7 @@
                         </mat-chip>
                     </mat-chip-list>
                 </div>
-            </mat-form-field> -->
+            </mat-form-field>
         </div>
     </div>
 

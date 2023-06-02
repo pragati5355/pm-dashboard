@@ -124,10 +124,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.addResourceForm.get('technology')?.setValue('');
     }
 
-    selected(): void {
-        // console.log(event?.option?.value);
-        // this.technologys.push(event?.option?.value);
-        console.log("--------------------------------")
+    selected(event: MatAutocompleteSelectedEvent): void {
+        console.log(event?.option?.value);
+        this.technologys.push(event?.option?.value);
         this.technologyInput.nativeElement.value = '';
         this.addResourceForm.get('technology')?.setValue('');
     }
@@ -286,7 +285,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             startDate: [new Date(), [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
-            technology: [{disabled: true}],
+            technology: [''],
         });
 
         this.filteredTechnologies = this.addResourceForm
