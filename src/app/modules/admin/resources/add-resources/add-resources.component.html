@@ -489,7 +489,7 @@
                                     aria-label="PM/Mentor"
                                     #emailInput
                                     [matAutocomplete]="selectPm"
-                                    formControlName="pmMentorEmail"
+                                    formControlName="pmOrMentorEmail"
                                 />
                                 <mat-autocomplete #selectPm="matAutocomplete">
                                     <mat-option
@@ -504,7 +504,7 @@
                                 <mat-error
                                     *ngIf="
                                         resourcesForm
-                                            ?.get('pmMentorEmail')
+                                            ?.get('pmOrMentorEmail')
                                             ?.hasError('required')
                                     "
                                 >

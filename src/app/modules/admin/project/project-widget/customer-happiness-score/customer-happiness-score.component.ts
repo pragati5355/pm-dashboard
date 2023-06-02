@@ -79,7 +79,7 @@ export class CustomerHappinessScoreComponent implements OnInit {
 
     ngOnInit() {
         let projectData = this._authService.getProjectDetails();
-        this.projectId = projectData.id;
+        this.projectId = projectData?.id;
         this._route.params.subscribe((sprintId: any) => {
             if (sprintId['sprintId'] && sprintId['name']) {
                 this.sprintId = parseInt(sprintId['sprintId']);
