@@ -19,7 +19,11 @@
         ></mat-icon>
     </button>
 </div>
-<form *ngIf="addResourceForm" [formGroup]="addResourceForm" class="mt-12">
+<form
+    *ngIf="addResourceForm"
+    [formGroup]="addResourceForm"
+    class="mt-12 overscroll-contain"
+>
     <div class="w-full flex flex-1">
         <div class="w-full mr-3">
             <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
@@ -154,7 +158,7 @@
                     <div>
                         <mat-chip-list #chipList>
                             <input
-                                placeholder="New technology..."
+                                placeholder="Select technology..."
                                 #technologyInput
                                 formControlName="technology"
                                 [matAutocomplete]="auto"
@@ -208,37 +212,15 @@
     </div>
 
     <div class="flex flex-1 items-center">
-        <div class="flex w-full items-center">
-            <div class="mb-4 mr-8">
-                <mat-checkbox
-                    [color]="'primary'"
-                    [checked]="markResourceAsBench"
-                    (change)="resourceOnBench($event?.checked)"
-                    ><span class="font-semibold">On Bench?</span></mat-checkbox
-                >
-            </div>
-
-            <div class="mb-4">
-                <mat-checkbox
-                    [color]="'primary'"
-                    [checked]="markResourceAsShadow"
-                    (change)="shadowResource($event?.checked)"
-                    ><span class="font-semibold"
-                        >Shadow Resource?</span
-                    ></mat-checkbox
-                >
-            </div>
-        </div>
-
-        <div class="w-full ml-4">
-            <label class="font-semibold">Utilization *</label>
+        <div class="w-full flex flex-row ml-2">
+            <label class="font-semibold mt-1">Utilization *</label>
             <mat-radio-group
                 aria-labelledby="example-radio-group-label"
                 class="example-radio-group"
                 formControlName="utilization"
             >
                 <mat-radio-button
-                    class="example-radio-button"
+                    class="ml-4 example-radio-button"
                     [color]="'primary'"
                     *ngFor="let value of utilizationValues"
                     [disabled]="value > currentCapacity"
@@ -248,15 +230,35 @@
                 </mat-radio-button>
             </mat-radio-group>
         </div>
+
+        <div class="flex w-full mt-3 ml-3 items-center">
+            <div class="mb-4 mr-8">
+                <mat-checkbox
+                    [color]="'primary'"
+                    [checked]="markResourceAsBench"
+                    (change)="resourceOnBench($event?.checked)"
+                    ><span class="font-semibold">On Bench</span></mat-checkbox
+                >
+            </div>
+
+            <div class="mb-4">
+                <mat-checkbox
+                    [color]="'primary'"
+                    [checked]="markResourceAsShadow"
+                    (change)="shadowResource($event?.checked)"
+                    ><span class="font-semibold"
+                        >Shadow Resource</span
+                    ></mat-checkbox
+                >
+            </div>
+        </div>
     </div>
 
     <div
-        class="flex flex-col flex-1 overflow-hidden mt-4"
+        class="flex flex-col flex-1 mt-4"
         *ngIf="alreadyAssignedProjects?.length > 0"
     >
-        <span class="text-l text-gray-500 mb-1"
-            >Current Resource Utilization</span
-        >
+        <span class="text-l text-gray-500 mb-1">Current Utilization</span>
         <div
             class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
         >
