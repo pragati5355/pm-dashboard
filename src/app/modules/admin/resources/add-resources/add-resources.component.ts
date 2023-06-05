@@ -18,7 +18,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDeactivateComponent } from '@services/deactivate-service/decativate.guard';
-import { ValidationConstants } from '../../../../core/constacts/constacts';
+import { ROLE_LIST, ValidationConstants } from '../../../../core/constacts/constacts';
 import { StaticData } from '../../../../core/constacts/static';
 import { C, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -36,7 +36,6 @@ import { ResourcesService } from '../common/services/resources.service';
 import { findIndex } from 'lodash';
 import { mode } from 'crypto-js';
 import { user } from 'app/mock-api/common/user/data';
-import { ROLE_LIST } from '@modules/admin/external-projects/common/constants';
 import { ResourceModel } from '../common/models/resource.model';
 export class Technology {
     constructor(public id: number, public name: string) {}

@@ -75,3 +75,15 @@ export const ErrorMessage = {
 export interface ConstantsInterface {
     [key: string]: string;
 }
+
+export const ROLE_LIST = [
+    'FRONTEND',
+    'BACKEND',
+    'FULLSTACK',
+    'PM',
+    'DEVOPS',
+    'QA',
+    'DESIGNER',
+    'MOBILE',
+    'DATASCIENCE',
+];
