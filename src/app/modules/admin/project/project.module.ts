@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -93,5 +93,6 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
         MatDatepickerModule,
         MatMomentDateModule,
     ],
+    providers: [DatePipe],
 })
 export class ProjectModule {}

@@ -10,6 +10,7 @@ export class ExternalProjectsApiService {
     mapResourceUrl = AppConstants['PROJECT_API_URL'] + '/map-resource';
     externalProjectsListUrl =
         AppConstants['PROJECT_API_URL'] + '/get-external-project';
+
     constructor(private http: HttpClient) {}
 
     findAllDeveloperEmails() {

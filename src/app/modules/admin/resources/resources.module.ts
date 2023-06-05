@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -35,6 +35,8 @@ import { DiffDatePipe } from './common/pipes/diff-date.pipe';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { resourcesRoutes } from './resources.routing';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ResourceUploadCsvComponent } from './resource-upload-csv/resource-upload-csv.component';
+import { JoinPipe } from './common/pipes/join-tech.pipe';
 
 @NgModule({
     declarations: [
@@ -43,10 +45,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         AddResourcesComponent,
         ResourceDetailsComponent,
         DiffDatePipe,
+        ResourceUploadCsvComponent,
+        JoinPipe
     ],
     imports: [
         CommonModule,
         SharedModule,
+        FormsModule,
         ReactiveFormsModule,
         MatChipsModule,
         MatButtonModule,

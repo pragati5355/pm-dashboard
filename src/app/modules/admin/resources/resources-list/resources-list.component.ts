@@ -32,6 +32,9 @@ import {
 } from '@angular/cdk/layout';
 import { take } from 'rxjs/internal/operators/take';
 import moment from 'moment';
+import { MatDialog } from '@angular/material/dialog';
+import { ResourceUploadCsvComponent } from '../resource-upload-csv/resource-upload-csv.component';
+import { ResourceModel } from '../common/models/resource.model';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -53,6 +56,7 @@ export class ResourcesListComponent implements OnInit {
     configFormAssignedProject!: FormGroup;
     technologys = new FormControl('');
     projects = new FormControl('');
+    isShadowIsBench = new FormControl('');
     techName: any = null;
     technologyList: any = [];
     pagination = false;
@@ -75,6 +79,10 @@ export class ResourcesListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: true,
     };
+    showTechnologies: any[];
+    selectedProject: boolean = false;
+    isBench: boolean = false;
+    isShadow: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -87,7 +95,8 @@ export class ResourcesListComponent implements OnInit {
         private snackBar: SnackBar,
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        public breakpointObserver: BreakpointObserver
+        public breakpointObserver: BreakpointObserver,
+        private matDialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -176,6 +185,9 @@ export class ResourcesListComponent implements OnInit {
             }
         }
         const payload = this.getDefaultSearchPayload();
+        this.showTechnologies = this.technologyList.filter((obj) =>
+            this.technologys?.value?.some((id) => obj.id === id)
+        );
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
@@ -282,10 +294,27 @@ export class ResourcesListComponent implements OnInit {
             });
     }
 
+    uploadCsvDialog() {
+        this.matDialog
+            .open(ResourceUploadCsvComponent, {
+                disableClose: true,
+                width: '50%',
+                height: 'auto',
+            })
+            .afterClosed()
+            .subscribe((result: any) => {
+                console.log(result);
+                if (result) {
+                    this.loadData();
+                }
+            });
+    }
+
     selectChangeProject(event: any) {
         this.count = 1;
         this.pagination = false;
         let payload = this.getDefaultSearchPayload(this.count);
+        this.selectedProject = true;
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
@@ -296,6 +325,39 @@ export class ResourcesListComponent implements OnInit {
             }
         );
     }
+    resourceBenchShadow() {
+        this.isBench = this.isShadowIsBench?.value?.includes(0);
+        this.isShadow = this.isShadowIsBench?.value?.includes(1);
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.initialLoading = true;
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearBenchShadowSearch() {
+        this.isBench = false;
+        this.isShadow = false;
+        this.isShadowIsBench.setValue('');
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearProjectSearch() {
+        this.projects.setValue('');
+        this.count = 1;
+        let payload = this.getDefaultSearchPayload(this.count);
+        this.selectedProject = false;
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearTechnologySearch() {
+        this.showTechnologies = [];
+        this.technologys.setValue('');
+        this.count = 1;
+        let payload = this.getDefaultSearchPayload(this.count);
+        this.loadDataWithFilterPayload(payload);
+    }
+
     deleteProjectString(projects: any) {
         this.deleteProjects = '';
         var arr = projects;
@@ -319,15 +381,31 @@ export class ResourcesListComponent implements OnInit {
         this.getList();
     }
 
+    private loadDataWithFilterPayload(payload: any) {
+        this.initialLoading = true;
+        this.pagination = false;
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
     private handleTokenExpiry() {
         this._authService.updateAndReload(window.location);
     }
 
     private getExperiencePayload() {
-        return [
-            parseInt(this.exprienceForm?.value?.minExprience),
-            parseInt(this.exprienceForm?.value?.maxExprience),
-        ];
+        const exp = {
+            minExp: parseInt(this.exprienceForm?.value?.minExprience),
+            maxExp: parseInt(this.exprienceForm?.value?.maxExprience),
+        };
+
+        return exp;
     }
 
     private getDefaultSearchPayload(count?: any) {
@@ -336,36 +414,24 @@ export class ResourcesListComponent implements OnInit {
             technology:
                 this.technologys?.value.length > 0
                     ? this.technologys?.value
-                    : null,
-            experience:
-                this.exprienceForm?.value?.minExprience.length > 0 &&
-                this.exprienceForm?.value?.maxExprience.length > 0
-                    ? expriencePayload
-                    : null,
-            projects: this.projects?.value ? [this.projects.value] : null,
+                    : [],
+            minExp: expriencePayload?.minExp,
+            maxExp: expriencePayload?.maxExp,
+            projects: this.projects?.value ? [this.projects.value] : [],
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             name: this.searchValue,
+            isBench: this.isBench,
+            isShadow: this.isShadow,
         };
     }
 
     private initializeExperienceForm() {
         this.exprienceForm = this._formBuilder.group(
             {
-                minExprience: [
-                    '',
-                    [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
-                ],
-                maxExprience: [
-                    '',
-                    [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
-                ],
+                minExprience: [''],
+                maxExprience: [''],
             },
-            {
-                validator: [
-                    ExprienceValidation('minExprience', 'maxExprience'),
-                ],
-            }
         );
     }
 

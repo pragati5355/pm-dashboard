@@ -1,7 +1,7 @@
 export class TeamMember {
     constructor(
-        public firstName: string,
-        public lastName: string,
+        public firstname: string,
+        public lastname: string,
         public id: string,
         public email: string,
         public team: string
@@ -9,8 +9,8 @@ export class TeamMember {
 }
 export class ManagerList {
     constructor(
-        public firstName: string,
-        public lastName: string,
+        public firstname: string,
+        public lastname: string,
         public id: string,
         public email: string,
         public team: string

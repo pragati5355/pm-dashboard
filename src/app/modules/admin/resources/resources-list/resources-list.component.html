@@ -58,10 +58,17 @@
                                     <mat-option>None</mat-option>
                                     <mat-option
                                         *ngFor="let project of projectsList"
-                                        [value]="project.id"
-                                        >{{ project.name }}</mat-option
+                                        [value]="project?.id"
+                                        >{{ project?.name }}</mat-option
                                     >
                                 </mat-select>
+                                <mat-icon
+                                    *ngIf="selectedProject"
+                                    class="icon-size-5 cursor-pointer"
+                                    matSuffix
+                                    [svgIcon]="'heroicons_solid:x'"
+                                    (click)="clearProjectSearch()"
+                                ></mat-icon>
                             </mat-form-field>
                             <mat-form-field
                                 class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
@@ -75,24 +82,13 @@
                                     panelClass="multiple-select-style"
                                 >
                                     <mat-select-trigger>
-                                        {{ techName || "" }}
-                                        <span
-                                            *ngIf="
-                                                (technologys.value?.length ||
-                                                    0) > 1
+                                        <ng-container
+                                            *ngFor="
+                                                let tech of showTechnologies
                                             "
-                                            class="example-additional-selection"
                                         >
-                                            (+{{
-                                                (technologys.value?.length ||
-                                                    0) - 1
-                                            }}
-                                            {{
-                                                technologys.value?.length === 2
-                                                    ? "other"
-                                                    : "others"
-                                            }})
-                                        </span>
+                                            <span>{{ tech?.name + ", " }}</span>
+                                        </ng-container>
                                     </mat-select-trigger>
                                     <mat-option
                                         *ngFor="
@@ -102,6 +98,13 @@
                                         >{{ technology.name }}</mat-option
                                     >
                                 </mat-select>
+                                <mat-icon
+                                    *ngIf="showTechnologies?.length > 0"
+                                    class="icon-size-5 cursor-pointer"
+                                    matSuffix
+                                    [svgIcon]="'heroicons_solid:x'"
+                                    (click)="clearTechnologySearch()"
+                                ></mat-icon>
                             </mat-form-field>
                             <div
                                 class="ml-4 justify-between content-center text-gray-400 inline-flex px-3 py-2.5 rounded-full border border-gray-300 w-full"
@@ -156,38 +159,6 @@
                                                 formControlName="minExprience"
                                                 matInput
                                             />
-                                            <mat-error
-                                                *ngIf="
-                                                    exprienceValidForm[
-                                                        'minExprience'
-                                                    ].errors &&
-                                                    exprienceValidForm[
-                                                        'minExprience'
-                                                    ]?.invalid &&
-                                                    exprienceValidForm[
-                                                        'minExprience'
-                                                    ]?.touched
-                                                "
-                                            >
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'minExprience'
-                                                        ].errors['required']
-                                                    "
-                                                >
-                                                    First name is mandatory
-                                                </div>
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'minExprience'
-                                                        ].errors['pattern']
-                                                    "
-                                                >
-                                                    Enter valid first name
-                                                </div>
-                                            </mat-error>
                                         </mat-form-field>
                                         <span class="px-2">to</span>
                                         <mat-form-field
@@ -200,38 +171,6 @@
                                                 formControlName="maxExprience"
                                                 matInput
                                             />
-                                            <mat-error
-                                                *ngIf="
-                                                    exprienceValidForm[
-                                                        'maxExprience'
-                                                    ].errors &&
-                                                    exprienceValidForm[
-                                                        'maxExprience'
-                                                    ]?.invalid &&
-                                                    exprienceValidForm[
-                                                        'maxExprience'
-                                                    ]?.touched
-                                                "
-                                            >
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'maxExprience'
-                                                        ].errors['required']
-                                                    "
-                                                >
-                                                    First name is mandatory
-                                                </div>
-                                                <div
-                                                    *ngIf="
-                                                        exprienceValidForm[
-                                                            'maxExprience'
-                                                        ].errors['pattern']
-                                                    "
-                                                >
-                                                    Enter valid first name
-                                                </div>
-                                            </mat-error>
                                         </mat-form-field>
                                         <button
                                             [color]="'primary'"
@@ -247,12 +186,35 @@
                                 </form>
                             </mat-menu>
 
+                            <mat-form-field
+                                class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
+                            >
+                                <mat-select
+                                    (selectionChange)="resourceBenchShadow()"
+                                    [disableOptionCentering]="true"
+                                    [placeholder]="'Bench/Shadow Resource'"
+                                    multiple
+                                    panelClass="multiple-select-style"
+                                    [formControl]="isShadowIsBench"
+                                >
+                                    <mat-option [value]="0">Bench</mat-option>
+                                    <mat-option [value]="1">Shadow</mat-option>
+                                </mat-select>
+                                <mat-icon
+                                    *ngIf="isBench || isShadow"
+                                    class="icon-size-5 cursor-pointer"
+                                    matSuffix
+                                    [svgIcon]="'heroicons_solid:x'"
+                                    (click)="clearBenchShadowSearch()"
+                                ></mat-icon>
+                            </mat-form-field>
+
                             <div class="w-full">
                                 <button
                                     [color]="'primary'"
                                     [matTooltip]="'Add Resource'"
                                     [matMenuTriggerFor]="listCard07Menu"
-                                    class="ml-4"
+                                    class="ml-2"
                                     mat-flat-button
                                 >
                                     <mat-icon
@@ -268,7 +230,12 @@
                                     >
                                         Single Upload
                                     </button>
-                                    <button mat-menu-item>CSV Upload</button>
+                                    <button
+                                        (click)="uploadCsvDialog()"
+                                        mat-menu-item
+                                    >
+                                        CSV Upload
+                                    </button>
                                 </mat-menu>
                             </div>
                         </div>
@@ -292,10 +259,12 @@
                             >
                                 <div></div>
                                 <div>Name</div>
-                                <div class="hidden md:block">Technology</div>
-                                <div class="hidden md:block">Projects</div>
-                                <div class="hidden sm:block">Team</div>
-                                <div class="hidden lg:block">Experience</div>
+                                <div class="hidden sm:block">Technology</div>
+                                <div class="hidden lg:block">
+                                    Active Projects
+                                </div>
+                                <div class="hidden lg:block">Team</div>
+                                <div class="hidden sm:block">Experience</div>
                                 <div>Action</div>
                             </div>
                             <ng-container
@@ -310,25 +279,29 @@
                                         >
                                             <div
                                                 class="flex items-center cursor-pointer"
-                                               (click)="viewResource(resources.id)"
+                                                (click)="
+                                                    viewResource(resources?.id)
+                                                "
                                             >
                                                 <ng-container
-                                                    *ngIf="resources.image"
+                                                    *ngIf="resources['image']"
                                                 >
                                                     <img
                                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
-                                                        [src]="resources.image"
+                                                        [src]="
+                                                            resources['image']
+                                                        "
                                                         alt="Contact avatar"
                                                     />
                                                 </ng-container>
                                                 <ng-container
-                                                    *ngIf="!resources.image"
+                                                    *ngIf="!resources['image']"
                                                 >
                                                     <div
                                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600"
                                                     >
                                                         {{
-                                                            resources.firstName.charAt(
+                                                            resources?.firstname?.charAt(
                                                                 0
                                                             )
                                                         }}
@@ -337,7 +310,9 @@
                                             </div>
                                             <div
                                                 class="cursor-pointer"
-                                                (click)="viewResource(resources.id)"
+                                                (click)="
+                                                    viewResource(resources.id)
+                                                "
                                             >
                                                 <div
                                                     class="truncate"
@@ -348,62 +323,56 @@
                                                                 resources.id,
                                                         'bg-primary-50 dark:bg-hover':
                                                             selectedContact &&
-                                                            selectedContact.id ===
-                                                                resources.id
+                                                            selectedContact?.id ===
+                                                                resources?.id
                                                     }"
                                                 >
-                                                    {{ resources.firstName }}
-                                                    {{ resources.lastName }}
+                                                    {{ resources?.firstname }}
+                                                    {{ resources?.lastname }}
                                                 </div>
                                                 <div class="truncate">
-                                                    {{ resources.email }}
+                                                    {{ resources?.email }}
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="grid-flow-row sm:flex truncate"
+                                            >
+                                                <div>
+                                                    {{
+                                                        resources?.technologies ||
+                                                            "-"
+                                                    }}
                                                 </div>
                                             </div>
 
                                             <div
-                                                class="hidden md:block truncate"
+                                                class="hidden lg:block truncate"
                                             >
-                                                {{ resources.technologys }}
-                                            </div>
-                                            <div
-                                                class="hidden md:block truncate"
-                                                *ngIf="
-                                                    resources.assignedProject
-                                                        .length > 0
-                                                "
-                                            >
-                                                {{ resources.assignedProject }}
-                                            </div>
-                                            <div
-                                                class="hidden md:block truncate"
-                                                *ngIf="
-                                                    resources.assignedProject
-                                                        .length == 0
-                                                "
-                                            >
-                                                -
+                                                {{ resources?.projects || "-" }}
                                             </div>
                                             <div class="hidden sm:block">
-                                                {{ resources.team }}
+                                                {{ resources?.role }}
                                             </div>
 
                                             <div
-                                                class="hidden lg:flex items-center"
+                                                class="hidden md:flex items-center"
                                             >
                                                 {{
-                                                    resources.careerStartDate
+                                                    resources?.careerstartdate
                                                         | diffDate
                                                 }}
                                             </div>
 
-                                            <div class="sm:block">
+                                            <div class="md:block">
                                                 <mat-icon
                                                     [matTooltip]="
                                                         'Edit Resource'
                                                     "
                                                     class="text-gray-400 icon-size-5 cursor-pointer"
                                                     svgIcon="heroicons_outline:pencil"
-                                                    (click)="edit(resources.id)"
+                                                    (click)="
+                                                        edit(resources?.id)
+                                                    "
                                                 ></mat-icon>
                                                 <mat-icon
                                                     [matTooltip]="
@@ -413,8 +382,10 @@
                                                     svgIcon="heroicons_outline:trash"
                                                     (click)="
                                                         deleteResource(
-                                                            resources.id,
-                                                            resources.assignedProject
+                                                            resources?.id,
+                                                            resources[
+                                                                'projects'
+                                                            ]
                                                         )
                                                     "
                                                 ></mat-icon>
@@ -433,7 +404,9 @@
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="initialLoading">
-                                <app-table-skeleton [skeletonData]="requiredSkeletonData"></app-table-skeleton>
+                                <app-table-skeleton
+                                    [skeletonData]="requiredSkeletonData"
+                                ></app-table-skeleton>
                             </ng-container>
                         </div>
                     </div>

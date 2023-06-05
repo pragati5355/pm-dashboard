@@ -7,7 +7,7 @@
                 <div class="">
                     <form
                         [formGroup]="resourcesForm"
-                        *ngIf="!initialLoading"
+                        *ngIf="!initialLoading && resourcesForm"
                         class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
                     >
                         <div class="w-full">
@@ -55,7 +55,11 @@
                                 <div
                                     class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
                                 >
-                                    {{ firstName.charAt(0) }}
+                                    {{
+                                        resourcesForm
+                                            ?.get("firstName")
+                                            ?.value?.charAt(0)
+                                    }}
                                 </div>
                             </div>
                         </div>
@@ -72,7 +76,6 @@
                                     <mat-label>First Name</mat-label>
                                     <input
                                         formControlName="firstName"
-                                        [(ngModel)]="firstName"
                                         matInput
                                         maxlength="50"
                                         placeholder="First Name"
@@ -315,7 +318,12 @@
                         <div class="mb-4">
                             <mat-checkbox
                                 (change)="onCheckBoxChange($event.checked)"
-                                ><span class="font-semibold"
+                                [checked]="
+                                    existingResource?.month === 0 &&
+                                    existingResource?.year === 0
+                                "
+                            >
+                                <span class="font-semibold"
                                     >First Company</span
                                 ></mat-checkbox
                             >
@@ -336,7 +344,7 @@
                                     >
                                         <mat-label>Team</mat-label>
                                         <mat-select
-                                            formControlName="team"
+                                            formControlName="role"
                                             placeholder="Select Team"
                                             type="text"
                                             [disableOptionCentering]="true"
@@ -345,28 +353,28 @@
                                                 *ngFor="
                                                     let role of selectTeamList
                                                 "
-                                                [value]="role.value"
+                                                [value]="role"
                                             >
-                                                {{ role.viewValue }}
+                                                {{ role }}
                                             </mat-option>
                                         </mat-select>
                                         <mat-error
                                             *ngIf="
-                                                resourcesValidForm['team']
+                                                resourcesValidForm['role']
                                                     .errors &&
-                                                resourcesValidForm['team']
+                                                resourcesValidForm['role']
                                                     ?.invalid &&
-                                                resourcesValidForm['team']
+                                                resourcesValidForm['role']
                                                     ?.touched
                                             "
                                         >
                                             <div
                                                 *ngIf="
-                                                    resourcesValidForm['team']
+                                                    resourcesValidForm['role']
                                                         .errors['required']
                                                 "
                                             >
-                                                team is mandatory
+                                                Team is mandatory
                                             </div>
                                         </mat-error>
                                     </mat-form-field>
@@ -388,7 +396,8 @@
                                             matInput
                                             placeholder="Year"
                                             InputFormatter="numeric"
-                                            type="text"
+                                            type="number"
+                                            min="0"
                                         />
                                         <span matPrefix>YY</span>
                                         <mat-error
@@ -434,7 +443,8 @@
                                             InputFormatter="numeric"
                                             matInput
                                             placeholder="Month"
-                                            type="text"
+                                            type="number"
+                                            min="0"
                                         />
                                         <span matPrefix>MM</span>
                                         <mat-error
@@ -470,6 +480,41 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="w-140">
+                            <mat-label class="mb-2">PM/Mentor</mat-label>
+                            <mat-form-field class="w-full mt-2">
+                                <input
+                                    matInput
+                                    [placeholder]="'PM/Mentor'"
+                                    aria-label="PM/Mentor"
+                                    #emailInput
+                                    [matAutocomplete]="selectPm"
+                                    formControlName="pmOrMentorEmail"
+                                />
+                                <mat-autocomplete #selectPm="matAutocomplete">
+                                    <mat-option
+                                        *ngFor="
+                                            let item of filteredEmails | async
+                                        "
+                                        [value]="item?.email"
+                                    >
+                                        <span>{{ item?.email }}</span>
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error
+                                    *ngIf="
+                                        resourcesForm
+                                            ?.get('pmOrMentorEmail')
+                                            ?.hasError('required')
+                                    "
+                                >
+                                    <div>PM/mentor is mandatory</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- technologies form -->
+
                         <div
                             class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
                         >
@@ -484,9 +529,8 @@
                                     <mat-label>Technology</mat-label>
                                     <mat-chip-list #chipList>
                                         <input
-                                            placeholder="New technology..."
                                             #technologyInput
-                                            [formControl]="technology"
+                                            placeholder="New technology..."
                                             formControlName="technology"
                                             [matAutocomplete]="auto"
                                             [matChipInputFor]="chipList"
@@ -507,79 +551,136 @@
                                                 let technology of filteredTechnologies
                                                     | async
                                             "
-                                            [value]="technology.id"
+                                            [value]="technology"
                                         >
-                                            {{ technology.name }}
+                                            {{ technology?.name }}
                                         </mat-option>
                                     </mat-autocomplete>
-                                    <mat-chip-list #chipList class="mb-2">
-                                        <mat-chip
-                                            *ngFor="
-                                                let technology of technologys;
-                                                let selectIndex = index
-                                            "
-                                            [selectable]="selectable"
-                                            [removable]="removable"
-                                            (removed)="
-                                                remove(technology, selectIndex)
-                                            "
-                                        >
-                                            <div
-                                                *ngFor="
-                                                    let technologyi of alltechnologys
-                                                "
-                                            >
-                                                <div
-                                                    *ngIf="
-                                                        technologyi.id ==
-                                                        technology
-                                                    "
-                                                >
-                                                    {{ technologyi.name }}
-                                                </div>
-                                            </div>
-                                            <mat-icon
-                                                matChipRemove
-                                                *ngIf="removable"
-                                                >cancel</mat-icon
-                                            >
-                                        </mat-chip>
-                                    </mat-chip-list>
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="w-140">
-                            <mat-label class="mb-2">PM/Mentor</mat-label>
-                            <mat-form-field class="w-full mt-2">
-                                <input
-                                    matInput
-                                    placeholder="PM/Mentor"
-                                    aria-label="PM/Mentor"
-                                    #emailInput
-                                    [matAutocomplete]="auto1"
-                                    formControlName="pmMentorEmail"
-                                    [readonly]="!loadingAllEmails"
-                                />
-                                <mat-autocomplete #auto1="matAutocomplete">
-                                    <mat-option
-                                        *ngFor="
-                                            let item of filteredEmails | async
-                                        "
-                                        [value]="item?.email"
-                                    >
-                                        <span>{{ item?.email }}</span>
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                            <mat-error
-                                *ngIf="
-                                    resourcesForm
-                                        ?.get('pmMentorEmail')
-                                        ?.hasError('required')
-                                "
+                        <div
+                            *ngIf="technologies?.length > 0"
+                            class="flex w-2/4 sm:w-1/2 flex-col overflow-hidden mt-4"
+                        >
+                            <div
+                                class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
                             >
-                                <div>PM/mentor is mandatory</div>
-                            </mat-error>
+                                <div
+                                    class="inventory-grid z-10 sticky top-0 grid grid-cols-4 gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
+                                    matSortDisableClear
+                                >
+                                    <div>Technology Name</div>
+                                    <div class="col-span-2">Experience</div>
+                                    <div class="ml-4">Action</div>
+                                </div>
+                                <ng-container>
+                                    <div
+                                        formArrayName="technologies"
+                                        class="grid shadow"
+                                    >
+                                        <ng-container
+                                            *ngFor="
+                                                let technology of technologies?.controls;
+                                                let i = index;
+                                                let last = last
+                                            "
+                                        >
+                                            <form
+                                                *ngIf="
+                                                    !technology?.value?.deleted
+                                                "
+                                                class="flex flex-row items-center justify-center gap-4 pt-2 border-b bg-white px-2"
+                                                [formGroupName]="i"
+                                            >
+                                                <div
+                                                    class="inventory-grid grid grid-cols-4 md:grid-cols-4 gap-4 pt-1 items-center"
+                                                >
+                                                    <div
+                                                        class="hidden md:block truncate -mt-5"
+                                                    >
+                                                        {{
+                                                            technology?.value
+                                                                ?.name
+                                                        }}
+                                                    </div>
+                                                    <mat-form-field
+                                                        [floatLabel]="'always'"
+                                                        class="w-full"
+                                                    >
+                                                        <input
+                                                            formControlName="experienceYear"
+                                                            matInput
+                                                            placeholder="Year"
+                                                            InputFormatter="numeric"
+                                                            type="number"
+                                                            min="0"
+                                                        />
+                                                        <span
+                                                            matPrefix
+                                                            class="text-sm"
+                                                            >YY</span
+                                                        >
+                                                        <mat-error
+                                                            class="text-xs"
+                                                            *ngIf="
+                                                                technology.get(
+                                                                    'experienceYear'
+                                                                )?.invalid
+                                                            "
+                                                        >
+                                                            Enter valid Year
+                                                        </mat-error>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field
+                                                        [floatLabel]="'always'"
+                                                        class="w-full"
+                                                    >
+                                                        <input
+                                                            class=""
+                                                            formControlName="experienceMonth"
+                                                            InputFormatter="numeric"
+                                                            matInput
+                                                            placeholder="Month"
+                                                            min="0"
+                                                            type="number"
+                                                        />
+                                                        <span
+                                                            matPrefix
+                                                            class="text-sm"
+                                                            >MM</span
+                                                        >
+                                                        <mat-error
+                                                            class="text-xs"
+                                                            *ngIf="
+                                                                technology.get(
+                                                                    'experienceMonth'
+                                                                )?.invalid
+                                                            "
+                                                        >
+                                                            Enter valid Month
+                                                        </mat-error>
+                                                    </mat-form-field>
+
+                                                    <mat-icon
+                                                        class="cursor-pointer -mt-5 ml-6"
+                                                        color="warn"
+                                                        matTooltip="Remove"
+                                                        (click)="
+                                                            removeTechnology(
+                                                                i,
+                                                                technology?.value
+                                                            )
+                                                        "
+                                                        >cancel</mat-icon
+                                                    >
+                                                </div>
+                                            </form>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
                         </div>
                         <div
                             class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"
@@ -593,22 +694,15 @@
                                     Cancel
                                 </button>
                                 <button
-                                    *ngIf="formTypeAdd"
                                     (click)="submit()"
                                     [color]="'primary'"
                                     class="order-first sm:order-last ml-4"
                                     mat-flat-button
                                 >
-                                    Save
-                                </button>
-                                <button
-                                    *ngIf="!formTypeAdd"
-                                    (click)="editResource()"
-                                    [color]="'primary'"
-                                    class="order-first sm:order-last ml-4"
-                                    mat-flat-button
-                                >
-                                    Update
+                                    <span *ngIf="mode === 'add'"> Save </span>
+                                    <span *ngIf="mode === 'edit'">
+                                        Update
+                                    </span>
                                 </button>
                             </div>
                         </div>

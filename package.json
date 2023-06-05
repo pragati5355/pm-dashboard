@@ -1,6 +1,6 @@
 {
     "name": "metrics-pm-dashboard-web",
-    "version": "1.2.8",
+    "version": "1.2.10",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --port 8080",
