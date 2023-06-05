@@ -57,6 +57,406 @@ export class ResourceUploadCsvComponent implements OnInit {
         //         name: 'Pragati',
         //         email: 'pragati@mindbowser.com',
         //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rohan kadam',
+        //         email: 'r@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Amaresh Joshi',
+        //         email: 'amaresh@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Rahul Dudhane',
+        //         email: 'rahul_12@mindbowser.com',
+        //     },
+        //     {
+        //         name: 'Pragati',
+        //         email: 'pragati@mindbowser.com',
+        //     },
         // ];
     }
 
@@ -142,7 +542,10 @@ export class ResourceUploadCsvComponent implements OnInit {
                     this.submitInProgress = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
-                        this.skippedResources = res?.data;
+                        this.skippedResources = res?.data?.records;
+                        this.resourceUploadSuccessCount = res?.data?.saved;
+                        this.resourceUploadSkipCount = res?.data?.skiped;
+
                         this.reloadResourcesList = true;
                     }
                     if (res?.error === true) {
