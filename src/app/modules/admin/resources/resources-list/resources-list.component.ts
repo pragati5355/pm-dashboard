@@ -300,6 +300,7 @@ export class ResourcesListComponent implements OnInit {
                 disableClose: true,
                 width: '50%',
                 height: 'auto',
+                maxHeight: '90vh'
             })
             .afterClosed()
             .subscribe((result: any) => {
