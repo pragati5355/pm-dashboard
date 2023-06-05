@@ -19,8 +19,8 @@ export class ResourceUploadCsvComponent implements OnInit {
     @ViewChild('fileUpload') fileUpload: ElementRef;
     submitInProgress: boolean = false;
     uploadFileName: string | null = null;
-    resourceUploadSuccessCount: number = 0;
-    resourceUploadSkipCount: number = 0;
+    resourceUploadSuccessCount: number | null = null;
+    resourceUploadSkipCount: number | null = null;
     csvFileToBeUploaded: File | null = null;
     skippedResources: any[] = [];
     csvPreSignedUrl: string | null = null;
@@ -28,6 +28,7 @@ export class ResourceUploadCsvComponent implements OnInit {
     resourceUrl: string | null = null;
     reloadResourcesList: boolean = false;
     isFileUploadedToS3: boolean = false;
+    showSubmitButton: boolean = true;
     constructor(
         public matDialog: MatDialogRef<ResourceUploadCsvComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -38,26 +39,6 @@ export class ResourceUploadCsvComponent implements OnInit {
 
     ngOnInit(): void {
         this.csvTemplateUrl = this.resourceService.csvDownloadTempletUrl;
-        // this.resourceUploadSkipCount = 4;
-        // this.resourceUploadSuccessCount = 5;
-        // this.skippedResources = [
-        //     {
-        //         name: 'Rohan kadam',
-        //         email: 'r@mindbowser.com',
-        //     },
-        //     {
-        //         name: 'Amaresh Joshi',
-        //         email: 'amaresh@mindbowser.com',
-        //     },
-        //     {
-        //         name: 'Rahul Dudhane',
-        //         email: 'rahul_12@mindbowser.com',
-        //     },
-        //     {
-        //         name: 'Pragati',
-        //         email: 'pragati@mindbowser.com',
-        //     },
-        // ];
     }
 
     cancel() {
@@ -142,7 +123,10 @@ export class ResourceUploadCsvComponent implements OnInit {
                     this.submitInProgress = false;
                     if (res?.error === false) {
                         this.snackBar.successSnackBar(res?.message);
-                        this.skippedResources = res?.data;
+                        this.skippedResources = res?.data?.records;
+                        this.resourceUploadSuccessCount = res?.data?.saved;
+                        this.resourceUploadSkipCount = res?.data?.skiped;
+                        this.showSubmitButton = false;
                         this.reloadResourcesList = true;
                     }
                     if (res?.error === true) {

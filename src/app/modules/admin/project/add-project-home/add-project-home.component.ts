@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ValidationConstants } from '../../../../core/constacts/constacts';
+import { ROLE_LIST, ValidationConstants } from '../../../../core/constacts/constacts';
 import { StaticData } from '../../../../core/constacts/static';
 import {
     AbstractControl,
@@ -136,14 +136,7 @@ export class AddProjectHomeComponent
     clientDtailsList: any = [];
     routeSubscribe: any;
     changeForm: number = 0;
-    ROLE_LIST: string[] = [
-        'FRONTEND_DEV',
-        'BACKEND_DEV',
-        'FULL_STACK',
-        'PM',
-        'DEVOPS',
-        'QA',
-    ];
+    ROLE_LIST: string[] = ROLE_LIST
     editMemberMode = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
