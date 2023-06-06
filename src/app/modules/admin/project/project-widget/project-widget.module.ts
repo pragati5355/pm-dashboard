@@ -41,6 +41,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { ProjectWidgetRoutingModule } from './project-widget.routing';
+import { InvoicePercentageComponent } from './invoice-percentage/invoice-percentage.component';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import { ProjectWidgetRoutingModule } from './project-widget.routing';
         SprintIssuesTypeComponent,
         SpringProgressComponent,
         AssignBitbucketProjectDialogComponent,
+        InvoicePercentageComponent,
     ],
     imports: [
         FormsModule,
