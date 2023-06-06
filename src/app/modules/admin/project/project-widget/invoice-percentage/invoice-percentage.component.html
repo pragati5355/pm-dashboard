@@ -12,19 +12,61 @@
         </button>
     </div>
 
-    <div class="mt-4 h-12">
-        <input class="h-full border-2 border-primary-400 rounded p-2" type="number" placeholder="Enter invoice percentage">
-    </div>
+    <div class="mt-8">
+        <form [formGroup]="invoiceForm">
+            <div class="flex">
+                <button
+                    class="bg-primary-500 hover:bg-primary-400 text-white font-bold py-2 px-6 border-b-4 border-primary-700 hover:border-primary-500 rounded text-3xl"
+                    (click)="decrease()"
+                >
+                    -
+                </button>
 
-    <div mat-dialog-actions class="flex flex-row justify-end mt-4">
-        <button mat-stroked-button (click)="close()">Cancel</button>
-        <button class="ml-2" mat-flat-button color="primary">
-            Add
-            <!-- <mat-progress-spinner
+                <input
+                    class="h-full mx-2 flex-1 border-2 border-primary-200 rounded p-2"
+                    type="number"
+                    placeholder="Invoice percentage"
+                    formControlName="invoicePercentage"
+                    [value]="this.invoiceForm?.get('invoicePercentage')?.value"
+                />
+                <button
+                    class="bg-primary-500 hover:bg-primary-400 text-white font-bold py-2 px-6 border-b-4 border-primary-700 hover:border-primary-500 rounded text-3xl"
+                    (click)="increase()"
+                >
+                    +
+                </button>
+            </div>
+            <mat-error
+                *ngIf="invoiceForm?.get('invoicePercentage')?.hasError('min')"
+            >
+                <div class="ml-16 mt-2">
+                    Invoice Percentage value must be greater than or equal to 0
+                </div>
+            </mat-error>
+
+            <mat-error
+                *ngIf="invoiceForm?.get('invoicePercentage')?.hasError('max')"
+            >
+                <div class="ml-16 mt-2">
+                    Invoice Percentage value must be lesser than or equal to 100
+                </div>
+            </mat-error>
+
+            <div mat-dialog-actions class="flex flex-row justify-end mt-8">
+                <button
+                    (click)="submit()"
+                    class="ml-2"
+                    mat-flat-button
+                    color="primary"
+                >
+                    Save
+                    <!-- <mat-progress-spinner
                 class="ml-3"
                 mode="indeterminate"
                 diameter="24"
             ></mat-progress-spinner> -->
-        </button>
+                </button>
+            </div>
+        </form>
     </div>
 </div>

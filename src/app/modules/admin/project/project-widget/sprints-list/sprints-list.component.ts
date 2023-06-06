@@ -68,7 +68,7 @@ export class SprintsListComponent implements OnInit {
     openInvoiceDialog() {
         const dialogRef = this.dialog.open(InvoicePercentageComponent, {
             disableClose: true,
-            width: '50%',
+            width: '40%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {},
