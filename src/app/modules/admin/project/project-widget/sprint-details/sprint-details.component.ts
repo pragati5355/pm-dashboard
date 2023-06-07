@@ -11,6 +11,8 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { SendFeedbackFormComponent } from '../../send-feedback-form/send-feedback-form.component';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
     selector: 'app-sprint-details',
     templateUrl: './sprint-details.component.html',
@@ -25,6 +27,7 @@ export class SprintDetailsComponent implements OnInit {
     routeSubscribe: any;
     sprintId = 0;
     projectId = 0;
+    configForm!: FormGroup;
     initialLoading = false;
     @Input() dataId: any;
     @Input() data: any = {};
@@ -35,11 +38,14 @@ export class SprintDetailsComponent implements OnInit {
         private router: Router,
         private dialog: MatDialog,
         private _route: ActivatedRoute,
+        private _formBuilder: FormBuilder,
         private _authService: AuthService,
+        private _fuseConfirmationService: FuseConfirmationService,
         private ProjectService: CreateProjecteService
     ) {}
 
     ngOnInit(): void {
+        this.initializeConfigForm();
         this.routeSubscribe = this._route.params.subscribe((sprintId) => {
             if (sprintId['sprintId']) {
                 this.sprintId = sprintId['sprintId'];
@@ -72,5 +78,42 @@ export class SprintDetailsComponent implements OnInit {
 
     attachForm() {
         this.router.navigate([`/forms`]);
+    }
+
+    markAsComplete(){
+        const dialogRef = this._fuseConfirmationService.open(
+            this.configForm.value
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result == 'confirmed') {
+               
+            }
+        });
+    }
+
+    private initializeConfigForm() {
+        this.configForm = this._formBuilder.group({
+            title: 'Mark as Complete',
+            message:
+                'Are you sure you want to mark this sprint as completed ? <br/> <span class="font-medium">This action will trigger the mail to the admin.</span>',
+            icon: this._formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'primary',
+            }),
+            actions: this._formBuilder.group({
+                confirm: this._formBuilder.group({
+                    show: true,
+                    label: 'Yes',
+                    color: 'primary',
+                }),
+                cancel: this._formBuilder.group({
+                    show: true,
+                    label: 'No',
+                }),
+            }),
+            dismissible: false,
+        });
     }
 }
