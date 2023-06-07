@@ -4,6 +4,8 @@ import { StaticData } from '../../../../../core/constacts/static';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { Input } from '@angular/core';
 import { AuthService } from '@services/auth/auth.service';
+import { InvoicePercentageComponent } from '../invoice-percentage/invoice-percentage.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: 'app-sprints-list',
     templateUrl: './sprints-list.component.html',
@@ -23,7 +25,8 @@ export class SprintsListComponent implements OnInit {
     constructor(
         private _authService: AuthService,
         private ProjectService: CreateProjecteService,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog
     ) {}
     @Input() dataId: any;
     ngOnInit(): void {
@@ -61,5 +64,22 @@ export class SprintsListComponent implements OnInit {
         this.router.navigate([
             `/projects/${this.dataId}/sprint-details/${id}/${name}`,
         ]);
+    }
+    openInvoiceDialog() {
+        const dialogRef = this.dialog.open(InvoicePercentageComponent, {
+            disableClose: true,
+            width: '40%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {},
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                let payload = {
+                    id: this.dataId,
+                };
+                this.getSprintList(payload);
+            }
+        });
     }
 }
