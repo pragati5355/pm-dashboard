@@ -9,6 +9,7 @@
             <div class="primary-900">Sprints</div>
             <div class="hidden md:block">Start Date</div>
             <div class="hidden sm:block">End Date</div>
+            <div class="hidden sm:block">Invoice Percentage</div>
             <div class="hidden lg:block">State</div>
             <div class="hidden lg:block">Actions</div>
         </div>
@@ -47,6 +48,8 @@
                             }}
                         </div>
 
+                        <div class="hidden sm:block">-</div>
+
                         <!-- Lorem Ipsum -->
                         <div class="hidden lg:flex items-center">
                             <div class="min-w-4">
@@ -73,7 +76,10 @@
                                 <mat-icon>more_vert</mat-icon>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <button mat-menu-item (click)="openInvoiceDialog()">
+                                <button
+                                    mat-menu-item
+                                    (click)="openInvoiceDialog()"
+                                >
                                     <span>Add Invoice Percentage</span>
                                 </button>
                                 <button mat-menu-item>

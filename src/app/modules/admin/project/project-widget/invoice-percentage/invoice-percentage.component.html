@@ -4,7 +4,12 @@
         class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -mt-6 -mx-6"
     >
         <div class="text-lg font-medium">Invoice Percentage</div>
-        <button mat-icon-button (click)="close()" [tabIndex]="-1">
+        <button
+            mat-icon-button
+            [disabled]="submitInProcess"
+            (click)="close()"
+            [tabIndex]="-1"
+        >
             <mat-icon
                 class="text-current"
                 [svgIcon]="'heroicons_outline:x'"
@@ -54,17 +59,19 @@
 
             <div mat-dialog-actions class="flex flex-row justify-end mt-8">
                 <button
+                    [disabled]="submitInProcess"
                     (click)="submit()"
                     class="ml-2"
                     mat-flat-button
                     color="primary"
                 >
                     Save
-                    <!-- <mat-progress-spinner
-                class="ml-3"
-                mode="indeterminate"
-                diameter="24"
-            ></mat-progress-spinner> -->
+                    <mat-progress-spinner
+                        *ngIf="submitInProcess"
+                        class="ml-3"
+                        mode="indeterminate"
+                        diameter="24"
+                    ></mat-progress-spinner>
                 </button>
             </div>
         </form>

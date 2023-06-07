@@ -7,6 +7,9 @@ import {
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { PlatformUsersFormComponent } from '@modules/admin/platform-users/platform-users-form/platform-users-form.component';
+import { AuthService } from '@services/auth/auth.service';
+import { SnackBar } from 'app/core/utils/snackBar';
+import { InvoicePercentageService } from '../../common/services/invoice-percentage.service';
 
 @Component({
     selector: 'app-invoice-percentage',
@@ -16,9 +19,13 @@ import { PlatformUsersFormComponent } from '@modules/admin/platform-users/platfo
 export class InvoicePercentageComponent implements OnInit {
     invoicePercentage = new FormControl();
     invoiceForm: FormGroup;
+    submitInProcess: boolean = false;
     constructor(
         private matDialogRef: MatDialogRef<PlatformUsersFormComponent>,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private invoicePercentageService: InvoicePercentageService,
+        private snackBar: SnackBar,
+        private authService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -31,7 +38,30 @@ export class InvoicePercentageComponent implements OnInit {
 
     submit() {
         if (this.invoiceForm?.valid) {
-            console.log(this.invoiceForm?.get('invoicePercentage')?.value);
+            this.submitInProcess = true;
+            const payload = {
+                invoicePercentage:
+                    this.invoiceForm?.get('invoicePercentage')?.value,
+            };
+            this.invoicePercentageService.invoicePercentage(payload).subscribe(
+                (res: any) => {
+                    if (!res?.error) {
+                        this.submitInProcess = false;
+                        this.snackBar.successSnackBar(res?.message);
+                        this.matDialogRef.close(true);
+                    } else {
+                        this.submitInProcess = false;
+                        this.snackBar.errorSnackBar(res?.message);
+                    }
+                    if (res?.tokenExpire == true) {
+                        this.authService.updateAndReload(window.location);
+                    }
+                },
+                (err: any) => {
+                    this.submitInProcess = false;
+                    this.snackBar.errorSnackBar('Something Went Wrong');
+                }
+            );
         }
     }
 

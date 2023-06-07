@@ -74,7 +74,7 @@ export class SprintsListComponent implements OnInit {
             data: {},
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result == 'success') {
+            if (result) {
                 let payload = {
                     id: this.dataId,
                 };
