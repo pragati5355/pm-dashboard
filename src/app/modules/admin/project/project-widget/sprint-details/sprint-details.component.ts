@@ -83,7 +83,10 @@ export class SprintDetailsComponent implements OnInit {
     sprintStatus(status:any){
         if(status == 'COMPLETE'){
             this.disableButton = true;
+        }else if(status == 'null'){
+            this.disableButton = true;
         }
+
     }
 
     feedbackForm() {
