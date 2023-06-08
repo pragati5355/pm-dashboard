@@ -6,7 +6,8 @@ import { AppConstants } from 'app/core/constacts/constacts';
     providedIn: 'root',
 })
 export class InvoicePercentageService {
-    invoicePercentageUrl = AppConstants['PROJECT_API_URL'] + '/';
+    invoicePercentageUrl =
+        AppConstants['PROJECT_API_URL'] + '/upload-sprint-invoice';
 
     constructor(private http: HttpClient) {}
 

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
     FormBuilder,
     FormControl,
     FormGroup,
     Validators,
 } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PlatformUsersFormComponent } from '@modules/admin/platform-users/platform-users-form/platform-users-form.component';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
@@ -25,7 +25,8 @@ export class InvoicePercentageComponent implements OnInit {
         private formBuilder: FormBuilder,
         private invoicePercentageService: InvoicePercentageService,
         private snackBar: SnackBar,
-        private authService: AuthService
+        private authService: AuthService,
+        @Inject(MAT_DIALOG_DATA) public data: any
     ) {}
 
     ngOnInit(): void {
@@ -40,6 +41,7 @@ export class InvoicePercentageComponent implements OnInit {
         if (this.invoiceForm?.valid) {
             this.submitInProcess = true;
             const payload = {
+                sprintId: this.data?.sprintData?.id,
                 invoicePercentage:
                     this.invoiceForm?.get('invoicePercentage')?.value,
             };
@@ -65,7 +67,7 @@ export class InvoicePercentageComponent implements OnInit {
         }
     }
 
-    increase() {
+    increasePercentage() {
         const value =
             Number(this.invoiceForm?.get('invoicePercentage')?.value) + 1;
         if (value <= 100) {
@@ -73,7 +75,7 @@ export class InvoicePercentageComponent implements OnInit {
         }
     }
 
-    decrease() {
+    decreasePercentage() {
         const value =
             Number(this.invoiceForm?.get('invoicePercentage')?.value) - 1;
         if (value >= 0) {
