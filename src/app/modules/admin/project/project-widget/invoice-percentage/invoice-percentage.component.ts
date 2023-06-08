@@ -40,11 +40,7 @@ export class InvoicePercentageComponent implements OnInit {
     submit() {
         if (this.invoiceForm?.valid) {
             this.submitInProcess = true;
-            const payload = {
-                sprintId: this.data?.sprintData?.id,
-                invoicePercentage:
-                    this.invoiceForm?.get('invoicePercentage')?.value,
-            };
+            const payload = this.getInvoicePercentagePayload();
             this.invoicePercentageService.invoicePercentage(payload).subscribe(
                 (res: any) => {
                     if (!res?.error) {
@@ -85,7 +81,29 @@ export class InvoicePercentageComponent implements OnInit {
 
     private initializeForm() {
         this.invoiceForm = this.formBuilder.group({
-            invoicePercentage: ['', [Validators.min(0), Validators.max(100)]],
+            invoicePercentage: [
+                this.data?.sprintData?.sprintInvoice?.invoicePercentage
+                    ? this.data?.sprintData?.sprintInvoice?.invoicePercentage
+                    : '',
+                [Validators.min(0), Validators.max(100)],
+            ],
         });
+    }
+
+    private getInvoicePercentagePayload() {
+        if (this.data?.sprintData?.sprintInvoice) {
+            return {
+                id: this.data?.sprintData?.sprintInvoice?.id,
+                sprintId: this.data?.sprintData?.id,
+                invoicePercentage:
+                    this.invoiceForm?.get('invoicePercentage')?.value,
+            };
+        }
+
+        return {
+            sprintId: this.data?.sprintData?.id,
+            invoicePercentage:
+                this.invoiceForm?.get('invoicePercentage')?.value,
+        };
     }
 }

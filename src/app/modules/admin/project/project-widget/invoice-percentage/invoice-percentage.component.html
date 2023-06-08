@@ -75,7 +75,9 @@
                     mat-flat-button
                     color="primary"
                 >
-                    Save
+                    {{
+                        this.data?.sprintData?.sprintInvoice ? "Update" : "Add"
+                    }}
                     <mat-progress-spinner
                         *ngIf="submitInProcess"
                         class="ml-3"
