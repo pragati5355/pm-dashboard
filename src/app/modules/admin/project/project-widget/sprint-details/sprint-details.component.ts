@@ -37,7 +37,7 @@ export class SprintDetailsComponent implements OnInit {
     disableButton : boolean = false;
     projectData: any = null;
     formData: any = null;
-    sprint: any;
+    sprint : any;
     constructor(
         private router: Router,
         private dialog: MatDialog,
@@ -61,6 +61,7 @@ export class SprintDetailsComponent implements OnInit {
         });
         this.projectData = this._authService.getProjectDetails();
         this.formData = this.projectData.form;
+        this.getSprintDetails();
     }
     goBack() {
         window.history.back();
@@ -75,7 +76,7 @@ export class SprintDetailsComponent implements OnInit {
             .subscribe((res: any) => {
                 this.sprint = res?.data;
                 console.log(this.sprint);
-                this.sprintStatus(this.sprint.status);
+                this.sprintStatus(this.sprint);
                 this.initialLoading = false;
         });
     }

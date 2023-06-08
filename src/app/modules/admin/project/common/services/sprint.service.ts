@@ -7,9 +7,9 @@ import { AppConstants } from 'app/core/constacts/constacts';
 })
 export class SprintService {
 
-  getSprintByIdUrl = AppConstants['PROJECT_API_URL'] + '/sprint-by-id';
+  getSprintByIdUrl = AppConstants['GET_SPRINT_BY_ID'];
 
-  updateSprintStatusUrl = AppConstants['PROJECT_API_URL'] + '/sprint-completion';
+  updateSprintStatusUrl = AppConstants['UPDATE_SPRINT_STATUS'];
 
   constructor(private http: HttpClient) { }
 

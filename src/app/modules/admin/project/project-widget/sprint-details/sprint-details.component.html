@@ -15,16 +15,17 @@
                                     (click)="goBack()"
                                     [svgIcon]="'heroicons_outline:chevron-left'"
                                 ></mat-icon>
-                                {{ sprint_name }}
+                                {{ sprint?.name }}
                             </div>
                             <div class="sm:block ml-5">
                                 <div class="min-w-4">
                                     <span
                                         class="pb-3 font-semibold text-red-500 ng-star-inserted"
+                                        *ngIf="sprint?.status == null"
                                     >
                                         Status not available
                                     </span>
-                                    <!-- <span
+                                    <span
                                         class="py-1 px-2 rounded-full font-semibold text-white bg-yellow-500 ng-star-inserted"
                                         *ngIf="sprint?.status == 'COMPLETED'"
                                     >
@@ -35,7 +36,7 @@
                                         *ngIf="sprint?.status == 'ACTIVE'"
                                     >
                                         Active
-                                    </span> -->
+                                    </span>
                                 </div>
                             </div>
                             <div
