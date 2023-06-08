@@ -13,6 +13,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { SendFeedbackFormComponent } from '../../send-feedback-form/send-feedback-form.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SprintService } from '../../common/services/sprint.service';
 @Component({
     selector: 'app-sprint-details',
     templateUrl: './sprint-details.component.html',
@@ -32,8 +33,10 @@ export class SprintDetailsComponent implements OnInit {
     @Input() dataId: any;
     @Input() data: any = {};
     isLoading = false;
+    disableButton : boolean = false;
     projectData: any = null;
     formData: any = null;
+    sprint: any;
     constructor(
         private router: Router,
         private dialog: MatDialog,
@@ -41,7 +44,8 @@ export class SprintDetailsComponent implements OnInit {
         private _formBuilder: FormBuilder,
         private _authService: AuthService,
         private _fuseConfirmationService: FuseConfirmationService,
-        private ProjectService: CreateProjecteService
+        private ProjectService: CreateProjecteService,
+        private sprintService : SprintService
     ) {}
 
     ngOnInit(): void {
@@ -58,6 +62,26 @@ export class SprintDetailsComponent implements OnInit {
     }
     goBack() {
         window.history.back();
+    }
+
+    getSprintDetails() {
+        this.initialLoading = true;
+        this.sprintService
+            .getSprintById({
+                id: this.sprintId,
+            })
+            .subscribe((res: any) => {
+                this.sprint = res?.data;
+                console.log(this.sprint);
+                this.sprintStatus(this.sprint);
+                this.initialLoading = false;
+        });
+    }
+
+    sprintStatus(status:any){
+        if(status == 'COMPLETE'){
+            this.disableButton = true;
+        }
     }
 
     feedbackForm() {
@@ -81,15 +105,25 @@ export class SprintDetailsComponent implements OnInit {
     }
 
     markAsComplete(){
+        const payload = {
+            id: this.sprintId,
+        }
         const dialogRef = this._fuseConfirmationService.open(
             this.configForm.value
         );
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
-               
+                this.disableButton = true;
+               console.log("Sprint ID =  " + this.sprintId);
+               this.updateStatusApi(payload.id);
             }
         });
+    }
+
+    updateStatusApi(payload:any){
+        this.initialLoading = true;
+        console.log(payload);
     }
 
     private initializeConfigForm() {
