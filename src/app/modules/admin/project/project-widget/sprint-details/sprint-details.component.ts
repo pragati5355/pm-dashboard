@@ -14,6 +14,7 @@ import { SendFeedbackFormComponent } from '../../send-feedback-form/send-feedbac
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SprintService } from '../../common/services/sprint.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 @Component({
     selector: 'app-sprint-details',
     templateUrl: './sprint-details.component.html',
@@ -41,6 +42,7 @@ export class SprintDetailsComponent implements OnInit {
         private router: Router,
         private dialog: MatDialog,
         private _route: ActivatedRoute,
+        private snackBar: SnackBar,
         private _formBuilder: FormBuilder,
         private _authService: AuthService,
         private _fuseConfirmationService: FuseConfirmationService,
@@ -73,7 +75,7 @@ export class SprintDetailsComponent implements OnInit {
             .subscribe((res: any) => {
                 this.sprint = res?.data;
                 console.log(this.sprint);
-                this.sprintStatus(this.sprint);
+                this.sprintStatus(this.sprint.status);
                 this.initialLoading = false;
         });
     }
@@ -107,6 +109,7 @@ export class SprintDetailsComponent implements OnInit {
     markAsComplete(){
         const payload = {
             id: this.sprintId,
+            status : 'COMPLETE'
         }
         const dialogRef = this._fuseConfirmationService.open(
             this.configForm.value
@@ -116,7 +119,7 @@ export class SprintDetailsComponent implements OnInit {
             if (result == 'confirmed') {
                 this.disableButton = true;
                console.log("Sprint ID =  " + this.sprintId);
-               this.updateStatusApi(payload.id);
+               this.updateStatusApi(payload);
             }
         });
     }
@@ -124,6 +127,26 @@ export class SprintDetailsComponent implements OnInit {
     updateStatusApi(payload:any){
         this.initialLoading = true;
         console.log(payload);
+        this.sprintService.postSprintStatus(payload).subscribe(
+            (res:any)=> {
+                console.log(res?.data);
+                if (!res?.error) {
+                    this.initialLoading = false;
+                    this.snackBar.successSnackBar(res?.message);
+                } else {
+                    this.initialLoading = false;
+                    this.snackBar.errorSnackBar(res?.message);
+                }
+                if (res?.tokenExpire == true) {
+                    this._authService.updateAndReload(window.location);
+                }
+            },
+            (err: any) => {
+                this.initialLoading = false;
+                this.snackBar.errorSnackBar('Something Went Wrong');
+            }
+                
+        );
     }
 
     private initializeConfigForm() {

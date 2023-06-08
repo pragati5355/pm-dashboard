@@ -9,9 +9,15 @@ export class SprintService {
 
   getSprintByIdUrl = AppConstants['PROJECT_API_URL'] + '/';
 
+  updateSprintStatusUrl = AppConstants['PROJECT_API_URL'] + '/sprint-completion';
+
   constructor(private http: HttpClient) { }
 
   getSprintById(payload: any) {
     return this.http.post(this.getSprintByIdUrl, payload);
-}
+  }
+
+  postSprintStatus(payload : any){
+    return this.http.post(this.updateSprintStatusUrl, payload);
+  }
 }
