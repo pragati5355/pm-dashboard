@@ -12,6 +12,12 @@ import { PlatformUsersService } from '../common/services/platform-users.service'
 export class PlatformUsersFormComponent implements OnInit {
     addUserForm: FormGroup;
     submitInProcess = false;
+
+    roles: any[] = [
+        { name: 'ADMIN' },
+        { name: 'PM' },
+    ];
+
     constructor(
         private _formBuilder: FormBuilder,
         private matDialogRef: MatDialogRef<PlatformUsersFormComponent>,
@@ -24,6 +30,7 @@ export class PlatformUsersFormComponent implements OnInit {
     }
 
     submitUserData() {
+        
         if (this.addUserForm?.valid) {
             this.submitInProcess = true;
             this.platformUserService.create(this.addUserForm?.value).subscribe(
@@ -60,6 +67,7 @@ export class PlatformUsersFormComponent implements OnInit {
                     Validators.pattern(/@mindbowser.com\s*$/),
                 ],
             ],
+            role :['',[Validators.required]],
         });
     }
 }
