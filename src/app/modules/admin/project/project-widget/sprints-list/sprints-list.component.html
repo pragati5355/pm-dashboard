@@ -48,7 +48,14 @@
                             }}
                         </div>
 
-                        <div class="hidden sm:block">-</div>
+                        <div class="hidden sm:block">
+                            {{
+                                sprint?.sprintInvoice?.invoicePercentage
+                                    ? sprint?.sprintInvoice?.invoicePercentage +
+                                      "%"
+                                    : "-"
+                            }}
+                        </div>
 
                         <!-- Lorem Ipsum -->
                         <div class="hidden lg:flex items-center">
@@ -78,9 +85,19 @@
                             <mat-menu #menu="matMenu">
                                 <button
                                     mat-menu-item
-                                    (click)="openInvoiceDialog()"
+                                    (click)="
+                                        openInvoiceDialog(sprint)
+                                    "
                                 >
-                                    <span>Add Invoice Percentage</span>
+                                    <span
+                                        >{{
+                                            sprint?.sprintInvoice
+                                                ?.invoicePercentage
+                                                ? "Edit"
+                                                : "Add"
+                                        }}
+                                        Invoice Percentage</span
+                                    >
                                 </button>
                                 <button mat-menu-item>
                                     <span>Mark This Sprint As Completed</span>

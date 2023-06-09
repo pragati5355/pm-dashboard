@@ -65,13 +65,15 @@ export class SprintsListComponent implements OnInit {
             `/projects/${this.dataId}/sprint-details/${id}/${name}`,
         ]);
     }
-    openInvoiceDialog() {
+    openInvoiceDialog(data: any) {
         const dialogRef = this.dialog.open(InvoicePercentageComponent, {
             disableClose: true,
             width: '40%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
-            data: {},
+            data: {
+                sprintData: data,
+            },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
