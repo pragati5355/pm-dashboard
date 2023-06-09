@@ -32,6 +32,8 @@ export const AppConstants: ConstantsInterface = {
     SPRINT_PROGRESS: `${projectBaseUrl}/sprint-progress`,
     UPDATE_DELETE_RESOURCE: `${projectBaseUrl}/update-delete`,
     GET_SPRINT_LIST: `${projectBaseUrl}/sprint`,
+    GET_SPRINT_BY_ID : `${projectBaseUrl}/sprint-by-id`,
+    UPDATE_SPRINT_STATUS : `${projectBaseUrl}/sprint-completion`,
     GET_PROJECT_TEAM_LIST: `${projectBaseUrl}/project-team`,
     GET_SPRINT_ISSUES: `${projectBaseUrl}/get-sprint-issue`,
     GET_SPRINT_ISSUES_TYPE_COUNT: `${projectBaseUrl}/issue-type-count`,
