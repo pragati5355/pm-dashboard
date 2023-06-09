@@ -51,40 +51,40 @@ export class SprintDetailsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.initialLoading = true;
         this.initializeConfigForm();
         this.routeSubscribe = this._route.params.subscribe((sprintId) => {
             if (sprintId['sprintId']) {
                 this.sprintId = sprintId['sprintId'];
-                this.sprint_name = sprintId['name'];
             }
             this.projectId = sprintId['id'];
         });
         this.projectData = this._authService.getProjectDetails();
         this.formData = this.projectData.form;
         this.getSprintDetails();
+        this.disableButton = true;
     }
+    
     goBack() {
         window.history.back();
     }
 
     getSprintDetails() {
-        this.initialLoading = true;
         this.sprintService
             .getSprintById({
                 id: this.sprintId,
             })
             .subscribe((res: any) => {
                 this.sprint = res?.data;
-                console.log(this.sprint);
-                this.sprintStatus(this.sprint);
+                this.sprintStatus(this.sprint.status);
                 this.initialLoading = false;
         });
     }
 
     sprintStatus(status:any){
-        if(status == 'COMPLETE'){
+        if(status == 'COMPLETED'){
             this.disableButton = true;
-        }else if(status == 'null'){
+        }else if(status == null){
             this.disableButton = true;
         }
 
@@ -113,7 +113,7 @@ export class SprintDetailsComponent implements OnInit {
     markAsComplete(){
         const payload = {
             id: this.sprintId,
-            status : 'COMPLETE'
+            status : 'COMPLETED'
         }
         const dialogRef = this._fuseConfirmationService.open(
             this.configForm.value
@@ -121,9 +121,7 @@ export class SprintDetailsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
-                this.disableButton = true;
-               console.log("Sprint ID =  " + this.sprintId);
-               this.updateStatusApi(payload);
+                this.updateStatusApi(payload);
             }
         });
     }
@@ -133,9 +131,10 @@ export class SprintDetailsComponent implements OnInit {
         console.log(payload);
         this.sprintService.postSprintStatus(payload).subscribe(
             (res:any)=> {
-                console.log(res?.data);
                 if (!res?.error) {
                     this.initialLoading = false;
+                    this.disableButton = true;
+                    this.sprint.status = 'COMPLETED';
                     this.snackBar.successSnackBar(res?.message);
                 } else {
                     this.initialLoading = false;

@@ -60,9 +60,9 @@ export class SprintsListComponent implements OnInit {
             }
         );
     }
-    goToSprint(id: number, name: any) {
+    goToSprint(id: number) {
         this.router.navigate([
-            `/projects/${this.dataId}/sprint-details/${id}/${name}`,
+            `/projects/${this.dataId}/sprint-details/${id}`,
         ]);
     }
     openInvoiceDialog() {

@@ -49,7 +49,7 @@
                                 mat-flat-button
                                 [matTooltip]="'Mark as Complete'"
                                 [color]="'primary'"
-                                *ngIf="disableButton"
+                                *ngIf="!disableButton"
                                 (click)="markAsComplete()"
                             >
                                 <span class="ml-2 mr-1">Mark as Complete</span>
