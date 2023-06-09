@@ -85,9 +85,7 @@
                             <mat-menu #menu="matMenu">
                                 <button
                                     mat-menu-item
-                                    (click)="
-                                        openInvoiceDialog(sprint)
-                                    "
+                                    (click)="openInvoiceDialog(sprint)"
                                 >
                                     <span
                                         >{{
@@ -99,7 +97,10 @@
                                         Invoice Percentage</span
                                     >
                                 </button>
-                                <button mat-menu-item>
+                                <button
+                                    mat-menu-item
+                                    (click)="markAsComplete(sprint?.id)"
+                                >
                                     <span>Mark This Sprint As Completed</span>
                                 </button>
                             </mat-menu>
