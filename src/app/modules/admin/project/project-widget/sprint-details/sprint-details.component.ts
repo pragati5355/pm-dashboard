@@ -86,6 +86,8 @@ export class SprintDetailsComponent implements OnInit {
             this.disableButton = true;
         }else if(status == null){
             this.disableButton = true;
+        }else if(status == 'ACTIVE'){
+            this.disableButton = false;
         }
 
     }
