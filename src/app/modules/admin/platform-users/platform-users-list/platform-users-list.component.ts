@@ -54,103 +54,24 @@ export class PlatformUsersListComponent implements OnInit {
         this.searchValue = '';
     }
 
-    openDialog() {
+    openDialog(mode: String, data: any) {
         const dialogRef = this.dialog.open(PlatformUsersFormComponent, {
             disableClose: true,
             width: '50%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
-            data: {},
+            data: {
+                mode: mode,
+                editData: data,
+            },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
-                this.userList = [];
-                this.totalRecords = 0;
                 this.getList();
             }
         });
     }
-
-    // changeStatus(list: any) {
-    //     const payload = {
-    //         id: list.id,
-    //         email: list.email,
-    //         firstName: list.firstName,
-    //         lastName: list.lastName,
-    //         status:
-    //             list.status == 'ACTIVATED'
-    //                 ? 'DEACTIVATED'
-    //                 : list.status == 'PENDING_ACTIVATION'
-    //                 ? 'DEACTIVATED'
-    //                 : 'ACTIVATED',
-    //         isDeleted:
-    //             list.status == 'ACTIVATED'
-    //                 ? false
-    //                 : list.status == 'PENDING_ACTIVATION'
-    //                 ? true
-    //                 : false,
-    //     };
-    //     this.initailizeConfirmationFormPopup(list.status);
-    //     const dialogRef = this._fuseConfirmationService.open(
-    //         this.configFormStatus.value
-    //     );
-
-    //     dialogRef.afterClosed().subscribe((result) => {
-    //         if (result == 'confirmed') {
-    //             this.statusChangeApi(payload);
-    //         }
-    //     });
-    // }
-
-    // initailizeConfirmationFormPopup(status: string) {
-    //     this.configFormStatus = this._formBuilder.group({
-    //         title:
-    //             status == 'ACTIVATED'
-    //                 ? 'Deactivate User'
-    //                 : status == 'PENDING_ACTIVATION'
-    //                 ? 'Delete Invitation'
-    //                 : 'Activate User',
-    //         message:
-    //             status == 'ACTIVATED'
-    //                 ? 'Are you sure you want to deactivate this user?'
-    //                 : status == 'PENDING_ACTIVATION'
-    //                 ? 'Are you sure you want to delete this user? <span class="font-medium">This action cannot be undone!</span>'
-    //                 : 'Are you sure you want to activate this user?',
-    //         icon: this._formBuilder.group({
-    //             show: true,
-    //             name: 'heroicons_outline:exclamation',
-    //             color:
-    //                 status == 'ACTIVATED'
-    //                     ? 'warn'
-    //                     : status == 'PENDING_ACTIVATION'
-    //                     ? 'warn'
-    //                     : 'primary',
-    //         }),
-    //         actions: this._formBuilder.group({
-    //             confirm: this._formBuilder.group({
-    //                 show: true,
-    //                 label:
-    //                     status == 'ACTIVATED'
-    //                         ? 'Deactivate user'
-    //                         : status == 'PENDING_ACTIVATION'
-    //                         ? 'Delete Invitation'
-    //                         : 'Activate user',
-    //                 color:
-    //                     status == 'ACTIVATED'
-    //                         ? 'warn'
-    //                         : status == 'PENDING_ACTIVATION'
-    //                         ? 'warn'
-    //                         : 'primary',
-    //             }),
-    //             cancel: this._formBuilder.group({
-    //                 show: true,
-    //                 label: 'Cancel',
-    //             }),
-    //         }),
-    //         dismissible: false,
-    //     });
-    // }
-    
+ 
     statusChangeApi(payload: any) {
         console.log(payload);
         this.userList = [];
@@ -189,6 +110,7 @@ export class PlatformUsersListComponent implements OnInit {
                     firstName: list.firstName,
                     lastName: list.lastName,
                     status: list.status,
+                    role: list.role,
                     isDeleted: true,
                 };
                 this.statusChangeApi(payload);

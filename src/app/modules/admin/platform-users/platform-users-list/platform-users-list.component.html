@@ -41,7 +41,7 @@
                             [matTooltip]="'Add User'"
                             class="ml-4"
                             mat-flat-button
-                            (click)="openDialog()"
+                            (click)="openDialog('ADD', null)"
                         >
                             <mat-icon
                                 [svgIcon]="'heroicons_outline:plus'"
@@ -130,6 +130,7 @@
                                             class="mr-4"
                                             [matTooltip]="'Edit User'"
                                             svgIcon="heroicons_outline:pencil"
+                                            (click)="openDialog('EDIT', list)"
                                         ></mat-icon>
                                         <mat-icon
                                             [matTooltip]="'Delete User'"
