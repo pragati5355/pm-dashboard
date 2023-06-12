@@ -9,10 +9,10 @@ export class DashboardApiService {
         AppConstants['PROJECT_API_URL'] + '/resource-utilization-report';
 
     downloadExcelAvailabilityUrl =
-        AppConstants['PROJECT_API_URL'] + '/resource-availability-report ';
+        AppConstants['PROJECT_API_URL'] + '/resource-report ';
 
     downloadExcelGenericUrl =
-        AppConstants['PROJECT_API_URL'] + '/resource-report';
+        AppConstants['PROJECT_API_URL'] + '/resource-generic-report';
 
     constructor(private http: HttpClient) {}
 
