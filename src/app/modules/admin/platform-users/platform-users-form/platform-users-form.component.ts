@@ -44,6 +44,7 @@ export class PlatformUsersFormComponent implements OnInit {
 
 
     private patchValuesInEditMode() {
+        this.disableEmailField = true;
         if (this.mode === 'EDIT') {
             this.addUserForm.patchValue({
                 email: this.data?.editData?.email,
@@ -82,14 +83,16 @@ export class PlatformUsersFormComponent implements OnInit {
                 lastName: this.addUserForm?.value?.lastName,
                 role: this.addUserForm?.value?.role,
                 email : this.addUserForm?.getRawValue()?.email,
+                status: this.data?.editData?.status,
             }
-        
+            console.log(payload);
             this.platformUserService
             .changeStatus(payload)
             .subscribe((res: any) => {
                 this.submitInProcess = false;
                 if (!res?.error) {
                     this.snackBar.successSnackBar(res?.message);
+                    this.matDialogRef.close('success');
                 } else {
                     this.snackBar.errorSnackBar(res?.message);
                 }
