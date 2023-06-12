@@ -71,85 +71,88 @@ export class PlatformUsersListComponent implements OnInit {
         });
     }
 
-    changeStatus(list: any) {
-        const payload = {
-            id: list.id,
-            email: list.email,
-            firstName: list.firstName,
-            lastName: list.lastName,
-            status:
-                list.status == 'ACTIVATED'
-                    ? 'DEACTIVATED'
-                    : list.status == 'PENDING_ACTIVATION'
-                    ? 'DEACTIVATED'
-                    : 'ACTIVATED',
-            isDeleted:
-                list.status == 'ACTIVATED'
-                    ? false
-                    : list.status == 'PENDING_ACTIVATION'
-                    ? true
-                    : false,
-        };
-        this.initailizeConfirmationFormPopup(list.status);
-        const dialogRef = this._fuseConfirmationService.open(
-            this.configFormStatus.value
-        );
+    // changeStatus(list: any) {
+    //     const payload = {
+    //         id: list.id,
+    //         email: list.email,
+    //         firstName: list.firstName,
+    //         lastName: list.lastName,
+    //         status:
+    //             list.status == 'ACTIVATED'
+    //                 ? 'DEACTIVATED'
+    //                 : list.status == 'PENDING_ACTIVATION'
+    //                 ? 'DEACTIVATED'
+    //                 : 'ACTIVATED',
+    //         isDeleted:
+    //             list.status == 'ACTIVATED'
+    //                 ? false
+    //                 : list.status == 'PENDING_ACTIVATION'
+    //                 ? true
+    //                 : false,
+    //     };
+    //     this.initailizeConfirmationFormPopup(list.status);
+    //     const dialogRef = this._fuseConfirmationService.open(
+    //         this.configFormStatus.value
+    //     );
 
-        dialogRef.afterClosed().subscribe((result) => {
-            if (result == 'confirmed') {
-                this.statusChangeApi(payload);
-            }
-        });
-    }
-    initailizeConfirmationFormPopup(status: string) {
-        this.configFormStatus = this._formBuilder.group({
-            title:
-                status == 'ACTIVATED'
-                    ? 'Deactivate User'
-                    : status == 'PENDING_ACTIVATION'
-                    ? 'Delete Invitation'
-                    : 'Activate User',
-            message:
-                status == 'ACTIVATED'
-                    ? 'Are you sure you want to deactivate this user?'
-                    : status == 'PENDING_ACTIVATION'
-                    ? 'Are you sure you want to delete this user? <span class="font-medium">This action cannot be undone!</span>'
-                    : 'Are you sure you want to activate this user?',
-            icon: this._formBuilder.group({
-                show: true,
-                name: 'heroicons_outline:exclamation',
-                color:
-                    status == 'ACTIVATED'
-                        ? 'warn'
-                        : status == 'PENDING_ACTIVATION'
-                        ? 'warn'
-                        : 'primary',
-            }),
-            actions: this._formBuilder.group({
-                confirm: this._formBuilder.group({
-                    show: true,
-                    label:
-                        status == 'ACTIVATED'
-                            ? 'Deactivate user'
-                            : status == 'PENDING_ACTIVATION'
-                            ? 'Delete Invitation'
-                            : 'Activate user',
-                    color:
-                        status == 'ACTIVATED'
-                            ? 'warn'
-                            : status == 'PENDING_ACTIVATION'
-                            ? 'warn'
-                            : 'primary',
-                }),
-                cancel: this._formBuilder.group({
-                    show: true,
-                    label: 'Cancel',
-                }),
-            }),
-            dismissible: false,
-        });
-    }
+    //     dialogRef.afterClosed().subscribe((result) => {
+    //         if (result == 'confirmed') {
+    //             this.statusChangeApi(payload);
+    //         }
+    //     });
+    // }
+
+    // initailizeConfirmationFormPopup(status: string) {
+    //     this.configFormStatus = this._formBuilder.group({
+    //         title:
+    //             status == 'ACTIVATED'
+    //                 ? 'Deactivate User'
+    //                 : status == 'PENDING_ACTIVATION'
+    //                 ? 'Delete Invitation'
+    //                 : 'Activate User',
+    //         message:
+    //             status == 'ACTIVATED'
+    //                 ? 'Are you sure you want to deactivate this user?'
+    //                 : status == 'PENDING_ACTIVATION'
+    //                 ? 'Are you sure you want to delete this user? <span class="font-medium">This action cannot be undone!</span>'
+    //                 : 'Are you sure you want to activate this user?',
+    //         icon: this._formBuilder.group({
+    //             show: true,
+    //             name: 'heroicons_outline:exclamation',
+    //             color:
+    //                 status == 'ACTIVATED'
+    //                     ? 'warn'
+    //                     : status == 'PENDING_ACTIVATION'
+    //                     ? 'warn'
+    //                     : 'primary',
+    //         }),
+    //         actions: this._formBuilder.group({
+    //             confirm: this._formBuilder.group({
+    //                 show: true,
+    //                 label:
+    //                     status == 'ACTIVATED'
+    //                         ? 'Deactivate user'
+    //                         : status == 'PENDING_ACTIVATION'
+    //                         ? 'Delete Invitation'
+    //                         : 'Activate user',
+    //                 color:
+    //                     status == 'ACTIVATED'
+    //                         ? 'warn'
+    //                         : status == 'PENDING_ACTIVATION'
+    //                         ? 'warn'
+    //                         : 'primary',
+    //             }),
+    //             cancel: this._formBuilder.group({
+    //                 show: true,
+    //                 label: 'Cancel',
+    //             }),
+    //         }),
+    //         dismissible: false,
+    //     });
+    // }
+    
     statusChangeApi(payload: any) {
+        console.log(payload);
         this.userList = [];
         this.initialLoading = true;
         this.platformUsersService
@@ -162,6 +165,59 @@ export class PlatformUsersListComponent implements OnInit {
                 } else {
                     this.snackBar.errorSnackBar(res?.message);
                 }
+                if (res?.tokenExpire) {
+                    this._authService.updateAndReload(window.location);
+                }
+            },
+            (err) => {
+                this.initialLoading = false;
             });
+    }
+
+    deleteUser(list : any){
+        this.initailizeConfirmationFormPopup();
+        const confirmPopDialog = this._fuseConfirmationService.open(
+            this.configFormStatus.value
+        );
+
+        confirmPopDialog.afterClosed().subscribe((result) => {
+            if (result == 'confirmed') {
+                this.initialLoading = true;
+                const payload = {
+                    id: list.id,
+                    email: list.email,
+                    firstName: list.firstName,
+                    lastName: list.lastName,
+                    status: list.status,
+                    isDeleted: true,
+                };
+                this.statusChangeApi(payload);
+            }
+        });
+
+    }
+
+    initailizeConfirmationFormPopup() {
+        this.configFormStatus = this._formBuilder.group({
+            title: 'Delete User',
+            message: 'Are you sure you want to delete this user?',
+            icon: this._formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this._formBuilder.group({
+                confirm: this._formBuilder.group({
+                    show: true,
+                    label: 'Delete User',
+                    color: 'warn',
+                }),
+                cancel: this._formBuilder.group({
+                    show: true,
+                    label: 'Cancel',
+                }),
+            }),
+            dismissible: false,
+        });
     }
 }
