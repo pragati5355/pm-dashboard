@@ -85,7 +85,7 @@ export class PlatformUsersFormComponent implements OnInit {
                 email : this.addUserForm?.getRawValue()?.email,
                 status: this.data?.editData?.status,
             }
-            console.log(payload);
+           
             this.platformUserService
             .changeStatus(payload)
             .subscribe((res: any) => {
