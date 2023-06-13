@@ -107,6 +107,7 @@
                                     >
                                 </button>
                                 <button
+                                    *ngIf="sprint?.status !== 'COMPLETED'"
                                     mat-menu-item
                                     (click)="markAsComplete(sprint?.id)"
                                 >

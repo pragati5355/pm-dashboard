@@ -94,6 +94,10 @@ export class SprintsListComponent implements OnInit {
             (res: any) => {
                 if (!res?.error) {
                     this.initialLoading = false;
+                    let payload = {
+                        id: this.dataId,
+                    };
+                    this.getSprintList(payload);
                     this.snackBar.successSnackBar(res?.message);
                 } else {
                     this.initialLoading = false;
@@ -130,7 +134,7 @@ export class SprintsListComponent implements OnInit {
     }
     private initializeConfigForm() {
         this.configForm = this.formBuilder.group({
-            title: 'Mark this sprint as Complete?',
+            title: 'Mark this sprint as Completed?',
             message:
                 'Are you sure you want to mark this sprint as completed ? <br/> <span class="font-medium">This action will trigger the mail to the admin.</span>',
             icon: this.formBuilder.group({
