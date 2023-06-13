@@ -44,7 +44,6 @@ export class PlatformUsersFormComponent implements OnInit {
 
 
     private patchValuesInEditMode() {
-        this.disableEmailField = true;
         if (this.mode === 'EDIT') {
             this.addUserForm.patchValue({
                 email: this.data?.editData?.email,
