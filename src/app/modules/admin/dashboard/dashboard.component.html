@@ -71,11 +71,13 @@
                     >
                         <button
                             [color]="'primary'"
-                            [matTooltip]="'Download Resource Generic report'"
+                            [matTooltip]="
+                                'Download Resource Availablity report'
+                            "
                             class="ml-4"
                             mat-flat-button
                             [disabled]="submitInProcess2"
-                            (click)="downloadExcelGenericReport()"
+                            (click)="downloadExcelAvailablityReport()"
                         >
                             <mat-icon
                                 [svgIcon]="
