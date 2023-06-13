@@ -13,6 +13,7 @@ const dashboardRoutes: Route[] = [
         path: '',
         data: {
             pageTitle: 'Dashboard',
+            allowedRoles: ['ADMIN'],
         },
         component: DashboardComponent,
     },
@@ -30,6 +31,6 @@ const dashboardRoutes: Route[] = [
         MatProgressSpinnerModule,
         RouterModule.forChild(dashboardRoutes),
     ],
-    providers:[DatePipe]
+    providers: [DatePipe],
 })
 export class DashboardModule {}

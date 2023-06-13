@@ -7,6 +7,9 @@ export const resourcesRoutes: Route[] = [
     {
         path: '',
         component: ResourcesHomeComponent,
+        data: {
+            allowedRoles: ['ADMIN'],
+        },
         children: [
             {
                 path: 'add',

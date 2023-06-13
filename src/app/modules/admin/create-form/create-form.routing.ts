@@ -7,6 +7,9 @@ export const createFormRoutes: Route[] = [
     {
         path: '',
         component: CreateFormHomeComponent,
+        data: {
+            allowedRoles: ['ADMIN'],
+        },
         children: [
             {
                 path: 'add',
