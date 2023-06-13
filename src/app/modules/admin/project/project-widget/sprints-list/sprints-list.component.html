@@ -10,6 +10,7 @@
             <div class="hidden md:block">Start Date</div>
             <div class="hidden sm:block">End Date</div>
             <div class="hidden sm:block">Invoice Percentage</div>
+            <div class="hidden sm:block">Status</div>
             <div class="hidden lg:block">State</div>
             <div class="hidden lg:block">Actions</div>
         </div>
@@ -54,6 +55,14 @@
                                     ? sprint?.sprintInvoice?.invoicePercentage +
                                       "%"
                                     : "-"
+                            }}
+                        </div>
+
+                        <div class="hidden sm:block">
+                            {{
+                                sprint?.status
+                                    ? sprint?.status
+                                    : "Not Available"
                             }}
                         </div>
 
