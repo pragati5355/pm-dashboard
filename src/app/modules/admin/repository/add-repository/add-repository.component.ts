@@ -81,8 +81,8 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
     //branch filter value
     addOnBlurBranch = false;
     filteredBranches: Observable<any[]> | undefined;
-    branches: any = ['master', 'staging', 'development'];
-    allBranches: any = ['master', 'staging', 'development', 'testing'];
+    branches: any = ['master', 'staging', 'development', 'qa'];
+    allBranches: any = ['master', 'staging', 'development', 'qa', 'uat'];
     // developer filter value
     developer = new FormControl();
     filteredDevelopers: Observable<any[]> | undefined;
@@ -113,7 +113,7 @@ export class AddRepositoryComponent implements OnInit, OnDestroy {
     get createBitbucketProject(): { [key: string]: AbstractControl } {
         return this.createBitbucketProjectFrom.controls;
     }
-    currentPortalType = 'portal';
+    currentPortalType : any;
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder,

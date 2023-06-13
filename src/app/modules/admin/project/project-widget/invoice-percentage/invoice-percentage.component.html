@@ -1,0 +1,91 @@
+<div class="">
+    <div
+        matDialogTitle
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -mt-6 -mx-6"
+    >
+        <div class="text-lg font-medium">Invoice Percentage</div>
+        <button
+            mat-icon-button
+            [disabled]="submitInProcess"
+            (click)="close()"
+            [tabIndex]="-1"
+        >
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"
+            ></mat-icon>
+        </button>
+    </div>
+
+    <div class="mt-8">
+        <form [formGroup]="invoiceForm">
+            <div class="flex">
+                <button
+                    class="bg-primary-500 hover:bg-primary-400 text-white font-bold py-2 px-6 border-b-4 border-primary-700 hover:border-primary-500 rounded text-3xl"
+                    (click)="decreasePercentage()"
+                >
+                    -
+                </button>
+
+                <input
+                    class="h-full mx-2 flex-1 border-2 border-primary-200 rounded p-2"
+                    type="number"
+                    placeholder="Invoice percentage"
+                    formControlName="invoicePercentage"
+                    [value]="this.invoiceForm?.get('invoicePercentage')?.value"
+                />
+                <button
+                    class="bg-primary-500 hover:bg-primary-400 text-white font-bold py-2 px-6 border-b-4 border-primary-700 hover:border-primary-500 rounded text-3xl"
+                    (click)="increasePercentage()"
+                >
+                    +
+                </button>
+            </div>
+            <p
+                *ngIf="
+                    this.invoiceForm?.get('invoicePercentage')?.value !== '' &&
+                    this.invoiceForm?.valid
+                "
+                class="mt-3 text-xl mb-0"
+            >
+                Your invoice percentage for this sprint is
+                {{ this.invoiceForm?.get("invoicePercentage")?.value }}%
+            </p>
+            <mat-error
+                *ngIf="invoiceForm?.get('invoicePercentage')?.hasError('min')"
+            >
+                <div class="ml-16 mt-2">
+                    Invoice Percentage value must be greater than or equal to 0
+                </div>
+            </mat-error>
+
+            <mat-error
+                *ngIf="invoiceForm?.get('invoicePercentage')?.hasError('max')"
+            >
+                <div class="ml-16 mt-2">
+                    Invoice Percentage value must be lesser than or equal to 100
+                </div>
+            </mat-error>
+
+            <div mat-dialog-actions class="flex flex-row justify-end mt-4">
+                <button
+                    [disabled]="submitInProcess"
+                    (click)="submit()"
+                    class="ml-2"
+                    mat-flat-button
+                    color="primary"
+                >
+                    {{
+                        this.data?.sprintData?.sprintInvoice ? "Update" : "Add"
+                    }}
+                    <mat-progress-spinner
+                        *ngIf="submitInProcess"
+                        class="ml-3"
+                        mode="indeterminate"
+                        diameter="24"
+                    ></mat-progress-spinner>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,26 +1,14 @@
 .inventory-grid {
-  grid-template-columns: 48px 150px 60px;
-
-  @screen sm {
-    grid-template-columns: auto 200px  200px 140px ;
-  }
-
-  @screen md {
-    grid-template-columns:  auto 200px 200px 140px ;
-  }
-
-  @screen lg {
-    grid-template-columns:   auto  235px 235px 210px ;
-  }
+    grid-template-columns: 25% 15% 15% 13% 14% 8% 10%;
 }
 
-.h-67{
-  height: 67px;
+.h-67 {
+    height: 67px;
 }
 
-.primary-900{
-  color: #0054A4;
+.primary-900 {
+    color: #0054a4;
 }
-.h400{
-  height: 400px;
+.h400 {
+    height: 400px;
 }
