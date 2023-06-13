@@ -1,4 +1,4 @@
-<div class="fuse-vertical-navigation-wrapper">
+<div *ngIf="!isLoading" class="fuse-vertical-navigation-wrapper">
 
     <!-- Header -->
     <div class="fuse-vertical-navigation-header">
@@ -18,7 +18,8 @@
         <ng-container *ngFor="let item of navigation; trackBy: trackByFn">
 
             <!-- Skip the hidden items -->
-            <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
+            <ng-container
+                *ngIf="((item.hidden && !item.hidden(item)) || !item.hidden) && (item?.allowedRoles?.includes(userRole) || !item?.allowedRoles)">
 
                 <!-- Aside -->
                 <ng-container *ngIf="item.type === 'aside'">
