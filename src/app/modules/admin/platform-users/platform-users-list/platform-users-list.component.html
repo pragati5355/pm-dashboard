@@ -41,7 +41,7 @@
                             [matTooltip]="'Add User'"
                             class="ml-4"
                             mat-flat-button
-                            (click)="openDialog()"
+                            (click)="openDialog('ADD', null)"
                         >
                             <mat-icon
                                 [svgIcon]="'heroicons_outline:plus'"
@@ -127,31 +127,15 @@
                                         class="sm:block flex flex-row items-center w-full cursor-pointer"
                                     >
                                         <mat-icon
-                                            [matTooltip]="
-                                                'Deactivate this user'
-                                            "
-                                            *ngIf="list?.status == 'ACTIVATED'"
-                                            svgIcon="mat_outline:block"
-                                            (click)="changeStatus(list)"
+                                            class="mr-4"
+                                            [matTooltip]="'Edit User'"
+                                            svgIcon="heroicons_outline:pencil"
+                                            (click)="openDialog('EDIT', list)"
                                         ></mat-icon>
                                         <mat-icon
-                                            [matTooltip]="
-                                                'Delete this invitation'
-                                            "
-                                            *ngIf="
-                                                list?.status ==
-                                                'PENDING_ACTIVATION'
-                                            "
+                                            [matTooltip]="'Delete User'"
                                             svgIcon="heroicons_outline:trash"
-                                            (click)="changeStatus(list)"
-                                        ></mat-icon>
-                                        <mat-icon
-                                            [matTooltip]="'Active this user'"
-                                            *ngIf="
-                                                list?.status == 'DEACTIVATED'
-                                            "
-                                            svgIcon="mat_outline:check_circle"
-                                            (click)="changeStatus(list)"
+                                            (click)="deleteUser(list)"
                                         ></mat-icon>
                                     </div>
                                 </div>
