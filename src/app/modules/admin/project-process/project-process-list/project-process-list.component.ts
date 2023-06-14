@@ -136,12 +136,15 @@ export class ProjectProcessListComponent implements OnInit {
     }
     getForms() {
         this.initialLoading = true;
-        this.ProjectProcessService.find().subscribe((res: any) => {
+        const payload = {
+            formType: 'CHECKLIST',
+        };
+        this.ProjectProcessService.find(payload).subscribe((res: any) => {
             this.initialLoading = false;
             this.tokenExpireFun(res);
             // this.formList = res.data
-            this.form = res.data;
-            this.formId = res.data.id;
+            this.form = res?.data;
+            this.formId = res?.data?.id;
         });
     }
     getSubmittedFormDetails() {

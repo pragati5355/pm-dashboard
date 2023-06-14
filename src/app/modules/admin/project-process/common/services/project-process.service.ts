@@ -6,14 +6,14 @@ import { AppConstants } from '../../../../../core/constacts/constacts';
 })
 export class ProjectProcessService {
     constructor(private http: HttpClient) {}
-    getProcessForm = AppConstants['PROJECT_API_URL'] + '/checklist-form';
+    getProcessForm = AppConstants['PROJECT_API_URL'] + '/get-form-by-type';
     saveProcessForm = AppConstants['PROJECT_API_URL'] + '/checklist';
     updateProcessForm = AppConstants['PROJECT_API_URL'] + '/checklist-response';
     deleteProcessForm = AppConstants['PROJECT_API_URL'] + '/delete-checklist';
     submittedProcessForm =
         AppConstants['PROJECT_API_URL'] + '/checklist-response';
-    find() {
-        return this.http.get(this.getProcessForm);
+    find(obj:any) {
+        return this.http.post(this.getProcessForm,obj);
     }
     submittedForm(obj: any) {
         return this.http.post(this.submittedProcessForm, obj);
