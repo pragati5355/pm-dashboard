@@ -1,10 +1,4 @@
-import {
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChildren,
-    ViewEncapsulation,
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '@services/auth/auth.service';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { Router } from '@angular/router';
@@ -18,6 +12,9 @@ import {
     BreakpointState,
 } from '@angular/cdk/layout';
 import { take } from 'rxjs/internal/operators/take';
+import { WeeklyFeedbackFormComponent } from '../weekly-feedback-form/weekly-feedback-form.component';
+import { MatDialog } from '@angular/material/dialog';
+import { WeeklyStatusService } from '../common/services/weekly-status.service';
 @Component({
     selector: 'app-project-list',
     templateUrl: './project-list.component.html',
@@ -25,7 +22,9 @@ import { take } from 'rxjs/internal/operators/take';
     encapsulation: ViewEncapsulation.None,
 })
 export class ProjectListComponent implements OnInit {
-    @ViewChildren(FuseCardComponent, { read: ElementRef })
+    // @ViewChildren(FuseCardComponent, { read: ElementRef })
+    public form!: any;
+    loadingWeeklyFormData: boolean = false;
     pageNo = 1;
     pagination = false;
     initialLoading = true;
@@ -47,7 +46,9 @@ export class ProjectListComponent implements OnInit {
         private _authService: AuthService,
         private projectService: CreateProjecteService,
         private snackBar: SnackBar,
-        public breakpointObserver: BreakpointObserver
+        public breakpointObserver: BreakpointObserver,
+        private dialog: MatDialog,
+        private weeklyStatusService: WeeklyStatusService
     ) {}
 
     ngOnInit() {
@@ -121,10 +122,10 @@ export class ProjectListComponent implements OnInit {
             next: (res: any) => {
                 this.submitInProcess = false;
                 if (res?.error) {
-                    this.snackBar.errorSnackBar(res?.Message);
+                    this.snackBar.errorSnackBar(res?.message);
                 }
-                if (res?.data) {
-                    this.snackBar.successSnackBar(res?.data);
+                if (res?.data || !res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
                     const payload = {
                         perPageData: 0,
                         totalPerPageData: this.totalPageData,
@@ -139,6 +140,23 @@ export class ProjectListComponent implements OnInit {
                 this.submitInProcess = false;
                 this.snackBar.errorSnackBar('server error');
             },
+        });
+    }
+    weeklyFeedbackDialog(id: any) {
+        const dialogRef = this.dialog.open(WeeklyFeedbackFormComponent, {
+            disableClose: true,
+            width: '60%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                projectId: id,
+                form: this.form,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                this.loadData();
+            }
         });
     }
     clearSearch() {
@@ -215,6 +233,20 @@ export class ProjectListComponent implements OnInit {
             projectName: this.searchValue,
         };
         this.getList(payload);
+        this.loadWeeklyStatusForm();
+    }
+
+    private loadWeeklyStatusForm() {
+        this.loadingWeeklyFormData = true;
+        this.weeklyStatusService.getWeeklyStatusFormComponent().subscribe(
+            (res: any) => {
+                this.loadingWeeklyFormData = false;
+                this.form = res?.data;
+            },
+            (err) => {
+                this.loadingWeeklyFormData = false;
+            }
+        );
     }
 
     private checkForLargerScreen() {
