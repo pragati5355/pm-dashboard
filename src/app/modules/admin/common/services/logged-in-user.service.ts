@@ -1,6 +1,8 @@
+import { I } from '@angular/cdk/keycodes';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { API_LIST } from 'app/core/constacts/constacts';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -25,18 +27,14 @@ export class LoggedInUserService {
     }
 
     private findUser() {
-        this.userData = {
-            userId: 14,
-            email: 'rahul.dudhane@mindbowser.com',
-            firstName: 'Rahul',
-            lastName: 'Dudhane',
-            role: 'PM',
-            photoUrl:
-                'https://lh3.googleusercontent.com/a/AAcHTteRuPnlLsGhimr-_l3-ErfSrSyqX1uW3Dbl9Qi1=s96-c',
-            provider: null,
-            id: '116252424213133229008',
-        };
-        this.loggedInUser.next(this.userData);
-        return of(this.userData);
+        return this.http.get(API_LIST.LOGGED_IN_USER).pipe(
+            map((response) => {
+                if (response && response['data']) {
+                    this.setUser(response['data']);
+                    return response['data'];
+                }
+                return null;
+            })
+        );
     }
 }
