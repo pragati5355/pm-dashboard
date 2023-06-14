@@ -18,6 +18,8 @@ import {
     BreakpointState,
 } from '@angular/cdk/layout';
 import { take } from 'rxjs/internal/operators/take';
+import { WeeklyFeedbackFormComponent } from '../weekly-feedback-form/weekly-feedback-form.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: 'app-project-list',
     templateUrl: './project-list.component.html',
@@ -47,7 +49,8 @@ export class ProjectListComponent implements OnInit {
         private _authService: AuthService,
         private projectService: CreateProjecteService,
         private snackBar: SnackBar,
-        public breakpointObserver: BreakpointObserver
+        public breakpointObserver: BreakpointObserver,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit() {
@@ -121,10 +124,10 @@ export class ProjectListComponent implements OnInit {
             next: (res: any) => {
                 this.submitInProcess = false;
                 if (res?.error) {
-                    this.snackBar.errorSnackBar(res?.Message);
+                    this.snackBar.errorSnackBar(res?.message);
                 }
-                if (res?.data) {
-                    this.snackBar.successSnackBar(res?.data);
+                if (res?.data || !res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
                     const payload = {
                         perPageData: 0,
                         totalPerPageData: this.totalPageData,
@@ -139,6 +142,21 @@ export class ProjectListComponent implements OnInit {
                 this.submitInProcess = false;
                 this.snackBar.errorSnackBar('server error');
             },
+        });
+    }
+    weeklyFeedbackDialog(id: any) {
+        const dialogRef = this.dialog.open(WeeklyFeedbackFormComponent, {
+            disableClose: true,
+            width: '60%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                projectId: id,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
         });
     }
     clearSearch() {

@@ -43,6 +43,7 @@ import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { ProjectRoutingModule } from './project.routing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedback-form.component';
 
 @NgModule({
     declarations: [
@@ -53,6 +54,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
         AddProjectHomeComponent,
         ProjectListComponent,
         SkeletonComponent,
+        WeeklyFeedbackFormComponent,
     ],
     exports: [CdkStepperModule, MatStepperModule],
     imports: [

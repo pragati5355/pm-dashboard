@@ -65,7 +65,7 @@
                                 <fuse-card
                                     class="min-h-344 flex flex-col max-w-140 w-full filter-post filter-interactive"
                                     #expandableCard02="fuseCard">
-                                    <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
+                                    <div class="flex justify-between items-center mx-6 sm:mx-8 mt-6 mb-4">
 
                                         <div class="flex flex-col cursor-pointer" (click)="goToProject(project)">
                                             <span class="text-lg font-semibold leading-none"
@@ -79,11 +79,18 @@
                                    'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500':project.status == 'Off Track'}">
                                             <span class="leading-relaxed whitespace-nowrap">{{project.status}}</span>
                                         </span>
-                                        <button class=" ml-auto    inline-flex items-center"
-                                            *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
-                                            (click)="syncProject($event,project.id)">
-                                            <span class="ml-2 mr-1">Sync Now</span>
+                                        <div>
+                                            <button class="mr-2 inline-flex items-center"
+                                            mat-flat-button [color]="'primary'"
+                                            (click)="weeklyFeedbackDialog(project?.id)">
+                                            <span class="ml-2 mr-1">Weekly Feedback</span>
                                         </button>
+                                            <button class="inline-flex items-center"
+                                                *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
+                                                (click)="syncProject($event,project.id)">
+                                                <span class="ml-2 mr-1">Sync Now</span>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div *ngIf="project.lastSyncDate" class="flex items-center mx-6 sm:mx-8 mb-4">
 
