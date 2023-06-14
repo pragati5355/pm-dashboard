@@ -81,6 +81,7 @@
                                         </span>
                                         <div>
                                             <button class="mr-2 inline-flex items-center"
+                                            [disabled]="loadingWeeklyFormData"
                                             mat-flat-button [color]="'primary'"
                                             (click)="weeklyFeedbackDialog(project?.id)">
                                             <span class="ml-2 mr-1">Weekly Feedback</span>
