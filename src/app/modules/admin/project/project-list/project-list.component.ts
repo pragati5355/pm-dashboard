@@ -15,6 +15,7 @@ import { take } from 'rxjs/internal/operators/take';
 import { WeeklyFeedbackFormComponent } from '../weekly-feedback-form/weekly-feedback-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { WeeklyStatusService } from '../common/services/weekly-status.service';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 @Component({
     selector: 'app-project-list',
     templateUrl: './project-list.component.html',
@@ -40,6 +41,7 @@ export class ProjectListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: false,
     };
+    userRole: string;
 
     constructor(
         private router: Router,
@@ -48,7 +50,8 @@ export class ProjectListComponent implements OnInit {
         private snackBar: SnackBar,
         public breakpointObserver: BreakpointObserver,
         private dialog: MatDialog,
-        private weeklyStatusService: WeeklyStatusService
+        private weeklyStatusService: WeeklyStatusService,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit() {
@@ -226,6 +229,8 @@ export class ProjectListComponent implements OnInit {
     }
 
     private loadData() {
+        this.getUserRole();
+
         const payload = {
             perPageData: this.count,
             totalPerPageData: this.totalPageData,
@@ -234,6 +239,14 @@ export class ProjectListComponent implements OnInit {
         };
         this.getList(payload);
         this.loadWeeklyStatusForm();
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
     }
 
     private loadWeeklyStatusForm() {

@@ -26,7 +26,6 @@ export class WeeklyFeedbackFormComponent implements OnInit {
     }
 
     submit(event: any) {
-        console.log(event?.data);
         const payload = {
             projectId: this.projectId,
             formComponent: this.data?.form?.formComponent,

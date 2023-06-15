@@ -47,7 +47,7 @@
                     <span class="ml-2">List</span>
                 </button>
             </div>
-            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="gotoAddProject()">
+            <button *ngIf="userRole !== 'PM'" class="ml-4" mat-flat-button [color]="'primary'" (click)="gotoAddProject()">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Add New Project</span>
             </button>
