@@ -662,7 +662,7 @@ export class AddProjectHomeComponent
         //     }
         // }
 
-        if (this.resourceTechnologyList?.length < 1) {
+        if (this.resourceTechnologyList?.length < 1 && this.projectTeam?.value?.select_role != 'PM') {
             this.snackBar.errorSnackBar('Add technologies');
             return;
         }
