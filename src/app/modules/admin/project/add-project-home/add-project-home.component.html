@@ -594,8 +594,8 @@
                                             <mat-label>Utilization *</mat-label>
                                             <mat-select formControlName="tm_utilization" type="text"
                                                 placeholder="Select Utilization" [disableOptionCentering]="true">
-                                                <mat-option *ngFor="let u of [0.25, 0.5, 1]" [value]="u"
-                                                    [disabled]="u > getAvailableCapacity(projectTeamForm['email']?.value)">
+                                                <mat-option *ngFor="let u of utilizationValues" [value]="u"
+                                                [disabled]="u > currentCapacity">
                                                     {{ u }}
                                                 </mat-option>
                                             </mat-select>
