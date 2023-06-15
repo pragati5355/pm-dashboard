@@ -45,6 +45,7 @@ import {
     JiraTeamUser,
 } from './model/add-project-models';
 import { DatePipe } from '@angular/common';
+import { UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
 
 @Component({
     selector: 'app-add-project-home',
@@ -139,6 +140,9 @@ export class AddProjectHomeComponent
     ROLE_LIST: string[] = ROLE_LIST
     editMemberMode = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    utilizationValues: number[] = UTILIZATION_VALUES;
+    currentCapacity: number;
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -249,15 +253,11 @@ export class AddProjectHomeComponent
         return filteredJiraUser?.length > 0 ? filteredJiraUser[0] : null;
     }
 
-    getAvailableCapacity(teamMember: any) {
-        const selectedMember = this.teamMemberList.filter(
-            (item) => item?.resourceId === teamMember?.id
-        );
-        if (selectedMember?.length > 0) {
-            return teamMember?.capacity + selectedMember[0]?.utilization;
-        } else {
-            return teamMember?.capacity;
-        }
+    getAvailableCapacity(email: any) {
+        const value = this.emailList.filter((item: any) => {
+            return item?.email === email;
+        });
+        this.currentCapacity = value[0]?.capacity;
     }
 
     private findTeamMember(id) {
@@ -1307,6 +1307,7 @@ export class AddProjectHomeComponent
     getSelectedEmail(resource: any) {
         console.log('selected resource :', resource);
         this.resourceSpecificTechnologies = resource?.technologies;
+        this.getAvailableCapacity(resource.email);
     }
 
     // private getCurrentResourceTechnology(email: string) {
