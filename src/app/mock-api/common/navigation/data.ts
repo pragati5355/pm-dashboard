@@ -8,6 +8,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
         link: '/dashboard',
+        allowedRoles: ['ADMIN'],
     },
     {
         id: 'project',
@@ -22,6 +23,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:user-add',
         link: '/resources',
+        allowedRoles: ['ADMIN'],
     },
     {
         id: 'external-projects',
@@ -36,6 +38,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:pencil-alt',
         link: '/forms',
+        allowedRoles: ['ADMIN'],
     },
     {
         id: 'platform-users',
@@ -43,6 +46,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:users',
         link: '/platform-users',
+        allowedRoles: ['ADMIN'],
     },
 ];
 export const compactNavigation: FuseNavigationItem[] = [];

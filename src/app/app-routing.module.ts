@@ -31,7 +31,7 @@ export const appRoutes: Routes = [
     {
         path: '',
         canActivate: [AuthGuard],
-        // canActivateChild: [AuthGuard],
+        canActivateChild: [AuthGuard],
         component: LayoutComponent,
         data: {
             pageTitle: 'dashboard',

@@ -5,7 +5,7 @@ const jiraBaseUrl = environment.jiraBaseUrl;
 const projectBaseUrl = environment.projectBaseUrl;
 const springBootUrl = environment.springBootUrl;
 const bitbucketSource = environment.bitbucketSource;
-export const AppConstants: ConstantsInterface = {
+export const AppConstants = {
     BASE_URL: baseUrl,
     CSV_TEMPLATE_URL: environment.csvTemplateUrl,
     bitbucketSource: bitbucketSource,
@@ -32,8 +32,8 @@ export const AppConstants: ConstantsInterface = {
     SPRINT_PROGRESS: `${projectBaseUrl}/sprint-progress`,
     UPDATE_DELETE_RESOURCE: `${projectBaseUrl}/update-delete`,
     GET_SPRINT_LIST: `${projectBaseUrl}/sprint`,
-    GET_SPRINT_BY_ID : `${projectBaseUrl}/sprint-by-id`,
-    UPDATE_SPRINT_STATUS : `${projectBaseUrl}/sprint-completion`,
+    GET_SPRINT_BY_ID: `${projectBaseUrl}/sprint-by-id`,
+    UPDATE_SPRINT_STATUS: `${projectBaseUrl}/sprint-completion`,
     GET_PROJECT_TEAM_LIST: `${projectBaseUrl}/project-team`,
     GET_SPRINT_ISSUES: `${projectBaseUrl}/get-sprint-issue`,
     GET_SPRINT_ISSUES_TYPE_COUNT: `${projectBaseUrl}/issue-type-count`,
@@ -74,10 +74,6 @@ export const ErrorMessage = {
     ERROR_SOMETHING_WENT_WRONG: 'Something went wrong',
 };
 
-export interface ConstantsInterface {
-    [key: string]: string;
-}
-
 export const ROLE_LIST = [
     'FRONTEND',
     'BACKEND',
@@ -89,3 +85,7 @@ export const ROLE_LIST = [
     'MOBILE',
     'DATASCIENCE',
 ];
+
+export const API_LIST = {
+    LOGGED_IN_USER: springBootUrl + '/user',
+};
