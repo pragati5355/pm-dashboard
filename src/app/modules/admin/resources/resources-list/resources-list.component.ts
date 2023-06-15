@@ -219,7 +219,7 @@ export class ResourcesListComponent implements OnInit {
             this.configFormAssignedProject = this._formBuilder.group({
                 title: 'Delete Resource',
                 message:
-                    'This resource is attached to the following projects. Remove the association of the resources from the projects in order to delete it. <div class="listClass">' +
+                    'This resource is attached to the following projects. Remove the association of the resources from the projects in order to delete it. <div class="font-semibold mt-2">' +
                     this.deleteProjects +
                     '</div>',
                 icon: this._formBuilder.group({
@@ -363,7 +363,7 @@ export class ResourcesListComponent implements OnInit {
         this.deleteProjects = '';
         var arr = projects;
         for (let i = 0; i <= arr.length - 1; i++) {
-            this.deleteProjects = this.deleteProjects + arr[i] + '<br>';
+            this.deleteProjects = this.deleteProjects + arr[i];
         }
     }
     viewResource(id: number) {
