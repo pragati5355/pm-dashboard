@@ -7,6 +7,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 import { FormControl } from '@angular/forms';
 import { project } from 'app/mock-api/dashboards/project/data';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 
 @Component({
     selector: 'app-external-projects-list',
@@ -19,16 +20,19 @@ export class ExternalProjectsListComponent implements OnInit {
     projectList = [];
     filteredProjectList = [];
     searchControl = new FormControl();
+    userRole: string;
 
     initialLoading: boolean = false;
     constructor(
         private router: Router,
         private matDialog: MatDialog,
         private externalProjectsService: ExternalProjectsApiService,
-        private _authService: AuthService
+        private _authService: AuthService,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
+        this.getUserRole();
         this.addSearchListener();
         this.loadExternalProjectsList();
         this.loadDeveloperEmailList();
@@ -102,6 +106,14 @@ export class ExternalProjectsListComponent implements OnInit {
                     window.location.reload();
                 }
             });
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
     }
 
     private filterOutAlreadyAssignedEmails(team: any) {
