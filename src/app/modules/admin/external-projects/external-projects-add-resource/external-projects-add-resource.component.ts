@@ -82,7 +82,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return;
         }
 
-        if (this.technologys?.length < 1) {
+        if (this.technologys?.length < 1 && this.addResourceForm?.value?.role != 'PM') {
             this.snackBar.errorSnackBar('Add Technologys');
             return;
         }
