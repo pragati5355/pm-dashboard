@@ -13,7 +13,7 @@
                             <mat-icon *ngIf="searchControl?.value" class="icon-size-5 cursor-pointer" matSuffix
                                 [svgIcon]="'heroicons_solid:x'" (click)="searchControl?.reset()"></mat-icon>
                         </mat-form-field>
-                        <button class="ml-4 px-8" mat-flat-button [color]="'primary'" (click)="addNew()">
+                        <button *ngIf="userRole !== 'PM'" class="ml-4 px-8" mat-flat-button [color]="'primary'" (click)="addNew()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                             <span class="ml-2 mr-1">Add External Project</span>
                         </button>
