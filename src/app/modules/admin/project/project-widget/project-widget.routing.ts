@@ -11,7 +11,7 @@ export const projectWidgetRoutes: Route[] = [
         },
     },
     {
-        path: 'sprint-details/:sprintId/:name',
+        path: 'sprint-details/:sprintId',
         component: SprintDetailsComponent,
         data: {
             pageTitle: 'Sprint Details',

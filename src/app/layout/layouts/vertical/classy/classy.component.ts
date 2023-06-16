@@ -12,6 +12,7 @@ import { NavigationService } from 'app/core/navigation/navigation.service';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import packageJson from '../../../../../../package.json';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 @Component({
     selector: 'classy-layout',
     templateUrl: './classy.component.html',
@@ -25,6 +26,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
     userData: any;
     pageTitle: string;
     userPhoto: any = '';
+    userState: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     /**
      * Constructor
@@ -36,7 +38,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
         private _userService: UserService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
-        private authService: AuthService
+        private authService: AuthService,
+        private loggedInUserService: LoggedInUserService
     ) {
         this.addRouteChangeSubscription(activatedRoute);
     }
@@ -66,6 +69,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
         this.addWatcherSubscription();
         this.userData = this.authService.getUser();
         this.userPhoto = this.authService.getUserPhoto();
+
+        this.getUserState();
     }
 
     /**
@@ -94,6 +99,14 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
         if (navigation) {
             navigation.toggle();
         }
+    }
+
+    private getUserState() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res) => {
+            if (res) {
+                this.userState = res;
+            }
+        });
     }
 
     private addWatcherSubscription() {

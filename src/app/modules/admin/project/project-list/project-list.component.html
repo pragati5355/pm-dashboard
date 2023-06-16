@@ -47,7 +47,7 @@
                     <span class="ml-2">List</span>
                 </button>
             </div>
-            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="gotoAddProject()">
+            <button *ngIf="userRole !== 'PM'" class="ml-4" mat-flat-button [color]="'primary'" (click)="gotoAddProject()">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Add New Project</span>
             </button>
@@ -65,7 +65,7 @@
                                 <fuse-card
                                     class="min-h-344 flex flex-col max-w-140 w-full filter-post filter-interactive"
                                     #expandableCard02="fuseCard">
-                                    <div class="flex items-center mx-6 sm:mx-8 mt-6 mb-4">
+                                    <div class="flex justify-between items-center mx-6 sm:mx-8 mt-6 mb-4">
 
                                         <div class="flex flex-col cursor-pointer" (click)="goToProject(project)">
                                             <span class="text-lg font-semibold leading-none"
@@ -79,11 +79,19 @@
                                    'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500':project.status == 'Off Track'}">
                                             <span class="leading-relaxed whitespace-nowrap">{{project.status}}</span>
                                         </span>
-                                        <button class=" ml-auto    inline-flex items-center"
-                                            *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
-                                            (click)="syncProject($event,project.id)">
-                                            <span class="ml-2 mr-1">Sync Now</span>
+                                        <div>
+                                            <button class="mr-2 inline-flex items-center"
+                                            [disabled]="loadingWeeklyFormData"
+                                            mat-flat-button [color]="'primary'"
+                                            (click)="weeklyFeedbackDialog(project?.id)">
+                                            <span class="ml-2 mr-1">Weekly Feedback</span>
                                         </button>
+                                            <button class="inline-flex items-center"
+                                                *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
+                                                (click)="syncProject($event,project.id)">
+                                                <span class="ml-2 mr-1">Sync Now</span>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div *ngIf="project.lastSyncDate" class="flex items-center mx-6 sm:mx-8 mb-4">
 
@@ -193,7 +201,7 @@
                     <div class="hidden md:block">Description</div>
                     <div class="hidden sm:block">Start Date</div>
                     <div class="hidden lg:block">Last updated </div>
-                    <div>Action</div>
+                    <div>Actions</div>
                 </div>
                 <ng-container *ngIf="!initialLoading && projectList.length > 0">
 
@@ -222,14 +230,38 @@
                                 {{ project.lastSyncDate ? (project.lastSyncDate | date) : '-' }}
                             </div>
                             <div class="sm:block">
-                                <div *ngIf="!project.lastSyncDate" (click)="syncProject($event,project.id)"
+                                <!-- <div *ngIf="!project.lastSyncDate" (click)="syncProject($event,project.id)"
                                     class="cursor-pointer py-1 px-3 rounded-full font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500 ng-star-inserted">
                                     Sync Now </div>
                                 <span *ngIf="project.lastSyncDate"
                                     class=" ml-auto  inline-flex items-center font-semibold py-1 rounded-full tracking-wide">
                                     <span class="leading-relaxed whitespace-nowrap border-b-a cursor-pointer"
                                         (click)="syncProject($event,project.id)">Sync Now</span>
-                                </span>
+                                </span> -->
+
+                                <button
+                                mat-icon-button
+                                [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu"
+                            >
+                                <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <button
+                                        mat-menu-item
+                                        (click)="syncProject($event,project?.id)"
+                                    >
+                                        <span
+                                            >
+                                            Sync Now</span
+                                        >
+                                    </button>
+                                    <button 
+                                        mat-menu-item
+                                        (click)="weeklyFeedbackDialog(project?.id)">
+                                        <span>Weekly Feedback</span>
+                                    </button>
+                                </mat-menu>
                             </div>
                         </div>
                     </ng-container>

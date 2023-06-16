@@ -1,366 +1,747 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
-    <div *ngIf="!initialLoading" class="flex flex-row w-full h-full overflow-y-auto">
+    <div
+        *ngIf="!initialLoading"
+        class="flex flex-row w-full h-full overflow-y-auto"
+    >
         <div class="w-1/4 border-r-0 bg-default sticky top-0">
             <div class="p-4 h-full">
-                <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
-                    [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
-                    <mat-step label="Choose Technology" [completed]="isFormType"> </mat-step>
+                <mat-vertical-stepper
+                    class="pr-sidebar h-full"
+                    [linear]="true"
+                    #verticalStepper
+                    [selectedIndex]="this.selectedIndex"
+                    (selectionChange)="selectionChange($event)"
+                >
+                    <mat-step
+                        label="Choose Technology"
+                        [completed]="isFormType"
+                    >
+                    </mat-step>
 
-                    <mat-step label="Create Repository" [completed]="!createBitbucketProjectFrom?.invalid"> </mat-step>
+                    <mat-step
+                        label="Create Repository"
+                        [completed]="!createBitbucketProjectFrom?.invalid"
+                    >
+                    </mat-step>
 
-                    <mat-step label="Create Ansible Script" [completed]="isFileUploaded"> </mat-step>
+                    <mat-step
+                        label="Create Ansible Script"
+                        [completed]="isFileUploaded"
+                    >
+                    </mat-step>
 
                     <mat-step label="Review Repository"> </mat-step>
                 </mat-vertical-stepper>
             </div>
         </div>
-        <div class="flex flex-col flex-auto py-4 pr-4 ">
+        <div class="flex flex-col flex-auto py-4 pr-4">
             <button mat-icon-button class="hidden" (click)="toggle()">
                 <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
             </button>
             <!-- Choose Technology -->
-            <div *ngIf="selectedIndex === 0 && !initialLoading" class="flex flex-col flex-auto w-full">
+            <div
+                *ngIf="selectedIndex === 0 && !initialLoading"
+                class="flex flex-col flex-auto w-full"
+            >
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 mb-6  md:grid-cols-3 gap-6 w-full min-w-0">
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 mb-6 md:grid-cols-3 gap-6 w-full min-w-0"
+                    >
                         <!-- REACT JS-->
-                        <div (click)="isFormType = true" [matTooltip]="'React Js '"
+                        <div
+                            (click)="isFormType = true"
+                            [matTooltip]="'React Js '"
                             class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
-                            (click)="getTechnology('react-js')">
-                            <div> <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
-                            <div> REACT JS</div>
+                            (click)="getTechnology('react-js')"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/react-native.png"
+                                    alt=""
+                                />
+                            </div>
+                            <div>REACT JS</div>
                         </div>
 
                         <!-- ANGULAR-->
-                        <div (click)="isFormType = true" [matTooltip]="'Angular '"
+                        <div
+                            (click)="isFormType = true"
+                            [matTooltip]="'Angular '"
                             class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-pointer"
-                            (click)="getTechnology('angular')">
-                            <div> <img class="w-20 h-20" src="/assets/mbicons/angular.png" alt=""></div>
+                            (click)="getTechnology('angular')"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/angular.png"
+                                    alt=""
+                                />
+                            </div>
                             <div>ANGULAR</div>
                         </div>
 
                         <!-- DJANGO-->
-                        <div (click)="isFormType = true" [matTooltip]="'Django '"
-                        class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer" 
-                        (click)="getTechnology('django')">
-                        <div> <img class="w-20 h-20" src="/assets/mbicons/django.png" alt=""></div>
-                        <div> DJANGO</div>
+                        <div
+                            (click)="isFormType = true"
+                            [matTooltip]="'Django '"
+                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            (click)="getTechnology('django')"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/django.png"
+                                    alt=""
+                                />
+                            </div>
+                            <div>DJANGO</div>
                         </div>
-
-
-
-                          <!-- ANDROID KOTLIN-->
-                          <div [matTooltip]="'Coming Soon '"
-                          class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
-                          >
-                             <div> <img class="w-20 h-20" src="/assets/mbicons/android-kotlin.png" alt=""></div>
-                             <div> ANDROID KOTLIN</div>
-                          </div>
-                        
-
-                        <!-- ANDROID JAVA-->
-                         <div [matTooltip]="'Android Java'"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed" 
-                         >
-                            <div> <img class="w-20 h-20" src="/assets/mbicons/android-java.png" alt=""></div>
-                            <div>ANDROID JAVA</div>
-                          </div>
-
-
 
                         <!-- JAVA-->
-                        <div [matTooltip]="'Coming Soon '"
-                        class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                        <div
+                            (click)="isFormType = true"
+                            [matTooltip]="'Java '"
+                            class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-pointer"
+                            (click)="getTechnology('java')"
                         >
-                        <div> <img class="w-20 h-20" src="/assets/mbicons/java.png" alt=""></div>
-                        <div>JAVA</div>
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/java.png"
+                                    alt=""
+                                />
+                            </div>
+                            <div>JAVA</div>
                         </div>
-                       
-                        
+
+                        <!-- ANDROID KOTLIN-->
+                        <div
+                            [matTooltip]="'Coming Soon '"
+                            class="flex flex-col text-center py-16 rounded-md items-center flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/android-kotlin.png"
+                                    alt=""
+                                />
+                            </div>
+                            <div>ANDROID KOTLIN</div>
+                        </div>
+
+                        <!-- ANDROID JAVA-->
+                        <div
+                            [matTooltip]="'Coming Soon'"
+                            class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/android-java.png"
+                                    alt=""
+                                />
+                            </div>
+                            <div>ANDROID JAVA</div>
+                        </div>
+
                         <!-- REACT NATIVE -->
-                        <div [matTooltip]="'React Native '"
-                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed" 
-                            >
-                            <div> <img class="w-20 h-20" src="/assets/mbicons/react-native.png" alt=""></div>
+                        <div
+                            [matTooltip]="'React Native '"
+                            class="flex rounded-md flex-col flex-auto items-center text-center py-16 bg-card shadow overflow-hidden cursor-not-allowed"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/react-native.png"
+                                    alt=""
+                                />
+                            </div>
                             <div>REACT NATIVE</div>
                         </div>
 
-                         <!-- IOS-->
-                         <div  [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
-                         >
-                            <div> <img class="w-20 h-20" src="/assets/mbicons/ios.png" alt=""></div>
+                        <!-- IOS-->
+                        <div
+                            [matTooltip]="'Coming Soon '"
+                            class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/ios.png"
+                                    alt=""
+                                />
+                            </div>
                             <div>IOS</div>
-                          </div>
+                        </div>
 
-
-                            <!-- NODE JS-->
-                         <div  [matTooltip]="'Coming Soon '"
-                         class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed">
-                            <div> <img class="w-20 h-20" src="/assets/mbicons/node-js.png" alt=""></div>
+                        <!-- NODE JS-->
+                        <div
+                            [matTooltip]="'Coming Soon '"
+                            class="flex flex-col text-center items-center py-16 rounded-md flex-auto mb-auto bg-card shadow overflow-hidden cursor-not-allowed"
+                        >
+                            <div>
+                                <img
+                                    class="w-20 h-20"
+                                    src="/assets/mbicons/node-js.png"
+                                    alt=""
+                                />
+                            </div>
                             <div>NODE JS</div>
-                          </div>
-                       
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- Create Bitbucket Project -->
-            <div *ngIf="selectedIndex === 1" class="flex flex-col flex-auto w-full">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto  min-h-full">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full  bg-card dark:bg-transparent">
-                        <form [formGroup]="createBitbucketProjectFrom"
-                            class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
-                            <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
+            <div
+                *ngIf="selectedIndex === 1"
+                class="flex flex-col flex-auto w-full"
+            >
+                <div
+                    class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full"
+                >
+                    <div
+                        class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent"
+                    >
+                        <form
+                            [formGroup]="createBitbucketProjectFrom"
+                            class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
+                        >
+                            <mat-form-field
+                                class="w-full sm:w-140 mt-4 mb-2 sm:mt-0"
+                                [floatLabel]="'always'"
+                            >
                                 <mat-label>Bitbucket Project Name</mat-label>
-                                <input type="text" placeholder="Bitbucket Project Name here."
-                                    aria-label="Bitbucket Project Name" matInput formControlName="bitbucketProjectName"
-                                    [disabled]="true" />
+                                <input
+                                    type="text"
+                                    placeholder="Bitbucket Project Name here."
+                                    aria-label="Bitbucket Project Name"
+                                    matInput
+                                    formControlName="bitbucketProjectName"
+                                    [disabled]="true"
+                                />
                             </mat-form-field>
-                            <mat-form-field class="w-full sm:w-140 mt-4 mb-2 sm:mt-0" [floatLabel]="'always'">
+                            <mat-form-field
+                                class="w-full sm:w-140 mt-4 mb-2 sm:mt-0"
+                                [floatLabel]="'always'"
+                            >
                                 <mat-label>Project Name</mat-label>
                                 <span matSuffix>-{{ formType }}</span>
-                                <input matInput [placeholder]="'Project Name here.'"
-                                    #createBitbucketProjectFromProjectName formControlName="projectName"
-                                    maxlength="50" />
-                                <mat-error *ngIf="
+                                <input
+                                    matInput
+                                    [placeholder]="'Project Name here.'"
+                                    #createBitbucketProjectFromProjectName
+                                    formControlName="projectName"
+                                    maxlength="50"
+                                />
+                                <mat-error
+                                    *ngIf="
                                         createBitbucketProject['projectName']
                                             .errors &&
                                         createBitbucketProject['projectName']
                                             ?.invalid &&
                                         createBitbucketProject['projectName']
                                             ?.touched
-                                    ">
-                                    <div *ngIf="
+                                    "
+                                >
+                                    <div
+                                        *ngIf="
                                             createBitbucketProject[
                                                 'projectName'
                                             ].errors['required']
-                                        ">
+                                        "
+                                    >
                                         Project is mandatory
                                     </div>
-                                    <div *ngIf="createBitbucketProject['projectName'].errors['pattern']">Enter valid
-                                        Project name</div>
+                                    <div
+                                        *ngIf="
+                                            createBitbucketProject[
+                                                'projectName'
+                                            ].errors['pattern']
+                                        "
+                                    >
+                                        Enter valid Project name
+                                    </div>
                                 </mat-error>
                             </mat-form-field>
-                            <div *ngIf="formType != 'react-native'"
-                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                                <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
-                                    <mat-form-field [floatLabel]="'always'" appearance="fill"
-                                        class="example-chip-list w-full flex-0 mb-2">
-                                        <mat-label>{{currentPortalType | titlecase}} Name *</mat-label>
-                                        <mat-chip-list #portalChipList formControlName="portalNameOrMicroserviceName">
-                                            <input placeholder="New {{currentPortalType | titlecase}} Name..." #portalNameOrMicroserviceNameInput
+                            <div
+                                *ngIf="formType != 'react-native'"
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div
+                                    class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        appearance="fill"
+                                        class="example-chip-list w-full flex-0 mb-2"
+                                    >
+                                        <mat-label
+                                            >{{
+                                                currentPortalType | titlecase
+                                            }}
+                                            Name *</mat-label
+                                        >
+                                        <mat-chip-list
+                                            #portalChipList
+                                            formControlName="portalNameOrMicroserviceName"
+                                        >
+                                            <input
+                                                placeholder="New {{
+                                                    currentPortalType
+                                                        | titlecase
+                                                }} Name..."
+                                                #portalNameOrMicroserviceNameInput
                                                 formControlName="portalNameOrMicroserviceName"
-                                                [matChipInputFor]="portalChipList"
-                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                                [matChipInputAddOnBlur]="addOnBlur"
-                                                (matChipInputTokenEnd)="addPortal($event)" class="w-full" />
+                                                [matChipInputFor]="
+                                                    portalChipList
+                                                "
+                                                [matChipInputSeparatorKeyCodes]="
+                                                    separatorKeysCodes
+                                                "
+                                                [matChipInputAddOnBlur]="
+                                                    addOnBlur
+                                                "
+                                                (matChipInputTokenEnd)="
+                                                    addPortal($event)
+                                                "
+                                                class="w-full"
+                                            />
                                         </mat-chip-list>
-                                        <mat-chip-list #portalChipList
-                                            aria-label="portalNameOrMicroserviceName selection" class="mb-2">
+                                        <mat-chip-list
+                                            #portalChipList
+                                            aria-label="portalNameOrMicroserviceName selection"
+                                            class="mb-2"
+                                        >
                                             <mat-chip
-                                                *ngFor="let portalNameOrMicroserviceName of portalNameOrMicroserviceNames"
-                                                [selectable]="selectable" [removable]="removable"
-                                                (removed)="removePortal(portalNameOrMicroserviceName)">
-                                                {{portalNameOrMicroserviceName}}
-                                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                *ngFor="
+                                                    let portalNameOrMicroserviceName of portalNameOrMicroserviceNames
+                                                "
+                                                [selectable]="selectable"
+                                                [removable]="removable"
+                                                (removed)="
+                                                    removePortal(
+                                                        portalNameOrMicroserviceName
+                                                    )
+                                                "
+                                            >
+                                                {{
+                                                    portalNameOrMicroserviceName
+                                                }}
+                                                <mat-icon
+                                                    matChipRemove
+                                                    *ngIf="removable"
+                                                    >cancel</mat-icon
+                                                >
                                             </mat-chip>
                                         </mat-chip-list>
-                                        <mat-error>At least add one {{currentPortalType}} name
+                                        <mat-error
+                                            >At least add one
+                                            {{ currentPortalType }} name
                                         </mat-error>
                                     </mat-form-field>
-                                    <div class="text-sm -mt-5 mb-4" *ngIf="portalNameOrMicroserviceNameInput.value">
-                                        Please press enter to select {{currentPortalType}} name</div>
+                                    <div
+                                        class="text-sm -mt-5 mb-4"
+                                        *ngIf="
+                                            portalNameOrMicroserviceNameInput.value
+                                        "
+                                    >
+                                        Please press enter to select
+                                        {{ currentPortalType }} name
+                                    </div>
                                 </div>
                             </div>
-                            <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                                <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
-                                    <mat-form-field [floatLabel]="'always'" appearance="fill"
-                                        class="example-chip-list w-full flex-0 mb-2">
+                            <div
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div
+                                    class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        appearance="fill"
+                                        class="example-chip-list w-full flex-0 mb-2"
+                                    >
                                         <mat-label>Repository *</mat-label>
-                                        <mat-chip-list #chipListRepository formControlName="repositoryName">
-                                            <input [disabled]="isRepository" placeholder="Search repository..."
-                                                #repositoryInput formControlName="repositoryName" [matAutocomplete]="
+                                        <mat-chip-list
+                                            #chipListRepository
+                                            formControlName="repositoryName"
+                                        >
+                                            <input
+                                                [disabled]="isRepository"
+                                                placeholder="Search repository..."
+                                                #repositoryInput
+                                                formControlName="repositoryName"
+                                                [matAutocomplete]="
                                                     autoRepository
-                                                " [matChipInputFor]="
+                                                "
+                                                [matChipInputFor]="
                                                     chipListRepository
-                                                " [matChipInputSeparatorKeyCodes]="
+                                                "
+                                                [matChipInputSeparatorKeyCodes]="
                                                     separatorKeysCodes
-                                                " [matChipInputAddOnBlur]="
+                                                "
+                                                [matChipInputAddOnBlur]="
                                                     addOnBlurRepository
-                                                " (matChipInputTokenEnd)="
+                                                "
+                                                (matChipInputTokenEnd)="
                                                     addRepository($event)
-                                                " class="w-full" />
+                                                "
+                                                class="w-full"
+                                            />
                                         </mat-chip-list>
-                                        <mat-autocomplete #autoRepository="matAutocomplete" (optionSelected)="
+                                        <mat-autocomplete
+                                            #autoRepository="matAutocomplete"
+                                            (optionSelected)="
                                                 selectedRepository($event)
-                                            ">
-                                            <mat-option *ngFor="
+                                            "
+                                        >
+                                            <mat-option
+                                                *ngFor="
                                                     let repository of filteredRepositories
                                                         | async
-                                                " [value]="repository">
-                                                {{ repository }}</mat-option>
+                                                "
+                                                [value]="repository"
+                                            >
+                                                {{ repository }}</mat-option
+                                            >
                                         </mat-autocomplete>
-                                        <mat-chip-list #chipListRepository class="mb-2"
-                                            aria-label="repository selection">
-                                            <mat-chip *ngFor="
+                                        <mat-chip-list
+                                            #chipListRepository
+                                            class="mb-2"
+                                            aria-label="repository selection"
+                                        >
+                                            <mat-chip
+                                                *ngFor="
                                                     let repository of repositories
-                                                " [selectable]="selectable" [removable]="removable" (removed)="
+                                                "
+                                                [selectable]="selectable"
+                                                [removable]="removable"
+                                                (removed)="
                                                     removeRepository(repository)
-                                                ">
+                                                "
+                                            >
                                                 {{ repository }}
-                                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                <mat-icon
+                                                    matChipRemove
+                                                    *ngIf="removable"
+                                                    >cancel</mat-icon
+                                                >
                                             </mat-chip>
                                         </mat-chip-list>
-                                        <mat-error>At least add one repository
+                                        <mat-error
+                                            >At least add one repository
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
 
-                            <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                                <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
-                                    <mat-form-field [floatLabel]="'always'" appearance="fill"
-                                        class="example-chip-list w-full flex-0 mb-2">
-                                        <mat-label>Branch Or Pattern *</mat-label>
-                                        <mat-chip-list #chipListBranch formControlName="branchOrPattern">
-                                            <input placeholder="Search branch..." #branchInput
-                                                formControlName="branchOrPattern" [matAutocomplete]="autoBranch"
-                                                [matChipInputFor]="chipListBranch"
-                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                                [matChipInputAddOnBlur]="addOnBlurBranch"
-                                                (matChipInputTokenEnd)="addBranch($event)" class="w-full" />
+                            <div
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div
+                                    class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        appearance="fill"
+                                        class="example-chip-list w-full flex-0 mb-2"
+                                    >
+                                        <mat-label
+                                            >Branch Or Pattern *</mat-label
+                                        >
+                                        <mat-chip-list
+                                            #chipListBranch
+                                            formControlName="branchOrPattern"
+                                        >
+                                            <input
+                                                placeholder="Search branch..."
+                                                #branchInput
+                                                formControlName="branchOrPattern"
+                                                [matAutocomplete]="autoBranch"
+                                                [matChipInputFor]="
+                                                    chipListBranch
+                                                "
+                                                [matChipInputSeparatorKeyCodes]="
+                                                    separatorKeysCodes
+                                                "
+                                                [matChipInputAddOnBlur]="
+                                                    addOnBlurBranch
+                                                "
+                                                (matChipInputTokenEnd)="
+                                                    addBranch($event)
+                                                "
+                                                class="w-full"
+                                            />
                                         </mat-chip-list>
-                                        <mat-autocomplete #autoBranch="matAutocomplete"
-                                            (optionSelected)="selectedBranch($event)">
-                                            <mat-option *ngFor="let branch of filteredBranches | async"
-                                                [value]="branch">
+                                        <mat-autocomplete
+                                            #autoBranch="matAutocomplete"
+                                            (optionSelected)="
+                                                selectedBranch($event)
+                                            "
+                                        >
+                                            <mat-option
+                                                *ngFor="
+                                                    let branch of filteredBranches
+                                                        | async
+                                                "
+                                                [value]="branch"
+                                            >
                                                 {{ branch }}
                                             </mat-option>
                                         </mat-autocomplete>
-                                        <mat-chip-list #chipListBranch class="mb-2" aria-label="branch selection">
-                                            <mat-chip *ngFor="let branch of branches" [selectable]="selectable"
-                                                [removable]="removable" (removed)="removeBranch(branch)">
+                                        <mat-chip-list
+                                            #chipListBranch
+                                            class="mb-2"
+                                            aria-label="branch selection"
+                                        >
+                                            <mat-chip
+                                                *ngFor="let branch of branches"
+                                                [selectable]="selectable"
+                                                [removable]="removable"
+                                                (removed)="removeBranch(branch)"
+                                            >
                                                 {{ branch }}
-                                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                <mat-icon
+                                                    matChipRemove
+                                                    *ngIf="removable"
+                                                    >cancel</mat-icon
+                                                >
                                             </mat-chip>
                                         </mat-chip-list>
-                                        <mat-error>At least add one branch</mat-error>
+                                        <mat-error
+                                            >At least add one branch</mat-error
+                                        >
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                                <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
-                                    <mat-form-field [floatLabel]="'always'" appearance="fill"
-                                        class="example-chip-list w-full flex-0 mb-2">
+                            <div
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div
+                                    class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        appearance="fill"
+                                        class="example-chip-list w-full flex-0 mb-2"
+                                    >
                                         <mat-label>Developer *</mat-label>
-                                        <mat-chip-list #chipListDeveloper formControlName="developer">
-                                            <input placeholder="New developer..." #developerInput
-                                                [formControl]="developer" formControlName="developer"
-                                                [matAutocomplete]="autoDeveloper" [matChipInputFor]="chipListDeveloper"
-                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                                [matChipInputAddOnBlur]="addOnBlur"
-                                                (matChipInputTokenEnd)="addDeveloper($event)" class="w-full" />
+                                        <mat-chip-list
+                                            #chipListDeveloper
+                                            formControlName="developer"
+                                        >
+                                            <input
+                                                placeholder="New developer..."
+                                                #developerInput
+                                                [formControl]="developer"
+                                                formControlName="developer"
+                                                [matAutocomplete]="
+                                                    autoDeveloper
+                                                "
+                                                [matChipInputFor]="
+                                                    chipListDeveloper
+                                                "
+                                                [matChipInputSeparatorKeyCodes]="
+                                                    separatorKeysCodes
+                                                "
+                                                [matChipInputAddOnBlur]="
+                                                    addOnBlur
+                                                "
+                                                (matChipInputTokenEnd)="
+                                                    addDeveloper($event)
+                                                "
+                                                class="w-full"
+                                            />
                                         </mat-chip-list>
-                                        <mat-autocomplete #autoDeveloper="matAutocomplete" (optionSelected)="
-                                                selectedDeveloper($event)">
-                                            <mat-option *ngFor="let developer of filteredDevelopers | async
-                                                " [value]="developer?.email">
+                                        <mat-autocomplete
+                                            #autoDeveloper="matAutocomplete"
+                                            (optionSelected)="
+                                                selectedDeveloper($event)
+                                            "
+                                        >
+                                            <mat-option
+                                                *ngFor="
+                                                    let developer of filteredDevelopers
+                                                        | async
+                                                "
+                                                [value]="developer?.email"
+                                            >
                                                 {{ developer?.email }}
                                             </mat-option>
                                         </mat-autocomplete>
-                                        <mat-chip-list #chipListDeveloper class="mb-2">
-                                            <mat-chip *ngFor="
+                                        <mat-chip-list
+                                            #chipListDeveloper
+                                            class="mb-2"
+                                        >
+                                            <mat-chip
+                                                *ngFor="
                                                     let developer of developers;
                                                     let selectIndex = index
-                                                " [selectable]="selectable" [removable]="removable" (removed)="
+                                                "
+                                                [selectable]="selectable"
+                                                [removable]="removable"
+                                                (removed)="
                                                     removeDeveloper(
                                                         developer,
                                                         selectIndex
                                                     )
-                                                ">
-                                                <div *ngFor="
+                                                "
+                                            >
+                                                <div
+                                                    *ngFor="
                                                         let developerObj of allDevelopers
-                                                    ">
-                                                    <div *ngIf="
+                                                    "
+                                                >
+                                                    <div
+                                                        *ngIf="
                                                             developerObj?.email ==
                                                             developer
-                                                        ">
-                                                        {{ developerObj?.email }}
+                                                        "
+                                                    >
+                                                        {{
+                                                            developerObj?.email
+                                                        }}
                                                     </div>
                                                 </div>
-                                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                <mat-icon
+                                                    matChipRemove
+                                                    *ngIf="removable"
+                                                    >cancel</mat-icon
+                                                >
                                             </mat-chip>
                                         </mat-chip-list>
-                                        <mat-error>At least add one developer
+                                        <mat-error
+                                            >At least add one developer
                                         </mat-error>
                                     </mat-form-field>
                                     <div class="error-msg text-md mb-2">
-                                        <mat-error *ngIf="emailInvalid">Invalid email
+                                        <mat-error *ngIf="emailInvalid"
+                                            >Invalid email
                                         </mat-error>
                                     </div>
                                 </div>
                             </div>
-                            <div class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                                <div class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859">
-                                    <mat-form-field [floatLabel]="'always'" appearance="fill"
-                                        class="example-chip-list w-full flex-0 mb-2">
-                                        <mat-label>Code Reviewer & PM *</mat-label>
-                                        <mat-chip-list #chipListCodeReviewer formControlName="codeReviewerAndPm">
-                                            <input placeholder="Search Code Reviewer & PM..." #codeReviewerInput
-                                                formControlName="codeReviewerAndPm" [matAutocomplete]="
+                            <div
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div
+                                    class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
+                                >
+                                    <mat-form-field
+                                        [floatLabel]="'always'"
+                                        appearance="fill"
+                                        class="example-chip-list w-full flex-0 mb-2"
+                                    >
+                                        <mat-label
+                                            >Code Reviewer & PM *</mat-label
+                                        >
+                                        <mat-chip-list
+                                            #chipListCodeReviewer
+                                            formControlName="codeReviewerAndPm"
+                                        >
+                                            <input
+                                                placeholder="Search Code Reviewer & PM..."
+                                                #codeReviewerInput
+                                                formControlName="codeReviewerAndPm"
+                                                [matAutocomplete]="
                                                     autoCodeReviewer
-                                                " [matChipInputFor]="
+                                                "
+                                                [matChipInputFor]="
                                                     chipListCodeReviewer
-                                                " [matChipInputSeparatorKeyCodes]="
+                                                "
+                                                [matChipInputSeparatorKeyCodes]="
                                                     separatorKeysCodes
-                                                " [matChipInputAddOnBlur]="
+                                                "
+                                                [matChipInputAddOnBlur]="
                                                     addOnBlur
-                                                " (matChipInputTokenEnd)="
+                                                "
+                                                (matChipInputTokenEnd)="
                                                     addCodeReviewer($event)
-                                                " class="w-full" />
+                                                "
+                                                class="w-full"
+                                            />
                                         </mat-chip-list>
-                                        <mat-autocomplete #autoCodeReviewer="matAutocomplete" (optionSelected)="
+                                        <mat-autocomplete
+                                            #autoCodeReviewer="matAutocomplete"
+                                            (optionSelected)="
                                                 selectedCodeReviewer($event)
-                                            ">
-                                            <mat-option *ngFor="
+                                            "
+                                        >
+                                            <mat-option
+                                                *ngFor="
                                                     let codeReviewer of filteredCodeReviewers
                                                         | async
-                                                " [value]="codeReviewer">
+                                                "
+                                                [value]="codeReviewer"
+                                            >
                                                 {{ codeReviewer.display_name }}
                                             </mat-option>
                                         </mat-autocomplete>
 
-                                        <mat-chip-list #chipListCodeReviewer class="mb-2"
-                                            aria-label="repository selection">
-                                            <mat-chip *ngFor="
+                                        <mat-chip-list
+                                            #chipListCodeReviewer
+                                            class="mb-2"
+                                            aria-label="repository selection"
+                                        >
+                                            <mat-chip
+                                                *ngFor="
                                                     let codeReviewer of codeReviewers;
                                                     let indx = index
-                                                " [selectable]="selectable" [removable]="removable" (removed)="
+                                                "
+                                                [selectable]="selectable"
+                                                [removable]="removable"
+                                                (removed)="
                                                     removeCodeReviewer(
                                                         codeReviewer,
                                                         indx
                                                     )
-                                                ">
+                                                "
+                                            >
                                                 {{ codeReviewer.display_name }}
-                                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                <mat-icon
+                                                    matChipRemove
+                                                    *ngIf="removable"
+                                                    >cancel</mat-icon
+                                                >
                                             </mat-chip>
                                         </mat-chip-list>
-                                        <mat-error>At least add one Code Reviewer & PM
+                                        <mat-error
+                                            >At least add one Code Reviewer & PM
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
 
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
-                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(0)">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto"
+                            >
+                                <div
+                                    class="flex items-center ml-auto mt-4 sm:mt-0"
+                                >
+                                    <button
+                                        class="min-w-30"
+                                        mat-stroked-button
+                                        type="button"
+                                        (click)="goBack(0)"
+                                    >
                                         Back
                                     </button>
-                                    <button type="button" class="min-w-30 order-first sm:order-last ml-4"
-                                    mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
-                                    Save as Draft
-                                </button>
-                                    <button class="min-w-30 order-first sm:order-last ml-4" mat-flat-button
-                                        [color]="'primary'" (click)="submitBitbucketProject()">
+                                    <button
+                                        type="button"
+                                        class="min-w-30 order-first sm:order-last ml-4"
+                                        mat-flat-button
+                                        [color]="'accent'"
+                                        (click)="submit('DRAFT')"
+                                    >
+                                        Save as Draft
+                                    </button>
+                                    <button
+                                        class="min-w-30 order-first sm:order-last ml-4"
+                                        mat-flat-button
+                                        [color]="'primary'"
+                                        (click)="submitBitbucketProject()"
+                                    >
                                         Next
                                     </button>
                                 </div>
@@ -372,51 +753,128 @@
 
             <!-- Ansible Script -->
 
-            <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full overflow-y-auto ">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
-                    <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
-                        <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
-
-                            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 ">
-                                <div class="shrink-0 items-center mt-6 sm:mt-0 ng-tns-c274-3859 mb-4 max-w-full">
-                                    <div class="mb-2 ">Script URL</div>
-                                    <div class="text-secondary flex items-center" *ngIf="uploadResourceUrl"><a
-                                            class="break-all" href="{{uploadResourceUrl}}"
-                                            target="_blank">{{uploadResourceUrl}}</a>
-                                        <div class="ml-4 cursor-pointer"><mat-icon class="text-primary"
-                                                [svgIcon]="'heroicons_outline:x'" (click)="deleteURL()"></mat-icon>
+            <div
+                *ngIf="showStep === 3"
+                class="flex flex-col flex-auto w-full overflow-y-auto"
+            >
+                <div
+                    class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full"
+                >
+                    <div
+                        class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent"
+                    >
+                        <form
+                            class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
+                        >
+                            <div
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div
+                                    class="shrink-0 items-center mt-6 sm:mt-0 ng-tns-c274-3859 mb-4 max-w-full"
+                                >
+                                    <div class="mb-2">Script URL</div>
+                                    <div
+                                        class="text-secondary flex items-center"
+                                        *ngIf="uploadResourceUrl"
+                                    >
+                                        <a
+                                            class="break-all"
+                                            href="{{ uploadResourceUrl }}"
+                                            target="_blank"
+                                            >{{ uploadResourceUrl }}</a
+                                        >
+                                        <div class="ml-4 cursor-pointer">
+                                            <mat-icon
+                                                class="text-primary"
+                                                [svgIcon]="
+                                                    'heroicons_outline:x'
+                                                "
+                                                (click)="deleteURL()"
+                                            ></mat-icon>
                                         </div>
                                     </div>
-                                    <button class="min-w-30" *ngIf="!uploadResourceUrl" mat-raised-button
-                                        color="primary" (click)="onClick($event)">
-                                        <span *ngIf="!uploadInProcess">Upload</span>
-                                        <mat-progress-spinner *ngIf="uploadInProcess" [diameter]="24"
-                                            [mode]="'indeterminate'" class="px-2"></mat-progress-spinner>
+                                    <button
+                                        class="min-w-30"
+                                        *ngIf="!uploadResourceUrl"
+                                        mat-raised-button
+                                        color="primary"
+                                        (click)="onClick($event)"
+                                    >
+                                        <span *ngIf="!uploadInProcess"
+                                            >Upload</span
+                                        >
+                                        <mat-progress-spinner
+                                            *ngIf="uploadInProcess"
+                                            [diameter]="24"
+                                            [mode]="'indeterminate'"
+                                            class="px-2"
+                                        ></mat-progress-spinner>
                                     </button>
-                                    <input #fileUpload class="d-none" type="file" accept=".yml"
-                                        (change)="uploadChange($event)" />
-                                    <div class="text-sm text-red-600 mt-1" *ngIf="!isFileUploaded">Upload Script URL
+                                    <input
+                                        #fileUpload
+                                        class="d-none"
+                                        type="file"
+                                        accept=".yml"
+                                        (change)="uploadChange($event)"
+                                    />
+                                    <div
+                                        class="text-sm text-red-600 mt-1"
+                                        *ngIf="!isFileUploaded"
+                                    >
+                                        Upload Script URL
                                     </div>
                                 </div>
                             </div>
 
-                            <div class=" sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4">
-                                <div class=""> <a class="text-primary .mt-8p cursor-pointer"
-                                        (click)="downloadYmlFile()"> Download Template</a></div>
-                                <div class="text-left ml-4"><a class="text-primary .mt-8p cursor-pointer"
-                                        (click)="sendEmail()"> Email Template</a></div>
+                            <div
+                                class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                            >
+                                <div class="">
+                                    <a
+                                        class="text-primary .mt-8p cursor-pointer"
+                                        (click)="downloadYmlFile()"
+                                    >
+                                        Download Template</a
+                                    >
+                                </div>
+                                <div class="text-left ml-4">
+                                    <a
+                                        class="text-primary .mt-8p cursor-pointer"
+                                        (click)="sendEmail()"
+                                    >
+                                        Email Template</a
+                                    >
+                                </div>
                             </div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between  mt-auto">
-                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(1)">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto"
+                            >
+                                <div
+                                    class="flex items-center ml-auto mt-4 sm:mt-0"
+                                >
+                                    <button
+                                        class="min-w-30"
+                                        mat-stroked-button
+                                        type="button"
+                                        (click)="goBack(1)"
+                                    >
                                         Back
                                     </button>
-                                    <button type="button" class="min-w-30 order-first sm:order-last ml-4"
-                                        mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
+                                    <button
+                                        type="button"
+                                        class="min-w-30 order-first sm:order-last ml-4"
+                                        mat-flat-button
+                                        [color]="'accent'"
+                                        (click)="submit('DRAFT')"
+                                    >
                                         Save as Draft
                                     </button>
-                                    <button class="min-w-30  order-first sm:order-last ml-4" mat-flat-button
-                                        [color]="'primary'" (click)="submitAnsibleScript()">
+                                    <button
+                                        class="min-w-30 order-first sm:order-last ml-4"
+                                        mat-flat-button
+                                        [color]="'primary'"
+                                        (click)="submitAnsibleScript()"
+                                    >
                                         Next
                                     </button>
                                 </div>
@@ -426,92 +884,139 @@
                 </div>
             </div>
             <!-- Review your project -->
-            <div *ngIf="showStep === 4 && !initialLoading" class="flex flex-col flex-auto w-full overflow-y-auto">
-                <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
-                    <div *ngIf="!submitInProcess" class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full  bg-card dark:bg-transparent">
+            <div
+                *ngIf="showStep === 4 && !initialLoading"
+                class="flex flex-col flex-auto w-full overflow-y-auto"
+            >
+                <div
+                    class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full"
+                >
+                    <div
+                        *ngIf="!submitInProcess"
+                        class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent"
+                    >
                         <!-- Review form -->
-                        <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+                        <div
+                            class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
+                        >
                             <ng-container>
                                 <div class="flex sm:items-center">
                                     <span class="ml-2">Technology:</span>
                                     <div class="ml-4 leading-6">
-                                        {{formType | titlecase}}
+                                        {{ formType | titlecase }}
                                     </div>
                                 </div>
                             </ng-container>
                             <ng-container>
                                 <div class="flex sm:items-center mt-4">
-                                    <span class="ml-2">Bitbucket Project Name:</span>
+                                    <span class="ml-2"
+                                        >Bitbucket Project Name:</span
+                                    >
                                     <div class="ml-4 leading-6">
-                                        {{bitbucketRepositoryName}}
+                                        {{ bitbucketRepositoryName }}
                                     </div>
                                 </div>
                             </ng-container>
                             <ng-container>
                                 <div class="flex sm:items-center mt-4">
-                                    <span class="ml-2 ">Project Name:</span>
+                                    <span class="ml-2">Project Name:</span>
                                     <div class="ml-4 leading-6">
-                                        {{createBitbucketProjectFrom.value.projectName}}
+                                        {{
+                                            createBitbucketProjectFrom.value
+                                                .projectName
+                                        }}
                                     </div>
                                 </div>
                             </ng-container>
                             <div class="flex sm:items-center mt-2">
-                                <span class="ml-2">
-                                    Repository:</span>
+                                <span class="ml-2"> Repository:</span>
                                 <ng-container *ngIf="repositories.length > 0">
-                                    <div class="flex flex-wrap items-center mt-2 ml-4">
+                                    <div
+                                        class="flex flex-wrap items-center mt-2 ml-4"
+                                    >
                                         <!-- Tag -->
-                                        <ng-container *ngFor="let repository of repositories">
+                                        <ng-container
+                                            *ngFor="
+                                                let repository of repositories
+                                            "
+                                        >
                                             <div
-                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                            >
                                                 <span
-                                                    class="text-sm font-medium whitespace-nowrap">{{repository}}</span>
+                                                    class="text-sm font-medium whitespace-nowrap"
+                                                    >{{ repository }}</span
+                                                >
                                             </div>
                                         </ng-container>
                                     </div>
                                 </ng-container>
                             </div>
                             <div class="flex sm:items-center mt-2">
-                                <span class="ml-2">
-                                    Branch Or Pattern:</span>
+                                <span class="ml-2"> Branch Or Pattern:</span>
                                 <ng-container *ngIf="branches.length > 0">
-                                    <div class="flex flex-wrap items-center mt-2 ml-4">
+                                    <div
+                                        class="flex flex-wrap items-center mt-2 ml-4"
+                                    >
                                         <!-- Tag -->
-                                        <ng-container *ngFor="let branch of branches">
+                                        <ng-container
+                                            *ngFor="let branch of branches"
+                                        >
                                             <div
-                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                                                <span class="text-sm font-medium whitespace-nowrap">{{branch}}</span>
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </ng-container>
-                            </div>
-                            <div class="flex sm:items-center mt-2">
-                                <span class="ml-2">
-                                    Developer:</span>
-                                <ng-container *ngIf="developers.length > 0">
-                                    <div class="flex flex-wrap items-center mt-2 ml-4">
-                                        <!-- Tag -->
-                                        <ng-container *ngFor="let developer of developers">
-                                            <div
-                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                                                <span class="text-sm font-medium whitespace-nowrap">{{developer}}</span>
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </ng-container>
-                            </div>
-                            <div class="flex sm:items-center mt-2">
-                                <span class="ml-2">
-                                    Code Reviewer & PM:</span>
-                                <ng-container *ngIf="codeReviewers.length > 0">
-                                    <div class="flex flex-wrap items-center mt-2 ml-4">
-                                        <!-- Tag -->
-                                        <ng-container *ngFor="let codeReviewer of codeReviewers">
-                                            <div
-                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                            >
                                                 <span
-                                                    class="text-sm font-medium whitespace-nowrap">{{codeReviewer.display_name}}</span>
+                                                    class="text-sm font-medium whitespace-nowrap"
+                                                    >{{ branch }}</span
+                                                >
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="flex sm:items-center mt-2">
+                                <span class="ml-2"> Developer:</span>
+                                <ng-container *ngIf="developers.length > 0">
+                                    <div
+                                        class="flex flex-wrap items-center mt-2 ml-4"
+                                    >
+                                        <!-- Tag -->
+                                        <ng-container
+                                            *ngFor="let developer of developers"
+                                        >
+                                            <div
+                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                            >
+                                                <span
+                                                    class="text-sm font-medium whitespace-nowrap"
+                                                    >{{ developer }}</span
+                                                >
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="flex sm:items-center mt-2">
+                                <span class="ml-2"> Code Reviewer & PM:</span>
+                                <ng-container *ngIf="codeReviewers.length > 0">
+                                    <div
+                                        class="flex flex-wrap items-center mt-2 ml-4"
+                                    >
+                                        <!-- Tag -->
+                                        <ng-container
+                                            *ngFor="
+                                                let codeReviewer of codeReviewers
+                                            "
+                                        >
+                                            <div
+                                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                            >
+                                                <span
+                                                    class="text-sm font-medium whitespace-nowrap"
+                                                    >{{
+                                                        codeReviewer.display_name
+                                                    }}</span
+                                                >
                                             </div>
                                         </ng-container>
                                     </div>
@@ -521,40 +1026,83 @@
                                 <div class="flex sm:items-center mt-4">
                                     <span class="ml-2">ScriptURL:</span>
                                     <div class="ml-4 leading-6">
-                                        {{uploadResourceUrl}}
+                                        {{ uploadResourceUrl }}
                                     </div>
                                 </div>
                             </ng-container>
 
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
-
-                                <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button class="min-w-30 " mat-stroked-button type="button" (click)="goBack(2)">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto"
+                            >
+                                <div
+                                    class="flex items-center ml-auto mt-4 sm:mt-0"
+                                >
+                                    <button
+                                        class="min-w-30"
+                                        mat-stroked-button
+                                        type="button"
+                                        (click)="goBack(2)"
+                                    >
                                         Back
                                     </button>
-                                    <button type="button" class="min-w-30 order-first sm:order-last ml-4"
-                                    mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
-                                    Save as Draft
+                                    <button
+                                        type="button"
+                                        class="min-w-30 order-first sm:order-last ml-4"
+                                        mat-flat-button
+                                        [color]="'accent'"
+                                        (click)="submit('DRAFT')"
+                                    >
+                                        Save as Draft
                                     </button>
-                                    <button class="min-w-30 order-first sm:order-last ml-4" mat-flat-button
-                                        [color]="'primary'" (click)="submit('ACTIVE')">
-                                        <span *ngIf="!submitInProcess">Submit</span>
-                                        <mat-progress-spinner *ngIf="submitInProcess" [diameter]="24"
-                                            [mode]="'indeterminate'" class="px-2"></mat-progress-spinner>
+                                    <button
+                                        class="min-w-30 order-first sm:order-last ml-4"
+                                        mat-flat-button
+                                        [color]="'primary'"
+                                        (click)="submit('ACTIVE')"
+                                    >
+                                        <span *ngIf="!submitInProcess"
+                                            >Submit</span
+                                        >
+                                        <mat-progress-spinner
+                                            *ngIf="submitInProcess"
+                                            [diameter]="24"
+                                            [mode]="'indeterminate'"
+                                            class="px-2"
+                                        ></mat-progress-spinner>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <app-command-line *ngIf="submitInProcess" [data]="commandLineModel" class="w-full"></app-command-line>
-                    <div *ngIf="isRepoCreationError" class="p-4 flex flex-col sm:flex-row sm:items-center justify-end mt-auto w-full">
-                        <div class="flex items-center justify-end ml-auto mt-4 sm:mt-0">
-                            <button class="min-w-30 " [color]="'primary'" mat-flat-button type="button" (click)="goBack(2)">
+                    <app-command-line
+                        *ngIf="submitInProcess"
+                        [data]="commandLineModel"
+                        class="w-full"
+                    ></app-command-line>
+                    <div
+                        *ngIf="isRepoCreationError"
+                        class="p-4 flex flex-col sm:flex-row sm:items-center justify-end mt-auto w-full"
+                    >
+                        <div
+                            class="flex items-center justify-end ml-auto mt-4 sm:mt-0"
+                        >
+                            <button
+                                class="min-w-30"
+                                [color]="'primary'"
+                                mat-flat-button
+                                type="button"
+                                (click)="goBack(2)"
+                            >
                                 Back
                             </button>
-                            <button type="button" class="min-w-30 order-first sm:order-last ml-4"
-                            mat-flat-button [color]="'accent'" (click)="submit('DRAFT')">
-                            Save as Draft
+                            <button
+                                type="button"
+                                class="min-w-30 order-first sm:order-last ml-4"
+                                mat-flat-button
+                                [color]="'accent'"
+                                (click)="submit('DRAFT')"
+                            >
+                                Save as Draft
                             </button>
                         </div>
                     </div>
