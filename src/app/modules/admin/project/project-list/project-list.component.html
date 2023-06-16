@@ -201,7 +201,7 @@
                     <div class="hidden md:block">Description</div>
                     <div class="hidden sm:block">Start Date</div>
                     <div class="hidden lg:block">Last updated </div>
-                    <div>Action</div>
+                    <div>Actions</div>
                 </div>
                 <ng-container *ngIf="!initialLoading && projectList.length > 0">
 
@@ -230,14 +230,38 @@
                                 {{ project.lastSyncDate ? (project.lastSyncDate | date) : '-' }}
                             </div>
                             <div class="sm:block">
-                                <div *ngIf="!project.lastSyncDate" (click)="syncProject($event,project.id)"
+                                <!-- <div *ngIf="!project.lastSyncDate" (click)="syncProject($event,project.id)"
                                     class="cursor-pointer py-1 px-3 rounded-full font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500 ng-star-inserted">
                                     Sync Now </div>
                                 <span *ngIf="project.lastSyncDate"
                                     class=" ml-auto  inline-flex items-center font-semibold py-1 rounded-full tracking-wide">
                                     <span class="leading-relaxed whitespace-nowrap border-b-a cursor-pointer"
                                         (click)="syncProject($event,project.id)">Sync Now</span>
-                                </span>
+                                </span> -->
+
+                                <button
+                                mat-icon-button
+                                [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu"
+                            >
+                                <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <button
+                                        mat-menu-item
+                                        (click)="syncProject($event,project?.id)"
+                                    >
+                                        <span
+                                            >
+                                            Sync Now</span
+                                        >
+                                    </button>
+                                    <button 
+                                        mat-menu-item
+                                        (click)="weeklyFeedbackDialog(project?.id)">
+                                        <span>Weekly Feedback</span>
+                                    </button>
+                                </mat-menu>
                             </div>
                         </div>
                     </ng-container>
