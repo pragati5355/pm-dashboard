@@ -1,13 +1,21 @@
-import { Route, Router, RouterModule, Routes } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { SprintDetailsComponent } from './sprint-details/sprint-details.component';
 import { NgModule } from '@angular/core';
+import { AddCrComponent } from './add-cr/add-cr.component';
 export const projectWidgetRoutes: Route[] = [
     {
         path: 'details',
         component: ProjectDetailsComponent,
         data: {
             pageTitle: 'Project Details',
+        },
+    },
+    {
+        path: 'details/add-cr',
+        component: AddCrComponent,
+        data: {
+            pageTitle: 'Add Cr',
         },
     },
     {
