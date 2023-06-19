@@ -62,8 +62,8 @@
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item [matTooltip]="'Weekly Feedback'">
-                            <span>Weekly Feedback</span>
+                        <button mat-menu-item [matTooltip]="'Weekly Feedback'" (click)="weeklyFeedBackList()">
+                            <span>Weekly Feedback List</span>
                         </button>
                         <button mat-menu-item [matTooltip]="'Add CR'">
                             <span>Add CR</span>
