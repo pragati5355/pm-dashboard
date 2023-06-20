@@ -9,6 +9,7 @@ export class AddCrService {
     getEmailsUrl = AppConstants['PROJECT_API_URL'] + '/emails';
     projectDetailsByIdUrl =
         AppConstants['PROJECT_API_URL'] + '/get-project-by-id';
+    mapResourceUrl = AppConstants['PROJECT_API_URL'] + '/map-resource';
     constructor(private http: HttpClient) {}
 
     findAllDeveloperEmails() {
@@ -17,5 +18,9 @@ export class AddCrService {
 
     getProjectDetailsById(obj: any) {
         return this.http.post(this.projectDetailsByIdUrl, obj);
+    }
+
+    mapResource(obj: any) {
+        return this.http.post(this.mapResourceUrl, obj);
     }
 }

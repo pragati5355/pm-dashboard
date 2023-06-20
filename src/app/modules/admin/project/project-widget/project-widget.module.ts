@@ -45,8 +45,9 @@ import { InvoicePercentageComponent } from './invoice-percentage/invoice-percent
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddCrComponent } from './add-cr/add-cr.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
+import { MatChipsModule } from '@angular/material/chips';
 
+import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
 
 @NgModule({
     declarations: [
@@ -67,7 +68,7 @@ import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-re
         AssignBitbucketProjectDialogComponent,
         InvoicePercentageComponent,
         AddCrComponent,
-        AddCrResourceDialogComponent
+        AddCrResourceDialogComponent,
     ],
     imports: [
         FormsModule,
@@ -103,7 +104,8 @@ import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-re
         MatProgressSpinnerModule,
         SkeletonModule,
         MatFormFieldModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatChipsModule,
     ],
     exports: [
         ProjectDetailsComponent,

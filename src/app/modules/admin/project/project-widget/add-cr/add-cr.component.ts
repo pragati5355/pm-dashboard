@@ -19,69 +19,6 @@ export class AddCrComponent implements OnInit {
     projectDetails: any;
     projectId: any;
     isLoading: boolean = false;
-    teamMembers: any[] = [
-        {
-            id: 6,
-            isBench: false,
-            isShadow: false,
-            isDeleted: false,
-            firstName: 'Prafull',
-            lastName: 'patil',
-            email: 'prafull.patil@mindbowser.com',
-            projectId: 335,
-            jiraUserName: null,
-            startDate: 1686216642951,
-            endDate: 1686594600000,
-            utilization: 0.25,
-            projectType: 'EXTERNAL',
-            status: 'ACTIVE',
-            assignedBy: 12,
-            role: 'PM',
-            resourceId: 2,
-            resourceTechnologyId: [4],
-            technologies: [
-                {
-                    id: 4,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 46,
-                    name: 'python',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 2,
-                    deleted: false,
-                },
-            ],
-            deleted: false,
-            bench: false,
-            shadow: false,
-        },
-        {
-            id: 10,
-            isBench: false,
-            isShadow: false,
-            isDeleted: false,
-            firstName: 'Sample',
-            lastName: 'User',
-            email: 'sample.user@mindbowser.com',
-            projectId: 335,
-            jiraUserName: null,
-            startDate: 1686822136225,
-            endDate: 1687458600000,
-            utilization: 1,
-            projectType: 'EXTERNAL',
-            status: 'ACTIVE',
-            assignedBy: 38,
-            role: 'PM',
-            resourceId: 7,
-            resourceTechnologyId: [],
-            technologies: [],
-            deleted: false,
-            bench: false,
-            shadow: false,
-        },
-    ];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -96,7 +33,6 @@ export class AddCrComponent implements OnInit {
         this.initializeForm();
         this.setProjectIdSubscription();
         this.loadDevelopersEmail();
-
         this.loadProjectDetails();
     }
 
@@ -112,6 +48,7 @@ export class AddCrComponent implements OnInit {
                 mode: mode,
                 editData: member,
                 allResources: this.developerEmailList,
+                projectId: this.projectId,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
