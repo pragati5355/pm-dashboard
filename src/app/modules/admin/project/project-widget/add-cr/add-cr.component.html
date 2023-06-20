@@ -1,4 +1,4 @@
-<div class="p-8 w-full flex flex-col">
+<div *ngIf="!isLoading" class="p-8 w-full flex flex-col">
     <div class="flex flex-row justify-between items-center mb-4">
         <div
             class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
@@ -8,7 +8,7 @@
                 class="icon-size-6 text-3xl text-black"
                 [svgIcon]="'heroicons_outline:chevron-left'"
             ></mat-icon>
-            {{ "Add CR for Metrics" }}
+            {{ "Add CR for " + projectDetails?.project?.name }}
         </div>
     </div>
 
@@ -69,8 +69,10 @@
                 <span class="text-gray-500 text-2xl">CR Details</span>
 
                 <button
+                    (click)="openDialog('ADD', null)"
                     [color]="'primary'"
                     [matTooltip]="'Add Resource'"
+                    [disabled]="isLoadingDevelopersEmail"
                     class="ml-4"
                     mat-flat-button
                 >
@@ -150,7 +152,7 @@
                                         class="sm:block flex flex-row items-center w-full cursor-pointer"
                                     >
                                         <mat-icon
-                                            (click)="openDialog(member,'EDIT')"
+                                            (click)="openDialog(member, 'EDIT')"
                                             [matTooltip]="'Edit this resource'"
                                             svgIcon="heroicons_outline:pencil"
                                         ></mat-icon>

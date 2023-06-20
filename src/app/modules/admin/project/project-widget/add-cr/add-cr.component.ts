@@ -54,6 +54,7 @@ export class AddCrComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
                 this.loadProjectDetails();
+                this.loadDevelopersEmail();
             }
         });
     }
