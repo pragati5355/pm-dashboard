@@ -45,6 +45,7 @@ import { InvoicePercentageComponent } from './invoice-percentage/invoice-percent
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddCrComponent } from './add-cr/add-cr.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
         SpringProgressComponent,
         AssignBitbucketProjectDialogComponent,
         InvoicePercentageComponent,
-        AddCrComponent
+        AddCrComponent,
+        AddCrResourceDialogComponent
     ],
     imports: [
         FormsModule,
