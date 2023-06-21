@@ -125,6 +125,7 @@
                     (focus)="dateOfJoiningDatepicker1.open()"
                     [disabled]="currentCapacity === 0 ? true : false"
                     [min]="addResourceForm.get('startDate').value"
+                    [max]="this.data?.projectEndDate"
                 />
                 <mat-datepicker-toggle
                     matSuffix

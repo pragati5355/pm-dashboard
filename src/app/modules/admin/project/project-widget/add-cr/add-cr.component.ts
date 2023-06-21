@@ -49,6 +49,7 @@ export class AddCrComponent implements OnInit {
                 editData: member,
                 allResources: this.developerEmailList,
                 projectId: this.projectId,
+                projectEndDate: this.addCrForm?.get('newProjectEndDate')?.value,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
@@ -57,6 +58,12 @@ export class AddCrComponent implements OnInit {
                 this.loadDevelopersEmail();
             }
         });
+    }
+
+    submit() {
+        if (this.addCrForm?.valid) {
+            console.log(this.addCrForm?.value);
+        }
     }
 
     private loadDevelopersEmail() {
@@ -118,7 +125,7 @@ export class AddCrComponent implements OnInit {
         this.addCrForm = this.formBuilder.group({
             totalCrHours: ['', [Validators.required]],
             crLink: [''],
-            newProjectEndDate: ['', [Validators.required]],
+            newProjectEndDate: [''],
             teamMemberModel: [''],
         });
     }

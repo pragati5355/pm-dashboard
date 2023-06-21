@@ -15,35 +15,39 @@
     <div class="w-full bg-white shadow rounded p-8">
         <span class="text-gray-500 text-2xl">CR Summary</span>
         <form *ngIf="addCrForm" [formGroup]="addCrForm" class="mt-4">
-            <div class="mb-4 max-w-md">
-                <div>
-                    <span class="text-xl">Total CR hours</span>
-                </div>
-                <input
-                    class="h-full w-full flex-2 border-2 border-primary-200 rounded p-2"
-                    type="number"
-                    formControlName="totalCrHours"
-                    placeholder="Total cr hours"
-                />
+            <div class="mb-2 max-w-md">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                    <mat-label>Total CR hours</mat-label>
+                    <input
+                        matInput
+                        type="number"
+                        placeholder="Total CR hours"
+                        formControlName="totalCrHours"
+                    />
+                    <mat-error
+                        *ngIf="
+                            addCrForm?.get('totalCrHours')?.hasError('required')
+                        "
+                    >
+                        <div>Total CR hours is mandatory</div>
+                    </mat-error>
+                </mat-form-field>
             </div>
 
-            <div class="mb-4 max-w-md">
-                <div>
-                    <span class="text-xl">CR link</span>
-                </div>
-                <input
-                    class="h-full w-full flex-2 border-2 border-primary-200 rounded p-2"
-                    type="text"
-                    formControlName="crLink"
-                    placeholder="CR link"
-                />
+            <div class="mb-2 max-w-md">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                    <mat-label>CR link</mat-label>
+                    <input
+                        matInput
+                        placeholder="CR link"
+                        formControlName="crLink"
+                    />
+                </mat-form-field>
             </div>
 
             <div class="mb-6 max-w-md">
-                <div>
-                    <span class="text-xl">New project end date</span>
-                </div>
                 <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <mat-label>New project end date</mat-label>
                     <input
                         matInput
                         #inputJoining
@@ -174,12 +178,7 @@
             </div>
 
             <div class="flex justify-end mt-4">
-                <button
-                    [color]="'primary'"
-                    [matTooltip]="'Add Resource'"
-                    class="ml-4"
-                    mat-flat-button
-                >
+                <button (click)="submit()" [color]="'primary'" class="ml-4" mat-flat-button>
                     <span class="ml-2 mr-1">Submit</span>
                 </button>
             </div>
