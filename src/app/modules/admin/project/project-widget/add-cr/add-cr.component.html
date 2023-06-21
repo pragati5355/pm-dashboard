@@ -66,6 +66,15 @@
                         (closed)="inputJoining.blur()"
                     >
                     </mat-datepicker>
+                    <mat-error
+                        *ngIf="
+                            addCrForm
+                                ?.get('newProjectEndDate')
+                                ?.hasError('required')
+                        "
+                    >
+                        <div>New project end date is mandatory</div>
+                    </mat-error>
                 </mat-form-field>
             </div>
 
@@ -143,6 +152,14 @@
                                                 member?.shadow ? "Shadow" : null
                                             }}</span
                                         >
+                                        <span
+                                            *ngIf="
+                                                !member?.shadow &&
+                                                !member?.bench
+                                            "
+                                        >
+                                        -
+                                        </span>
                                     </div>
 
                                     <div class="hidden md:block truncate">
@@ -178,7 +195,12 @@
             </div>
 
             <div class="flex justify-end mt-4">
-                <button (click)="submit()" [color]="'primary'" class="ml-4" mat-flat-button>
+                <button
+                    (click)="submit()"
+                    [color]="'primary'"
+                    class="ml-4"
+                    mat-flat-button
+                >
                     <span class="ml-2 mr-1">Submit</span>
                 </button>
             </div>

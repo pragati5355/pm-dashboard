@@ -125,7 +125,7 @@ export class AddCrComponent implements OnInit {
         this.addCrForm = this.formBuilder.group({
             totalCrHours: ['', [Validators.required]],
             crLink: [''],
-            newProjectEndDate: [''],
+            newProjectEndDate: ['',[Validators.required]],
             teamMemberModel: [''],
         });
     }
