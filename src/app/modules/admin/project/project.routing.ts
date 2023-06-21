@@ -54,7 +54,7 @@ export const projectRoutes: Route[] = [
                 },
             },
             {
-                path: 'feedback/list',
+                path: ':id/feedback/list',
                 component: WeeklyFeedbackListComponent,
                 data: {
                     pageTitle: 'Weekly Feedback List',
