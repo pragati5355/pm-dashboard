@@ -147,67 +147,95 @@
             </mat-form-field>
         </div>
     </div>
-    <div class="w-full flex mt-2">
-        <div class="w-full">
-            <mat-form-field
-                [floatLabel]="'always'"
-                appearance="fill"
-                class="example-chip-list w-full flex-0 mb-2"
-            >
-                <mat-label>Technology *</mat-label>
-                <div class="flex flex-col">
-                    <div>
-                        <mat-chip-list #chipList>
-                            <input
-                                placeholder="Select technology..."
-                                #technologyInput
-                                formControlName="technology"
-                                [matAutocomplete]="auto"
-                                [matChipInputFor]="chipList"
-                                [matChipInputSeparatorKeyCodes]="
-                                    separatorKeysCodes
-                                "
-                                [matChipInputAddOnBlur]="addOnBlur"
-                                (matChipInputTokenEnd)="add($event)"
-                                class="w-full"
-                            />
-                        </mat-chip-list>
-                        <mat-autocomplete
-                            #auto="matAutocomplete"
-                            (optionSelected)="selected($event)"
-                        >
-                            <mat-option
+
+    <div class="flex flex-1 w-full mt-2">
+        <div class="w-full flex mr-3">
+            <div class="w-full">
+                <mat-form-field
+                    [floatLabel]="'always'"
+                    appearance="fill"
+                    class="example-chip-list w-full flex-0 mb-2"
+                >
+                    <mat-label>Technology *</mat-label>
+                    <div class="flex flex-col">
+                        <div>
+                            <mat-chip-list #chipList>
+                                <input
+                                    placeholder="Select technology..."
+                                    #technologyInput
+                                    formControlName="technology"
+                                    [matAutocomplete]="auto"
+                                    [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="
+                                        separatorKeysCodes
+                                    "
+                                    [matChipInputAddOnBlur]="addOnBlur"
+                                    (matChipInputTokenEnd)="add($event)"
+                                    class="w-full"
+                                />
+                            </mat-chip-list>
+                            <mat-autocomplete
+                                #auto="matAutocomplete"
+                                (optionSelected)="selected($event)"
+                            >
+                                <mat-option
+                                    *ngFor="
+                                        let technology of filteredTechnologies
+                                            | async
+                                    "
+                                    [value]="technology"
+                                >
+                                    {{ technology.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                        <mat-chip-list #chipList class="mb-2">
+                            <mat-chip
                                 *ngFor="
-                                    let technology of filteredTechnologies
-                                        | async
+                                    let technology of technologys;
+                                    let selectIndex = index
                                 "
-                                [value]="technology"
+                                [selectable]="selectable"
+                                [removable]="removable"
+                                (removed)="remove(technology, selectIndex)"
                             >
-                                {{ technology.name }}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </div>
-                    <mat-chip-list #chipList class="mb-2">
-                        <mat-chip
-                            *ngFor="
-                                let technology of technologys;
-                                let selectIndex = index
-                            "
-                            [selectable]="selectable"
-                            [removable]="removable"
-                            (removed)="remove(technology, selectIndex)"
-                        >
-                            <div *ngFor="let technologyi of alltechnologys">
-                                <div *ngIf="technologyi?.id == technology?.id">
-                                    {{ technologyi?.name }}
+                                <div *ngFor="let technologyi of alltechnologys">
+                                    <div
+                                        *ngIf="
+                                            technologyi?.id == technology?.id
+                                        "
+                                    >
+                                        {{ technologyi?.name }}
+                                    </div>
                                 </div>
-                            </div>
-                            <mat-icon matChipRemove *ngIf="removable"
-                                >cancel</mat-icon
-                            >
-                        </mat-chip>
-                    </mat-chip-list>
-                </div>
+                                <mat-icon matChipRemove *ngIf="removable"
+                                    >cancel</mat-icon
+                                >
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div *ngIf="showNoOfHoursField" class="w-full">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>No. of hours</mat-label>
+                <input
+                    matInput
+                    type="number"
+                    placeholder="No. of hours"
+                    formControlName="noOfHours"
+                />
+                <mat-error
+                    *ngIf="
+                        addResourceForm
+                            ?.get('noOfHours')
+                            ?.hasError('required')
+                    "
+                >
+                    <div>No. of hours is mandatory</div>
+                </mat-error>
             </mat-form-field>
         </div>
     </div>

@@ -15,67 +15,71 @@
     <div class="w-full bg-white shadow rounded p-8">
         <span class="text-gray-500 text-2xl">CR Summary</span>
         <form *ngIf="addCrForm" [formGroup]="addCrForm" class="mt-4">
-            <div class="mb-2 max-w-md">
-                <mat-form-field class="w-full" [floatLabel]="'always'">
-                    <mat-label>Total CR hours</mat-label>
-                    <input
-                        matInput
-                        type="number"
-                        placeholder="Total CR hours"
-                        formControlName="totalCrHours"
-                    />
-                    <mat-error
-                        *ngIf="
-                            addCrForm?.get('totalCrHours')?.hasError('required')
-                        "
-                    >
-                        <div>Total CR hours is mandatory</div>
-                    </mat-error>
-                </mat-form-field>
-            </div>
+            <div class="flex">
+                <div class="mb-2 flex-1">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Total CR hours</mat-label>
+                        <input
+                            matInput
+                            type="number"
+                            placeholder="Total CR hours"
+                            formControlName="totalCrHours"
+                        />
+                        <mat-error
+                            *ngIf="
+                                addCrForm
+                                    ?.get('totalCrHours')
+                                    ?.hasError('required')
+                            "
+                        >
+                            <div>Total CR hours is mandatory</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
 
-            <div class="mb-2 max-w-md">
-                <mat-form-field class="w-full" [floatLabel]="'always'">
-                    <mat-label>CR link</mat-label>
-                    <input
-                        matInput
-                        placeholder="CR link"
-                        formControlName="crLink"
-                    />
-                </mat-form-field>
-            </div>
+                <div class="mb-2 flex-1 mx-3">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>CR link</mat-label>
+                        <input
+                            matInput
+                            placeholder="CR link"
+                            formControlName="crLink"
+                        />
+                    </mat-form-field>
+                </div>
 
-            <div class="mb-6 max-w-md">
-                <mat-form-field [floatLabel]="'always'" class="w-full">
-                    <mat-label>New project end date</mat-label>
-                    <input
-                        matInput
-                        #inputJoining
-                        [placeholder]="'New project end date'"
-                        formControlName="newProjectEndDate"
-                        [matDatepicker]="dateOfJoiningDatepicker"
-                        (focus)="dateOfJoiningDatepicker.open()"
-                    />
-                    <mat-datepicker-toggle
-                        matSuffix
-                        [for]="dateOfJoiningDatepicker"
-                    >
-                    </mat-datepicker-toggle>
-                    <mat-datepicker
-                        #dateOfJoiningDatepicker
-                        (closed)="inputJoining.blur()"
-                    >
-                    </mat-datepicker>
-                    <mat-error
-                        *ngIf="
-                            addCrForm
-                                ?.get('newProjectEndDate')
-                                ?.hasError('required')
-                        "
-                    >
-                        <div>New project end date is mandatory</div>
-                    </mat-error>
-                </mat-form-field>
+                <div class="mb-6 flex-1">
+                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <mat-label>New project end date</mat-label>
+                        <input
+                            matInput
+                            #inputJoining
+                            [placeholder]="'New project end date'"
+                            formControlName="newProjectEndDate"
+                            [matDatepicker]="dateOfJoiningDatepicker"
+                            (focus)="dateOfJoiningDatepicker.open()"
+                        />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="dateOfJoiningDatepicker"
+                        >
+                        </mat-datepicker-toggle>
+                        <mat-datepicker
+                            #dateOfJoiningDatepicker
+                            (closed)="inputJoining.blur()"
+                        >
+                        </mat-datepicker>
+                        <mat-error
+                            *ngIf="
+                                addCrForm
+                                    ?.get('newProjectEndDate')
+                                    ?.hasError('required')
+                            "
+                        >
+                            <div>New project end date is mandatory</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
             </div>
 
             <div class="flex justify-between items-center mb-4">

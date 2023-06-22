@@ -54,6 +54,7 @@ export class AddCrResourceDialogComponent implements OnInit {
     alltechnologys: any[] = [];
     currentResourceTechnologyList: any[] = [];
     isEmailSelected: boolean = false;
+    showNoOfHoursField: boolean = false;
 
     constructor(
         private matDialogRef: MatDialogRef<AddCrResourceDialogComponent>,
@@ -231,6 +232,7 @@ export class AddCrResourceDialogComponent implements OnInit {
             bench: this.isResourceOnBench,
             shadow: this.isShadowResource,
             technologies: this.technologys,
+            extendedHours: this.addResourceForm?.value?.noOfHours,
         };
         if (this.mode === 'EDIT') {
             return {
@@ -247,6 +249,7 @@ export class AddCrResourceDialogComponent implements OnInit {
                 bench: this.isResourceOnBench,
                 shadow: this.isShadowResource,
                 technologies: this.technologys,
+                extendedHours: this.addResourceForm?.value?.noOfHours,
             };
         }
         return payload;
@@ -260,7 +263,10 @@ export class AddCrResourceDialogComponent implements OnInit {
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
             technology: [''],
+            noOfHours: [''],
         });
+
+        this.dynamicFieldValidationForHours();
 
         this.filteredTechnologies = this.addResourceForm
             .get('technology')
@@ -292,6 +298,29 @@ export class AddCrResourceDialogComponent implements OnInit {
     remove(technology: any, selectIndex: any): void {
         this.technologys.splice(selectIndex, 1);
         this.addResourceForm.get('technology')?.setValue('');
+    }
+
+    private dynamicFieldValidationForHours() {
+        this.addResourceForm
+            .get('endDate')
+            .valueChanges.subscribe((res: any) => {
+                if (
+                    res === '' ||
+                    res !==
+                        this.datePipe.transform(
+                            this.data?.editData?.endDate,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                        )
+                ) {
+                    this.showNoOfHoursField = true;
+                    this.addResourceForm
+                        .get('noOfHours')
+                        .setValidators(Validators.required);
+                    this.addResourceForm
+                        .get('noOfHours')
+                        .updateValueAndValidity();
+                }
+            });
     }
 
     private patchValuesInEditMode() {

@@ -62,27 +62,26 @@ export class AddCrComponent implements OnInit {
             }
 
             if (result?.editResource && result?.data) {
-                const index = this.resourceData?.findIndex(
-                    (resource) => resource?.email === result?.data?.email
-                );
-                this.resourceData[index] = result?.data;
-                const index2 = this.resourcePayload?.findIndex(
-                    (resource) => resource?.email === result?.data?.email
-                );
-                if (index2 !== -1) {
-                    this.resourcePayload[index2] = result?.data;
-                } else {
-                    this.resourcePayload?.push(result?.data);
-                }
+                this.editResource(result);
             }
         });
     }
 
     submit() {
         if (this.addCrForm?.valid) {
-            console.log(this.addCrForm?.value);
-            console.log('resourcePayload :', this.resourcePayload);
+            const payload = this.getPayload();
+            console.log('payload :', payload);
         }
+    }
+
+    private getPayload() {
+        return {
+            projectId: this.projectId,
+            extendedHours: this.addCrForm.get('totalCrHours')?.value,
+            endDate: this.addCrForm.get('newProjectEndDate')?.value,
+            link: this.addCrForm.get('crLink')?.value,
+            teamMembers: this.resourcePayload,
+        };
     }
 
     private loadDevelopersEmail() {
@@ -98,6 +97,21 @@ export class AddCrComponent implements OnInit {
                 this.isLoadingDevelopersEmail = false;
             }
         );
+    }
+
+    private editResource(result: any) {
+        const index = this.resourceData?.findIndex(
+            (resource) => resource?.email === result?.data?.email
+        );
+        this.resourceData[index] = result?.data;
+        const index2 = this.resourcePayload?.findIndex(
+            (resource) => resource?.email === result?.data?.email
+        );
+        if (index2 !== -1) {
+            this.resourcePayload[index2] = result?.data;
+        } else {
+            this.resourcePayload?.push(result?.data);
+        }
     }
 
     private loadProjectDetails() {
