@@ -34,9 +34,6 @@ export class LoggedInUserService {
                     this.setUser(response['data']);
                     return response['data'];
                 }
-                if (response?.status === 401) {
-                    this.authService.updateAndReload(window.location);
-                }
                 return null;
             })
         );

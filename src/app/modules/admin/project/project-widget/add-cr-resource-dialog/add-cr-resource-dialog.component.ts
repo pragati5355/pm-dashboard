@@ -89,26 +89,11 @@ export class AddCrResourceDialogComponent implements OnInit {
         }
 
         if (!this.addResourceForm.invalid) {
-            this.submitInProcess = true;
-            let payload = this.getCreateResourcePayload();
-            this.addCrService.mapResource(payload).subscribe(
-                (res: any) => {
-                    this.submitInProcess = false;
-                    if (res?.error === false) {
-                        this.snackBar.successSnackBar(res?.message);
-                        this.matDialogRef.close(true);
-                    }
-                    if (res?.error === true) {
-                        this.snackBar.errorSnackBar(res?.message);
-                    }
-                    if (res?.tokenExpire) {
-                        this.authService.updateAndReload(window.location);
-                    }
-                },
-                (err) => {
-                    this.submitInProcess = false;
-                }
-            );
+            let resourceData = this.getCreateResourcePayload();
+            this.matDialogRef.close({
+                data: resourceData,
+                editResource: this.mode === 'EDIT' ? true : false,
+            });
         }
     }
 
@@ -214,10 +199,10 @@ export class AddCrResourceDialogComponent implements OnInit {
     }
 
     private loadCheckBoxData() {
-        this.isResourceOnBench = this.data?.editData?.isBench || false;
-        this.isShadowResource = this.data?.editData?.isShadow || false;
-        this.markResourceAsBench = this.data?.editData?.isBench || false;
-        this.markResourceAsShadow = this.data?.editData?.isShadow || false;
+        this.isResourceOnBench = this.data?.editData?.bench || false;
+        this.isShadowResource = this.data?.editData?.shadow || false;
+        this.markResourceAsBench = this.data?.editData?.bench || false;
+        this.markResourceAsShadow = this.data?.editData?.shadow || false;
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
@@ -233,6 +218,7 @@ export class AddCrResourceDialogComponent implements OnInit {
         );
 
         let payload = {
+            email: this.addResourceForm.get('email')?.value,
             projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
@@ -249,6 +235,7 @@ export class AddCrResourceDialogComponent implements OnInit {
         if (this.mode === 'EDIT') {
             return {
                 id: this.data?.editData?.id,
+                email: this.addResourceForm.get('email')?.value,
                 projectId: this.projectId,
                 resourceId: this.data?.editData?.resourceId,
                 startDate: this.addResourceForm?.value?.startDate,

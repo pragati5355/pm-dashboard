@@ -17,6 +17,8 @@ export class AddCrComponent implements OnInit {
     isLoadingDevelopersEmail: boolean = false;
     developerEmailList: any[];
     projectDetails: any;
+    resourceData: any[];
+    resourcePayload: any[] = [];
     projectId: any;
     isLoading: boolean = false;
 
@@ -37,6 +39,7 @@ export class AddCrComponent implements OnInit {
     }
 
     openDialog(member: any, mode: string) {
+        console.log('edit data:', member);
         const emailList = this.filterOutAlreadyAssignedEmails();
         const dialogRef = this.dialog.open(AddCrResourceDialogComponent, {
             disableClose: true,
@@ -53,9 +56,24 @@ export class AddCrComponent implements OnInit {
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result) {
-                this.loadProjectDetails();
-                this.loadDevelopersEmail();
+            if (!result?.editResource && result?.data) {
+                this.resourceData = [...this.resourceData, result?.data];
+                this.resourcePayload?.push(result?.data);
+            }
+
+            if (result?.editResource && result?.data) {
+                const index = this.resourceData?.findIndex(
+                    (resource) => resource?.email === result?.data?.email
+                );
+                this.resourceData[index] = result?.data;
+                const index2 = this.resourcePayload?.findIndex(
+                    (resource) => resource?.email === result?.data?.email
+                );
+                if (index2 !== -1) {
+                    this.resourcePayload[index2] = result?.data;
+                } else {
+                    this.resourcePayload?.push(result?.data);
+                }
             }
         });
     }
@@ -63,6 +81,7 @@ export class AddCrComponent implements OnInit {
     submit() {
         if (this.addCrForm?.valid) {
             console.log(this.addCrForm?.value);
+            console.log('resourcePayload :', this.resourcePayload);
         }
     }
 
@@ -90,6 +109,7 @@ export class AddCrComponent implements OnInit {
                     this.isLoading = false;
                     if (res?.error === false) {
                         this.projectDetails = res?.data;
+                        this.resourceData = res?.data?.teamModel;
                     } else {
                         this.snackBar.errorSnackBar(res?.message);
                     }
@@ -125,7 +145,7 @@ export class AddCrComponent implements OnInit {
         this.addCrForm = this.formBuilder.group({
             totalCrHours: ['', [Validators.required]],
             crLink: [''],
-            newProjectEndDate: ['',[Validators.required]],
+            newProjectEndDate: ['', [Validators.required]],
             teamMemberModel: [''],
         });
     }
