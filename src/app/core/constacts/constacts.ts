@@ -17,7 +17,7 @@ export const AppConstants = {
     CONNECT_PROJECT: `${jiraBaseUrl}/jira-project`,
     CREATE_PROJECT: `${jiraBaseUrl}/connect-jira`,
     GET_JIRA_USER: `${jiraBaseUrl}/jira-user`,
-    SYNC_JIRA: `${jiraBaseUrl}/project-sync`,
+    SYNC_JIRA: `${springBootUrl}/sync-project`,
     GET_TEAM_MEMBER_LIST: `${projectBaseUrl}/get-team-member`,
     GET_RESOURCE_LIST: `${projectBaseUrl}/get-team-member`,
     ADD_RESOURCE_LIST: `${projectBaseUrl}/team-member`,

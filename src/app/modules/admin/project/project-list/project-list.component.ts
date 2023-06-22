@@ -130,7 +130,7 @@ export class ProjectListComponent implements OnInit {
                 if (res?.data || !res?.error) {
                     this.snackBar.successSnackBar(res?.message);
                     const payload = {
-                        perPageData: 0,
+                        perPageData: 1,
                         totalPerPageData: this.totalPageData,
                         projectKey: '',
                         projectName: this.searchValue,
