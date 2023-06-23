@@ -6,7 +6,12 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {
+    FormBuilder,
+    FormGroup,
+    Validators,
+    FormControl,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
@@ -82,7 +87,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             return;
         }
 
-        if (this.technologys?.length < 1 && this.addResourceForm?.value?.role != 'PM') {
+        if (
+            this.technologys?.length < 1 &&
+            this.addResourceForm?.value?.role != 'PM'
+        ) {
             this.snackBar.errorSnackBar('Add Technologys');
             return;
         }
@@ -90,7 +98,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         if (!this.addResourceForm.invalid) {
             this.submitInProcess = true;
             let payload = this.getCreateResourcePayload();
-            console.log(payload);
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
@@ -124,7 +131,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
-        console.log(event?.option?.value);
         this.technologys.push(event?.option?.value);
         this.technologyInput.nativeElement.value = '';
         this.addResourceForm.get('technology')?.setValue('');
@@ -203,7 +209,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
         this.checkEditMode();
-        console.log('this.data?.editData :', this.data?.editData);
     }
 
     private checkEditMode() {
@@ -245,7 +250,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             assignedBy: this.userID,
             role: this.addResourceForm?.value?.role,
             projectType: 'EXTERNAL',
-            bench : this.isResourceOnBench,
+            bench: this.isResourceOnBench,
             shadow: this.isShadowResource,
             technologies: this.technologys,
         };
@@ -284,10 +289,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 startWith(''),
                 map((technology: any | null) =>
                     technology ? this._filter(technology) : this._filterslice()
-                    
                 )
-        );
-        
+            );
+
         this.patchValuesInEditMode();
         this.addEmailFilteringAndSubscription();
         if (this.mode === 'EDIT') {
@@ -296,13 +300,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     _filter(value: any) {
-        console.log("AllTechnology : "+this.alltechnologys);
         return this.alltechnologys.filter(
             (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );
     }
     _filterslice() {
-        console.log("allTechnology : "+this.alltechnologys);
         return this.alltechnologys.filter(
             (obj) => !this.technologys?.some(({ id }) => obj.id === id)
         );

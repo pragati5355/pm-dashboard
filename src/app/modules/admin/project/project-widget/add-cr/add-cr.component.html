@@ -89,7 +89,7 @@
                     (click)="openDialog('ADD', null)"
                     [color]="'primary'"
                     [matTooltip]="'Add Resource'"
-                    [disabled]="isLoadingDevelopersEmail"
+                    [disabled]="isLoadingDevelopersEmail || submitInProcess"
                     class="ml-4"
                     mat-flat-button
                 >
@@ -174,11 +174,18 @@
                                     <div
                                         class="sm:block flex flex-row items-center w-full cursor-pointer"
                                     >
-                                        <mat-icon
+                                        <button
                                             (click)="openDialog(member, 'EDIT')"
                                             [matTooltip]="'Edit this resource'"
-                                            svgIcon="heroicons_outline:pencil"
-                                        ></mat-icon>
+                                            [disabled]="
+                                                isLoadingDevelopersEmail ||
+                                                submitInProcess
+                                            "
+                                        >
+                                            <mat-icon
+                                                svgIcon="heroicons_outline:pencil"
+                                            ></mat-icon>
+                                        </button>
                                     </div>
                                 </div>
                             </ng-container>

@@ -11,6 +11,7 @@ export class AddCrService {
         AppConstants['PROJECT_API_URL'] + '/get-project-by-id';
     mapResourceUrl = AppConstants['PROJECT_API_URL'] + '/map-resource';
     constructor(private http: HttpClient) {}
+    addCrUrl = AppConstants['PROJECT_API_URL'] + '/change-request';
 
     findAllDeveloperEmails() {
         return this.http.get(this.getEmailsUrl);
@@ -22,5 +23,9 @@ export class AddCrService {
 
     mapResource(obj: any) {
         return this.http.post(this.mapResourceUrl, obj);
+    }
+
+    changeRequest(obj: any) {
+        return this.http.post(this.addCrUrl, obj);
     }
 }

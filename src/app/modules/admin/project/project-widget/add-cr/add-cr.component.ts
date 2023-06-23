@@ -21,6 +21,7 @@ export class AddCrComponent implements OnInit {
     resourcePayload: any[] = [];
     projectId: any;
     isLoading: boolean = false;
+    submitInProcess: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -39,7 +40,6 @@ export class AddCrComponent implements OnInit {
     }
 
     openDialog(member: any, mode: string) {
-        console.log('edit data:', member);
         const emailList = this.filterOutAlreadyAssignedEmails();
         const dialogRef = this.dialog.open(AddCrResourceDialogComponent, {
             disableClose: true,
@@ -57,8 +57,7 @@ export class AddCrComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (!result?.editResource && result?.data) {
-                this.resourceData = [...this.resourceData, result?.data];
-                this.resourcePayload?.push(result?.data);
+                this.addResource(result);
             }
 
             if (result?.editResource && result?.data) {
@@ -70,7 +69,39 @@ export class AddCrComponent implements OnInit {
     submit() {
         if (this.addCrForm?.valid) {
             const payload = this.getPayload();
-            console.log('payload :', payload);
+            // console.log(payload);
+            this.submitInProcess = true;
+            this.addCrService.changeRequest(payload).subscribe(
+                (res: any) => {
+                    this.submitInProcess = false;
+                    if (res?.error === false) {
+                        this.snackBar.successSnackBar(res?.message);
+                        this.resourceData = [];
+                        this.resourcePayload = [];
+                        this.addCrForm?.reset();
+                        this.loadProjectDetails();
+                    } else {
+                        this.snackBar.errorSnackBar(res?.message);
+                    }
+                },
+                (err) => {
+                    this.submitInProcess = false;
+                    this.snackBar.errorSnackBar('Something Went Wrong');
+                }
+            );
+        }
+    }
+
+    private addResource(result: any) {
+        const index = this.resourceData?.findIndex(
+            (resource) => resource?.email === result?.data?.email
+        );
+
+        if (index === -1) {
+            this.resourceData = [...this.resourceData, result?.data];
+            this.resourcePayload?.push(result?.data);
+        } else {
+            this.snackBar.errorSnackBar(`${result?.data?.email} Already added`);
         }
     }
 
@@ -80,7 +111,7 @@ export class AddCrComponent implements OnInit {
             extendedHours: this.addCrForm.get('totalCrHours')?.value,
             endDate: this.addCrForm.get('newProjectEndDate')?.value,
             link: this.addCrForm.get('crLink')?.value,
-            teamMembers: this.resourcePayload,
+            resourceMapModel: this.resourcePayload,
         };
     }
 

@@ -15,7 +15,6 @@ import { AuthService } from '@services/auth/auth.service';
 import { DatePipe } from '@angular/common';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { AddCrService } from '../common/services/add-cr.service';
 
 @Component({
     selector: 'app-add-cr-resource-dialog',
@@ -62,8 +61,7 @@ export class AddCrResourceDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private snackBar: SnackBar,
         private authService: AuthService,
-        private datePipe: DatePipe,
-        private addCrService: AddCrService
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -72,6 +70,11 @@ export class AddCrResourceDialogComponent implements OnInit {
     }
 
     cancel() {
+        this.technologys = [];
+        this.alltechnologys = [];
+        this.technologyInput.nativeElement.value = '';
+        this.addResourceForm.get('technology')?.setValue('');
+        this.addResourceForm?.reset();
         this.matDialogRef.close();
     }
 
@@ -310,7 +313,8 @@ export class AddCrResourceDialogComponent implements OnInit {
                         this.datePipe.transform(
                             this.data?.editData?.endDate,
                             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
-                        )
+                        ) ||
+                    this.data?.editData?.extendedHours
                 ) {
                     this.showNoOfHoursField = true;
                     this.addResourceForm
@@ -337,6 +341,7 @@ export class AddCrResourceDialogComponent implements OnInit {
                     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
                 ),
                 utilization: this.data?.editData?.utilization,
+                noOfHours: this.data?.editData?.extendedHours,
             });
             this.technologys = this.data?.editData?.technologies;
             this.getCurrentResourceTechnology(this.data?.editData?.email);
