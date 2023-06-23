@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { WeeklyFeedbackFormComponent } from '../weekly-feedback-form/weekly-feedback-form.component';
 import { WeeklyStatusService } from '../common/services/weekly-status.service';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { ActivatedRoute } from '@angular/router';
+import { WeeklyFormComponent } from '../weekly-form/weekly-form.component';
 
 @Component({
   selector: 'app-weekly-feedback-list',
@@ -15,6 +17,9 @@ export class WeeklyFeedbackListComponent implements OnInit {
   loadingWeeklyFormData: boolean = false;
   public form!: any;
   userRole: string;
+  projectId = 0;
+  WeeklyFormList : any = [];
+  routeSubscribe: any;
   requiredReposSkeletonData = {
     rowsToDisplay: 10,
     displayProfilePicture: false,
@@ -22,7 +27,7 @@ export class WeeklyFeedbackListComponent implements OnInit {
 
   weeklyFeedbackModel = [ 
     {
-      weekEndDate : "09-02-2023",
+      weekEndDate : 1686670977488,
       submitDate : "10-02-2023",
       name: "Test",
       resource : "Pragati Gawade",
@@ -56,21 +61,28 @@ export class WeeklyFeedbackListComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private weeklyStatusService: WeeklyStatusService,
-    private loggedInUserService: LoggedInUserService
+    private loggedInUserService: LoggedInUserService,
+    private _route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.loadData();
+    this.getWeeklyStatusList();
+    this.routeSubscribe = this._route.params.subscribe((id) => {
+      if (id['id']) {
+          this.projectId = id['id'];
+      }
+  });
   }
 
-  weeklyFeedbackDialog() {
+  weeklyFeedbackDialog(){
     const dialogRef = this.dialog.open(WeeklyFeedbackFormComponent, {
         disableClose: true,
         width: '60%',
         panelClass: 'warn-dialog-content',
         autoFocus: false,
         data: {
-            // projectId: id,
+            projectId: this.projectId,
             form: this.form,
         },
     });
@@ -84,9 +96,23 @@ export class WeeklyFeedbackListComponent implements OnInit {
   private loadData() {
     this.getUserRole();
     this.loadWeeklyStatusForm();
- }
+  }
 
-   private getUserRole() {
+  getWeeklyStatusList(){
+    this.initialLoading = true;
+    this.weeklyStatusService.getWeeklyStatusList().subscribe(
+      (res:any)=>{
+        this.initialLoading = false;
+        this.WeeklyFormList = res?.data;
+        console.log("this.WeeklyFormList : ",this.WeeklyFormList);
+      },
+      (err) => {
+        this.initialLoading = false;
+      }
+    )
+  }
+
+  private getUserRole() {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
             if (res?.role) {
                 this.userRole = res?.role;
@@ -106,5 +132,23 @@ export class WeeklyFeedbackListComponent implements OnInit {
         }
     );
   } 
+
+  getDialogData(){
+    const dialogRef = this.dialog.open(WeeklyFormComponent, {
+      disableClose: true,
+      width: '60%',
+      panelClass: 'warn-dialog-content',
+      autoFocus: false,
+      data: {
+          projectId: this.projectId,
+      },
+  });
+  dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+          this.loadData();
+      }
+  });
+
+  }
 
 }

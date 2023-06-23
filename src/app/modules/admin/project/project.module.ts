@@ -45,6 +45,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedback-form.component';
 import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedback-list.component';
+import { WeeklyFormComponent } from './weekly-form/weekly-form.component';
 
 @NgModule({
     declarations: [
@@ -57,6 +58,7 @@ import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedb
         SkeletonComponent,
         WeeklyFeedbackFormComponent,
         WeeklyFeedbackListComponent,
+        WeeklyFormComponent,
     ],
     exports: [CdkStepperModule, MatStepperModule,WeeklyFeedbackListComponent],
     imports: [

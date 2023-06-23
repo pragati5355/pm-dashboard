@@ -50,6 +50,7 @@
                     >
                         <div>Week End Date</div>
                         <div>Submit Date</div>
+                        <div>Submitted By</div>
                         <div>Actions</div>
                     </div>
                     <ng-container *ngIf="!initialLoading">
@@ -67,11 +68,16 @@
                                     <div class="hidden md:block truncate">
                                         {{list.submitDate}}
                                     </div>
+                                     <!-- Submitted By -->
+                                     <div class="hidden md:block truncate">
+                                        {{list.name}}
+                                    </div>
                                     <!-- Action -->
                                     <div class="sm:block flex flex-row px-4 items-center w-full cursor-pointer">
-                                        <mat-icon
+                                        <mat-icon [matTooltip]="'View'"
                                             class="text-gray-400 icon-size-5 cursor-pointer"
                                             svgIcon="heroicons_outline:eye"
+                                            (click)="getDialogData()"
                                         ></mat-icon>
                                     </div>
                                 </div>

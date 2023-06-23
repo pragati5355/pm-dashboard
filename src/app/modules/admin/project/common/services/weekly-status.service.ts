@@ -9,6 +9,8 @@ export class WeeklyStatusService {
     getWeeklyStatusFormUrl =
         AppConstants['PROJECT_API_URL'] + '/get-form-by-type';
     saveWeeklyFormUrl = AppConstants['PROJECT_API_URL'] + '/weekly-form';
+
+    getWeeklyStatusListUrl =  AppConstants['PROJECT_API_URL'] + '/get-weekly-forms';
     constructor(private http: HttpClient) {}
 
     getWeeklyStatusFormComponent() {
@@ -19,5 +21,9 @@ export class WeeklyStatusService {
 
     saveWeeklyStatusForm(obj: any) {
         return this.http.post(this.saveWeeklyFormUrl, obj);
+    }
+
+    getWeeklyStatusList(){
+        return this.http.get(this.getWeeklyStatusListUrl);             
     }
 }
