@@ -89,3 +89,5 @@ export const ROLE_LIST = [
 export const API_LIST = {
     LOGGED_IN_USER: springBootUrl + '/user',
 };
+
+export const UTILIZATION_VALUES = [0.25, 0.5, 1];

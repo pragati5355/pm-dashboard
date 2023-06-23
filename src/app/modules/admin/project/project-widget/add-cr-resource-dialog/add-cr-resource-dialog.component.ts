@@ -1,34 +1,27 @@
 import {
-    ChangeDetectorRef,
     Component,
     ElementRef,
     Inject,
     OnInit,
     ViewChild,
 } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    Validators,
-    FormControl,
-} from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SnackBar } from '../../../../core/utils/snackBar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ROLE_LIST, UTILIZATION_VALUES } from 'app/core/constacts/constacts';
 import { map, Observable, startWith } from 'rxjs';
-import { ROLE_LIST, UTILIZATION_VALUES } from '../common/constants';
-import { AuthService } from '@services/auth/auth.service';
-import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
-import { DatePipe } from '@angular/common';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SnackBar } from 'app/core/utils/snackBar';
+import { AuthService } from '@services/auth/auth.service';
+import { DatePipe } from '@angular/common';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
-    selector: 'app-external-projects-add-resource',
-    templateUrl: './external-projects-add-resource.component.html',
-    styleUrls: ['./external-projects-add-resource.component.scss'],
+    selector: 'app-add-cr-resource-dialog',
+    templateUrl: './add-cr-resource-dialog.component.html',
+    styleUrls: ['./add-cr-resource-dialog.component.scss'],
 })
-export class ExternalProjectsAddResourceComponent implements OnInit {
+export class AddCrResourceDialogComponent implements OnInit {
     @ViewChild('technologyInput')
     technologyInput!: ElementRef;
 
@@ -60,16 +53,15 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alltechnologys: any[] = [];
     currentResourceTechnologyList: any[] = [];
     isEmailSelected: boolean = false;
+    showNoOfHoursField: boolean = false;
 
     constructor(
-        private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
-        private _formBuilder: FormBuilder,
+        private matDialogRef: MatDialogRef<AddCrResourceDialogComponent>,
+        private formBuilder: FormBuilder,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private snackBar: SnackBar,
-        private _authService: AuthService,
-        private externalProjectsService: ExternalProjectsApiService,
-        private datePipe: DatePipe,
-        private cd: ChangeDetectorRef
+        private authService: AuthService,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -78,6 +70,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     cancel() {
+        this.technologys = [];
+        this.alltechnologys = [];
+        this.technologyInput.nativeElement.value = '';
+        this.addResourceForm.get('technology')?.setValue('');
+        this.addResourceForm?.reset();
         this.matDialogRef.close();
     }
 
@@ -96,26 +93,11 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         }
 
         if (!this.addResourceForm.invalid) {
-            this.submitInProcess = true;
-            let payload = this.getCreateResourcePayload();
-            this.externalProjectsService.mapResource(payload).subscribe(
-                (res: any) => {
-                    this.submitInProcess = false;
-                    if (res?.error === false) {
-                        this.snackBar.successSnackBar(res?.message);
-                        this.matDialogRef.close(true);
-                    }
-                    if (res?.error === true) {
-                        this.snackBar.errorSnackBar(res?.message);
-                    }
-                    if (res?.tokenExpire) {
-                        this._authService.updateAndReload(window.location);
-                    }
-                },
-                (err) => {
-                    this.submitInProcess = false;
-                }
-            );
+            let resourceData = this.getCreateResourcePayload();
+            this.matDialogRef.close({
+                data: resourceData,
+                editResource: this.mode === 'EDIT' ? true : false,
+            });
         }
     }
 
@@ -207,7 +189,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.loadCheckBoxData();
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
-        this.userID = this._authService.getUser()?.userId;
+        this.userID = this.authService.getUser()?.userId;
         this.checkEditMode();
     }
 
@@ -217,15 +199,14 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.currentCapacity =
                 this.getCurrentResourceCapacity(this.data?.editData?.email) +
                 this.data?.editData?.utilization;
-            this.cd.detectChanges();
         }
     }
 
     private loadCheckBoxData() {
-        this.isResourceOnBench = this.data?.editData?.isBench || false;
-        this.isShadowResource = this.data?.editData?.isShadow || false;
-        this.markResourceAsBench = this.data?.editData?.isBench || false;
-        this.markResourceAsShadow = this.data?.editData?.isShadow || false;
+        this.isResourceOnBench = this.data?.editData?.bench || false;
+        this.isShadowResource = this.data?.editData?.shadow || false;
+        this.markResourceAsBench = this.data?.editData?.bench || false;
+        this.markResourceAsShadow = this.data?.editData?.shadow || false;
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
@@ -241,6 +222,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         );
 
         let payload = {
+            email: this.addResourceForm.get('email')?.value,
             projectId: this.projectId,
             resourceId: this.resourceId,
             startDate: this.addResourceForm?.value?.startDate,
@@ -253,10 +235,12 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             bench: this.isResourceOnBench,
             shadow: this.isShadowResource,
             technologies: this.technologys,
+            extendedHours: this.addResourceForm?.value?.noOfHours,
         };
         if (this.mode === 'EDIT') {
             return {
                 id: this.data?.editData?.id,
+                email: this.addResourceForm.get('email')?.value,
                 projectId: this.projectId,
                 resourceId: this.data?.editData?.resourceId,
                 startDate: this.addResourceForm?.value?.startDate,
@@ -268,20 +252,24 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 bench: this.isResourceOnBench,
                 shadow: this.isShadowResource,
                 technologies: this.technologys,
+                extendedHours: this.addResourceForm?.value?.noOfHours,
             };
         }
         return payload;
     }
 
     private initializeFormGroup() {
-        this.addResourceForm = this._formBuilder.group({
+        this.addResourceForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
             role: ['', [Validators.required]],
             startDate: [new Date(), [Validators.required]],
             endDate: ['', [Validators.required]],
             utilization: [null, [Validators.required]],
             technology: [''],
+            noOfHours: [''],
         });
+
+        this.dynamicFieldValidationForHours();
 
         this.filteredTechnologies = this.addResourceForm
             .get('technology')
@@ -315,6 +303,30 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.addResourceForm.get('technology')?.setValue('');
     }
 
+    private dynamicFieldValidationForHours() {
+        this.addResourceForm
+            .get('endDate')
+            .valueChanges.subscribe((res: any) => {
+                if (
+                    res === '' ||
+                    res !==
+                        this.datePipe.transform(
+                            this.data?.editData?.endDate,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                        ) ||
+                    this.data?.editData?.extendedHours
+                ) {
+                    this.showNoOfHoursField = true;
+                    this.addResourceForm
+                        .get('noOfHours')
+                        .setValidators(Validators.required);
+                    this.addResourceForm
+                        .get('noOfHours')
+                        .updateValueAndValidity();
+                }
+            });
+    }
+
     private patchValuesInEditMode() {
         if (this.mode === 'EDIT') {
             this.addResourceForm.patchValue({
@@ -329,6 +341,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
                 ),
                 utilization: this.data?.editData?.utilization,
+                noOfHours: this.data?.editData?.extendedHours,
             });
             this.technologys = this.data?.editData?.technologies;
             this.getCurrentResourceTechnology(this.data?.editData?.email);

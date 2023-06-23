@@ -139,7 +139,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
 
     openDialog(mode: String, data: any) {
         const emailList = this.filterOutAlreadyAssignedEmails();
-        console.log(data);
         const dialogRef = this.dialog.open(
             ExternalProjectsAddResourceComponent,
             {
