@@ -207,8 +207,14 @@
                     [color]="'primary'"
                     class="ml-4"
                     mat-flat-button
+                    [disabled]="submitInProcess"
                 >
                     <span class="ml-2 mr-1">Submit</span>
+                    <mat-progress-spinner
+                        *ngIf="submitInProcess"
+                        [diameter]="18"
+                        [mode]="'indeterminate'"
+                    ></mat-progress-spinner>
                 </button>
             </div>
         </form>
