@@ -45,20 +45,32 @@
                     class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
                 >
                     <div
-                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-16 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                         matSortDisableClear
                     >
+                        <div></div>
+                        <div>Submitted By</div>
                         <div>Week End Date</div>
                         <div>Submit Date</div>
-                        <div>Submitted By</div>
                         <div>Actions</div>
                     </div>
                     <ng-container *ngIf="!initialLoading">
                         <div class="grid">
                             <ng-container *ngFor="let list of weeklyFormList">
                                 <div
-                                    class="cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-16 border-b"
+                                    class="cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-10 border-b"
                                 >
+                                    <div class="flex items-center">
+                                        <div
+                                            class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                            {{list?.userModel?.firstName.charAt(0)}}
+                                        </div>
+                                    </div>
+                                     <!-- Submitted By -->
+                                     <div class="hidden md:block truncate">
+                                        {{list?.userModel?.firstName}} {{list?.userModel?.lastName}} ({{list?.userModel?.role}})
+                                    </div>
+                                    
                                      <!-- Week End Date -->
                                     <div class="hidden md:block truncate">
                                         {{list?.createdAt | date}}
@@ -67,10 +79,6 @@
                                      <!-- Submit Date -->
                                     <div class="hidden md:block truncate">
                                         {{list?.lastModifiedAt | date}}
-                                    </div>
-                                     <!-- Submitted By -->
-                                     <div class="hidden md:block truncate">
-                                        {{list?.userModel?.firstName}} {{list?.userModel?.lastName}} ({{list?.userModel?.role}})
                                     </div>
                                     <!-- Action -->
                                     <div class="sm:block flex flex-row px-4 items-center w-full cursor-pointer">
