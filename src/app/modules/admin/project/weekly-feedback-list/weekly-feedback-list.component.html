@@ -93,13 +93,13 @@
                         </div>      
                     </ng-container>
                     
-                    <!-- <ng-container>
+                    <ng-container *ngIf="weeklyFormList.length == 0">
                         <div
                             class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
                         >
                             Looks like there is no weekly feedback submitted
                         </div>
-                    </ng-container> -->
+                    </ng-container> 
                     <ng-container *ngIf="initialLoading">
                         <app-table-skeleton
                             [skeletonData]="requiredReposSkeletonData"
