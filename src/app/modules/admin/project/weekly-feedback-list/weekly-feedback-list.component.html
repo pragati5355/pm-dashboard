@@ -61,16 +61,16 @@
                                 >
                                      <!-- Week End Date -->
                                     <div class="hidden md:block truncate">
-                                        {{list.weekEndDate}}
+                                        {{list.weekEndDate | date}}
                                     </div>
 
                                      <!-- Submit Date -->
                                     <div class="hidden md:block truncate">
-                                        {{list.submitDate}}
+                                        {{list.submitDate | date}}
                                     </div>
                                      <!-- Submitted By -->
                                      <div class="hidden md:block truncate">
-                                        {{list.name}}
+                                        {{list.name}} ({{list.role}})
                                     </div>
                                     <!-- Action -->
                                     <div class="sm:block flex flex-row px-4 items-center w-full cursor-pointer">

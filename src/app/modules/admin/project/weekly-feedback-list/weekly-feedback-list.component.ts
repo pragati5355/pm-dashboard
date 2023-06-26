@@ -5,6 +5,7 @@ import { WeeklyStatusService } from '../common/services/weekly-status.service';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { ActivatedRoute } from '@angular/router';
 import { WeeklyFormComponent } from '../weekly-form/weekly-form.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-weekly-feedback-list',
@@ -29,32 +30,37 @@ export class WeeklyFeedbackListComponent implements OnInit {
     {
       weekEndDate : 1686670977488,
       submitDate : "10-02-2023",
-      name: "Test",
+      name: "Pragati Gawade",
       resource : "Pragati Gawade",
+      role :"PM"
     },
     {
       weekEndDate : "04-02-2023",
       submitDate : "06-02-2023",
       name: "Test1",
       resource : "Pragati Gawade",
+      role :"ADMIN"
     },
     {
       weekEndDate : "02-06-2023",
       submitDate : "04-06-2023",
       name: "Test2",
       resource : "Pragati Gawade",
+      role :"PM"
     },
     {
       weekEndDate : "07-07-2023",
       submitDate : "10-07-2023",
       name: "Test3",
       resource : "Pragati Gawade",
+      role :"ADMIN"
     },
     {
-      weekEndDate : "15-04-2023",
-      submitDate : "18-04-2023",
+      weekEndDate : 1686745620709,
+      submitDate :1686670977488,
       name: "Test4",
       resource : "Pragati Gawade",
+      role :"ADMIN"
     },
   ]
 
@@ -63,6 +69,7 @@ export class WeeklyFeedbackListComponent implements OnInit {
     private weeklyStatusService: WeeklyStatusService,
     private loggedInUserService: LoggedInUserService,
     private _route: ActivatedRoute,
+    public datePipe : DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -100,7 +107,10 @@ export class WeeklyFeedbackListComponent implements OnInit {
 
   getWeeklyStatusList(){
     this.initialLoading = true;
-    this.weeklyStatusService.getWeeklyStatusList().subscribe(
+    const payload = {
+      projectId: this.projectId,
+    }
+    this.weeklyStatusService.getWeeklyStatusList(payload).subscribe(
       (res:any)=>{
         this.initialLoading = false;
         this.WeeklyFormList = res?.data;
