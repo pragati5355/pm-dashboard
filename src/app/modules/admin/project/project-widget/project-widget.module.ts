@@ -43,6 +43,11 @@ import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
 import { ProjectWidgetRoutingModule } from './project-widget.routing';
 import { InvoicePercentageComponent } from './invoice-percentage/invoice-percentage.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AddCrComponent } from './add-cr/add-cr.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatChipsModule } from '@angular/material/chips';
+
+import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
 
 @NgModule({
     declarations: [
@@ -62,6 +67,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         SpringProgressComponent,
         AssignBitbucketProjectDialogComponent,
         InvoicePercentageComponent,
+        AddCrComponent,
+        AddCrResourceDialogComponent,
     ],
     imports: [
         FormsModule,
@@ -97,6 +104,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatProgressSpinnerModule,
         SkeletonModule,
         MatFormFieldModule,
+        MatDatepickerModule,
+        MatChipsModule,
     ],
     exports: [
         ProjectDetailsComponent,

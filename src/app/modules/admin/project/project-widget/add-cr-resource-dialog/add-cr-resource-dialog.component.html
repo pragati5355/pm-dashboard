@@ -1,0 +1,312 @@
+<div
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
+>
+    <div *ngIf="!disableEmailField" class="text-lg font-medium">
+        Add Resource
+    </div>
+    <div *ngIf="disableEmailField" class="text-lg font-medium">
+        Update Resource
+    </div>
+    <button
+        mat-icon-button
+        (click)="cancel()"
+        [tabIndex]="-1"
+        [disabled]="submitInProcess"
+    >
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"
+        ></mat-icon>
+    </button>
+</div>
+<form
+    *ngIf="addResourceForm"
+    [formGroup]="addResourceForm"
+    class="mt-12 overscroll-contain"
+>
+    <div class="w-full flex flex-1">
+        <div class="w-full mr-3">
+            <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
+                <mat-label class="">Email</mat-label>
+                <input
+                    matInput
+                    [placeholder]="'Email'"
+                    aria-label="email"
+                    #emailInput
+                    [matAutocomplete]="auto1"
+                    formControlName="email"
+                />
+                <mat-autocomplete
+                    #auto1="matAutocomplete"
+                    (optionSelected)="getSelectedEmail($event.option.value)"
+                >
+                    <mat-option
+                        *ngFor="let item of filteredEmails | async"
+                        [value]="item?.email"
+                    >
+                        <span>{{ item?.email }}</span>
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error
+                    *ngIf="addResourceForm?.get('email')?.hasError('required')"
+                >
+                    <div>Email is mandatory</div>
+                </mat-error>
+                <mat-icon
+                    *ngIf="isEmailSelected"
+                    class="icon-size-5 cursor-pointer"
+                    matSuffix
+                    [svgIcon]="'heroicons_solid:x'"
+                    (click)="$event.stopPropagation(); clearSelectedEmail()"
+                ></mat-icon>
+            </mat-form-field>
+        </div>
+        <div class="w-full">
+            <mat-form-field [floatLabel]="'always'" class="w-full mt-2">
+                <mat-label class="">Role on this project</mat-label>
+                <mat-select
+                    placeholder="Select role"
+                    formControlName="role"
+                    [disabled]="currentCapacity === 0 ? true : false"
+                >
+                    <mat-option *ngFor="let role of ROLE_LIST" [value]="role">
+                        {{ role }}
+                    </mat-option>
+                </mat-select>
+                <mat-error
+                    *ngIf="addResourceForm?.get('role')?.hasError('required')"
+                >
+                    <div>Role is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="w-full flex flex-1 mt-2">
+        <div class="w-full mr-3">
+            <mat-form-field [floatLabel]="'always'" class="w-full">
+                <mat-label>Start Date</mat-label>
+                <input
+                    matInput
+                    #inputJoining
+                    [placeholder]="'Start Date'"
+                    formControlName="startDate"
+                    [matDatepicker]="dateOfJoiningDatepicker"
+                    (focus)="dateOfJoiningDatepicker.open()"
+                    [disabled]="currentCapacity === 0 ? true : false"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="dateOfJoiningDatepicker"
+                >
+                </mat-datepicker-toggle>
+                <mat-datepicker
+                    #dateOfJoiningDatepicker
+                    (closed)="inputJoining.blur()"
+                >
+                </mat-datepicker>
+                <mat-error
+                    *ngIf="
+                        addResourceForm?.get('startDate')?.hasError('required')
+                    "
+                >
+                    <div>Start Date is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="w-full">
+            <mat-form-field [floatLabel]="'always'" class="w-full">
+                <mat-label>End Date</mat-label>
+                <input
+                    matInput
+                    #inputJoining
+                    [placeholder]="'End Date'"
+                    formControlName="endDate"
+                    [matDatepicker]="dateOfJoiningDatepicker1"
+                    (focus)="dateOfJoiningDatepicker1.open()"
+                    [disabled]="currentCapacity === 0 ? true : false"
+                    [min]="addResourceForm.get('startDate').value"
+                    [max]="this.data?.projectEndDate"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="dateOfJoiningDatepicker1"
+                >
+                </mat-datepicker-toggle>
+                <mat-datepicker
+                    #dateOfJoiningDatepicker1
+                    (closed)="inputJoining.blur()"
+                >
+                </mat-datepicker>
+                <mat-error
+                    *ngIf="
+                        addResourceForm?.get('endDate')?.hasError('required')
+                    "
+                >
+                    <div>End Date is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="flex flex-1 w-full mt-2">
+        <div class="w-full flex mr-3">
+            <div class="w-full">
+                <mat-form-field
+                    [floatLabel]="'always'"
+                    appearance="fill"
+                    class="example-chip-list w-full flex-0 mb-2"
+                >
+                    <mat-label>Technology *</mat-label>
+                    <div class="flex flex-col">
+                        <div>
+                            <mat-chip-list #chipList>
+                                <input
+                                    placeholder="Select technology..."
+                                    #technologyInput
+                                    formControlName="technology"
+                                    [matAutocomplete]="auto"
+                                    [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="
+                                        separatorKeysCodes
+                                    "
+                                    [matChipInputAddOnBlur]="addOnBlur"
+                                    (matChipInputTokenEnd)="add($event)"
+                                    class="w-full"
+                                />
+                            </mat-chip-list>
+                            <mat-autocomplete
+                                #auto="matAutocomplete"
+                                (optionSelected)="selected($event)"
+                            >
+                                <mat-option
+                                    *ngFor="
+                                        let technology of filteredTechnologies
+                                            | async
+                                    "
+                                    [value]="technology"
+                                >
+                                    {{ technology.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                        <mat-chip-list #chipList class="mb-2">
+                            <mat-chip
+                                *ngFor="
+                                    let technology of technologys;
+                                    let selectIndex = index
+                                "
+                                [selectable]="selectable"
+                                [removable]="removable"
+                                (removed)="remove(technology, selectIndex)"
+                            >
+                                <div *ngFor="let technologyi of alltechnologys">
+                                    <div
+                                        *ngIf="
+                                            technologyi?.id == technology?.id
+                                        "
+                                    >
+                                        {{ technologyi?.name }}
+                                    </div>
+                                </div>
+                                <mat-icon matChipRemove *ngIf="removable"
+                                    >cancel</mat-icon
+                                >
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div *ngIf="showNoOfHoursField" class="w-full">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>{{
+                    this.mode === "EDIT" ? "Extended Hours" : "No. of hours"
+                }}</mat-label>
+                <input
+                    matInput
+                    type="number"
+                    placeholder="No. of hours"
+                    formControlName="noOfHours"
+                />
+                <mat-error
+                    *ngIf="
+                        addResourceForm?.get('noOfHours')?.hasError('required')
+                    "
+                >
+                    <div>No. of hours is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="flex flex-1 items-center">
+        <div class="w-full flex flex-row ml-2">
+            <label class="font-semibold mt-1">Utilization *</label>
+            <mat-radio-group
+                aria-labelledby="example-radio-group-label"
+                class="example-radio-group"
+                formControlName="utilization"
+            >
+                <mat-radio-button
+                    class="ml-4 example-radio-button"
+                    [color]="'primary'"
+                    *ngFor="let value of utilizationValues"
+                    [disabled]="value > currentCapacity"
+                    [value]="value"
+                >
+                    {{ value }}
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <div class="flex w-full mt-3 ml-3 items-center">
+            <div class="mb-4 mr-8">
+                <mat-checkbox
+                    [color]="'primary'"
+                    [checked]="markResourceAsBench"
+                    (change)="resourceOnBench($event?.checked)"
+                    ><span class="font-semibold">On Bench</span></mat-checkbox
+                >
+            </div>
+
+            <div class="mb-4">
+                <mat-checkbox
+                    [color]="'primary'"
+                    [checked]="markResourceAsShadow"
+                    (change)="shadowResource($event?.checked)"
+                    ><span class="font-semibold"
+                        >Shadow Resource</span
+                    ></mat-checkbox
+                >
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-end mt-3">
+        <button
+            mat-stroked-button
+            type="button"
+            class="px-6 mr-2"
+            (click)="cancel()"
+            [disabled]="submitInProcess"
+        >
+            Cancel
+        </button>
+        <button
+            class="ml-3"
+            mat-flat-button
+            [color]="'primary'"
+            (click)="submitResourceData()"
+            [disabled]="submitInProcess"
+            [disabled]="currentCapacity === 0 ? true : false"
+        >
+            <span class="mx-2">{{ mode === "EDIT" ? "Update" : "Add" }}</span>
+            <mat-progress-spinner
+                *ngIf="submitInProcess"
+                [diameter]="18"
+                [mode]="'indeterminate'"
+            ></mat-progress-spinner>
+        </button>
+    </div>
+</form>
