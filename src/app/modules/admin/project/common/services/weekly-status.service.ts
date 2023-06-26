@@ -6,9 +6,11 @@ import { AppConstants } from 'app/core/constacts/constacts';
     providedIn: 'root',
 })
 export class WeeklyStatusService {
-    getWeeklyStatusFormUrl =
-        AppConstants['PROJECT_API_URL'] + '/get-form-by-type';
+    getWeeklyStatusFormUrl = AppConstants['PROJECT_API_URL'] + '/get-form-by-type';
+
     saveWeeklyFormUrl = AppConstants['PROJECT_API_URL'] + '/weekly-form';
+
+    getWeeklyStatusListUrl =  AppConstants['PROJECT_API_URL'] + '/weekly-form-by-project-id';
     constructor(private http: HttpClient) {}
 
     getWeeklyStatusFormComponent() {
@@ -19,5 +21,9 @@ export class WeeklyStatusService {
 
     saveWeeklyStatusForm(obj: any) {
         return this.http.post(this.saveWeeklyFormUrl, obj);
+    }
+
+    getWeeklyStatusList(id:any){
+        return this.http.post(this.getWeeklyStatusListUrl,id);             
     }
 }
