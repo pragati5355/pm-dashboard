@@ -55,29 +55,29 @@
                     </div>
                     <ng-container *ngIf="!initialLoading">
                         <div class="grid">
-                            <ng-container *ngFor="let list of weeklyFeedbackModel">
+                            <ng-container *ngFor="let list of WeeklyFormList">
                                 <div
                                     class="cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-16 border-b"
                                 >
                                      <!-- Week End Date -->
                                     <div class="hidden md:block truncate">
-                                        {{list.weekEndDate | date}}
+                                        {{list?.createdAt | date}}
                                     </div>
 
                                      <!-- Submit Date -->
                                     <div class="hidden md:block truncate">
-                                        {{list.submitDate | date}}
+                                        {{list?.lastModifiedAt | date}}
                                     </div>
                                      <!-- Submitted By -->
                                      <div class="hidden md:block truncate">
-                                        {{list.name}} ({{list.role}})
+                                        {{list?.userModel?.firstName}} {{list?.userModel?.lastName}} ({{list?.userModel?.role}})
                                     </div>
                                     <!-- Action -->
                                     <div class="sm:block flex flex-row px-4 items-center w-full cursor-pointer">
                                         <mat-icon [matTooltip]="'View'"
                                             class="text-gray-400 icon-size-5 cursor-pointer"
                                             svgIcon="heroicons_outline:eye"
-                                            (click)="getDialogData()"
+                                            (click)="getDialogData(list.formResponse)"
                                         ></mat-icon>
                                     </div>
                                 </div>

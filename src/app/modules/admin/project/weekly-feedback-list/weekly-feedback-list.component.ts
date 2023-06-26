@@ -74,12 +74,12 @@ export class WeeklyFeedbackListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.getWeeklyStatusList();
     this.routeSubscribe = this._route.params.subscribe((id) => {
       if (id['id']) {
           this.projectId = id['id'];
-      }
-  });
+    }
+    });
+    this.getWeeklyStatusList();
   }
 
   weeklyFeedbackDialog(){
@@ -143,7 +143,7 @@ export class WeeklyFeedbackListComponent implements OnInit {
     );
   } 
 
-  getDialogData(){
+  getDialogData(formResponse:any){
     const dialogRef = this.dialog.open(WeeklyFormComponent, {
       disableClose: true,
       width: '60%',

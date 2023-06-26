@@ -80,12 +80,6 @@
                                             <span class="leading-relaxed whitespace-nowrap">{{project.status}}</span>
                                         </span>
                                         <div>
-                                            <button class="mr-2 inline-flex items-center"
-                                            [disabled]="loadingWeeklyFormData"
-                                            mat-flat-button [color]="'primary'"
-                                            (click)="weeklyFeedbackDialog(project?.id)">
-                                            <span class="ml-2 mr-1">Weekly Feedback</span>
-                                        </button>
                                             <button class="inline-flex items-center"
                                                 *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
                                                 (click)="syncProject($event,project.id)">
@@ -255,11 +249,6 @@
                                             >
                                             Sync Now</span
                                         >
-                                    </button>
-                                    <button 
-                                        mat-menu-item
-                                        (click)="weeklyFeedbackDialog(project?.id)">
-                                        <span>Weekly Feedback</span>
                                     </button>
                                 </mat-menu>
                             </div>

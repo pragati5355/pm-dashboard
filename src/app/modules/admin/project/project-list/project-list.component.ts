@@ -24,7 +24,7 @@ import { LoggedInUserService } from '@modules/admin/common/services/logged-in-us
 })
 export class ProjectListComponent implements OnInit {
     // @ViewChildren(FuseCardComponent, { read: ElementRef })
-    public form!: any;
+   
     loadingWeeklyFormData: boolean = false;
     pageNo = 1;
     pagination = false;
@@ -145,23 +145,7 @@ export class ProjectListComponent implements OnInit {
             },
         });
     }
-    weeklyFeedbackDialog(id: any) {
-        const dialogRef = this.dialog.open(WeeklyFeedbackFormComponent, {
-            disableClose: true,
-            width: '60%',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                projectId: id,
-                form: this.form,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result) {
-                this.loadData();
-            }
-        });
-    }
+
     clearSearch() {
         this.projectSearchInput.setValue('', { emitEvent: false });
         this.count = 1;
@@ -238,7 +222,6 @@ export class ProjectListComponent implements OnInit {
             projectName: this.searchValue,
         };
         this.getList(payload);
-        this.loadWeeklyStatusForm();
     }
 
     private getUserRole() {
@@ -247,19 +230,6 @@ export class ProjectListComponent implements OnInit {
                 this.userRole = res?.role;
             }
         });
-    }
-
-    private loadWeeklyStatusForm() {
-        this.loadingWeeklyFormData = true;
-        this.weeklyStatusService.getWeeklyStatusFormComponent().subscribe(
-            (res: any) => {
-                this.loadingWeeklyFormData = false;
-                this.form = res?.data;
-            },
-            (err) => {
-                this.loadingWeeklyFormData = false;
-            }
-        );
     }
 
     private checkForLargerScreen() {
