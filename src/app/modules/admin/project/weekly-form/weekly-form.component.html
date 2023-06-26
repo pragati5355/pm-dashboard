@@ -12,13 +12,18 @@
     </div>
 
     <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
-        <div>
+        <div *ngIf="!initialLoading">
             <div class="formio-render">
                 <div>
-                    <formio [submission]="formData" [readOnly]="true"></formio>
+                    <formio  [form]="form" [submission]="formData" [readOnly]="true"></formio>
                 </div>
             </div>
         </div>
+        <ng-container  *ngIf="initialLoading">
+            <div class="p-8 sm:p-16 text-2xl font-semibold tracking-tight text-center">
+              Loading.....
+            </div>
+          </ng-container>
     </div>
 </div>
 

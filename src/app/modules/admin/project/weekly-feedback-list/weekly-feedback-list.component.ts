@@ -19,50 +19,13 @@ export class WeeklyFeedbackListComponent implements OnInit {
   public form!: any;
   userRole: string;
   projectId = 0;
-  WeeklyFormList : any = [];
+  weeklyFormList : any = [];
+  formList: any = [];
   routeSubscribe: any;
   requiredReposSkeletonData = {
     rowsToDisplay: 10,
     displayProfilePicture: false,
   };
-
-  weeklyFeedbackModel = [ 
-    {
-      weekEndDate : 1686670977488,
-      submitDate : "10-02-2023",
-      name: "Pragati Gawade",
-      resource : "Pragati Gawade",
-      role :"PM"
-    },
-    {
-      weekEndDate : "04-02-2023",
-      submitDate : "06-02-2023",
-      name: "Test1",
-      resource : "Pragati Gawade",
-      role :"ADMIN"
-    },
-    {
-      weekEndDate : "02-06-2023",
-      submitDate : "04-06-2023",
-      name: "Test2",
-      resource : "Pragati Gawade",
-      role :"PM"
-    },
-    {
-      weekEndDate : "07-07-2023",
-      submitDate : "10-07-2023",
-      name: "Test3",
-      resource : "Pragati Gawade",
-      role :"ADMIN"
-    },
-    {
-      weekEndDate : 1686745620709,
-      submitDate :1686670977488,
-      name: "Test4",
-      resource : "Pragati Gawade",
-      role :"ADMIN"
-    },
-  ]
 
   constructor(
     private dialog: MatDialog,
@@ -113,8 +76,8 @@ export class WeeklyFeedbackListComponent implements OnInit {
     this.weeklyStatusService.getWeeklyStatusList(payload).subscribe(
       (res:any)=>{
         this.initialLoading = false;
-        this.WeeklyFormList = res?.data;
-        console.log("this.WeeklyFormList : ",this.WeeklyFormList);
+        this.weeklyFormList = res?.data;
+        console.log("this.WeeklyFormList : ",this.weeklyFormList);
       },
       (err) => {
         this.initialLoading = false;
@@ -143,7 +106,9 @@ export class WeeklyFeedbackListComponent implements OnInit {
     );
   } 
 
-  getDialogData(formResponse:any){
+  getDialogData(
+    formResponse: any,
+    formComponent:any){
     const dialogRef = this.dialog.open(WeeklyFormComponent, {
       disableClose: true,
       width: '60%',
@@ -151,14 +116,21 @@ export class WeeklyFeedbackListComponent implements OnInit {
       autoFocus: false,
       data: {
           projectId: this.projectId,
+          formResponse: formResponse,
+          formComponent : formComponent,
       },
   });
   dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-          this.loadData();
+          this.resetList();
       }
   });
 
   }
+
+  private resetList() {
+    this.formList = [];
+    this.getWeeklyStatusList();
+}
 
 }

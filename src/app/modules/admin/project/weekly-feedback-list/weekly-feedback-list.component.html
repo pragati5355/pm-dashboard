@@ -55,7 +55,7 @@
                     </div>
                     <ng-container *ngIf="!initialLoading">
                         <div class="grid">
-                            <ng-container *ngFor="let list of WeeklyFormList">
+                            <ng-container *ngFor="let list of weeklyFormList">
                                 <div
                                     class="cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-16 border-b"
                                 >
@@ -77,7 +77,7 @@
                                         <mat-icon [matTooltip]="'View'"
                                             class="text-gray-400 icon-size-5 cursor-pointer"
                                             svgIcon="heroicons_outline:eye"
-                                            (click)="getDialogData(list.formResponse)"
+                                            (click)="getDialogData(list?.formResponse, list?.formComponent)"
                                         ></mat-icon>
                                     </div>
                                 </div>
