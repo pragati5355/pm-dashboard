@@ -86,6 +86,68 @@
                                         mandatory</div>
                                 </mat-error>
                             </mat-form-field>
+                            <div class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 flex flex-1">
+                                <div class="w-full">            
+                                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                                        <mat-label>Start Date</mat-label>
+                                        <input
+                                            matInput
+                                            #inputJoining
+                                            [placeholder]="'Start Date'"
+                                            formControlName="startDate"
+                                            [matDatepicker]="dateOfJoiningDatepicker"
+                                            (focus)="dateOfJoiningDatepicker.open()"
+                                        />
+                                        <mat-datepicker-toggle
+                                            matSuffix
+                                            [for]="dateOfJoiningDatepicker"
+                                        >
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker
+                                            #dateOfJoiningDatepicker
+                                            (closed)="inputJoining.blur()"
+                                        >
+                                        </mat-datepicker>
+                                        <mat-error
+                                            *ngIf="
+                                            projectDetails?.get('startDate')?.hasError('required')
+                                            "
+                                        >
+                                            <div>Start Date is mandatory</div>
+                                        </mat-error>
+                                    </mat-form-field></div>
+                                <div class="w-full ml-4 mr-">
+                                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                                        <mat-label>End Date</mat-label>
+                                        <input
+                                            matInput
+                                            #inputJoining
+                                            [placeholder]="'End Date'"
+                                            formControlName="endDate"
+                                            [matDatepicker]="dateOfJoiningDatepicker1"
+                                            (focus)="dateOfJoiningDatepicker1.open()"
+                                            [min]="projectDetails?.get('startDate')?.value"
+                                        />
+                                        <mat-datepicker-toggle
+                                            matSuffix
+                                            [for]="dateOfJoiningDatepicker1"
+                                        >
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker
+                                            #dateOfJoiningDatepicker1
+                                            (closed)="inputJoining.blur()"
+                                        >
+                                        </mat-datepicker>
+                                        <mat-error
+                                            *ngIf="
+                                                projectDetails?.get('endDate')?.hasError('required')
+                                            "
+                                        >
+                                            <div>End Date is mandatory</div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto ">
 
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
@@ -613,7 +675,7 @@
                                             <mat-label>Start Date</mat-label>
                                             <input matInput #inputJoining [placeholder]="'Start Date'"
                                                 formControlName="startDate" [matDatepicker]="dateOfJoiningDatepicker"
-                                                (focus)="dateOfJoiningDatepicker.open()" />
+                                                (focus)="dateOfJoiningDatepicker.open()" [min]="projectDetails?.get('startDate')?.value"/>
                                             <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker">
                                             </mat-datepicker-toggle>
                                             <mat-datepicker #dateOfJoiningDatepicker (closed)="inputJoining.blur()">
@@ -631,6 +693,7 @@
                                             <input matInput #inputJoining [placeholder]="'End Date'"
                                                 formControlName="endDate" [matDatepicker]="dateOfJoiningDatepicker1"
                                                 [min]="projectTeamForm['startDate']?.value"
+                                                [max]="projectDetails?.get('endDate')?.value"
                                                 (focus)="dateOfJoiningDatepicker1.open()" />
                                             <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker1">
                                             </mat-datepicker-toggle>
