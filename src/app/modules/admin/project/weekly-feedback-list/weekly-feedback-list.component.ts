@@ -77,7 +77,6 @@ export class WeeklyFeedbackListComponent implements OnInit {
       (res:any)=>{
         this.initialLoading = false;
         this.weeklyFormList = res?.data;
-        console.log("this.WeeklyFormList : ",this.weeklyFormList);
       },
       (err) => {
         this.initialLoading = false;
