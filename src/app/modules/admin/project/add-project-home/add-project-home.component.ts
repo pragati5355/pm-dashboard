@@ -148,8 +148,8 @@ export class AddProjectHomeComponent
     utilizationValues: number[] = UTILIZATION_VALUES;
     currentCapacity: number;
     editProjectEndDateReason: string = '';
-    prevDate:any
-    newDate:any
+    prevDate: any;
+    newDate: any;
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -458,7 +458,7 @@ export class AddProjectHomeComponent
     goBack(stepper: any) {
         this.selectedIndex = stepper;
         if (this.selectedIndex == 0) {
-            this.projectDetails.reset(this.projectDetails.value);
+            // this.projectDetails.reset(this.projectDetails.value);
             this.showStep = 1;
         } else if (this.selectedIndex == 1) {
             this.clientDetials.reset(this.clientDetials.value);
@@ -1047,11 +1047,25 @@ export class AddProjectHomeComponent
                     feedback_form: this.projectData?.formId
                         ? this.projectData?.formId
                         : '',
-                    startDate: dummyStartDate,
-                    endDate: dummyEndDate,
+                    startDate: this.projectData?.startDate
+                        ? this.datePipe.transform(
+                              this.projectData?.startDate,
+                              "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                          )
+                        : dummyStartDate,
+                    endDate: this.projectData?.endDate
+                        ? this.datePipe.transform(
+                              this.projectData?.endDate,
+                              "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                          )
+                        : dummyEndDate,
                 });
 
-                this.projectEndDateValueSubscription(dummyEndDate);
+                this.projectEndDateValueSubscription(
+                    this.projectData?.endDate
+                        ? this.projectData?.endDate
+                        : dummyEndDate
+                );
 
                 this.clientDetials.patchValue({
                     id:
@@ -1204,7 +1218,9 @@ export class AddProjectHomeComponent
                     formId: this.projectDetails?.value?.feedback_form,
                     orgId: this.jiraProjectList[0]?.orgId,
                     userId: this.userData?.userId,
-                    extendedReason:this.editProjectEndDateReason
+                    extendedReason: this.editProjectEndDateReason,
+                    startDate:this.projectDetails?.value?.startDate,
+                    endDate:this.projectDetails?.value?.endDate
                 },
                 clientDetails: this.clientDtailsList,
                 baseUrl:
@@ -1219,39 +1235,39 @@ export class AddProjectHomeComponent
                 teamDetails: this.teamMemberList,
             };
             console.log(payload);
-            this.submitInProcess = true;
-            this.ProjectService.updateProject(payload).subscribe(
-                (res: any) => {
-                    this.submitInProcess = false;
-                    if (!res?.error) {
-                        this.snackBar.successSnackBar(
-                            'Project updated successFully'
-                        );
-                        this.projectDetails.reset();
-                        this.clientDetials.reset();
-                        this.projectSetting.reset();
-                        this.projectTeam.reset();
-                        this.teamMemberList = [];
-                        this.settingProjectName = '';
-                        this.router.navigate([
-                            '/projects/' + this.editProjectId + '/details',
-                        ]);
-                    } else {
-                        this.snackBar.errorSnackBar(res?.message);
-                    }
-                    if (res?.tokenExpire == true) {
-                        this.snackBar.errorSnackBar(
-                            ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-                        );
-                        this._authService.updateAndReload(window.location);
-                    }
-                },
-                (error) => {
-                    this.submitInProcess = false;
+            // this.submitInProcess = true;
+            // this.ProjectService.updateProject(payload).subscribe(
+            //     (res: any) => {
+            //         this.submitInProcess = false;
+            //         if (!res?.error) {
+            //             this.snackBar.successSnackBar(
+            //                 'Project updated successFully'
+            //             );
+            //             this.projectDetails.reset();
+            //             this.clientDetials.reset();
+            //             this.projectSetting.reset();
+            //             this.projectTeam.reset();
+            //             this.teamMemberList = [];
+            //             this.settingProjectName = '';
+            //             this.router.navigate([
+            //                 '/projects/' + this.editProjectId + '/details',
+            //             ]);
+            //         } else {
+            //             this.snackBar.errorSnackBar(res?.message);
+            //         }
+            //         if (res?.tokenExpire == true) {
+            //             this.snackBar.errorSnackBar(
+            //                 ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+            //             );
+            //             this._authService.updateAndReload(window.location);
+            //         }
+            //     },
+            //     (error) => {
+            //         this.submitInProcess = false;
 
-                    this.snackBar.errorSnackBar('server error');
-                }
-            );
+            //         this.snackBar.errorSnackBar('server error');
+            //     }
+            // );
         } else {
             this.isAddTeam = false;
             this.snackBar.errorSnackBar('Add team member and role');
@@ -1376,10 +1392,8 @@ export class AddProjectHomeComponent
 
     private projectEndDateValueSubscription(dummyEndDate: string) {
         this.projectDetails.get('endDate').valueChanges.subscribe((value) => {
-            this.prevDate = this.datePipe.transform(
-                dummyEndDate,
-                'dd-MM-yyyy'
-            );
+            console.log('valueChanges calledd-------');
+            this.prevDate = this.datePipe.transform(dummyEndDate, 'dd-MM-yyyy');
             this.newDate = this.datePipe.transform(value, 'dd-MM-yyyy');
             if (this.prevDate === this.newDate) {
                 this.editProjectEndDateReason = '';
@@ -1398,7 +1412,7 @@ export class AddProjectHomeComponent
             data: {
                 prevEndDate: this.prevDate,
                 newEndDate: this.newDate,
-                prefiledReason:this.editProjectEndDateReason
+                prefiledReason: this.editProjectEndDateReason,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

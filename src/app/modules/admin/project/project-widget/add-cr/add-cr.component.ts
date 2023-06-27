@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,6 +23,7 @@ export class AddCrComponent implements OnInit {
     projectId: any;
     isLoading: boolean = false;
     submitInProcess: boolean = false;
+    projectEndDate: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -31,6 +33,7 @@ export class AddCrComponent implements OnInit {
         private snackBar: SnackBar,
         private authService: AuthService,
         private router: Router,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -93,7 +96,7 @@ export class AddCrComponent implements OnInit {
         }
     }
 
-    goBack(){
+    goBack() {
         this.router.navigate([`/projects/${this.projectId}/details`]);
     }
 
@@ -159,7 +162,12 @@ export class AddCrComponent implements OnInit {
                     this.isLoading = false;
                     if (res?.error === false) {
                         this.projectDetails = res?.data;
+                        this.projectEndDate = this.datePipe.transform(
+                            this.projectDetails?.project?.endDate,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                        );
                         this.resourceData = res?.data?.teamModel;
+                        this.addCrForm?.get('newProjectEndDate')?.setValue(this.projectEndDate)
                     } else {
                         this.snackBar.errorSnackBar(res?.message);
                     }

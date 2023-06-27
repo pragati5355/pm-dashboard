@@ -58,6 +58,7 @@
                             formControlName="newProjectEndDate"
                             [matDatepicker]="dateOfJoiningDatepicker"
                             (focus)="dateOfJoiningDatepicker.open()"
+                            [min]="projectEndDate"
                         />
                         <mat-datepicker-toggle
                             matSuffix
