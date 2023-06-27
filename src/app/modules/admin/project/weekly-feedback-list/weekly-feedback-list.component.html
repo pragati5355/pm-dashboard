@@ -93,7 +93,7 @@
                         </div>      
                     </ng-container>
                     
-                    <ng-container *ngIf="weeklyFormList.length == 0">
+                    <ng-container *ngIf="weeklyFormList?.length == 0 && !initialLoading">
                         <div
                             class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
                         >

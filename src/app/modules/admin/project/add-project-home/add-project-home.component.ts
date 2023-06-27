@@ -1023,6 +1023,16 @@ export class AddProjectHomeComponent
 
                 const projectsetting = res?.data?.authUser;
 
+                const dummyStartDate = this.datePipe.transform(
+                    1686894251322,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                );
+
+                const dummyEndDate = this.datePipe.transform(
+                    1689791400000,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                );
+
                 this.projectDetails.patchValue({
                     projectName: this.projectData?.name
                         ? this.projectData?.name
@@ -1033,15 +1043,15 @@ export class AddProjectHomeComponent
                     feedback_form: this.projectData?.formId
                         ? this.projectData?.formId
                         : '',
-                    startDate: this.datePipe.transform(
-                        1686894251322,
-                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
-                    ),
-                    endDate: this.datePipe.transform(
-                        1689791400000,
-                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
-                    ),
+                    startDate: dummyStartDate,
+                    endDate: dummyEndDate,
                 });
+
+                this.projectDetails
+                    .get('endDate')
+                    .valueChanges.subscribe((value) => {
+                        console.log('value :', value);
+                    });
 
                 this.clientDetials.patchValue({
                     id:

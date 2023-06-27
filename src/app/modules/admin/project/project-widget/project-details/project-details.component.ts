@@ -87,6 +87,9 @@ export class ProjectDetailsComponent implements OnInit {
     weeklyFeedBackList(){
         this.router.navigate([`/projects/${this.projectId}/feedback/list`]);
     }
+    addCR(){
+        this.router.navigate([`/projects/${this.projectId}/add-cr`]);
+    }
     assignBitbucketProject() {
         if (this.allBitbucketProjects?.length > 0) {
             this.openAssignDialog(this.allBitbucketProjects);

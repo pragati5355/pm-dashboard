@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { AddCrResourceDialogComponent } from '../add-cr-resource-dialog/add-cr-resource-dialog.component';
@@ -29,7 +29,8 @@ export class AddCrComponent implements OnInit {
         private addCrService: AddCrService,
         private route: ActivatedRoute,
         private snackBar: SnackBar,
-        private authService: AuthService
+        private authService: AuthService,
+        private router: Router,
     ) {}
 
     ngOnInit(): void {
@@ -90,6 +91,10 @@ export class AddCrComponent implements OnInit {
                 }
             );
         }
+    }
+
+    goBack(){
+        this.router.navigate([`/projects/${this.projectId}/details`]);
     }
 
     private addResource(result: any) {
