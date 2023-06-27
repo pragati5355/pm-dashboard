@@ -84,6 +84,9 @@ export class ProjectDetailsComponent implements OnInit {
     projectProcess() {
         this.router.navigate([`/projects/project-process/list`]);
     }
+    weeklyFeedBackList(){
+        this.router.navigate([`/projects/${this.projectId}/feedback/list`]);
+    }
     assignBitbucketProject() {
         if (this.allBitbucketProjects?.length > 0) {
             this.openAssignDialog(this.allBitbucketProjects);

@@ -44,6 +44,8 @@ import { ProjectRoutingModule } from './project.routing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedback-form.component';
+import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedback-list.component';
+import { WeeklyFormComponent } from './weekly-form/weekly-form.component';
 
 @NgModule({
     declarations: [
@@ -55,8 +57,10 @@ import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedb
         ProjectListComponent,
         SkeletonComponent,
         WeeklyFeedbackFormComponent,
+        WeeklyFeedbackListComponent,
+        WeeklyFormComponent,
     ],
-    exports: [CdkStepperModule, MatStepperModule],
+    exports: [CdkStepperModule, MatStepperModule,WeeklyFeedbackListComponent],
     imports: [
         CommonModule,
         ProjectWidgetModule,
