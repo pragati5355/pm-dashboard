@@ -1,0 +1,58 @@
+<div class="flex flex-col max-h-screen -m-6">
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+    >
+        <div class="text-lg font-medium">Reason for updating end date</div>
+        <button mat-icon-button (click)="close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"
+            ></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+        <div>
+            <p>
+                Date changed from
+                <span class="font-semibold">{{ this.data?.prevEndDate }}</span>
+                to
+                <span class="font-semibold">{{ this.data?.newEndDate }}</span>
+            </p>
+
+            <p>
+                By
+                <span class="font-semibold">{{ this.changedBy }}</span>
+                on
+                <span class="font-semibold">{{ this.currentDate }}</span>
+            </p>
+            <form [formGroup]="reasonForm">
+                <mat-form-field class="fuse-mat-textarea w-full mb-2 mt-4">
+                    <mat-label>Reason</mat-label>
+                    <textarea
+                        matInput
+                        trim="blur"
+                        rows="6"
+                        style="resize: none"
+                        formControlName="editEndDateReason"
+                        [placeholder]="'Add reason for date change...'"
+                    ></textarea>
+                    <mat-error
+                        *ngIf="
+                            reasonForm
+                                ?.get('editEndDateReason')
+                                ?.hasError('required')
+                        "
+                    >
+                        <div>Reason is mandatory</div>
+                    </mat-error>
+                </mat-form-field>
+                <div class="flex justify-end">
+                    <button (click)="submit()" class="ml-3" mat-flat-button [color]="'primary'">
+                        <span class="mx-2">Add</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

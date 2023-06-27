@@ -49,6 +49,7 @@ import {
 } from './model/add-project-models';
 import { DatePipe } from '@angular/common';
 import { UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
+import { EditProjectReasonDialogComponent } from '../edit-project-reason-dialog/edit-project-reason-dialog.component';
 
 @Component({
     selector: 'app-add-project-home',
@@ -146,6 +147,9 @@ export class AddProjectHomeComponent
 
     utilizationValues: number[] = UTILIZATION_VALUES;
     currentCapacity: number;
+    editProjectEndDateReason: string = '';
+    prevDate:any
+    newDate:any
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -1047,11 +1051,7 @@ export class AddProjectHomeComponent
                     endDate: dummyEndDate,
                 });
 
-                this.projectDetails
-                    .get('endDate')
-                    .valueChanges.subscribe((value) => {
-                        console.log('value :', value);
-                    });
+                this.projectEndDateValueSubscription(dummyEndDate);
 
                 this.clientDetials.patchValue({
                     id:
@@ -1182,6 +1182,7 @@ export class AddProjectHomeComponent
             }
         );
     }
+
     updateProject() {
         // this.filterEditTeamMember();
         // this.filterEditClientList();
@@ -1203,6 +1204,7 @@ export class AddProjectHomeComponent
                     formId: this.projectDetails?.value?.feedback_form,
                     orgId: this.jiraProjectList[0]?.orgId,
                     userId: this.userData?.userId,
+                    extendedReason:this.editProjectEndDateReason
                 },
                 clientDetails: this.clientDtailsList,
                 baseUrl:
@@ -1370,6 +1372,40 @@ export class AddProjectHomeComponent
         this.initializeClientsDetailsForm();
         this.initializeProjectSettingsForm();
         this.initializeProjectTeamForm();
+    }
+
+    private projectEndDateValueSubscription(dummyEndDate: string) {
+        this.projectDetails.get('endDate').valueChanges.subscribe((value) => {
+            this.prevDate = this.datePipe.transform(
+                dummyEndDate,
+                'dd-MM-yyyy'
+            );
+            this.newDate = this.datePipe.transform(value, 'dd-MM-yyyy');
+            if (this.prevDate === this.newDate) {
+                this.editProjectEndDateReason = '';
+            } else {
+                this.addReasonForProjectEndDate();
+            }
+        });
+    }
+
+    addReasonForProjectEndDate() {
+        const dialogRef = this.dialog.open(EditProjectReasonDialogComponent, {
+            disableClose: true,
+            width: '40%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                prevEndDate: this.prevDate,
+                newEndDate: this.newDate,
+                prefiledReason:this.editProjectEndDateReason
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                this.editProjectEndDateReason = result?.reason;
+            }
+        });
     }
 
     private initializeFuseWatcherService() {
