@@ -728,7 +728,8 @@
                                                 formControlName="endDate" [matDatepicker]="dateOfJoiningDatepicker1"
                                                 [min]="projectTeamForm['startDate']?.value"
                                                 [max]="projectDetails?.get('endDate')?.value"
-                                                (focus)="dateOfJoiningDatepicker1.open()" />
+                                                (focus)="dateOfJoiningDatepicker1.open()"
+                                                (dateChange)="resourceEndDate($event)" />
                                             <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker1">
                                             </mat-datepicker-toggle>
                                             <mat-datepicker #dateOfJoiningDatepicker1 (closed)="inputJoining.blur()">

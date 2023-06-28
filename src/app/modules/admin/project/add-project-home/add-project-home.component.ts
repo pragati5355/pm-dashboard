@@ -150,6 +150,8 @@ export class AddProjectHomeComponent
     editProjectEndDateReason: string = '';
     prevDate: any;
     newDate: any;
+    resourcePrevDate: any;
+    resourceNewDate: any;
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -190,13 +192,26 @@ export class AddProjectHomeComponent
             });
     }
 
+    resourceEndDate(event: any) {
+        if (this.editMemberMode) {
+            const newDate = this.datePipe.transform(
+                event?.target?.value,
+                'dd-MM-yyyy'
+            );
+            console.log("newDate :",newDate)
+            console.log("resourcePrevDate :",this.resourcePrevDate)
+            // const newDate = this.datePipe.transform(value, 'dd-MM-yyyy');
+        }
+    }
+
     editMember(index: number, teamMember: any) {
         this.editMemberMode = true;
+
+        this.resourcePrevDate = this.datePipe.transform(teamMember?.endDate, 'dd-MM-yyyy')
 
         this.resourceSpecificTechnologies = this.emailList
             ?.filter((item) => item?.email === teamMember?.email)
             .map((item) => item?.technologies)[0];
-        console.log('resource specific :', this.resourceSpecificTechnologies);
 
         this.projectTeam.patchValue({
             team_member: this.findTeamMember(teamMember?.resourceId),
@@ -216,6 +231,7 @@ export class AddProjectHomeComponent
                   )
                 : null,
         });
+
         this.markResourceAsBench = teamMember?.bench;
         this.markResourceAsShadow = teamMember?.shadow;
         // this.technologies.setValue([
@@ -475,7 +491,7 @@ export class AddProjectHomeComponent
     public selectionChange($event: any): void {
         if ($event.selectedIndex == 0) {
             this.showStep = 1;
-            this.projectDetails.reset(this.projectDetails.value);
+            // this.projectDetails.reset(this.projectDetails.value);
         } else if ($event.selectedIndex == 1) {
             this.showStep = 2;
             this.clientDetials.reset(this.clientDetials.value);
@@ -1219,8 +1235,8 @@ export class AddProjectHomeComponent
                     orgId: this.jiraProjectList[0]?.orgId,
                     userId: this.userData?.userId,
                     extendedReason: this.editProjectEndDateReason,
-                    startDate:this.projectDetails?.value?.startDate,
-                    endDate:this.projectDetails?.value?.endDate
+                    startDate: this.projectDetails?.value?.startDate,
+                    endDate: this.projectDetails?.value?.endDate,
                 },
                 clientDetails: this.clientDtailsList,
                 baseUrl:
@@ -1392,7 +1408,6 @@ export class AddProjectHomeComponent
 
     private projectEndDateValueSubscription(dummyEndDate: string) {
         this.projectDetails.get('endDate').valueChanges.subscribe((value) => {
-            console.log('valueChanges calledd-------');
             this.prevDate = this.datePipe.transform(dummyEndDate, 'dd-MM-yyyy');
             this.newDate = this.datePipe.transform(value, 'dd-MM-yyyy');
             if (this.prevDate === this.newDate) {
