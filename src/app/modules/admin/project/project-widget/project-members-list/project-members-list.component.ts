@@ -3,6 +3,7 @@ import { StaticData } from '../../../../../core/constacts/static';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { Router } from '@angular/router';
 import { Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-project-members-list',
     templateUrl: './project-members-list.component.html',
@@ -22,7 +23,9 @@ export class ProjectMembersListComponent implements OnInit {
         displayProfilePicture: true,
     };
 
-    constructor() {}
+    constructor(
+        private datePipe : DatePipe
+    ) {}
 
     ngOnInit(): void {}
 }
