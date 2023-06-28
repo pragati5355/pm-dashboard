@@ -46,6 +46,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedback-form.component';
 import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedback-list.component';
 import { WeeklyFormComponent } from './weekly-form/weekly-form.component';
+import { EditProjectReasonDialogComponent } from './edit-project-reason-dialog/edit-project-reason-dialog.component';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import { WeeklyFormComponent } from './weekly-form/weekly-form.component';
         WeeklyFeedbackFormComponent,
         WeeklyFeedbackListComponent,
         WeeklyFormComponent,
+        EditProjectReasonDialogComponent,
     ],
     exports: [CdkStepperModule, MatStepperModule,WeeklyFeedbackListComponent],
     imports: [

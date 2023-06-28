@@ -1,7 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { AddCrResourceDialogComponent } from '../add-cr-resource-dialog/add-cr-resource-dialog.component';
@@ -22,6 +23,7 @@ export class AddCrComponent implements OnInit {
     projectId: any;
     isLoading: boolean = false;
     submitInProcess: boolean = false;
+    projectEndDate: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -29,7 +31,9 @@ export class AddCrComponent implements OnInit {
         private addCrService: AddCrService,
         private route: ActivatedRoute,
         private snackBar: SnackBar,
-        private authService: AuthService
+        private authService: AuthService,
+        private router: Router,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -90,6 +94,10 @@ export class AddCrComponent implements OnInit {
                 }
             );
         }
+    }
+
+    goBack() {
+        this.router.navigate([`/projects/${this.projectId}/details`]);
     }
 
     private addResource(result: any) {
@@ -154,7 +162,12 @@ export class AddCrComponent implements OnInit {
                     this.isLoading = false;
                     if (res?.error === false) {
                         this.projectDetails = res?.data;
+                        this.projectEndDate = this.datePipe.transform(
+                            this.projectDetails?.project?.endDate,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                        );
                         this.resourceData = res?.data?.teamModel;
+                        this.addCrForm?.get('newProjectEndDate')?.setValue(this.projectEndDate)
                     } else {
                         this.snackBar.errorSnackBar(res?.message);
                     }

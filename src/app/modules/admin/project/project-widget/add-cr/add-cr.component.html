@@ -2,7 +2,7 @@
     <div class="flex flex-row justify-between items-center mb-4">
         <div
             class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
-            [routerLink]="['../']"
+            (click)="goBack()"
         >
             <mat-icon
                 class="icon-size-6 text-3xl text-black"
@@ -58,6 +58,7 @@
                             formControlName="newProjectEndDate"
                             [matDatepicker]="dateOfJoiningDatepicker"
                             (focus)="dateOfJoiningDatepicker.open()"
+                            [min]="projectEndDate"
                         />
                         <mat-datepicker-toggle
                             matSuffix
