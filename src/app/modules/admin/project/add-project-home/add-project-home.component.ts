@@ -148,6 +148,7 @@ export class AddProjectHomeComponent
     utilizationValues: number[] = UTILIZATION_VALUES;
     currentCapacity: number;
     editProjectEndDateReason: string = '';
+    editResourceEndDateReason: string = '';
     prevDate: any;
     newDate: any;
     resourcePrevDate: any;
@@ -198,16 +199,41 @@ export class AddProjectHomeComponent
                 event?.target?.value,
                 'dd-MM-yyyy'
             );
-            console.log("newDate :",newDate)
-            console.log("resourcePrevDate :",this.resourcePrevDate)
-            // const newDate = this.datePipe.transform(value, 'dd-MM-yyyy');
+
+            if (newDate !== this.resourcePrevDate) {
+                const dialogRef = this.dialog.open(
+                    EditProjectReasonDialogComponent,
+                    {
+                        disableClose: true,
+                        width: '40%',
+                        panelClass: 'warn-dialog-content',
+                        autoFocus: false,
+                        data: {
+                            prevEndDate: this.resourcePrevDate,
+                            newEndDate: newDate,
+                            prefiledReason: this.editResourceEndDateReason,
+                        },
+                    }
+                );
+                dialogRef.afterClosed().subscribe((result: any) => {
+                    if (result) {
+                        this.editResourceEndDateReason = result?.reason;
+                    }
+                });
+            }
         }
     }
 
     editMember(index: number, teamMember: any) {
+        this.editResourceEndDateReason = teamMember?.extendedReason
+            ? teamMember?.extendedReason
+            : '';
         this.editMemberMode = true;
 
-        this.resourcePrevDate = this.datePipe.transform(teamMember?.endDate, 'dd-MM-yyyy')
+        this.resourcePrevDate = this.datePipe.transform(
+            teamMember?.endDate,
+            'dd-MM-yyyy'
+        );
 
         this.resourceSpecificTechnologies = this.emailList
             ?.filter((item) => item?.email === teamMember?.email)
@@ -264,11 +290,9 @@ export class AddProjectHomeComponent
         this.resourceTechnologyList = this.resourceSpecificTechnologies?.filter(
             (a) => teamMember?.technologies?.some((b) => a?.id === b?.id)
         );
-        console.log('resource techlist :', this.resourceTechnologyList);
     }
 
     findJiraUser(accountId: string) {
-        console.log('jira user :', this.jiraUsers);
         const filteredJiraUser = this.jiraUsers?.filter(
             (user) => user?.accountId === accountId
         );
@@ -732,6 +756,7 @@ export class AddProjectHomeComponent
                     item.technologies = this.resourceTechnologyList;
                     item.bench = this.markResourceAsBench;
                     item.shadow = this.markResourceAsShadow;
+                    item.extendedReason = this.editResourceEndDateReason;
                 }
                 return item;
             });
@@ -773,6 +798,8 @@ export class AddProjectHomeComponent
         this.projectTeam.controls['startDate'].reset();
         this.projectTeam.controls['endDate'].reset();
         this.projectTeam.controls['tm_utilization'].reset();
+        this.markResourceAsBench = false;
+        this.markResourceAsShadow = false;
     }
     deleteTeamMember(index: any, teamMember: any) {
         if (teamMember?.id) {
@@ -875,43 +902,42 @@ export class AddProjectHomeComponent
                     addedBy: this.userData?.userId,
                     teamDetails: this.teamMemberList,
                 };
-                console.log('add project payload:', payload);
-                // this.submitInProcess = true;
+                this.submitInProcess = true;
 
-                // this.ProjectService.createProject(payload).subscribe(
-                //     (res: any) => {
-                //         this.submitInProcess = false;
-                //         if (!res.error) {
-                //             this.snackBar.successSnackBar(
-                //                 'Project created successFully'
-                //             );
-                //             this.projectDetails.reset();
-                //             this.clientDetials.reset();
-                //             this.projectSetting.reset();
-                //             this.projectTeam.reset();
-                //             this.teamMemberList = [];
-                //             this.settingProjectName = '';
-                //             this.router.navigate(['/projects/']);
-                //         } else {
-                //             this.snackBar.errorSnackBar(res?.message);
-                //             if (res?.message == 'Project already exists') {
-                //                 this.selectedIndex = 2;
-                //                 this.projectTeam.reset();
-                //                 this.teamMemberList = [];
-                //             }
-                //         }
-                //         if (res?.tokenExpire == true) {
-                //             this.snackBar.errorSnackBar(
-                //                 ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-                //             );
-                //             this._authService.updateAndReload(window.location);
-                //         }
-                //     },
-                //     (error) => {
-                //         this.submitInProcess = false;
-                //         this.snackBar.errorSnackBar('server error');
-                //     }
-                // );
+                this.ProjectService.createProject(payload).subscribe(
+                    (res: any) => {
+                        this.submitInProcess = false;
+                        if (!res.error) {
+                            this.snackBar.successSnackBar(
+                                'Project created successFully'
+                            );
+                            this.projectDetails.reset();
+                            this.clientDetials.reset();
+                            this.projectSetting.reset();
+                            this.projectTeam.reset();
+                            this.teamMemberList = [];
+                            this.settingProjectName = '';
+                            this.router.navigate(['/projects/']);
+                        } else {
+                            this.snackBar.errorSnackBar(res?.message);
+                            if (res?.message == 'Project already exists') {
+                                this.selectedIndex = 2;
+                                this.projectTeam.reset();
+                                this.teamMemberList = [];
+                            }
+                        }
+                        if (res?.tokenExpire == true) {
+                            this.snackBar.errorSnackBar(
+                                ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                            );
+                            this._authService.updateAndReload(window.location);
+                        }
+                    },
+                    (error) => {
+                        this.submitInProcess = false;
+                        this.snackBar.errorSnackBar('server error');
+                    }
+                );
             } else {
                 this.isAddTeam = false;
                 this.snackBar.errorSnackBar('Add team member and role');
@@ -1250,40 +1276,39 @@ export class AddProjectHomeComponent
                 jiraProjectKey: this.projectSetting?.value?.project,
                 teamDetails: this.teamMemberList,
             };
-            console.log(payload);
-            // this.submitInProcess = true;
-            // this.ProjectService.updateProject(payload).subscribe(
-            //     (res: any) => {
-            //         this.submitInProcess = false;
-            //         if (!res?.error) {
-            //             this.snackBar.successSnackBar(
-            //                 'Project updated successFully'
-            //             );
-            //             this.projectDetails.reset();
-            //             this.clientDetials.reset();
-            //             this.projectSetting.reset();
-            //             this.projectTeam.reset();
-            //             this.teamMemberList = [];
-            //             this.settingProjectName = '';
-            //             this.router.navigate([
-            //                 '/projects/' + this.editProjectId + '/details',
-            //             ]);
-            //         } else {
-            //             this.snackBar.errorSnackBar(res?.message);
-            //         }
-            //         if (res?.tokenExpire == true) {
-            //             this.snackBar.errorSnackBar(
-            //                 ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-            //             );
-            //             this._authService.updateAndReload(window.location);
-            //         }
-            //     },
-            //     (error) => {
-            //         this.submitInProcess = false;
+            this.submitInProcess = true;
+            this.ProjectService.updateProject(payload).subscribe(
+                (res: any) => {
+                    this.submitInProcess = false;
+                    if (!res?.error) {
+                        this.snackBar.successSnackBar(
+                            'Project updated successFully'
+                        );
+                        // this.projectDetails.reset();
+                        this.clientDetials.reset();
+                        this.projectSetting.reset();
+                        // this.projectTeam.reset();
+                        // this.teamMemberList = [];
+                        this.settingProjectName = '';
+                        this.router.navigate([
+                            '/projects/' + this.editProjectId + '/details',
+                        ]);
+                    } else {
+                        this.snackBar.errorSnackBar(res?.message);
+                    }
+                    if (res?.tokenExpire == true) {
+                        this.snackBar.errorSnackBar(
+                            ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                        );
+                        this._authService.updateAndReload(window.location);
+                    }
+                },
+                (error) => {
+                    this.submitInProcess = false;
 
-            //         this.snackBar.errorSnackBar('server error');
-            //     }
-            // );
+                    this.snackBar.errorSnackBar('server error');
+                }
+            );
         } else {
             this.isAddTeam = false;
             this.snackBar.errorSnackBar('Add team member and role');
@@ -1386,7 +1411,6 @@ export class AddProjectHomeComponent
     }
 
     getSelectedEmail(resource: any) {
-        console.log('selected resource :', resource);
         this.resourceSpecificTechnologies = resource?.technologies;
         this.getAvailableCapacity(resource.email);
     }
@@ -1522,7 +1546,6 @@ export class AddProjectHomeComponent
         this.ProjectService.getResourceEmails().subscribe((res: any) => {
             if (res?.data) {
                 this.emailList = res?.data;
-                console.log('emails data:', this.emailList);
             }
         });
         this.projectTeam = this._formBuilder.group(
