@@ -99,7 +99,7 @@ export class SprintDetailsComponent implements OnInit {
             autoFocus: false,
             data: {
                 id: this.sprintId,
-                sprintName: this.sprint_name,
+                sprintName: this.sprint?.name,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
