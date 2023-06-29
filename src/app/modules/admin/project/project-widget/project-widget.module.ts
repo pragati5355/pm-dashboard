@@ -48,6 +48,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
+import { ProjectMembersDetailsComponent } from './project-members-details/project-members-details.component';
 
 @NgModule({
     declarations: [
@@ -69,6 +70,7 @@ import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-re
         InvoicePercentageComponent,
         AddCrComponent,
         AddCrResourceDialogComponent,
+        ProjectMembersDetailsComponent,
     ],
     imports: [
         FormsModule,

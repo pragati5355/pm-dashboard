@@ -1,5 +1,5 @@
 .inventory-grid {
-    grid-template-columns:20% 24% 12% 12% 10% 10% 4%;
+    grid-template-columns: 20% 25% 12% 12% 17% 10%;
 }
 
 .h-67 {
@@ -12,4 +12,9 @@
 
 .h300 {
     height: 300px;
+}
+
+.width-menu-panel {
+    max-width: 800px !important;
+    width: 800px !important;
 }

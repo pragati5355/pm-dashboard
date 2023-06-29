@@ -8,10 +8,9 @@
       <div>Name</div>
       <div>Email</div>
       <div>Role</div>
-      <div>Utilization</div>
       <div>Start Date</div>
       <div>End Date</div>
-      <div></div>
+      <div>Utilization</div>
     </div>
     <div class="grid">
       <!-- Rows -->
@@ -42,23 +41,24 @@
           </div>
 
           <div class="hidden sm:block">
-            {{ team?.utilization }}
-          </div>
-
-          <div class="hidden sm:block">
             {{team?.startDate | date}}
           </div>
-
-          <div class="hidden sm:block">
-            {{team?.endDate | date}}
+          <div class="flex md:flex-row">
+            <div class="sm:block">
+              {{team?.endDate | date}}
+            </div>
+             <!-- Action -->
+             <div class="px-3 items-center cursor-pointer">
+              <mat-icon [matTooltip]="'View'"
+                  class="text-gray-400 icon-size-5 cursor-pointer"
+                  svgIcon="heroicons_outline:eye"
+                  (click)="membersDetailsDialog(team)"
+              ></mat-icon>
+            </div>
           </div>
 
-          <!-- Action -->
-          <div class="sm:block flex flex-row px-4 items-center w-full cursor-pointer">
-            <mat-icon [matTooltip]="'View'"
-                class="text-gray-400 icon-size-5 cursor-pointer"
-                svgIcon="heroicons_outline:eye"
-            ></mat-icon>
+          <div class="hidden sm:block">
+            {{ team?.utilization }}
           </div>
 
         </div>
