@@ -17,9 +17,7 @@ export class ProjectMembersDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.member = this.data.team.history;
-    console.log("this.member : ",this.member);
-    console.log("member : ", this.data.team);
+    this.member = this.data?.team?.history;
   }
 
   close() {
