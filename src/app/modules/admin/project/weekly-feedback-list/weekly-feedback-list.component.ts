@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WeeklyFeedbackFormComponent } from '../weekly-feedback-form/weekly-feedback-form.component';
 import { WeeklyStatusService } from '../common/services/weekly-status.service';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WeeklyFormComponent } from '../weekly-form/weekly-form.component';
 import { DatePipe } from '@angular/common';
 
@@ -31,7 +31,8 @@ export class WeeklyFeedbackListComponent implements OnInit {
         private weeklyStatusService: WeeklyStatusService,
         private loggedInUserService: LoggedInUserService,
         private _route: ActivatedRoute,
-        public datePipe: DatePipe
+        public datePipe: DatePipe,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -61,6 +62,10 @@ export class WeeklyFeedbackListComponent implements OnInit {
                 this.getWeeklyStatusList();
             }
         });
+    }
+
+    goBack() {
+        this.router.navigate([`/projects/${this.projectId}/details`]);
     }
 
     private loadData() {
@@ -105,16 +110,16 @@ export class WeeklyFeedbackListComponent implements OnInit {
         );
     }
 
-    getDialogData(formResponse: any, formComponent: any) {
+    getDialogData(url: string) {
         const dialogRef = this.dialog.open(WeeklyFormComponent, {
             disableClose: true,
-            width: '60%',
+            width: '70%',
+            height: '100vh',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
                 projectId: this.projectId,
-                formResponse: formResponse,
-                formComponent: formComponent,
+                pdfUrl: url,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

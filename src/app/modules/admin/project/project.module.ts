@@ -47,7 +47,7 @@ import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedb
 import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedback-list.component';
 import { WeeklyFormComponent } from './weekly-form/weekly-form.component';
 import { EditProjectReasonDialogComponent } from './edit-project-reason-dialog/edit-project-reason-dialog.component';
-
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 @NgModule({
     declarations: [
         ProjectHomeComponent,
@@ -100,6 +100,7 @@ import { EditProjectReasonDialogComponent } from './edit-project-reason-dialog/e
         SkeletonModule,
         MatDatepickerModule,
         MatMomentDateModule,
+        NgxExtendedPdfViewerModule
     ],
     providers: [DatePipe],
 })
