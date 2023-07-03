@@ -15,7 +15,7 @@ export const projectWidgetRoutes: Route[] = [
         path: ':id/add-cr',
         component: AddCrComponent,
         data: {
-            pageTitle: 'Add Cr',
+            pageTitle: 'Request Change',
         },
     },
     {
