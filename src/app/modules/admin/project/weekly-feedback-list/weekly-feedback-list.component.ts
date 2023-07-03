@@ -105,16 +105,16 @@ export class WeeklyFeedbackListComponent implements OnInit {
         );
     }
 
-    getDialogData(formResponse: any, formComponent: any) {
+    getDialogData(url: string) {
         const dialogRef = this.dialog.open(WeeklyFormComponent, {
             disableClose: true,
-            width: '60%',
+            width: '70%',
+            height: '100vh',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
                 projectId: this.projectId,
-                formResponse: formResponse,
-                formComponent: formComponent,
+                pdfUrl: url,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
