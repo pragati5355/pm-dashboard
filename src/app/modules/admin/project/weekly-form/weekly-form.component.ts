@@ -19,7 +19,6 @@ export class WeeklyFormComponent implements OnInit {
 
     ngOnInit(): void {
         this.pdfUrl = this.data?.pdfUrl;
-        console.log(this.pdfUrl)
     }
 
     close() {

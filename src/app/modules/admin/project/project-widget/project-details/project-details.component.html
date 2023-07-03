@@ -39,7 +39,7 @@
         <div class="flex items-center justify-between w-full">
             <div class="flex flex-col items-center">
                 <div
-                    class="items-center justify-between text-3xl font-semibold tracking-tight leading-8"
+                    class="flex items-center justify-between text-3xl font-semibold tracking-tight leading-8"
                 >
                     <mat-icon
                         class="icon-size-6 text-3xl cursor-pointer text-black"
@@ -49,12 +49,7 @@
                     {{ project?.name | titlecase }}
                 </div>
             </div>
-            <div class="mt-3 flex items-center ml-6">
-                <!-- <button [matTooltip]="'Edit Project'" class="ml-4" mat-flat-button [color]="'primary'"
-                    (click)="editProject()">
-                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
-                    <span class="ml-2 mr-1">Edit Project</span>
-                </button> -->
+            <div class="flex items-center ml-6">
                 <div
                     *ngIf="repoCount == 0"
                     [matTooltip]="
@@ -112,25 +107,13 @@
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button
-                            mat-menu-item
-                            [matTooltip]="'Weekly Feedback'"
-                            (click)="weeklyFeedBackList()"
-                        >
+                        <button mat-menu-item (click)="weeklyFeedBackList()">
                             <span>Weekly Feedback List</span>
                         </button>
-                        <button
-                            mat-menu-item
-                            [matTooltip]="'Add CR'"
-                            (click)="addCR()"
-                        >
+                        <button mat-menu-item (click)="addCR()">
                             <span>Add CR</span>
                         </button>
-                        <button
-                            mat-menu-item
-                            [matTooltip]="'Edit Project'"
-                            (click)="editProject()"
-                        >
+                        <button mat-menu-item (click)="editProject()">
                             <span>Edit Project</span>
                         </button>
                     </mat-menu>

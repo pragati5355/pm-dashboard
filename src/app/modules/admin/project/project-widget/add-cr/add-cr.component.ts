@@ -73,7 +73,6 @@ export class AddCrComponent implements OnInit {
     submit() {
         if (this.addCrForm?.valid) {
             const payload = this.getPayload();
-            // console.log(payload);
             this.submitInProcess = true;
             this.addCrService.changeRequest(payload).subscribe(
                 (res: any) => {
@@ -83,7 +82,9 @@ export class AddCrComponent implements OnInit {
                         this.resourceData = [];
                         this.resourcePayload = [];
                         this.addCrForm?.reset();
-                        this.loadProjectDetails();
+                        this.router.navigate([
+                            `/projects/${this.projectId}/details`,
+                        ]);
                     } else {
                         this.snackBar.errorSnackBar(res?.message);
                     }
@@ -167,7 +168,9 @@ export class AddCrComponent implements OnInit {
                             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
                         );
                         this.resourceData = res?.data?.teamModel;
-                        this.addCrForm?.get('newProjectEndDate')?.setValue(this.projectEndDate)
+                        this.addCrForm
+                            ?.get('newProjectEndDate')
+                            ?.setValue(this.projectEndDate);
                     } else {
                         this.snackBar.errorSnackBar(res?.message);
                     }
