@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
     FormBuilder,
@@ -24,7 +25,8 @@ export class EditProjectReasonDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<EditProjectReasonDialogComponent>,
         private authService: AuthService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        public datePipe : DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -60,12 +62,8 @@ export class EditProjectReasonDialogComponent implements OnInit {
 
     private getCurrentDate() {
         const date = new Date();
-
-        let day = date.getDate();
-        let month = date.getMonth() + 1;
-        let year = date.getFullYear();
-
-        this.currentDate = `${day}-${month}-${year}`;
+        var dateobj = this.datePipe.transform(date, 'dd-MM-yyyy');
+        this.currentDate = dateobj;
     }
 
     close() {
