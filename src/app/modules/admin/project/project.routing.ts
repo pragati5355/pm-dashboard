@@ -3,6 +3,7 @@ import { ProjectListComponent } from './project-list/project-list.component';
 import { AddProjectHomeComponent } from '../project/add-project-home/add-project-home.component';
 import { ProjectHomeComponent } from './project-home/project-home.component';
 import { NgModule } from '@angular/core';
+import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedback-list.component';
 export const projectRoutes: Route[] = [
     {
         path: '',
@@ -50,6 +51,13 @@ export const projectRoutes: Route[] = [
                 component: ProjectListComponent,
                 data: {
                     pageTitle: 'Projects List',
+                },
+            },
+            {
+                path: ':id/feedback/list',
+                component: WeeklyFeedbackListComponent,
+                data: {
+                    pageTitle: 'Weekly Feedback List',
                 },
             },
             {

@@ -1,0 +1,223 @@
+<div *ngIf="!isLoading" class="p-8 w-full flex flex-col">
+    <div class="flex flex-row justify-between items-center mb-4">
+        <div
+            class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
+            (click)="goBack()"
+        >
+            <mat-icon
+                class="icon-size-6 text-3xl text-black"
+                [svgIcon]="'heroicons_outline:chevron-left'"
+            ></mat-icon>
+            {{ "Add CR for " + projectDetails?.project?.name }}
+        </div>
+    </div>
+
+    <div class="w-full bg-white shadow rounded p-8">
+        <span class="text-gray-500 text-2xl">CR Summary</span>
+        <form *ngIf="addCrForm" [formGroup]="addCrForm" class="mt-4">
+            <div class="flex">
+                <div class="mb-2 flex-1">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Total CR hours</mat-label>
+                        <input
+                            matInput
+                            type="number"
+                            placeholder="Total CR hours"
+                            formControlName="totalCrHours"
+                        />
+                        <mat-error
+                            *ngIf="
+                                addCrForm
+                                    ?.get('totalCrHours')
+                                    ?.hasError('required')
+                            "
+                        >
+                            <div>Total CR hours is mandatory</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-2 flex-1 mx-3">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>CR link</mat-label>
+                        <input
+                            matInput
+                            placeholder="CR link"
+                            formControlName="crLink"
+                        />
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-6 flex-1">
+                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <mat-label>New project end date</mat-label>
+                        <input
+                            matInput
+                            #inputJoining
+                            [placeholder]="'New project end date'"
+                            formControlName="newProjectEndDate"
+                            [matDatepicker]="dateOfJoiningDatepicker"
+                            (focus)="dateOfJoiningDatepicker.open()"
+                            [min]="projectEndDate"
+                        />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="dateOfJoiningDatepicker"
+                        >
+                        </mat-datepicker-toggle>
+                        <mat-datepicker
+                            #dateOfJoiningDatepicker
+                            (closed)="inputJoining.blur()"
+                        >
+                        </mat-datepicker>
+                        <mat-error
+                            *ngIf="
+                                addCrForm
+                                    ?.get('newProjectEndDate')
+                                    ?.hasError('required')
+                            "
+                        >
+                            <div>New project end date is mandatory</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-gray-500 text-2xl">CR Details</span>
+
+                <button
+                    (click)="openDialog('ADD', null)"
+                    [color]="'primary'"
+                    [matTooltip]="'Add Resource'"
+                    [disabled]="isLoadingDevelopersEmail || submitInProcess"
+                    class="ml-4"
+                    mat-flat-button
+                >
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1">Add Resource</span>
+                </button>
+            </div>
+
+            <div class="flex flex-auto overflow-hidden">
+                <div
+                    class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
+                >
+                    <div
+                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-white dark:bg-black dark:bg-opacity-5"
+                        matSortDisableClear
+                    >
+                        <div>Email</div>
+                        <div>Role</div>
+                        <div>Utilization</div>
+                        <div>Type</div>
+                        <div>Start Date</div>
+                        <div>End Date</div>
+                        <div>Actions</div>
+                    </div>
+                    <ng-container *ngIf="resourceData?.length > 0">
+                        <div class="grid shadow">
+                            <ng-container *ngFor="let member of resourceData">
+                                <div
+                                    class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
+                                >
+                                    <div class="cursor-pointer">
+                                        <div class="truncate">
+                                            {{ member?.email }}
+                                        </div>
+                                    </div>
+
+                                    <div class="hidden md:block truncate">
+                                        {{ member?.role }}
+                                    </div>
+
+                                    <div class="hidden md:block truncate">
+                                        {{ member?.utilization }}
+                                    </div>
+
+                                    <div class="truncate">
+                                        <span *ngIf="member?.bench">
+                                            {{
+                                                member?.bench
+                                                    ? "On Bench"
+                                                    : null
+                                            }}</span
+                                        >
+                                        <span
+                                            *ngIf="
+                                                member?.shadow && member?.bench
+                                            "
+                                        >
+                                            {{ " And " }}</span
+                                        >
+                                        <span *ngIf="member?.shadow">
+                                            {{
+                                                member?.shadow ? "Shadow" : null
+                                            }}</span
+                                        >
+                                        <span
+                                            *ngIf="
+                                                !member?.shadow &&
+                                                !member?.bench
+                                            "
+                                        >
+                                            -
+                                        </span>
+                                    </div>
+
+                                    <div class="hidden md:block truncate">
+                                        {{ member?.startDate | date }}
+                                    </div>
+                                    <div class="hidden md:block truncate">
+                                        {{ member?.endDate | date }}
+                                    </div>
+
+                                    <div
+                                        class="sm:block flex flex-row items-center w-full cursor-pointer"
+                                    >
+                                        <button
+                                            (click)="openDialog(member, 'EDIT')"
+                                            [matTooltip]="'Edit this resource'"
+                                            [disabled]="
+                                                isLoadingDevelopersEmail ||
+                                                submitInProcess
+                                            "
+                                        >
+                                            <mat-icon
+                                                svgIcon="heroicons_outline:pencil"
+                                            ></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="resourceData?.length === 0">
+                        <div class="flex justify-center min-h-10 mt-4">
+                            <span class="text-2xl"
+                                >No Resource Assigned To This Project</span
+                            >
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-4">
+                <button
+                    (click)="submit()"
+                    [color]="'primary'"
+                    class="ml-4"
+                    mat-flat-button
+                    [disabled]="submitInProcess"
+                >
+                    <span class="ml-2 mr-1">Submit</span>
+                    <mat-progress-spinner
+                        *ngIf="submitInProcess"
+                        [diameter]="18"
+                        [mode]="'indeterminate'"
+                    ></mat-progress-spinner>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

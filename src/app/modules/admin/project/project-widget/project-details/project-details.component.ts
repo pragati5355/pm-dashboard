@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AssignBitbucketProjectDialogComponent } from '../assign-bitbucket-project-dialog/assign-bitbucket-project-dialog.component';
 import { BitbucketProjectService } from '@modules/admin/repository/common/services/bitbucket-project.service';
 import { BitbucketProjectModel } from '@modules/admin/repository/common/models/bitbucket-project.model';
+import { DatePipe } from '@angular/common';
+import { ProjectMembersDetailsComponent } from '../project-members-details/project-members-details.component';
 
 @Component({
     selector: 'app-project-details',
@@ -43,7 +45,8 @@ export class ProjectDetailsComponent implements OnInit {
         private projectService: CreateProjecteService,
         private bitbucketProjectService: BitbucketProjectService,
         private matDialog: MatDialog,
-        private _authService: AuthService
+        private _authService: AuthService,
+        private datePipe : DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -62,6 +65,7 @@ export class ProjectDetailsComponent implements OnInit {
             })
             .subscribe((res: any) => {
                 this.project = res?.data?.project;
+                console.log("this.project : ", this.project?.history);
                 this.teamMembers = res?.data?.teamModel;
                 this.repoCount = res?.data?.repoCount;
                 this._authService.setProjectDetails(this.project);
@@ -83,6 +87,12 @@ export class ProjectDetailsComponent implements OnInit {
     }
     projectProcess() {
         this.router.navigate([`/projects/project-process/list`]);
+    }
+    weeklyFeedBackList(){
+        this.router.navigate([`/projects/${this.projectId}/feedback/list`]);
+    }
+    addCR(){
+        this.router.navigate([`/projects/${this.projectId}/add-cr`]);
     }
     assignBitbucketProject() {
         if (this.allBitbucketProjects?.length > 0) {
@@ -114,5 +124,22 @@ export class ProjectDetailsComponent implements OnInit {
                     window.location.reload();
                 }
             });
+    }
+
+    historyDetails(){
+        const dialogRef = this.matDialog.open(ProjectMembersDetailsComponent, {
+            disableClose: true,
+            width: '60%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                team : this.project
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+            }
+        });
+
     }
 }

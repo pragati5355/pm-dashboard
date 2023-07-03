@@ -44,7 +44,10 @@ import { ProjectRoutingModule } from './project.routing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedback-form.component';
-
+import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedback-list.component';
+import { WeeklyFormComponent } from './weekly-form/weekly-form.component';
+import { EditProjectReasonDialogComponent } from './edit-project-reason-dialog/edit-project-reason-dialog.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 @NgModule({
     declarations: [
         ProjectHomeComponent,
@@ -55,8 +58,11 @@ import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedb
         ProjectListComponent,
         SkeletonComponent,
         WeeklyFeedbackFormComponent,
+        WeeklyFeedbackListComponent,
+        WeeklyFormComponent,
+        EditProjectReasonDialogComponent,
     ],
-    exports: [CdkStepperModule, MatStepperModule],
+    exports: [CdkStepperModule, MatStepperModule,WeeklyFeedbackListComponent],
     imports: [
         CommonModule,
         ProjectWidgetModule,
@@ -94,6 +100,7 @@ import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedb
         SkeletonModule,
         MatDatepickerModule,
         MatMomentDateModule,
+        NgxExtendedPdfViewerModule
     ],
     providers: [DatePipe],
 })

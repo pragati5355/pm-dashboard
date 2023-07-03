@@ -8,7 +8,10 @@ import {
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ROLE_LIST, ValidationConstants } from '../../../../core/constacts/constacts';
+import {
+    ROLE_LIST,
+    ValidationConstants,
+} from '../../../../core/constacts/constacts';
 import { StaticData } from '../../../../core/constacts/static';
 import {
     AbstractControl,
@@ -46,6 +49,7 @@ import {
 } from './model/add-project-models';
 import { DatePipe } from '@angular/common';
 import { UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
+import { EditProjectReasonDialogComponent } from '../edit-project-reason-dialog/edit-project-reason-dialog.component';
 
 @Component({
     selector: 'app-add-project-home',
@@ -137,12 +141,18 @@ export class AddProjectHomeComponent
     clientDtailsList: any = [];
     routeSubscribe: any;
     changeForm: number = 0;
-    ROLE_LIST: string[] = ROLE_LIST
+    ROLE_LIST: string[] = ROLE_LIST;
     editMemberMode = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     utilizationValues: number[] = UTILIZATION_VALUES;
     currentCapacity: number;
+    editProjectEndDateReason: string = '';
+    editResourceEndDateReason: string = '';
+    prevDate: any;
+    newDate: any;
+    resourcePrevDate: any;
+    resourceNewDate: any;
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -183,13 +193,51 @@ export class AddProjectHomeComponent
             });
     }
 
+    resourceEndDate(event: any) {
+        if (this.editMemberMode) {
+            const newDate = this.datePipe.transform(
+                event?.target?.value,
+                'dd-MM-yyyy'
+            );
+
+            if (newDate !== this.resourcePrevDate) {
+                const dialogRef = this.dialog.open(
+                    EditProjectReasonDialogComponent,
+                    {
+                        disableClose: true,
+                        width: '40%',
+                        panelClass: 'warn-dialog-content',
+                        autoFocus: false,
+                        data: {
+                            prevEndDate: this.resourcePrevDate,
+                            newEndDate: newDate,
+                            prefiledReason: this.editResourceEndDateReason,
+                        },
+                    }
+                );
+                dialogRef.afterClosed().subscribe((result: any) => {
+                    if (result) {
+                        this.editResourceEndDateReason = result?.reason;
+                    }
+                });
+            }
+        }
+    }
+
     editMember(index: number, teamMember: any) {
+        this.editResourceEndDateReason = teamMember?.extendedReason
+            ? teamMember?.extendedReason
+            : '';
         this.editMemberMode = true;
+
+        this.resourcePrevDate = this.datePipe.transform(
+            teamMember?.endDate,
+            'dd-MM-yyyy'
+        );
 
         this.resourceSpecificTechnologies = this.emailList
             ?.filter((item) => item?.email === teamMember?.email)
             .map((item) => item?.technologies)[0];
-        console.log('resource specific :', this.resourceSpecificTechnologies);
 
         this.projectTeam.patchValue({
             team_member: this.findTeamMember(teamMember?.resourceId),
@@ -209,6 +257,7 @@ export class AddProjectHomeComponent
                   )
                 : null,
         });
+
         this.markResourceAsBench = teamMember?.bench;
         this.markResourceAsShadow = teamMember?.shadow;
         // this.technologies.setValue([
@@ -241,11 +290,9 @@ export class AddProjectHomeComponent
         this.resourceTechnologyList = this.resourceSpecificTechnologies?.filter(
             (a) => teamMember?.technologies?.some((b) => a?.id === b?.id)
         );
-        console.log('resource techlist :', this.resourceTechnologyList);
     }
 
     findJiraUser(accountId: string) {
-        console.log('jira user :', this.jiraUsers);
         const filteredJiraUser = this.jiraUsers?.filter(
             (user) => user?.accountId === accountId
         );
@@ -451,7 +498,7 @@ export class AddProjectHomeComponent
     goBack(stepper: any) {
         this.selectedIndex = stepper;
         if (this.selectedIndex == 0) {
-            this.projectDetails.reset(this.projectDetails.value);
+            // this.projectDetails.reset(this.projectDetails.value);
             this.showStep = 1;
         } else if (this.selectedIndex == 1) {
             this.clientDetials.reset(this.clientDetials.value);
@@ -468,7 +515,7 @@ export class AddProjectHomeComponent
     public selectionChange($event: any): void {
         if ($event.selectedIndex == 0) {
             this.showStep = 1;
-            this.projectDetails.reset(this.projectDetails.value);
+            // this.projectDetails.reset(this.projectDetails.value);
         } else if ($event.selectedIndex == 1) {
             this.showStep = 2;
             this.clientDetials.reset(this.clientDetials.value);
@@ -662,8 +709,31 @@ export class AddProjectHomeComponent
         //     }
         // }
 
-        if (this.resourceTechnologyList?.length < 1 && this.projectTeam?.value?.select_role != 'PM') {
+        if (this.projectTeam?.value?.startDate === '') {
+            this.snackBar.errorSnackBar('Start date is mandatory');
+            return;
+        }
+
+        if (this.projectTeam?.value?.endDate === '') {
+            this.snackBar.errorSnackBar('End date is mandatory');
+            return;
+        }
+
+        if (
+            this.resourceTechnologyList?.length < 1 &&
+            this.projectTeam?.value?.select_role != 'PM'
+        ) {
             this.snackBar.errorSnackBar('Add technologies');
+            return;
+        }
+
+        if (this.projectTeam?.value?.select_role === '') {
+            this.snackBar.errorSnackBar('Select role');
+            return;
+        }
+
+        if (this.projectTeam?.value?.tm_utilization === '') {
+            this.snackBar.errorSnackBar('Select utilization');
             return;
         }
 
@@ -686,6 +756,7 @@ export class AddProjectHomeComponent
                     item.technologies = this.resourceTechnologyList;
                     item.bench = this.markResourceAsBench;
                     item.shadow = this.markResourceAsShadow;
+                    item.extendedReason = this.editResourceEndDateReason;
                 }
                 return item;
             });
@@ -727,6 +798,8 @@ export class AddProjectHomeComponent
         this.projectTeam.controls['startDate'].reset();
         this.projectTeam.controls['endDate'].reset();
         this.projectTeam.controls['tm_utilization'].reset();
+        this.markResourceAsBench = false;
+        this.markResourceAsShadow = false;
     }
     deleteTeamMember(index: any, teamMember: any) {
         if (teamMember?.id) {
@@ -816,6 +889,8 @@ export class AddProjectHomeComponent
                         private: this.jiraProjectList[0]?.private,
                         jiraProjectId: this.jiraProjectList[0]?.id,
                         formId: this.projectDetails?.value?.feedback_form,
+                        startDate: this.projectDetails?.value?.startDate,
+                        endDate: this.projectDetails?.value?.endDate,
                     },
                     clientDetails: this.clientDtailsList,
                     baseUrl:
@@ -994,6 +1069,16 @@ export class AddProjectHomeComponent
 
                 const projectsetting = res?.data?.authUser;
 
+                const dummyStartDate = this.datePipe.transform(
+                    1686894251322,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                );
+
+                const dummyEndDate = this.datePipe.transform(
+                    1689791400000,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                );
+
                 this.projectDetails.patchValue({
                     projectName: this.projectData?.name
                         ? this.projectData?.name
@@ -1004,7 +1089,25 @@ export class AddProjectHomeComponent
                     feedback_form: this.projectData?.formId
                         ? this.projectData?.formId
                         : '',
+                    startDate: this.projectData?.startDate
+                        ? this.datePipe.transform(
+                              this.projectData?.startDate,
+                              "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                          )
+                        : dummyStartDate,
+                    endDate: this.projectData?.endDate
+                        ? this.datePipe.transform(
+                              this.projectData?.endDate,
+                              "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                          )
+                        : dummyEndDate,
                 });
+
+                this.projectEndDateValueSubscription(
+                    this.projectData?.endDate
+                        ? this.projectData?.endDate
+                        : dummyEndDate
+                );
 
                 this.clientDetials.patchValue({
                     id:
@@ -1135,6 +1238,7 @@ export class AddProjectHomeComponent
             }
         );
     }
+
     updateProject() {
         // this.filterEditTeamMember();
         // this.filterEditClientList();
@@ -1156,6 +1260,9 @@ export class AddProjectHomeComponent
                     formId: this.projectDetails?.value?.feedback_form,
                     orgId: this.jiraProjectList[0]?.orgId,
                     userId: this.userData?.userId,
+                    extendedReason: this.editProjectEndDateReason,
+                    startDate: this.projectDetails?.value?.startDate,
+                    endDate: this.projectDetails?.value?.endDate,
                 },
                 clientDetails: this.clientDtailsList,
                 baseUrl:
@@ -1169,7 +1276,6 @@ export class AddProjectHomeComponent
                 jiraProjectKey: this.projectSetting?.value?.project,
                 teamDetails: this.teamMemberList,
             };
-            console.log(payload);
             this.submitInProcess = true;
             this.ProjectService.updateProject(payload).subscribe(
                 (res: any) => {
@@ -1178,11 +1284,11 @@ export class AddProjectHomeComponent
                         this.snackBar.successSnackBar(
                             'Project updated successFully'
                         );
-                        this.projectDetails.reset();
+                        // this.projectDetails.reset();
                         this.clientDetials.reset();
                         this.projectSetting.reset();
-                        this.projectTeam.reset();
-                        this.teamMemberList = [];
+                        // this.projectTeam.reset();
+                        // this.teamMemberList = [];
                         this.settingProjectName = '';
                         this.router.navigate([
                             '/projects/' + this.editProjectId + '/details',
@@ -1305,7 +1411,6 @@ export class AddProjectHomeComponent
     }
 
     getSelectedEmail(resource: any) {
-        console.log('selected resource :', resource);
         this.resourceSpecificTechnologies = resource?.technologies;
         this.getAvailableCapacity(resource.email);
     }
@@ -1323,6 +1428,37 @@ export class AddProjectHomeComponent
         this.initializeClientsDetailsForm();
         this.initializeProjectSettingsForm();
         this.initializeProjectTeamForm();
+    }
+
+    private projectEndDateValueSubscription(dummyEndDate: string) {
+        this.projectDetails.get('endDate').valueChanges.subscribe((value) => {
+            this.prevDate = this.datePipe.transform(dummyEndDate, 'dd-MM-yyyy');
+            this.newDate = this.datePipe.transform(value, 'dd-MM-yyyy');
+            if (this.prevDate === this.newDate) {
+                this.editProjectEndDateReason = '';
+            } else {
+                this.addReasonForProjectEndDate();
+            }
+        });
+    }
+
+    addReasonForProjectEndDate() {
+        const dialogRef = this.dialog.open(EditProjectReasonDialogComponent, {
+            disableClose: true,
+            width: '40%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                prevEndDate: this.prevDate,
+                newEndDate: this.newDate,
+                prefiledReason: this.editProjectEndDateReason,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                this.editProjectEndDateReason = result?.reason;
+            }
+        });
     }
 
     private initializeFuseWatcherService() {
@@ -1410,7 +1546,6 @@ export class AddProjectHomeComponent
         this.ProjectService.getResourceEmails().subscribe((res: any) => {
             if (res?.data) {
                 this.emailList = res?.data;
-                console.log('emails data:', this.emailList);
             }
         });
         this.projectTeam = this._formBuilder.group(
@@ -1497,6 +1632,8 @@ export class AddProjectHomeComponent
                     ],
                 ],
                 feedback_form: [''],
+                startDate: ['', [Validators.required]],
+                endDate: ['', [Validators.required]],
             },
             {
                 validator: [noWhitespaceValidator('projectDescription')],
