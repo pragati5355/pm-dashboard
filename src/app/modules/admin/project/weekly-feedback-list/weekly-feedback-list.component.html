@@ -7,12 +7,25 @@
                 class="relative flex flex-col sm:flex-row md:flex-col justify-between p-6 border-b bg-card dark:bg-transparent"
             >
                 <div class="flex items-center">
+                    <div class="flex items-center ml-2">
+                        <div
+                            class="flex items-center justify-between text-3xl font-semibold cursor-pointer"
+                            (click)="goBack()"
+                        >
+                            <mat-icon
+                                class="icon-size-6 text-3xl text-black"
+                                [svgIcon]="'heroicons_outline:chevron-left'"
+                            ></mat-icon>
+                            {{ "Project details" | titlecase }}
+                        </div>
+                    </div>
                     <div class="ml-auto">
                         <button
-                        class="mr-2 inline-flex items-center"
-                        [disabled]="loadingWeeklyFormData"
-                        mat-flat-button [color]="'primary'"
-                        (click)="weeklyFeedbackDialog()"
+                            class="mr-2 inline-flex items-center"
+                            [disabled]="loadingWeeklyFormData"
+                            mat-flat-button
+                            [color]="'primary'"
+                            (click)="weeklyFeedbackDialog()"
                         >
                             <mat-icon
                                 [svgIcon]="'heroicons_outline:plus'"
@@ -62,44 +75,61 @@
                                 >
                                     <div class="flex items-center">
                                         <div
-                                            class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                            {{list?.userModel?.firstName.charAt(0)}}
+                                            class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                        >
+                                            {{
+                                                list?.userModel?.firstName.charAt(
+                                                    0
+                                                )
+                                            }}
                                         </div>
                                     </div>
-                                     <!-- Submitted By -->
-                                     <div class="hidden md:block truncate">
-                                        {{list?.userModel?.firstName}} {{list?.userModel?.lastName}} ({{list?.userModel?.role}})
-                                    </div>
-                                    
-                                     <!-- Week End Date -->
+                                    <!-- Submitted By -->
                                     <div class="hidden md:block truncate">
-                                        {{list?.createdAt | date}}
+                                        {{ list?.userModel?.firstName }}
+                                        {{ list?.userModel?.lastName }} ({{
+                                            list?.userModel?.role
+                                        }})
                                     </div>
 
-                                     <!-- Submit Date -->
+                                    <!-- Week End Date -->
                                     <div class="hidden md:block truncate">
-                                        {{list?.lastModifiedAt | date}}
+                                        {{ list?.createdAt | date }}
+                                    </div>
+
+                                    <!-- Submit Date -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.lastModifiedAt | date }}
                                     </div>
                                     <!-- Action -->
-                                    <div class="sm:block flex flex-row px-4 items-center w-full cursor-pointer">
-                                        <mat-icon [matTooltip]="'View'"
+                                    <div
+                                        class="sm:block flex flex-row px-4 items-center w-full cursor-pointer"
+                                    >
+                                        <mat-icon
+                                            [matTooltip]="'View'"
                                             class="text-gray-400 icon-size-5 cursor-pointer"
                                             svgIcon="heroicons_outline:eye"
-                                            (click)="getDialogData(list?.formResponse, list?.formComponent)"
+                                            (click)="
+                                                getDialogData(
+                                                    list?.internalReportLink
+                                                )
+                                            "
                                         ></mat-icon>
                                     </div>
                                 </div>
                             </ng-container>
-                        </div>      
+                        </div>
                     </ng-container>
-                    
-                    <ng-container *ngIf="weeklyFormList?.length == 0 && !initialLoading">
+
+                    <ng-container
+                        *ngIf="weeklyFormList?.length == 0 && !initialLoading"
+                    >
                         <div
                             class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
                         >
                             Looks like there is no weekly feedback submitted
                         </div>
-                    </ng-container> 
+                    </ng-container>
                     <ng-container *ngIf="initialLoading">
                         <app-table-skeleton
                             [skeletonData]="requiredReposSkeletonData"

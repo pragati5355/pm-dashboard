@@ -39,7 +39,7 @@
         <div class="flex items-center justify-between w-full">
             <div class="flex flex-col items-center">
                 <div
-                    class="items-center justify-between text-3xl font-semibold tracking-tight leading-8"
+                    class="flex items-center justify-between text-3xl font-semibold tracking-tight leading-8"
                 >
                     <mat-icon
                         class="icon-size-6 text-3xl cursor-pointer text-black"
@@ -107,25 +107,13 @@
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button
-                            mat-menu-item
-                            [matTooltip]="'Weekly Feedback'"
-                            (click)="weeklyFeedBackList()"
-                        >
+                        <button mat-menu-item (click)="weeklyFeedBackList()">
                             <span>Weekly Feedback List</span>
                         </button>
-                        <button
-                            mat-menu-item
-                            [matTooltip]="'Add CR'"
-                            (click)="addCR()"
-                        >
+                        <button mat-menu-item (click)="addCR()">
                             <span>Add CR</span>
                         </button>
-                        <button
-                            mat-menu-item
-                            [matTooltip]="'Edit Project'"
-                            (click)="editProject()"
-                        >
+                        <button mat-menu-item (click)="editProject()">
                             <span>Edit Project</span>
                         </button>
                     </mat-menu>
