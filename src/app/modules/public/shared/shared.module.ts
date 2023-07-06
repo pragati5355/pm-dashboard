@@ -18,51 +18,57 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import * as moment from 'moment';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedHomeComponent } from './shared-home/shared-home.component';
 import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
 import { EmptyHomeComponent } from './empty-home/empty-home.component';
 import { FeedbackHomeComponent } from './feedback-home/feedback-home.component';
+import { WorkLogsComponent } from './work-logs/work-logs.component';
 
 const routes: Routes = [
-  {
-    path: "",
-    component: SharedHomeComponent,
-    children: [
-      { path: 'feedback/:projectId/:sprintId', component: FeedbackFormComponent },
-      { path: 'empty-feedback-form', component: EmptyHomeComponent },
-      { path: 'feedback-submitted', component: FeedbackHomeComponent },
-      {
-        path: "",
-        redirectTo: "empty-feedback-form",
-        pathMatch: "full"
-      },
-      {
-        path: "**",
-        redirectTo: "empty-feedback-form"
-      }
-    ]
-  }
+    {
+        path: '',
+        component: SharedHomeComponent,
+        children: [
+            {
+                path: 'feedback/:projectId/:sprintId',
+                component: FeedbackFormComponent,
+            },
+            { path: 'empty-feedback-form', component: EmptyHomeComponent },
+            { path: 'feedback-submitted', component: FeedbackHomeComponent },
+            { path: 'work-logs/:id', component: WorkLogsComponent },
+            {
+                path: '',
+                redirectTo: 'empty-feedback-form',
+                pathMatch: 'full',
+            },
+            {
+                path: '**',
+                redirectTo: 'empty-feedback-form',
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  declarations: [
-    SharedHomeComponent,
-    FeedbackFormComponent,
-    EmptyHomeComponent,
-    FeedbackHomeComponent
-  ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormioModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    RouterModule.forChild(routes),
-  ],
-  providers:    [ {provide: FormioAppConfig} ]
+    declarations: [
+        SharedHomeComponent,
+        FeedbackFormComponent,
+        EmptyHomeComponent,
+        FeedbackHomeComponent,
+        WorkLogsComponent,
+    ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormioModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        RouterModule.forChild(routes),
+    ],
+    providers: [{ provide: FormioAppConfig }],
 })
-export class SharedModule { }
+export class SharedModule {}
