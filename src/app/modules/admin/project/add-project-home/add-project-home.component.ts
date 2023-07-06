@@ -727,6 +727,11 @@ export class AddProjectHomeComponent
             return;
         }
 
+        if(this.projectTeam?.value?.team_jira_user === ''){
+            this.snackBar.errorSnackBar('Select Jira Username');
+            return;
+        }
+
         if (this.projectTeam?.value?.select_role === '') {
             this.snackBar.errorSnackBar('Select role');
             return;
