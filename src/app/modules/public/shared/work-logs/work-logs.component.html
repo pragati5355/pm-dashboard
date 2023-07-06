@@ -1,1 +1,75 @@
-<p>work-logs works!</p>
+<div class="w-screen h-screen flex justify-center items-center">
+    <div class="w-full max-w-screen-md p-6 bg-white rounded-sm shadow mt-6">
+        <div class="w-full flex justify-between items-center mb-4">
+            <div
+                class="mt-2 text-3xl font-extrabold tracking-tight leading-tight"
+            >
+                Work Logs
+            </div>
+            <div>
+                <img class="w-24" src="assets/images/logo/logo.png" alt="" />
+            </div>
+        </div>
+
+        <div class="w-full max-w-[500px] m-auto my-18 border-2 p-8 rounded-lg">
+            <span class="text-gray-500 text-2xl">Please fill your details</span>
+            <form class="mt-6" [formGroup]="workLogForm">
+                <div class="flex flex-col">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                            <mat-label>Total hours</mat-label>
+                            <input
+                                matInput
+                                type="number"
+                                placeholder="Total hours"
+                                formControlName="totalHours"
+                            />
+                            <mat-error
+                                *ngIf="
+                                    workLogForm
+                                        ?.get('totalHours')
+                                        ?.hasError('required')
+                                "
+                            >
+                                <div>Total hours is mandatory</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex-1 mt-4">
+                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                            <mat-label>Description</mat-label>
+                            <textarea
+                                matInput
+                                maxlength="150"
+                                trim="blur"
+                                rows="3"
+                                style="resize: none"
+                                formControlName="description"
+                                [placeholder]="'Add description here...'"
+                            ></textarea>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex justify-end mt-4">
+                        <button
+                            class="bg-primary-500 text-white font-bold"
+                            mat-flat-button
+                            type="button"
+                            (click)="submit()"
+                            [disabled]="submitInProgress"
+                        >
+                            <mat-progress-spinner
+                                *ngIf="submitInProgress"
+                                class="mr-2"
+                                [diameter]="24"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -26,6 +26,8 @@ import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
 import { EmptyHomeComponent } from './empty-home/empty-home.component';
 import { FeedbackHomeComponent } from './feedback-home/feedback-home.component';
 import { WorkLogsComponent } from './work-logs/work-logs.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 const routes: Routes = [
     {
@@ -67,6 +69,8 @@ const routes: Routes = [
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
         RouterModule.forChild(routes),
     ],
     providers: [{ provide: FormioAppConfig }],
