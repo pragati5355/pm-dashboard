@@ -1,21 +1,23 @@
 <div class="w-screen h-screen flex justify-center items-center">
-    <div class="w-full max-w-screen-md p-6 bg-white rounded-sm shadow mt-6">
-        <div class="w-full flex justify-between items-center mb-4">
-            <div
-                class="mt-2 text-3xl font-extrabold tracking-tight leading-tight"
-            >
-                Work Logs
-            </div>
+    <div class="w-full max-w-screen-md p-6 bg-white">
+        <div class="w-full flex justify-center mb-2">
             <div>
-                <img class="w-24" src="assets/images/logo/logo.png" alt="" />
+                <img class="w-36" src="assets/images/logo/logo.png" alt="" />
             </div>
         </div>
 
-        <div class="w-full max-w-[500px] m-auto my-18 border-2 p-8 rounded-lg">
-            <span class="text-gray-500 text-2xl">Please fill your details</span>
+        <div
+            class="w-full max-w-[600px] m-auto mt-8 bg-gray-50 shadow-sm p-8 rounded-lg"
+        >
+            <span class="text-gray-500 text-2xl">Work log for 07/07/2023</span>
             <form class="mt-6" [formGroup]="workLogForm">
                 <div class="flex flex-col">
                     <div class="flex-1">
+                        <mat-checkbox (change)="checkBox($event?.checked)"
+                            ><span>I was on Leave</span></mat-checkbox
+                        >
+                    </div>
+                    <div class="flex-1 mt-4">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <mat-label>Total hours</mat-label>
                             <input
@@ -25,6 +27,7 @@
                                 formControlName="totalHours"
                             />
                             <mat-error
+                                class="text-red-500"
                                 *ngIf="
                                     workLogForm
                                         ?.get('totalHours')
@@ -43,11 +46,22 @@
                                 matInput
                                 maxlength="150"
                                 trim="blur"
-                                rows="3"
+                                rows="6"
                                 style="resize: none"
                                 formControlName="description"
                                 [placeholder]="'Add description here...'"
                             ></textarea>
+
+                            <mat-error
+                                class="text-red-500"
+                                *ngIf="
+                                    workLogForm
+                                        ?.get('description')
+                                        ?.hasError('required')
+                                "
+                            >
+                                <div>Description is mandatory</div>
+                            </mat-error>
                         </mat-form-field>
                     </div>
 

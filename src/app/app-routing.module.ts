@@ -5,6 +5,7 @@ import { AuthGuard } from '@services/auth/guards/auth.guard';
 import { NoAuthGuard } from '@services/auth/guards/noAuth.guard';
 import { InitialDataResolver } from 'app/app.resolvers';
 import { LayoutComponent } from './layout/layout.component';
+import { WorkLogsComponent } from '@modules/public/shared/work-logs/work-logs.component';
 export const appRoutes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'sign-in' },
 
@@ -99,6 +100,10 @@ export const appRoutes: Routes = [
                     ),
             },
         ],
+    },
+    {
+        path: 'work-logs/:id',
+        component: WorkLogsComponent,
     },
     {
         path: '**',
