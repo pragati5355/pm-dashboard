@@ -1,4 +1,7 @@
-<div class="w-screen h-screen flex justify-center items-center bg-gray-50">
+<div
+    *ngIf="!responseSubmitted"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50"
+>
     <div class="w-full max-w-screen-md p-2 sm:p-6">
         <div class="w-full flex justify-center mb-2">
             <div>
@@ -7,7 +10,7 @@
         </div>
 
         <div
-            class="w-full max-w-[600px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
+            class="w-full max-w-[800px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
         >
             <span class="text-gray-500 text-2xl">Work log for 07/07/2023</span>
             <form class="mt-8" [formGroup]="workLogForm">
@@ -40,29 +43,28 @@
                     </div>
 
                     <div class="flex-1 mt-4">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <mat-label>Description</mat-label>
-                            <textarea
-                                matInput
-                                maxlength="350"
-                                trim="blur"
-                                rows="6"
-                                style="resize: none"
-                                formControlName="description"
-                                [placeholder]="'Add description here...'"
-                            ></textarea>
-
-                            <mat-error
-                                class="text-red-500"
-                                *ngIf="
-                                    workLogForm
-                                        ?.get('description')
-                                        ?.hasError('required')
-                                "
-                            >
-                                <div>Description is mandatory</div>
-                            </mat-error>
-                        </mat-form-field>
+                        <span class="font-semibold mb-4"
+                            >Description <span *ngIf="!onLeave">*</span></span
+                        >
+                        <div
+                            class="mt-2 border border-red-500"
+                            [ngClass]="{
+                                border: showError,
+                                'border-red-500': showError
+                            }"
+                        >
+                            <quill-editor
+                                #editor
+                                [modules]="modules"
+                                (onContentChanged)="getDescription($event)"
+                                [readOnly]="onLeave"
+                            ></quill-editor>
+                        </div>
+                        <span
+                            *ngIf="showError"
+                            class="mat-error text-red-500 ng-tns-c116-0 ng-star-inserted font-semibold text-[12px]"
+                            >Description is mandatory</span
+                        >
                     </div>
 
                     <div class="flex justify-end mt-4">
@@ -85,5 +87,14 @@
                 </div>
             </form>
         </div>
+    </div>
+</div>
+
+<div
+    *ngIf="responseSubmitted"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50"
+>
+    <div class="text-4xl font-extrabold tracking-tight leading-tight">
+        Successfully logged work
     </div>
 </div>

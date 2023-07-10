@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Delta } from 'quill-delta';
 
 @Component({
     selector: 'app-work-logs',
@@ -7,9 +8,20 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     styleUrls: ['./work-logs.component.scss'],
 })
 export class WorkLogsComponent implements OnInit {
+    @ViewChild('editor') editor: any;
     workLogForm: FormGroup;
     submitInProgress: boolean = false;
     onLeave: boolean = false;
+    showError: boolean = false;
+    description: string = '';
+    responseSubmitted: boolean = false;
+    closingCounter: number;
+    modules = {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+        ],
+    };
     constructor(private formBuilder: FormBuilder) {}
 
     ngOnInit(): void {
@@ -17,37 +29,62 @@ export class WorkLogsComponent implements OnInit {
     }
 
     submit() {
-        if (this.workLogForm?.valid && !this.onLeave) {
+        if (
+            this.workLogForm?.valid &&
+            this.description !== '' &&
+            !this.onLeave
+        ) {
             this.submitInProgress = true;
-            console.log(this.workLogForm?.value);
-            console.log(this.onLeave);
+            console.log(this.getPayload());
+        } else if (
+            !this.workLogForm?.valid &&
+            this.description === '' &&
+            this.onLeave
+        ) {
+            this.submitInProgress = true;
+            console.log(this.getPayload());
+        } else {
+            this.showError = true;
         }
 
-        if (!this.workLogForm?.valid && this.onLeave) {
-            this.submitInProgress = true;
-
-            console.log(this.workLogForm?.value);
-            console.log(this.onLeave);
-        }
+        setTimeout(() => {
+            this.submitInProgress = false;
+        }, 3000);
     }
 
     checkBox(value: boolean) {
         this.onLeave = value;
         if (value) {
             this.workLogForm?.get('totalHours')?.disable();
-            this.workLogForm?.get('description')?.disable();
             this.workLogForm?.get('totalHours')?.setValue('');
-            this.workLogForm?.get('description')?.setValue('');
+            this.editor.quillEditor.deleteText(0, 20000);
+            this.description = '';
+            this.showError = false;
         } else {
             this.workLogForm?.get('totalHours')?.enable();
-            this.workLogForm?.get('description')?.enable();
         }
+    }
+
+    getDescription($event: any) {
+        if ($event?.html !== null) {
+            this.description = $event?.html;
+            this.showError = false;
+        } else {
+            this.showError = true;
+        }
+    }
+
+    private getPayload() {
+        return {
+            totalHours: this.workLogForm?.get('totalHours')?.value,
+            description: this.description,
+            onLeave: this.onLeave,
+        };
     }
 
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
             totalHours: ['', [Validators.required]],
-            description: ['', [Validators.required]],
         });
     }
 }
