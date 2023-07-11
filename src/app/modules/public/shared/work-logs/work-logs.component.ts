@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { WorkLogsService } from '@modules/public/services/work-logs.service';
 
 @Component({
     selector: 'app-work-logs',
@@ -16,15 +18,23 @@ export class WorkLogsComponent implements OnInit {
     responseSubmitted: boolean = false;
     closingCounter: number;
     initialLoading: boolean = false;
+    pathToken: string;
+    resourceData: any;
     modules = {
         toolbar: [
             ['bold', 'italic', 'underline'],
             [{ list: 'ordered' }, { list: 'bullet' }],
         ],
     };
-    constructor(private formBuilder: FormBuilder) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private route: ActivatedRoute,
+        private workLogsService: WorkLogsService
+    ) {}
 
     ngOnInit(): void {
+        this.setTokenSubscription();
+        this.loadData();
         this.initializeForm();
     }
 
@@ -35,14 +45,14 @@ export class WorkLogsComponent implements OnInit {
             !this.onLeave
         ) {
             this.submitInProgress = true;
-            console.log(this.getPayload());
+            console.log(this.getSaveWorkLogsPayload());
         } else if (
             !this.workLogForm?.valid &&
             this.description === '' &&
             this.onLeave
         ) {
             this.submitInProgress = true;
-            console.log(this.getPayload());
+            console.log(this.getSaveWorkLogsPayload());
         } else {
             this.showError = true;
         }
@@ -75,7 +85,30 @@ export class WorkLogsComponent implements OnInit {
         }
     }
 
-    private getPayload() {
+    private setTokenSubscription() {
+        this.route.paramMap.subscribe((paramMap) => {
+            const token = paramMap.get('id');
+            if (token) {
+                this.pathToken = token;
+            }
+        });
+    }
+
+    private loadData() {
+        const payload = {
+            token: this.pathToken,
+            verifies: true,
+        };
+        this.workLogsService
+            ?.saveAndGetWorkLogsData(payload)
+            ?.subscribe((res: any) => {
+                if (res) {
+                    this.resourceData = res?.data;
+                }
+            });
+    }
+
+    private getSaveWorkLogsPayload() {
         return {
             totalHours: this.workLogForm?.get('totalHours')?.value,
             description: this.description,
