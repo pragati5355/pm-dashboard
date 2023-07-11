@@ -1,6 +1,6 @@
 <div
-    *ngIf="!responseSubmitted"
-    class="w-screen h-screen flex justify-center items-center bg-gray-50"
+    *ngIf="!responseSubmitted && !initialLoading"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50 transition-all"
 >
     <div class="w-full max-w-screen-md p-2 sm:p-6">
         <div class="w-full flex justify-center mb-2">
@@ -91,7 +91,52 @@
 </div>
 
 <div
-    *ngIf="responseSubmitted"
+    *ngIf="initialLoading"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50"
+>
+    <div class="w-full max-w-screen-md p-2 sm:p-6">
+        <div class="w-full flex justify-center mb-2">
+            <div>
+                <img class="w-36" src="assets/images/logo/logo.png" alt="" />
+            </div>
+        </div>
+
+        <div
+            class="w-full max-w-[800px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
+        >
+            <div class="skeleton-loader w-1/2">
+                <div class="table_row rounded-2xl"></div>
+            </div>
+            <form class="mt-8" [formGroup]="workLogForm">
+                <div class="flex flex-col">
+                    <div class="skeleton-loader w-24">
+                        <div class="table_row rounded-2xl"></div>
+                    </div>
+                    <div class="flex-1 mt-6">
+                        <div class="skeleton-loader w-full">
+                            <div class="table_row rounded-2xl"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="skeleton-loader_description">
+                            <div class="table_row rounded-2xl"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-4">
+                        <div class="skeleton-loader w-18">
+                            <div class="table_row rounded-2xl"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div
+    *ngIf="responseSubmitted && !initialLoading"
     class="w-screen h-screen flex justify-center items-center bg-gray-50"
 >
     <div class="text-4xl font-extrabold tracking-tight leading-tight">

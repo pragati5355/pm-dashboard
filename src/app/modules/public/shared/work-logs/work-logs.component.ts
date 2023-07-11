@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Delta } from 'quill-delta';
 
 @Component({
     selector: 'app-work-logs',
@@ -16,6 +15,7 @@ export class WorkLogsComponent implements OnInit {
     description: string = '';
     responseSubmitted: boolean = false;
     closingCounter: number;
+    initialLoading: boolean = false;
     modules = {
         toolbar: [
             ['bold', 'italic', 'underline'],
@@ -70,6 +70,7 @@ export class WorkLogsComponent implements OnInit {
             this.description = $event?.html;
             this.showError = false;
         } else {
+            this.description = '';
             this.showError = true;
         }
     }
