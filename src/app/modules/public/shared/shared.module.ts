@@ -15,7 +15,8 @@ import { EmptyHomeComponent } from './empty-home/empty-home.component';
 import { FeedbackHomeComponent } from './feedback-home/feedback-home.component';
 import { WorkLogsComponent } from './work-logs/work-logs.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { QuillModule } from 'ngx-quill'
+import { QuillModule } from 'ngx-quill';
+import { WrongUrlComponent } from './wrong-url/wrong-url.component'
 
 const routes: Routes = [
     {
@@ -48,6 +49,7 @@ const routes: Routes = [
         EmptyHomeComponent,
         FeedbackHomeComponent,
         WorkLogsComponent,
+        WrongUrlComponent,
     ],
     imports: [
         CommonModule,

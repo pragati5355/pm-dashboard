@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WorkLogsService } from '@modules/public/services/work-logs.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 
 @Component({
     selector: 'app-work-logs',
@@ -29,7 +30,9 @@ export class WorkLogsComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
-        private workLogsService: WorkLogsService
+        private workLogsService: WorkLogsService,
+        private snackBar: SnackBar,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -44,22 +47,16 @@ export class WorkLogsComponent implements OnInit {
             this.description !== '' &&
             !this.onLeave
         ) {
-            this.submitInProgress = true;
-            console.log(this.getSaveWorkLogsPayload());
+            this.handleSubmitResponse();
         } else if (
             !this.workLogForm?.valid &&
             this.description === '' &&
             this.onLeave
         ) {
-            this.submitInProgress = true;
-            console.log(this.getSaveWorkLogsPayload());
+            this.handleSubmitResponse();
         } else {
             this.showError = true;
         }
-
-        setTimeout(() => {
-            this.submitInProgress = false;
-        }, 3000);
     }
 
     checkBox(value: boolean) {
@@ -85,6 +82,25 @@ export class WorkLogsComponent implements OnInit {
         }
     }
 
+    private handleSubmitResponse() {
+        this.submitInProgress = true;
+        const payload = this.getSaveWorkLogsPayload();
+        this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
+            (res: any) => {
+                this.submitInProgress = false;
+                if (!res?.error && res?.message === 'Success') {
+                    this.responseSubmitted = true;
+                } else {
+                    this.snackBar.errorSnackBar('Something went wrong');
+                }
+            },
+            (err) => {
+                this.submitInProgress = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
+    }
+
     private setTokenSubscription() {
         this.route.paramMap.subscribe((paramMap) => {
             const token = paramMap.get('id');
@@ -95,24 +111,39 @@ export class WorkLogsComponent implements OnInit {
     }
 
     private loadData() {
+        this.initialLoading = true;
         const payload = {
             token: this.pathToken,
             verifies: true,
         };
-        this.workLogsService
-            ?.saveAndGetWorkLogsData(payload)
-            ?.subscribe((res: any) => {
-                if (res) {
+        this.workLogsService?.saveAndGetWorkLogsData(payload)?.subscribe(
+            (res: any) => {
+                this.initialLoading = false;
+                if (!res?.data?.expired) {
                     this.resourceData = res?.data;
+                } else {
+                    this.router.navigate(['/wrong-url']);
                 }
-            });
+            },
+            (err) => {
+                this.initialLoading = false;
+                this.snackBar?.errorSnackBar('Somethin went wrong');
+            }
+        );
     }
 
     private getSaveWorkLogsPayload() {
         return {
-            totalHours: this.workLogForm?.get('totalHours')?.value,
-            description: this.description,
-            onLeave: this.onLeave,
+            token: this.pathToken,
+            verifies: false,
+            externalWorklog: {
+                resourceId: this.resourceData?.resourceId,
+                projectId: this.resourceData?.projectId,
+                workLogDate: this.resourceData?.workLogDate,
+                timeSpent: this.workLogForm?.get('totalHours')?.value,
+                comment: this.description,
+                onLeave: this.onLeave,
+            },
         };
     }
 

@@ -12,7 +12,15 @@
         <div
             class="w-full max-w-[800px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
         >
-            <span class="text-gray-500 text-2xl">Work log for 07/07/2023</span>
+            <div class="mb-2">
+                <span class="text-xl"
+                    >Hi, {{ resourceData?.resourceName | titlecase }}</span
+                >
+            </div>
+            <span class="text-gray-500 text-2xl"
+                >{{ resourceData?.projectName }} : Work log for
+                {{ resourceData?.workLogDate | date }}</span
+            >
             <form class="mt-8" [formGroup]="workLogForm">
                 <div class="flex flex-col">
                     <div class="flex-1">
@@ -139,7 +147,9 @@
     *ngIf="responseSubmitted && !initialLoading"
     class="w-screen h-screen flex justify-center items-center bg-gray-50"
 >
-    <div class="text-4xl font-extrabold tracking-tight leading-tight">
+    <div
+        class="text-4xl text-center font-extrabold tracking-tight leading-tight"
+    >
         Successfully logged work
     </div>
 </div>
