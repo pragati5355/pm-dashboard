@@ -140,8 +140,10 @@ export class WorkLogsComponent implements OnInit {
                 resourceId: this.resourceData?.resourceId,
                 projectId: this.resourceData?.projectId,
                 workLogDate: this.resourceData?.workLogDate,
-                timeSpent: this.workLogForm?.get('totalHours')?.value,
-                comment: this.description,
+                timeSpent: this.workLogForm?.get('totalHours')?.value
+                    ? this.workLogForm?.get('totalHours')?.value
+                    : null,
+                comment: this.description ? this.description : null,
                 onLeave: this.onLeave,
             },
         };
