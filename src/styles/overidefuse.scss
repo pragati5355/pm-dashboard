@@ -244,3 +244,15 @@
         padding-right: 0 !important;
     }
 }
+
+.mat-datepicker-content {
+    background-color: rgb(252, 252, 252) !important;
+    border: 0.5px solid black !important;
+}
+.mat-radio-checked .mat-radio-inner-circle {
+    background-color: black;
+}
+.mat-select-panel,
+.cdk-overlay-pane {
+    background-color: white !important;
+}

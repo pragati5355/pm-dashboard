@@ -111,6 +111,13 @@ export const appRoutes: Routes = [
         component: WrongUrlComponent,
     },
     {
+        path: 'resource',
+        loadChildren: () =>
+            import('./modules/public/resource/resource.module').then(
+                (m) => m.ResourceModule
+            ),
+    },
+    {
         path: '**',
         redirectTo: 'sign-in',
         pathMatch: 'full',
