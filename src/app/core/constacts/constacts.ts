@@ -82,7 +82,6 @@ export const ROLE_LIST = [
     'DEVOPS',
     'QA',
     'DESIGNER',
-    'MOBILE',
     'DATASCIENCE',
 ];
 

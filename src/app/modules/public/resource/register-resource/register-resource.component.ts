@@ -9,11 +9,11 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Technology } from '@modules/admin/resources/add-resources/add-resources.component';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
 import { MonthValdation } from 'app/core/utils/Validations';
 import moment from 'moment';
 import { map, Observable, startWith } from 'rxjs';
+import { EMAIL_LIST, TECHNOLOGIES } from '../common';
 
 @Component({
     selector: 'app-register-resource',
@@ -31,1204 +31,27 @@ export class RegisterResourceComponent implements OnInit {
     addOnBlur = false;
     userData: any;
     filteredTechnologies: Observable<any[]> | undefined;
-    alltechnologys: Technology[] = [];
+    alltechnologys: any[] = [];
     technologys: any = [];
-    emailList: any[] = [
-        {
-            id: 14,
-            email: 'pranita1959@mindbowser.com',
-            firstName: 'pranita',
-            lastName: 'jadhav',
-            capacity: 0,
-            projectUtilizationDetails: [],
-            technologies: [
-                {
-                    id: 27,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 0,
-                    experienceMonth: 0,
-                    resourceId: 14,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 5,
-            email: 'pranita.jadhav@mindbowser.com',
-            firstName: 'Pranita',
-            lastName: 'Jadhav',
-            capacity: 0,
-            projectUtilizationDetails: [
-                {
-                    id: 94,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 333,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1688732604988,
-                    endDate: 1690309800000,
-                    utilization: 0.25,
-                    projectType: 'EXTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: 'ThriveHealth',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 100,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 278,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686853800000,
-                    endDate: 1689791400000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: '609ccb4197f3d40070c3c8bd',
-                    projectName: 'Metrics PM dashboard ',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 9,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 305,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686563307584,
-                    endDate: 1687804200000,
-                    utilization: 0.25,
-                    projectType: 'EXTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: 'Lion 1',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 91,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 336,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1688162205076,
-                    endDate: 1704020400000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'PM',
-                    jiraUserName: null,
-                    projectName: '3PRONG',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 9,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 5,
-                    deleted: false,
-                },
-                {
-                    id: 10,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 46,
-                    name: 'python',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 5,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 10,
-            email: 'rohan.kadam@mindbowser.com',
-            firstName: 'Rohan',
-            lastName: 'kadam',
-            capacity: 0.25,
-            projectUtilizationDetails: [
-                {
-                    id: 73,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 276,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1685577600000,
-                    endDate: 1725906600000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: 'fox test mar 21',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 101,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 278,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686853800000,
-                    endDate: 1689791400000,
-                    utilization: 0.5,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: '620b6f188c763e0068d132a7',
-                    projectName: 'Metrics PM dashboard ',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 96,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 332,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1689082839241,
-                    endDate: 1690741800000,
-                    utilization: 0.25,
-                    projectType: 'EXTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: 'Syngrid',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 19,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 10,
-                    deleted: false,
-                },
-                {
-                    id: 20,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 46,
-                    name: 'python',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 10,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 17,
-            email: 'rahul.dudhane@mindbowser.com',
-            firstName: 'Rahul',
-            lastName: 'Dudhane',
-            capacity: 0.75,
-            projectUtilizationDetails: [],
-            technologies: [
-                {
-                    id: 33,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 1,
-                    name: 'Java',
-                    experienceYear: 3,
-                    experienceMonth: 0,
-                    resourceId: 17,
-                    deleted: false,
-                },
-                {
-                    id: 34,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 3,
-                    experienceMonth: 0,
-                    resourceId: 17,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 4,
-            email: 'Pragati.Gawade@mindbowser.com',
-            firstName: 'Pragati',
-            lastName: 'Gawade',
-            capacity: 0.75,
-            projectUtilizationDetails: [
-                {
-                    id: 85,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 327,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686853800000,
-                    endDate: 1688063400000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: 'Hello',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 104,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 329,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1689313420018,
-                    endDate: 1690223400000,
-                    utilization: 0.25,
-                    projectType: 'EXTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: 'Pragati Test',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 76,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 277,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687525193347,
-                    endDate: 1697653800000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FULLSTACK',
-                    jiraUserName: null,
-                    projectName: 'Qwerty',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 7,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 4,
-                    deleted: false,
-                },
-                {
-                    id: 8,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 46,
-                    name: 'python',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 4,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 2,
-            email: 'prafull.patil@mindbowser.com',
-            firstName: 'Prafull',
-            lastName: 'patil',
-            capacity: 0,
-            projectUtilizationDetails: [
-                {
-                    id: 5,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 334,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686216504086,
-                    endDate: 1686162600000,
-                    utilization: 0.25,
-                    projectType: 'EXTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'PM',
-                    jiraUserName: null,
-                    projectName: 'TEST1',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 6,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 335,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686216642951,
-                    endDate: 1686594600000,
-                    utilization: 0.25,
-                    projectType: 'EXTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'PM',
-                    jiraUserName: null,
-                    projectName: 'Test2',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 15,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 167,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687262939177,
-                    endDate: 1687977000000,
-                    utilization: 0.5,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: 'chartbiopsy',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 3,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 2,
-                    deleted: false,
-                },
-                {
-                    id: 4,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 46,
-                    name: 'python',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 2,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 9,
-            email: 'ryan.jj@mindbowser.com',
-            firstName: 'Ryan',
-            lastName: 'Jadhav',
-            capacity: 0,
-            projectUtilizationDetails: [
-                {
-                    id: 89,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 276,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1688080785349,
-                    endDate: 1723055400000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: 'fox test mar 21',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 59,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 169,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687533901391,
-                    endDate: 1692037800000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FULLSTACK',
-                    jiraUserName: null,
-                    projectName: 'Metrics Test Amaresh',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 77,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 336,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1688006237084,
-                    endDate: 1716143400000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: '3PRONG',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 61,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 322,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687515074168,
-                    endDate: 1689100200000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: 'Hello',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 17,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 9,
-                    deleted: false,
-                },
-                {
-                    id: 18,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 1,
-                    name: 'Java',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 9,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 12,
-            email: 'pranita.05jadhav@mindbowser.com',
-            firstName: 'Pranita',
-            lastName: 'Jadhav',
-            capacity: 0.25,
-            projectUtilizationDetails: [
-                {
-                    id: 84,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 276,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687870135480,
-                    endDate: 1723228200000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: 'fox test mar 21',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 90,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 336,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687950000000,
-                    endDate: 1717957800000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: '3PRONG',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 23,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 2,
-                    name: 'SpringBoot',
-                    experienceYear: 0,
-                    experienceMonth: 0,
-                    resourceId: 12,
-                    deleted: false,
-                },
-                {
-                    id: 24,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 1,
-                    name: 'Java',
-                    experienceYear: 0,
-                    experienceMonth: 0,
-                    resourceId: 12,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 6,
-            email: 'vimu.kale@mindbowser.com',
-            firstName: 'vimu',
-            lastName: 'kale',
-            capacity: 0.25,
-            projectUtilizationDetails: [
-                {
-                    id: 92,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 336,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1688163352846,
-                    endDate: 1707589800000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: '3PRONG',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 16,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 167,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687336938599,
-                    endDate: 1691605800000,
-                    utilization: 0.5,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: '5c8782481330837ea2b10bff',
-                    projectName: 'chartbiopsy',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 11,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 7,
-                    name: 'React',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 6,
-                    deleted: false,
-                },
-                {
-                    id: 12,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 45,
-                    name: 'node',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 6,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 7,
-            email: 'sample.user@mindbowser.com',
-            firstName: 'Sample',
-            lastName: 'User',
-            capacity: 0.25,
-            projectUtilizationDetails: [
-                {
-                    id: 93,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 336,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1688927400000,
-                    endDate: 1690741800000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: '557058:214cdd6a-ff93-4d8b-838b-62dfcf1a2a71',
-                    projectName: '3PRONG',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 75,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 277,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687524966243,
-                    endDate: 1690482600000,
-                    utilization: 0.5,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: 'Qwerty',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 13,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 7,
-                    deleted: false,
-                },
-                {
-                    id: 14,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 45,
-                    name: 'node',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 7,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 8,
-            email: 'r.joshi@mindbowser.com',
-            firstName: 'Rohan',
-            lastName: 'Joshi',
-            capacity: 0,
-            projectUtilizationDetails: [
-                {
-                    id: 58,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 169,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687533875965,
-                    endDate: 1694457000000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: 'Metrics Test Amaresh',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 51,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 336,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1680465600000,
-                    endDate: 1711996200000,
-                    utilization: 0.5,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'FRONTEND',
-                    jiraUserName: null,
-                    projectName: '3PRONG',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 62,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 322,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687515098596,
-                    endDate: 1689359400000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: null,
-                    projectName: 'Hello',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 15,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 0,
-                    resourceId: 8,
-                    deleted: false,
-                },
-                {
-                    id: 16,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 1,
-                    name: 'Java',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 8,
-                    deleted: false,
-                },
-                {
-                    id: 29,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 4,
-                    name: 'AWS',
-                    experienceYear: 0,
-                    experienceMonth: 0,
-                    resourceId: 8,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 16,
-            email: 'roham.kadam@mindbowser.com',
-            firstName: 'roham',
-            lastName: 'kadam',
-            capacity: 1,
-            projectUtilizationDetails: null,
-            technologies: [
-                {
-                    id: 32,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 2,
-                    experienceMonth: 0,
-                    resourceId: 16,
-                    deleted: false,
-                },
-            ],
-        },
-        {
-            id: 1,
-            email: 'amaresh.joshi@mindbowser.com',
-            firstName: 'Amaresh',
-            lastName: 'Joshi',
-            capacity: 0,
-            projectUtilizationDetails: [
-                {
-                    id: 98,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 278,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686853800000,
-                    endDate: 1689791400000,
-                    utilization: 0.5,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: '620c7b12ef2bd5006ae98a3a',
-                    projectName: 'Metrics PM dashboard ',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 7,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 332,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1686226832879,
-                    endDate: 1687285800000,
-                    utilization: 0.25,
-                    projectType: 'EXTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'PM',
-                    jiraUserName: null,
-                    projectName: 'Syngrid',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-                {
-                    id: 14,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    projectId: 167,
-                    resourceId: null,
-                    email: null,
-                    startDate: 1687199400000,
-                    endDate: 1693333800000,
-                    utilization: 0.25,
-                    projectType: 'INTERNAL',
-                    status: 'ACTIVE',
-                    assignedBy: null,
-                    role: 'BACKEND',
-                    jiraUserName: '6130ad009976c300694fdf42',
-                    projectName: 'chartbiopsy',
-                    isShadow: false,
-                    isBench: false,
-                    technologies: null,
-                    extendedHours: null,
-                    extendedReason: null,
-                    bench: false,
-                    shadow: false,
-                    deleted: false,
-                },
-            ],
-            technologies: [
-                {
-                    id: 1,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 5,
-                    name: 'Angular',
-                    experienceYear: 1,
-                    experienceMonth: 2,
-                    resourceId: 1,
-                    deleted: false,
-                },
-                {
-                    id: 2,
-                    createdAt: null,
-                    lastModifiedAt: null,
-                    isDeleted: false,
-                    technologyId: 46,
-                    name: 'python',
-                    experienceYear: 2,
-                    experienceMonth: 4,
-                    resourceId: 1,
-                    deleted: false,
-                },
-            ],
-        },
-    ];
+    emailList: any[] = EMAIL_LIST;
+    allTeamsTechnologyList: any = TECHNOLOGIES;
+
+    get resourcesValidForm(): { [key: string]: AbstractControl } {
+        return this.resourcesForm.controls;
+    }
+
+    get certificates() {
+        return this.resourcesForm?.get('certificates') as FormArray;
+    }
+
+    get mbProjects() {
+        return this.resourcesForm?.get('mbProjects') as FormArray;
+    }
+
+    get technologies() {
+        return this.resourcesForm?.get('technologies') as FormArray;
+    }
+
     constructor(private formBuilder: FormBuilder) {}
 
     ngOnInit(): void {
@@ -1270,16 +93,9 @@ export class RegisterResourceComponent implements OnInit {
 
     selected(event: MatAutocompleteSelectedEvent): void {
         const technology = event?.option?.value;
-        const isAlreadyExist =
-            this.technologies?.value?.filter(
-                (item) =>
-                    item?.name?.toLowerCase() === technology?.name.toLowerCase()
-            )?.length > 0;
-
-        if (technology && !isAlreadyExist) {
+        if (technology) {
             const technologyControl = this.formBuilder.group({
-                technologyId: [technology?.id || null],
-                name: [technology?.name || null],
+                name: [technology || null],
                 experienceYear: [0, [Validators.required]],
                 experienceMonth: [0, [Validators.required]],
                 resourceId: [this.userData?.userId || null],
@@ -1287,6 +103,30 @@ export class RegisterResourceComponent implements OnInit {
             this.technologies.push(technologyControl);
         }
         this.resourcesForm.get('technology')?.reset();
+    }
+
+    teamType($event: any) {
+        this.resourcesForm?.get('technology')?.setValue([]);
+        const team = $event?.value;
+        this.alltechnologys = [];
+        if (team === ROLE_LIST[0]) {
+            this.alltechnologys?.push(this.allTeamsTechnologyList?.frontEnd);
+        } else if (team === ROLE_LIST[1]) {
+            this.alltechnologys?.push(this.allTeamsTechnologyList?.backEnd);
+        } else if (team === ROLE_LIST[2]) {
+            const fe: any[] = this.allTeamsTechnologyList?.frontEnd;
+            const be: any[] = fe.concat(this.allTeamsTechnologyList?.backEnd);
+            this.alltechnologys?.push([...new Set(be)]);
+        } else if (team === ROLE_LIST[3]) {
+        } else if (team === ROLE_LIST[4]) {
+            this.alltechnologys?.push(this.allTeamsTechnologyList?.devOps);
+        } else if (team === ROLE_LIST[5]) {
+            this.alltechnologys?.push(this.allTeamsTechnologyList?.qa);
+        } else if (team === ROLE_LIST[6]) {
+            this.alltechnologys?.push(this.allTeamsTechnologyList?.designer);
+        } else if (team === ROLE_LIST[7]) {
+            this.alltechnologys?.push(this.allTeamsTechnologyList?.dataScience);
+        }
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
@@ -1300,12 +140,52 @@ export class RegisterResourceComponent implements OnInit {
         }
     }
 
-    get resourcesValidForm(): { [key: string]: AbstractControl } {
-        return this.resourcesForm.controls;
+    submit() {
+        if (this.resourcesForm?.valid) {
+            console.log(this.resourcesForm?.value);
+        }
     }
 
-    get technologies() {
-        return this.resourcesForm?.get('technologies') as FormArray;
+    getTechnologiesList() {
+        this.filteredTechnologies = this.resourcesForm
+            .get('technology')
+            ?.valueChanges.pipe(
+                startWith(''),
+                map((technology: any | null) =>
+                    technology ? this._filter(technology) : this._filterslice()
+                )
+            );
+    }
+    _filter(value: any) {
+        const res = this.alltechnologys[0]?.filter(
+            (tech) => tech.toLowerCase().indexOf(value) === 0
+        );
+        return res;
+    }
+    _filterslice() {
+        return this.alltechnologys[0]?.filter(
+            (tech) => !this.technologys.includes(tech)
+        );
+    }
+
+    addNewCertificate() {
+        this.certificates.push(this.getSingleControl());
+    }
+
+    addNewProject() {
+        this.mbProjects.push(this.getSingleProjectsControl());
+    }
+
+    removeProject(index: number) {
+        if (index !== 0) {
+            this.mbProjects.removeAt(index);
+        }
+    }
+
+    remove(index: number) {
+        if (index !== 0) {
+            this.certificates.removeAt(index);
+        }
     }
 
     private initializeForm() {
@@ -1350,6 +230,8 @@ export class RegisterResourceComponent implements OnInit {
                 technology: [],
                 technologies: this.formBuilder.array([]),
                 pmOrMentorEmail: [''],
+                certificates: this.getCertifcatesControls(),
+                mbProjects: this.getMbProjectsControls(),
             },
             {
                 validator: [MonthValdation('month')],
@@ -1357,6 +239,32 @@ export class RegisterResourceComponent implements OnInit {
         );
         this.pmMentorFilterInitialization();
         this.dynamicFieldValidation();
+        this.getTechnologiesList();
+    }
+
+    private getMbProjectsControls(): FormArray {
+        return this.formBuilder.array([this.getSingleProjectsControl()]);
+    }
+
+    private getCertifcatesControls(): FormArray {
+        return this.formBuilder.array([this.getSingleControl()]);
+    }
+
+    private getSingleControl(): FormGroup {
+        const control = this.formBuilder.group({
+            name: [''],
+            link: [''],
+        });
+
+        return control;
+    }
+
+    private getSingleProjectsControl(): FormGroup {
+        const control = this.formBuilder.group({
+            name: ['', [Validators.required]],
+        });
+
+        return control;
     }
 
     private dynamicFieldValidation() {
@@ -1395,28 +303,5 @@ export class RegisterResourceComponent implements OnInit {
         );
 
         return arr.length ? arr : [{ email: 'No Emails found' }];
-    }
-
-    getTechnologiesList() {
-        this.filteredTechnologies = this.resourcesForm
-            .get('technology')
-            ?.valueChanges.pipe(
-                startWith(''),
-                map((technology: any | null) =>
-                    technology ? this._filter(technology) : this._filterslice()
-                )
-            );
-    }
-    _filter(value: any) {
-        return this.alltechnologys.filter(
-            (alltechnologys: any) =>
-                alltechnologys.name.toLowerCase().indexOf(value) === 0 &&
-                !this.technologys.includes(alltechnologys.id)
-        );
-    }
-    _filterslice() {
-        return this.alltechnologys.filter(
-            (alltechnologys) => !this.technologys.includes(alltechnologys.id)
-        );
     }
 }

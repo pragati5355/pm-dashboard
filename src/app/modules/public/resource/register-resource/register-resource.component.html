@@ -19,8 +19,11 @@
                 [formGroup]="resourcesForm"
                 *ngIf="!initialLoading && resourcesForm"
             >
+                <div class="bg-gray-100 py-3 px-1 shadow rounded mb-4">
+                    <span class="text-2xl">Personal details</span>
+                </div>
                 <div
-                    class="flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                    class="mt-4 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
                 >
                     <div
                         class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
@@ -321,49 +324,6 @@
                     </div>
                 </div>
 
-                <div
-                    class="w-full font-extrabold tracking-tight ng-tns-c274-3859"
-                >
-                    <mat-form-field
-                        [floatLabel]="'always'"
-                        appearance="fill"
-                        class="w-full"
-                    >
-                        <mat-label>Your current team</mat-label>
-                        <mat-select
-                            formControlName="role"
-                            placeholder="Select Team"
-                            type="text"
-                            [disableOptionCentering]="true"
-                        >
-                            <mat-option
-                                *ngFor="let role of selectTeamList"
-                                [value]="role"
-                            >
-                                {{ role }}
-                            </mat-option>
-                        </mat-select>
-                        <mat-error
-                            *ngIf="
-                                resourcesValidForm['role'].errors &&
-                                resourcesValidForm['role']?.invalid &&
-                                resourcesValidForm['role']?.touched
-                            "
-                        >
-                            <div
-                                *ngIf="
-                                    resourcesValidForm['role'].errors[
-                                        'required'
-                                    ]
-                                "
-                                class="text-red-500"
-                            >
-                                Team is mandatory
-                            </div>
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
                 <div class="w-full mt-4">
                     <mat-label class="mb-2">PM/Mentor</mat-label>
                     <mat-form-field class="w-full mt-2">
@@ -396,8 +356,56 @@
                     </mat-form-field>
                 </div>
 
+                <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+                    <span class="text-2xl">Technology/skill</span>
+                </div>
+
                 <div
-                    class="flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                    class="w-full font-extrabold tracking-tight ng-tns-c274-3859"
+                >
+                    <mat-form-field
+                        [floatLabel]="'always'"
+                        appearance="fill"
+                        class="w-full mt-4"
+                    >
+                        <mat-label>Your current team</mat-label>
+                        <mat-select
+                            formControlName="role"
+                            placeholder="Select Team"
+                            type="text"
+                            (selectionChange)="teamType($event)"
+                            [disableOptionCentering]="true"
+                        >
+                            <mat-option
+                                *ngFor="let role of selectTeamList"
+                                [value]="role"
+                            >
+                                {{ role }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="
+                                resourcesValidForm['role'].errors &&
+                                resourcesValidForm['role']?.invalid &&
+                                resourcesValidForm['role']?.touched
+                            "
+                        >
+                            <div
+                                *ngIf="
+                                    resourcesValidForm['role'].errors[
+                                        'required'
+                                    ]
+                                "
+                                class="text-red-500"
+                            >
+                                Team is mandatory
+                            </div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div
+                    class="mt-4 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
                 >
                     <div
                         class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
@@ -410,15 +418,10 @@
                             <mat-label>Technology</mat-label>
                             <mat-chip-list #chipList>
                                 <input
-                                    #technologyInput
                                     placeholder="New technology..."
                                     formControlName="technology"
                                     [matAutocomplete]="auto"
                                     [matChipInputFor]="chipList"
-                                    [matChipInputSeparatorKeyCodes]="
-                                        separatorKeysCodes
-                                    "
-                                    [matChipInputAddOnBlur]="addOnBlur"
                                     (matChipInputTokenEnd)="add($event)"
                                     class="w-full"
                                 />
@@ -434,7 +437,7 @@
                                     "
                                     [value]="technology"
                                 >
-                                    {{ technology?.name }}
+                                    {{ technology }}
                                 </mat-option>
                             </mat-autocomplete>
                         </mat-form-field>
@@ -476,9 +479,7 @@
                                         <div
                                             class="inventory-grid grid grid-cols-4 md:grid-cols-4 gap-4 pt-1 items-center"
                                         >
-                                            <div
-                                                class="hidden md:block truncate -mt-5"
-                                            >
+                                            <div class="">
                                                 {{ technology?.value?.name }}
                                             </div>
                                             <mat-form-field
@@ -556,8 +557,148 @@
                     </div>
                 </div>
 
-                <div class="w-full flex items-center justify-end ml-auto mt-6 sm:mt-0">
+                <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+                    <span class="text-2xl">Certification (Optional)</span>
+                </div>
+
+                <div formArrayName="certificates">
+                    <ng-container
+                        *ngFor="
+                            let certificate of certificates?.controls;
+                            let i = index;
+                            let last = last
+                        "
+                    >
+                        <form
+                            class="flex flex-row justify-center items-center"
+                            [formGroupName]="i"
+                        >
+                            <mat-form-field
+                                class="w-full mr-4 userlist mt-2"
+                                id="userlist"
+                                [floatLabel]="'always'"
+                            >
+                                <mat-label>Name</mat-label>
+                                <input
+                                    matInput
+                                    placeholder="Certificate Name"
+                                    formControlName="name"
+                                    class="inputlist"
+                                />
+                            </mat-form-field>
+
+                            <mat-form-field
+                                class="w-full mr-4 sm:mt-0 userlist mt-2"
+                                id="userlist"
+                                [floatLabel]="'always'"
+                            >
+                                <mat-label
+                                    >Certificate Link(Optional)</mat-label
+                                >
+                                <input
+                                    matInput
+                                    placeholder="certificate link"
+                                    formControlName="link"
+                                    class="inputlist"
+                                />
+                            </mat-form-field>
+                            <mat-icon
+                                *ngIf="last"
+                                class="cursor-pointer mr-2"
+                                color="primary"
+                                matTooltip="Add more certificates"
+                                (click)="
+                                    certificate?.valid
+                                        ? addNewCertificate()
+                                        : certificate?.markAllAsTouched()
+                                "
+                                >add</mat-icon
+                            >
+                            <mat-icon
+                                *ngIf="i != 0"
+                                class="cursor-pointer"
+                                color="warn"
+                                matTooltip="Remove"
+                                (click)="remove(i)"
+                                >delete</mat-icon
+                            >
+                        </form>
+                    </ng-container>
+                </div>
+
+                <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+                    <span class="text-2xl">Mindbowser projects</span>
+                </div>
+
+                <div formArrayName="mbProjects" class="mt-4">
+                    <ng-container
+                        *ngFor="
+                            let project of mbProjects?.controls;
+                            let i = index;
+                            let last = last
+                        "
+                    >
+                        <form
+                            class="flex flex-row justify-center items-center"
+                            [formGroupName]="i"
+                        >
+                            <mat-form-field
+                                class="w-full mr-4 userlist mt-4"
+                                id="userlist"
+                                [floatLabel]="'always'"
+                            >
+                                <mat-label
+                                    >Name the project you have worked on in
+                                    mindbowser</mat-label
+                                >
+                                <input
+                                    matInput
+                                    placeholder="Project Name"
+                                    formControlName="name"
+                                    class="inputlist"
+                                />
+                                <mat-error
+                                    *ngIf="
+                                        project
+                                            ?.get('name')
+                                            ?.hasError('required')
+                                    "
+                                >
+                                    <div class="text-red-500">
+                                        Project Name is Mandatory
+                                    </div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-icon
+                                *ngIf="last"
+                                class="cursor-pointer mr-2"
+                                color="primary"
+                                matTooltip="Add more projects"
+                                (click)="
+                                    project?.valid
+                                        ? addNewProject()
+                                        : project?.markAllAsTouched()
+                                "
+                                >add</mat-icon
+                            >
+                            <mat-icon
+                                *ngIf="i != 0"
+                                class="cursor-pointer"
+                                color="warn"
+                                matTooltip="Remove"
+                                (click)="removeProject(i)"
+                                >delete</mat-icon
+                            >
+                        </form>
+                    </ng-container>
+                </div>
+
+                <div
+                    class="w-full flex items-center justify-end ml-auto mt-6 sm:mt-0"
+                >
                     <button
+                        (click)="submit()"
                         [color]="'primary'"
                         class="order-first sm:order-last ml-4 bg-primary-500 text-white"
                         mat-flat-button
