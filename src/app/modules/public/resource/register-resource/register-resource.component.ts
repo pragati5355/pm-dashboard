@@ -13,6 +13,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
+import { SnackBar } from 'app/core/utils/snackBar';
 import { MonthValdation } from 'app/core/utils/Validations';
 import moment from 'moment';
 import { map, Observable, of, startWith } from 'rxjs';
@@ -63,7 +64,11 @@ export class RegisterResourceComponent implements OnInit {
         return this.resourcesForm?.get('technologies') as FormArray;
     }
 
-    constructor(private formBuilder: FormBuilder, private dialog: MatDialog) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private dialog: MatDialog,
+        private snackBar: SnackBar
+    ) {}
 
     ngOnInit(): void {
         this.initializeForm();

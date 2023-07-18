@@ -700,7 +700,7 @@
 
                             <mat-icon
                                 *ngIf="last"
-                                class="cursor-pointer mr-2"
+                                class="cursor-pointer mt-4"
                                 color="primary"
                                 matTooltip="Add more projects"
                                 (click)="
@@ -712,7 +712,7 @@
                             >
                             <mat-icon
                                 *ngIf="i != 0"
-                                class="cursor-pointer"
+                                class="cursor-pointer mt-4"
                                 color="warn"
                                 matTooltip="Remove"
                                 (click)="removeProject(i)"
@@ -743,7 +743,7 @@
                 </div>
 
                 <div
-                    class="w-full flex items-center justify-end ml-auto mt-6 sm:mt-0"
+                    class="w-full flex items-center justify-end ml-auto mt-6"
                 >
                     <button
                         (click)="submit()"
