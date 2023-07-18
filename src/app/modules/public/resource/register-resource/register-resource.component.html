@@ -1,8 +1,8 @@
 <div
-    class="min-h-screen min-w-screen bg-gray-50 flex justify-center items-center py-4"
+    class="main-container min-h-screen min-w-screen bg-gray-50 flex justify-center items-center py-4"
 >
     <div
-        class="w-full max-w-3xl px-4 py-8 sm:px-8 sm:py-12 shadow-sm rounded bg-white"
+        class="w-full max-w-4xl px-4 py-8 sm:px-8 sm:py-12 shadow-sm rounded bg-white"
     >
         <div class="w-full flex justify-center mb-2">
             <div>
@@ -558,6 +558,33 @@
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+                    <span class="text-2xl">Other skills/integrations</span>
+                </div>
+
+                <div
+                    class="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-1 gap-y-3"
+                >
+                    <div *ngFor="let skill of integrations; let i = index">
+                        <mat-checkbox
+                            class="example-margin"
+                            [value]="skill"
+                            (change)="onCheckBoxChange($event)"
+                        >
+                            {{ skill }}</mat-checkbox
+                        >
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    Did not find the skill/integration?
+                    <span
+                        (click)="addSkillAndIntegrations()"
+                        class="mx-3 px-4 py-2 bg-primary-500 text-white cursor-pointer rounded-md"
+                        >Add your own</span
+                    >
+                </div>
+
+                <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
                     <span class="text-2xl">Certification (Optional)</span>
                 </div>
 
@@ -699,6 +726,7 @@
                 >
                     <button
                         (click)="submit()"
+                        type="submit"
                         [color]="'primary'"
                         class="order-first sm:order-last ml-4 bg-primary-500 text-white"
                         mat-flat-button

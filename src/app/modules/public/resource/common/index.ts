@@ -1195,9 +1195,104 @@ export const EMAIL_LIST = [
     },
 ];
 
+export class TechnologyModel {
+    name: string;
+    team: string[];
+}
+
+export enum TEAM_LIST {
+    FRONTEND = 'FRONTEND',
+    BACKEND = 'BACKEND',
+    FULLSTACK = 'FULLSTACK',
+    PM = 'PM',
+    DEVOPS = 'DEVOPS',
+    QA = 'QA',
+    DESIGNER = 'DESIGNER',
+    DATASCIENCE = 'DATASCIENCE',
+}
+
+export const TECHNOLOGIES_V2: TechnologyModel[] = [
+    {
+        name: 'Angular',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'ReactJS',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'VueJS',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'NextJS',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Javascript',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Typescript',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'HTML',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Material UI',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Bootstrap',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Tailwind',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'CSS/SCSS',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'iOS (Swift)',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Android (Java)',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Android (Kotlin)',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'React Native',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Flutter(Dart)',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Jest',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'ASP',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Java',
+        team: [TEAM_LIST.BACKEND],
+    },
+];
+
 export const TECHNOLOGIES = {
     frontEnd: [
-        'AngularJS',
+        'Angular',
         'ReactJS',
         'VueJS',
         'NextJS',

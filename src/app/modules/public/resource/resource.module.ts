@@ -14,10 +14,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
-
+import { AddSkillAndIntegrationComponent } from './add-skill-and-integration/add-skill-and-integration.component';
 
 @NgModule({
-    declarations: [RegisterResourceComponent],
+    declarations: [RegisterResourceComponent, AddSkillAndIntegrationComponent],
     imports: [
         CommonModule,
         MatFormFieldModule,

@@ -4,16 +4,25 @@ import {
     AbstractControl,
     FormArray,
     FormBuilder,
+    FormControl,
     FormGroup,
     Validators,
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
 import { MonthValdation } from 'app/core/utils/Validations';
 import moment from 'moment';
-import { map, Observable, startWith } from 'rxjs';
-import { EMAIL_LIST, TECHNOLOGIES } from '../common';
+import { map, Observable, of, startWith } from 'rxjs';
+import { AddSkillAndIntegrationComponent } from '../add-skill-and-integration/add-skill-and-integration.component';
+import {
+    EMAIL_LIST,
+    TEAM_LIST,
+    TECHNOLOGIES,
+    TECHNOLOGIES_V2,
+} from '../common';
 
 @Component({
     selector: 'app-register-resource',
@@ -35,6 +44,8 @@ export class RegisterResourceComponent implements OnInit {
     technologys: any = [];
     emailList: any[] = EMAIL_LIST;
     allTeamsTechnologyList: any = TECHNOLOGIES;
+    integrations: any = TECHNOLOGIES?.integrations;
+    extraSkillIntegration: FormGroup;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -52,7 +63,7 @@ export class RegisterResourceComponent implements OnInit {
         return this.resourcesForm?.get('technologies') as FormArray;
     }
 
-    constructor(private formBuilder: FormBuilder) {}
+    constructor(private formBuilder: FormBuilder, private dialog: MatDialog) {}
 
     ngOnInit(): void {
         this.initializeForm();
@@ -64,6 +75,21 @@ export class RegisterResourceComponent implements OnInit {
         }
         if ($event?.value === 'no') {
             this.showExperience = true;
+        }
+    }
+
+    onCheckBoxChange(selectedOption: MatCheckboxChange) {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        if (selectedOption?.checked) {
+            integration.push(new FormControl(selectedOption.source.value));
+        } else {
+            const i = integration?.controls.findIndex(
+                (x) => x.value === selectedOption.source.value
+            );
+            integration?.removeAt(i);
         }
     }
 
@@ -106,27 +132,24 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     teamType($event: any) {
-        this.resourcesForm?.get('technology')?.setValue([]);
+        this.resourcesForm
+            ?.get('technology')
+            ?.setValue(null, { emitEvent: true });
         const team = $event?.value;
-        this.alltechnologys = [];
-        if (team === ROLE_LIST[0]) {
-            this.alltechnologys?.push(this.allTeamsTechnologyList?.frontEnd);
-        } else if (team === ROLE_LIST[1]) {
-            this.alltechnologys?.push(this.allTeamsTechnologyList?.backEnd);
-        } else if (team === ROLE_LIST[2]) {
-            const fe: any[] = this.allTeamsTechnologyList?.frontEnd;
-            const be: any[] = fe.concat(this.allTeamsTechnologyList?.backEnd);
-            this.alltechnologys?.push([...new Set(be)]);
-        } else if (team === ROLE_LIST[3]) {
-        } else if (team === ROLE_LIST[4]) {
-            this.alltechnologys?.push(this.allTeamsTechnologyList?.devOps);
-        } else if (team === ROLE_LIST[5]) {
-            this.alltechnologys?.push(this.allTeamsTechnologyList?.qa);
-        } else if (team === ROLE_LIST[6]) {
-            this.alltechnologys?.push(this.allTeamsTechnologyList?.designer);
-        } else if (team === ROLE_LIST[7]) {
-            this.alltechnologys?.push(this.allTeamsTechnologyList?.dataScience);
+
+        if (team === TEAM_LIST.FULLSTACK) {
+            this.alltechnologys = TECHNOLOGIES_V2.filter(
+                (item) =>
+                    item?.team?.includes(TEAM_LIST.FRONTEND) ||
+                    item?.team?.includes(TEAM_LIST.BACKEND)
+            ).map((item) => item?.name);
+        } else {
+            this.alltechnologys = TECHNOLOGIES_V2.filter((item) =>
+                item?.team?.includes(team)
+            ).map((item) => item?.name);
         }
+
+        this.filteredTechnologies = of(this.alltechnologys);
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
@@ -146,6 +169,21 @@ export class RegisterResourceComponent implements OnInit {
         }
     }
 
+    addSkillAndIntegrations() {
+        const dialogRef = this.dialog.open(AddSkillAndIntegrationComponent, {
+            disableClose: true,
+            width: '100%',
+            maxWidth: '700px',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {},
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
+    }
+
     getTechnologiesList() {
         this.filteredTechnologies = this.resourcesForm
             .get('technology')
@@ -157,13 +195,14 @@ export class RegisterResourceComponent implements OnInit {
             );
     }
     _filter(value: any) {
-        const res = this.alltechnologys[0]?.filter(
+        console.log(this.alltechnologys);
+        const res = this.alltechnologys.filter(
             (tech) => tech.toLowerCase().indexOf(value) === 0
         );
         return res;
     }
     _filterslice() {
-        return this.alltechnologys[0]?.filter(
+        return this.alltechnologys?.filter(
             (tech) => !this.technologys.includes(tech)
         );
     }
@@ -192,21 +231,21 @@ export class RegisterResourceComponent implements OnInit {
         this.resourcesForm = this.formBuilder.group(
             {
                 firstName: [
-                    '',
+                    'rohan',
                     [
                         Validators.required,
                         Validators.pattern(ValidationConstants.NAME_VALIDATION),
                     ],
                 ],
                 lastName: [
-                    '',
+                    'kadam',
                     [
                         Validators.required,
                         Validators.pattern(ValidationConstants.NAME_VALIDATION),
                     ],
                 ],
                 email: [
-                    '',
+                    'r@mindbowser.com',
                     [
                         Validators.required,
                         Validators.email,
@@ -215,28 +254,30 @@ export class RegisterResourceComponent implements OnInit {
                 ],
                 role: ['', [Validators.required]],
                 year: [
-                    0,
+                    3,
                     [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
                 ],
                 month: [
-                    0,
+                    4,
                     [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
                 ],
-                dateOfJoining: ['', [Validators.required]],
+                dateOfJoining: ['07/06/2023', [Validators.required]],
                 salary: [
                     '',
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
                 ],
                 technology: [],
                 technologies: this.formBuilder.array([]),
-                pmOrMentorEmail: [''],
+                pmOrMentorEmail: ['rohan.kadam@mindbowser.com'],
                 certificates: this.getCertifcatesControls(),
                 mbProjects: this.getMbProjectsControls(),
+                integrations: this.formBuilder.array([]),
             },
             {
                 validator: [MonthValdation('month')],
             }
         );
+
         this.pmMentorFilterInitialization();
         this.dynamicFieldValidation();
         this.getTechnologiesList();
