@@ -20,7 +20,7 @@
                 *ngIf="!initialLoading && resourcesForm"
             >
                 <div class="bg-gray-100 py-3 px-1 shadow rounded mb-4">
-                    <span class="text-2xl">Personal details</span>
+                    <span class="text-2xl">Personal details *</span>
                 </div>
                 <div
                     class="mt-4 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
@@ -357,7 +357,7 @@
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
-                    <span class="text-2xl">Technology/skill</span>
+                    <span class="text-2xl">Technology/skill *</span>
                 </div>
 
                 <div
@@ -558,7 +558,7 @@
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
-                    <span class="text-2xl">Other skills/integrations</span>
+                    <span class="text-2xl">Other skills/integrations *</span>
                 </div>
 
                 <div
@@ -655,7 +655,7 @@
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
-                    <span class="text-2xl">Mindbowser projects</span>
+                    <span class="text-2xl">Mindbowser projects *</span>
                 </div>
 
                 <div formArrayName="mbProjects" class="mt-4">
@@ -723,7 +723,7 @@
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
-                    <span class="text-2xl">Resume</span>
+                    <span class="text-2xl">Resume *</span>
                 </div>
 
                 <div class="flex items-center">
@@ -732,27 +732,58 @@
                     <button
                         class="ml-4 bg-primary-500 text-white"
                         mat-raised-button
+                        (click)="onClick()"
                     >
                         <span>Upload</span>
-                        <!-- <mat-progress-spinner
+                        <mat-progress-spinner
+                            *ngIf="submitInProgress"
                             [diameter]="24"
                             [mode]="'indeterminate'"
                             class="px-3 ml-3"
-                        ></mat-progress-spinner> -->
+                        ></mat-progress-spinner>
                     </button>
+
+                    <div *ngIf="preSignedUrl !== null" class="flex item-center">
+                        <span class="text-primary font-semibold truncate">{{
+                            preSignedUrl
+                        }}</span>
+                        <!-- <div class="cursor-pointer">
+                            <mat-icon
+                                class="text-primary"
+                                [svgIcon]="'heroicons_outline:x'"
+                                (click)="removeUploadedFile()"
+                                [matTooltip]="'remove file'"
+                                *ngIf="showSubmitButton"
+                            ></mat-icon>
+                        </div> -->
+                    </div>
+
+                    <input
+                        #fileUpload
+                        class="d-none"
+                        type="file"
+                        accept=".pdf"
+                        (change)="uploadChange($event)"
+                    />
                 </div>
 
-                <div
-                    class="w-full flex items-center justify-end ml-auto mt-6"
-                >
+                <div class="w-full flex items-center justify-end ml-auto mt-6">
                     <button
                         (click)="submit()"
                         type="submit"
                         [color]="'primary'"
                         class="order-first sm:order-last ml-4 bg-primary-500 text-white"
                         mat-flat-button
+                        [disabled]="submitInProgress"
                     >
                         <span>Submit</span>
+
+                        <mat-progress-spinner
+                            *ngIf="submitInProgress"
+                            [diameter]="24"
+                            [mode]="'indeterminate'"
+                            class="px-3 ml-3"
+                        ></mat-progress-spinner>
                     </button>
                 </div>
             </form>

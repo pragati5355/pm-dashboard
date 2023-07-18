@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
     AbstractControl,
     FormArray,
@@ -12,6 +12,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { MonthValdation } from 'app/core/utils/Validations';
@@ -24,6 +25,7 @@ import {
     TECHNOLOGIES,
     TECHNOLOGIES_V2,
 } from '../common';
+import { ResourceService } from '../common/services/resource.service';
 
 @Component({
     selector: 'app-register-resource',
@@ -31,6 +33,7 @@ import {
     styleUrls: ['./register-resource.component.scss'],
 })
 export class RegisterResourceComponent implements OnInit {
+    @ViewChild('fileUpload') fileUpload: ElementRef;
     resourcesForm!: FormGroup;
     initialLoading: boolean = false;
     currentDate = moment();
@@ -47,6 +50,13 @@ export class RegisterResourceComponent implements OnInit {
     allTeamsTechnologyList: any = TECHNOLOGIES;
     integrations: any = TECHNOLOGIES?.integrations;
     extraSkillIntegration: FormGroup;
+    submitInProgress: boolean = false;
+    resumeFileToBeUploaded: any;
+    preSignedUrl: string | null = null;
+    isFileUploadedToS3: boolean = false;
+    resourceUrl: string | null = null;
+    configForm: FormGroup;
+    AlreadyExistConfigForm: FormGroup;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -67,7 +77,9 @@ export class RegisterResourceComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        private resourceService: ResourceService,
+        private fuseConfirmationService: FuseConfirmationService
     ) {}
 
     ngOnInit(): void {
@@ -122,6 +134,64 @@ export class RegisterResourceComponent implements OnInit {
         }
     }
 
+    uploadChange({ target }: any) {
+        if (target?.files[0]) {
+            this.submitInProgress = true;
+            this.resumeFileToBeUploaded = target?.files[0];
+            const file = target?.files[0];
+
+            const uploadedFile = new FormData();
+            uploadedFile.append(
+                'file',
+                this.resumeFileToBeUploaded,
+                this.resumeFileToBeUploaded?.name
+            );
+
+            const payload = {
+                fileName: target?.files[0]?.name,
+            };
+            this.resourceService.getPreSignedUrl(payload).subscribe(
+                (res: any) => {
+                    this.submitInProgress = false;
+                    if (res?.error === false) {
+                        this.preSignedUrl = res?.data?.preSignedURL;
+                        this.resourceUrl = res?.data?.resourceUrl;
+                        if (this.preSignedUrl) {
+                            this.submitInProgress = true;
+                            this.resourceService
+                                .uploadFileToS3(
+                                    this.preSignedUrl,
+                                    this.resumeFileToBeUploaded
+                                )
+                                .subscribe(
+                                    (res: any) => {
+                                        this.isFileUploadedToS3 = true;
+                                        this.submitInProgress = false;
+                                    },
+                                    (err) => {
+                                        this.submitInProgress = false;
+                                        this.snackBar.errorSnackBar(
+                                            'Somethin went wrong'
+                                        );
+                                    }
+                                );
+                        }
+                    } else {
+                        this.snackBar.errorSnackBar('Somethin went wrong');
+                    }
+                },
+                (err) => {
+                    this.submitInProgress = false;
+                    this.snackBar.errorSnackBar('Somethin went wrong');
+                }
+            );
+        }
+    }
+
+    onClick() {
+        if (this.fileUpload) this.fileUpload.nativeElement.click();
+    }
+
     selected(event: MatAutocompleteSelectedEvent): void {
         const technology = event?.option?.value;
         if (technology) {
@@ -170,14 +240,96 @@ export class RegisterResourceComponent implements OnInit {
 
     submit() {
         if (this.resourcesForm?.valid) {
-            console.log(this.resourcesForm?.value);
+            if (
+                this.resourcesForm?.get('role')?.value !== 'PM' &&
+                this.resourcesForm?.get('technologies')?.value?.length === 0
+            ) {
+                this.snackBar.errorSnackBar('choose technologies');
+                return;
+            }
+
+            if (this.resourcesForm?.get('integrations')?.value?.length === 0) {
+                this.snackBar.errorSnackBar('choose skill/integrations');
+                return;
+            }
+
+            // if (!this.isFileUploadedToS3) {
+            //     this.snackBar.errorSnackBar('Upload resume');
+            //     return;
+            // }
+
+            const dialogRef = this.fuseConfirmationService.open(
+                this.configForm.value
+            );
+
+            dialogRef.afterClosed().subscribe((result) => {
+                if (result == 'confirmed') {
+                    this.saveResource();
+                }
+            });
         }
+    }
+
+    saveResource() {
+        this.submitInProgress = true;
+        const payload = this.saveResourcePayload();
+        this.resourceService?.saveResource(payload)?.subscribe(
+            (res: any) => {
+                this.submitInProgress = false;
+                if (!res?.error && !res?.data?.alreadyExist) {
+                    this.snackBar.successSnackBar(res?.message);
+                }
+                if (res?.data?.alreadyExist) {
+                    const dialogRef = this.fuseConfirmationService.open(
+                        this.AlreadyExistConfigForm.value
+                    );
+
+                    dialogRef.afterClosed().subscribe((result) => {
+                        if (result == 'confirmed') {
+                            this.submitInProgress = true;
+                            const payload = this.saveResourcePayload();
+                            payload.confirmed = true;
+
+                            this.resourceService
+                                ?.saveResource(payload)
+                                ?.subscribe(
+                                    (res: any) => {
+                                        this.submitInProgress = false;
+                                        if (!res?.error) {
+                                            this.snackBar.successSnackBar(
+                                                res?.message
+                                            );
+                                        } else {
+                                            this.snackBar.errorSnackBar(
+                                                'Something went wrong'
+                                            );
+                                        }
+                                    },
+                                    (err) => {
+                                        this.submitInProgress = false;
+                                        this.snackBar.errorSnackBar(
+                                            'Something went wrong'
+                                        );
+                                    }
+                                );
+                        }
+                    });
+                }
+                if (res?.error) {
+                    this.snackBar.errorSnackBar('Something went wrong');
+                }
+            },
+            (err) => {
+                this.submitInProgress = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
     addSkillAndIntegrations() {
         const dialogRef = this.dialog.open(AddSkillAndIntegrationComponent, {
             disableClose: true,
-            width: '100%',
+            width: '98%',
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
@@ -211,7 +363,6 @@ export class RegisterResourceComponent implements OnInit {
             );
     }
     _filter(value: any) {
-        console.log(this.alltechnologys);
         const res = this.alltechnologys.filter(
             (tech) => tech.toLowerCase().indexOf(value) === 0
         );
@@ -241,6 +392,66 @@ export class RegisterResourceComponent implements OnInit {
         if (index !== 0) {
             this.certificates.removeAt(index);
         }
+    }
+
+    private initializeConfigForm() {
+        this.configForm = this.formBuilder.group({
+            title: 'Save Details',
+            message: 'Are you sure you want to submit',
+            icon: this.formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this.formBuilder.group({
+                confirm: this.formBuilder.group({
+                    show: true,
+                    label: 'Submit',
+                    color: 'mat-warn',
+                }),
+                cancel: this.formBuilder.group({
+                    show: true,
+                    label: 'Cancel',
+                }),
+            }),
+            dismissible: false,
+        });
+    }
+
+    private initializeAlreadyExistConfigForm() {
+        this.AlreadyExistConfigForm = this.formBuilder.group({
+            title: 'Save Details',
+            message:
+                'Data with this email already exists do you want to overwrite it?',
+            icon: this.formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this.formBuilder.group({
+                confirm: this.formBuilder.group({
+                    show: true,
+                    label: 'Submit',
+                    color: 'mat-warn',
+                }),
+                cancel: this.formBuilder.group({
+                    show: true,
+                    label: 'Cancel',
+                }),
+            }),
+            dismissible: false,
+        });
+    }
+
+    private saveResourcePayload() {
+        return {
+            email: this.resourcesForm?.get('email')?.value,
+            details: {
+                ...this.resourcesForm?.value,
+                resourceUrl: this.resourceUrl,
+            },
+            confirmed: false,
+        };
     }
 
     private initializeForm() {
@@ -297,6 +508,7 @@ export class RegisterResourceComponent implements OnInit {
         this.pmMentorFilterInitialization();
         this.dynamicFieldValidation();
         this.getTechnologiesList();
+        this.initializeConfigForm();
     }
 
     private getMbProjectsControls(): FormArray {
