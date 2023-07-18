@@ -576,7 +576,7 @@
                     </div>
                 </div>
 
-                <div class="mt-8">
+                <div class="mt-8 flex">
                     Did not find the skill/integration?
                     <span
                         (click)="addSkillAndIntegrations()"
@@ -720,6 +720,26 @@
                             >
                         </form>
                     </ng-container>
+                </div>
+
+                <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+                    <span class="text-2xl">Resume</span>
+                </div>
+
+                <div class="flex items-center">
+                    <span>Upload your updated resume</span>
+
+                    <button
+                        class="ml-4 bg-primary-500 text-white"
+                        mat-raised-button
+                    >
+                        <span>Upload</span>
+                        <!-- <mat-progress-spinner
+                            [diameter]="24"
+                            [mode]="'indeterminate'"
+                            class="px-3 ml-3"
+                        ></mat-progress-spinner> -->
+                    </button>
                 </div>
 
                 <div

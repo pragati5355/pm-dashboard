@@ -1288,149 +1288,466 @@ export const TECHNOLOGIES_V2: TechnologyModel[] = [
         name: 'Java',
         team: [TEAM_LIST.BACKEND],
     },
+    {
+        name: 'Springboot',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'Python/Django',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'NodeJS',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'Javascript',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'Typescript',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'MySQL',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'Postgresql',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'MongoDB',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'Express',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'GraphQL',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'AWS - DynamoDB',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'AWS - Lambda',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'JUnit',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'PyTest',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'Redis',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'Queue Service',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'C#',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: '.Net Core',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: '.Net MVC',
+        team: [TEAM_LIST.BACKEND],
+    },
+    {
+        name: 'AWS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Azure',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'GCP',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Firebase',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - S3',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Cloudfront',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - RDS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - EKS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - ALB',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - EC2',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Lambda',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - SNS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Cloudformation',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Terraform',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - SQS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Cloudwatch',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Opensearch',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - IAM',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'ELK',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Route53',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - VPC',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Terragrunt',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - EBS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS  - ECS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Grafana',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Kibana',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Rancher',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Docker',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Cloudtrail',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Trust advisor',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - WAF',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS  - Guard Duty',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Vanta',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Ansible',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Prowler',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Dockerscan',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Neuvector',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS -  Aurora',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS  - Redshift',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - IoT Core',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - API Gateway',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS  - Elastic Media Conver',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - SES',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Amplify',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Jenkins',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Fastlane',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Code deploy',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Kubernates',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Media Package',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Fargate',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - KMS',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'AWS - Shield',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'Shell Script',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'CI/CD',
+        team: [TEAM_LIST.DEVOPS],
+    },
+    {
+        name: 'API testing',
+        team: [TEAM_LIST.QA],
+    },
+    {
+        name: 'Manual testing',
+        team: [TEAM_LIST.QA],
+    },
+    {
+        name: 'Automation (Selenium)',
+        team: [TEAM_LIST.QA],
+    },
+    {
+        name: 'Java',
+        team: [TEAM_LIST.QA],
+    },
+    {
+        name: 'Javascript',
+        team: [TEAM_LIST.QA],
+    },
+    {
+        name: 'Figma',
+        team: [TEAM_LIST.DESIGNER],
+    },
+    {
+        name: 'Figjam',
+        team: [TEAM_LIST.DESIGNER],
+    },
+    {
+        name: 'AdobeXD',
+        team: [TEAM_LIST.DESIGNER],
+    },
+    {
+        name: 'Miro',
+        team: [TEAM_LIST.DESIGNER],
+    },
+    {
+        name: 'Notion',
+        team: [TEAM_LIST.DESIGNER],
+    },
+
+    {
+        name: 'PowerBI/DAX',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Tabaleau',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'DJango',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Scrapy',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Pandas',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'SKLearn',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Pytest',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'OCR',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Postgresql',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'MySQL',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'MongoDB',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'ELK',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Fast API',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Flask',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Beautiful Soup',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Jupyter Notebook/ Collab notebook',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'LLM',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Chat GPT integration',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'NLP',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Power Apps',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Selenium',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Playwright',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Zyte',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Sagemaker',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Sendgrid',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Plotly',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Shell Script',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'MSSQL',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'ETL',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Airflow',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
+    {
+        name: 'Big Query',
+        team: [TEAM_LIST.DATASCIENCE],
+    },
 ];
 
 export const TECHNOLOGIES = {
-    frontEnd: [
-        'Angular',
-        'ReactJS',
-        'VueJS',
-        'NextJS',
-        'Javascript',
-        'Typescript',
-        'HTML',
-        'Material UI',
-        'Bootstrap',
-        'Tailwind',
-        'CSS/SCSS',
-        'iOS (Swift)',
-        'Android (Java)',
-        'Android (Kotlin)',
-        'React Native',
-        'Flutter(Dart)',
-        'Jest',
-        'ASP',
-    ],
-    backEnd: [
-        'Java',
-        'Springboot',
-        'Python/Django',
-        'NodeJS',
-        'Javascript',
-        'Typescript',
-        'MySQL',
-        'Postgresql',
-        'MongoDB',
-        'Express',
-        'GraphQL',
-        'AWS - DynamoDB',
-        'AWS - Lambda',
-        'Express',
-        'JUnit',
-        'PyTest',
-        'Redis',
-        'Queue Service',
-        'C#',
-        '.Net Core',
-        '.Net MVC',
-    ],
-    devOps: [
-        'AWS',
-        'Azure',
-        'GCP',
-        'Firebase',
-        'AWS - S3',
-        'AWS - Cloudfront',
-        'AWS - RDS',
-        'AWS - EKS',
-        'AWS - ALB',
-        'AWS - EC2',
-        'AWS - Lambda',
-        'AWS - SNS',
-        'AWS - Cloudformation',
-        'Terraform',
-        'AWS - SQS',
-        'AWS - Cloudwatch',
-        'AWS - Opensearch',
-        'AWS - IAM',
-        'ELK',
-        'AWS - Route53',
-        'AWS - VPC',
-        'Terragrunt',
-        'AWS - EBS',
-        'AWS  - ECS',
-        'Grafana',
-        'Kibana',
-        'Rancher',
-        'Docker',
-        'AWS - Cloudtrail',
-        'AWS - Trust advisor',
-        'AWS - WAF',
-        'AWS  - Guard Duty',
-        'Vanta',
-        'Ansible',
-        'Prowler',
-        'Dockerscan',
-        'Neuvector',
-        'AWS -  Aurora',
-        'AWS  - Redshift',
-        'AWS - IoT Core',
-        'AWS - API Gateway',
-        'AWS  - Elastic Media Conver',
-        'AWS - SES',
-        'AWS - Amplify',
-        'Jenkins',
-        'Fastlane',
-        'AWS - Code deploy',
-        'Kubernates',
-        'AWS - Media Package',
-        'AWS - Fargate',
-        'AWS - KMS',
-        'AWS - Shield',
-        'Shell Script',
-        'CI/CD',
-    ],
-    qa: [
-        'API testing',
-        'Manual testing',
-        'Automation (Selenium)',
-        'Java',
-        'Javascript',
-    ],
-    designer: ['Figma', 'Figjam', 'AdobeXD', 'Miro', 'Notion'],
-    dataScience: [
-        'PowerBI/DAX',
-        'Tabaleau',
-        'DJango',
-        'Scrapy',
-        'Pandas',
-        'SKLearn',
-        'Power Apps',
-        'NLP',
-        'Chat GPT integration',
-        'LLM',
-        'Jupyter Notebook/ Collab notebook',
-        'Beautiful Soup',
-        'Flask',
-        'Fast API',
-        'ELK',
-        'MongoDB',
-        'MySQL',
-        'Postgresql',
-        'OCR',
-        'Pytest',
-        'Selenium',
-        'Playwright',
-        'Zyte',
-        'Sagemaker',
-        'Sendgrid',
-        'Plotly',
-        'Shell Script',
-        'Big Query',
-        'Airflow',
-        'ETL',
-        'MSSQL',
-    ],
     integrations: [
         { name: '1UpHealth', checked: false },
         { name: 'Terra', checked: false },
