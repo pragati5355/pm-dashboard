@@ -569,8 +569,9 @@
                             class="example-margin"
                             [value]="skill"
                             (change)="onCheckBoxChange($event)"
+                            [checked]="skill?.checked"
                         >
-                            {{ skill }}</mat-checkbox
+                            {{ skill?.name }}</mat-checkbox
                         >
                     </div>
                 </div>

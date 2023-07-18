@@ -42,9 +42,18 @@ export class AddSkillAndIntegrationComponent implements OnInit {
         this.matDialogRef.close();
     }
 
+    submit() {
+        if (this.skillandIntegration?.valid) {
+            const values = this.skillandIntegration?.value?.map((item) => item);
+
+            this.matDialogRef.close(values);
+        }
+    }
+
     private getSingleControl(): FormGroup {
         const control = this.formBuilder.group({
             name: ['', [Validators.required]],
+            checked: [true],
         });
 
         return control;

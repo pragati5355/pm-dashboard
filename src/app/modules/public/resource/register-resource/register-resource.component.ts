@@ -179,7 +179,18 @@ export class RegisterResourceComponent implements OnInit {
             data: {},
         });
         dialogRef.afterClosed().subscribe((result: any) => {
-            if (result == 'success') {
+            if (result) {
+                this.integrations.push(...result);
+
+                const integration = (<FormArray>(
+                    this.resourcesForm.get('integrations')
+                )) as FormArray;
+
+                result?.map((item) => {
+                    if (item?.checked) {
+                        integration.push(new FormControl(item));
+                    }
+                });
             }
         });
     }

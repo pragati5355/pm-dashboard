@@ -20,49 +20,60 @@
                 let last = last
             "
         >
-            <form
-                class="flex flex-row justify-center items-center"
-                [formGroupName]="i"
-            >
-                <mat-form-field
-                    class="w-full mr-4 userlist mt-4"
-                    id="userlist"
-                    [floatLabel]="'always'"
-                >
-                    <mat-label
-                        >Name the project you have worked on in
-                        mindbowser</mat-label
+            <form class="" [formGroupName]="i">
+                <div class="flex items-center">
+                    <mat-form-field
+                        class="w-2/3 mr-4 userlist mt-4"
+                        id="userlist"
+                        [floatLabel]="'always'"
                     >
-                    <input
-                        matInput
-                        placeholder="Project Name"
-                        formControlName="name"
-                        class="inputlist"
-                    />
-                    <mat-error *ngIf="skill?.get('name')?.hasError('required')">
-                        <div class="text-red-500">
-                            Project Name is Mandatory
-                        </div>
-                    </mat-error>
-                </mat-form-field>
+                        <mat-label>Enter skill/integration</mat-label>
+                        <input
+                            matInput
+                            placeholder="Name"
+                            formControlName="name"
+                            class="inputlist"
+                        />
+                        <mat-error
+                            *ngIf="skill?.get('name')?.hasError('required')"
+                        >
+                            <div class="text-red-500">
+                                Skill/integration Name is Mandatory
+                            </div>
+                        </mat-error>
+                    </mat-form-field>
 
-                <mat-icon
-                    *ngIf="last"
-                    class="cursor-pointer mr-2"
-                    color="primary"
-                    matTooltip="Add more projects"
-                    (click)="skill?.valid ? add() : skill?.markAllAsTouched()"
-                    >add</mat-icon
-                >
-                <mat-icon
-                    *ngIf="i != 0"
-                    class="cursor-pointer"
-                    color="warn"
-                    matTooltip="Remove"
-                    (click)="remove(i)"
-                    >delete</mat-icon
-                >
+                    <mat-icon
+                        *ngIf="last"
+                        class="cursor-pointer mr-2 mt-4"
+                        color="primary"
+                        matTooltip="Add more projects"
+                        (click)="
+                            skill?.valid ? add() : skill?.markAllAsTouched()
+                        "
+                        >add</mat-icon
+                    >
+                    <mat-icon
+                        *ngIf="i != 0"
+                        class="cursor-pointer mt-4"
+                        color="warn"
+                        matTooltip="Remove"
+                        (click)="remove(i)"
+                        >delete</mat-icon
+                    >
+                </div>
             </form>
         </ng-container>
+        <div class="w-full flex justify-end">
+            <button
+                (click)="submit()"
+                type="submit"
+                [color]="'primary'"
+                class="order-first sm:order-last ml-4 bg-primary-500 text-white"
+                mat-flat-button
+            >
+                <span>Submit</span>
+            </button>
+        </div>
     </div>
 </form>
