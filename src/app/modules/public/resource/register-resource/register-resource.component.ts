@@ -46,7 +46,7 @@ export class RegisterResourceComponent implements OnInit {
     filteredTechnologies: Observable<any[]> | undefined;
     alltechnologys: any[] = [];
     technologys: any = [];
-    emailList: any[] = EMAIL_LIST;
+    emailList: any[] = [];
     allTeamsTechnologyList: any = TECHNOLOGIES;
     integrations: any = TECHNOLOGIES?.integrations;
     extraSkillIntegration: FormGroup;
@@ -84,6 +84,7 @@ export class RegisterResourceComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
+        // this.getEmails();
     }
 
     getRadioBtnValues($event: any) {
@@ -207,9 +208,6 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     teamType($event: any) {
-        this.resourcesForm
-            ?.get('technology')
-            ?.setValue(null, { emitEvent: true });
         const team = $event?.value;
 
         if (team === TEAM_LIST.FULLSTACK) {
@@ -224,7 +222,9 @@ export class RegisterResourceComponent implements OnInit {
             ).map((item) => item?.name);
         }
 
-        this.filteredTechnologies = of(this.alltechnologys);
+        this.resourcesForm?.get('technology')?.reset();
+
+        // this.filteredTechnologies = of(this.alltechnologys);
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
@@ -394,6 +394,16 @@ export class RegisterResourceComponent implements OnInit {
         }
     }
 
+    private getEmails() {
+        this.initialLoading = true;
+        this.resourceService.getEmails().subscribe((res: any) => {
+            this.initialLoading = false;
+            if (res?.data) {
+                this.emailList = res?.data;
+            }
+        });
+    }
+
     private initializeConfigForm() {
         this.configForm = this.formBuilder.group({
             title: 'Save Details',
@@ -458,21 +468,21 @@ export class RegisterResourceComponent implements OnInit {
         this.resourcesForm = this.formBuilder.group(
             {
                 firstName: [
-                    'rohan',
+                    '',
                     [
                         Validators.required,
                         Validators.pattern(ValidationConstants.NAME_VALIDATION),
                     ],
                 ],
                 lastName: [
-                    'kadam',
+                    '',
                     [
                         Validators.required,
                         Validators.pattern(ValidationConstants.NAME_VALIDATION),
                     ],
                 ],
                 email: [
-                    'r@mindbowser.com',
+                    '',
                     [
                         Validators.required,
                         Validators.email,
@@ -481,21 +491,20 @@ export class RegisterResourceComponent implements OnInit {
                 ],
                 role: ['', [Validators.required]],
                 year: [
-                    3,
+                    0,
                     [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
                 ],
                 month: [
-                    4,
+                    0,
                     [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
                 ],
-                dateOfJoining: ['07/06/2023', [Validators.required]],
+                dateOfJoining: ['', [Validators.required]],
                 salary: [
                     '',
                     [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
                 ],
                 technology: [],
                 technologies: this.formBuilder.array([]),
-                pmOrMentorEmail: ['rohan.kadam@mindbowser.com'],
                 certificates: this.getCertifcatesControls(),
                 mbProjects: this.getMbProjectsControls(),
                 integrations: this.formBuilder.array([]),
@@ -509,6 +518,7 @@ export class RegisterResourceComponent implements OnInit {
         this.dynamicFieldValidation();
         this.getTechnologiesList();
         this.initializeConfigForm();
+        this.initializeAlreadyExistConfigForm();
     }
 
     private getMbProjectsControls(): FormArray {
@@ -538,34 +548,35 @@ export class RegisterResourceComponent implements OnInit {
 
     private dynamicFieldValidation() {
         this.resourcesForm.get('role').valueChanges.subscribe((res: any) => {
-            if (res != 'PM') {
-                this.resourcesForm
-                    .get('pmOrMentorEmail')
-                    .setValidators(Validators.required);
-                this.resourcesForm
-                    .get('pmOrMentorEmail')
-                    .updateValueAndValidity();
-            } else {
-                this.resourcesForm.get('pmOrMentorEmail').clearValidators();
-                this.resourcesForm
-                    .get('pmOrMentorEmail')
-                    .updateValueAndValidity();
-            }
+            // if (res != 'PM') {
+            //     this.resourcesForm
+            //         .get('pmOrMentorEmail')
+            //         .setValidators(Validators.required);
+            //     this.resourcesForm
+            //         .get('pmOrMentorEmail')
+            //         .updateValueAndValidity();
+            // } else {
+            //     this.resourcesForm.get('pmOrMentorEmail').clearValidators();
+            //     this.resourcesForm
+            //         .get('pmOrMentorEmail')
+            //         .updateValueAndValidity();
+            // }
         });
     }
 
     private pmMentorFilterInitialization() {
-        this.filteredEmails = this.resourcesForm
-            .get('pmOrMentorEmail')
-            .valueChanges.pipe(
-                startWith(null),
-                map((email) =>
-                    email ? this.filterEmails(email) : this.emailList.slice()
-                )
-            );
+        // this.filteredEmails = this.resourcesForm
+        //     .get('pmOrMentorEmail')
+        //     .valueChanges.pipe(
+        //         startWith(null),
+        //         map((email) =>
+        //             email ? this.filterEmails(email) : this.emailList?.slice()
+        //         )
+        //     );
     }
 
     private filterEmails(email: string) {
+        console.log(this.emailList);
         let arr = this.emailList.filter(
             (item) =>
                 item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0

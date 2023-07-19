@@ -8,6 +8,7 @@ import { AppConstants } from 'app/core/constacts/constacts';
 export class ResourceService {
     saveResourceUrl = AppConstants['PROJECT_API_URL'] + '/resource-register';
     preSignedUrl = AppConstants['PROJECT_API_URL'] + '/upload-resource-resume';
+    getEmailsUrl = AppConstants['PROJECT_API_URL'] + '/emails';
     constructor(private http: HttpClient) {}
 
     saveResource(obj: any) {
@@ -22,5 +23,9 @@ export class ResourceService {
         return this.http.put(url, file, {
             headers: { skipToken: 'true' },
         });
+    }
+
+    getEmails() {
+        return this.http.get(this.getEmailsUrl);
     }
 }
