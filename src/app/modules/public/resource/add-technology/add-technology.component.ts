@@ -50,7 +50,7 @@ export class AddTechnologyComponent implements OnInit {
 
     private getSingleControl(): FormGroup {
         const technologyControl = this.formBuilder.group({
-            name: [null],
+            name: [null, [Validators.required]],
             experienceYear: [0, [Validators.required]],
             experienceMonth: [0, [Validators.required]],
             resourceId: [null],
