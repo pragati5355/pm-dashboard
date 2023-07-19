@@ -12,6 +12,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
 import { SnackBar } from 'app/core/utils/snackBar';
@@ -19,6 +20,7 @@ import { MonthValdation } from 'app/core/utils/Validations';
 import moment from 'moment';
 import { map, Observable, of, startWith } from 'rxjs';
 import { AddSkillAndIntegrationComponent } from '../add-skill-and-integration/add-skill-and-integration.component';
+import { AddTechnologyComponent } from '../add-technology/add-technology.component';
 import {
     EMAIL_LIST,
     TEAM_LIST,
@@ -57,6 +59,7 @@ export class RegisterResourceComponent implements OnInit {
     resourceUrl: string | null = null;
     configForm: FormGroup;
     AlreadyExistConfigForm: FormGroup;
+    isPm: boolean = false;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -79,7 +82,8 @@ export class RegisterResourceComponent implements OnInit {
         private dialog: MatDialog,
         private snackBar: SnackBar,
         private resourceService: ResourceService,
-        private fuseConfirmationService: FuseConfirmationService
+        private fuseConfirmationService: FuseConfirmationService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -210,6 +214,12 @@ export class RegisterResourceComponent implements OnInit {
     teamType($event: any) {
         const team = $event?.value;
 
+        if (team === TEAM_LIST.PM) {
+            this.isPm = true;
+        } else {
+            this.isPm = false;
+        }
+
         if (team === TEAM_LIST.FULLSTACK) {
             this.alltechnologys = TECHNOLOGIES_V2.filter(
                 (item) =>
@@ -264,7 +274,9 @@ export class RegisterResourceComponent implements OnInit {
 
             dialogRef.afterClosed().subscribe((result) => {
                 if (result == 'confirmed') {
-                    this.saveResource();
+                    console.log(this.saveResourcePayload());
+                    this.router.navigate([`/resource/success`]);
+                    // this.saveResource();
                 }
             });
         }
@@ -352,6 +364,31 @@ export class RegisterResourceComponent implements OnInit {
         });
     }
 
+    addTechnology() {
+        const dialogRef = this.dialog.open(AddTechnologyComponent, {
+            disableClose: true,
+            width: '98%',
+            maxWidth: '700px',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {},
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                result?.map((item) => {
+                    const technologyControl = this.formBuilder.group({
+                        technologyId: [null],
+                        name: [item?.name],
+                        experienceYear: [0, [Validators.required]],
+                        experienceMonth: [0, [Validators.required]],
+                        resourceId: [this.userData?.userId || null],
+                    });
+                    this.technologies.push(technologyControl);
+                });
+            }
+        });
+    }
+
     getTechnologiesList() {
         this.filteredTechnologies = this.resourcesForm
             .get('technology')
@@ -407,7 +444,7 @@ export class RegisterResourceComponent implements OnInit {
     private initializeConfigForm() {
         this.configForm = this.formBuilder.group({
             title: 'Save Details',
-            message: 'Are you sure you want to submit',
+            message: 'Are you sure you want to submit?',
             icon: this.formBuilder.group({
                 show: true,
                 name: 'heroicons_outline:exclamation',

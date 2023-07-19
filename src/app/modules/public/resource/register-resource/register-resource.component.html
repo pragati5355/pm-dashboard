@@ -410,6 +410,7 @@
                 </div>
 
                 <div
+                    *ngIf="!isPm"
                     class="mt-4 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
                 >
                     <div
@@ -451,13 +452,100 @@
 
                 <div
                     *ngIf="technologies?.length > 0"
-                    class="w-full flex flex-col overflow-hidden mt-4"
+                    class="w-full flex flex-col overflow-hidden mb-6"
                 >
+                    <!-- <div
+                        class="w-full grid grid-cols-4 shadow text-md font-semibold text-secondary bg-gray-50"
+                    >
+                        <div>Technology Name</div>
+                        <div class="col-span-2">Experience</div>
+                        <div class="">Action</div>
+                    </div>
+
+                    <div
+                        class="w-full grid grid-cols-4 mt-4"
+                        *ngFor="
+                            let technology of technologies?.controls;
+                            let i = index;
+                            let last = last
+                        "
+                    >
+                        <form
+                            class=""
+                            [formGroupName]="i"
+                        >
+                            <div class="font-semibold text-xl">
+                                {{ technology?.value?.name }}
+                            </div>
+                            <div class="flex col-span-2 pr-4">
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    class="w-full"
+                                >
+                                    <input
+                                        formControlName="experienceYear"
+                                        matInput
+                                        placeholder="Year"
+                                        InputFormatter="numeric"
+                                        type="number"
+                                        min="0"
+                                    />
+                                    <span matPrefix class="text-sm">YY</span>
+                                    <mat-error
+                                        class="text-xs"
+                                        *ngIf="
+                                            technology.get('experienceYear')
+                                                ?.invalid
+                                        "
+                                    >
+                                        Enter valid Year
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    [floatLabel]="'always'"
+                                    class="w-full"
+                                >
+                                    <input
+                                        class=""
+                                        formControlName="experienceMonth"
+                                        InputFormatter="numeric"
+                                        matInput
+                                        placeholder="Month"
+                                        min="0"
+                                        type="number"
+                                    />
+                                    <span matPrefix class="text-sm">MM</span>
+                                    <mat-error
+                                        class="text-xs"
+                                        *ngIf="
+                                            technology.get('experienceMonth')
+                                                ?.invalid
+                                        "
+                                    >
+                                        Enter valid Month
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <mat-icon
+                                    class="cursor-pointer"
+                                    color="warn"
+                                    matTooltip="Remove"
+                                    (click)="
+                                        removeTechnology(i, technology?.value)
+                                    "
+                                    >cancel</mat-icon
+                                >
+                            </div>
+                        </form>
+                    </div> -->
                     <div
                         class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
                     >
                         <div
-                            class="inventory-grid z-10 sticky top-0 grid grid-cols-4 gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
+                            class="w-full grid grid-cols-4 shadow text-md font-semibold text-secondary bg-gray-50"
                             matSortDisableClear
                         >
                             <div>Technology Name</div>
@@ -477,17 +565,76 @@
                                     "
                                 >
                                     <form
-                                        *ngIf="!technology?.value?.deleted"
-                                        class="flex flex-row items-center justify-center pt-2 border-b bg-white"
+                                        class="w-full flex flex-row pt-2 border-b bg-white"
                                         [formGroupName]="i"
                                     >
                                         <div
-                                            class="inventory-grid grid grid-cols-4 md:grid-cols-4 pt-1 items-center"
+                                            class="w-full grid grid-cols-4 mt-4"
                                         >
                                             <div class="">
                                                 {{ technology?.value?.name }}
                                             </div>
-                                            <mat-form-field
+                                            <div class="flex col-span-2 pr-4">
+                                                <mat-form-field
+                                                    [floatLabel]="'always'"
+                                                    class="w-full"
+                                                >
+                                                    <input
+                                                        formControlName="experienceYear"
+                                                        matInput
+                                                        placeholder="Year"
+                                                        InputFormatter="numeric"
+                                                        type="number"
+                                                        min="0"
+                                                    />
+                                                    <span
+                                                        matPrefix
+                                                        class="text-sm"
+                                                        >YY</span
+                                                    >
+                                                    <mat-error
+                                                        class="text-xs"
+                                                        *ngIf="
+                                                            technology.get(
+                                                                'experienceYear'
+                                                            )?.invalid
+                                                        "
+                                                    >
+                                                        Enter valid Year
+                                                    </mat-error>
+                                                </mat-form-field>
+
+                                                <mat-form-field
+                                                    [floatLabel]="'always'"
+                                                    class="w-full"
+                                                >
+                                                    <input
+                                                        class=""
+                                                        formControlName="experienceMonth"
+                                                        InputFormatter="numeric"
+                                                        matInput
+                                                        placeholder="Month"
+                                                        min="0"
+                                                        type="number"
+                                                    />
+                                                    <span
+                                                        matPrefix
+                                                        class="text-sm"
+                                                        >MM</span
+                                                    >
+                                                    <mat-error
+                                                        class="text-xs"
+                                                        *ngIf="
+                                                            technology.get(
+                                                                'experienceMonth'
+                                                            )?.invalid
+                                                        "
+                                                    >
+                                                        Enter valid Month
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <!-- <mat-form-field
                                                 [floatLabel]="'always'"
                                                 class="w-full"
                                             >
@@ -540,26 +687,38 @@
                                                 >
                                                     Enter valid Month
                                                 </mat-error>
-                                            </mat-form-field>
+                                            </mat-form-field> -->
 
-                                            <mat-icon
-                                                class="cursor-pointer -mt-5 ml-6"
-                                                color="warn"
-                                                matTooltip="Remove"
-                                                (click)="
-                                                    removeTechnology(
-                                                        i,
-                                                        technology?.value
-                                                    )
-                                                "
-                                                >cancel</mat-icon
-                                            >
+                                            <div>
+                                                <mat-icon
+                                                    class="cursor-pointer ml-6"
+                                                    color="warn"
+                                                    matTooltip="Remove"
+                                                    (click)="
+                                                        removeTechnology(
+                                                            i,
+                                                            technology?.value
+                                                        )
+                                                    "
+                                                    >cancel</mat-icon
+                                                >
+                                            </div>
                                         </div>
                                     </form>
                                 </ng-container>
                             </div>
                         </ng-container>
                     </div>
+                </div>
+
+                <div class="flex">
+                    Did not find the technology?
+
+                    <span
+                        (click)="addTechnology()"
+                        class="text-primary-500 underline ml-2 font-bold cursor-pointer"
+                        >Add your own</span
+                    >
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">

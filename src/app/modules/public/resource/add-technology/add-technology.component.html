@@ -1,1 +1,79 @@
-<p>add-technology works!</p>
+<div
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 text-black -m-6"
+>
+    <div class="text-xl font-medium">Add Technology</div>
+
+    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"
+        ></mat-icon>
+    </button>
+</div>
+
+<form [formGroup]="addTechnologyForm">
+    <div formArrayName="technology" class="mt-4">
+        <ng-container
+            *ngFor="
+                let skill of technology?.controls;
+                let i = index;
+                let last = last
+            "
+        >
+            <form class="" [formGroupName]="i">
+                <div class="flex items-center">
+                    <mat-form-field
+                        class="w-full mr-4 userlist mt-4"
+                        id="userlist"
+                        [floatLabel]="'always'"
+                    >
+                        <mat-label>Enter technology</mat-label>
+                        <input
+                            matInput
+                            placeholder="Name"
+                            formControlName="name"
+                            class="inputlist"
+                        />
+                        <mat-error
+                            *ngIf="skill?.get('name')?.hasError('required')"
+                        >
+                            <div class="text-red-500">
+                                Technology Name is Mandatory
+                            </div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-icon
+                        *ngIf="last"
+                        class="cursor-pointer mr-2 mt-4"
+                        color="primary"
+                        matTooltip="Add more projects"
+                        (click)="
+                            skill?.valid ? add() : skill?.markAllAsTouched()
+                        "
+                        >add</mat-icon
+                    >
+                    <mat-icon
+                        *ngIf="i != 0"
+                        class="cursor-pointer mt-4"
+                        color="warn"
+                        matTooltip="Remove"
+                        (click)="remove(i)"
+                        >delete</mat-icon
+                    >
+                </div>
+            </form>
+        </ng-container>
+        <div class="w-full flex justify-end">
+            <button
+                (click)="submit()"
+                type="submit"
+                [color]="'primary'"
+                class="order-first sm:order-last ml-4 bg-primary-500 text-white"
+                mat-flat-button
+            >
+                <span>Submit</span>
+            </button>
+        </div>
+    </div>
+</form>
