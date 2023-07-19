@@ -21,6 +21,7 @@ import {
     SocialAuthServiceConfig,
 } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import { NgParticlesModule } from "ng-particles";
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 
 import { getDatabase, provideDatabase } from '@angular/fire/database';
@@ -55,6 +56,7 @@ const routerConfig: ExtraOptions = {
         FuseConfigModule.forRoot(appConfig),
         FuseMockApiModule.forRoot(mockApiServices),
         LayoutModule,
+        NgParticlesModule,
         MarkdownModule.forRoot({}),
         // provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         // provideDatabase(() => getDatabase()),

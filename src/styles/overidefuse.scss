@@ -244,3 +244,28 @@
         padding-right: 0 !important;
     }
 }
+
+.mat-datepicker-content {
+    background-color: rgb(252, 252, 252) !important;
+    border: 0.5px solid black !important;
+}
+.mat-radio-checked .mat-radio-inner-circle {
+    background-color: black !important;
+}
+.mat-select-panel,
+.cdk-overlay-pane {
+    background-color: white !important;
+}
+.mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: #6366f1 !important;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #6366f1;
+}
+.mat-mat-warn {
+    background-color: #6366f1 !important;
+    color: white !important;
+}
