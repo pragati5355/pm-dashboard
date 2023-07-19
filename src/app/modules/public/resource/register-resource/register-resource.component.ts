@@ -197,6 +197,14 @@ export class RegisterResourceComponent implements OnInit {
         if (this.fileUpload) this.fileUpload.nativeElement.click();
     }
 
+    removeUploadedFile() {
+        this.fileUpload.nativeElement.value = '';
+        this.resumeFileToBeUploaded = null;
+        this.preSignedUrl = null;
+        this.resourceUrl = null;
+        this.isFileUploadedToS3 = false;
+    }
+
     selected(event: MatAutocompleteSelectedEvent): void {
         const technology = event?.option?.value;
         if (technology) {
@@ -263,10 +271,10 @@ export class RegisterResourceComponent implements OnInit {
                 return;
             }
 
-            // if (!this.isFileUploadedToS3) {
-            //     this.snackBar.errorSnackBar('Upload resume');
-            //     return;
-            // }
+            if (!this.isFileUploadedToS3) {
+                this.snackBar.errorSnackBar('Upload resume');
+                return;
+            }
 
             const dialogRef = this.fuseConfirmationService.open(
                 this.configForm.value
@@ -274,9 +282,7 @@ export class RegisterResourceComponent implements OnInit {
 
             dialogRef.afterClosed().subscribe((result) => {
                 if (result == 'confirmed') {
-                    console.log(this.saveResourcePayload());
-                    this.router.navigate([`/resource/success`]);
-                    // this.saveResource();
+                    this.saveResource();
                 }
             });
         }
@@ -289,7 +295,7 @@ export class RegisterResourceComponent implements OnInit {
             (res: any) => {
                 this.submitInProgress = false;
                 if (!res?.error && !res?.data?.alreadyExist) {
-                    this.snackBar.successSnackBar(res?.message);
+                    this.router.navigate([`/resource/success`]);
                 }
                 if (res?.data?.alreadyExist) {
                     const dialogRef = this.fuseConfirmationService.open(
@@ -308,9 +314,9 @@ export class RegisterResourceComponent implements OnInit {
                                     (res: any) => {
                                         this.submitInProgress = false;
                                         if (!res?.error) {
-                                            this.snackBar.successSnackBar(
-                                                res?.message
-                                            );
+                                            this.router.navigate([
+                                                `/resource/success`,
+                                            ]);
                                         } else {
                                             this.snackBar.errorSnackBar(
                                                 'Something went wrong'
@@ -327,7 +333,7 @@ export class RegisterResourceComponent implements OnInit {
                         }
                     });
                 }
-                if (res?.error) {
+                if (res?.error && !res?.data?.alreadyExist) {
                     this.snackBar.errorSnackBar('Something went wrong');
                 }
             },
@@ -467,7 +473,7 @@ export class RegisterResourceComponent implements OnInit {
 
     private initializeAlreadyExistConfigForm() {
         this.AlreadyExistConfigForm = this.formBuilder.group({
-            title: 'Save Details',
+            title: 'Overwrite Details',
             message:
                 'Data with this email already exists do you want to overwrite it?',
             icon: this.formBuilder.group({

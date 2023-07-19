@@ -894,36 +894,39 @@
                     <span class="text-2xl">Resume</span>
                 </div>
 
-                <div class="flex items-center">
-                    <span>Upload your updated resume *</span>
-
-                    <button
-                        class="ml-4 bg-primary-500 text-white"
-                        mat-raised-button
-                        (click)="onClick()"
+                <div class="flex flex-col">
+                    <div
+                        *ngIf="preSignedUrl !== null"
+                        class="flex item-center w-1/2"
                     >
-                        <span>Upload</span>
-                        <mat-progress-spinner
-                            *ngIf="submitInProgress"
-                            [diameter]="24"
-                            [mode]="'indeterminate'"
-                            class="px-3 ml-3"
-                        ></mat-progress-spinner>
-                    </button>
-
-                    <div *ngIf="preSignedUrl !== null" class="flex item-center">
                         <span class="text-primary font-semibold truncate">{{
                             preSignedUrl
                         }}</span>
-                        <!-- <div class="cursor-pointer">
+                        <div class="cursor-pointer">
                             <mat-icon
                                 class="text-primary"
                                 [svgIcon]="'heroicons_outline:x'"
                                 (click)="removeUploadedFile()"
-                                [matTooltip]="'remove file'"
-                                *ngIf="showSubmitButton"
                             ></mat-icon>
-                        </div> -->
+                        </div>
+                    </div>
+                    <div *ngIf="!isFileUploadedToS3">
+                        <span>Upload your updated resume *</span>
+
+                        <button
+                            class="ml-4 bg-primary-500 text-white"
+                            mat-raised-button
+                            (click)="onClick()"
+                            [disabled]="submitInProgress"
+                        >
+                            <span>Upload</span>
+                            <mat-progress-spinner
+                                *ngIf="submitInProgress"
+                                [diameter]="24"
+                                [mode]="'indeterminate'"
+                                class="px-3 ml-3"
+                            ></mat-progress-spinner>
+                        </button>
                     </div>
 
                     <input
