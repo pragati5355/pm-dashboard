@@ -60,6 +60,12 @@ export class RegisterResourceComponent implements OnInit {
     configForm: FormGroup;
     AlreadyExistConfigForm: FormGroup;
     isPm: boolean = false;
+    minDate: Date;
+    maxDate: Date;
+    minFromDate: Date;
+    maxFromDate: Date | null;
+    minToDate: Date | null;
+    maxToDate: Date;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -89,6 +95,9 @@ export class RegisterResourceComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         // this.getEmails();
+
+        this.minFromDate = new Date(2012, 3, 24);
+        this.maxToDate = new Date();
     }
 
     getRadioBtnValues($event: any) {
@@ -206,6 +215,15 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
+        const isAlreadyExist =
+            this.technologies?.value?.filter(
+                (item) =>
+                    item?.name?.toLowerCase() ===
+                    event?.option?.value.toLowerCase()
+            )?.length > 0;
+        if (isAlreadyExist) {
+            return;
+        }
         const technology = event?.option?.value;
         if (technology) {
             const technologyControl = this.formBuilder.group({
@@ -215,6 +233,7 @@ export class RegisterResourceComponent implements OnInit {
                 resourceId: [this.userData?.userId || null],
             });
             this.technologies.push(technologyControl);
+            console.log(this.technologies?.value);
         }
         this.resourcesForm.get('technology')?.reset();
     }
@@ -257,6 +276,20 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     submit() {
+        // console.log(this.resourcesForm?.get('technologies')?.value);
+        // this.resourcesForm?.get('technologies')?.value?.map((item) => {
+        //     if (item?.experienceMonth === 0 && item?.experienceYear === 0) {
+        //         this.snackBar?.errorSnackBar('Add technology experience');
+        //     }
+        // });
+
+        const technologyWithNoExperience = this.resourcesForm
+            ?.get('technologies')
+            ?.value?.filter(
+                (item) =>
+                    item?.experienceMonth === 0 && item?.experienceYear === 0
+            );
+
         if (this.resourcesForm?.valid) {
             if (
                 this.resourcesForm?.get('role')?.value !== 'PM' &&
@@ -273,6 +306,11 @@ export class RegisterResourceComponent implements OnInit {
 
             if (!this.isFileUploadedToS3) {
                 this.snackBar.errorSnackBar('Upload resume');
+                return;
+            }
+
+            if (technologyWithNoExperience?.length > 0) {
+                this.snackBar?.errorSnackBar('Add technology experience');
                 return;
             }
 
@@ -348,6 +386,7 @@ export class RegisterResourceComponent implements OnInit {
         const dialogRef = this.dialog.open(AddSkillAndIntegrationComponent, {
             disableClose: true,
             width: '98%',
+            maxHeight: '700px',
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
@@ -374,6 +413,7 @@ export class RegisterResourceComponent implements OnInit {
         const dialogRef = this.dialog.open(AddTechnologyComponent, {
             disableClose: true,
             width: '98%',
+            maxHeight: '700px',
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
@@ -497,6 +537,12 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     private saveResourcePayload() {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        integration?.value?.map((item) => (item.checked = true));
+
         return {
             email: this.resourcesForm?.get('email')?.value,
             details: {

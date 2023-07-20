@@ -12,7 +12,10 @@
 </div>
 
 <form [formGroup]="addTechnologyForm">
-    <div formArrayName="technology" class="mt-4">
+    <div
+        formArrayName="technology"
+        class="mt-4 overflow-hidden sm:overflow-y-auto overflow-x-auto"
+    >
         <ng-container
             *ngFor="
                 let skill of technology?.controls;

@@ -19,7 +19,7 @@ import { NgParticlesModule } from "ng-particles";
 import { AddSkillAndIntegrationComponent } from './add-skill-and-integration/add-skill-and-integration.component';
 import { SuccessPageComponent } from './success-page/success-page.component';
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
-
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 @NgModule({
     declarations: [RegisterResourceComponent, AddSkillAndIntegrationComponent, SuccessPageComponent, AddTechnologyComponent],
     imports: [
@@ -35,6 +35,7 @@ import { AddTechnologyComponent } from './add-technology/add-technology.componen
         MatChipsModule,
         MatAutocompleteModule,
         MatProgressSpinnerModule,
+        MatMomentDateModule,
         NgParticlesModule,
         FormsModule,
         ReactiveFormsModule,
