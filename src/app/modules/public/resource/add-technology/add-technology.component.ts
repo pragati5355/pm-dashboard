@@ -43,7 +43,13 @@ export class AddTechnologyComponent implements OnInit {
     submit() {
         if (this.technology?.valid) {
             const values = this.technology?.value?.map((item) => item);
-
+            const newArr = values.filter((x) => {
+                return !this?.data?.technologies?.find(
+                    (y) => y?.name?.toLowerCase() === x?.name?.toLowerCase()
+                );
+            });
+            console.log('old :', values);
+            console.log('new :', newArr);
             this.matDialogRef.close(values);
         }
     }

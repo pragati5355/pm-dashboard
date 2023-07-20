@@ -292,6 +292,14 @@ export class RegisterResourceComponent implements OnInit {
 
         if (this.resourcesForm?.valid) {
             if (
+                this.showExperience &&
+                this.resourcesForm?.get('month')?.value === 0 &&
+                this.resourcesForm?.get('year')?.value === 0
+            ) {
+                this.snackBar.errorSnackBar('Fill previous experience');
+                return;
+            }
+            if (
                 this.resourcesForm?.get('role')?.value !== 'PM' &&
                 this.resourcesForm?.get('technologies')?.value?.length === 0
             ) {
@@ -417,7 +425,9 @@ export class RegisterResourceComponent implements OnInit {
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
-            data: {},
+            data: {
+                technologies: this.technologies,
+            },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
