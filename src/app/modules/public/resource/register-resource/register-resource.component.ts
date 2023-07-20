@@ -233,7 +233,6 @@ export class RegisterResourceComponent implements OnInit {
                 resourceId: [this.userData?.userId || null],
             });
             this.technologies.push(technologyControl);
-            console.log(this.technologies?.value);
         }
         this.resourcesForm.get('technology')?.reset();
     }
@@ -291,6 +290,14 @@ export class RegisterResourceComponent implements OnInit {
             );
 
         if (this.resourcesForm?.valid) {
+            if (
+                this.showExperience &&
+                this.resourcesForm?.get('month')?.value === 0 &&
+                this.resourcesForm?.get('year')?.value === 0
+            ) {
+                this.snackBar.errorSnackBar('Fill previous experience');
+                return;
+            }
             if (
                 this.resourcesForm?.get('role')?.value !== 'PM' &&
                 this.resourcesForm?.get('technologies')?.value?.length === 0
@@ -390,7 +397,9 @@ export class RegisterResourceComponent implements OnInit {
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
-            data: {},
+            data: {
+                integrations: this.integrations,
+            },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
@@ -417,7 +426,9 @@ export class RegisterResourceComponent implements OnInit {
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
-            data: {},
+            data: {
+                technologies: this.technologies?.value,
+            },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
@@ -665,7 +676,6 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     private filterEmails(email: string) {
-        console.log(this.emailList);
         let arr = this.emailList.filter(
             (item) =>
                 item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
