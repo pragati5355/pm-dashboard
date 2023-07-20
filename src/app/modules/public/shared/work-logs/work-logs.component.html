@@ -1,0 +1,155 @@
+<div
+    *ngIf="!responseSubmitted && !initialLoading"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50 transition-all"
+>
+    <div class="w-full max-w-screen-md p-2 sm:p-6">
+        <div class="w-full flex justify-center mb-2">
+            <div>
+                <img class="w-36" src="assets/images/logo/logo.png" alt="" />
+            </div>
+        </div>
+
+        <div
+            class="w-full max-w-[800px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
+        >
+            <div class="mb-2">
+                <span class="text-xl"
+                    >Hi, {{ resourceData?.resourceName | titlecase }}</span
+                >
+            </div>
+            <span class="text-gray-500 text-2xl"
+                >{{ resourceData?.projectName }} : Work log for
+                {{ resourceData?.workLogDate | date }}</span
+            >
+            <form class="mt-8" [formGroup]="workLogForm">
+                <div class="flex flex-col">
+                    <div class="flex-1">
+                        <mat-checkbox (change)="checkBox($event?.checked)"
+                            ><span>I was on Leave</span></mat-checkbox
+                        >
+                    </div>
+                    <div class="flex-1 mt-6">
+                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                            <mat-label>Total hours</mat-label>
+                            <input
+                                matInput
+                                type="number"
+                                placeholder="Total hours"
+                                formControlName="totalHours"
+                            />
+                            <mat-error
+                                class="text-red-500"
+                                *ngIf="
+                                    workLogForm
+                                        ?.get('totalHours')
+                                        ?.hasError('required')
+                                "
+                            >
+                                <div>Total hours is mandatory</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex-1 mt-4">
+                        <span class="font-semibold mb-4"
+                            >Description <span *ngIf="!onLeave">*</span></span
+                        >
+                        <div
+                            class="mt-2 border border-red-500"
+                            [ngClass]="{
+                                border: showError,
+                                'border-red-500': showError
+                            }"
+                        >
+                            <quill-editor
+                                #editor
+                                [modules]="modules"
+                                (onContentChanged)="getDescription($event)"
+                                [readOnly]="onLeave"
+                            ></quill-editor>
+                        </div>
+                        <span
+                            *ngIf="showError"
+                            class="mat-error text-red-500 ng-tns-c116-0 ng-star-inserted font-semibold text-[12px]"
+                            >Description is mandatory</span
+                        >
+                    </div>
+
+                    <div class="flex justify-end mt-4">
+                        <button
+                            class="bg-primary-500 text-white font-bold"
+                            mat-flat-button
+                            type="submit"
+                            (click)="submit()"
+                            [disabled]="submitInProgress"
+                        >
+                            <mat-progress-spinner
+                                *ngIf="submitInProgress"
+                                class="mr-2"
+                                [diameter]="24"
+                                [mode]="'indeterminate'"
+                            ></mat-progress-spinner>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div
+    *ngIf="initialLoading"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50"
+>
+    <div class="w-full max-w-screen-md p-2 sm:p-6">
+        <div class="w-full flex justify-center mb-2">
+            <div>
+                <img class="w-36" src="assets/images/logo/logo.png" alt="" />
+            </div>
+        </div>
+
+        <div
+            class="w-full max-w-[800px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
+        >
+            <div class="skeleton-loader w-1/2">
+                <div class="table_row rounded-2xl"></div>
+            </div>
+            <form class="mt-8" [formGroup]="workLogForm">
+                <div class="flex flex-col">
+                    <div class="skeleton-loader w-24">
+                        <div class="table_row rounded-2xl"></div>
+                    </div>
+                    <div class="flex-1 mt-6">
+                        <div class="skeleton-loader w-full">
+                            <div class="table_row rounded-2xl"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="skeleton-loader_description">
+                            <div class="table_row rounded-2xl"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-4">
+                        <div class="skeleton-loader w-18">
+                            <div class="table_row rounded-2xl"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div
+    *ngIf="responseSubmitted && !initialLoading"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50"
+>
+    <div
+        class="text-4xl text-center font-extrabold tracking-tight leading-tight"
+    >
+        Successfully logged work
+    </div>
+</div>
