@@ -570,9 +570,9 @@
                                         [formGroupName]="i"
                                     >
                                         <div
-                                            class="w-full grid grid-cols-4 mt-4"
+                                            class="w-full grid grid-cols-1 sm:grid-cols-4 mt-4"
                                         >
-                                            <div class="">
+                                            <div class="mb-2 sm:mb-0">
                                                 {{ technology?.value?.name }}
                                             </div>
                                             <div class="flex col-span-2 pr-4">
@@ -692,7 +692,7 @@
 
                                             <div>
                                                 <mat-icon
-                                                    class="cursor-pointer ml-6"
+                                                    class="cursor-pointer sm:ml-6"
                                                     color="warn"
                                                     matTooltip="Remove"
                                                     (click)="
