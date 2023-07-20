@@ -206,6 +206,15 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
+        const isAlreadyExist =
+            this.technologies?.value?.filter(
+                (item) =>
+                    item?.name?.toLowerCase() ===
+                    event?.option?.value.toLowerCase()
+            )?.length > 0;
+        if (isAlreadyExist) {
+            return;
+        }
         const technology = event?.option?.value;
         if (technology) {
             const technologyControl = this.formBuilder.group({
@@ -215,6 +224,7 @@ export class RegisterResourceComponent implements OnInit {
                 resourceId: [this.userData?.userId || null],
             });
             this.technologies.push(technologyControl);
+            console.log(this.technologies?.value);
         }
         this.resourcesForm.get('technology')?.reset();
     }
@@ -497,6 +507,12 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     private saveResourcePayload() {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        integration?.value?.map((item) => (item.checked = true));
+
         return {
             email: this.resourcesForm?.get('email')?.value,
             details: {
