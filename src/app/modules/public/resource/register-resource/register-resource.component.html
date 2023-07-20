@@ -188,7 +188,7 @@
                                     formControlName="dateOfJoining"
                                     [matDatepicker]="dateOfJoiningDatepicker"
                                     (focus)="dateOfJoiningDatepicker.open()"
-                                    [min]="minToDate"
+                                    min="2012-04-24"
                                     [max]="maxToDate"
                                 />
                                 <mat-datepicker-toggle
@@ -224,7 +224,7 @@
                         (change)="getRadioBtnValues($event)"
                     >
                         <mat-label class="mb-2 font-semibold"
-                            >Is mindbowser your first company?</mat-label
+                            >Is Mindbowser your first company?</mat-label
                         >
 
                         <mat-radio-button value="yes" class="mx-4"
