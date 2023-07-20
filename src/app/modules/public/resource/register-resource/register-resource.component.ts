@@ -426,7 +426,7 @@ export class RegisterResourceComponent implements OnInit {
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                technologies: this.technologies,
+                technologies: this.technologies?.value,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

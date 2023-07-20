@@ -48,9 +48,7 @@ export class AddTechnologyComponent implements OnInit {
                     (y) => y?.name?.toLowerCase() === x?.name?.toLowerCase()
                 );
             });
-            console.log('old :', values);
-            console.log('new :', newArr);
-            this.matDialogRef.close(values);
+            this.matDialogRef.close(newArr);
         }
     }
 
