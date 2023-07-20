@@ -386,6 +386,7 @@ export class RegisterResourceComponent implements OnInit {
         const dialogRef = this.dialog.open(AddSkillAndIntegrationComponent, {
             disableClose: true,
             width: '98%',
+            maxHeight: '700px',
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
@@ -412,6 +413,7 @@ export class RegisterResourceComponent implements OnInit {
         const dialogRef = this.dialog.open(AddTechnologyComponent, {
             disableClose: true,
             width: '98%',
+            maxHeight: '700px',
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,

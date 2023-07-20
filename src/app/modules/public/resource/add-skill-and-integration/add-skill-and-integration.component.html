@@ -12,7 +12,10 @@
 </div>
 
 <form [formGroup]="skillAndIntegrationsForm">
-    <div formArrayName="skillandIntegration" class="mt-4">
+    <div
+        formArrayName="skillandIntegration"
+        class="mt-4 overflow-hidden sm:overflow-y-auto overflow-x-auto"
+    >
         <ng-container
             *ngFor="
                 let skill of skillandIntegration?.controls;
