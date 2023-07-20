@@ -26,7 +26,6 @@ export class AddSkillAndIntegrationComponent implements OnInit {
         this.skillAndIntegrationsForm = this.formBuilder.group({
             skillandIntegration: this.getControls(),
         });
-        console.log('incoming :', this?.data?.integrations);
     }
 
     add() {

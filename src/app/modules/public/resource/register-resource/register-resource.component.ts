@@ -233,7 +233,6 @@ export class RegisterResourceComponent implements OnInit {
                 resourceId: [this.userData?.userId || null],
             });
             this.technologies.push(technologyControl);
-            console.log(this.technologies?.value);
         }
         this.resourcesForm.get('technology')?.reset();
     }
@@ -677,7 +676,6 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     private filterEmails(email: string) {
-        console.log(this.emailList);
         let arr = this.emailList.filter(
             (item) =>
                 item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
