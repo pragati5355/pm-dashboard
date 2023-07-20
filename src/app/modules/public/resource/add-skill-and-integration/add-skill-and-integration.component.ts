@@ -26,6 +26,7 @@ export class AddSkillAndIntegrationComponent implements OnInit {
         this.skillAndIntegrationsForm = this.formBuilder.group({
             skillandIntegration: this.getControls(),
         });
+        console.log('incoming :', this?.data?.integrations);
     }
 
     add() {
@@ -46,7 +47,13 @@ export class AddSkillAndIntegrationComponent implements OnInit {
         if (this.skillandIntegration?.valid) {
             const values = this.skillandIntegration?.value?.map((item) => item);
 
-            this.matDialogRef.close(values);
+            const newArr = values.filter((x) => {
+                return !this?.data?.integrations?.find(
+                    (y) => y?.name?.toLowerCase() === x?.name?.toLowerCase()
+                );
+            });
+
+            this.matDialogRef.close(newArr);
         }
     }
 

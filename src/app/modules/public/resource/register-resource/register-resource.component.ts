@@ -398,7 +398,9 @@ export class RegisterResourceComponent implements OnInit {
             maxWidth: '700px',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
-            data: {},
+            data: {
+                integrations: this.integrations,
+            },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
