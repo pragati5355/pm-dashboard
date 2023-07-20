@@ -60,6 +60,12 @@ export class RegisterResourceComponent implements OnInit {
     configForm: FormGroup;
     AlreadyExistConfigForm: FormGroup;
     isPm: boolean = false;
+    minDate: Date;
+    maxDate: Date;
+    minFromDate: Date;
+    maxFromDate: Date | null;
+    minToDate: Date | null;
+    maxToDate: Date;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -89,6 +95,9 @@ export class RegisterResourceComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         // this.getEmails();
+
+        this.minFromDate = new Date(2012, 3, 24);
+        this.maxToDate = new Date();
     }
 
     getRadioBtnValues($event: any) {
@@ -267,6 +276,20 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     submit() {
+        // console.log(this.resourcesForm?.get('technologies')?.value);
+        // this.resourcesForm?.get('technologies')?.value?.map((item) => {
+        //     if (item?.experienceMonth === 0 && item?.experienceYear === 0) {
+        //         this.snackBar?.errorSnackBar('Add technology experience');
+        //     }
+        // });
+
+        const technologyWithNoExperience = this.resourcesForm
+            ?.get('technologies')
+            ?.value?.filter(
+                (item) =>
+                    item?.experienceMonth === 0 && item?.experienceYear === 0
+            );
+
         if (this.resourcesForm?.valid) {
             if (
                 this.resourcesForm?.get('role')?.value !== 'PM' &&
@@ -283,6 +306,11 @@ export class RegisterResourceComponent implements OnInit {
 
             if (!this.isFileUploadedToS3) {
                 this.snackBar.errorSnackBar('Upload resume');
+                return;
+            }
+
+            if (technologyWithNoExperience?.length > 0) {
+                this.snackBar?.errorSnackBar('Add technology experience');
                 return;
             }
 
