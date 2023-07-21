@@ -31,7 +31,7 @@ export class CreateResumeComponent implements OnInit {
     removable = true;
     addOnBlur = true;
     separatorKeysCodes: number[] = [ENTER, COMMA];
-    fruitCtrl = new FormControl();
+    projectCtrl = new FormControl();
     filteredProjects: Observable<string[]>;
     projects: string[] = [];
     allProjects: string[] = [
@@ -78,7 +78,7 @@ export class CreateResumeComponent implements OnInit {
             education: [true],
             experience: [true],
         });
-        this.filteredProjects = this.fruitCtrl.valueChanges.pipe(
+        this.filteredProjects = this.projectCtrl.valueChanges.pipe(
             startWith(null),
             map((fruit: string | null) =>
                 fruit ? this._filter(fruit) : this.allProjects.slice()
@@ -90,23 +90,19 @@ export class CreateResumeComponent implements OnInit {
     }
 
     add(event: MatChipInputEvent): void {
-        // Add fruit only when MatAutocomplete is not open
-        // To make sure this does not conflict with OptionSelected Event
         if (!this.matAutocomplete.isOpen) {
             const input = event.input;
             const value = event.value;
 
-            // Add our fruit
             if ((value || '').trim()) {
                 this.projects.push(value.trim());
             }
 
-            // Reset the input value
             if (input) {
                 input.value = '';
             }
 
-            this.fruitCtrl.setValue(null);
+            this.projectCtrl.setValue(null);
         }
     }
 
@@ -126,7 +122,11 @@ export class CreateResumeComponent implements OnInit {
             this.projects.push(event.option.viewValue);
         }
         this.projectInput.nativeElement.value = '';
-        this.fruitCtrl.setValue(null);
+        this.projectCtrl.setValue(null);
+    }
+
+    submit() {
+        console.log(this.resumeForm?.value);
     }
 
     private _filter(value: string): string[] {

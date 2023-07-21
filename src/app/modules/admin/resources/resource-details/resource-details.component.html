@@ -5,8 +5,24 @@
         <div
             class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6"
         >
-            <button (click)="createResumeDialog()" [color]="'primary'" class="mr-2" mat-flat-button>
+            <button
+                (click)="createResumeDialog()"
+                [color]="'primary'"
+                class="mr-2"
+                mat-flat-button
+            >
                 Create resume
+            </button>
+            <button
+                class="bg-slate-400 mr-2"
+                mat-icon-button
+                [matTooltip]="'View resume versions'"
+                (click)="viewResumeVersions()"
+            >
+                <mat-icon
+                    class="text-white"
+                    svgIcon="heroicons_outline:eye"
+                ></mat-icon>
             </button>
             <button
                 class="bg-slate-400"

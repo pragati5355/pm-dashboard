@@ -11,6 +11,7 @@ import { ResourcesListComponent } from '../resources-list/resources-list.compone
 import { round } from 'lodash';
 import { CreateResumeComponent } from '../create-resume/create-resume.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ResumeVersionsComponent } from '../resume-versions/resume-versions.component';
 @Component({
     selector: 'app-resource-details',
     templateUrl: './resource-details.component.html',
@@ -90,6 +91,23 @@ export class ResourceDetailsComponent implements OnInit {
             data: {},
         });
         dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
+    }
+
+    viewResumeVersions() {
+        const viewResumeVersionDialogRef = this.dialog.open(
+            ResumeVersionsComponent,
+            {
+                disableClose: true,
+                width: '40%',
+                panelClass: 'warn-dialog-content',
+                autoFocus: false,
+                data: {},
+            }
+        );
+        viewResumeVersionDialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
             }
         });
