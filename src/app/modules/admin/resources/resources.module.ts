@@ -37,6 +37,8 @@ import { resourcesRoutes } from './resources.routing';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ResourceUploadCsvComponent } from './resource-upload-csv/resource-upload-csv.component';
 import { JoinPipe } from './common/pipes/join-tech.pipe';
+import { CreateResumeComponent } from './create-resume/create-resume.component';
+import { ResumeVersionsComponent } from './resume-versions/resume-versions.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +48,9 @@ import { JoinPipe } from './common/pipes/join-tech.pipe';
         ResourceDetailsComponent,
         DiffDatePipe,
         ResourceUploadCsvComponent,
-        JoinPipe
+        JoinPipe,
+        CreateResumeComponent,
+        ResumeVersionsComponent,
     ],
     imports: [
         CommonModule,

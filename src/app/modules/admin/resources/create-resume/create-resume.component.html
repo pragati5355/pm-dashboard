@@ -1,0 +1,124 @@
+<div
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
+>
+    <div class="text-lg font-medium">Select sections to include in resume</div>
+
+    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"
+        ></mat-icon>
+    </button>
+</div>
+<form [formGroup]="resumeForm" class="mt-12">
+    <div class="mb-4">
+        <section
+            class="example-section w-full grid grid-cols-2 gap-y-3"
+            [formGroup]="resumeForm"
+        >
+            <div>
+                <mat-checkbox formControlName="designation"
+                    >Designation</mat-checkbox
+                >
+            </div>
+            <div>
+                <mat-checkbox formControlName="technology"
+                    >Technology</mat-checkbox
+                >
+            </div>
+            <div>
+                <mat-checkbox formControlName="skillIntegrations"
+                    >Skill/Integrations</mat-checkbox
+                >
+            </div>
+
+            <div>
+                <mat-checkbox formControlName="experience"
+                    >Previous experience</mat-checkbox
+                >
+            </div>
+
+            <div>
+                <mat-checkbox formControlName="education"
+                    >Education</mat-checkbox
+                >
+            </div>
+
+            <div class="flex items-center">
+                <mat-checkbox formControlName="projects"
+                    >Projects
+                </mat-checkbox>
+                <div class="popover-wrapper">
+                    <mat-icon
+                        class="cursor-pointer mb-2 ml-2"
+                        svgIcon="heroicons_outline:information-circle"
+                    ></mat-icon>
+
+                    <div class="content overflow-y-scroll">
+                        <div><span>Projects on profile</span></div>
+                        <div class="grid grid-cols-3 gap-2 mt-2">
+                            <div
+                                *ngFor="let project of projectsOnProfile"
+                                class="flex items-center justify-center py-1 px-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                            >
+                                <span
+                                    class="text-sm font-medium whitespace-nowrap truncate"
+                                    >{{ project }}</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <mat-form-field class="example-chip-list w-full mt-4">
+        <mat-label>Select projects to include in resume</mat-label>
+        <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip
+                *ngFor="let project of projects"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="remove(project)"
+            >
+                {{ project }}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+                id="projectInput"
+                placeholder="Add project..."
+                #projectInput
+                [formControl]="projectCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+            />
+        </mat-chip-list>
+        <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+        >
+            <mat-option
+                *ngFor="let project of filteredProjects | async"
+                [value]="project"
+            >
+                {{ project }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <div class="w-full flex justify-end mt-4">
+        <button
+            (click)="submit()"
+            [color]="'primary'"
+            class="ml-2"
+            mat-flat-button
+        >
+            <span class="">Save to platform</span>
+        </button>
+        <button [color]="'primary'" class="ml-2" mat-flat-button>
+            <span class="">Export .Docx</span>
+        </button>
+    </div>
+</form>
