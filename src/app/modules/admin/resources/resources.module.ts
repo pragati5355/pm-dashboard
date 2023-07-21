@@ -48,7 +48,7 @@ import { CreateResumeComponent } from './create-resume/create-resume.component';
         DiffDatePipe,
         ResourceUploadCsvComponent,
         JoinPipe,
-        CreateResumeComponent
+        CreateResumeComponent,
     ],
     imports: [
         CommonModule,

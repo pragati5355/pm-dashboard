@@ -1,0 +1,29 @@
+.popover-wrapper {
+    position: relative;
+}
+.content {
+    position: absolute;
+    transform: translateX(-50%);
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    z-index: 1000;
+    width: 430px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.1s all ease-in-out;
+    display: none;
+    max-height: 175px;
+}
+// .content:before {
+//     content: "";
+//     position: absolute;
+//     width: 15px;
+//     height: 15px;
+//     background: white;
+//     bottom: -7px;
+//     left: 162px;
+//     transform: rotate(45deg);
+// }
+.popover-wrapper:hover .content {
+    display: block;
+}

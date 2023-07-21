@@ -84,7 +84,7 @@ export class ResourceDetailsComponent implements OnInit {
     createResumeDialog() {
         const dialogRef = this.dialog.open(CreateResumeComponent, {
             disableClose: true,
-            width: '50%',
+            width: '40%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {},
