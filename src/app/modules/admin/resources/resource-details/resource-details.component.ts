@@ -9,6 +9,8 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 
 import { ResourcesListComponent } from '../resources-list/resources-list.component';
 import { round } from 'lodash';
+import { CreateResumeComponent } from '../create-resume/create-resume.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: 'app-resource-details',
     templateUrl: './resource-details.component.html',
@@ -26,6 +28,7 @@ export class ResourceDetailsComponent implements OnInit {
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
         private activatedRoute: ActivatedRoute,
+        private dialog: MatDialog,
         private _resourcesListComponent: ResourcesListComponent
     ) {}
 
@@ -76,6 +79,20 @@ export class ResourceDetailsComponent implements OnInit {
             },
             (error) => {}
         );
+    }
+
+    createResumeDialog() {
+        const dialogRef = this.dialog.open(CreateResumeComponent, {
+            disableClose: true,
+            width: '50%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {},
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
     }
 
     closeDrawer(): Promise<MatDrawerToggleResult> {
