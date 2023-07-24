@@ -11,7 +11,7 @@ export class CrListsComponent implements OnInit {
     initialLoading: boolean = false;
 
     @Input()
-    crList = [];
+    crList : any =[];
 
     requiredSprintSkeletonData = {
         rowsToDisplay: 10,
