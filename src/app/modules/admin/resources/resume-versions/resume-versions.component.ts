@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+    MatDialog,
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { NameResumeVersionComponent } from '../name-resume-version/name-resume-version.component';
 
 @Component({
     selector: 'app-resume-versions',
@@ -16,7 +21,8 @@ export class ResumeVersionsComponent implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
-        private matDialogRef: MatDialogRef<ResumeVersionsComponent>
+        private matDialogRef: MatDialogRef<ResumeVersionsComponent>,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {}
@@ -25,5 +31,23 @@ export class ResumeVersionsComponent implements OnInit {
         this.matDialogRef.close();
     }
 
-    upload() {}
+    upload() {
+        this.matDialogRef.close();
+
+        const dialogRef = this.dialog.open(NameResumeVersionComponent, {
+            disableClose: true,
+            width: '40%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                mode: 'UPLOAD',
+                fileName: 'new resume',
+                data: {},
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
+    }
 }

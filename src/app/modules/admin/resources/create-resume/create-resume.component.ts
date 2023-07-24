@@ -156,6 +156,7 @@ export class CreateResumeComponent implements OnInit {
                 data: {
                     formValues: this.resumeForm?.value,
                     projects: this.projects,
+                    mode: 'SAVE',
                 },
             }
         );

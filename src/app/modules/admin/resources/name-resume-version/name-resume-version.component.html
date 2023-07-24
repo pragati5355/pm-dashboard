@@ -1,7 +1,11 @@
 <div
     class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
 >
-    <div class="text-lg font-medium">Name resume version</div>
+    <div class="text-lg font-medium">
+        {{
+            this.data?.mode === "SAVE" ? "Name resume version" : "Upload resume"
+        }}
+    </div>
 
     <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
         <mat-icon
@@ -11,7 +15,11 @@
     </button>
 </div>
 
-<form [formGroup]="resumeVersionForm" class="mt-12">
+<form
+    [formGroup]="resumeVersionForm"
+    class="mt-12"
+    *ngIf="this.data?.mode === 'SAVE'"
+>
     <mat-form-field [floatLabel]="'always'" class="w-full">
         <mat-label>Name this version</mat-label>
         <input
@@ -37,3 +45,67 @@
         </button>
     </div>
 </form>
+
+<div *ngIf="this.data?.mode === 'UPLOAD'" class="flex flex-col mt-8">
+    <div *ngIf="preSignedUrl !== null" class="flex item-center w-1/2">
+        <span class="text-primary font-semibold truncate">{{
+            resumeFileToBeUploaded?.name
+        }}</span>
+        <div class="cursor-pointer">
+            <mat-icon
+                class="text-primary"
+                [svgIcon]="'heroicons_outline:x'"
+                (click)="removeUploadedFile()"
+            ></mat-icon>
+        </div>
+    </div>
+    <div *ngIf="!isFileUploadedToS3">
+        <span>Upload your resume *</span>
+
+        <button
+            class="ml-4 bg-primary-500 text-white"
+            mat-raised-button
+            (click)="onClick()"
+            [disabled]="submitInProgress"
+        >
+            <span>Upload</span>
+            <mat-progress-spinner
+                *ngIf="submitInProgress"
+                [diameter]="24"
+                [mode]="'indeterminate'"
+                class="px-3 ml-3"
+            ></mat-progress-spinner>
+        </button>
+    </div>
+
+    <input
+        #fileUpload
+        class="d-none"
+        type="file"
+        accept=".pdf"
+        (change)="uploadChange($event)"
+    />
+</div>
+
+<div
+    *ngIf="this.data?.mode === 'UPLOAD'"
+    class="w-full flex items-center justify-end ml-auto mt-6"
+>
+    <button
+        (click)="submit()"
+        type="submit"
+        [color]="'primary'"
+        class="order-first sm:order-last ml-4 bg-primary-500 text-white"
+        mat-flat-button
+        [disabled]="submitInProgress"
+    >
+        <span>Submit</span>
+
+        <mat-progress-spinner
+            *ngIf="submitInProgress"
+            [diameter]="24"
+            [mode]="'indeterminate'"
+            class="px-3 ml-3"
+        ></mat-progress-spinner>
+    </button>
+</div>
