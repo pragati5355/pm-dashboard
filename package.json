@@ -1,6 +1,6 @@
 {
     "name": "metrics-pm-dashboard-web",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --port 8080",
@@ -41,6 +41,7 @@
         "lodash-es": "4.17.21",
         "moment": "^2.29.3",
         "ng-apexcharts": "^1.7.0",
+        "ng-particles": "^3.0.6",
         "ngx-extended-pdf-viewer": "^15.0.9",
         "ngx-infinite-scroll": "^10.0.0",
         "ngx-markdown": "13.1.0",
@@ -50,6 +51,9 @@
         "rxjs": "7.5.4",
         "save-as": "^0.1.8",
         "tslib": "^2.3.1",
+        "tsparticles": "^2.7.1",
+        "tsparticles-engine": "^2.7.1",
+        "tsparticles-slim": "^2.7.1",
         "zone.js": "0.11.4"
     },
     "devDependencies": {
@@ -83,6 +87,6 @@
         "lodash": "4.17.21",
         "postcss": "8.4.6",
         "tailwindcss": "3.0.23",
-        "typescript": "^4.5.5"
+        "typescript": "^4.6.4"
     }
 }
