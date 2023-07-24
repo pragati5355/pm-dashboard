@@ -49,6 +49,8 @@ import { MatChipsModule } from '@angular/material/chips';
 
 import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
 import { ProjectMembersDetailsComponent } from './project-members-details/project-members-details.component';
+import { CrListsComponent } from './cr-lists/cr-lists.component';
+import { CrDetailsComponent } from './cr-details/cr-details.component';
 
 @NgModule({
     declarations: [
@@ -71,6 +73,8 @@ import { ProjectMembersDetailsComponent } from './project-members-details/projec
         AddCrComponent,
         AddCrResourceDialogComponent,
         ProjectMembersDetailsComponent,
+        CrListsComponent,
+        CrDetailsComponent,
     ],
     imports: [
         FormsModule,
