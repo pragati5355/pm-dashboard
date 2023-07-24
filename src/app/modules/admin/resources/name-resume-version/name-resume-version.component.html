@@ -1,0 +1,39 @@
+<div
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
+>
+    <div class="text-lg font-medium">Name resume version</div>
+
+    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"
+        ></mat-icon>
+    </button>
+</div>
+
+<form [formGroup]="resumeVersionForm" class="mt-12">
+    <mat-form-field [floatLabel]="'always'" class="w-full">
+        <mat-label>Name this version</mat-label>
+        <input
+            formControlName="name"
+            matInput
+            maxlength="30"
+            placeholder="name"
+            type="text"
+        />
+        <mat-error *ngIf="resumeVersionForm?.get('name')?.hasError('required')">
+            <div>Version name is mandatory</div>
+        </mat-error>
+    </mat-form-field>
+
+    <div class="flex justify-end">
+        <button
+            (click)="submit()"
+            [color]="'primary'"
+            class="order-first sm:order-last ml-4"
+            mat-flat-button
+        >
+            <span>Submit</span>
+        </button>
+    </div>
+</form>

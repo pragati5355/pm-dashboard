@@ -10,72 +10,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ResumeVersionsComponent implements OnInit {
     initialLoading: boolean = false;
     resumeVersions: any[] = [
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '13/04/2023',
-        },
-        {
-            time: '12/04/2023',
-        },
-        {
-            time: '16/07/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
+        { name: 'version 1', time: '12/12/2023 12:31' },
+        { name: 'version 1', time: '12/12/2023 12:31' },
     ];
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -88,4 +24,6 @@ export class ResumeVersionsComponent implements OnInit {
     cancel() {
         this.matDialogRef.close();
     }
+
+    upload() {}
 }

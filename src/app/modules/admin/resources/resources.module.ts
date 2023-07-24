@@ -39,6 +39,7 @@ import { ResourceUploadCsvComponent } from './resource-upload-csv/resource-uploa
 import { JoinPipe } from './common/pipes/join-tech.pipe';
 import { CreateResumeComponent } from './create-resume/create-resume.component';
 import { ResumeVersionsComponent } from './resume-versions/resume-versions.component';
+import { NameResumeVersionComponent } from './name-resume-version/name-resume-version.component';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import { ResumeVersionsComponent } from './resume-versions/resume-versions.compo
         JoinPipe,
         CreateResumeComponent,
         ResumeVersionsComponent,
+        NameResumeVersionComponent,
     ],
     imports: [
         CommonModule,

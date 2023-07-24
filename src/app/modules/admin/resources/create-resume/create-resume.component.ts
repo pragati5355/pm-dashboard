@@ -12,8 +12,14 @@ import {
     MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+    MatDialog,
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
+import { NameResumeVersionComponent } from '../name-resume-version/name-resume-version.component';
 
 @Component({
     selector: 'app-create-resume',
@@ -66,7 +72,9 @@ export class CreateResumeComponent implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
-        private matDialogRef: MatDialogRef<CreateResumeComponent>
+        private matDialogRef: MatDialogRef<CreateResumeComponent>,
+        private dialog: MatDialog,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
@@ -126,7 +134,35 @@ export class CreateResumeComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.resumeForm?.value);
+        if (
+            this.resumeForm?.get('projects')?.value &&
+            this.projects?.length === 0
+        ) {
+            this.snackBar.errorSnackBar('Please select projects');
+        } else {
+            this.matDialogRef.close();
+            this.nameResumeVersionDialog();
+        }
+    }
+
+    nameResumeVersionDialog() {
+        const resumeVersionDialogRef = this.dialog.open(
+            NameResumeVersionComponent,
+            {
+                disableClose: true,
+                width: '40%',
+                panelClass: 'warn-dialog-content',
+                autoFocus: false,
+                data: {
+                    formValues: this.resumeForm?.value,
+                    projects: this.projects,
+                },
+            }
+        );
+        resumeVersionDialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
     }
 
     private _filter(value: string): string[] {
