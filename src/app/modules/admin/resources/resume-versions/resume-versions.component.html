@@ -3,34 +3,50 @@
 >
     <div class="text-lg font-medium">Resume versions</div>
 
-    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
-        <mat-icon
-            class="text-current"
-            [svgIcon]="'heroicons_outline:x'"
-        ></mat-icon>
-    </button>
+    <div class="flex items-center">
+        <button
+            [matTooltip]="'Upload resume'"
+            (click)="upload()"
+            [color]="'secondary'"
+            class="mr-4"
+            mat-flat-button
+        >
+            <span>Upload</span>
+        </button>
+
+        <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"
+            ></mat-icon>
+        </button>
+    </div>
 </div>
 
 <div class="flex flex-auto overflow-hidden mt-8">
     <!-- Resources list -->
     <div class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto">
         <div
+            *ngIf="!initialLoading && resumeVersions?.length > 0"
             class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
             matSortDisableClear
         >
-            <div class="primary-900">Resume created on</div>
+            <div class="primary-900">Version name</div>
+            <div class="primary-900">Created on</div>
             <div class="hidden lg:block">Actions</div>
         </div>
         <ng-container *ngIf="!initialLoading && resumeVersions?.length > 0">
             <div *ngIf="resumeVersions?.length > 0" class="grid max-h-[500px]">
-                <!-- Header -->
-
-                <!-- Rows -->
                 <ng-container *ngFor="let resume of resumeVersions">
                     <div
                         class="inventory-grid grid items-center gap-4 py-4 px-6 md:px-8 border-b h-67"
                     >
-                        <!-- Sprints -->
+                        <div class="truncate font-semibold text-black">
+                            <div class="truncate cursor-pointer">
+                                {{ resume?.name }}
+                            </div>
+                        </div>
+
                         <div class="truncate font-semibold text-black">
                             <div class="truncate cursor-pointer">
                                 {{ resume?.time }}
@@ -53,14 +69,14 @@
                 </ng-container>
             </div>
         </ng-container>
-        <!-- <ng-container *ngIf="!initialLoading && totalRecored == 0">
+        <ng-container *ngIf="!initialLoading && resumeVersions?.length == 0">
             <div
                 class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
             >
-                Sprints not found
+                Versions not found
             </div>
         </ng-container>
-        <ng-container *ngIf="initialLoading">
+        <!-- <ng-container *ngIf="initialLoading">
             <app-table-skeleton
                 [skeletonData]="requiredSprintSkeletonData"
             ></app-table-skeleton>

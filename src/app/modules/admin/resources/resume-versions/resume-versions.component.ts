@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+    MatDialog,
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { NameResumeVersionComponent } from '../name-resume-version/name-resume-version.component';
 
 @Component({
     selector: 'app-resume-versions',
@@ -10,82 +15,39 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ResumeVersionsComponent implements OnInit {
     initialLoading: boolean = false;
     resumeVersions: any[] = [
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '13/04/2023',
-        },
-        {
-            time: '12/04/2023',
-        },
-        {
-            time: '16/07/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
-        {
-            time: '12/02/2023',
-        },
+        { name: 'version 1', time: '12/12/2023 12:31' },
+        { name: 'version 1', time: '12/12/2023 12:31' },
     ];
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
-        private matDialogRef: MatDialogRef<ResumeVersionsComponent>
+        private matDialogRef: MatDialogRef<ResumeVersionsComponent>,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {}
 
     cancel() {
         this.matDialogRef.close();
+    }
+
+    upload() {
+        this.matDialogRef.close();
+
+        const dialogRef = this.dialog.open(NameResumeVersionComponent, {
+            disableClose: true,
+            width: '40%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                mode: 'UPLOAD',
+                fileName: 'new resume',
+                data: {},
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
     }
 }
