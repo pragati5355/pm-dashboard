@@ -22,6 +22,8 @@ export class WorkLogsComponent implements OnInit {
     pathToken: string;
     resourceData: any;
     quillValue: any;
+    totalHours: number = 0;
+    currentTaskIndex: null | number = null;
     modules = {
         toolbar: [
             ['bold', 'italic', 'underline'],
@@ -69,6 +71,7 @@ export class WorkLogsComponent implements OnInit {
             this.workLogForm?.get('totalHours')?.setValue('');
             this.editor.quillEditor.deleteText(0, 20000);
             this.description = '';
+            this.tasks = [];
             this.showError = false;
         } else {
             this.workLogForm?.get('totalHours')?.enable();
@@ -88,11 +91,21 @@ export class WorkLogsComponent implements OnInit {
 
     removeTask(index: number) {
         this.tasks?.splice(index, 1);
+        this.calculateTotalHours();
     }
 
-    editTask(task: any) {
+    editTask(task: any, i: any) {
+        this.currentTaskIndex = i;
         this.quillValue = task?.htmlDescription;
         this.workLogForm?.get('totalHours')?.setValue(task?.hours);
+        this.calculateTotalHours();
+    }
+
+    calculateTotalHours() {
+        this.totalHours = this.tasks?.reduce(
+            (sum, item) => sum + item?.hours,
+            0
+        );
     }
 
     addTask() {
@@ -100,14 +113,29 @@ export class WorkLogsComponent implements OnInit {
             this.snackBar.errorSnackBar('Add description');
             return;
         }
+        if (!this.workLogForm?.get('totalHours')?.value) {
+            this.snackBar.errorSnackBar('Add Hours');
+            return;
+        }
+        console.log('current index:', this.currentTaskIndex);
         const task = {
             description: this.currentDescriptionValue,
             htmlDescription: this.description,
             hours: this.workLogForm?.get('totalHours')?.value,
         };
-        this.tasks?.push(task);
+
+        if (this.currentTaskIndex !== null) {
+            this.tasks?.splice(this.currentTaskIndex, 1, task);
+        } else {
+            this.tasks?.push(task);
+        }
         this.currentDescriptionValue = '';
-        console.log(this.tasks);
+        this.workLogForm?.get('totalHours')?.setValue('');
+        this.workLogForm?.get('totalHours')?.setErrors(null);
+        this.quillValue = '';
+        this.showError = false;
+        this.calculateTotalHours();
+        this.currentTaskIndex = null;
     }
 
     private handleSubmitResponse() {
@@ -179,7 +207,7 @@ export class WorkLogsComponent implements OnInit {
 
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
-            totalHours: ['', [Validators.required]],
+            totalHours: [''],
         });
     }
 }
