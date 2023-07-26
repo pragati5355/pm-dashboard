@@ -16,10 +16,8 @@ export class OnboardResourceComponent implements OnInit {
     };
 
     constructor(
-      @Inject(MAT_DIALOG_DATA) public data: any,
       private router: Router,
       private dialog: MatDialog,
-      private matDialogRef: MatDialogRef<OnboardResourceComponent>
       ) {}
 
     ngOnInit(): void {}
@@ -38,10 +36,10 @@ export class OnboardResourceComponent implements OnInit {
   
         },
     });
-    dialogRef.afterClosed().subscribe((result: any) => {
+      dialogRef.afterClosed().subscribe((result: any) => {
         if (result == 'success') {
            
         }
-    });
+      });
     }
 }

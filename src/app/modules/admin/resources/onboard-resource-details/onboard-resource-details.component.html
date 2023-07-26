@@ -1,1 +1,71 @@
-<p>onboard-resource-details works!</p>
+<div class="flex flex-col max-h-screen -m-6">
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+    >
+        <div class="flex text-lg font-medium">
+            <mat-icon style="color: white">assignment</mat-icon>
+            <span class="px-2 leading-6">Resource Details</span>
+        </div>
+        <button mat-icon-button (click)="close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"
+            ></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+        <div *ngIf="!initialLoading">
+            <!-- Main -->
+            <div class="flex flex-auto overflow-hidden">
+                <!-- Project member list -->
+                <div
+                    *ngIf="!initialLoading"
+                    class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto"
+                >
+                    <div
+                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        matSortDisableClear
+                    >
+                        <div>Modified By</div>
+                        <div>Previous End Date</div>
+                        <div>New End Date</div>
+                        <div>Reason</div>
+                    </div>
+                    <div class="grid">
+                        <!-- Rows -->
+                        <ng-container>
+                            <div
+                                class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
+                            >
+                                <!-- Role -->
+                                <div class="hidden sm:block">
+                                    Pragati Gawade
+                                </div>
+
+                                <div class="hidden sm:block">12 July,2023</div>
+
+                                <div class="hidden sm:block">23 July, 2023</div>
+
+                                <div class="hidden sm:block">NA</div>
+                            </div>
+                        </ng-container>
+                    </div>  
+                </div>
+
+                <!-- <ng-container *ngIf="!initialLoading">
+                    <div class="w-full flex justify-center min-h-10 mt-4">
+                        <span class="text-2xl">History not available</span>
+                    </div>
+                </ng-container> -->
+            </div>
+        </div>
+        <ng-container *ngIf="initialLoading">
+            <div
+                class="p-8 sm:p-16 text-2xl font-semibold tracking-tight text-center"
+            >
+                Loading.....
+            </div>
+        </ng-container>
+    </div>
+</div>
