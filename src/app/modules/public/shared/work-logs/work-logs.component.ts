@@ -21,12 +21,15 @@ export class WorkLogsComponent implements OnInit {
     initialLoading: boolean = false;
     pathToken: string;
     resourceData: any;
+    quillValue: any;
     modules = {
         toolbar: [
             ['bold', 'italic', 'underline'],
             [{ list: 'ordered' }, { list: 'bullet' }],
         ],
     };
+    tasks: any[] = [];
+    currentDescriptionValue: any;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -75,11 +78,36 @@ export class WorkLogsComponent implements OnInit {
     getDescription($event: any) {
         if ($event?.html !== null) {
             this.description = $event?.html;
+            this.currentDescriptionValue = $event?.text;
             this.showError = false;
         } else {
             this.description = '';
             this.showError = true;
         }
+    }
+
+    removeTask(index: number) {
+        this.tasks?.splice(index, 1);
+    }
+
+    editTask(task: any) {
+        this.quillValue = task?.htmlDescription;
+        this.workLogForm?.get('totalHours')?.setValue(task?.hours);
+    }
+
+    addTask() {
+        if (!this.currentDescriptionValue) {
+            this.snackBar.errorSnackBar('Add description');
+            return;
+        }
+        const task = {
+            description: this.currentDescriptionValue,
+            htmlDescription: this.description,
+            hours: this.workLogForm?.get('totalHours')?.value,
+        };
+        this.tasks?.push(task);
+        this.currentDescriptionValue = '';
+        console.log(this.tasks);
     }
 
     private handleSubmitResponse() {

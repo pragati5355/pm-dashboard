@@ -146,6 +146,7 @@ export class CreateResumeComponent implements OnInit {
     }
 
     nameResumeVersionDialog() {
+        console.log(this.resumeForm?.value);
         const resumeVersionDialogRef = this.dialog.open(
             NameResumeVersionComponent,
             {

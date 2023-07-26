@@ -10,7 +10,7 @@
         </div>
 
         <div
-            class="w-full max-w-[800px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
+            class="w-full max-w-[900px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
         >
             <div class="mb-2">
                 <span class="text-xl"
@@ -28,51 +28,134 @@
                             ><span>I was on Leave</span></mat-checkbox
                         >
                     </div>
-                    <div class="flex-1 mt-6">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <mat-label>Total hours</mat-label>
-                            <input
-                                matInput
-                                type="number"
-                                placeholder="Total hours"
-                                formControlName="totalHours"
-                            />
-                            <mat-error
-                                class="text-red-500"
-                                *ngIf="
-                                    workLogForm
-                                        ?.get('totalHours')
-                                        ?.hasError('required')
-                                "
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div class="flex-1 mt-4 sm:col-span-2">
+                            <span class="font-semibold mb-4"
+                                >Description
+                                <span *ngIf="!onLeave">*</span></span
                             >
-                                <div>Total hours is mandatory</div>
-                            </mat-error>
-                        </mat-form-field>
+                            <div
+                                class="mt-2 border border-red-500"
+                                [ngClass]="{
+                                    border: showError,
+                                    'border-red-500': showError
+                                }"
+                            >
+                                <quill-editor
+                                    #editor
+                                    [modules]="modules"
+                                    (onContentChanged)="getDescription($event)"
+                                    [(ngModel)]="quillValue"
+                                    [readOnly]="onLeave"
+                                    [ngModelOptions]="{ standalone: true }"
+                                ></quill-editor>
+                            </div>
+                            <span
+                                *ngIf="showError"
+                                class="mat-error text-red-500 ng-tns-c116-0 ng-star-inserted font-semibold text-[12px]"
+                                >Description is mandatory</span
+                            >
+                        </div>
+
+                        <div class="flex mt-6">
+                            <mat-form-field
+                                class="w-full"
+                                [floatLabel]="'always'"
+                            >
+                                <mat-label>Total hours</mat-label>
+                                <input
+                                    matInput
+                                    type="number"
+                                    placeholder="Total hours"
+                                    formControlName="totalHours"
+                                />
+                                <mat-error
+                                    class="text-red-500"
+                                    *ngIf="
+                                        workLogForm
+                                            ?.get('totalHours')
+                                            ?.hasError('required')
+                                    "
+                                >
+                                    <div>Total hours is mandatory</div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-icon
+                                (click)="workLogForm?.valid ? addTask() : null"
+                                class="mt-6 ml-2 cursor-pointer w-10 h-10"
+                                svgIcon="heroicons_outline:plus"
+                            ></mat-icon>
+                        </div>
                     </div>
 
-                    <div class="flex-1 mt-4">
-                        <span class="font-semibold mb-4"
-                            >Description <span *ngIf="!onLeave">*</span></span
-                        >
+                    <div class="flex flex-auto overflow-hidden mt-8">
                         <div
-                            class="mt-2 border border-red-500"
-                            [ngClass]="{
-                                border: showError,
-                                'border-red-500': showError
-                            }"
+                            class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto"
                         >
-                            <quill-editor
-                                #editor
-                                [modules]="modules"
-                                (onContentChanged)="getDescription($event)"
-                                [readOnly]="onLeave"
-                            ></quill-editor>
+                            <div
+                                *ngIf="tasks?.length > 0"
+                                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                matSortDisableClear
+                            >
+                                <div class="primary-900">Description</div>
+                                <div class="primary-900">Hours</div>
+                                <div class="hidden lg:block">Actions</div>
+                            </div>
+                            <ng-container>
+                                <div
+                                    *ngIf="tasks?.length > 0"
+                                    class="grid max-h-[500px]"
+                                >
+                                    <ng-container
+                                        *ngFor="let task of tasks; index as i"
+                                    >
+                                        <div
+                                            class="inventory-grid grid items-center gap-4 py-4 px-6 md:px-8 border-b h-67"
+                                        >
+                                            <div
+                                                class="truncate font-semibold text-black"
+                                            >
+                                                <div
+                                                    class="truncate cursor-pointer"
+                                                >
+                                                    {{ task?.description }}
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="truncate font-semibold text-black"
+                                            >
+                                                <div
+                                                    class="truncate cursor-pointer"
+                                                >
+                                                    {{ task?.hours }}
+                                                </div>
+                                            </div>
+
+                                            <div class="md:block">
+                                                <mat-icon
+                                                    (click)="editTask(task)"
+                                                    [matTooltip]="
+                                                        'Download resume'
+                                                    "
+                                                    class="text-gray-400 icon-size-5 cursor-pointer"
+                                                    svgIcon="heroicons_outline:pencil"
+                                                ></mat-icon>
+                                                <mat-icon
+                                                    (click)="removeTask(i)"
+                                                    [matTooltip]="
+                                                        'Delete resume'
+                                                    "
+                                                    class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
+                                                    svgIcon="heroicons_outline:trash"
+                                                ></mat-icon>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
                         </div>
-                        <span
-                            *ngIf="showError"
-                            class="mat-error text-red-500 ng-tns-c116-0 ng-star-inserted font-semibold text-[12px]"
-                            >Description is mandatory</span
-                        >
                     </div>
 
                     <div class="flex justify-end mt-4">
