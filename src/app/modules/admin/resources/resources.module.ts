@@ -40,6 +40,8 @@ import { JoinPipe } from './common/pipes/join-tech.pipe';
 import { CreateResumeComponent } from './create-resume/create-resume.component';
 import { ResumeVersionsComponent } from './resume-versions/resume-versions.component';
 import { NameResumeVersionComponent } from './name-resume-version/name-resume-version.component';
+import { OnboardResourceComponent } from './onboard-resource/onboard-resource.component';
+import { OnboardResourceDetailsComponent } from './onboard-resource-details/onboard-resource-details.component';
 
 @NgModule({
     declarations: [
@@ -53,6 +55,8 @@ import { NameResumeVersionComponent } from './name-resume-version/name-resume-ve
         CreateResumeComponent,
         ResumeVersionsComponent,
         NameResumeVersionComponent,
+        OnboardResourceComponent,
+        OnboardResourceDetailsComponent,
     ],
     imports: [
         CommonModule,

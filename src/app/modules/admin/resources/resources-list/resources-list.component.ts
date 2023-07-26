@@ -113,6 +113,10 @@ export class ResourcesListComponent implements OnInit {
         this.router.navigate(['/resources/add']);
     }
 
+    gotoOnboardResource() {
+        this.router.navigate(['/resources/onboard']);
+    }
+
     getList(searchPayload?: any) {
         if (!searchPayload) {
             searchPayload = this.getDefaultSearchPayload();
@@ -300,7 +304,7 @@ export class ResourcesListComponent implements OnInit {
                 disableClose: true,
                 width: '50%',
                 height: 'auto',
-                maxHeight: '90vh'
+                maxHeight: '90vh',
             })
             .afterClosed()
             .subscribe((result: any) => {
@@ -428,12 +432,10 @@ export class ResourcesListComponent implements OnInit {
     }
 
     private initializeExperienceForm() {
-        this.exprienceForm = this._formBuilder.group(
-            {
-                minExprience: [''],
-                maxExprience: [''],
-            },
-        );
+        this.exprienceForm = this._formBuilder.group({
+            minExprience: [''],
+            maxExprience: [''],
+        });
     }
 
     private addRequiredSubscriptions() {
