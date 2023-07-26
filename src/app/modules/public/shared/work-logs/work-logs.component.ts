@@ -117,7 +117,6 @@ export class WorkLogsComponent implements OnInit {
             this.snackBar.errorSnackBar('Add Hours');
             return;
         }
-        console.log('current index:', this.currentTaskIndex);
         const task = {
             description: this.currentDescriptionValue,
             htmlDescription: this.description,
