@@ -12,104 +12,686 @@
         ></mat-icon>
     </button>
 </div>
-<form [formGroup]="resourceForm" class="mt-12">
-    <div class="w-full flex flex-1">
-        <div class="w-full mr-3">
-            <mat-form-field
-                class="w-full mb-2 mt-4 sm:mt-0 userlist"
-                id="userlist"
-                [floatLabel]="'always'"
-            >
-                <mat-label>First Name</mat-label>
-                <input
-                    matInput
-                    placeholder="First Name"
-                    formControlName="firstName"
-                    class="inputlist"
-                />
-                <mat-error
-                    *ngIf="resourceForm?.get('firstName')?.hasError('required')"
-                >
-                    <div>First name is mandatory</div>
-                </mat-error>
-            </mat-form-field>
-        </div>
-        <div class="w-full">
-            <mat-form-field
-                class="w-full mb-2 mt-4 sm:mt-0 userlist"
-                id="userlist"
-                [floatLabel]="'always'"
-            >
-                <mat-label>Last Name</mat-label>
-                <input
-                    matInput
-                    placeholder="Last Name"
-                    formControlName="lastName"
-                    class="inputlist"
-                />
-                <mat-error
-                    *ngIf="resourceForm?.get('lastName')?.hasError('required')"
-                >
-                    <div>Last name is mandatory</div>
-                </mat-error>
-            </mat-form-field>
-        </div>
-    </div>
 
-    <div class="w-full flex flex-1">
-        <div class="w-full mr-3">
-            <mat-form-field
-                class="w-full mb-2 mt-4 sm:mt-0 userlist"
-                id="userlist"
-                [floatLabel]="'always'"
-            >
-                <mat-label>Email</mat-label>
-                <input
-                    matInput
-                    placeholder="Email"
-                    formControlName="email"
-                    class="inputlist"
-                />
-                <mat-error
-                    *ngIf="resourceForm?.get('email')?.hasError('required')"
-                >
-                    <div>Email is mandatory</div>
-                </mat-error>
-                <mat-error
-                    *ngIf="
-                        resourceForm?.get('email')?.hasError('email') &&
-                        !resourceForm?.get('email')?.hasError('required')
-                    "
-                >
-                    <div>Invalid Email</div>
-                </mat-error>
-                <mat-error
-                    *ngIf="
-                        resourceForm?.get('email')?.hasError('pattern') &&
-                        !resourceForm?.get('email')?.hasError('required') &&
-                        !resourceForm?.get('email')?.hasError('email')
-                    "
-                >
-                    <div>Only Mindbowser email is allowed</div>
-                </mat-error>
-            </mat-form-field>
+<div class="w-full mt-12">
+    <form [formGroup]="resourceForm" *ngIf="!initialLoading && resourceForm">
+        <div class="bg-gray-100 py-3 px-1 shadow rounded mb-4">
+            <span class="text-2xl">Personal details</span>
         </div>
-    </div>
-
-    <div class="flex justify-end">
-        <button
-            class="ml-3"
-            mat-flat-button
-            [color]="'primary'"
-            (click)="submitResourceData()"
-            [disabled]="submitInProcess"
+        <div
+            class="flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 mt-8"
         >
-            <span class="mx-2">{{ mode === "EDIT" ? "Update" : "Close" }}</span>
-            <mat-progress-spinner
-                *ngIf="submitInProcess"
-                [diameter]="18"
-                [mode]="'indeterminate'"
-            ></mat-progress-spinner>
-        </button>
-    </div>
-</form>
+            <div
+                class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+            >
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <mat-label>First Name</mat-label>
+                    <input
+                        formControlName="firstName"
+                        matInput
+                        maxlength="50"
+                        placeholder="First Name"
+                        type="text"
+                    />
+                    <mat-error
+                        *ngIf="
+                            resourcesValidForm['firstName'].errors &&
+                            resourcesValidForm['firstName']?.invalid &&
+                            resourcesValidForm['firstName']?.touched
+                        "
+                    >
+                        <div
+                            *ngIf="
+                                resourcesValidForm['firstName'].errors[
+                                    'required'
+                                ]
+                            "
+                            class="text-red-500"
+                        >
+                            First name is mandatory
+                        </div>
+                        <div
+                            *ngIf="
+                                resourcesValidForm['firstName'].errors[
+                                    'pattern'
+                                ]
+                            "
+                            class="text-red-500"
+                        >
+                            Enter valid first name
+                        </div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div
+                class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4"
+            >
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <mat-label>Last Name</mat-label>
+                    <input
+                        formControlName="lastName"
+                        matInput
+                        maxlength="50"
+                        placeholder="Last Name"
+                        type="text"
+                    />
+                    <mat-error
+                        *ngIf="
+                            resourcesValidForm['lastName'].errors &&
+                            resourcesValidForm['lastName']?.invalid &&
+                            resourcesValidForm['lastName']?.touched
+                        "
+                        class="text-red-500"
+                    >
+                        <div
+                            *ngIf="
+                                resourcesValidForm['lastName'].errors[
+                                    'required'
+                                ]
+                            "
+                            class="text-red-500"
+                        >
+                            Last name is mandatory
+                        </div>
+                        <div
+                            *ngIf="
+                                resourcesValidForm['lastName'].errors['pattern']
+                            "
+                        >
+                            Enter valid last name
+                        </div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="flex flex-0 flex-wrap sm:flex-nowrap">
+            <div class="w-full">
+                <div
+                    class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+                >
+                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <mat-label>Email</mat-label>
+                        <input
+                            formControlName="email"
+                            matInput
+                            maxlength="50"
+                            placeholder="Email"
+                            type="text"
+                        />
+                        <mat-error
+                            *ngIf="
+                                resourceForm
+                                    ?.get('email')
+                                    ?.hasError('required')
+                            "
+                            class="text-red-500"
+                        >
+                            <div>Email is mandatory</div>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="
+                                resourceForm
+                                    ?.get('email')
+                                    ?.hasError('email') &&
+                                !resourceForm
+                                    ?.get('email')
+                                    ?.hasError('required')
+                            "
+                            class="text-red-500"
+                        >
+                            <div>Invalid Email</div>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="
+                                resourceForm
+                                    ?.get('email')
+                                    ?.hasError('pattern') &&
+                                !resourceForm
+                                    ?.get('email')
+                                    ?.hasError('required') &&
+                                !resourceForm?.get('email')?.hasError('email')
+                            "
+                            class="text-red-500"
+                        >
+                            <div>Only Mindbowser email is allowed</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="w-full sm:ml-4">
+                <div
+                    class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+                >
+                    <mat-form-field [floatLabel]="'always'" class="w-full">
+                        <mat-label>Date of joining</mat-label>
+                        <input
+                            matInput
+                            #inputJoining
+                            [placeholder]="'Date of joining'"
+                            formControlName="dateOfJoining"
+                            [matDatepicker]="dateOfJoiningDatepicker"
+                            (focus)="dateOfJoiningDatepicker.open()"
+                            min="2012-04-24"
+                            [max]="maxToDate"
+                        />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="dateOfJoiningDatepicker"
+                        >
+                        </mat-datepicker-toggle>
+                        <mat-datepicker
+                            #dateOfJoiningDatepicker
+                            (closed)="inputJoining.blur()"
+                            class="bg-gray-100"
+                        >
+                        </mat-datepicker>
+                        <mat-error
+                            *ngIf="
+                                resourceForm
+                                    ?.get('dateOfJoining')
+                                    ?.hasError('required')
+                            "
+                            class="text-red-500"
+                        >
+                            <div>Date of joining is mandatory</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full">
+            <mat-radio-group
+                aria-label="Select an option"
+                class="flex items-center"
+                (change)="getRadioBtnValues($event)"
+            >
+                <mat-label class="mb-2 font-semibold"
+                    >Is Mindbowser your first company?</mat-label
+                >
+
+                <mat-radio-button value="yes" class="mx-4"
+                    >Yes</mat-radio-button
+                >
+                <mat-radio-button value="no" [checked]="true"
+                    >No</mat-radio-button
+                >
+            </mat-radio-group>
+        </div>
+
+        <div *ngIf="showExperience" class="w-full flex flex-wrap my-4">
+            <mat-label class="w-full font-semibold"
+                >Previous Experience</mat-label
+            >
+            <div
+                class="mb-1font-extrabold tracking-tight ng-tns-c274-3859 flex-1"
+            >
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <input
+                        formControlName="year"
+                        matInput
+                        placeholder="Year"
+                        InputFormatter="numeric"
+                        type="number"
+                        min="0"
+                    />
+                    <span matPrefix>YY</span>
+                    <mat-error
+                        *ngIf="
+                            resourcesValidForm['year'].errors &&
+                            resourcesValidForm['year']?.invalid &&
+                            resourcesValidForm['year']?.touched
+                        "
+                        class="text-red-500"
+                    >
+                        <div
+                            *ngIf="
+                                resourcesValidForm['year'].errors['required']
+                            "
+                            class="text-red-500"
+                        >
+                            Year is mandatory
+                        </div>
+                        <div
+                            *ngIf="resourcesValidForm['year'].errors['pattern']"
+                            class="text-red-500"
+                        >
+                            Enter valid Year
+                        </div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div
+                class="font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4 flex-1"
+            >
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <input
+                        class=""
+                        formControlName="month"
+                        InputFormatter="numeric"
+                        matInput
+                        placeholder="Month"
+                        type="number"
+                        min="0"
+                    />
+                    <span matPrefix>MM</span>
+                    <mat-error
+                        *ngIf="
+                            resourcesValidForm['month'].errors &&
+                            resourcesValidForm['month']?.invalid &&
+                            resourcesValidForm['month']?.touched
+                        "
+                    >
+                        <div
+                            *ngIf="
+                                resourcesValidForm['month'].errors['required']
+                            "
+                            class="text-red-500"
+                        >
+                            Month is mandatory
+                        </div>
+                        <div
+                            *ngIf="
+                                resourcesValidForm['month'].errors['pattern'] ||
+                                resourcesValidForm['month'].errors
+                            "
+                            class="text-red-500"
+                        >
+                            Enter valid month
+                        </div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+            <span class="text-2xl">Technology/skill</span>
+        </div>
+
+        <div class="w-full font-extrabold tracking-tight ng-tns-c274-3859">
+            <mat-form-field
+                [floatLabel]="'always'"
+                appearance="fill"
+                class="w-full mt-4"
+            >
+                <mat-label>Your current team</mat-label>
+                <mat-select
+                    formControlName="role"
+                    placeholder="Select Team"
+                    type="text"
+                    (selectionChange)="teamType($event)"
+                    [disableOptionCentering]="true"
+                >
+                    <mat-option
+                        *ngFor="let role of selectTeamList"
+                        [value]="role"
+                    >
+                        {{ role }}
+                    </mat-option>
+                </mat-select>
+                <mat-error
+                    *ngIf="
+                        resourcesValidForm['role'].errors &&
+                        resourcesValidForm['role']?.invalid &&
+                        resourcesValidForm['role']?.touched
+                    "
+                >
+                    <div
+                        *ngIf="resourcesValidForm['role'].errors['required']"
+                        class="text-red-500"
+                    >
+                        Team is mandatory
+                    </div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div
+            *ngIf="!isPm"
+            class="mt-4 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+        >
+            <div
+                class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
+            >
+                <mat-form-field
+                    [floatLabel]="'always'"
+                    appearance="fill"
+                    class="example-chip-list w-full flex-0 mb-2"
+                >
+                    <mat-label>Technology</mat-label>
+                    <mat-chip-list #chipList>
+                        <input
+                            placeholder="New technology..."
+                            formControlName="technology"
+                            [matAutocomplete]="auto"
+                            [matChipInputFor]="chipList"
+                            (matChipInputTokenEnd)="add($event)"
+                            class="w-full"
+                        />
+                    </mat-chip-list>
+                    <mat-autocomplete
+                        #auto="matAutocomplete"
+                        (optionSelected)="selected($event)"
+                    >
+                        <mat-option
+                            *ngFor="
+                                let technology of filteredTechnologies | async
+                            "
+                            [value]="technology"
+                        >
+                            {{ technology }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div
+            *ngIf="technologies?.length > 0"
+            class="w-full flex flex-col overflow-hidden mb-6"
+        >
+            <div
+                class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
+            >
+                <div
+                    class="w-full grid grid-cols-4 shadow text-md font-semibold text-secondary bg-gray-50"
+                    matSortDisableClear
+                >
+                    <div>Technology Name</div>
+                    <div class="col-span-2">Experience</div>
+                    <div class="ml-4">Action</div>
+                </div>
+                <ng-container>
+                    <div formArrayName="technologies" class="grid shadow">
+                        <ng-container
+                            *ngFor="
+                                let technology of technologies?.controls;
+                                let i = index;
+                                let last = last
+                            "
+                        >
+                            <form
+                                class="w-full flex flex-row pt-2 border-b bg-white"
+                                [formGroupName]="i"
+                            >
+                                <div
+                                    class="w-full grid grid-cols-1 sm:grid-cols-4 mt-4"
+                                >
+                                    <div class="mb-2 sm:mb-0">
+                                        {{ technology?.value?.name }}
+                                    </div>
+                                    <div class="flex col-span-2 pr-4">
+                                        <mat-form-field
+                                            [floatLabel]="'always'"
+                                            class="w-full max-w-[150px] mr-2"
+                                        >
+                                            <input
+                                                formControlName="experienceYear"
+                                                matInput
+                                                placeholder="Year"
+                                                InputFormatter="numeric"
+                                                type="number"
+                                                min="0"
+                                            />
+                                            <span matPrefix class="text-sm"
+                                                >YY</span
+                                            >
+                                            <mat-error
+                                                class="text-xs text-red-500"
+                                                *ngIf="
+                                                    technology.get(
+                                                        'experienceYear'
+                                                    )?.invalid
+                                                "
+                                            >
+                                                Enter valid Year
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                        <mat-form-field
+                                            [floatLabel]="'always'"
+                                            class="w-full max-w-[150px]"
+                                        >
+                                            <input
+                                                class=""
+                                                formControlName="experienceMonth"
+                                                InputFormatter="numeric"
+                                                matInput
+                                                placeholder="Month"
+                                                min="0"
+                                                max="11"
+                                                type="number"
+                                            />
+                                            <span matPrefix class="text-sm"
+                                                >MM</span
+                                            >
+                                            <mat-error
+                                                class="text-xs text-red-500"
+                                                *ngIf="
+                                                    technology.get(
+                                                        'experienceMonth'
+                                                    )?.invalid
+                                                "
+                                            >
+                                                Enter valid Month
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div>
+                                        <mat-icon
+                                            class="cursor-pointer sm:ml-6"
+                                            color="warn"
+                                            matTooltip="Remove"
+                                            (click)="
+                                                removeTechnology(
+                                                    i,
+                                                    technology?.value
+                                                )
+                                            "
+                                            >cancel</mat-icon
+                                        >
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="flex">
+            Did not find the technology?
+
+            <span
+                (click)="addTechnology()"
+                class="text-primary-500 underline ml-2 font-bold cursor-pointer"
+                >Add your own</span
+            >
+        </div>
+
+        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+            <span class="text-2xl">Other skills/integrations</span>
+        </div>
+
+        <div
+            class="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-1 gap-y-3 mt-8"
+        >
+            <div *ngFor="let skill of integrations; let i = index">
+                <mat-checkbox
+                    class="example-margin"
+                    [value]="skill"
+                    (change)="onCheckBoxChange($event)"
+                    [checked]="skill?.checked"
+                >
+                    {{ skill?.name }}</mat-checkbox
+                >
+            </div>
+        </div>
+
+        <div class="mt-8 flex">
+            Did not find the skill/integration?
+
+            <span
+                (click)="addSkillAndIntegrations()"
+                class="text-primary-500 underline ml-2 font-bold cursor-pointer"
+                >Add your own</span
+            >
+        </div>
+
+        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+            <span class="text-2xl">Certification (Optional)</span>
+        </div>
+
+        <div formArrayName="certificates">
+            <ng-container
+                *ngFor="
+                    let certificate of certificates?.controls;
+                    let i = index;
+                    let last = last
+                "
+            >
+                <form
+                    class="flex flex-0 flex-wrap sm:flex-nowrap flex-row justify-center items-center mt-8"
+                    [formGroupName]="i"
+                >
+                    <mat-form-field
+                        class="w-full mr-4 userlist"
+                        id="userlist"
+                        [floatLabel]="'always'"
+                    >
+                        <mat-label>Name</mat-label>
+                        <input
+                            matInput
+                            placeholder="Certificate Name"
+                            formControlName="name"
+                            class="inputlist"
+                        />
+                    </mat-form-field>
+
+                    <mat-form-field
+                        class="w-full mr-4 sm:mt-0 userlist"
+                        id="userlist"
+                        [floatLabel]="'always'"
+                    >
+                        <mat-label>Certificate Link(Optional)</mat-label>
+                        <input
+                            matInput
+                            placeholder="certificate link"
+                            formControlName="link"
+                            class="inputlist"
+                        />
+                    </mat-form-field>
+                    <mat-icon
+                        *ngIf="last"
+                        class="cursor-pointer mr-2"
+                        color="primary"
+                        matTooltip="Add more certificates"
+                        (click)="
+                            certificate?.valid
+                                ? addNewCertificate()
+                                : certificate?.markAllAsTouched()
+                        "
+                        >add</mat-icon
+                    >
+                    <mat-icon
+                        *ngIf="i != 0"
+                        class="cursor-pointer"
+                        color="warn"
+                        matTooltip="Remove"
+                        (click)="remove(i)"
+                        >delete</mat-icon
+                    >
+                </form>
+            </ng-container>
+        </div>
+
+        <div
+            class="bg-gray-100 flex flex-col py-2 px-1 shadow rounded mt-6 mb-4"
+        >
+            <span class="text-2xl">Mindbowser projects</span>
+            <span class="mt-2"
+                >Name the projects you have worked on in Mindbowser</span
+            >
+        </div>
+
+        <div formArrayName="mbProjects" class="mt-4">
+            <ng-container
+                *ngFor="
+                    let project of mbProjects?.controls;
+                    let i = index;
+                    let last = last
+                "
+            >
+                <form
+                    class="flex flex-row justify-center items-center"
+                    [formGroupName]="i"
+                >
+                    <mat-form-field
+                        class="w-full mr-4 userlist mt-4"
+                        id="userlist"
+                        [floatLabel]="'always'"
+                    >
+                        <mat-label>Project name</mat-label>
+                        <input
+                            matInput
+                            placeholder="Project Name"
+                            formControlName="name"
+                            class="inputlist"
+                        />
+                        <mat-error
+                            *ngIf="project?.get('name')?.hasError('required')"
+                        >
+                            <div class="text-red-500">
+                                Project Name is Mandatory
+                            </div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-icon
+                        *ngIf="last"
+                        class="cursor-pointer mt-4 mr-2"
+                        color="primary"
+                        matTooltip="Add more projects"
+                        (click)="
+                            project?.valid
+                                ? addNewProject()
+                                : project?.markAllAsTouched()
+                        "
+                        >add</mat-icon
+                    >
+                    <mat-icon
+                        *ngIf="i != 0"
+                        class="cursor-pointer mt-4"
+                        color="warn"
+                        matTooltip="Remove"
+                        (click)="removeProject(i)"
+                        >delete</mat-icon
+                    >
+                </form>
+            </ng-container>
+        </div>
+
+        <div class="w-full flex items-center justify-end ml-auto mt-6">
+            <button
+                (click)="submit()"
+                type="submit"
+                [color]="'primary'"
+                class="order-first sm:order-last ml-4 bg-primary-500 text-white"
+                mat-flat-button
+                [disabled]="submitInProgress"
+            >
+                <span>Submit</span>
+
+                <mat-progress-spinner
+                    *ngIf="submitInProgress"
+                    [diameter]="24"
+                    [mode]="'indeterminate'"
+                    class="px-3 ml-3"
+                ></mat-progress-spinner>
+            </button>
+        </div>
+    </form>
+</div>

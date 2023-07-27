@@ -84,6 +84,7 @@ export class OnboardResourceComponent implements OnInit {
         const dialogRef = this.dialog.open(OnboardResourceDetailsComponent, {
             disableClose: true,
             width: '50%',
+            maxHeight:'90vh',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
