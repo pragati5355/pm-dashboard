@@ -9,6 +9,12 @@ import { OnboardResourceDetailsComponent } from '../onboard-resource-details/onb
 import { AuthService } from '@services/auth/auth.service';
 import { ResourceService } from '@modules/public/resource/common/services/resource.service';
 import { ResourcesService } from '../common/services/resources.service';
+import {
+    BreakpointObserver,
+    BreakpointState,
+    Breakpoints,
+} from '@angular/cdk/layout';
+import { take } from 'rxjs/internal/operators/take';
 
 @Component({
     selector: 'app-onboard-resource',
@@ -17,10 +23,12 @@ import { ResourcesService } from '../common/services/resources.service';
 })
 export class OnboardResourceComponent implements OnInit {
     initialLoading = false;
-    registeredList: any = [];
+    registeredList: any[] = [];
     perPageData = 1;
+    count = 1;
     totalPerPageData = 10;
     totalRecord: any;
+    pagination = false;
     requiredReposSkeletonData = {
         rowsToDisplay: 10,
         displayProfilePicture: false,
@@ -30,7 +38,8 @@ export class OnboardResourceComponent implements OnInit {
         private router: Router,
         private dialog: MatDialog,
         private _authService: AuthService,
-        private resourceService: ResourcesService
+        private resourceService: ResourcesService,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     ngOnInit() {
@@ -50,8 +59,7 @@ export class OnboardResourceComponent implements OnInit {
                 if (!res?.error) {
                     this.registeredList = res?.data?.resource;
                     this.totalRecord = res?.data?.totalRecored;
-                    console.log('this.totalRecord -> ', this.totalRecord);
-                    console.log('this.registeredList -> ', this.registeredList);
+                    this.checkForLargerScreen();
                 }
                 if (res?.tokenExpire) {
                     this._authService.updateAndReload(window.location);
@@ -79,5 +87,42 @@ export class OnboardResourceComponent implements OnInit {
                 this.getList();
             }
         });
+    }
+
+    private getDefaultSearchPayload(count?: any) {
+        return {
+            perPageData: this.count,
+            totalPerPageData: this.totalPerPageData,
+        };
+    }
+
+    private checkForLargerScreen() {
+        this.breakpointObserver
+            .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .pipe(take(1))
+            .subscribe((state: BreakpointState) => {
+                if (state.matches) {
+                    this.handleScroll();
+                }
+            });
+    }
+
+    handleScroll() {
+        if (!this.pagination && this.registeredList.length < this.totalRecord) {
+            this.count = this.count + this.totalPerPageData;
+            const payload = this.getDefaultSearchPayload(this.count);
+            this.pagination = true;
+            this.resourceService.getRegisteredResource(payload).subscribe(
+                (res: any) => {
+                    this.pagination = false;
+                    if (res?.data) {
+                        this.registeredList = [...res?.data?.resource];
+                    }
+                },
+                (err: any) => {
+                    this.pagination = false;
+                }
+            );
+        }
     }
 }
