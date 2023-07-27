@@ -208,10 +208,21 @@
                     >Is Mindbowser your first company?</mat-label
                 >
 
-                <mat-radio-button value="yes" class="mx-4"
+                <mat-radio-button
+                    value="yes"
+                    class="mx-4"
+                    [checked]="
+                        this.patchData?.details?.month === 0 &&
+                        this.patchData?.details?.year === 0
+                    "
                     >Yes</mat-radio-button
                 >
-                <mat-radio-button value="no" [checked]="true"
+                <mat-radio-button
+                    value="no"
+                    [checked]="
+                        this.patchData?.details?.month > 0 ||
+                        this.patchData?.details?.year > 0
+                    "
                     >No</mat-radio-button
                 >
             </mat-radio-group>

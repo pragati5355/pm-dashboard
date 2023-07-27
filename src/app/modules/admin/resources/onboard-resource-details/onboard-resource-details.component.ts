@@ -152,6 +152,8 @@ export class OnboardResourceDetailsComponent implements OnInit {
     getRadioBtnValues($event: any) {
         if ($event?.value === 'yes') {
             this.showExperience = false;
+            this.resourceForm?.get('year')?.setValue(0);
+            this.resourceForm?.get('month')?.setValue(0);
         }
         if ($event?.value === 'no') {
             this.showExperience = true;
@@ -433,8 +435,15 @@ export class OnboardResourceDetailsComponent implements OnInit {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         this.selectedRole = this.data?.editData?.details?.role;
-        console.log('this.mode -> ', this.mode);
-        console.log('this.patchData -> ', this.patchData);
+
+        if (
+            this.patchData?.details?.year === 0 &&
+            this.patchData?.details?.month === 0
+        ) {
+            this.showExperience = false;
+        } else {
+            this.showExperience = true;
+        }
     }
 
     private patchValuesInEditMode() {
