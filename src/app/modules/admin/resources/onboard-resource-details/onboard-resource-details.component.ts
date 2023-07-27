@@ -367,41 +367,27 @@ export class OnboardResourceDetailsComponent implements OnInit {
                     this.matDialogRef.close('success');
                 }
                 if (res?.data?.alreadyExist) {
-                    const dialogRef = this.fuseConfirmationService.open(
-                        this.AlreadyExistConfigForm.value
-                    );
+                    this.submitInProgress = true;
+                    const payload = this.saveResourcePayload();
+                    payload.confirmed = true;
 
-                    dialogRef.afterClosed().subscribe((result) => {
-                        if (result == 'confirmed') {
-                            this.submitInProgress = true;
-                            const payload = this.saveResourcePayload();
-                            payload.confirmed = true;
-
-                            this.resourceService
-                                ?.saveResource(payload)
-                                ?.subscribe(
-                                    (res: any) => {
-                                        this.submitInProgress = false;
-                                        if (!res?.error) {
-                                            this.snackBar.successSnackBar(
-                                                'Update success'
-                                            );
-                                            this.matDialogRef.close('success');
-                                        } else {
-                                            this.snackBar.errorSnackBar(
-                                                'Something went wrong'
-                                            );
-                                        }
-                                    },
-                                    (err) => {
-                                        this.submitInProgress = false;
-                                        this.snackBar.errorSnackBar(
-                                            'Something went wrong'
-                                        );
-                                    }
+                    this.resourceService?.saveResource(payload)?.subscribe(
+                        (res: any) => {
+                            this.submitInProgress = false;
+                            if (!res?.error) {
+                                this.snackBar.successSnackBar('Update success');
+                                this.matDialogRef.close('success');
+                            } else {
+                                this.snackBar.errorSnackBar(
+                                    'Something went wrong'
                                 );
+                            }
+                        },
+                        (err) => {
+                            this.submitInProgress = false;
+                            this.snackBar.errorSnackBar('Something went wrong');
                         }
-                    });
+                    );
                 }
                 if (res?.error && !res?.data?.alreadyExist) {
                     this.snackBar.errorSnackBar('Something went wrong');
@@ -548,9 +534,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
 
         this.patchValuesInEditMode();
         if (this.mode === 'VIEW') {
-            this.resourceForm.get('email').disable();
-            this.resourceForm.get('firstName').disable();
-            this.resourceForm.get('lastName').disable();
+            this.resourceForm?.disable();
         }
 
         this.getTechnologiesList();
