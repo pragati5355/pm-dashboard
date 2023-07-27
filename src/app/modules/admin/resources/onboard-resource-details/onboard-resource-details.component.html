@@ -670,7 +670,10 @@
             </ng-container>
         </div>
 
-        <div class="w-full flex items-center justify-end ml-auto mt-6">
+        <div
+            class="w-full flex items-center justify-end ml-auto mt-6"
+            *ngIf="mode !== 'VIEW'"
+        >
             <button
                 (click)="submit()"
                 type="submit"

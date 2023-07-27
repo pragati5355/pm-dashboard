@@ -84,7 +84,7 @@ export class OnboardResourceComponent implements OnInit {
         const dialogRef = this.dialog.open(OnboardResourceDetailsComponent, {
             disableClose: true,
             width: '50%',
-            maxHeight:'90vh',
+            maxHeight: '90vh',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
@@ -94,6 +94,8 @@ export class OnboardResourceComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
+                this.count = 1;
+                this.totalPerPageData = 10;
                 this.getList();
             }
         });

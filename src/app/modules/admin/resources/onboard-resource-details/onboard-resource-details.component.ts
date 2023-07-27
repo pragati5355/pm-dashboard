@@ -16,6 +16,7 @@ import {
     MatDialogRef,
     MatDialog,
 } from '@angular/material/dialog';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AddSkillAndIntegrationComponent } from '@modules/public/resource/add-skill-and-integration/add-skill-and-integration.component';
 import { AddTechnologyComponent } from '@modules/public/resource/add-technology/add-technology.component';
 import {
@@ -23,6 +24,7 @@ import {
     TECHNOLOGIES,
     TECHNOLOGIES_V2,
 } from '@modules/public/resource/common';
+import { ResourceService } from '@modules/public/resource/common/services/resource.service';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { MonthValdation } from 'app/core/utils/Validations';
@@ -51,6 +53,8 @@ export class OnboardResourceDetailsComponent implements OnInit {
     integrations: any = TECHNOLOGIES?.integrations;
     submitInProgress: boolean = false;
     selectedRole: any = 'FRONTEND';
+    configForm: FormGroup;
+    AlreadyExistConfigForm: FormGroup;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourceForm.controls;
@@ -74,7 +78,9 @@ export class OnboardResourceDetailsComponent implements OnInit {
         public matDialogRef: MatDialogRef<OnboardResourceDetailsComponent>,
         private dialog: MatDialog,
         private snackBar: SnackBar,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private resourceService: ResourceService,
+        private fuseConfirmationService: FuseConfirmationService
     ) {}
 
     ngOnInit(): void {
@@ -335,75 +341,75 @@ export class OnboardResourceDetailsComponent implements OnInit {
                 this.snackBar?.errorSnackBar('Add technology experience');
                 return;
             }
-            this.saveResource();
 
-            // const dialogRef = this.fuseConfirmationService.open(
-            //     this.configForm.value
-            // );
+            const dialogRef = this.fuseConfirmationService.open(
+                this.configForm.value
+            );
 
-            // dialogRef.afterClosed().subscribe((result) => {
-            //     if (result == 'confirmed') {
-            //     }
-            // });
+            dialogRef.afterClosed().subscribe((result) => {
+                if (result == 'confirmed') {
+                    this.saveResource();
+                }
+            });
         }
     }
 
     saveResource() {
         const payload = this.saveResourcePayload();
-        console.log('payload :', payload);
-        console.log('skills :', this.integrations);
-        // this.submitInProgress = true;
-        // this.resourceService?.saveResource(payload)?.subscribe(
-        //     (res: any) => {
-        //         this.submitInProgress = false;
-        //         if (!res?.error && !res?.data?.alreadyExist) {
-        //             this.router.navigate([`/resource/success`]);
-        //         }
-        //         if (res?.data?.alreadyExist) {
-        //             const dialogRef = this.fuseConfirmationService.open(
-        //                 this.AlreadyExistConfigForm.value
-        //             );
+        this.submitInProgress = true;
+        this.resourceService?.saveResource(payload)?.subscribe(
+            (res: any) => {
+                this.submitInProgress = false;
+                if (!res?.error && !res?.data?.alreadyExist) {
+                    this.snackBar.successSnackBar('Update success');
+                    this.matDialogRef.close('success');
+                }
+                if (res?.data?.alreadyExist) {
+                    const dialogRef = this.fuseConfirmationService.open(
+                        this.AlreadyExistConfigForm.value
+                    );
 
-        //             dialogRef.afterClosed().subscribe((result) => {
-        //                 if (result == 'confirmed') {
-        //                     this.submitInProgress = true;
-        //                     const payload = this.saveResourcePayload();
-        //                     payload.confirmed = true;
+                    dialogRef.afterClosed().subscribe((result) => {
+                        if (result == 'confirmed') {
+                            this.submitInProgress = true;
+                            const payload = this.saveResourcePayload();
+                            payload.confirmed = true;
 
-        //                     this.resourceService
-        //                         ?.saveResource(payload)
-        //                         ?.subscribe(
-        //                             (res: any) => {
-        //                                 this.submitInProgress = false;
-        //                                 if (!res?.error) {
-        //                                     this.router.navigate([
-        //                                         `/resource/success`,
-        //                                     ]);
-        //                                 } else {
-        //                                     this.snackBar.errorSnackBar(
-        //                                         'Something went wrong'
-        //                                     );
-        //                                 }
-        //                             },
-        //                             (err) => {
-        //                                 this.submitInProgress = false;
-        //                                 this.snackBar.errorSnackBar(
-        //                                     'Something went wrong'
-        //                                 );
-        //                             }
-        //                         );
-        //                 }
-        //             });
-        //         }
-        //         if (res?.error && !res?.data?.alreadyExist) {
-        //             this.snackBar.errorSnackBar('Something went wrong');
-        //         }
-        //     },
-        //     (err) => {
-        //         this.submitInProgress = false;
-        //         this.snackBar.errorSnackBar('Something went wrong');
-        //     }
-        // );
+                            this.resourceService
+                                ?.saveResource(payload)
+                                ?.subscribe(
+                                    (res: any) => {
+                                        this.submitInProgress = false;
+                                        if (!res?.error) {
+                                            this.snackBar.successSnackBar(
+                                                'Update success'
+                                            );
+                                            this.matDialogRef.close('success');
+                                        } else {
+                                            this.snackBar.errorSnackBar(
+                                                'Something went wrong'
+                                            );
+                                        }
+                                    },
+                                    (err) => {
+                                        this.submitInProgress = false;
+                                        this.snackBar.errorSnackBar(
+                                            'Something went wrong'
+                                        );
+                                    }
+                                );
+                        }
+                    });
+                }
+                if (res?.error && !res?.data?.alreadyExist) {
+                    this.snackBar.errorSnackBar('Something went wrong');
+                }
+            },
+            (err) => {
+                this.submitInProgress = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
     private saveResourcePayload() {
@@ -412,10 +418,6 @@ export class OnboardResourceDetailsComponent implements OnInit {
         )) as FormArray;
 
         integration?.value?.map((item) => (item.checked = true));
-
-        const checkedSkill = this.integrations?.map((item) => item?.checked);
-
-        console.log('checkedSkill :', checkedSkill);
 
         return {
             email: this.resourceForm?.get('email')?.value,
@@ -523,11 +525,17 @@ export class OnboardResourceDetailsComponent implements OnInit {
             }
         );
 
+        if (this.patchData?.details?.role === TEAM_LIST.PM) {
+            this.isPm = true;
+        }
+
         this.patchTechnologies();
         this.patchProjects();
         this.patchCertificates();
         this.patchIntegrations();
         this.setInitialTechnologyList();
+        this.initializeConfigForm();
+        this.initializeAlreadyExistConfigForm();
 
         this.patchValuesInEditMode();
         if (this.mode === 'VIEW') {
@@ -554,6 +562,14 @@ export class OnboardResourceDetailsComponent implements OnInit {
     }
 
     private patchIntegrations() {
+        const integration = (<FormArray>(
+            this.resourceForm.get('integrations')
+        )) as FormArray;
+
+        this.patchData?.details?.integrations?.map((item) => {
+            integration.push(new FormControl(item));
+        });
+
         this.integrations?.map((item) => {
             const skill = this.patchData?.details?.integrations?.findIndex(
                 (obj) => obj.name === item.name
@@ -599,6 +615,55 @@ export class OnboardResourceDetailsComponent implements OnInit {
             });
 
             this.certificates?.push(control);
+        });
+    }
+
+    private initializeConfigForm() {
+        this.configForm = this.formBuilder.group({
+            title: 'Save Details',
+            message: 'Are you sure you want to submit?',
+            icon: this.formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this.formBuilder.group({
+                confirm: this.formBuilder.group({
+                    show: true,
+                    label: 'Submit',
+                    color: 'mat-warn',
+                }),
+                cancel: this.formBuilder.group({
+                    show: true,
+                    label: 'Cancel',
+                }),
+            }),
+            dismissible: false,
+        });
+    }
+
+    private initializeAlreadyExistConfigForm() {
+        this.AlreadyExistConfigForm = this.formBuilder.group({
+            title: 'Overwrite Details',
+            message:
+                'Data with this email already exists do you want to overwrite it?',
+            icon: this.formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this.formBuilder.group({
+                confirm: this.formBuilder.group({
+                    show: true,
+                    label: 'Submit',
+                    color: 'mat-warn',
+                }),
+                cancel: this.formBuilder.group({
+                    show: true,
+                    label: 'Cancel',
+                }),
+            }),
+            dismissible: false,
         });
     }
 
