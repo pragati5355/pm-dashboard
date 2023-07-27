@@ -121,9 +121,7 @@
                         />
                         <mat-error
                             *ngIf="
-                                resourceForm
-                                    ?.get('email')
-                                    ?.hasError('required')
+                                resourceForm?.get('email')?.hasError('required')
                             "
                             class="text-red-500"
                         >
@@ -131,9 +129,7 @@
                         </mat-error>
                         <mat-error
                             *ngIf="
-                                resourceForm
-                                    ?.get('email')
-                                    ?.hasError('email') &&
+                                resourceForm?.get('email')?.hasError('email') &&
                                 !resourceForm
                                     ?.get('email')
                                     ?.hasError('required')

@@ -50,6 +50,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
     technologys: any = [];
     integrations: any = TECHNOLOGIES?.integrations;
     submitInProgress: boolean = false;
+    selectedRole: any = 'FRONTEND';
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourceForm.controls;
@@ -95,8 +96,8 @@ export class OnboardResourceDetailsComponent implements OnInit {
             const technologyControl = this.formBuilder.group({
                 technologyId: [null],
                 name: [event?.value || null],
-                experienceYear: [0, [Validators.required]],
-                experienceMonth: [0, [Validators.required]],
+                experienceYear: [0],
+                experienceMonth: [0],
                 resourceId: [null],
             });
             this.technologies.push(technologyControl);
@@ -132,6 +133,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
     }
 
     close() {
+        this.integrations?.map((item) => (item.checked = false));
         this.matDialogRef.close();
     }
 
@@ -349,6 +351,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
     saveResource() {
         const payload = this.saveResourcePayload();
         console.log('payload :', payload);
+        console.log('skills :', this.integrations);
         // this.submitInProgress = true;
         // this.resourceService?.saveResource(payload)?.subscribe(
         //     (res: any) => {
@@ -410,6 +413,10 @@ export class OnboardResourceDetailsComponent implements OnInit {
 
         integration?.value?.map((item) => (item.checked = true));
 
+        const checkedSkill = this.integrations?.map((item) => item?.checked);
+
+        console.log('checkedSkill :', checkedSkill);
+
         return {
             email: this.resourceForm?.get('email')?.value,
             details: {
@@ -423,7 +430,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
     private loadData() {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
-
+        this.selectedRole = this.data?.editData?.details?.role;
         console.log('this.mode -> ', this.mode);
         console.log('this.patchData -> ', this.patchData);
     }
@@ -479,9 +486,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
                     ],
                 ],
                 role: [
-                    this.data?.editData?.details?.role
-                        ? this.data?.editData?.details?.role
-                        : '',
+                    this.data?.editData?.details?.role,
                     [Validators.required],
                 ],
                 year: [
@@ -521,6 +526,8 @@ export class OnboardResourceDetailsComponent implements OnInit {
         this.patchTechnologies();
         this.patchProjects();
         this.patchCertificates();
+        this.patchIntegrations();
+        this.setInitialTechnologyList();
 
         this.patchValuesInEditMode();
         if (this.mode === 'VIEW') {
@@ -530,6 +537,41 @@ export class OnboardResourceDetailsComponent implements OnInit {
         }
 
         this.getTechnologiesList();
+    }
+
+    private setInitialTechnologyList() {
+        if (this.patchData?.details?.role === TEAM_LIST.FULLSTACK) {
+            this.alltechnologys = TECHNOLOGIES_V2.filter(
+                (item) =>
+                    item?.team?.includes(TEAM_LIST.FRONTEND) ||
+                    item?.team?.includes(TEAM_LIST.BACKEND)
+            ).map((item) => item?.name);
+        } else {
+            this.alltechnologys = TECHNOLOGIES_V2.filter((item) =>
+                item?.team?.includes(this.patchData?.details?.role)
+            ).map((item) => item?.name);
+        }
+    }
+
+    private patchIntegrations() {
+        this.integrations?.map((item) => {
+            const skill = this.patchData?.details?.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+            if (skill > -1) {
+                item.checked = true;
+            }
+        });
+
+        this.patchData?.details?.integrations?.map((item) => {
+            const id = this.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+
+            if (id === -1) {
+                this.integrations?.push(item);
+            }
+        });
     }
 
     private patchTechnologies() {
@@ -542,8 +584,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
                     Validators.required,
                 ]),
                 experienceMonth: this.formBuilder.control(
-                    tech?.experienceMonth,
-                    [Validators.email]
+                    tech?.experienceMonth
                 ),
             });
             this.technologies.push(control);
