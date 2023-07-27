@@ -24,7 +24,6 @@ import { take } from 'rxjs/internal/operators/take';
 export class OnboardResourceComponent implements OnInit {
     initialLoading = false;
     registeredList: any[] = [];
-    perPageData = 1;
     count = 1;
     totalPerPageData = 10;
     totalRecord: any;
@@ -48,7 +47,7 @@ export class OnboardResourceComponent implements OnInit {
 
     getList() {
         const payload = {
-            perPageData: this.perPageData,
+            perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
         };
         this.initialLoading = true;
@@ -57,14 +56,24 @@ export class OnboardResourceComponent implements OnInit {
             .subscribe((res: any) => {
                 this.initialLoading = false;
                 if (!res?.error) {
-                    this.registeredList = res?.data?.resource;
-                    this.totalRecord = res?.data?.totalRecored;
+                    this.handleGetResourceMemberResponse(res);
                     this.checkForLargerScreen();
                 }
                 if (res?.tokenExpire) {
                     this._authService.updateAndReload(window.location);
                 }
             });
+    }
+
+    handleGetResourceMemberResponse(res: any) {
+        if (res.data) {
+            this.totalRecord = res?.data?.totalRecored;
+            this.registeredList = res?.data?.resource;
+            this.initialLoading = false;
+        } else if (res?.data == null) {
+            this.totalRecord = 0;
+            this.initialLoading = false;
+        }
     }
 
     goBack() {
@@ -116,7 +125,10 @@ export class OnboardResourceComponent implements OnInit {
                 (res: any) => {
                     this.pagination = false;
                     if (res?.data) {
-                        this.registeredList = [...res?.data?.resource];
+                        this.registeredList = [
+                            ...this.registeredList,
+                            ...res?.data?.resource,
+                        ];
                     }
                 },
                 (err: any) => {
