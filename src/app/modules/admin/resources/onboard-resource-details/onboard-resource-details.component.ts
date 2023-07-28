@@ -309,6 +309,10 @@ export class OnboardResourceDetailsComponent implements OnInit {
         }
     }
 
+    viewResume() {
+        window.open(this.patchData?.details?.resourceUrl, '_blank');
+    }
+
     submit() {
         const technologyWithNoExperience = this.resourceForm
             ?.get('technologies')

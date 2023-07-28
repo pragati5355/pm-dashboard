@@ -688,6 +688,18 @@
             </ng-container>
         </div>
 
+        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
+            <span class="text-2xl">Resume</span>
+        </div>
+
+        <div class="mt-8">
+            <span
+                (click)="viewResume()"
+                class="text-primary-500 underline ml-2 font-bold cursor-pointer"
+                >View resume</span
+            >
+        </div>
+
         <div
             class="w-full flex items-center justify-end ml-auto mt-6"
             *ngIf="mode !== 'VIEW'"
