@@ -254,7 +254,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
             integration.push(new FormControl(selectedOption.source.value));
         } else {
             const i = integration?.controls.findIndex(
-                (x) => x.value === selectedOption.source.value
+                (x) => x?.value?.name === selectedOption.source.value['name']
             );
             integration?.removeAt(i);
         }
@@ -362,6 +362,9 @@ export class OnboardResourceDetailsComponent implements OnInit {
 
     saveResource() {
         const payload = this.saveResourcePayload();
+        const integration = (<FormArray>(
+            this.resourceForm.get('integrations')
+        )) as FormArray;
         this.submitInProgress = true;
         this.resourceService?.saveResource(payload)?.subscribe(
             (res: any) => {
@@ -675,20 +678,12 @@ export class OnboardResourceDetailsComponent implements OnInit {
         });
     }
 
-    private getMbProjectsControls(): FormArray {
-        return this.formBuilder.array([this.getSingleProjectsControl()]);
-    }
-
     private getSingleProjectsControl(): FormGroup {
         const control = this.formBuilder.group({
             name: ['', [Validators.required]],
         });
 
         return control;
-    }
-
-    private getCertifcatesControls(): FormArray {
-        return this.formBuilder.array([this.getSingleControl()]);
     }
 
     private getSingleControl(): FormGroup {
