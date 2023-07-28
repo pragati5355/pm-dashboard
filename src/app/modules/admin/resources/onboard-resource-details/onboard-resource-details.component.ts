@@ -86,7 +86,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
     ngOnInit(): void {
         this.loadData();
         this.initializeForm();
-
+        console.log('integrations :', this.integrations);
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
     }
@@ -376,6 +376,10 @@ export class OnboardResourceDetailsComponent implements OnInit {
                             this.submitInProgress = false;
                             if (!res?.error) {
                                 this.snackBar.successSnackBar('Update success');
+                                const integration = (<FormArray>(
+                                    this.resourceForm.get('integrations')
+                                )) as FormArray;
+                                integration?.clear();
                                 this.matDialogRef.close('success');
                             } else {
                                 this.snackBar.errorSnackBar(
