@@ -602,9 +602,11 @@
                         color="primary"
                         matTooltip="Add more certificates"
                         (click)="
-                            certificate?.valid
-                                ? addNewCertificate()
-                                : certificate?.markAllAsTouched()
+                            mode !== 'VIEW'
+                                ? certificate?.valid
+                                    ? addNewCertificate()
+                                    : certificate?.markAllAsTouched()
+                                : null
                         "
                         >add</mat-icon
                     >
@@ -613,7 +615,7 @@
                         class="cursor-pointer"
                         color="warn"
                         matTooltip="Remove"
-                        (click)="remove(i)"
+                        (click)="mode !== 'VIEW' ? remove(i) : null"
                         >delete</mat-icon
                     >
                 </form>
@@ -679,7 +681,7 @@
                         class="cursor-pointer mt-4"
                         color="warn"
                         matTooltip="Remove"
-                        (click)="removeProject(i)"
+                        (click)="mode !== 'VIEW' ? removeProject(i) : null"
                         >delete</mat-icon
                     >
                 </form>
