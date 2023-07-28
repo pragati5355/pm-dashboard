@@ -46,12 +46,13 @@
                                         <div
                                             class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
                                         >
-                                            <!-- {{
-                                                resource?.details?.firstName.charAt(
-                                                    0
-                                                )
-                                            }} -->
-                                            R
+                                            {{
+                                                resource?.details?.firstName
+                                                    ? resource?.details?.firstName.charAt(
+                                                          0
+                                                      )
+                                                    : "NA"
+                                            }}
                                         </div>
                                     </div>
                                     <!-- Name -->

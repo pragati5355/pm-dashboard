@@ -48,6 +48,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
     alltechnologys: any[] = [];
     isPm: boolean = false;
     selectTeamList: any[] = ROLE_LIST;
+    currentRole: string = '';
     filteredTechnologies: Observable<any[]> | undefined;
     technologys: any = [];
     integrations: any = TECHNOLOGIES?.integrations;
@@ -86,7 +87,6 @@ export class OnboardResourceDetailsComponent implements OnInit {
     ngOnInit(): void {
         this.loadData();
         this.initializeForm();
-        console.log('integrations :', this.integrations);
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
     }
@@ -415,7 +415,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
 
         integration?.value?.map((item) => (item.checked = true));
 
-        return {
+        const payload = {
             email: this.resourceForm?.get('email')?.value,
             details: {
                 ...this.resourceForm?.value,
@@ -423,13 +423,15 @@ export class OnboardResourceDetailsComponent implements OnInit {
             },
             confirmed: false,
         };
+        payload.details.role = this.currentRole;
+        return payload;
     }
 
     private loadData() {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         this.selectedRole = this.data?.editData?.details?.role;
-
+        this.currentRole = this.data?.editData?.details?.role;
         if (
             this.patchData?.details?.year === 0 &&
             this.patchData?.details?.month === 0
@@ -489,10 +491,6 @@ export class OnboardResourceDetailsComponent implements OnInit {
                         Validators.email,
                         Validators.pattern(/@mindbowser.com\s*$/),
                     ],
-                ],
-                role: [
-                    this.data?.editData?.details?.role,
-                    [Validators.required],
                 ],
                 year: [
                     this.data?.editData?.details?.year

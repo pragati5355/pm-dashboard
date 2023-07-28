@@ -326,7 +326,8 @@
             >
                 <mat-label>Your current team</mat-label>
                 <mat-select
-                    formControlName="role"
+                    [(ngModel)]="currentRole"
+                    [ngModelOptions]="{ standalone: true }"
                     placeholder="Select Team"
                     type="text"
                     (selectionChange)="teamType($event)"
@@ -339,20 +340,6 @@
                         {{ role }}
                     </mat-option>
                 </mat-select>
-                <mat-error
-                    *ngIf="
-                        resourcesValidForm['role'].errors &&
-                        resourcesValidForm['role']?.invalid &&
-                        resourcesValidForm['role']?.touched
-                    "
-                >
-                    <div
-                        *ngIf="resourcesValidForm['role'].errors['required']"
-                        class="text-red-500"
-                    >
-                        Team is mandatory
-                    </div>
-                </mat-error>
             </mat-form-field>
         </div>
 
@@ -692,10 +679,10 @@
             <span class="text-2xl">Resume</span>
         </div>
 
-        <div class="mt-8">
+        <div class="mt-4">
             <span
                 (click)="viewResume()"
-                class="text-primary-500 underline ml-2 font-bold cursor-pointer"
+                class="text-primary-500 underline font-bold cursor-pointer"
                 >View resume</span
             >
         </div>
