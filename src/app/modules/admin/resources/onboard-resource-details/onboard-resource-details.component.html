@@ -203,6 +203,7 @@
                 aria-label="Select an option"
                 class="flex items-center"
                 (change)="getRadioBtnValues($event)"
+                [disabled]="mode === 'VIEW'"
             >
                 <mat-label class="mb-2 font-semibold"
                     >Is Mindbowser your first company?</mat-label
@@ -376,6 +377,7 @@
                             [matChipInputFor]="chipList"
                             (matChipInputTokenEnd)="add($event)"
                             class="w-full"
+                            [disabled]="mode === 'VIEW'"
                         />
                     </mat-chip-list>
                     <mat-autocomplete
@@ -493,10 +495,12 @@
                                             color="warn"
                                             matTooltip="Remove"
                                             (click)="
-                                                removeTechnology(
-                                                    i,
-                                                    technology?.value
-                                                )
+                                                mode !== 'VIEW'
+                                                    ? removeTechnology(
+                                                          i,
+                                                          technology?.value
+                                                      )
+                                                    : null
                                             "
                                             >cancel</mat-icon
                                         >
@@ -509,7 +513,7 @@
             </div>
         </div>
 
-        <div class="flex">
+        <div class="flex" *ngIf="mode !== 'VIEW'">
             Did not find the technology?
 
             <span
@@ -532,13 +536,14 @@
                     [value]="skill"
                     (change)="onCheckBoxChange($event)"
                     [checked]="skill?.checked"
+                    [disabled]="mode === 'VIEW'"
                 >
                     {{ skill?.name }}</mat-checkbox
                 >
             </div>
         </div>
 
-        <div class="mt-8 flex">
+        <div class="mt-8 flex" *ngIf="mode !== 'VIEW'">
             Did not find the skill/integration?
 
             <span
