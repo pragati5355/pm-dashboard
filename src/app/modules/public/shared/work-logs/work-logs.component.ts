@@ -47,6 +47,10 @@ export class WorkLogsComponent implements OnInit {
     }
 
     submit() {
+        if (this.tasks?.length === 0 && !this.onLeave) {
+            this.snackBar.errorSnackBar('Please add task');
+            return;
+        }
         if (
             this.workLogForm?.valid &&
             this.description !== '' &&
