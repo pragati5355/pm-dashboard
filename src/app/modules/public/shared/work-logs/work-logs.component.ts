@@ -134,21 +134,20 @@ export class WorkLogsComponent implements OnInit {
     private handleSubmitResponse() {
         this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
-        console.log(payload);
-        // this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
-        //     (res: any) => {
-        //         this.submitInProgress = false;
-        //         if (!res?.error && res?.message === 'Success') {
-        //             this.responseSubmitted = true;
-        //         } else {
-        //             this.snackBar.errorSnackBar('Something went wrong');
-        //         }
-        //     },
-        //     (err) => {
-        //         this.submitInProgress = false;
-        //         this.snackBar.errorSnackBar('Something went wrong');
-        //     }
-        // );
+        this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
+            (res: any) => {
+                this.submitInProgress = false;
+                if (!res?.error && res?.message === 'Success') {
+                    this.responseSubmitted = true;
+                } else {
+                    this.snackBar.errorSnackBar('Something went wrong');
+                }
+            },
+            (err) => {
+                this.submitInProgress = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
     private setTokenSubscription() {
