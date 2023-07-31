@@ -332,6 +332,7 @@
                     type="text"
                     (selectionChange)="teamType($event)"
                     [disableOptionCentering]="true"
+                    [disabled]="mode === 'VIEW'"
                 >
                     <mat-option
                         *ngFor="let role of selectTeamList"

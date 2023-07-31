@@ -97,7 +97,8 @@ export class OnboardResourceComponent implements OnInit {
             if (result == 'success') {
                 this.count = 1;
                 this.totalPerPageData = 10;
-                this.getList();
+                // this.getList();
+                window.location.reload();
             }
         });
     }
