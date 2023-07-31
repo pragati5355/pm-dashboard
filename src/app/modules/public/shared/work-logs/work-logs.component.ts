@@ -186,10 +186,12 @@ export class WorkLogsComponent implements OnInit {
         return {
             token: this.pathToken,
             verifies: false,
-            resourceId: this.resourceData?.resourceId,
-            projectId: this.resourceData?.projectId,
-            workLogDate: this.resourceData?.workLogDate,
-            worklog: tasks,
+            externalWorklog: {
+                resourceId: this.resourceData?.resourceId,
+                projectId: this.resourceData?.projectId,
+                workLogDate: this.resourceData?.workLogDate,
+                worklogPerTask: tasks,
+            },
             onLeave: this.onLeave,
         };
     }
