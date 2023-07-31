@@ -4,14 +4,14 @@ import { RegisterResourceComponent } from './register-resource/register-resource
 import { SuccessPageComponent } from './success-page/success-page.component';
 
 const routes: Routes = [
-    {
-        path: 'register',
-        component: RegisterResourceComponent,
-    },
-    {
-        path: 'success',
-        component: SuccessPageComponent,
-    },
+    // {
+    //     path: 'register',
+    //     component: RegisterResourceComponent,
+    // },
+    // {
+    //     path: 'success',
+    //     component: SuccessPageComponent,
+    // },
 ];
 
 @NgModule({
