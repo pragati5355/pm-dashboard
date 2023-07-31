@@ -32,6 +32,7 @@ export class WorkLogsComponent implements OnInit {
     };
     tasks: any[] = [];
     currentDescriptionValue: any;
+    editMode: boolean = false;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -50,21 +51,8 @@ export class WorkLogsComponent implements OnInit {
         if (this.tasks?.length === 0 && !this.onLeave) {
             this.snackBar.errorSnackBar('Please add task');
             return;
-        }
-        if (
-            this.workLogForm?.valid &&
-            this.description !== '' &&
-            !this.onLeave
-        ) {
-            this.handleSubmitResponse();
-        } else if (
-            !this.workLogForm?.valid &&
-            this.description === '' &&
-            this.onLeave
-        ) {
-            this.handleSubmitResponse();
         } else {
-            this.showError = true;
+            this.handleSubmitResponse();
         }
     }
 
@@ -100,14 +88,15 @@ export class WorkLogsComponent implements OnInit {
 
     editTask(task: any, i: any) {
         this.currentTaskIndex = i;
-        this.quillValue = task?.htmlDescription;
-        this.workLogForm?.get('totalHours')?.setValue(task?.hours);
+        this.quillValue = task?.comment;
+        this.workLogForm?.get('totalHours')?.setValue(task?.timeSpent);
         this.calculateTotalHours();
+        this.editMode = true;
     }
 
     calculateTotalHours() {
         this.totalHours = this.tasks?.reduce(
-            (sum, item) => sum + item?.hours,
+            (sum, item) => sum + item?.timeSpent,
             0
         );
     }
@@ -123,8 +112,8 @@ export class WorkLogsComponent implements OnInit {
         }
         const task = {
             description: this.currentDescriptionValue,
-            htmlDescription: this.description,
-            hours: this.workLogForm?.get('totalHours')?.value,
+            timeSpent: this.workLogForm?.get('totalHours')?.value,
+            comment: this.description,
         };
 
         if (this.currentTaskIndex !== null) {
@@ -139,25 +128,27 @@ export class WorkLogsComponent implements OnInit {
         this.showError = false;
         this.calculateTotalHours();
         this.currentTaskIndex = null;
+        this.editMode = false;
     }
 
     private handleSubmitResponse() {
         this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
-        this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
-            (res: any) => {
-                this.submitInProgress = false;
-                if (!res?.error && res?.message === 'Success') {
-                    this.responseSubmitted = true;
-                } else {
-                    this.snackBar.errorSnackBar('Something went wrong');
-                }
-            },
-            (err) => {
-                this.submitInProgress = false;
-                this.snackBar.errorSnackBar('Something went wrong');
-            }
-        );
+        console.log(payload);
+        // this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
+        //     (res: any) => {
+        //         this.submitInProgress = false;
+        //         if (!res?.error && res?.message === 'Success') {
+        //             this.responseSubmitted = true;
+        //         } else {
+        //             this.snackBar.errorSnackBar('Something went wrong');
+        //         }
+        //     },
+        //     (err) => {
+        //         this.submitInProgress = false;
+        //         this.snackBar.errorSnackBar('Something went wrong');
+        //     }
+        // );
     }
 
     private setTokenSubscription() {
@@ -192,19 +183,15 @@ export class WorkLogsComponent implements OnInit {
     }
 
     private getSaveWorkLogsPayload() {
+        const tasks = this.tasks?.map(({ description, ...item }) => item);
         return {
             token: this.pathToken,
             verifies: false,
-            externalWorklog: {
-                resourceId: this.resourceData?.resourceId,
-                projectId: this.resourceData?.projectId,
-                workLogDate: this.resourceData?.workLogDate,
-                timeSpent: this.workLogForm?.get('totalHours')?.value
-                    ? this.workLogForm?.get('totalHours')?.value
-                    : null,
-                comment: this.description ? this.description : null,
-                onLeave: this.onLeave,
-            },
+            resourceId: this.resourceData?.resourceId,
+            projectId: this.resourceData?.projectId,
+            workLogDate: this.resourceData?.workLogDate,
+            worklog: tasks,
+            onLeave: this.onLeave,
         };
     }
 

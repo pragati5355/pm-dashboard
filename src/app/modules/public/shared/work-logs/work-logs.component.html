@@ -71,7 +71,7 @@
                     <div class="w-full">
                         <div class="flex items-center mt-6">
                             <mat-form-field
-                                class="w-1/2"
+                                class="w-full"
                                 [floatLabel]="'always'"
                             >
                                 <mat-label>Hours *</mat-label>
@@ -111,7 +111,7 @@
                                 <mat-icon
                                     svgIcon="heroicons_outline:plus"
                                 ></mat-icon>
-                                Add
+                                {{ editMode ? "SAVE" : "ADD" }}
                             </button>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                                                 class="truncate font-semibold text-black"
                                             >
                                                 <div class="truncate">
-                                                    {{ task?.hours }}
+                                                    {{ task?.timeSpent }}
                                                 </div>
                                             </div>
 
@@ -232,7 +232,7 @@
         </div>
 
         <div
-            class="w-full max-w-[900px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
+            class="w-full max-w-[700px] m-auto mt-8 shadow-sm p-2 py-4 sm:p-8 rounded-lg bg-white"
         >
             <div class="skeleton-loader w-1/2">
                 <div class="table_row rounded-2xl"></div>
