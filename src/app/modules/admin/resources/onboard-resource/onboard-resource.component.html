@@ -70,35 +70,41 @@
                                     <div
                                         class="sm:block flex flex-row items-center w-full cursor-pointer"
                                     >
-                                        <mat-icon
-                                            [matTooltip]="'View'"
-                                            class="text-gray-400 icon-size-5 cursor-pointer"
-                                            svgIcon="heroicons_outline:eye"
-                                            (click)="
-                                                gotoDetailspage(
-                                                    'VIEW',
-                                                    resource
-                                                )
-                                            "
-                                        ></mat-icon>
+                                        <button *ngIf="!submitInProgress">
+                                            <mat-icon
+                                                [matTooltip]="'View'"
+                                                class="text-gray-400 icon-size-5 cursor-pointer"
+                                                svgIcon="heroicons_outline:eye"
+                                                (click)="
+                                                    gotoDetailspage(
+                                                        'VIEW',
+                                                        resource
+                                                    )
+                                                "
+                                            ></mat-icon>
+                                        </button>
 
-                                        <mat-icon
-                                            [matTooltip]="'Edit'"
-                                            class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
-                                            svgIcon="heroicons_outline:pencil"
-                                            (click)="
-                                                gotoDetailspage(
-                                                    'EDIT',
-                                                    resource
-                                                )
-                                            "
-                                        ></mat-icon>
+                                        <button *ngIf="!submitInProgress">
+                                            <mat-icon
+                                                [matTooltip]="'Edit'"
+                                                class="ml-6 text-gray-400 icon-size-5 cursor-pointer"
+                                                svgIcon="heroicons_outline:pencil"
+                                                (click)="
+                                                    gotoDetailspage(
+                                                        'EDIT',
+                                                        resource
+                                                    )
+                                                "
+                                            ></mat-icon>
+                                        </button>
 
                                         <button
                                             class="ml-8 inline-flex items-center"
                                             mat-flat-button
                                             [color]="'primary'"
                                             [matTooltip]="'Accept'"
+                                            (click)="submit(resource)"
+                                            [disabled]="submitInProgress"
                                         >
                                             <span class="ml-2 mr-1"
                                                 >Accept</span

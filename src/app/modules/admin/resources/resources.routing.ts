@@ -43,9 +43,8 @@ export const resourcesRoutes: Route[] = [
                 path: 'onboard',
                 component: OnboardResourceComponent,
                 data: {
-                    pageTitle: 'Onboard Resource',
+                    pageTitle: 'Onboarded Resource',
                 },
-
             },
             {
                 path: '',

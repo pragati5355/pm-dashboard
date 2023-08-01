@@ -21,6 +21,28 @@ export class ResourceDetailsComponent implements OnInit {
     resourceDetails: any = {};
     score: any = 0;
     outOfScore: any = 10;
+    certificates: any[] = [
+        'Full stack we development',
+        'AWS s3 full course',
+        'Data science master',
+    ];
+    skillAndIntegrations: any[] = [
+        {
+            name: 'Firebase',
+        },
+        {
+            name: 'AWS S3',
+        },
+        {
+            name: 'Stripe',
+        },
+        {
+            name: 'FCM',
+        },
+        {
+            name: 'Paypal',
+        },
+    ];
     constructor(
         private _formBuilder: FormBuilder,
         private router: Router,
@@ -111,6 +133,13 @@ export class ResourceDetailsComponent implements OnInit {
             if (result == 'success') {
             }
         });
+    }
+
+    viewResume() {
+        window.open(
+            'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/resource-resumes/Rohan%20k%20resume.pdf',
+            '_blank'
+        );
     }
 
     closeDrawer(): Promise<MatDrawerToggleResult> {
