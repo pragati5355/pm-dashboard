@@ -265,6 +265,6 @@
     </div>
 </div>
 
-<div>
+<div *ngIf="responseSubmitted && !initialLoading">
     <app-work-logs-success></app-work-logs-success>
 </div>
