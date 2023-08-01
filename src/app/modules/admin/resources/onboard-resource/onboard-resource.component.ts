@@ -1,13 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import {
-    MAT_DIALOG_DATA,
-    MatDialog,
-    MatDialogRef,
-} from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { OnboardResourceDetailsComponent } from '../onboard-resource-details/onboard-resource-details.component';
 import { AuthService } from '@services/auth/auth.service';
-import { ResourceService } from '@modules/public/resource/common/services/resource.service';
 import { ResourcesService } from '../common/services/resources.service';
 import {
     BreakpointObserver,
@@ -15,6 +10,7 @@ import {
     Breakpoints,
 } from '@angular/cdk/layout';
 import { take } from 'rxjs/internal/operators/take';
+import { SnackBar } from 'app/core/utils/snackBar';
 
 @Component({
     selector: 'app-onboard-resource',
@@ -32,13 +28,15 @@ export class OnboardResourceComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: false,
     };
+    submitInProgress: boolean = false;
 
     constructor(
         private router: Router,
         private dialog: MatDialog,
         private _authService: AuthService,
         private resourceService: ResourcesService,
-        public breakpointObserver: BreakpointObserver
+        public breakpointObserver: BreakpointObserver,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit() {
@@ -103,20 +101,19 @@ export class OnboardResourceComponent implements OnInit {
         });
     }
 
-    private getDefaultSearchPayload(count?: any) {
-        return {
-            perPageData: this.count,
-            totalPerPageData: this.totalPerPageData,
-        };
-    }
-
-    private checkForLargerScreen() {
-        this.breakpointObserver
-            .observe([Breakpoints.XLarge, Breakpoints.Large])
-            .pipe(take(1))
-            .subscribe((state: BreakpointState) => {
-                if (state.matches) {
-                    this.handleScroll();
+    submit(resource: any) {
+        this.submitInProgress = true;
+        this.resourceService
+            .saveOnboardedResource(resource?.details)
+            ?.subscribe((res: any) => {
+                this.submitInProgress = false;
+                if (!res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.getList();
+                } else {
+                    this.snackBar.errorSnackBar(
+                        res?.message ? res?.message : 'Something went wrong'
+                    );
                 }
             });
     }
@@ -141,5 +138,23 @@ export class OnboardResourceComponent implements OnInit {
                 }
             );
         }
+    }
+
+    private getDefaultSearchPayload(count?: any) {
+        return {
+            perPageData: this.count,
+            totalPerPageData: this.totalPerPageData,
+        };
+    }
+
+    private checkForLargerScreen() {
+        this.breakpointObserver
+            .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .pipe(take(1))
+            .subscribe((state: BreakpointState) => {
+                if (state.matches) {
+                    this.handleScroll();
+                }
+            });
     }
 }

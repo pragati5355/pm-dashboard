@@ -21,6 +21,29 @@ export class ResourceDetailsComponent implements OnInit {
     resourceDetails: any = {};
     score: any = 0;
     outOfScore: any = 10;
+    mbProjects: string[] = [];
+    certificates: any[] = [
+        'Full stack we development',
+        'AWS s3 full course',
+        'Data science master',
+    ];
+    skillAndIntegrations: any[] = [
+        {
+            name: 'Firebase',
+        },
+        {
+            name: 'AWS S3',
+        },
+        {
+            name: 'Stripe',
+        },
+        {
+            name: 'FCM',
+        },
+        {
+            name: 'Paypal',
+        },
+    ];
     constructor(
         private _formBuilder: FormBuilder,
         private router: Router,
@@ -52,7 +75,8 @@ export class ResourceDetailsComponent implements OnInit {
                 this.initialLoading = false;
                 if (res.data) {
                     this.resourceDetails = res?.data;
-                    console.log(this.resourceDetails);
+                    this.mbProjects =
+                        this.resourceDetails?.mbProjects?.split(',');
                 }
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -111,6 +135,10 @@ export class ResourceDetailsComponent implements OnInit {
             if (result == 'success') {
             }
         });
+    }
+
+    viewResume(url: string) {
+        window.open(url, '_blank');
     }
 
     closeDrawer(): Promise<MatDrawerToggleResult> {

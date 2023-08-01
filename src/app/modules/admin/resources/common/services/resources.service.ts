@@ -12,8 +12,10 @@ export class ResourcesService {
     csvPreSignedUrl = AppConstants['PROJECT_API_URL'] + '/upload-resources-csv';
     csvBulkUploadUrl =
         AppConstants['PROJECT_API_URL'] + '/bulk-upload-resource';
-     
-    getRegisteredResourceUrl =  AppConstants['PROJECT_API_URL'] + '/get-registered-resource';   
+
+    getRegisteredResourceUrl =
+        AppConstants['PROJECT_API_URL'] + '/get-registered-resource';
+    acceptOnboardResource = AppConstants['PROJECT_API_URL'] + '/add-resource';
 
     constructor(private http: HttpClient) {}
 
@@ -35,7 +37,11 @@ export class ResourcesService {
         });
     }
 
-    getRegisteredResource(obj:any){
+    getRegisteredResource(obj: any) {
         return this.http.post(this.getRegisteredResourceUrl, obj);
+    }
+
+    saveOnboardedResource(obj: any) {
+        return this.http.post(this.acceptOnboardResource, obj);
     }
 }
