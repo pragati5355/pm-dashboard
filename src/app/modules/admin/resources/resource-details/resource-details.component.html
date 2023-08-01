@@ -63,50 +63,30 @@
                     <div
                         class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
                     >
-                        {{
-                            resourceDetails?.firstName
-                                ? resourceDetails?.firstName?.charAt(0)
-                                : "R"
-                        }}
+                        {{ resourceDetails?.firstName?.charAt(0) }}
                     </div>
                 </div>
             </div>
 
             <div class="mt-3 pt-2 pb-2 text-4xl font-bold truncate">
-                {{
-                    resourceDetails?.firstName
-                        ? resourceDetails?.firstName
-                        : ("Rohan" | titlecase)
-                }}
-                {{
-                    resourceDetails.lastName
-                        ? resourceDetails.lastName
-                        : ("Kadam" | titlecase)
-                }}
+                {{ resourceDetails?.firstName }}
+                {{ resourceDetails.lastName }}
             </div>
 
-            <ng-container
-                *ngIf="
-                    resourceDetails.email
-                        ? resourceDetails.email
-                        : 'rohan.kadam@mindbowser.com'
-                "
-            >
+            <ng-container *ngIf="resourceDetails.email">
                 <div class="flex flex-wrap items-center mt-2">
                     <div
                         class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
                     >
                         <span class="text-sm font-medium whitespace-nowrap">{{
                             resourceDetails.email
-                                ? resourceDetails.email
-                                : "rohan.kadam@mindbowser.com"
                         }}</span>
                     </div>
                 </div>
             </ng-container>
 
             <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
-                <ng-container *ngIf="resourceDetails.assignedProject">
+                <ng-container *ngIf="resourceDetails?.assignedProject">
                     <div class="flex sm:items-center">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:briefcase'"
@@ -117,7 +97,7 @@
                             <div class="flex flex-wrap items-center mt-2 ml-4">
                                 <ng-container
                                     *ngFor="
-                                        let project of resourceDetails.assignedProject
+                                        let project of resourceDetails?.assignedProject
                                     "
                                 >
                                     <div
@@ -142,7 +122,7 @@
                         ></mat-icon>
                         <span class="ml-2">Experience:</span>
                         <div class="ml-4 leading-6">
-                            {{ resourceDetails.careerStartDate | diffDate }}
+                            {{ resourceDetails?.careerStartDate | diffDate }}
                         </div>
                     </div>
                 </ng-container>
@@ -166,16 +146,16 @@
                         ></mat-icon>
                         <span class="ml-2">Date Of Joining:</span>
                         <div
-                            *ngIf="!resourceDetails.dateOfJoining"
+                            *ngIf="!resourceDetails?.dateOfJoining"
                             class="ml-4 leading-6"
                         >
                             -
                         </div>
                         <div
-                            *ngIf="resourceDetails.dateOfJoining"
+                            *ngIf="resourceDetails?.dateOfJoining"
                             class="ml-4 leading-6"
                         >
-                            {{ resourceDetails.dateOfJoining | date }}
+                            {{ resourceDetails?.dateOfJoining | date }}
                         </div>
                     </div>
                 </ng-container>
@@ -187,17 +167,13 @@
                         ></mat-icon>
                         <span class="ml-2">Team:</span>
                         <div class="ml-4 leading-6">
-                            {{
-                                resourceDetails?.role
-                                    ? resourceDetails?.role
-                                    : "FRONTEND"
-                            }}
+                            {{ resourceDetails?.role }}
                         </div>
                     </div>
                 </ng-container>
 
                 <ng-container>
-                    <div class="flex sm:items-center mt-2">
+                    <div class="flex mt-2">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:code'"
                         ></mat-icon>
@@ -205,7 +181,7 @@
                         <ng-container
                             *ngIf="resourceDetails?.technologies?.length > 0"
                         >
-                            <div class="flex flex-wrap items-center mt-2 ml-4">
+                            <div class="flex flex-wrap items-center ml-4">
                                 <ng-container
                                     *ngFor="
                                         let technology of resourceDetails?.technologies
@@ -231,17 +207,21 @@
                             [svgIcon]="'heroicons_outline:code'"
                         ></mat-icon>
                         <span class="ml-2">Skill/Integrations:</span>
-                        <ng-container *ngIf="skillAndIntegrations?.length > 0">
+                        <ng-container
+                            *ngIf="resourceDetails?.integrations?.length > 0"
+                        >
                             <div class="flex flex-wrap items-center ml-4">
                                 <ng-container
-                                    *ngFor="let skill of skillAndIntegrations"
+                                    *ngFor="
+                                        let skill of resourceDetails?.integrations
+                                    "
                                 >
                                     <div
                                         class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
                                     >
                                         <span
                                             class="text-sm font-medium whitespace-nowrap"
-                                            >{{ skill?.name }}</span
+                                            >{{ skill?.name | titlecase }}</span
                                         >
                                     </div>
                                 </ng-container>
@@ -256,17 +236,48 @@
                             [svgIcon]="'heroicons_outline:code'"
                         ></mat-icon>
                         <span class="ml-2">Certificates:</span>
-                        <ng-container *ngIf="certificates.length > 0">
+                        <ng-container
+                            *ngIf="resourceDetails?.certificates?.length > 0"
+                        >
                             <div class="flex flex-wrap items-center ml-4">
                                 <ng-container
-                                    *ngFor="let certificate of certificates"
+                                    *ngFor="
+                                        let certificate of resourceDetails?.certificates
+                                    "
                                 >
                                     <div
                                         class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
                                     >
                                         <span
                                             class="text-sm font-medium whitespace-nowrap"
-                                            >{{ certificate }}</span
+                                            >{{
+                                                certificate?.name | titlecase
+                                            }}</span
+                                        >
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container>
+                    <div class="flex mt-2">
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:briefcase'"
+                        ></mat-icon>
+                        <span class="ml-2">Mindbowser projects:</span>
+                        <ng-container *ngIf="mbProjects?.length > 0">
+                            <div class="flex flex-wrap items-center ml-4">
+                                <ng-container
+                                    *ngFor="let project of mbProjects"
+                                >
+                                    <div
+                                        class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                    >
+                                        <span
+                                            class="text-sm font-medium whitespace-nowrap"
+                                            >{{ project | titlecase }}</span
                                         >
                                     </div>
                                 </ng-container>
@@ -303,7 +314,7 @@
                         ></mat-icon>
                         <span class="ml-2">Resume:</span>
                         <span
-                            (click)="viewResume()"
+                            (click)="viewResume(resourceDetails?.resourceUrl)"
                             class="text-primary-500 underline font-bold cursor-pointer ml-2"
                             >View resume</span
                         >
