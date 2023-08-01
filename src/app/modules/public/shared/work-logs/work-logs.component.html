@@ -265,13 +265,6 @@
     </div>
 </div>
 
-<div
-    *ngIf="responseSubmitted && !initialLoading"
-    class="w-screen h-screen flex justify-center items-center bg-gray-50"
->
-    <div
-        class="text-4xl text-center font-extrabold tracking-tight leading-tight"
-    >
-        Successfully logged work
-    </div>
+<div>
+    <app-work-logs-success></app-work-logs-success>
 </div>
