@@ -71,6 +71,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
             });
     }
 
+    settings() {}
+
     deleteResource(member: any) {
         this.initailizeConfirmationFormPopup();
         const confirmPopDialog = this._fuseConfirmationService.open(
