@@ -426,8 +426,8 @@ export class ResourcesListComponent implements OnInit {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
             name: this.searchValue,
-            isBench: this.isBench,
-            isShadow: this.isShadow,
+            bench: this.isBench,
+            shadow: this.isShadow,
         };
     }
 
