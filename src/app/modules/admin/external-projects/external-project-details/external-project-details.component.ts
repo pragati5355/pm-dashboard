@@ -1,4 +1,3 @@
-import { I } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -80,12 +79,15 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 data: {
                     projectModel: this.projectDetails?.project,
                     clientModels: this.projectDetails?.clientModels,
+                    projectSettings: this.projectDetails?.projectSettings,
                 },
             })
             .afterClosed()
             .subscribe((result) => {
                 if (result) {
-                    window.location.reload();
+                    this.isLoading = true;
+                    this.setProjectIdSubscription();
+                    this.loadDeveloperEmails();
                 }
             });
     }
