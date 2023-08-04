@@ -25,6 +25,7 @@
                 color="primary"
                 matTooltip="Project settings"
                 (click)="settings()"
+                [disabled]="isLoading"
             >
                 <mat-icon>settings</mat-icon>
             </button>
