@@ -150,6 +150,26 @@ export class SendRemindersComponent implements OnInit {
             });
     }
 
+    clearReminders() {
+        const payload = {
+            id: this.data?.projectSettings?.id,
+            projectId: this.data?.projectModel?.id,
+            deleted: true,
+        };
+        this.isLoading = true;
+        this.externalProjectService
+            .sendReminder(payload)
+            .subscribe((res: any) => {
+                this.isLoading = false;
+                if (!res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.dialogRef.close(true);
+                } else {
+                    this.snackBar.errorSnackBar(res?.message);
+                }
+            });
+    }
+
     private patchReminders() {
         this.data?.projectSettings?.reminderModel?.map((item) => {
             if (item?.reminderType === 'FIRST') {
