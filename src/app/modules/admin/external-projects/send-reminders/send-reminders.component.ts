@@ -10,7 +10,7 @@ import { ExternalProjectService } from '../common/services/external-project.serv
     styleUrls: ['./send-reminders.component.scss'],
 })
 export class SendRemindersComponent implements OnInit {
-    firstReminderCheck: boolean = true;
+    firstReminderCheck: boolean = false;
     secondReminderCheck: boolean = false;
     thirdReminderCheck: boolean = false;
     firstReminderControl: any = '';
