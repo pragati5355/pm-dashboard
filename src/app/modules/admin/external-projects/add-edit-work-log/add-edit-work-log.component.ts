@@ -77,7 +77,7 @@ export class AddEditWorkLogComponent implements OnInit {
         this.onLeave = value;
         if (value) {
             this.workLogForm?.get('totalHours')?.disable();
-            this.workLogForm?.get('totalHours')?.setValue('');
+            this.workLogForm?.get('totalHours')?.setValue('0');
             this.editor.quillEditor.deleteText(0, 20000);
             this.description = '';
             this.tasks = [];
@@ -129,10 +129,15 @@ export class AddEditWorkLogComponent implements OnInit {
             this.snackBar.errorSnackBar('Add Hours');
             return;
         }
+        const workLogDate = new Date(
+            this.workLogForm?.get('workLogDate')?.value
+        );
+        workLogDate.setHours(5);
+        workLogDate.setMinutes(30);
         const task = {
             resourceId: this.data?.loggedInUser?.resourceId,
             projectId: this.data?.projectId,
-            workLogDate: this.workLogForm?.get('workLogDate')?.value,
+            workLogDate: workLogDate,
             worklogPerTask: {
                 timeSpent: this.workLogForm?.get('totalHours')?.value,
                 comment: this.description,
@@ -200,8 +205,11 @@ export class AddEditWorkLogComponent implements OnInit {
             this.workLogForm?.get('workLogDate')?.disable();
             this.currentDate = this.data?.data?.workLogDate;
 
-            if (!(this.data?.tabIndex === new Date().getMonth())) {
-                if (new Date().getDate() > 5) {
+            if (this.data?.tabIndex !== new Date().getMonth()) {
+                if (
+                    new Date().getDate() > 5 ||
+                    this.data?.tabIndex < new Date().getMonth() - 1
+                ) {
                     this.workLogForm?.get('totalHours')?.disable();
                     this.disablePreviousWorklog = true;
                 } else {
@@ -246,6 +254,14 @@ export class AddEditWorkLogComponent implements OnInit {
 
     private getSaveWorkLogsPayload() {
         const tasks = this.tasks?.map(({ description, ...item }) => item);
+        const workLogDate = new Date(
+            this.workLogForm?.get('workLogDate')?.value
+        );
+        workLogDate.setHours(5);
+        workLogDate.setMinutes(30);
+
+        console.log(workLogDate);
+
         if (this.data?.mode === 'EDIT') {
             return {
                 externalWorklog: [
@@ -253,7 +269,7 @@ export class AddEditWorkLogComponent implements OnInit {
                         id: this.data?.data?.id,
                         resourceId: this.data?.loggedInUser?.resourceId,
                         projectId: this.data?.projectId,
-                        workLogDate: this.currentDate,
+                        workLogDate: workLogDate,
                         worklogPerTask: {
                             timeSpent:
                                 this.workLogForm?.get('totalHours')?.value,
@@ -270,8 +286,7 @@ export class AddEditWorkLogComponent implements OnInit {
                     {
                         resourceId: this.data?.loggedInUser?.resourceId,
                         projectId: this.data?.projectId,
-                        workLogDate:
-                            this.workLogForm?.get('workLogDate')?.value,
+                        workLogDate: workLogDate,
                         worklogPerTask: {
                             timeSpent: 0,
                             comment: '',
