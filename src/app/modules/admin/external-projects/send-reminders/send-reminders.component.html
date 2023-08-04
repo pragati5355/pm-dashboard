@@ -17,7 +17,11 @@
             <button
                 mat-flat-button
                 color="primary"
-                [disabled]="isLoading"
+                [disabled]="
+                    isLoading ||
+                    this.data?.projectSettings === null ||
+                    this.data?.projectSettings === ''
+                "
                 (click)="clearReminders()"
             >
                 <mat-progress-spinner
@@ -132,7 +136,7 @@
     </button> -->
     <button
         mat-flat-button
-        color="primary"
+        [color]="'primary'"
         [disabled]="isLoading"
         (click)="submit()"
     >
