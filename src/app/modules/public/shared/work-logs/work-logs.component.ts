@@ -21,12 +21,18 @@ export class WorkLogsComponent implements OnInit {
     initialLoading: boolean = false;
     pathToken: string;
     resourceData: any;
+    quillValue: any;
+    totalHours: number = 0;
+    currentTaskIndex: null | number = null;
     modules = {
         toolbar: [
             ['bold', 'italic', 'underline'],
             [{ list: 'ordered' }, { list: 'bullet' }],
         ],
     };
+    tasks: any[] = [];
+    currentDescriptionValue: any;
+    editMode: boolean = false;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -42,20 +48,11 @@ export class WorkLogsComponent implements OnInit {
     }
 
     submit() {
-        if (
-            this.workLogForm?.valid &&
-            this.description !== '' &&
-            !this.onLeave
-        ) {
-            this.handleSubmitResponse();
-        } else if (
-            !this.workLogForm?.valid &&
-            this.description === '' &&
-            this.onLeave
-        ) {
-            this.handleSubmitResponse();
+        if (this.tasks?.length === 0 && !this.onLeave) {
+            this.snackBar.errorSnackBar('Please add task');
+            return;
         } else {
-            this.showError = true;
+            this.handleSubmitResponse();
         }
     }
 
@@ -66,6 +63,7 @@ export class WorkLogsComponent implements OnInit {
             this.workLogForm?.get('totalHours')?.setValue('');
             this.editor.quillEditor.deleteText(0, 20000);
             this.description = '';
+            this.tasks = [];
             this.showError = false;
         } else {
             this.workLogForm?.get('totalHours')?.enable();
@@ -75,11 +73,62 @@ export class WorkLogsComponent implements OnInit {
     getDescription($event: any) {
         if ($event?.html !== null) {
             this.description = $event?.html;
+            this.currentDescriptionValue = $event?.text;
             this.showError = false;
         } else {
             this.description = '';
             this.showError = true;
         }
+    }
+
+    removeTask(index: number) {
+        this.tasks?.splice(index, 1);
+        this.calculateTotalHours();
+    }
+
+    editTask(task: any, i: any) {
+        this.currentTaskIndex = i;
+        this.quillValue = task?.comment;
+        this.workLogForm?.get('totalHours')?.setValue(task?.timeSpent);
+        this.calculateTotalHours();
+        this.editMode = true;
+    }
+
+    calculateTotalHours() {
+        this.totalHours = this.tasks?.reduce(
+            (sum, item) => sum + item?.timeSpent,
+            0
+        );
+    }
+
+    addTask() {
+        if (!this.currentDescriptionValue) {
+            this.snackBar.errorSnackBar('Add description');
+            return;
+        }
+        if (!this.workLogForm?.get('totalHours')?.value) {
+            this.snackBar.errorSnackBar('Add Hours');
+            return;
+        }
+        const task = {
+            description: this.currentDescriptionValue,
+            timeSpent: this.workLogForm?.get('totalHours')?.value,
+            comment: this.description,
+        };
+
+        if (this.currentTaskIndex !== null) {
+            this.tasks?.splice(this.currentTaskIndex, 1, task);
+        } else {
+            this.tasks?.push(task);
+        }
+        this.currentDescriptionValue = '';
+        this.workLogForm?.get('totalHours')?.setValue('');
+        this.workLogForm?.get('totalHours')?.setErrors(null);
+        this.quillValue = '';
+        this.showError = false;
+        this.calculateTotalHours();
+        this.currentTaskIndex = null;
+        this.editMode = false;
     }
 
     private handleSubmitResponse() {
@@ -133,6 +182,7 @@ export class WorkLogsComponent implements OnInit {
     }
 
     private getSaveWorkLogsPayload() {
+        const tasks = this.tasks?.map(({ description, ...item }) => item);
         return {
             token: this.pathToken,
             verifies: false,
@@ -140,18 +190,15 @@ export class WorkLogsComponent implements OnInit {
                 resourceId: this.resourceData?.resourceId,
                 projectId: this.resourceData?.projectId,
                 workLogDate: this.resourceData?.workLogDate,
-                timeSpent: this.workLogForm?.get('totalHours')?.value
-                    ? this.workLogForm?.get('totalHours')?.value
-                    : null,
-                comment: this.description ? this.description : null,
-                onLeave: this.onLeave,
+                worklogPerTask: tasks,
             },
+            onLeave: this.onLeave,
         };
     }
 
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
-            totalHours: ['', [Validators.required]],
+            totalHours: [''],
         });
     }
 }

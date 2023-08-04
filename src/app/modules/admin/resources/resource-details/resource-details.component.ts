@@ -9,6 +9,9 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 
 import { ResourcesListComponent } from '../resources-list/resources-list.component';
 import { round } from 'lodash';
+import { CreateResumeComponent } from '../create-resume/create-resume.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ResumeVersionsComponent } from '../resume-versions/resume-versions.component';
 @Component({
     selector: 'app-resource-details',
     templateUrl: './resource-details.component.html',
@@ -18,6 +21,29 @@ export class ResourceDetailsComponent implements OnInit {
     resourceDetails: any = {};
     score: any = 0;
     outOfScore: any = 10;
+    mbProjects: string[] = [];
+    certificates: any[] = [
+        'Full stack we development',
+        'AWS s3 full course',
+        'Data science master',
+    ];
+    skillAndIntegrations: any[] = [
+        {
+            name: 'Firebase',
+        },
+        {
+            name: 'AWS S3',
+        },
+        {
+            name: 'Stripe',
+        },
+        {
+            name: 'FCM',
+        },
+        {
+            name: 'Paypal',
+        },
+    ];
     constructor(
         private _formBuilder: FormBuilder,
         private router: Router,
@@ -26,6 +52,7 @@ export class ResourceDetailsComponent implements OnInit {
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
         private activatedRoute: ActivatedRoute,
+        private dialog: MatDialog,
         private _resourcesListComponent: ResourcesListComponent
     ) {}
 
@@ -48,7 +75,8 @@ export class ResourceDetailsComponent implements OnInit {
                 this.initialLoading = false;
                 if (res.data) {
                     this.resourceDetails = res?.data;
-                    console.log(this.resourceDetails);
+                    this.mbProjects =
+                        this.resourceDetails?.mbProjects?.split(',');
                 }
                 if (res.tokenExpire == true) {
                     this._authService.updateAndReload(window.location);
@@ -76,6 +104,41 @@ export class ResourceDetailsComponent implements OnInit {
             },
             (error) => {}
         );
+    }
+
+    createResumeDialog() {
+        const dialogRef = this.dialog.open(CreateResumeComponent, {
+            disableClose: true,
+            width: '40%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {},
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
+    }
+
+    viewResumeVersions() {
+        const viewResumeVersionDialogRef = this.dialog.open(
+            ResumeVersionsComponent,
+            {
+                disableClose: true,
+                width: '40%',
+                panelClass: 'warn-dialog-content',
+                autoFocus: false,
+                data: {},
+            }
+        );
+        viewResumeVersionDialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+            }
+        });
+    }
+
+    viewResume(url: string) {
+        window.open(url, '_blank');
     }
 
     closeDrawer(): Promise<MatDrawerToggleResult> {

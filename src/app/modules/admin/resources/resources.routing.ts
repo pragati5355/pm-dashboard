@@ -3,6 +3,7 @@ import { ResourcesHomeComponent } from './resources-home/resources-home.componen
 import { ResourcesListComponent } from './resources-list/resources-list.component';
 import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { ResourceDetailsComponent } from './resource-details/resource-details.component';
+import { OnboardResourceComponent } from './onboard-resource/onboard-resource.component';
 export const resourcesRoutes: Route[] = [
     {
         path: '',
@@ -37,6 +38,13 @@ export const resourcesRoutes: Route[] = [
                         component: ResourceDetailsComponent,
                     },
                 ],
+            },
+            {
+                path: 'onboard',
+                component: OnboardResourceComponent,
+                data: {
+                    pageTitle: 'Onboarded Resource',
+                },
             },
             {
                 path: '',

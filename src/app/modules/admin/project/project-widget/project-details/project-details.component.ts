@@ -26,6 +26,7 @@ import { ProjectMembersDetailsComponent } from '../project-members-details/proje
 export class ProjectDetailsComponent implements OnInit {
     members = true;
     sprints = true;
+    crLists = true;
     routeSubscribe: any;
     projectId: string;
     initialLoading = false;
@@ -34,6 +35,7 @@ export class ProjectDetailsComponent implements OnInit {
     isBitbucketProjectListLoading = false;
     allBitbucketProjects: BitbucketProjectModel[] = [];
     teamMembers = [];
+    crList = [];
 
     @Input() dataId: any;
     checked: false;
@@ -46,7 +48,7 @@ export class ProjectDetailsComponent implements OnInit {
         private bitbucketProjectService: BitbucketProjectService,
         private matDialog: MatDialog,
         private _authService: AuthService,
-        private datePipe : DatePipe
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -65,8 +67,10 @@ export class ProjectDetailsComponent implements OnInit {
             })
             .subscribe((res: any) => {
                 this.project = res?.data?.project;
-                console.log("this.project : ", this.project?.history);
-                this.teamMembers = res?.data?.teamModel;
+                console.log('this.project : ', this.project?.history);
+                this.teamMembers = res?.data?.teamModel; 
+                this.crList = res?.data?.changeRequestProject;
+                console.log("this.crList - > " , this.crList);
                 this.repoCount = res?.data?.repoCount;
                 this._authService.setProjectDetails(this.project);
                 this.initialLoading = false;
@@ -88,10 +92,10 @@ export class ProjectDetailsComponent implements OnInit {
     projectProcess() {
         this.router.navigate([`/projects/project-process/list`]);
     }
-    weeklyFeedBackList(){
+    weeklyFeedBackList() {
         this.router.navigate([`/projects/${this.projectId}/feedback/list`]);
     }
-    addCR(){
+    addCR() {
         this.router.navigate([`/projects/${this.projectId}/add-cr`]);
     }
     assignBitbucketProject() {
@@ -126,20 +130,19 @@ export class ProjectDetailsComponent implements OnInit {
             });
     }
 
-    historyDetails(){
+    historyDetails() {
         const dialogRef = this.matDialog.open(ProjectMembersDetailsComponent, {
             disableClose: true,
             width: '60%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                team : this.project
+                team: this.project,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
             }
         });
-
     }
 }

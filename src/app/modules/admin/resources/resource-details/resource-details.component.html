@@ -5,6 +5,25 @@
         <div
             class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6"
         >
+            <!-- <button
+                (click)="createResumeDialog()"
+                [color]="'primary'"
+                class="mr-2"
+                mat-flat-button
+            >
+                Create resume
+            </button>
+            <button
+                class="bg-slate-400 mr-2"
+                mat-icon-button
+                [matTooltip]="'View resume versions'"
+                (click)="viewResumeVersions()"
+            >
+                <mat-icon
+                    class="text-white"
+                    svgIcon="heroicons_outline:eye"
+                ></mat-icon>
+            </button> -->
             <button
                 class="bg-slate-400"
                 mat-icon-button
@@ -50,8 +69,8 @@
             </div>
 
             <div class="mt-3 pt-2 pb-2 text-4xl font-bold truncate">
-                {{ resourceDetails?.firstName | titlecase }}
-                {{ resourceDetails.lastName | titlecase }}
+                {{ resourceDetails?.firstName }}
+                {{ resourceDetails.lastName }}
             </div>
 
             <ng-container *ngIf="resourceDetails.email">
@@ -67,7 +86,7 @@
             </ng-container>
 
             <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
-                <ng-container *ngIf="resourceDetails.assignedProject">
+                <ng-container *ngIf="resourceDetails?.assignedProject">
                     <div class="flex sm:items-center">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:briefcase'"
@@ -78,7 +97,7 @@
                             <div class="flex flex-wrap items-center mt-2 ml-4">
                                 <ng-container
                                     *ngFor="
-                                        let project of resourceDetails.assignedProject
+                                        let project of resourceDetails?.assignedProject
                                     "
                                 >
                                     <div
@@ -97,42 +116,13 @@
                 </ng-container>
 
                 <ng-container>
-                    <div class="flex sm:items-center mt-2">
-                        <mat-icon
-                            [svgIcon]="'heroicons_outline:code'"
-                        ></mat-icon>
-                        <span class="ml-2">Technologies:</span>
-                        <ng-container
-                            *ngIf="resourceDetails?.technologies?.length > 0"
-                        >
-                            <div class="flex flex-wrap items-center mt-2 ml-4">
-                                <ng-container
-                                    *ngFor="
-                                        let technology of resourceDetails?.technologies
-                                    "
-                                >
-                                    <div
-                                        class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
-                                    >
-                                        <span
-                                            class="text-sm font-medium whitespace-nowrap"
-                                            >{{ technology?.name }}</span
-                                        >
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </ng-container>
-                    </div>
-                </ng-container>
-
-                <ng-container>
                     <div class="flex sm:items-center">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:document-text'"
                         ></mat-icon>
                         <span class="ml-2">Experience:</span>
                         <div class="ml-4 leading-6">
-                            {{ resourceDetails.careerStartDate | diffDate }}
+                            {{ resourceDetails?.careerStartDate | diffDate }}
                         </div>
                     </div>
                 </ng-container>
@@ -156,16 +146,16 @@
                         ></mat-icon>
                         <span class="ml-2">Date Of Joining:</span>
                         <div
-                            *ngIf="!resourceDetails.dateOfJoining"
+                            *ngIf="!resourceDetails?.dateOfJoining"
                             class="ml-4 leading-6"
                         >
                             -
                         </div>
                         <div
-                            *ngIf="resourceDetails.dateOfJoining"
+                            *ngIf="resourceDetails?.dateOfJoining"
                             class="ml-4 leading-6"
                         >
-                            {{ resourceDetails.dateOfJoining | date }}
+                            {{ resourceDetails?.dateOfJoining | date }}
                         </div>
                     </div>
                 </ng-container>
@@ -183,7 +173,121 @@
                 </ng-container>
 
                 <ng-container>
-                    <div class="flex sm:items-center">
+                    <div class="flex mt-2">
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:code'"
+                        ></mat-icon>
+                        <span class="ml-2">Technologies:</span>
+                        <ng-container
+                            *ngIf="resourceDetails?.technologies?.length > 0"
+                        >
+                            <div class="flex flex-wrap items-center ml-4">
+                                <ng-container
+                                    *ngFor="
+                                        let technology of resourceDetails?.technologies
+                                    "
+                                >
+                                    <div
+                                        class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                    >
+                                        <span
+                                            class="text-sm font-medium whitespace-nowrap"
+                                            >{{ technology?.name }}</span
+                                        >
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container>
+                    <div class="flex mt-2">
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:code'"
+                        ></mat-icon>
+                        <span class="ml-2">Skill/Integrations:</span>
+                        <ng-container
+                            *ngIf="resourceDetails?.integrations?.length > 0"
+                        >
+                            <div class="flex flex-wrap items-center ml-4">
+                                <ng-container
+                                    *ngFor="
+                                        let skill of resourceDetails?.integrations
+                                    "
+                                >
+                                    <div
+                                        class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                    >
+                                        <span
+                                            class="text-sm font-medium whitespace-nowrap"
+                                            >{{ skill?.name | titlecase }}</span
+                                        >
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container>
+                    <div class="flex mt-2">
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:code'"
+                        ></mat-icon>
+                        <span class="ml-2">Certificates:</span>
+                        <ng-container
+                            *ngIf="resourceDetails?.certificates?.length > 0"
+                        >
+                            <div class="flex flex-wrap items-center ml-4">
+                                <ng-container
+                                    *ngFor="
+                                        let certificate of resourceDetails?.certificates
+                                    "
+                                >
+                                    <div
+                                        class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                    >
+                                        <span
+                                            class="text-sm font-medium whitespace-nowrap"
+                                            >{{
+                                                certificate?.name | titlecase
+                                            }}</span
+                                        >
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container>
+                    <div class="flex mt-2">
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:briefcase'"
+                        ></mat-icon>
+                        <span class="ml-2">Mindbowser projects:</span>
+                        <ng-container *ngIf="mbProjects?.length > 0">
+                            <div class="flex flex-wrap items-center ml-4">
+                                <ng-container
+                                    *ngFor="let project of mbProjects"
+                                >
+                                    <div
+                                        class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                    >
+                                        <span
+                                            class="text-sm font-medium whitespace-nowrap"
+                                            >{{ project | titlecase }}</span
+                                        >
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container>
+                    <div class="flex">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:currency-dollar'"
                         ></mat-icon>
@@ -200,6 +304,20 @@
                         >
                             {{ resourceDetails.salary }}
                         </div>
+                    </div>
+                </ng-container>
+
+                <ng-container>
+                    <div class="flex sm:items-center mt-2">
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:document-text'"
+                        ></mat-icon>
+                        <span class="ml-2">Resume:</span>
+                        <span
+                            (click)="viewResume(resourceDetails?.resourceUrl)"
+                            class="text-primary-500 underline font-bold cursor-pointer ml-2"
+                            >View resume</span
+                        >
                     </div>
                 </ng-container>
             </div>

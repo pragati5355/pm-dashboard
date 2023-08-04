@@ -10,6 +10,9 @@ export class ExternalProjectService {
     createExternalProjectUrl =
         AppConstants['PROJECT_API_URL'] + '/external-project';
 
+    sendRemindersUrl =
+        AppConstants['PROJECT_API_URL'] + '/save-project-setting';
+
     constructor(private http: HttpClient) {}
 
     create(externalProjectInDto: any): Observable<any> {
@@ -17,5 +20,9 @@ export class ExternalProjectService {
             this.createExternalProjectUrl,
             externalProjectInDto
         );
+    }
+
+    sendReminder(obj: any) {
+        return this.http.post(this.sendRemindersUrl, obj);
     }
 }

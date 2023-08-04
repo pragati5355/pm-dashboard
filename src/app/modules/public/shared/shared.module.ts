@@ -16,7 +16,10 @@ import { FeedbackHomeComponent } from './feedback-home/feedback-home.component';
 import { WorkLogsComponent } from './work-logs/work-logs.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { QuillModule } from 'ngx-quill';
-import { WrongUrlComponent } from './wrong-url/wrong-url.component'
+import { NgParticlesModule } from 'ng-particles';
+import { WrongUrlComponent } from './wrong-url/wrong-url.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { WorkLogsSuccessComponent } from './work-logs-success/work-logs-success.component';
 
 const routes: Routes = [
     {
@@ -50,6 +53,7 @@ const routes: Routes = [
         FeedbackHomeComponent,
         WorkLogsComponent,
         WrongUrlComponent,
+        WorkLogsSuccessComponent,
     ],
     imports: [
         CommonModule,
@@ -62,7 +66,9 @@ const routes: Routes = [
         MatProgressSpinnerModule,
         MatCheckboxModule,
         FormsModule,
+        MatTooltipModule,
         QuillModule,
+        NgParticlesModule,
         RouterModule.forChild(routes),
     ],
     providers: [{ provide: FormioAppConfig }],

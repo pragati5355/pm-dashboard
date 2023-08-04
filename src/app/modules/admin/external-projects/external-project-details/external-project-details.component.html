@@ -10,14 +10,26 @@
             ></mat-icon>
             {{ projectDetails?.project?.name | titlecase }}
         </div>
-        <button
-            mat-mini-fab
-            color="primary"
-            matTooltip="Edit project"
-            (click)="edit()"
-        >
-            <mat-icon>edit</mat-icon>
-        </button>
+        <div>
+            <button
+                mat-mini-fab
+                color="primary"
+                matTooltip="Edit project"
+                (click)="edit()"
+            >
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button
+                class="ml-2"
+                mat-mini-fab
+                color="primary"
+                matTooltip="Project settings"
+                (click)="settings()"
+                [disabled]="isLoading"
+            >
+                <mat-icon>settings</mat-icon>
+            </button>
+        </div>
     </div>
     <div class="w-full bg-white shadow rounded p-8">
         <div class="mb-4">

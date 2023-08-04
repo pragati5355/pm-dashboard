@@ -36,6 +36,7 @@ import { CreateExternalProjectComponent } from './create-external-project/create
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ExternalProjectsAddResourceComponent } from './external-projects-add-resource/external-projects-add-resource.component';
+import { SendRemindersComponent } from './send-reminders/send-reminders.component';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -43,6 +44,7 @@ import { ExternalProjectsAddResourceComponent } from './external-projects-add-re
         ExternalProjectDetailsComponent,
         CreateExternalProjectComponent,
         ExternalProjectsAddResourceComponent,
+        SendRemindersComponent,
     ],
     imports: [
         CommonModule,

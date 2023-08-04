@@ -1,4 +1,3 @@
-import { I } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +9,7 @@ import { SnackBar } from 'app/core/utils/snackBar';
 import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 import { ExternalProjectsAddResourceComponent } from '../external-projects-add-resource/external-projects-add-resource.component';
+import { SendRemindersComponent } from '../send-reminders/send-reminders.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -67,6 +67,27 @@ export class ExternalProjectDetailsComponent implements OnInit {
             .subscribe((result) => {
                 if (result) {
                     window.location.reload();
+                }
+            });
+    }
+
+    settings() {
+        this.dialog
+            .open(SendRemindersComponent, {
+                width: '50%',
+                height: 'auto',
+                data: {
+                    projectModel: this.projectDetails?.project,
+                    clientModels: this.projectDetails?.clientModels,
+                    projectSettings: this.projectDetails?.projectSettings,
+                },
+            })
+            .afterClosed()
+            .subscribe((result) => {
+                if (result) {
+                    this.isLoading = true;
+                    this.setProjectIdSubscription();
+                    this.loadDeveloperEmails();
                 }
             });
     }

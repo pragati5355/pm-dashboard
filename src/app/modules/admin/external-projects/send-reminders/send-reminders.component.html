@@ -1,0 +1,152 @@
+<div
+    matDialogTitle
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -mt-6 -mx-6"
+>
+    <div class="text-lg font-medium">Project settings</div>
+    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"
+        ></mat-icon>
+    </button>
+</div>
+<div>
+    <div>
+        <div class="flex items-center justify-between">
+            <div class="text-xl font-semibold">Reminders</div>
+            <button
+                mat-flat-button
+                color="primary"
+                [disabled]="
+                    isLoading ||
+                    this.data?.projectSettings === null ||
+                    this.data?.projectSettings === ''
+                "
+                (click)="clearReminders()"
+            >
+                <mat-progress-spinner
+                    *ngIf="isLoading"
+                    class="mr-2"
+                    mode="indeterminate"
+                    diameter="24"
+                ></mat-progress-spinner>
+                Clear reminders
+            </button>
+        </div>
+        <div class="mt-4">
+            <div class="font-medium">First reminder</div>
+            <div class="flex items-center mt-1">
+                <mat-checkbox
+                    [color]="'primary'"
+                    class="font-medium mr-4"
+                    [(ngModel)]="firstReminderCheck"
+                    (change)="firstReminderCheckbox($event)"
+                    >On slack</mat-checkbox
+                >
+                <mat-form-field class="w-60">
+                    <mat-select
+                        [placeholder]="'Select time'"
+                        (selectionChange)="changeTime($event)"
+                        [disabled]="!firstReminderCheck"
+                        [(ngModel)]="firstSelect"
+                    >
+                        <mat-option
+                            *ngFor="let time of primaryTimings"
+                            [value]="time"
+                        >
+                            {{ time?.viewValue }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <div class="font-medium">Second reminder</div>
+            <div class="flex items-center mt-1">
+                <mat-checkbox
+                    [color]="'primary'"
+                    class="font-medium mr-4"
+                    [checked]="secondReminderCheck"
+                    (change)="secondReminderCheckbox($event)"
+                    [disabled]="
+                        firstReminderControl === '' || !firstReminderCheck
+                    "
+                    >On slack</mat-checkbox
+                >
+                <mat-form-field class="w-60">
+                    <mat-select
+                        [placeholder]="'Select time'"
+                        (selectionChange)="changeTimeSecond($event)"
+                        [(ngModel)]="secondSelect"
+                        [disabled]="
+                            firstReminderControl === '' || !secondReminderCheck
+                        "
+                    >
+                        <mat-option
+                            *ngFor="let time of primaryTimings"
+                            [value]="time"
+                            [disabled]="time?.id <= firstReminderControl?.id"
+                        >
+                            {{ time?.viewValue }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <div class="font-medium">Third reminder</div>
+            <div class="flex items-center mt-1">
+                <mat-checkbox
+                    [color]="'primary'"
+                    class="font-medium mr-4"
+                    [checked]="thirdReminderCheck"
+                    (change)="thirdReminderCheckbox($event)"
+                    [disabled]="!secondReminderCheck"
+                    >On slack</mat-checkbox
+                >
+                <mat-form-field class="w-60">
+                    <mat-select
+                        [placeholder]="'Select time'"
+                        (selectionChange)="changeTimeThird($event)"
+                        [(ngModel)]="thirdSelect"
+                        [disabled]="
+                            secondReminderControl === '' || !thirdReminderCheck
+                        "
+                    >
+                        <mat-option
+                            *ngFor="let time of secondaryTimings"
+                            [value]="time"
+                            [disabled]="time?.id <= secondReminderControl?.id"
+                        >
+                            {{ time?.viewValue }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions class="flex flex-row justify-end">
+    <!-- <button mat-stroked-button (click)="dialogRef.close()">
+        <mat-icon class="mr-2">close</mat-icon>
+        Cancel
+    </button> -->
+    <button
+        mat-flat-button
+        [color]="'primary'"
+        [disabled]="isLoading"
+        (click)="submit()"
+    >
+        <mat-icon *ngIf="!isLoading" class="mr-2">add</mat-icon>
+        <mat-progress-spinner
+            *ngIf="isLoading"
+            class="mr-2"
+            mode="indeterminate"
+            diameter="24"
+        ></mat-progress-spinner>
+        Save
+    </button>
+</div>

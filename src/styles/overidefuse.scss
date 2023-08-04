@@ -249,13 +249,13 @@
     background-color: rgb(252, 252, 252) !important;
     border: 0.5px solid black !important;
 }
-.mat-radio-checked .mat-radio-inner-circle {
-    background-color: black !important;
-}
-.mat-select-panel,
-.cdk-overlay-pane {
-    background-color: white !important;
-}
+// .mat-radio-checked .mat-radio-inner-circle {
+//     background-color: rgb(255, 255, 255) !important;
+// }
+// .mat-select-panel,
+// .cdk-overlay-pane {
+//     background-color: white !important;
+// }
 .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
     opacity: 0.03 !important;
     background-color: #6366f1 !important;
@@ -272,6 +272,14 @@
 .mat-autocomplete-panel.mat-autocomplete-visible {
     visibility: visible;
     box-shadow: 0px 1px 2px 0px !important;
+    background-color: white !important;
+}
+.mat-select-panel .mat-optgroup-label,
+.mat-select-panel .mat-option {
+    background-color: white;
+}
+.mat-dialog-container {
+    background-color: white !important;
 }
 // .cdk-overlay-pane {
 //     overflow-y: scroll;

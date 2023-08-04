@@ -13,6 +13,10 @@ export class ResourcesService {
     csvBulkUploadUrl =
         AppConstants['PROJECT_API_URL'] + '/bulk-upload-resource';
 
+    getRegisteredResourceUrl =
+        AppConstants['PROJECT_API_URL'] + '/get-registered-resource';
+    acceptOnboardResource = AppConstants['PROJECT_API_URL'] + '/add-resource';
+
     constructor(private http: HttpClient) {}
 
     findAllDeveloperEmails() {
@@ -26,9 +30,18 @@ export class ResourcesService {
     getCsvPreSignedUrl(obj: any) {
         return this.http.post(this.csvPreSignedUrl, obj);
     }
+
     uploadCsvFileToS3(url: string, file: any) {
         return this.http.put(url, file, {
             headers: { skipToken: 'true', 'Content-Type': 'text/csv' },
         });
+    }
+
+    getRegisteredResource(obj: any) {
+        return this.http.post(this.getRegisteredResourceUrl, obj);
+    }
+
+    saveOnboardedResource(obj: any) {
+        return this.http.post(this.acceptOnboardResource, obj);
     }
 }
