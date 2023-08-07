@@ -151,18 +151,14 @@ export class RegisterResourceComponent implements OnInit {
     uploadChange({ target }: any) {
         if (target?.files[0]) {
             this.submitInProgress = true;
+            const fileName = `${Date.now()}-${target?.files[0]?.name}`;
             this.resumeFileToBeUploaded = target?.files[0];
             const file = target?.files[0];
 
             const uploadedFile = new FormData();
-            uploadedFile.append(
-                'file',
-                this.resumeFileToBeUploaded,
-                this.resumeFileToBeUploaded?.name
-            );
-
+            uploadedFile.append('file', this.resumeFileToBeUploaded, fileName);
             const payload = {
-                fileName: target?.files[0]?.name,
+                fileName: fileName,
             };
             this.resourceService.getPreSignedUrl(payload).subscribe(
                 (res: any) => {
@@ -185,18 +181,18 @@ export class RegisterResourceComponent implements OnInit {
                                     (err) => {
                                         this.submitInProgress = false;
                                         this.snackBar.errorSnackBar(
-                                            'Somethin went wrong'
+                                            'Something went wrong'
                                         );
                                     }
                                 );
                         }
                     } else {
-                        this.snackBar.errorSnackBar('Somethin went wrong');
+                        this.snackBar.errorSnackBar('Something went wrong');
                     }
                 },
                 (err) => {
                     this.submitInProgress = false;
-                    this.snackBar.errorSnackBar('Somethin went wrong');
+                    this.snackBar.errorSnackBar('Something went wrong');
                 }
             );
         }

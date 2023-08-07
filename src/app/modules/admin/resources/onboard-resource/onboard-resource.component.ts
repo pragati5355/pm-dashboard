@@ -11,6 +11,8 @@ import {
 } from '@angular/cdk/layout';
 import { take } from 'rxjs/internal/operators/take';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { FormControl } from '@angular/forms';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
     selector: 'app-onboard-resource',
@@ -29,6 +31,8 @@ export class OnboardResourceComponent implements OnInit {
         displayProfilePicture: false,
     };
     submitInProgress: boolean = false;
+    searchControl = new FormControl();
+    searchValue = '';
 
     constructor(
         private router: Router,
@@ -41,12 +45,14 @@ export class OnboardResourceComponent implements OnInit {
 
     ngOnInit() {
         this.getList();
+        this.addResourceSearchValueSubscription();
     }
 
     getList() {
         const payload = {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
+            searchString: this.searchValue,
         };
         this.initialLoading = true;
         this.resourceService
@@ -140,10 +146,58 @@ export class OnboardResourceComponent implements OnInit {
         }
     }
 
+    private addResourceSearchValueSubscription() {
+        this.searchControl.valueChanges
+            .pipe(
+                map((value) => value?.trim()),
+                debounceTime(500),
+                distinctUntilChanged()
+            )
+            .subscribe((searchKey) => {
+                this.searchValue = searchKey;
+                if (searchKey) {
+                    this.getSearchResult(searchKey);
+                } else {
+                    this.clearSearch();
+                }
+            });
+    }
+
+    private getSearchResult(searchKey: any) {
+        this.count = 1;
+        this.totalPerPageData = 10;
+        const payload = {
+            perPageData: this.count,
+            totalPerPageData: this.totalPerPageData,
+            searchString: searchKey,
+        };
+        this.initialLoading = true;
+        this.resourceService
+            .getRegisteredResource(payload)
+            .subscribe((res: any) => {
+                this.initialLoading = false;
+                if (!res?.error) {
+                    this.handleGetResourceMemberResponse(res);
+                    this.checkForLargerScreen();
+                }
+                if (res?.tokenExpire) {
+                    this._authService.updateAndReload(window.location);
+                }
+            });
+    }
+
+    private clearSearch() {
+        this.searchControl.setValue('', { emitEvent: false });
+        this.count = 1;
+        this.searchValue = '';
+        this.getList();
+    }
+
     private getDefaultSearchPayload(count?: any) {
         return {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
+            searchString: this.searchValue,
         };
     }
 
