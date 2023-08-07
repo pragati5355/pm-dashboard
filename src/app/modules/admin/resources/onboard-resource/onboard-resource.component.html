@@ -23,6 +23,11 @@
             </div>
             <div class="flex flex-auto overflow-hidden">
                 <div
+                    infiniteScroll
+                    [infiniteScrollDistance]="2"
+                    [infiniteScrollThrottle]="50"
+                    [scrollWindow]="false"
+                    (scrolled)="handleScroll()"
                     class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
                 >
                     <div
