@@ -46,11 +46,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddCrComponent } from './add-cr/add-cr.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatChipsModule } from '@angular/material/chips';
-
 import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
 import { ProjectMembersDetailsComponent } from './project-members-details/project-members-details.component';
 import { CrListsComponent } from './cr-lists/cr-lists.component';
 import { CrDetailsComponent } from './cr-details/cr-details.component';
+import { WorkLogListComponent } from './work-log-list/work-log-list.component';
 
 @NgModule({
     declarations: [
@@ -75,6 +75,7 @@ import { CrDetailsComponent } from './cr-details/cr-details.component';
         ProjectMembersDetailsComponent,
         CrListsComponent,
         CrDetailsComponent,
+        WorkLogListComponent,
     ],
     imports: [
         FormsModule,

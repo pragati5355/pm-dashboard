@@ -281,6 +281,9 @@
 .mat-dialog-container {
     background-color: white !important;
 }
+.mat-tab-group .mat-tab-header .mat-tab-label-container {
+    padding: 0px;
+}
 // .cdk-overlay-pane {
 //     overflow-y: scroll;
 // }

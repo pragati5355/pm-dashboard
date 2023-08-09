@@ -17,6 +17,7 @@ import { BitbucketProjectModel } from '@modules/admin/repository/common/models/b
 import { DatePipe } from '@angular/common';
 import { ProjectMembersDetailsComponent } from '../project-members-details/project-members-details.component';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { WorkLogListComponent } from '../work-log-list/work-log-list.component';
 
 @Component({
     selector: 'app-project-details',
@@ -115,6 +116,39 @@ export class ProjectDetailsComponent implements OnInit {
         }
     }
 
+    showWorkLogs() {
+        const workLogdialogRef = this.matDialog.open(WorkLogListComponent, {
+            disableClose: true,
+            width: '60%',
+            maxHeight: '90vh',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                team: this.project,
+            },
+        });
+        workLogdialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+            }
+        });
+    }
+
+    historyDetails() {
+        const dialogRef = this.matDialog.open(ProjectMembersDetailsComponent, {
+            disableClose: true,
+            width: '60%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                team: this.project,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+            }
+        });
+    }
+
     private openAssignDialog(response: BitbucketProjectModel[]) {
         this.matDialog
             .open(AssignBitbucketProjectDialogComponent, {
@@ -138,22 +172,6 @@ export class ProjectDetailsComponent implements OnInit {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
             if (res?.role) {
                 this.userRole = res?.role;
-            }
-        });
-    }
-
-    historyDetails() {
-        const dialogRef = this.matDialog.open(ProjectMembersDetailsComponent, {
-            disableClose: true,
-            width: '60%',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                team: this.project,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result) {
             }
         });
     }
