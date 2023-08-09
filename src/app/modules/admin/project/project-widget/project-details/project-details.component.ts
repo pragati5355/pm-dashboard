@@ -72,10 +72,8 @@ export class ProjectDetailsComponent implements OnInit {
             })
             .subscribe((res: any) => {
                 this.project = res?.data?.project;
-                console.log('this.project : ', this.project?.history);
                 this.teamMembers = res?.data?.teamModel;
                 this.crList = res?.data?.changeRequestProject;
-                console.log('this.crList - > ', this.crList);
                 this.repoCount = res?.data?.repoCount;
                 this._authService.setProjectDetails(this.project);
                 this.initialLoading = false;
@@ -124,7 +122,7 @@ export class ProjectDetailsComponent implements OnInit {
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                team: this.project,
+                projectDetails: this.project,
             },
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
