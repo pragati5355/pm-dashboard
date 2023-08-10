@@ -1,5 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+    MatDialog,
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
+import { MAT_TAB_MONTHS } from '../common/constants';
 
 @Component({
     selector: 'app-work-log-list',
@@ -10,23 +16,11 @@ export class WorkLogListComponent implements OnInit {
     selected: string = '2020';
     currentYear: string = '';
     selectedTabIndex: number = 0;
-    matTabList: any[] = [
-        { value: 0, label: 'Jan' },
-        { value: 1, label: 'Feb' },
-        { value: 2, label: 'Mar' },
-        { value: 3, label: 'Apr' },
-        { value: 4, label: 'May' },
-        { value: 5, label: 'Jun' },
-        { value: 6, label: 'Jul' },
-        { value: 7, label: 'Aug' },
-        { value: 8, label: 'Sep' },
-        { value: 9, label: 'Oct' },
-        { value: 10, label: 'Nov' },
-        { value: 11, label: 'Dec' },
-    ];
+    matTabList: any[] = MAT_TAB_MONTHS;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
-        public matDialogRef: MatDialogRef<WorkLogListComponent>
+        public matDialogRef: MatDialogRef<WorkLogListComponent>,
+        private matDialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -39,6 +33,21 @@ export class WorkLogListComponent implements OnInit {
 
     onTabChanged(event: any) {
         console.log(event);
+    }
+
+    addOrEditWorklog() {
+        const workLogdialogRef = this.matDialog.open(AddEditWorkLogComponent, {
+            disableClose: true,
+            width: '60%',
+            maxHeight: '90vh',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {},
+        });
+        workLogdialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+            }
+        });
     }
 
     private getCurrentMonthAndYear() {
