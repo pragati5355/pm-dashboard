@@ -13,7 +13,7 @@ export const projectWidgetRoutes: Route[] = [
         },
     },
     {
-        path: 'worklogs',
+        path: ':id/worklogs',
         component: WorkLogsComponent,
         data: {
             pageTitle: 'Work logs',

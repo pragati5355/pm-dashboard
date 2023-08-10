@@ -115,20 +115,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     showWorkLogs() {
-        const workLogdialogRef = this.matDialog.open(WorkLogListComponent, {
-            disableClose: true,
-            width: '60%',
-            maxHeight: '90vh',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                projectDetails: this.project,
-            },
-        });
-        workLogdialogRef.afterClosed().subscribe((result: any) => {
-            if (result) {
-            }
-        });
+        this.router.navigate([`/projects/${this.projectId}/worklogs`]);
     }
 
     historyDetails() {

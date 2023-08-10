@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
 import { MAT_TAB_MONTHS } from '../common/constants';
 
@@ -12,17 +13,32 @@ export class WorkLogsComponent implements OnInit {
     selected: string = '2020';
     currentYear: string = '';
     selectedTabIndex: number = 0;
+    projectId: any;
     matTabList: any[] = MAT_TAB_MONTHS;
-    constructor(private matDialog: MatDialog) {}
+    requiredSprintSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: false,
+    };
+    initialLoading: boolean = false;
+    constructor(
+        private matDialog: MatDialog,
+        private router: Router,
+        private route: ActivatedRoute
+    ) {}
 
     ngOnInit(): void {
         this.getCurrentMonthAndYear();
+        this.routeSubscription();
     }
 
     close() {}
 
     onTabChanged(event: any) {
         console.log(event);
+    }
+
+    goBack() {
+        this.router.navigate([`/projects/${this.projectId}/details`]);
     }
 
     addOrEditWorklog() {
@@ -43,5 +59,13 @@ export class WorkLogsComponent implements OnInit {
     private getCurrentMonthAndYear() {
         this.selected = String(new Date().getFullYear());
         this.selectedTabIndex = new Date().getMonth();
+    }
+
+    private routeSubscription() {
+        this.route.params.subscribe((projectId) => {
+            if (projectId['id']) {
+                this.projectId = projectId['id'];
+            }
+        });
     }
 }
