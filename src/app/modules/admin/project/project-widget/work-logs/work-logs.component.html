@@ -1,0 +1,94 @@
+<div class="p-8 w-full">
+    <div class="px-8 pt-8 bg-white shadow rounded">
+        <div class="flex justify-between items-center">
+            <div>
+                <mat-form-field>
+                    <mat-label>Select year</mat-label>
+                    <mat-select [(value)]="selected">
+                        <mat-option value="2027">2027</mat-option>
+                        <mat-option value="2026">2026</mat-option>
+                        <mat-option value="2025">2025</mat-option>
+                        <mat-option value="2024">2024</mat-option>
+                        <mat-option value="{{ selected }}">{{
+                            selected
+                        }}</mat-option>
+                        <mat-option value="2022">2022</mat-option>
+                        <mat-option value="2021">2021</mat-option>
+                        <mat-option value="2020">2020</mat-option>
+                        <mat-option value="2019">2019</mat-option>
+                        <mat-option value="2018">2018</mat-option>
+                        <mat-option value="2017">2017</mat-option>
+                        <mat-option value="2016">2016</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <button class="ml-2" mat-flat-button [color]="'primary'">
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_outline:plus'"
+                    ></mat-icon>
+                    <span class="ml-2 mr-1">Add worklog</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <mat-tab-group
+                [color]="'primary'"
+                mat-stretch-tabs="false"
+                mat-align-tabs="start"
+                (selectedTabChange)="onTabChanged($event)"
+                [(selectedIndex)]="selectedTabIndex"
+            >
+                <mat-tab
+                    *ngFor="let tab of matTabList"
+                    label="{{ tab?.label }}"
+                >
+                    <div
+                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                    >
+                        <div class="font-semibold px-2">Date</div>
+                        <div class="font-semibold">Hours</div>
+                        <div class="font-semibold">Description</div>
+                        <div class="font-semibold">Actions</div>
+                    </div>
+                    <div
+                        *ngFor="
+                            let i of [
+                                1, 2, 3, 4, 4, 4, 4, 4, 1, 2, 3, 4, 4, 4, 4, 4
+                            ]
+                        "
+                        class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
+                    >
+                        <div class="px-2">12/12/2023</div>
+                        <div>4</div>
+                        <div class="truncate">
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Architecto labore cum delectus voluptates quas
+                            ducimus ipsum, earum perspiciatis cupiditate itaque
+                            dignissimos maxime, voluptatibus, numquam nostrum
+                            laborum corporis praesentium quo sapiente!
+                        </div>
+                        <div>
+                            <button (click)="addOrEditWorklog()">
+                                <mat-icon
+                                    [matTooltip]="'Edit'"
+                                    class="text-gray-400 icon-size-5 cursor-pointer"
+                                    svgIcon="heroicons_outline:pencil"
+                                ></mat-icon>
+                            </button>
+                            <button>
+                                <mat-icon
+                                    [matTooltip]="'Delete'"
+                                    class="ml-2 text-gray-400 icon-size-5 cursor-pointer"
+                                    svgIcon="heroicons_outline:trash"
+                                ></mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

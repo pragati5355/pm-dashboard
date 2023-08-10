@@ -52,6 +52,7 @@ import { CrListsComponent } from './cr-lists/cr-lists.component';
 import { CrDetailsComponent } from './cr-details/cr-details.component';
 import { WorkLogListComponent } from './work-log-list/work-log-list.component';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
+import { WorkLogsComponent } from './work-logs/work-logs.component';
 
 @NgModule({
     declarations: [
@@ -78,6 +79,7 @@ import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.c
         CrDetailsComponent,
         WorkLogListComponent,
         AddEditWorkLogComponent,
+        WorkLogsComponent,
     ],
     imports: [
         FormsModule,
