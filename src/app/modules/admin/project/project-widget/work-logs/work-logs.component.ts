@@ -6,6 +6,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from '@services/auth/auth.service';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
 import { MAT_TAB_MONTHS } from '../common/constants';
+import { WorkLogService } from '../common/services/work-log.service';
 
 @Component({
     selector: 'app-work-logs',
@@ -13,7 +14,7 @@ import { MAT_TAB_MONTHS } from '../common/constants';
     styleUrls: ['./work-logs.component.scss'],
 })
 export class WorkLogsComponent implements OnInit {
-    selected: string = '2020';
+    selectedYear: string = '2020';
     currentYear: string = '';
     selectedTabIndex: number = 0;
     projectId: any;
@@ -27,13 +28,16 @@ export class WorkLogsComponent implements OnInit {
     configForm: FormGroup;
     htmlText: string =
         '<div class="px-2">12/12/2023</div><div>4</div><div class="truncate"></div>';
+    workLogsList: any[] = [];
+    projectName: string = '';
     constructor(
         private matDialog: MatDialog,
         private router: Router,
         private route: ActivatedRoute,
         private authService: AuthService,
         private formBuilder: FormBuilder,
-        private fuseConfirmationService: FuseConfirmationService
+        private fuseConfirmationService: FuseConfirmationService,
+        private workLogService: WorkLogService
     ) {}
 
     ngOnInit(): void {
@@ -41,12 +45,18 @@ export class WorkLogsComponent implements OnInit {
         this.routeSubscription();
         this.userState = this.authService.getUser();
         this.initializeConfigForm();
+        this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
     close() {}
 
     onTabChanged(event: any) {
-        console.log(event);
+        this.selectedTabIndex = event?.index;
+        this.loadData(this.selectedYear, this.selectedTabIndex);
+    }
+
+    onYearChange(event: any) {
+        this.loadData(event?.value, this.selectedTabIndex);
     }
 
     goBack() {
@@ -64,6 +74,7 @@ export class WorkLogsComponent implements OnInit {
                 data: workLogData,
                 mode: mode,
                 userState: this.userState,
+                projectName: this.projectName,
             },
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
@@ -107,8 +118,25 @@ export class WorkLogsComponent implements OnInit {
         });
     }
 
+    private loadData(year: any, month: number) {
+        this.initialLoading = true;
+        const payload = {
+            resourceId: this.userState?.userId,
+            projectId: this.projectId,
+            month: ++month,
+            year: year,
+        };
+        this.workLogService.getWorkLogs(payload).subscribe((res: any) => {
+            this.initialLoading = false;
+            if (!res?.error) {
+                this.workLogsList = res?.data?.list;
+                this.projectName = res?.data?.projectName;
+            }
+        });
+    }
+
     private getCurrentMonthAndYear() {
-        this.selected = String(new Date().getFullYear());
+        this.selectedYear = String(new Date().getFullYear());
         this.selectedTabIndex = new Date().getMonth();
     }
 

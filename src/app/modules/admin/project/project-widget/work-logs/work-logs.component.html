@@ -16,13 +16,13 @@
             <div>
                 <mat-form-field>
                     <mat-label>Select year</mat-label>
-                    <mat-select [(value)]="selected">
+                    <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange($event)">
                         <mat-option value="2027">2027</mat-option>
                         <mat-option value="2026">2026</mat-option>
                         <mat-option value="2025">2025</mat-option>
                         <mat-option value="2024">2024</mat-option>
-                        <mat-option value="{{ selected }}">{{
-                            selected
+                        <mat-option value="{{ selectedYear }}">{{
+                            selectedYear
                         }}</mat-option>
                         <mat-option value="2022">2022</mat-option>
                         <mat-option value="2021">2021</mat-option>
@@ -64,50 +64,58 @@
                     label="{{ tab?.label }}"
                     [disabled]="initialLoading"
                 >
-                    <div
-                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                    <ng-container
+                        *ngIf="!initialLoading && workLogsList?.length > 0"
                     >
-                        <div class="font-semibold px-2">Date</div>
-                        <div class="font-semibold">Hours</div>
-                        <div class="font-semibold">Description</div>
-                        <div class="font-semibold">Actions</div>
-                    </div>
-                    <ng-container *ngIf="!initialLoading">
                         <div
-                            *ngFor="let i of [1, 2, 3, 4, 4, 4, 4, 4, 1]"
-                            class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
+                            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                         >
-                            <div class="px-2">12/12/2023</div>
-                            <div>4</div>
-                            <div class="truncate">
-                                {{ htmlText | stripHtml }}
-                            </div>
-                            <div>
-                                <button (click)="addOrEditWorklog(i, 'EDIT')">
-                                    <mat-icon
-                                        [matTooltip]="'Edit'"
-                                        class="text-gray-400 icon-size-5 cursor-pointer"
-                                        svgIcon="heroicons_outline:pencil"
-                                    ></mat-icon>
-                                </button>
-                                <button (click)="deleteWorkLog(i)">
-                                    <mat-icon
-                                        [matTooltip]="'Delete'"
-                                        class="ml-2 text-gray-400 icon-size-5 cursor-pointer"
-                                        svgIcon="heroicons_outline:trash"
-                                    ></mat-icon>
-                                </button>
-                            </div>
+                            <div class="font-semibold px-2">Date</div>
+                            <div class="font-semibold">Hours</div>
+                            <div class="font-semibold">Description</div>
+                            <div class="font-semibold">Actions</div>
                         </div>
+                        <ng-container *ngIf="!initialLoading">
+                            <div
+                                *ngFor="let i of [1, 2, 3, 4, 4, 4, 4, 4, 1]"
+                                class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
+                            >
+                                <div class="px-2">12/12/2023</div>
+                                <div>4</div>
+                                <div class="truncate">
+                                    {{ htmlText | stripHtml }}
+                                </div>
+                                <div>
+                                    <button
+                                        (click)="addOrEditWorklog(i, 'EDIT')"
+                                    >
+                                        <mat-icon
+                                            [matTooltip]="'Edit'"
+                                            class="text-gray-400 icon-size-5 cursor-pointer"
+                                            svgIcon="heroicons_outline:pencil"
+                                        ></mat-icon>
+                                    </button>
+                                    <button (click)="deleteWorkLog(i)">
+                                        <mat-icon
+                                            [matTooltip]="'Delete'"
+                                            class="ml-2 text-gray-400 icon-size-5 cursor-pointer"
+                                            svgIcon="heroicons_outline:trash"
+                                        ></mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
                     </ng-container>
-                    <!-- 
-                    <ng-container *ngIf="!initialLoading">
+
+                    <ng-container
+                        *ngIf="!initialLoading && workLogsList?.length === 0"
+                    >
                         <div
                             class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
                         >
                             Work logs not found
                         </div>
-                    </ng-container> -->
+                    </ng-container>
                     <ng-container *ngIf="initialLoading">
                         <app-table-skeleton
                             [skeletonData]="requiredSprintSkeletonData"

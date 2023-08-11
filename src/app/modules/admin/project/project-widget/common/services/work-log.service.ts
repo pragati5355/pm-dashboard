@@ -6,10 +6,10 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root',
 })
 export class WorkLogService {
-    getWorklogsUrl = AppConstants['PROJECT_API_URL'] + '/save-worklog-portal';
+    getWorklogsUrl = AppConstants['PROJECT_API_URL'] + '/worklog-list';
     constructor(private http: HttpClient) {}
 
-    getWorkLogs() {
-        return this.http.get(this.getWorklogsUrl);
+    getWorkLogs(obj: any) {
+        return this.http.post(this.getWorklogsUrl, obj);
     }
 }
