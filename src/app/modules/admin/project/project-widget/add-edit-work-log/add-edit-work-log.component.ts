@@ -51,15 +51,6 @@ export class AddEditWorkLogComponent implements OnInit {
         this.initializeForm();
         this.patchValueInEditMode();
     }
-    private patchValueInEditMode() {
-        console.log(this.data?.data);
-        if (this.data?.mode === 'EDIT') {
-            this.quillValue = this.data?.data?.comment;
-            this.workLogForm
-                ?.get('totalHours')
-                ?.setValue(this.data?.data?.timeSpent);
-        }
-    }
 
     close() {
         this.matDialogRef.close();
@@ -160,6 +151,16 @@ export class AddEditWorkLogComponent implements OnInit {
         this.editMode = false;
     }
 
+    private patchValueInEditMode() {
+        if (this.data?.mode === 'EDIT') {
+            this.quillValue = this.data?.data?.comment;
+            this.workLogForm
+                ?.get('totalHours')
+                ?.setValue(this.data?.data?.timeSpent);
+            this.currentDate = this.data?.data?.createdAt;
+        }
+    }
+
     private handleSubmitResponse() {
         this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
@@ -208,7 +209,7 @@ export class AddEditWorkLogComponent implements OnInit {
                         projectId: this.data?.projectId,
                         workLogDate: this.currentDate,
                         worklogPerTask: {
-                            timeSpent: null,
+                            timeSpent: 0,
                             comment: '',
                         },
                         onLeave: this.onLeave,
