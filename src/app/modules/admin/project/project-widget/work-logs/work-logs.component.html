@@ -80,12 +80,7 @@
                             <div class="px-2">12/12/2023</div>
                             <div>4</div>
                             <div class="truncate">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Architecto labore cum delectus
-                                voluptates quas ducimus ipsum, earum
-                                perspiciatis cupiditate itaque dignissimos
-                                maxime, voluptatibus, numquam nostrum laborum
-                                corporis praesentium quo sapiente!
+                                {{ htmlText | stripHtml }}
                             </div>
                             <div>
                                 <button (click)="addOrEditWorklog(i, 'EDIT')">

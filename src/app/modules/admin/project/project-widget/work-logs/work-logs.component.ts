@@ -25,6 +25,8 @@ export class WorkLogsComponent implements OnInit {
     initialLoading: boolean = false;
     userState: any;
     configForm: FormGroup;
+    htmlText: string =
+        '<div class="px-2">12/12/2023</div><div>4</div><div class="truncate"></div>';
     constructor(
         private matDialog: MatDialog,
         private router: Router,

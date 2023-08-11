@@ -54,6 +54,7 @@ import { WorkLogListComponent } from './work-log-list/work-log-list.component';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
 import { WorkLogsComponent } from './work-logs/work-logs.component';
 import { QuillModule } from 'ngx-quill';
+import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 
 @NgModule({
     declarations: [
@@ -81,6 +82,7 @@ import { QuillModule } from 'ngx-quill';
         WorkLogListComponent,
         AddEditWorkLogComponent,
         WorkLogsComponent,
+        StripHtmlPipe,
     ],
     imports: [
         FormsModule,
