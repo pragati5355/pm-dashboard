@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from '@services/auth/auth.service';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
 import { MAT_TAB_MONTHS } from '../common/constants';
@@ -22,17 +24,21 @@ export class WorkLogsComponent implements OnInit {
     };
     initialLoading: boolean = false;
     userState: any;
+    configForm: FormGroup;
     constructor(
         private matDialog: MatDialog,
         private router: Router,
         private route: ActivatedRoute,
-        private authService: AuthService
+        private authService: AuthService,
+        private formBuilder: FormBuilder,
+        private fuseConfirmationService: FuseConfirmationService
     ) {}
 
     ngOnInit(): void {
         this.getCurrentMonthAndYear();
         this.routeSubscription();
         this.userState = this.authService.getUser();
+        this.initializeConfigForm();
     }
 
     close() {}
@@ -61,6 +67,41 @@ export class WorkLogsComponent implements OnInit {
         workLogdialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
             }
+        });
+    }
+
+    deleteWorkLog(id: number) {
+        const dialogRef = this.fuseConfirmationService.open(
+            this.configForm.value
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result == 'confirmed') {
+            }
+        });
+    }
+
+    private initializeConfigForm() {
+        this.configForm = this.formBuilder.group({
+            title: 'Delete work log',
+            message: 'Are you sure you want to delete this work log?',
+            icon: this.formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this.formBuilder.group({
+                confirm: this.formBuilder.group({
+                    show: true,
+                    label: 'Yes',
+                    color: 'mat-warn',
+                }),
+                cancel: this.formBuilder.group({
+                    show: true,
+                    label: 'No',
+                }),
+            }),
+            dismissible: false,
         });
     }
 
