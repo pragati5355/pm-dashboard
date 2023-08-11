@@ -36,7 +36,7 @@
             </div>
             <div>
                 <button
-                    (click)="addOrEditWorklog()"
+                    (click)="addOrEditWorklog(null, 'ADD')"
                     [disabled]="initialLoading"
                     class="ml-2"
                     mat-flat-button
@@ -88,7 +88,7 @@
                                 corporis praesentium quo sapiente!
                             </div>
                             <div>
-                                <button (click)="addOrEditWorklog()">
+                                <button (click)="addOrEditWorklog(i, 'EDIT')">
                                     <mat-icon
                                         [matTooltip]="'Edit'"
                                         class="text-gray-400 icon-size-5 cursor-pointer"

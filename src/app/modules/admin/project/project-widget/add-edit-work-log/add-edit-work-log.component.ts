@@ -45,8 +45,6 @@ export class AddEditWorkLogComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        // this.setTokenSubscription();
-        // this.loadData();
         this.initializeForm();
     }
     close() {
@@ -54,7 +52,11 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     submit() {
-        if (this.tasks?.length === 0 && !this.onLeave) {
+        if (
+            this.tasks?.length === 0 &&
+            !this.onLeave &&
+            this.data?.mode === 'ADD'
+        ) {
             this.snackBar.errorSnackBar('Please add task');
             return;
         } else {
@@ -152,37 +154,6 @@ export class AddEditWorkLogComponent implements OnInit {
             (err) => {
                 this.submitInProgress = false;
                 this.snackBar.errorSnackBar('Something went wrong');
-            }
-        );
-    }
-
-    private setTokenSubscription() {
-        this.route.paramMap.subscribe((paramMap) => {
-            const token = paramMap.get('id');
-            if (token) {
-                this.pathToken = token;
-            }
-        });
-    }
-
-    private loadData() {
-        this.initialLoading = true;
-        const payload = {
-            token: this.pathToken,
-            verifies: true,
-        };
-        this.workLogsService?.saveAndGetWorkLogsData(payload)?.subscribe(
-            (res: any) => {
-                this.initialLoading = false;
-                if (!res?.data?.expired) {
-                    this.resourceData = res?.data;
-                } else {
-                    this.router.navigate(['/wrong-url']);
-                }
-            },
-            (err) => {
-                this.initialLoading = false;
-                this.snackBar?.errorSnackBar('Somethin went wrong');
             }
         );
     }
