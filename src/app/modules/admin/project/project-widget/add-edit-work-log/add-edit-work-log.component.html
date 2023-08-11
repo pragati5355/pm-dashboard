@@ -27,11 +27,12 @@
                     >
                 </div>
                 <span class="text-gray-500 text-2xl"
-                    >Metrics : Work log for 12 July 2023</span
+                    >{{ data?.projectName | titlecase }} : Work log for
+                    {{ currentDate | date }}</span
                 >
                 <form class="mt-8" [formGroup]="workLogForm">
                     <div class="flex flex-col">
-                        <div class="flex-1">
+                        <div class="flex-1" *ngIf="data?.mode === 'ADD'">
                             <mat-checkbox (change)="checkBox($event?.checked)"
                                 ><span>I was on Leave</span></mat-checkbox
                             >
@@ -130,7 +131,10 @@
                                                     class="truncate font-semibold text-black"
                                                 >
                                                     <div class="truncate">
-                                                        {{ task?.timeSpent }}
+                                                        {{
+                                                            task?.worklogPerTask
+                                                                ?.timeSpent
+                                                        }}
                                                     </div>
                                                 </div>
 

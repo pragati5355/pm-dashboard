@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkLogsService } from '@modules/public/services/work-logs.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { WorkLogService } from '../common/services/work-log.service';
 
 @Component({
     selector: 'app-add-edit-work-log',
@@ -34,6 +35,7 @@ export class AddEditWorkLogComponent implements OnInit {
     tasks: any[] = [];
     currentDescriptionValue: any;
     editMode: boolean = false;
+    currentDate: any = new Date();
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddEditWorkLogComponent>,
@@ -41,12 +43,24 @@ export class AddEditWorkLogComponent implements OnInit {
         private route: ActivatedRoute,
         private workLogsService: WorkLogsService,
         private snackBar: SnackBar,
-        private router: Router
+        private router: Router,
+        private workLogService: WorkLogService
     ) {}
 
     ngOnInit(): void {
         this.initializeForm();
+        this.patchValueInEditMode();
     }
+    private patchValueInEditMode() {
+        console.log(this.data?.data);
+        if (this.data?.mode === 'EDIT') {
+            this.quillValue = this.data?.data?.comment;
+            this.workLogForm
+                ?.get('totalHours')
+                ?.setValue(this.data?.data?.timeSpent);
+        }
+    }
+
     close() {
         this.matDialogRef.close();
     }
@@ -96,15 +110,17 @@ export class AddEditWorkLogComponent implements OnInit {
 
     editTask(task: any, i: any) {
         this.currentTaskIndex = i;
-        this.quillValue = task?.comment;
-        this.workLogForm?.get('totalHours')?.setValue(task?.timeSpent);
+        this.quillValue = task?.worklogPerTask?.comment;
+        this.workLogForm
+            ?.get('totalHours')
+            ?.setValue(task?.worklogPerTask?.timeSpent);
         this.calculateTotalHours();
         this.editMode = true;
     }
 
     calculateTotalHours() {
         this.totalHours = this.tasks?.reduce(
-            (sum, item) => sum + item?.timeSpent,
+            (sum, item) => sum + item?.worklogPerTask?.timeSpent,
             0
         );
     }
@@ -119,9 +135,14 @@ export class AddEditWorkLogComponent implements OnInit {
             return;
         }
         const task = {
+            resourceId: this.data?.userState?.userId,
+            projectId: this.data?.projectId,
+            workLogDate: this.currentDate,
+            worklogPerTask: {
+                timeSpent: this.workLogForm?.get('totalHours')?.value,
+                comment: this.description,
+            },
             description: this.currentDescriptionValue,
-            timeSpent: this.workLogForm?.get('totalHours')?.value,
-            comment: this.description,
         };
 
         if (this.currentTaskIndex !== null) {
@@ -142,11 +163,12 @@ export class AddEditWorkLogComponent implements OnInit {
     private handleSubmitResponse() {
         this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
-        this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
+        this.workLogService.saveWorkLogs(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
-                if (!res?.error && res?.message === 'Success') {
-                    this.responseSubmitted = true;
+                if (!res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.matDialogRef.close(true);
                 } else {
                     this.snackBar.errorSnackBar('Something went wrong');
                 }
@@ -160,16 +182,42 @@ export class AddEditWorkLogComponent implements OnInit {
 
     private getSaveWorkLogsPayload() {
         const tasks = this.tasks?.map(({ description, ...item }) => item);
+        if (this.data?.mode === 'EDIT') {
+            return {
+                externalWorklog: [
+                    {
+                        id: this.data?.data?.id,
+                        resourceId: this.data?.userState?.userId,
+                        projectId: this.data?.projectId,
+                        workLogDate: this.currentDate,
+                        worklogPerTask: {
+                            timeSpent:
+                                this.workLogForm?.get('totalHours')?.value,
+                            comment: this.description,
+                        },
+                        onLeave: this.onLeave,
+                    },
+                ],
+            };
+        }
+        if (this.onLeave && this.data?.mode === 'ADD') {
+            return {
+                externalWorklog: [
+                    {
+                        resourceId: this.data?.userState?.userId,
+                        projectId: this.data?.projectId,
+                        workLogDate: this.currentDate,
+                        worklogPerTask: {
+                            timeSpent: null,
+                            comment: '',
+                        },
+                        onLeave: this.onLeave,
+                    },
+                ],
+            };
+        }
         return {
-            token: this.pathToken,
-            verifies: false,
-            externalWorklog: {
-                resourceId: this.resourceData?.resourceId,
-                projectId: this.resourceData?.projectId,
-                workLogDate: this.resourceData?.workLogDate,
-                worklogPerTask: tasks,
-            },
-            onLeave: this.onLeave,
+            externalWorklog: tasks,
         };
     }
 

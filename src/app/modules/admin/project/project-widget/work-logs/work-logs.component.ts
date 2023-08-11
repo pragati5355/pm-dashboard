@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from '@services/auth/auth.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
 import { MAT_TAB_MONTHS } from '../common/constants';
 import { WorkLogService } from '../common/services/work-log.service';
@@ -30,6 +31,7 @@ export class WorkLogsComponent implements OnInit {
         '<div class="px-2">12/12/2023</div><div>4</div><div class="truncate"></div>';
     workLogsList: any[] = [];
     projectName: string = '';
+
     constructor(
         private matDialog: MatDialog,
         private router: Router,
@@ -37,7 +39,8 @@ export class WorkLogsComponent implements OnInit {
         private authService: AuthService,
         private formBuilder: FormBuilder,
         private fuseConfirmationService: FuseConfirmationService,
-        private workLogService: WorkLogService
+        private workLogService: WorkLogService,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
@@ -75,10 +78,12 @@ export class WorkLogsComponent implements OnInit {
                 mode: mode,
                 userState: this.userState,
                 projectName: this.projectName,
+                projectId: this.projectId,
             },
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
+                this.loadData(this.selectedYear, this.selectedTabIndex);
             }
         });
     }
@@ -90,6 +95,27 @@ export class WorkLogsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result == 'confirmed') {
+                this.initialLoading = true;
+                const payload = {
+                    externalWorklog: [
+                        {
+                            id: id,
+                            deleted: true,
+                        },
+                    ],
+                };
+                this.workLogService
+                    .saveWorkLogs(payload)
+                    .subscribe((res: any) => {
+                        this.initialLoading = false;
+                        if (!res?.error) {
+                            this.snackBar.successSnackBar(res?.message);
+                            this.loadData(
+                                this.selectedYear,
+                                this.selectedTabIndex
+                            );
+                        }
+                    });
             }
         });
     }
