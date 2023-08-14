@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -39,13 +40,14 @@ export class AddEditWorkLogComponent implements OnInit {
         public matDialogRef: MatDialogRef<AddEditWorkLogComponent>,
         private formBuilder: FormBuilder,
         private snackBar: SnackBar,
-        private workLogService: WorkLogService
+        private workLogService: WorkLogService,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
         this.initializeForm();
         this.patchValueInEditMode();
-        console.log(this.data?.data?.onLeave);
+        console.log(this.data?.data);
     }
 
     close() {
@@ -164,6 +166,15 @@ export class AddEditWorkLogComponent implements OnInit {
             this.workLogForm
                 ?.get('totalHours')
                 ?.setValue(this.data?.data?.timeSpent);
+            this.workLogForm
+                ?.get('workLogDate')
+                ?.setValue(
+                    this.datePipe.transform(
+                        this.data?.data?.createdAt,
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                    )
+                );
+            this.workLogForm?.get('workLogDate')?.disable();
             this.currentDate = this.data?.data?.createdAt;
         }
         if (this.data?.data?.onLeave) {
@@ -241,7 +252,7 @@ export class AddEditWorkLogComponent implements OnInit {
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
             totalHours: [''],
-            workLogDate: [''],
+            workLogDate: [new Date()],
         });
     }
 }
