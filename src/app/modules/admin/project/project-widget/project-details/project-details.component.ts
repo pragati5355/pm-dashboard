@@ -16,6 +16,8 @@ import { BitbucketProjectService } from '@modules/admin/repository/common/servic
 import { BitbucketProjectModel } from '@modules/admin/repository/common/models/bitbucket-project.model';
 import { DatePipe } from '@angular/common';
 import { ProjectMembersDetailsComponent } from '../project-members-details/project-members-details.component';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { WorkLogListComponent } from '../work-log-list/work-log-list.component';
 
 @Component({
     selector: 'app-project-details',
@@ -36,6 +38,7 @@ export class ProjectDetailsComponent implements OnInit {
     allBitbucketProjects: BitbucketProjectModel[] = [];
     teamMembers = [];
     crList = [];
+    userRole: string = '';
 
     @Input() dataId: any;
     checked: false;
@@ -48,7 +51,8 @@ export class ProjectDetailsComponent implements OnInit {
         private bitbucketProjectService: BitbucketProjectService,
         private matDialog: MatDialog,
         private _authService: AuthService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
@@ -58,6 +62,7 @@ export class ProjectDetailsComponent implements OnInit {
                 this.getProjectDetails();
             }
         });
+        this.getUserRole();
     }
     getProjectDetails() {
         this.initialLoading = true;
@@ -67,10 +72,8 @@ export class ProjectDetailsComponent implements OnInit {
             })
             .subscribe((res: any) => {
                 this.project = res?.data?.project;
-                console.log('this.project : ', this.project?.history);
-                this.teamMembers = res?.data?.teamModel; 
+                this.teamMembers = res?.data?.teamModel;
                 this.crList = res?.data?.changeRequestProject;
-                console.log("this.crList - > " , this.crList);
                 this.repoCount = res?.data?.repoCount;
                 this._authService.setProjectDetails(this.project);
                 this.initialLoading = false;
@@ -111,6 +114,26 @@ export class ProjectDetailsComponent implements OnInit {
         }
     }
 
+    showWorkLogs() {
+        this.router.navigate([`/projects/${this.projectId}/worklogs`]);
+    }
+
+    historyDetails() {
+        const dialogRef = this.matDialog.open(ProjectMembersDetailsComponent, {
+            disableClose: true,
+            width: '60%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                team: this.project,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+            }
+        });
+    }
+
     private openAssignDialog(response: BitbucketProjectModel[]) {
         this.matDialog
             .open(AssignBitbucketProjectDialogComponent, {
@@ -130,18 +153,10 @@ export class ProjectDetailsComponent implements OnInit {
             });
     }
 
-    historyDetails() {
-        const dialogRef = this.matDialog.open(ProjectMembersDetailsComponent, {
-            disableClose: true,
-            width: '60%',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                team: this.project,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result) {
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
             }
         });
     }
