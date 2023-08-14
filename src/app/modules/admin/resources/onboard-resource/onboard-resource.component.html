@@ -49,11 +49,6 @@
             </div>
             <div class="flex flex-auto overflow-hidden">
                 <div
-                    infiniteScroll
-                    [infiniteScrollDistance]="2"
-                    [infiniteScrollThrottle]="50"
-                    [scrollWindow]="false"
-                    (scrolled)="handleScroll()"
                     class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
                 >
                     <div
@@ -65,7 +60,9 @@
                         <div>Email</div>
                         <div>Actions</div>
                     </div>
-                    <ng-container *ngIf="!initialLoading">
+                    <ng-container
+                        *ngIf="!initialLoading && registeredList?.length > 0"
+                    >
                         <div class="grid">
                             <ng-container
                                 *ngFor="let resource of registeredList"
@@ -148,7 +145,7 @@
                     </ng-container>
 
                     <ng-container
-                        *ngIf="registeredList.length == 0 && !initialLoading"
+                        *ngIf="registeredList?.length == 0 && !initialLoading"
                     >
                         <div
                             class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
