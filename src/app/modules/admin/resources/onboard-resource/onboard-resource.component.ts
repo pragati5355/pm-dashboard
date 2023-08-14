@@ -70,7 +70,7 @@ export class OnboardResourceComponent implements OnInit {
     }
 
     handleGetResourceMemberResponse(res: any) {
-        if (res.data) {
+        if (res?.data) {
             this.totalRecord = res?.data?.totalRecored;
             this.registeredList = res?.data?.resource;
             this.initialLoading = false;

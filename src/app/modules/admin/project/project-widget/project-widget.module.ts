@@ -46,11 +46,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddCrComponent } from './add-cr/add-cr.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatChipsModule } from '@angular/material/chips';
-
 import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-resource-dialog.component';
 import { ProjectMembersDetailsComponent } from './project-members-details/project-members-details.component';
 import { CrListsComponent } from './cr-lists/cr-lists.component';
 import { CrDetailsComponent } from './cr-details/cr-details.component';
+import { WorkLogListComponent } from './work-log-list/work-log-list.component';
+import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
+import { WorkLogsComponent } from './work-logs/work-logs.component';
+import { QuillModule } from 'ngx-quill';
+import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 
 @NgModule({
     declarations: [
@@ -75,6 +79,10 @@ import { CrDetailsComponent } from './cr-details/cr-details.component';
         ProjectMembersDetailsComponent,
         CrListsComponent,
         CrDetailsComponent,
+        WorkLogListComponent,
+        AddEditWorkLogComponent,
+        WorkLogsComponent,
+        StripHtmlPipe,
     ],
     imports: [
         FormsModule,
@@ -112,6 +120,7 @@ import { CrDetailsComponent } from './cr-details/cr-details.component';
         MatFormFieldModule,
         MatDatepickerModule,
         MatChipsModule,
+        QuillModule,
     ],
     exports: [
         ProjectDetailsComponent,
