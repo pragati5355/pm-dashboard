@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { WorkLogsService } from '@modules/public/services/work-logs.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { WorkLogService } from '../common/services/work-log.service';
 
@@ -40,16 +38,14 @@ export class AddEditWorkLogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddEditWorkLogComponent>,
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private workLogsService: WorkLogsService,
         private snackBar: SnackBar,
-        private router: Router,
         private workLogService: WorkLogService
     ) {}
 
     ngOnInit(): void {
         this.initializeForm();
         this.patchValueInEditMode();
+        console.log(this.data?.data?.onLeave);
     }
 
     close() {
@@ -136,6 +132,8 @@ export class AddEditWorkLogComponent implements OnInit {
             description: this.currentDescriptionValue,
         };
 
+        this.scrollToBottom();
+
         if (this.currentTaskIndex !== null) {
             this.tasks?.splice(this.currentTaskIndex, 1, task);
         } else {
@@ -151,6 +149,15 @@ export class AddEditWorkLogComponent implements OnInit {
         this.editMode = false;
     }
 
+    private scrollToBottom() {
+        const element = document.getElementById('focusBtn');
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+            inline: 'nearest',
+        });
+    }
+
     private patchValueInEditMode() {
         if (this.data?.mode === 'EDIT') {
             this.quillValue = this.data?.data?.comment;
@@ -158,6 +165,15 @@ export class AddEditWorkLogComponent implements OnInit {
                 ?.get('totalHours')
                 ?.setValue(this.data?.data?.timeSpent);
             this.currentDate = this.data?.data?.createdAt;
+        }
+        if (this.data?.data?.onLeave) {
+            this.workLogForm?.get('totalHours')?.disable();
+            this.workLogForm?.get('totalHours')?.setValue('');
+            // this.editor.quillEditor.deleteText(0, 20000);
+            this.description = '';
+            this.tasks = [];
+            this.showError = false;
+            this.onLeave = this.data?.data?.onLeave;
         }
     }
 
@@ -225,6 +241,7 @@ export class AddEditWorkLogComponent implements OnInit {
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
             totalHours: [''],
+            workLogDate: [''],
         });
     }
 }

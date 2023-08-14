@@ -6,7 +6,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
-import { MAT_TAB_MONTHS } from '../common/constants';
+import { MAT_SELECT_YEARS, MAT_TAB_MONTHS } from '../common/constants';
 import { WorkLogService } from '../common/services/work-log.service';
 
 @Component({
@@ -20,6 +20,7 @@ export class WorkLogsComponent implements OnInit {
     selectedTabIndex: number = 0;
     projectId: any;
     matTabList: any[] = MAT_TAB_MONTHS;
+    matSelectYears: string[] = MAT_SELECT_YEARS;
     requiredSprintSkeletonData = {
         rowsToDisplay: 10,
         displayProfilePicture: false,
