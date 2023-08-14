@@ -27,15 +27,43 @@
                         {{ data?.userState?.lastName | titlecase }}</span
                     >
                 </div>
-                <span class="text-gray-500 text-2xl"
-                    >{{ data?.projectName | titlecase }} : Work log for
-                    {{ currentDate | date }}</span
-                >
+
                 <form class="mt-8" [formGroup]="workLogForm">
                     <div class="flex flex-col">
+                        <div
+                            class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
+                        >
+                            <mat-form-field
+                                [floatLabel]="'always'"
+                                class="w-full"
+                            >
+                                <mat-label>Select date for work log</mat-label>
+                                <input
+                                    matInput
+                                    #inputJoining
+                                    [placeholder]="'work log date'"
+                                    formControlName="workLogDate"
+                                    [matDatepicker]="dateOfJoiningDatepicker"
+                                    (focus)="dateOfJoiningDatepicker.open()"
+                                    [max]="currentDate"
+                                />
+                                <mat-datepicker-toggle
+                                    matSuffix
+                                    [for]="dateOfJoiningDatepicker"
+                                >
+                                </mat-datepicker-toggle>
+                                <mat-datepicker
+                                    #dateOfJoiningDatepicker
+                                    (closed)="inputJoining.blur()"
+                                >
+                                </mat-datepicker>
+                            </mat-form-field>
+                        </div>
                         <div class="flex-1">
-                            <mat-checkbox (change)="checkBox($event?.checked)"
-                                ><span>I was on Leave</span></mat-checkbox
+                            <mat-checkbox
+                                [checked]="onLeave"
+                                (change)="checkBox($event?.checked)"
+                                >I was on Leave</mat-checkbox
                             >
                         </div>
                         <div class="w-full">
@@ -145,7 +173,7 @@
                                                             editTask(task, i)
                                                         "
                                                         [matTooltip]="
-                                                            'Download resume'
+                                                            'Edit task'
                                                         "
                                                         class="text-gray-400 icon-size-5 cursor-pointer"
                                                         svgIcon="heroicons_outline:pencil"
@@ -153,7 +181,7 @@
                                                     <mat-icon
                                                         (click)="removeTask(i)"
                                                         [matTooltip]="
-                                                            'Delete resume'
+                                                            'Delete task'
                                                         "
                                                         class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
                                                         svgIcon="heroicons_outline:trash"
