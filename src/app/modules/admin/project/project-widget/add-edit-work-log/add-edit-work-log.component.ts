@@ -136,6 +136,8 @@ export class AddEditWorkLogComponent implements OnInit {
             description: this.currentDescriptionValue,
         };
 
+        this.scrollToBottom();
+
         if (this.currentTaskIndex !== null) {
             this.tasks?.splice(this.currentTaskIndex, 1, task);
         } else {
@@ -149,6 +151,15 @@ export class AddEditWorkLogComponent implements OnInit {
         this.calculateTotalHours();
         this.currentTaskIndex = null;
         this.editMode = false;
+    }
+
+    private scrollToBottom() {
+        const element = document.getElementById('focusBtn');
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+            inline: 'nearest',
+        });
     }
 
     private patchValueInEditMode() {

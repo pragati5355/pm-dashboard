@@ -12,3 +12,18 @@ export const MAT_TAB_MONTHS = [
     { value: 10, label: 'Nov' },
     { value: 11, label: 'Dec' },
 ];
+
+export const MAT_SELECT_YEARS = [
+    '2015',
+    '2016',
+    '2017',
+    '2018',
+    '2019',
+    '2020',
+    '2021',
+    '2022',
+    '2023',
+    '2024',
+    '2025',
+    '2026',
+];
