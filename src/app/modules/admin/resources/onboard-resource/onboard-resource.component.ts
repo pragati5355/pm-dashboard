@@ -23,7 +23,7 @@ export class OnboardResourceComponent implements OnInit {
     initialLoading = false;
     registeredList: any[] = [];
     count = 1;
-    totalPerPageData = 10;
+    totalPerPageData = 1000;
     totalRecord: any;
     pagination = false;
     requiredReposSkeletonData = {
@@ -50,8 +50,8 @@ export class OnboardResourceComponent implements OnInit {
 
     getList() {
         const payload = {
-            perPageData: this.count,
-            totalPerPageData: this.totalPerPageData,
+            perPageData: 1,
+            totalPerPageData: 1000,
             searchString: this.searchValue,
         };
         this.initialLoading = true;
@@ -61,7 +61,7 @@ export class OnboardResourceComponent implements OnInit {
                 this.initialLoading = false;
                 if (!res?.error) {
                     this.handleGetResourceMemberResponse(res);
-                    this.checkForLargerScreen();
+                    // this.checkForLargerScreen();
                 }
                 if (res?.tokenExpire) {
                     this._authService.updateAndReload(window.location);
@@ -70,12 +70,13 @@ export class OnboardResourceComponent implements OnInit {
     }
 
     handleGetResourceMemberResponse(res: any) {
-        if (res.data) {
+        if (res?.data) {
             this.totalRecord = res?.data?.totalRecored;
             this.registeredList = res?.data?.resource;
             this.initialLoading = false;
         } else if (res?.data == null) {
             this.totalRecord = 0;
+            this.registeredList = [];
             this.initialLoading = false;
         }
     }
@@ -100,7 +101,7 @@ export class OnboardResourceComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
                 this.count = 1;
-                this.totalPerPageData = 10;
+                this.totalPerPageData = 1000;
                 // this.getList();
                 window.location.reload();
             }
@@ -165,7 +166,8 @@ export class OnboardResourceComponent implements OnInit {
 
     private getSearchResult(searchKey: any) {
         this.count = 1;
-        this.totalPerPageData = 10;
+        this.totalPerPageData = 1000;
+        this.registeredList = [];
         const payload = {
             perPageData: this.count,
             totalPerPageData: this.totalPerPageData,
@@ -178,7 +180,7 @@ export class OnboardResourceComponent implements OnInit {
                 this.initialLoading = false;
                 if (!res?.error) {
                     this.handleGetResourceMemberResponse(res);
-                    this.checkForLargerScreen();
+                    // this.checkForLargerScreen();
                 }
                 if (res?.tokenExpire) {
                     this._authService.updateAndReload(window.location);
