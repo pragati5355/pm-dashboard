@@ -94,6 +94,7 @@
                             <mat-menu #menu="matMenu">
                                 <button
                                     mat-menu-item
+                                    [disabled]="userRole === 'USER'"
                                     (click)="openInvoiceDialog(sprint)"
                                 >
                                     <span
@@ -109,6 +110,7 @@
                                 <button
                                     *ngIf="sprint?.status !== 'COMPLETED'"
                                     mat-menu-item
+                                    [disabled]="userRole === 'USER'"
                                     (click)="markAsComplete(sprint?.id)"
                                 >
                                     <span>Mark This Sprint As Completed</span>
