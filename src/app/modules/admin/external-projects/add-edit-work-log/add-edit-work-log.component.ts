@@ -35,6 +35,8 @@ export class AddEditWorkLogComponent implements OnInit {
     currentDescriptionValue: any;
     editMode: boolean = false;
     currentDate: any = new Date();
+    minDate: any = '2023-07-07';
+    workLogEditValidation: boolean = false;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddEditWorkLogComponent>,
@@ -47,7 +49,9 @@ export class AddEditWorkLogComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         this.patchValueInEditMode();
-        console.log(this.data?.data);
+        console.log(this.data);
+        var date = new Date();
+        // this.minDate = new Date(date.getFullYear(), date.getMonth(), 1);
     }
 
     close() {
@@ -161,6 +165,8 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     private patchValueInEditMode() {
+        this.workLogEditValidation =
+            new Date(this.data?.data?.workLogDate).getDate() > 5;
         if (this.data?.mode === 'EDIT') {
             this.quillValue = this.data?.data?.comment;
             this.workLogForm
@@ -170,12 +176,12 @@ export class AddEditWorkLogComponent implements OnInit {
                 ?.get('workLogDate')
                 ?.setValue(
                     this.datePipe.transform(
-                        this.data?.data?.createdAt,
+                        this.data?.data?.workLogDate,
                         "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
                     )
                 );
             this.workLogForm?.get('workLogDate')?.disable();
-            this.currentDate = this.data?.data?.createdAt;
+            this.currentDate = this.data?.data?.workLogDate;
         }
         if (this.data?.data?.onLeave) {
             this.workLogForm?.get('totalHours')?.disable();

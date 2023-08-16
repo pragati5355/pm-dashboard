@@ -1,4 +1,4 @@
-<div class="p-8 w-full">
+<div class="px-8 pt-4 w-full">
     <div class="flex flex-row justify-between items-center mb-4">
         <div
             class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
@@ -76,7 +76,7 @@
                                 class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
                             >
                                 <div class="px-2">
-                                    {{ log?.createdAt | date }}
+                                    {{ log?.workLogDate | date }}
                                 </div>
                                 <div>{{ log?.timeSpent }}</div>
                                 <div class="truncate">
@@ -92,14 +92,14 @@
                                     >
                                         <mat-icon
                                             [matTooltip]="'Edit'"
-                                            class="text-gray-400 icon-size-5 cursor-pointer"
+                                            class="text-gray-400 icon-size-5 cursor-pointer mr-4"
                                             svgIcon="heroicons_outline:pencil"
                                         ></mat-icon>
                                     </button>
                                     <button (click)="deleteWorkLog(log?.id)">
                                         <mat-icon
                                             [matTooltip]="'Delete'"
-                                            class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
+                                            class="text-gray-400 icon-size-5 cursor-pointer"
                                             svgIcon="heroicons_outline:trash"
                                         ></mat-icon>
                                     </button>
