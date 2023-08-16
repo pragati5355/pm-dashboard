@@ -15,6 +15,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SprintService } from '../../common/services/sprint.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 @Component({
     selector: 'app-sprint-details',
     templateUrl: './sprint-details.component.html',
@@ -38,6 +39,7 @@ export class SprintDetailsComponent implements OnInit {
     projectData: any = null;
     formData: any = null;
     sprint: any;
+    userRole: string;
     constructor(
         private router: Router,
         private dialog: MatDialog,
@@ -47,7 +49,8 @@ export class SprintDetailsComponent implements OnInit {
         private _authService: AuthService,
         private _fuseConfirmationService: FuseConfirmationService,
         private ProjectService: CreateProjecteService,
-        private sprintService: SprintService
+        private sprintService: SprintService,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
@@ -154,6 +157,14 @@ export class SprintDetailsComponent implements OnInit {
                 this.snackBar.errorSnackBar('Something Went Wrong');
             }
         );
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
     }
 
     private initializeConfigForm() {
