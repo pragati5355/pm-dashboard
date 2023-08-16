@@ -4,7 +4,9 @@
     >
         <div class="flex text-lg font-medium">
             <mat-icon style="color: white">assignment</mat-icon>
-            <span class="px-2 leading-6">Work logs</span>
+            <span class="px-2 leading-6"
+                >{{ data?.projectName }} - Work logs</span
+            >
         </div>
         <button mat-icon-button (click)="close()" [tabIndex]="-1">
             <mat-icon
