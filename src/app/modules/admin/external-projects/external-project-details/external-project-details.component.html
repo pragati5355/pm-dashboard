@@ -20,6 +20,7 @@
                 <span class="ml-2 mr-1">Work logs</span>
             </button>
             <button
+                *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                 class="ml-2"
                 mat-mini-fab
                 color="primary"
@@ -29,6 +30,7 @@
                 <mat-icon>edit</mat-icon>
             </button>
             <button
+                *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                 class="ml-2"
                 mat-mini-fab
                 color="primary"
@@ -82,6 +84,7 @@
 
     <div class="flex justify-end my-5">
         <button
+            *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
             (click)="openDialog('ADD', null)"
             [color]="'primary'"
             [matTooltip]="'Add Resource'"
@@ -106,7 +109,9 @@
                 <div>Utilization</div>
                 <div>Start Date</div>
                 <div>End Date</div>
-                <div>Actions</div>
+                <div *ngIf="userRole === 'ADMIN' || userRole === 'PM'">
+                    Actions
+                </div>
             </div>
             <ng-container *ngIf="projectDetails?.teamModel?.length > 0">
                 <div class="grid shadow">
@@ -142,6 +147,9 @@
                             </div>
 
                             <div
+                                *ngIf="
+                                    userRole === 'ADMIN' || userRole === 'PM'
+                                "
                                 class="sm:block flex flex-row items-center w-full cursor-pointer"
                             >
                                 <mat-icon

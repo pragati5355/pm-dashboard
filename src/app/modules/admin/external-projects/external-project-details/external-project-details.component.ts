@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { AuthService } from '@services/auth/auth.service';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { SnackBar } from 'app/core/utils/snackBar';
@@ -24,6 +25,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
     isLoading = false;
     configFormStatus: FormGroup;
     currentProjectEmail: any[];
+    userRole: string;
 
     constructor(
         private dialog: MatDialog,
@@ -34,13 +36,15 @@ export class ExternalProjectDetailsComponent implements OnInit {
         private _fuseConfirmationService: FuseConfirmationService,
         private _authService: AuthService,
         private snackBar: SnackBar,
-        private router: Router
+        private router: Router,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
         this.isLoading = true;
         this.setProjectIdSubscription();
         this.loadDeveloperEmails();
+        this.getUserRole();
     }
 
     getProjectDetails() {
@@ -198,6 +202,15 @@ export class ExternalProjectDetailsComponent implements OnInit {
                     ({ email }) => obj.email === email
                 )
         );
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                console.log(res);
+                this.userRole = res?.role;
+            }
+        });
     }
 
     private setProjectIdSubscription() {

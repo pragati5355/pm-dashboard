@@ -67,18 +67,17 @@ export class PlatformUsersListComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
-                this.getList();
+                window.location.reload();
             }
         });
     }
- 
+
     statusChangeApi(payload: any) {
         console.log(payload);
         this.userList = [];
         this.initialLoading = true;
-        this.platformUsersService
-            .changeStatus(payload)
-            .subscribe((res: any) => {
+        this.platformUsersService.changeStatus(payload).subscribe(
+            (res: any) => {
                 this.initialLoading = false;
                 if (!res?.error) {
                     this.getList();
@@ -92,10 +91,11 @@ export class PlatformUsersListComponent implements OnInit {
             },
             (err) => {
                 this.initialLoading = false;
-            });
+            }
+        );
     }
 
-    deleteUser(list : any){
+    deleteUser(list: any) {
         this.initailizeConfirmationFormPopup();
         const confirmPopDialog = this._fuseConfirmationService.open(
             this.configFormStatus.value
@@ -116,7 +116,6 @@ export class PlatformUsersListComponent implements OnInit {
                 this.statusChangeApi(payload);
             }
         });
-
     }
 
     initailizeConfirmationFormPopup() {

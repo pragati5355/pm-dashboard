@@ -165,8 +165,9 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     private patchValueInEditMode() {
-        this.workLogEditValidation =
-            new Date(this.data?.data?.workLogDate).getDate() > 5;
+        console.log(new Date(this.data?.data?.workLogDate).getMonth());
+        console.log(new Date().getMonth());
+
         if (this.data?.mode === 'EDIT') {
             this.quillValue = this.data?.data?.comment;
             this.workLogForm
