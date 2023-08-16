@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { WorkLogService } from '../common/services/work-log.service';
 
 @Component({
     selector: 'app-add-edit-work-log',
@@ -35,6 +35,8 @@ export class AddEditWorkLogComponent implements OnInit {
     currentDescriptionValue: any;
     editMode: boolean = false;
     currentDate: any = new Date();
+    minDate: any = '2023-07-07';
+    workLogEditValidation: boolean = false;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddEditWorkLogComponent>,
@@ -47,7 +49,9 @@ export class AddEditWorkLogComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         this.patchValueInEditMode();
-        console.log(this.data?.data);
+        console.log(this.data);
+        var date = new Date();
+        // this.minDate = new Date(date.getFullYear(), date.getMonth(), 1);
     }
 
     close() {
@@ -161,6 +165,9 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     private patchValueInEditMode() {
+        console.log(new Date(this.data?.data?.workLogDate).getMonth());
+        console.log(new Date().getMonth());
+
         if (this.data?.mode === 'EDIT') {
             this.quillValue = this.data?.data?.comment;
             this.workLogForm
@@ -170,12 +177,12 @@ export class AddEditWorkLogComponent implements OnInit {
                 ?.get('workLogDate')
                 ?.setValue(
                     this.datePipe.transform(
-                        this.data?.data?.createdAt,
+                        this.data?.data?.workLogDate,
                         "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
                     )
                 );
             this.workLogForm?.get('workLogDate')?.disable();
-            this.currentDate = this.data?.data?.createdAt;
+            this.currentDate = this.data?.data?.workLogDate;
         }
         if (this.data?.data?.onLeave) {
             this.workLogForm?.get('totalHours')?.disable();

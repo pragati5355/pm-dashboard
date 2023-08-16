@@ -1,0 +1,129 @@
+<div class="px-8 pt-4 w-full">
+    <div class="flex flex-row justify-between items-center mb-4">
+        <div
+            class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
+            (click)="goBack()"
+        >
+            <mat-icon
+                class="icon-size-6 text-3xl text-black"
+                [svgIcon]="'heroicons_outline:chevron-left'"
+            ></mat-icon>
+            Back to project details
+        </div>
+    </div>
+    <div class="px-8 pt-8 bg-white shadow rounded">
+        <div class="flex justify-between items-center">
+            <div>
+                <mat-form-field>
+                    <mat-label>Select year</mat-label>
+                    <mat-select
+                        [(value)]="selectedYear"
+                        (selectionChange)="onYearChange($event)"
+                        [disabled]="initialLoading"
+                    >
+                        <mat-option
+                            *ngFor="let year of matSelectYears"
+                            value="{{ year }}"
+                            >{{ year }}</mat-option
+                        >
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <button
+                    (click)="addOrEditWorklog(null, 'ADD')"
+                    [disabled]="initialLoading"
+                    class="ml-2"
+                    mat-flat-button
+                    [color]="'primary'"
+                >
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_outline:plus'"
+                    ></mat-icon>
+                    <span class="ml-2 mr-1">Add worklog</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <mat-tab-group
+                [color]="'primary'"
+                mat-stretch-tabs="false"
+                mat-align-tabs="start"
+                (selectedTabChange)="onTabChanged($event)"
+                [(selectedIndex)]="selectedTabIndex"
+            >
+                <mat-tab
+                    *ngFor="let tab of matTabList"
+                    label="{{ tab?.label }}"
+                    [disabled]="initialLoading"
+                >
+                    <ng-container
+                        *ngIf="!initialLoading && workLogsList?.length > 0"
+                    >
+                        <div
+                            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        >
+                            <div class="font-semibold px-2">Date</div>
+                            <div class="font-semibold">Hours</div>
+                            <div class="font-semibold">Description</div>
+                            <div class="font-semibold">Actions</div>
+                        </div>
+                        <ng-container *ngIf="!initialLoading">
+                            <div
+                                *ngFor="let log of workLogsList"
+                                class="inventory-grid grid items-center gap-4 py-3 border-b bg-white"
+                            >
+                                <div class="px-2">
+                                    {{ log?.workLogDate | date }}
+                                </div>
+                                <div>{{ log?.timeSpent }}</div>
+                                <div class="truncate">
+                                    {{
+                                        log?.onLeave
+                                            ? "On Leave"
+                                            : (log?.comment | stripHtml)
+                                    }}
+                                </div>
+                                <div>
+                                    <button
+                                        (click)="addOrEditWorklog(log, 'EDIT')"
+                                    >
+                                        <mat-icon
+                                            [matTooltip]="'Edit'"
+                                            class="text-gray-400 icon-size-5 cursor-pointer mr-4"
+                                            svgIcon="heroicons_outline:pencil"
+                                        ></mat-icon>
+                                    </button>
+                                    <button (click)="deleteWorkLog(log?.id)">
+                                        <mat-icon
+                                            [matTooltip]="'Delete'"
+                                            class="text-gray-400 icon-size-5 cursor-pointer"
+                                            svgIcon="heroicons_outline:trash"
+                                        ></mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container
+                        *ngIf="!initialLoading && workLogsList?.length === 0"
+                    >
+                        <div
+                            class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
+                        >
+                            Work logs not found
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="initialLoading">
+                        <app-table-skeleton
+                            [skeletonData]="requiredSprintSkeletonData"
+                        ></app-table-skeleton>
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
