@@ -97,7 +97,11 @@
                         <span class="ml-2 mr-1">View Repository</span>
                     </button>
                 </div>
-                <div class="ml-2" [matTooltip]="'Project Process Checklist'">
+                <div
+                    *ngIf="userRole === 'ADMIN' || 'PM'"
+                    class="ml-2"
+                    [matTooltip]="'Project Process Checklist'"
+                >
                     <button
                         class="shadow-none"
                         mat-mini-fab
@@ -108,7 +112,7 @@
                         <mat-icon>check</mat-icon>
                     </button>
                 </div>
-                <div class="inline-block">
+                <div class="inline-block" *ngIf="userRole === 'ADMIN' || 'PM'">
                     <button
                         mat-icon-button
                         [matMenuTriggerFor]="menu"

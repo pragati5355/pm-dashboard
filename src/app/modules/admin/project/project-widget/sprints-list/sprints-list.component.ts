@@ -10,6 +10,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SprintService } from '../../common/services/sprint.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 @Component({
     selector: 'app-sprints-list',
     templateUrl: './sprints-list.component.html',
@@ -26,6 +27,7 @@ export class SprintsListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: false,
     };
+    userRole: string = '';
 
     constructor(
         private _authService: AuthService,
@@ -35,10 +37,12 @@ export class SprintsListComponent implements OnInit {
         private fuseConfirmationService: FuseConfirmationService,
         private formBuilder: FormBuilder,
         private sprintService: SprintService,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        private loggedInUserService: LoggedInUserService
     ) {}
     @Input() dataId: any;
     ngOnInit(): void {
+        this.getUserRole();
         this.initialLoading = true;
         let payload = {
             id: this.dataId,
@@ -154,6 +158,14 @@ export class SprintsListComponent implements OnInit {
                 }),
             }),
             dismissible: false,
+        });
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
         });
     }
 }
