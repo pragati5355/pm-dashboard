@@ -17,7 +17,6 @@ import { BitbucketProjectModel } from '@modules/admin/repository/common/models/b
 import { DatePipe } from '@angular/common';
 import { ProjectMembersDetailsComponent } from '../project-members-details/project-members-details.component';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
-import { WorkLogListComponent } from '../work-log-list/work-log-list.component';
 
 @Component({
     selector: 'app-project-details',
