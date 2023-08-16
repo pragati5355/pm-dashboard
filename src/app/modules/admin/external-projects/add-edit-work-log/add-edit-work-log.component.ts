@@ -3,6 +3,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
+import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 
 @Component({
@@ -43,7 +44,8 @@ export class AddEditWorkLogComponent implements OnInit {
         private formBuilder: FormBuilder,
         private snackBar: SnackBar,
         private workLogService: WorkLogService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private authService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -206,6 +208,9 @@ export class AddEditWorkLogComponent implements OnInit {
                     this.matDialogRef.close(true);
                 } else {
                     this.snackBar.errorSnackBar('Something went wrong');
+                }
+                if (res?.tokenExpire) {
+                    this.authService.updateAndReload(window.location);
                 }
             },
             (err) => {
