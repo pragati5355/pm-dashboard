@@ -1,0 +1,9 @@
+.inventory-grid {
+    grid-template-columns: 80% 10% 10%;
+}
+
+@media screen and (max-width: 480px) {
+    .inventory-grid {
+        grid-template-columns: 40% 25% 35%;
+    }
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from '@services/auth/auth.service';
 import { CreateProjecteService } from '@services/create-projecte.service';
@@ -33,7 +33,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
         private _formBuilder: FormBuilder,
         private _fuseConfirmationService: FuseConfirmationService,
         private _authService: AuthService,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -132,6 +133,12 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 );
             }
         });
+    }
+
+    showWorkLogs() {
+        this.router.navigate([
+            `/external-projects/work-logs/${this.projectId}`,
+        ]);
     }
 
     initailizeConfirmationFormPopup() {

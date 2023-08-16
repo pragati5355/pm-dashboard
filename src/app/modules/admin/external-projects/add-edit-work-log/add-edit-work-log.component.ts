@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { WorkLogService } from '../common/services/work-log.service';
 
 @Component({
     selector: 'app-add-edit-work-log',

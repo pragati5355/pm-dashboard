@@ -10,8 +10,17 @@
             ></mat-icon>
             {{ projectDetails?.project?.name | titlecase }}
         </div>
-        <div>
+        <div class="flex items-center">
             <button
+                class="ml-4"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="showWorkLogs()"
+            >
+                <span class="ml-2 mr-1">Work logs</span>
+            </button>
+            <button
+                class="ml-2"
                 mat-mini-fab
                 color="primary"
                 matTooltip="Edit project"
