@@ -162,6 +162,9 @@ export class WorkLogsListComponent implements OnInit {
                 this.workLogsList = res?.data?.list;
                 this.projectName = res?.data?.projectName;
             }
+            if (res?.tokenExpire) {
+                this.authService.updateAndReload(window.location);
+            }
         });
     }
 

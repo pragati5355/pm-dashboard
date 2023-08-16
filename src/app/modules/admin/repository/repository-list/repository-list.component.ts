@@ -6,6 +6,7 @@ import { RepositoryService } from '@modules/admin/repository/common/services/rep
 import { RepositoryDetailsComponent } from '../repository-details/repository-details.component';
 import { MessagingService } from '../common/services/messaging.service';
 import { Database, onValue, ref, object } from '@angular/fire/database';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 
 @Component({
     selector: 'app-repository-list',
@@ -21,13 +22,15 @@ export class RepositoryListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: false,
     };
+    userRole: string;
 
     constructor(
         private router: Router,
         private _authService: AuthService,
         private RepositoryService: RepositoryService,
         private dialog: MatDialog,
-        private messageService: MessagingService
+        private messageService: MessagingService,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
@@ -57,16 +60,6 @@ export class RepositoryListComponent implements OnInit {
         window.history.back();
     }
 
-    private setJiraProject() {
-        this.metricsProjectData = this._authService.getProjectDetails();
-        this.getList(this.metricsProjectData.id);
-    }
-
-    private tokenExpireFun(res: any) {
-        if (res.tokenExpire == true) {
-            this._authService.updateAndReload(window.location);
-        }
-    }
     repoDetails(data: any) {
         const dialogRef = this.dialog.open(RepositoryDetailsComponent, {
             disableClose: true,
@@ -84,5 +77,24 @@ export class RepositoryListComponent implements OnInit {
         this.router.navigate([`/projects/repository/add`], {
             queryParams: { id: id },
         });
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
+    }
+
+    private setJiraProject() {
+        this.metricsProjectData = this._authService.getProjectDetails();
+        this.getList(this.metricsProjectData.id);
+    }
+
+    private tokenExpireFun(res: any) {
+        if (res.tokenExpire == true) {
+            this._authService.updateAndReload(window.location);
+        }
     }
 }

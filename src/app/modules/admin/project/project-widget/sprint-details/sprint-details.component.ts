@@ -15,6 +15,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SprintService } from '../../common/services/sprint.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 @Component({
     selector: 'app-sprint-details',
     templateUrl: './sprint-details.component.html',
@@ -34,10 +35,11 @@ export class SprintDetailsComponent implements OnInit {
     @Input() dataId: any;
     @Input() data: any = {};
     isLoading = false;
-    disableButton : boolean = false;
+    disableButton: boolean = false;
     projectData: any = null;
     formData: any = null;
-    sprint : any;
+    sprint: any;
+    userRole: string;
     constructor(
         private router: Router,
         private dialog: MatDialog,
@@ -47,7 +49,8 @@ export class SprintDetailsComponent implements OnInit {
         private _authService: AuthService,
         private _fuseConfirmationService: FuseConfirmationService,
         private ProjectService: CreateProjecteService,
-        private sprintService : SprintService
+        private sprintService: SprintService,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
@@ -64,7 +67,7 @@ export class SprintDetailsComponent implements OnInit {
         this.getSprintDetails();
         this.disableButton = true;
     }
-    
+
     goBack() {
         window.history.back();
     }
@@ -78,18 +81,21 @@ export class SprintDetailsComponent implements OnInit {
                 this.sprint = res?.data;
                 this.sprintStatus(this.sprint.status);
                 this.initialLoading = false;
-        });
+
+                if (res?.tokenExpire) {
+                    this._authService.updateAndReload(window.location);
+                }
+            });
     }
 
-    sprintStatus(status:any){
-        if(status == 'COMPLETED'){
+    sprintStatus(status: any) {
+        if (status == 'COMPLETED') {
             this.disableButton = true;
-        }else if(status == null){
+        } else if (status == null) {
             this.disableButton = true;
-        }else if(status == 'ACTIVE'){
+        } else if (status == 'ACTIVE') {
             this.disableButton = false;
         }
-
     }
 
     feedbackForm() {
@@ -112,11 +118,11 @@ export class SprintDetailsComponent implements OnInit {
         this.router.navigate([`/forms`]);
     }
 
-    markAsComplete(){
+    markAsComplete() {
         const payload = {
             id: this.sprintId,
-            status : 'COMPLETED'
-        }
+            status: 'COMPLETED',
+        };
         const dialogRef = this._fuseConfirmationService.open(
             this.configForm.value
         );
@@ -128,11 +134,11 @@ export class SprintDetailsComponent implements OnInit {
         });
     }
 
-    updateStatusApi(payload:any){
+    updateStatusApi(payload: any) {
         this.initialLoading = true;
         console.log(payload);
         this.sprintService.postSprintStatus(payload).subscribe(
-            (res:any)=> {
+            (res: any) => {
                 if (!res?.error) {
                     this.initialLoading = false;
                     this.disableButton = true;
@@ -150,8 +156,15 @@ export class SprintDetailsComponent implements OnInit {
                 this.initialLoading = false;
                 this.snackBar.errorSnackBar('Something Went Wrong');
             }
-                
         );
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
     }
 
     private initializeConfigForm() {

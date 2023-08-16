@@ -79,7 +79,7 @@
                                    'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500':project.status == 'Off Track'}">
                                             <span class="leading-relaxed whitespace-nowrap">{{project.status}}</span>
                                         </span>
-                                        <div>
+                                        <div *ngIf="userRole === 'ADMIN' || userRole === 'PM'">
                                             <button class="inline-flex items-center"
                                                 *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
                                                 (click)="syncProject($event,project.id)">
@@ -94,6 +94,7 @@
                                                 {{project.lastSyncDate | date}}</span>
                                         </div>
                                         <span
+                                            *ngIf="userRole === 'ADMIN' || userRole === 'PM'"   
                                             class=" ml-auto  inline-flex items-center font-bold  px-3 py-1 rounded-full tracking-wide">
                                             <span class="leading-relaxed whitespace-nowrap border-b-a cursor-pointer"
                                                 (click)="syncProject($event,project.id)">Sync Now</span>
@@ -242,6 +243,7 @@
                                 </button>
                                 <mat-menu #menu="matMenu">
                                     <button
+                                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                                         mat-menu-item
                                         (click)="syncProject($event,project?.id)"
                                     >

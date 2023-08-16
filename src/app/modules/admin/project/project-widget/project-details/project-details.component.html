@@ -50,16 +50,6 @@
                 </div>
             </div>
             <div class="flex items-center ml-6">
-                <div>
-                    <button
-                        class="ml-4"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="showWorkLogs()"
-                    >
-                        <span class="ml-2 mr-1">Work logs</span>
-                    </button>
-                </div>
                 <div
                     *ngIf="repoCount == 0 && (userRole === 'ADMIN' || 'PM')"
                     [matTooltip]="
@@ -112,7 +102,10 @@
                         <mat-icon>check</mat-icon>
                     </button>
                 </div>
-                <div class="inline-block" *ngIf="userRole === 'ADMIN' || userRole === 'PM'">
+                <div
+                    class="inline-block"
+                    *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                >
                     <button
                         mat-icon-button
                         [matMenuTriggerFor]="menu"

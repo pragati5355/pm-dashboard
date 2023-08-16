@@ -50,9 +50,7 @@ import { AddCrResourceDialogComponent } from './add-cr-resource-dialog/add-cr-re
 import { ProjectMembersDetailsComponent } from './project-members-details/project-members-details.component';
 import { CrListsComponent } from './cr-lists/cr-lists.component';
 import { CrDetailsComponent } from './cr-details/cr-details.component';
-import { WorkLogListComponent } from './work-log-list/work-log-list.component';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
-import { WorkLogsComponent } from './work-logs/work-logs.component';
 import { QuillModule } from 'ngx-quill';
 import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 
@@ -79,9 +77,7 @@ import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
         ProjectMembersDetailsComponent,
         CrListsComponent,
         CrDetailsComponent,
-        WorkLogListComponent,
         AddEditWorkLogComponent,
-        WorkLogsComponent,
         StripHtmlPipe,
     ],
     imports: [
