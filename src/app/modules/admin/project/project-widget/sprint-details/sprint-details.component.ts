@@ -66,6 +66,7 @@ export class SprintDetailsComponent implements OnInit {
         this.formData = this.projectData.form;
         this.getSprintDetails();
         this.disableButton = true;
+        this.getUserRole();
     }
 
     goBack() {

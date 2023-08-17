@@ -35,6 +35,7 @@ export class WorkLogsListComponent implements OnInit {
         '<div class="px-2">12/12/2023</div><div>4</div><div class="truncate"></div>';
     workLogsList: any[] = [];
     projectName: string = '';
+    disablePreviousWorklog: boolean = false;
 
     constructor(
         private matDialog: MatDialog,
@@ -60,6 +61,16 @@ export class WorkLogsListComponent implements OnInit {
     onTabChanged(event: any) {
         this.selectedTabIndex = event?.index;
         this.loadData(this.selectedYear, this.selectedTabIndex);
+
+        if (!(this.selectedTabIndex === new Date().getMonth())) {
+            if (new Date().getDate() > 5) {
+                this.disablePreviousWorklog = true;
+            } else {
+                this.disablePreviousWorklog = false;
+            }
+        } else {
+            this.disablePreviousWorklog = false;
+        }
     }
 
     onYearChange(event: any) {
@@ -83,6 +94,7 @@ export class WorkLogsListComponent implements OnInit {
                 userState: this.userState,
                 projectName: this.projectName,
                 projectId: this.projectId,
+                tabIndex:this.selectedTabIndex
             },
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
@@ -171,6 +183,13 @@ export class WorkLogsListComponent implements OnInit {
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
         this.selectedTabIndex = new Date().getMonth();
+        if (!(this.selectedTabIndex === new Date().getMonth())) {
+            if (new Date().getDate() > 5) {
+                this.disablePreviousWorklog = true;
+            } else {
+                this.disablePreviousWorklog = false;
+            }
+        }
     }
 
     private routeSubscription() {

@@ -43,6 +43,7 @@
                                     [matDatepicker]="dateOfJoiningDatepicker"
                                     (focus)="dateOfJoiningDatepicker.open()"
                                     [max]="currentDate"
+                                    [min]="minDateWorklog"
                                 />
                                 <mat-datepicker-toggle
                                     matSuffix
@@ -58,6 +59,7 @@
                         </div>
                         <div class="flex-1">
                             <mat-checkbox
+                                [disabled]="disablePreviousWorklog"
                                 [checked]="onLeave"
                                 (change)="checkBox($event?.checked)"
                                 >I was on Leave</mat-checkbox
@@ -86,6 +88,7 @@
                                 >
                                 <div class="mt-2">
                                     <quill-editor
+                                        [disabled]="disablePreviousWorklog"
                                         #editor
                                         [modules]="modules"
                                         (onContentChanged)="
@@ -118,7 +121,7 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-auto overflow-hidden my-8">
+                        <div class="flex flex-auto overflow-hidden my-4">
                             <div
                                 class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto"
                             >
@@ -213,7 +216,9 @@
                                 mat-flat-button
                                 type="submit"
                                 (click)="submit()"
-                                [disabled]="submitInProgress"
+                                [disabled]="
+                                    submitInProgress || disablePreviousWorklog
+                                "
                             >
                                 <mat-progress-spinner
                                     *ngIf="submitInProgress"
