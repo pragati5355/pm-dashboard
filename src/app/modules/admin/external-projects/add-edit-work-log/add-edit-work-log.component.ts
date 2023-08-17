@@ -38,6 +38,7 @@ export class AddEditWorkLogComponent implements OnInit {
     currentDate: any = new Date();
     minDate: any = '2023-07-07';
     workLogEditValidation: boolean = false;
+    disablePreviousWorklog: boolean = false;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddEditWorkLogComponent>,
@@ -185,6 +186,17 @@ export class AddEditWorkLogComponent implements OnInit {
                 );
             this.workLogForm?.get('workLogDate')?.disable();
             this.currentDate = this.data?.data?.workLogDate;
+
+            if (!(this.data?.tabIndex === new Date().getMonth())) {
+                if (new Date().getDate() > 5) {
+                    this.workLogForm?.get('totalHours')?.disable();
+                    this.disablePreviousWorklog = true;
+                } else {
+                    this.disablePreviousWorklog = false;
+                }
+            } else {
+                this.disablePreviousWorklog = false;
+            }
         }
         if (this.data?.data?.onLeave) {
             this.workLogForm?.get('totalHours')?.disable();
