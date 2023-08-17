@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import {
     MAT_SELECT_YEARS,
     MAT_TAB_MONTHS,
@@ -36,6 +37,8 @@ export class WorkLogsListComponent implements OnInit {
     workLogsList: any[] = [];
     projectName: string = '';
     disablePreviousWorklog: boolean = false;
+    loggedInUser: any;
+    loadingUser: boolean = false;
 
     constructor(
         private matDialog: MatDialog,
@@ -45,7 +48,8 @@ export class WorkLogsListComponent implements OnInit {
         private formBuilder: FormBuilder,
         private fuseConfirmationService: FuseConfirmationService,
         private workLogService: WorkLogService,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        private loggedInService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
@@ -53,7 +57,7 @@ export class WorkLogsListComponent implements OnInit {
         this.routeSubscription();
         this.userState = this.authService.getUser();
         this.initializeConfigForm();
-        this.loadData(this.selectedYear, this.selectedTabIndex);
+        this.getLoggedInUser();
     }
 
     close() {}
@@ -94,7 +98,8 @@ export class WorkLogsListComponent implements OnInit {
                 userState: this.userState,
                 projectName: this.projectName,
                 projectId: this.projectId,
-                tabIndex:this.selectedTabIndex
+                tabIndex: this.selectedTabIndex,
+                loggedInUser: this.loggedInUser,
             },
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
@@ -136,6 +141,17 @@ export class WorkLogsListComponent implements OnInit {
         });
     }
 
+    private getLoggedInUser() {
+        this.initialLoading = true;
+        this.loggedInService.getLoggedInUser().subscribe((res: any) => {
+            this.initialLoading = false;
+            if (res) {
+                this.loggedInUser = res;
+                this.loadData(this.selectedYear, this.selectedTabIndex);
+            }
+        });
+    }
+
     private initializeConfigForm() {
         this.configForm = this.formBuilder.group({
             title: 'Delete work log',
@@ -163,7 +179,7 @@ export class WorkLogsListComponent implements OnInit {
     private loadData(year: any, month: number) {
         this.initialLoading = true;
         const payload = {
-            resourceId: this.userState?.userId,
+            resourceId: this.loggedInUser?.resourceId,
             projectId: this.projectId,
             month: ++month,
             year: year,

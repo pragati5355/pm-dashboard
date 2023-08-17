@@ -130,7 +130,7 @@ export class AddEditWorkLogComponent implements OnInit {
             return;
         }
         const task = {
-            resourceId: this.data?.userState?.userId,
+            resourceId: this.data?.loggedInUser?.resourceId,
             projectId: this.data?.projectId,
             workLogDate: this.workLogForm?.get('workLogDate')?.value,
             worklogPerTask: {
@@ -231,7 +231,7 @@ export class AddEditWorkLogComponent implements OnInit {
                     this.snackBar.successSnackBar(res?.message);
                     this.matDialogRef.close(true);
                 } else {
-                    this.snackBar.errorSnackBar('Something went wrong');
+                    this.snackBar.errorSnackBar(res?.message);
                 }
                 if (res?.tokenExpire) {
                     this.authService.updateAndReload(window.location);
@@ -251,7 +251,7 @@ export class AddEditWorkLogComponent implements OnInit {
                 externalWorklog: [
                     {
                         id: this.data?.data?.id,
-                        resourceId: this.data?.userState?.userId,
+                        resourceId: this.data?.loggedInUser?.resourceId,
                         projectId: this.data?.projectId,
                         workLogDate: this.currentDate,
                         worklogPerTask: {
@@ -268,7 +268,7 @@ export class AddEditWorkLogComponent implements OnInit {
             return {
                 externalWorklog: [
                     {
-                        resourceId: this.data?.userState?.userId,
+                        resourceId: this.data?.loggedInUser?.resourceId,
                         projectId: this.data?.projectId,
                         workLogDate:
                             this.workLogForm?.get('workLogDate')?.value,
