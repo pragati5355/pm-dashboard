@@ -214,7 +214,6 @@ export class AddEditWorkLogComponent implements OnInit {
         if (this.data?.data?.onLeave) {
             this.workLogForm?.get('totalHours')?.disable();
             this.workLogForm?.get('totalHours')?.setValue('');
-            // this.editor.quillEditor.deleteText(0, 20000);
             this.description = '';
             this.tasks = [];
             this.showError = false;
