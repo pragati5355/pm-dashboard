@@ -39,6 +39,7 @@ export class AddEditWorkLogComponent implements OnInit {
     minDate: any = '2023-07-07';
     workLogEditValidation: boolean = false;
     disablePreviousWorklog: boolean = false;
+    minDateWorklog: any;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddEditWorkLogComponent>,
@@ -52,9 +53,7 @@ export class AddEditWorkLogComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         this.patchValueInEditMode();
-        console.log(this.data);
-        var date = new Date();
-        // this.minDate = new Date(date.getFullYear(), date.getMonth(), 1);
+        this.dateValidation();
     }
 
     close() {
@@ -156,6 +155,20 @@ export class AddEditWorkLogComponent implements OnInit {
         this.calculateTotalHours();
         this.currentTaskIndex = null;
         this.editMode = false;
+    }
+
+    private dateValidation() {
+        if (new Date().getDate() > 5) {
+            this.minDateWorklog = new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                1
+            );
+        } else {
+            var date = new Date();
+            var month = date.getMonth() > 0 ? date.getMonth() - 1 : 11;
+            this.minDateWorklog = new Date(date.getFullYear(), month, 1);
+        }
     }
 
     private scrollToBottom() {
