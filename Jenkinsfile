@@ -19,10 +19,6 @@ def icons = [":heavy_check_mark:",":star-struck:",":tada:",":heart_eyes_cat:",":
 def randomIndex = (new Random()).nextInt(icons.size())
 pipeline{
    agent{
-       docker{
-           image 'mindbowser/node-ng-awscli:v4-gcp-aws'
-           label 'docker'
-       }
        docker {
             label "docker"
             alwaysPull true
