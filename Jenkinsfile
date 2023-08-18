@@ -23,6 +23,13 @@ pipeline{
            image 'mindbowser/node-ng-awscli:v4-gcp-aws'
            label 'docker'
        }
+       docker {
+            label "docker"
+            alwaysPull true
+            image 'node:v4-gcp-aws'
+            registryUrl "https://442050301785.dkr.ecr.us-east-1.amazonaws.com"
+            registryCredentialsId 'jenkins-ecr-user'
+        }
    }
    stages{
        stage('Init')
