@@ -23,7 +23,6 @@
                             <mat-option
                                 *ngFor="let year of matSelectYears"
                                 value="{{ year }}"
-                                [disabled]="year > selectedYear"
                                 >{{ year }}</mat-option
                             >
                         </mat-select>
@@ -33,7 +32,7 @@
                     <button
                         (click)="addOrEditWorklog(null, 'ADD')"
                         [disabled]="initialLoading"
-                        class="ml-4 mb-4"
+                        class="ml-6 mb-4"
                         mat-flat-button
                         [color]="'primary'"
                     >
