@@ -26,7 +26,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FuseCardModule } from '@fuse/components/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { MatTabsModule } from '@angular/material/tabs';
 import { ExternalProjectsRoutingModule } from './external-projects-routing.module';
 import { ExternalProjectsHomeComponent } from './external-projects-home/external-projects-home.component';
 import { ExternalProjectsListComponent } from './external-projects-list/external-projects-list.component';
@@ -37,6 +37,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ExternalProjectsAddResourceComponent } from './external-projects-add-resource/external-projects-add-resource.component';
 import { SendRemindersComponent } from './send-reminders/send-reminders.component';
+import { WorkLogsListComponent } from './work-logs-list/work-logs-list.component';
+import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
+import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
+import { QuillModule } from 'ngx-quill';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -45,6 +49,9 @@ import { SendRemindersComponent } from './send-reminders/send-reminders.componen
         CreateExternalProjectComponent,
         ExternalProjectsAddResourceComponent,
         SendRemindersComponent,
+        WorkLogsListComponent,
+        StripHtmlPipe,
+        AddEditWorkLogComponent,
     ],
     imports: [
         CommonModule,
@@ -78,6 +85,8 @@ import { SendRemindersComponent } from './send-reminders/send-reminders.componen
         FormsModule,
         MatCheckboxModule,
         ReactiveFormsModule,
+        MatTabsModule,
+        QuillModule,
     ],
     providers: [DatePipe],
 })

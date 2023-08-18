@@ -17,10 +17,7 @@ export class PlatformUsersFormComponent implements OnInit {
     patchData: [] | null;
     disableEmailField: boolean = false;
 
-    roles: any[] = [
-        { name: 'ADMIN' },
-        { name: 'PM' },
-    ];
+    roles: any[] = [{ name: 'ADMIN' }, { name: 'PM' }, { name: 'USER' }];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -29,7 +26,7 @@ export class PlatformUsersFormComponent implements OnInit {
         private platformUserService: PlatformUsersService,
         private snackBar: SnackBar,
         private cd: ChangeDetectorRef,
-        private _authService: AuthService,
+        private _authService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -37,11 +34,10 @@ export class PlatformUsersFormComponent implements OnInit {
         this.initializeForm();
     }
 
-    private loadData(){
+    private loadData() {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
-    }    
-
+    }
 
     private patchValuesInEditMode() {
         if (this.mode === 'EDIT') {
@@ -49,7 +45,7 @@ export class PlatformUsersFormComponent implements OnInit {
                 email: this.data?.editData?.email,
                 role: this.data?.editData?.role,
                 firstName: this.data?.editData?.firstName,
-                lastName: this.data?.editData?.lastName
+                lastName: this.data?.editData?.lastName,
             });
         }
     }
@@ -74,34 +70,34 @@ export class PlatformUsersFormComponent implements OnInit {
                 }
             );
         }
-        if(this.mode === 'EDIT' && this.addUserForm?.valid){
+        if (this.mode === 'EDIT' && this.addUserForm?.valid) {
             this.submitInProcess = true;
             const payload = {
                 id: this.data?.editData?.id,
                 firstName: this.addUserForm?.value?.firstName,
                 lastName: this.addUserForm?.value?.lastName,
                 role: this.addUserForm?.value?.role,
-                email : this.addUserForm?.getRawValue()?.email,
+                email: this.addUserForm?.getRawValue()?.email,
                 status: this.data?.editData?.status,
-            }
-           
-            this.platformUserService
-            .changeStatus(payload)
-            .subscribe((res: any) => {
-                this.submitInProcess = false;
-                if (!res?.error) {
-                    this.snackBar.successSnackBar(res?.message);
-                    this.matDialogRef.close('success');
-                } else {
-                    this.snackBar.errorSnackBar(res?.message);
+            };
+
+            this.platformUserService.changeStatus(payload).subscribe(
+                (res: any) => {
+                    this.submitInProcess = false;
+                    if (!res?.error) {
+                        this.snackBar.successSnackBar(res?.message);
+                        this.matDialogRef.close('success');
+                    } else {
+                        this.snackBar.errorSnackBar(res?.message);
+                    }
+                    if (res?.tokenExpire) {
+                        this._authService.updateAndReload(window.location);
+                    }
+                },
+                (err) => {
+                    this.submitInProcess = false;
                 }
-                if (res?.tokenExpire) {
-                    this._authService.updateAndReload(window.location);
-                }
-            },
-            (err) => {
-                this.submitInProcess = false;
-            });
+            );
         }
     }
 
@@ -121,7 +117,7 @@ export class PlatformUsersFormComponent implements OnInit {
                     Validators.pattern(/@mindbowser.com\s*$/),
                 ],
             ],
-            role :['',[Validators.required]],
+            role: ['', [Validators.required]],
         });
 
         this.patchValuesInEditMode();

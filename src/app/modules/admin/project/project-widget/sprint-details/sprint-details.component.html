@@ -49,6 +49,9 @@
                                 <span class="ml-2 mr-1">Mark as Complete</span>
                             </button>
                             <button
+                                *ngIf="
+                                    userRole === 'ADMIN' || userRole === 'PM'
+                                "
                                 [disabled]="!this.formData"
                                 class="ml-4"
                                 mat-flat-button

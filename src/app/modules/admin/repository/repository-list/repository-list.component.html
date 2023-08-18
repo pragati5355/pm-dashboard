@@ -9,6 +9,7 @@
                 <div class="flex items-center">
                     <div class="ml-auto">
                         <button
+                            *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                             [color]="'primary'"
                             class="ml-4"
                             mat-flat-button

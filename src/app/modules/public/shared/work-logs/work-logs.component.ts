@@ -190,7 +190,7 @@ export class WorkLogsComponent implements OnInit {
                 resourceId: this.resourceData?.resourceId,
                 projectId: this.resourceData?.projectId,
                 workLogDate: this.resourceData?.workLogDate,
-                worklogPerTask: tasks,
+                worklogPerTasks: tasks,
             },
             onLeave: this.onLeave,
         };
