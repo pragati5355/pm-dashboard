@@ -106,6 +106,7 @@
                                 *ngIf="data?.mode === 'ADD'"
                             >
                                 <button
+                                    [disabled]="onLeave"
                                     class="bg-primary-500 text-white font-bold ml-2"
                                     mat-flat-button
                                     type="submit"
