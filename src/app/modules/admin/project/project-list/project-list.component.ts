@@ -250,7 +250,7 @@ export class ProjectListComponent implements OnInit {
         if (id != null) {
             const pending = this.clipboard.beginCopy(id);
             this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 3;
+            let remainingAttempts = 10;
             const attempt = () => {
                 const result = pending.copy();
                 if (!result && --remainingAttempts) {
