@@ -67,9 +67,21 @@
                                     #expandableCard02="fuseCard">
                                     <div class="flex justify-between items-center mx-6 sm:mx-8 mt-6 mb-4">
 
-                                        <div class="flex flex-col cursor-pointer" (click)="goToProject(project)">
-                                            <span class="text-lg font-semibold leading-none"
-                                                *ngIf="project.name">{{project.name | titlecase}}</span>
+                                        <div class="flex items-center">
+                                            <div class="flex flex-col cursor-pointer" (click)="goToProject(project)">
+                                                <span class="text-lg font-semibold leading-none"
+                                                    *ngIf="project.name">{{project.name | titlecase}}</span>
+                                            </div>
+                                            <div class="flex sm:block ml-5 ">
+                                                <button
+                                                     mat-icon-button
+                                                    [matTooltip]="'Copy Project Id'"
+                                                    aria-label="Example icon-button with a menu"
+                                                    (click)="copyProjectId(project.id)"
+                                                    >
+                                                    <mat-icon class="text-gray-400 icon-size-5 cursor-pointer">content_copy</mat-icon>
+                                                </button>
+                                            </div>
                                         </div>
                                         <span (click)="goToProject(project)" *ngIf="project.status"
                                             class=" cursor-pointer ml-auto  inline-flex items-center font-bold text-xs px-3 py-2 rounded-full tracking-wide uppercase"
