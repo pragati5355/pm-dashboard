@@ -21,6 +21,8 @@ export class ExternalProjectsListComponent implements OnInit {
     filteredProjectList = [];
     searchControl = new FormControl();
     userRole: string;
+    technologies: any;
+    isLoadingTechnologies: boolean = false;
 
     initialLoading: boolean = false;
     constructor(
@@ -36,6 +38,8 @@ export class ExternalProjectsListComponent implements OnInit {
         this.addSearchListener();
         this.loadExternalProjectsList();
         this.loadDeveloperEmailList();
+
+        this.getTechnologies();
     }
 
     addSearchListener() {
@@ -73,6 +77,9 @@ export class ExternalProjectsListComponent implements OnInit {
             .open(CreateExternalProjectComponent, {
                 width: '60%',
                 height: 'auto',
+                data: {
+                    technologies: this.technologies,
+                },
             })
             .afterClosed()
             .subscribe((result) => {
@@ -139,5 +146,15 @@ export class ExternalProjectsListComponent implements OnInit {
                 this.initialLoading = false;
             }
         );
+    }
+
+    private getTechnologies() {
+        this.isLoadingTechnologies = true;
+        this.externalProjectsService.getTechnologies().subscribe((res: any) => {
+            this.isLoadingTechnologies = false;
+            if (res?.data) {
+                this.technologies = res?.data;
+            }
+        });
     }
 }
