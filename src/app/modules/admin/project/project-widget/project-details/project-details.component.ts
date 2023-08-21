@@ -17,6 +17,7 @@ import { BitbucketProjectModel } from '@modules/admin/repository/common/models/b
 import { DatePipe } from '@angular/common';
 import { ProjectMembersDetailsComponent } from '../project-members-details/project-members-details.component';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
     selector: 'app-project-details',
@@ -51,7 +52,9 @@ export class ProjectDetailsComponent implements OnInit {
         private matDialog: MatDialog,
         private _authService: AuthService,
         private datePipe: DatePipe,
-        private loggedInUserService: LoggedInUserService
+        private loggedInUserService: LoggedInUserService,
+        private clipboard: Clipboard,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
@@ -158,5 +161,25 @@ export class ProjectDetailsComponent implements OnInit {
                 this.userRole = res?.role;
             }
         });
+    }
+
+    copyProjectId() {
+        if (this.projectId != null) {
+            const pending = this.clipboard.beginCopy(this.projectId);
+            this.snackBar.successSnackBar('Copied');
+            let remainingAttempts = 10;
+            const attempt = () => {
+                const result = pending.copy();
+                if (!result && --remainingAttempts) {
+                    setTimeout(attempt);
+                } else {
+                    // Remember to destroy when you're done!
+                    pending.destroy();
+                }
+            };
+            attempt();
+        } else {
+            this.snackBar.errorSnackBar('Not Copied');
+        }
     }
 }
