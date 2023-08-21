@@ -176,6 +176,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             {
                 disableClose: true,
                 width: '50%',
+                maxHeight:'90vh',
                 panelClass: 'warn-dialog-content',
                 autoFocus: false,
                 data: {
