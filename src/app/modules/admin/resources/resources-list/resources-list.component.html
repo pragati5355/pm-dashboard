@@ -44,172 +44,227 @@
                                     (click)="clearSearch()"
                                 ></mat-icon>
                             </mat-form-field>
-                            <mat-form-field
-                                class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
-                            >
-                                <mat-select
-                                    [placeholder]="'Choose project'"
-                                    [disableOptionCentering]="true"
-                                    (selectionChange)="
-                                        selectChangeProject($event)
-                                    "
-                                    [formControl]="projects"
-                                >
-                                    <mat-option>None</mat-option>
-                                    <mat-option
-                                        *ngFor="let project of projectsList"
-                                        [value]="project?.id"
-                                        >{{ project?.name }}</mat-option
-                                    >
-                                </mat-select>
-                                <mat-icon
-                                    *ngIf="selectedProject"
-                                    class="icon-size-5 cursor-pointer"
-                                    matSuffix
-                                    [svgIcon]="'heroicons_solid:x'"
-                                    (click)="clearProjectSearch()"
-                                ></mat-icon>
-                            </mat-form-field>
-                            <mat-form-field
-                                class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
-                            >
-                                <mat-select
-                                    (selectionChange)="selectChange()"
-                                    [disableOptionCentering]="true"
-                                    [formControl]="technologys"
-                                    [placeholder]="'Choose technology'"
-                                    multiple
-                                    panelClass="multiple-select-style"
-                                >
-                                    <mat-select-trigger>
-                                        <ng-container
-                                            *ngFor="
-                                                let tech of showTechnologies
-                                            "
-                                        >
-                                            <span>{{ tech?.name + ", " }}</span>
-                                        </ng-container>
-                                    </mat-select-trigger>
-                                    <mat-option
-                                        *ngFor="
-                                            let technology of technologyList
-                                        "
-                                        [value]="technology.id"
-                                        >{{ technology.name }}</mat-option
-                                    >
-                                </mat-select>
-                                <mat-icon
-                                    *ngIf="showTechnologies?.length > 0"
-                                    class="icon-size-5 cursor-pointer"
-                                    matSuffix
-                                    [svgIcon]="'heroicons_solid:x'"
-                                    (click)="clearTechnologySearch()"
-                                ></mat-icon>
-                            </mat-form-field>
-                            <div
-                                class="ml-4 justify-between content-center text-gray-400 inline-flex px-3 py-2.5 rounded-full border border-gray-300 w-full"
-                                *ngIf="maxExprience.length > 0"
-                            >
-                                <div
-                                    class="flex flex-0 items-center justify-center ml-4"
-                                >
-                                    {{ minExprience }} to {{ maxExprience }}
-                                </div>
-                                <div
-                                    class="mat-select-arrow-wrapper mt-2 cursor-pointer"
+
+                            <div class="relative filter-container">
+                                <button
+                                    (click)="showFilter()"
+                                    mat-stroked-button
+                                    class="ml-2 rounded-full border py-1 px-4 items-center border-gray-500"
+                                    [matTooltip]="'Filter'"
                                 >
                                     <mat-icon
-                                        class="ml-4 text-gray-400 icon-size-4 cursor-pointer"
-                                        svgIcon="heroicons_outline:x"
-                                        (click)="getExprience($event, 'remove')"
+                                        svgIcon="heroicons_outline:adjustments"
                                     ></mat-icon>
-                                </div>
-                            </div>
-                            <button
-                                class="ml-4 justify-between text-gray-400 w-full"
-                                *ngIf="maxExprience?.length == 0"
-                                mat-stroked-button
-                                [matMenuTriggerFor]="beforeMenu"
-                            >
-                                <div class="grid grid-cols-2 items-center">
-                                    <div class="">Choose experience</div>
-                                    <div
-                                        class="mat-select-arrow-wrapper ml-auto"
+                                </button>
+
+                                <div
+                                    *ngIf="showFilterArea"
+                                    class="filter-content shadow-lg rounded-md p-4 w-[500px]"
+                                    id="filter-area"
+                                >
+                                    <mat-form-field
+                                        class="mb-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
                                     >
-                                        <div class="mat-select-arrow"></div>
-                                    </div>
-                                </div>
-                            </button>
-                            <mat-menu
-                                #beforeMenu="matMenu"
-                                xPosition="before"
-                                class="mt-4"
-                            >
-                                <form [formGroup]="exprienceForm">
-                                    <div
-                                        class="flex items-center min-w-50 px-3 py-2"
-                                    >
-                                        <mat-form-field
-                                            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
-                                            (click)="$event.stopPropagation()"
-                                        >
-                                            <input
-                                                [autocomplete]="'off'"
-                                                [placeholder]="'Min'"
-                                                formControlName="minExprience"
-                                                matInput
-                                            />
-                                        </mat-form-field>
-                                        <span class="px-2">to</span>
-                                        <mat-form-field
-                                            class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
-                                            (click)="$event.stopPropagation()"
-                                        >
-                                            <input
-                                                [autocomplete]="'off'"
-                                                [placeholder]="'Max'"
-                                                formControlName="maxExprience"
-                                                matInput
-                                            />
-                                        </mat-form-field>
-                                        <button
-                                            [color]="'primary'"
-                                            class="ml-4 rounded"
-                                            mat-flat-button
-                                            (click)="
-                                                getExprience($event, 'add')
+                                        <mat-select
+                                            [placeholder]="'Choose project'"
+                                            [disableOptionCentering]="true"
+                                            (selectionChange)="
+                                                selectChangeProject($event)
                                             "
+                                            [formControl]="projects"
                                         >
-                                            <span class="ml-2 mr-1">Apply</span>
+                                            <mat-option>None</mat-option>
+                                            <mat-option
+                                                *ngFor="
+                                                    let project of projectsList
+                                                "
+                                                [value]="project?.id"
+                                                >{{ project?.name }}</mat-option
+                                            >
+                                        </mat-select>
+                                        <mat-icon
+                                            *ngIf="selectedProject"
+                                            class="icon-size-5 cursor-pointer"
+                                            matSuffix
+                                            [svgIcon]="'heroicons_solid:x'"
+                                            (click)="clearProjectSearch()"
+                                        ></mat-icon>
+                                    </mat-form-field>
+                                    <mat-form-field
+                                        class="mb-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
+                                    >
+                                        <mat-select
+                                            (selectionChange)="selectChange()"
+                                            [disableOptionCentering]="true"
+                                            [formControl]="technologys"
+                                            [placeholder]="'Choose technology'"
+                                            multiple
+                                            panelClass="multiple-select-style"
+                                        >
+                                            <mat-select-trigger>
+                                                <ng-container
+                                                    *ngFor="
+                                                        let tech of showTechnologies
+                                                    "
+                                                >
+                                                    <span>{{
+                                                        tech?.name + ", "
+                                                    }}</span>
+                                                </ng-container>
+                                            </mat-select-trigger>
+                                            <mat-option
+                                                *ngFor="
+                                                    let technology of technologyList
+                                                "
+                                                [value]="technology.id"
+                                                >{{
+                                                    technology.name
+                                                }}</mat-option
+                                            >
+                                        </mat-select>
+                                        <mat-icon
+                                            *ngIf="showTechnologies?.length > 0"
+                                            class="icon-size-5 cursor-pointer"
+                                            matSuffix
+                                            [svgIcon]="'heroicons_solid:x'"
+                                            (click)="clearTechnologySearch()"
+                                        ></mat-icon>
+                                    </mat-form-field>
+                                    <div
+                                        class="justify-between content-center text-gray-400 inline-flex mb-4 py-1.5 rounded-full border border-gray-300 w-full"
+                                        *ngIf="maxExprience"
+                                    >
+                                        <div
+                                            class="flex flex-0 items-center justify-center ml-4"
+                                        >
+                                            {{ minExprience }} to
+                                            {{ maxExprience }}
+                                        </div>
+                                        <div
+                                            class="mat-select-arrow-wrapper mt-2 cursor-pointer"
+                                        >
+                                            <mat-icon
+                                                class="mr-4 text-gray-400 icon-size-4 cursor-pointer"
+                                                svgIcon="heroicons_outline:x"
+                                                (click)="
+                                                    getExprience(
+                                                        $event,
+                                                        'remove'
+                                                    )
+                                                "
+                                            ></mat-icon>
+                                        </div>
+                                    </div>
+                                    <div class="w-full">
+                                        <button
+                                            class="justify-between text-gray-400 w-full mb-4"
+                                            *ngIf="maxExprience?.length == 0"
+                                            mat-stroked-button
+                                            [matMenuTriggerFor]="beforeMenu"
+                                        >
+                                            Choose experience
                                         </button>
                                     </div>
-                                </form>
-                            </mat-menu>
+                                    <mat-menu
+                                        #beforeMenu="matMenu"
+                                        xPosition="before"
+                                        class="mt-4"
+                                    >
+                                        <form [formGroup]="exprienceForm">
+                                            <div
+                                                class="flex items-center min-w-50 px-3 py-2"
+                                            >
+                                                <mat-form-field
+                                                    class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+                                                    (click)="
+                                                        $event.stopPropagation()
+                                                    "
+                                                >
+                                                    <input
+                                                        [autocomplete]="'off'"
+                                                        [placeholder]="'Min'"
+                                                        formControlName="minExprience"
+                                                        matInput
+                                                    />
+                                                </mat-form-field>
+                                                <span class="px-2">to</span>
+                                                <mat-form-field
+                                                    class="w-72-px fuse-mat-dense fuse-mat-no-subscript"
+                                                    (click)="
+                                                        $event.stopPropagation()
+                                                    "
+                                                >
+                                                    <input
+                                                        [autocomplete]="'off'"
+                                                        [placeholder]="'Max'"
+                                                        formControlName="maxExprience"
+                                                        matInput
+                                                    />
+                                                </mat-form-field>
+                                                <button
+                                                    [color]="'primary'"
+                                                    class="ml-4 rounded"
+                                                    mat-flat-button
+                                                    (click)="
+                                                        getExprience(
+                                                            $event,
+                                                            'add'
+                                                        )
+                                                    "
+                                                >
+                                                    <span class="ml-2 mr-1"
+                                                        >Apply</span
+                                                    >
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </mat-menu>
 
-                            <mat-form-field
-                                class="ml-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
-                            >
-                                <mat-select
-                                    (selectionChange)="resourceBenchShadow()"
-                                    [disableOptionCentering]="true"
-                                    [placeholder]="'Bench/Shadow Resource'"
-                                    multiple
-                                    panelClass="multiple-select-style"
-                                    [formControl]="isShadowIsBench"
-                                >
-                                    <mat-option [value]="0">Bench</mat-option>
-                                    <mat-option [value]="1">Shadow</mat-option>
-                                </mat-select>
-                                <mat-icon
-                                    *ngIf="isBench || isShadow"
-                                    class="icon-size-5 cursor-pointer"
-                                    matSuffix
-                                    [svgIcon]="'heroicons_solid:x'"
-                                    (click)="clearBenchShadowSearch()"
-                                ></mat-icon>
-                            </mat-form-field>
+                                    <mat-form-field
+                                        class="mb-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
+                                    >
+                                        <mat-select
+                                            (selectionChange)="
+                                                resourceBenchShadow()
+                                            "
+                                            [disableOptionCentering]="true"
+                                            [placeholder]="
+                                                'Bench/Shadow Resource'
+                                            "
+                                            multiple
+                                            panelClass="multiple-select-style"
+                                            [formControl]="isShadowIsBench"
+                                        >
+                                            <mat-option [value]="0"
+                                                >Bench</mat-option
+                                            >
+                                            <mat-option [value]="1"
+                                                >Shadow</mat-option
+                                            >
+                                        </mat-select>
+                                        <mat-icon
+                                            *ngIf="isBench || isShadow"
+                                            class="icon-size-5 cursor-pointer"
+                                            matSuffix
+                                            [svgIcon]="'heroicons_solid:x'"
+                                            (click)="clearBenchShadowSearch()"
+                                        ></mat-icon>
+                                    </mat-form-field>
 
-                            <div class="w-full">
+                                    <div class="w-full flex justify-end">
+                                        <button
+                                            [color]="'primary'"
+                                            class="ml-2"
+                                            mat-flat-button
+                                            (click)="clearFilter()"
+                                        >
+                                            <span class="ml-2 mr-1">Clear</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="">
                                 <button
                                     [color]="'primary'"
                                     [matTooltip]="'Add Resource'"
@@ -239,7 +294,7 @@
                                 </mat-menu>
                             </div>
 
-                            <div class="w-full">
+                            <div class="">
                                 <button
                                     [color]="'primary'"
                                     [matTooltip]="'Onboard Resource'"
@@ -248,7 +303,9 @@
                                     mat-flat-button
                                     (click)="gotoOnboardResource()"
                                 >
-                                    <span class="ml-2 mr-1">Onboard Resource</span>
+                                    <span class="ml-2 mr-1"
+                                        >Onboard Resource</span
+                                    >
                                 </button>
                             </div>
                         </div>

@@ -83,6 +83,7 @@ export class ResourcesListComponent implements OnInit {
     selectedProject: boolean = false;
     isBench: boolean = false;
     isShadow: boolean = false;
+    showFilterArea: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -132,6 +133,33 @@ export class ResourcesListComponent implements OnInit {
                 this.initialLoading = false;
             }
         );
+    }
+
+    showFilter() {
+        if (this.showFilterArea) {
+            this.showFilterArea = false;
+        } else {
+            this.showFilterArea = true;
+        }
+    }
+
+    clearFilter() {
+        this.isBench = false;
+        this.isShadow = false;
+        this.exprienceForm.patchValue({
+            minExprience: '',
+            maxExprience: '',
+        });
+        this.searchValue = '';
+        this.count = 1;
+        this.totalPerPageData = 10;
+        this.projects?.setValue('');
+        this.showTechnologies = [];
+        this.technologys.setValue('');
+        this.isShadowIsBench.setValue('');
+        this.pagination = false;
+        this.showFilterArea = false;
+        this.getList();
     }
 
     getTechnologies() {
