@@ -54,7 +54,7 @@ export class ProjectListComponent implements OnInit {
         private dialog: MatDialog,
         private weeklyStatusService: WeeklyStatusService,
         private loggedInUserService: LoggedInUserService,
-        private clipboard: Clipboard
+        private clipboard: Clipboard,
     ) {}
 
     ngOnInit() {
@@ -250,7 +250,7 @@ export class ProjectListComponent implements OnInit {
         if (id != null) {
             const pending = this.clipboard.beginCopy(id);
             this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 10;
+            let remainingAttempts = 100;
             const attempt = () => {
                 const result = pending.copy();
                 if (!result && --remainingAttempts) {
@@ -265,4 +265,5 @@ export class ProjectListComponent implements OnInit {
             this.snackBar.errorSnackBar('Not Copied');
         }
     }
+
 }

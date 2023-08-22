@@ -54,7 +54,7 @@ export class ProjectDetailsComponent implements OnInit {
         private datePipe: DatePipe,
         private loggedInUserService: LoggedInUserService,
         private clipboard: Clipboard,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
     ) {}
 
     ngOnInit(): void {
@@ -167,7 +167,7 @@ export class ProjectDetailsComponent implements OnInit {
         if (this.projectId != null) {
             const pending = this.clipboard.beginCopy(this.projectId);
             this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 10;
+            let remainingAttempts = 100;
             const attempt = () => {
                 const result = pending.copy();
                 if (!result && --remainingAttempts) {
