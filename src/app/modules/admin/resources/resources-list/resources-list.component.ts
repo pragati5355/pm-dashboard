@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    OnInit,
+    Renderer2,
+    ViewChild,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import {
@@ -136,16 +143,14 @@ export class ResourcesListComponent implements OnInit {
     }
 
     showFilter() {
-        if (this.showFilterArea) {
-            this.showFilterArea = false;
-        } else {
-            this.showFilterArea = true;
-        }
+        this.showFilterArea = !this.showFilterArea;
     }
 
     clearFilter() {
         this.isBench = false;
         this.isShadow = false;
+        this.minExprience = '';
+        this.maxExprience = '';
         this.exprienceForm.patchValue({
             minExprience: '',
             maxExprience: '',
@@ -158,7 +163,8 @@ export class ResourcesListComponent implements OnInit {
         this.technologys.setValue('');
         this.isShadowIsBench.setValue('');
         this.pagination = false;
-        this.showFilterArea = false;
+        this.selectedProject = false;
+        // this.showFilterArea = false;
         this.getList();
     }
 
