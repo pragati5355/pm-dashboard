@@ -16,7 +16,6 @@ import { WeeklyFeedbackFormComponent } from '../weekly-feedback-form/weekly-feed
 import { MatDialog } from '@angular/material/dialog';
 import { WeeklyStatusService } from '../common/services/weekly-status.service';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
-import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
     selector: 'app-project-list',
@@ -54,7 +53,6 @@ export class ProjectListComponent implements OnInit {
         private dialog: MatDialog,
         private weeklyStatusService: WeeklyStatusService,
         private loggedInUserService: LoggedInUserService,
-        private clipboard: Clipboard
     ) {}
 
     ngOnInit() {
@@ -246,23 +244,4 @@ export class ProjectListComponent implements OnInit {
             });
     }
 
-    copyProjectId(id: any) {
-        if (id != null) {
-            const pending = this.clipboard.beginCopy(id);
-            this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 10;
-            const attempt = () => {
-                const result = pending.copy();
-                if (!result && --remainingAttempts) {
-                    setTimeout(attempt);
-                } else {
-                    // Remember to destroy when you're done!
-                    pending.destroy();
-                }
-            };
-            attempt();
-        } else {
-            this.snackBar.errorSnackBar('Not Copied');
-        }
-    }
 }

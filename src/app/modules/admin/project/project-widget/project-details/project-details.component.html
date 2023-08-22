@@ -48,16 +48,6 @@
                     ></mat-icon>
                     {{ project?.name | titlecase }}
                 </div>
-                <div class="flex sm:block ml-5">
-                    <button
-                        mat-icon-button
-                        [matTooltip]="'Copy Project Id'"
-                        aria-label="Example icon-button with a menu"
-                        (click)="copyProjectId()"
-                        >
-                        <mat-icon class="text-gray-400 icon-size-5 cursor-pointer">content_copy</mat-icon>
-                    </button>
-                </div>
             </div>
             <div class="flex items-center ml-6">
                 <div
