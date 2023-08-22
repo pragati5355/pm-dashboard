@@ -21,6 +21,10 @@ export class ExternalProjectsApiService {
         return this.http.post(this.mapResourceUrl, obj);
     }
 
+    getTechnologies() {
+        return this.http.get(AppConstants['PROJECT_API_URL'] + '/technology');
+    }
+
     getExternalProjectsList() {
         return this.http.get(this.externalProjectsListUrl);
     }

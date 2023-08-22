@@ -37,6 +37,7 @@
                             mat-flat-button
                             [color]="'primary'"
                             (click)="addNew()"
+                            [disabled]="isLoadingTechnologies"
                         >
                             <mat-icon
                                 [svgIcon]="'heroicons_outline:plus'"

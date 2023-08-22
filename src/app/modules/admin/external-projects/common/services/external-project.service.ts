@@ -22,6 +22,10 @@ export class ExternalProjectService {
         );
     }
 
+    getTechnologies() {
+        return this.http.get(AppConstants['PROJECT_API_URL'] + '/technology');
+    }
+
     sendReminder(obj: any) {
         return this.http.post(this.sendRemindersUrl, obj);
     }
