@@ -26,6 +26,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
     configFormStatus: FormGroup;
     currentProjectEmail: any[];
     userRole: string;
+    technologies: any;
+    isLoadingTechnologies: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -45,6 +47,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
         this.setProjectIdSubscription();
         this.loadDeveloperEmails();
         this.getUserRole();
+        this.getTechnologies();
     }
 
     getProjectDetails() {
@@ -66,6 +69,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 data: {
                     projectModel: this.projectDetails?.project,
                     clientModels: this.projectDetails?.clientModels,
+                    technologies: this.technologies,
                 },
             })
             .afterClosed()
@@ -192,6 +196,16 @@ export class ExternalProjectDetailsComponent implements OnInit {
             if (result) {
                 this.getProjectDetails();
                 this.loadDeveloperEmails();
+            }
+        });
+    }
+
+    private getTechnologies() {
+        this.isLoadingTechnologies = true;
+        this.externalProjectsService.getTechnologies().subscribe((res: any) => {
+            this.isLoadingTechnologies = false;
+            if (res?.data) {
+                this.technologies = res?.data;
             }
         });
     }
