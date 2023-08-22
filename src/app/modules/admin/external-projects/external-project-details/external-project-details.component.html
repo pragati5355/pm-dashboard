@@ -26,6 +26,7 @@
                 color="primary"
                 matTooltip="Edit project"
                 (click)="edit()"
+                [disabled]="isLoadingTechnologies"
             >
                 <mat-icon>edit</mat-icon>
             </button>

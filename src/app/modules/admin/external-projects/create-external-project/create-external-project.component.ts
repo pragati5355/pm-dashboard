@@ -1,11 +1,18 @@
-import { ENTER, COMMA, I, DELETE } from '@angular/cdk/keycodes';
-import { Component, Inject, OnInit } from '@angular/core';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import {
+    Component,
+    ElementRef,
+    Inject,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { result } from 'lodash';
+import { map, Observable, startWith } from 'rxjs';
 import { ExternalProjectService } from '../common/services/external-project.service';
 
 @Component({
@@ -14,8 +21,10 @@ import { ExternalProjectService } from '../common/services/external-project.serv
     styleUrls: ['./create-external-project.component.scss'],
 })
 export class CreateExternalProjectComponent implements OnInit {
-    technologies: string[] = this.data?.projectModel?.technology || [];
+    @ViewChild('technologyInput')
+    technologyInput!: ElementRef;
 
+    technologies: string[] = this.data?.projectModel?.technology || [];
     isLoading = false;
     mode: 'create' | 'update' = 'create';
     loggedInUser: any;
@@ -23,6 +32,12 @@ export class CreateExternalProjectComponent implements OnInit {
     clientModels = this.data?.clientModels;
     projectForm: FormGroup;
     separatorKeysCodes: number[] = [ENTER, COMMA];
+    addOnBlur = false;
+    selectable = true;
+    removable = true;
+    technologys: any = this.data?.projectModel?.technology || [];
+    filteredTechnologies: Observable<any[]> | undefined;
+    alltechnologys: any[] = this.data?.technologies;
 
     get clients() {
         return this.projectForm?.get('clients') as FormArray;
@@ -41,10 +56,44 @@ export class CreateExternalProjectComponent implements OnInit {
         this.loggedInUser = this.authService.getUser();
         this.setMode();
         this.initializeForm();
+
+        console.log(this.data?.projectModel?.technology);
     }
 
     setMode() {
         this.mode = this.projectModel?.id ? 'update' : 'create';
+    }
+
+    addTech(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = event.value;
+        // Add our technology
+
+        if (input) {
+            input.value = '';
+        }
+        this.projectForm.get('technology')?.setValue('');
+    }
+
+    remove(technology: any, selectIndex: any): void {
+        this.technologys.splice(selectIndex, 1);
+        this.projectForm.get('technology')?.setValue('');
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        const isAlreadyExist =
+            this.technologys?.filter(
+                (item) =>
+                    item?.toLowerCase() ===
+                    event?.option?.value?.name.toLowerCase()
+            )?.length > 0;
+        if (isAlreadyExist) {
+            return;
+        }
+
+        this.technologys.push(event?.option?.value?.name);
+        this.technologyInput.nativeElement.value = '';
+        this.projectForm.get('technology')?.setValue('');
     }
 
     initializeForm() {
@@ -56,11 +105,33 @@ export class CreateExternalProjectComponent implements OnInit {
             description: this.fb.control(
                 this.projectModel?.description || null
             ),
-            technology: this.fb.control(null),
+            technology: [''],
             clients: this.getClientsControl(),
             addedBy: this.loggedInUser?.userId,
         });
+
+        this.filteredTechnologies = this.projectForm
+            .get('technology')
+            ?.valueChanges.pipe(
+                startWith(''),
+                map((technology: any | null) =>
+                    technology ? this._filter(technology) : this._filterslice()
+                )
+            );
     }
+
+    _filter(value: any) {
+        return this.alltechnologys.filter(
+            (alltechnologys: any) =>
+                alltechnologys.name.toLowerCase().indexOf(value) === 0
+        );
+    }
+    _filterslice() {
+        return this.alltechnologys.filter(
+            (alltechnologys) => !this.technologys.includes(alltechnologys.name)
+        );
+    }
+
     getClientsControl(): FormArray {
         if (this.mode === 'create') {
             return this.fb.array([this.getClientSingleControl(null)]);
@@ -108,7 +179,6 @@ export class CreateExternalProjectComponent implements OnInit {
 
     removeClient(index: number) {
         const clientControl = this.clients.at(index);
-        console.log(clientControl?.value);
 
         if (clientControl?.value?.id) {
             clientControl?.get('deleted').setValue(true);
@@ -119,7 +189,7 @@ export class CreateExternalProjectComponent implements OnInit {
 
     add() {
         const formValue = this.projectForm?.value;
-        formValue.technology = this.technologies;
+        formValue.technology = this.technologys;
         if (this.projectForm?.valid) {
             if (this.mode === 'create') {
                 delete formValue.id;
