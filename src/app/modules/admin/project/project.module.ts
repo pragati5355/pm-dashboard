@@ -48,6 +48,7 @@ import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedb
 import { WeeklyFormComponent } from './weekly-form/weekly-form.component';
 import { EditProjectReasonDialogComponent } from './edit-project-reason-dialog/edit-project-reason-dialog.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+
 @NgModule({
     declarations: [
         ProjectHomeComponent,
