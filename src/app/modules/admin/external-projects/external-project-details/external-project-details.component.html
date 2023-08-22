@@ -6,19 +6,21 @@
                 [routerLink]="['../']"
             >
                 <mat-icon
-                    class="icon-size-6 text-3xl text-black"
+                    class="icon-size-6 text-black"
                     [svgIcon]="'heroicons_outline:chevron-left'"
                 ></mat-icon>
                 {{ projectDetails?.project?.name | titlecase }}
             </div>
-            <div class="flex sm:block ml-5">
+            <div class="flex sm:block">
                 <button
                     mat-icon-button
                     [matTooltip]="'Copy Project Id'"
                     aria-label="Example icon-button with a menu"
                     (click)="copyProjectId()"
+                >
+                    <mat-icon class="text-gray-400 icon-size-4.5 cursor-pointer"
+                        >content_copy</mat-icon
                     >
-                    <mat-icon class="text-gray-400 icon-size-4.5 cursor-pointer">content_copy</mat-icon>
                 </button>
             </div>
         </div>
