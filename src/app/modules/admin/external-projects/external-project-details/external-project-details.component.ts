@@ -275,4 +275,12 @@ export class ExternalProjectDetailsComponent implements OnInit {
             this.snackBar.errorSnackBar('Not Copied');
         }
     }
+
+    viewResourceWorkLogs(){
+        console.log("View Worklog");
+    }
+
+    downloadResouceWorklog(){
+        console.log("Download Worklog");
+    }
 }
