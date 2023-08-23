@@ -41,7 +41,7 @@ export class WorkLogsListComponent implements OnInit {
     loadingUser: boolean = false;
     userRole: string;
     resourceIdList: number[] = [101, 84, 89, 118];
-    selectedResourceId: number = 84;
+    selectedResourceId: number = this.resourceIdList[0];
 
     constructor(
         private matDialog: MatDialog,
