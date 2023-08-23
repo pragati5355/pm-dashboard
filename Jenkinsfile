@@ -22,9 +22,7 @@ pipeline{
        docker {
             label "docker"
             alwaysPull true
-            image 'node:v4-gcp-aws'
-            registryUrl "https://442050301785.dkr.ecr.us-east-1.amazonaws.com"
-            registryCredentialsId 'jenkins-ecr-user'
+            image 'public.ecr.aws/t6g5d7d1/node:v4-gcp-aws'
         }
    }
    stages{
