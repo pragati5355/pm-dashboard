@@ -39,6 +39,9 @@ export class WorkLogsListComponent implements OnInit {
     disablePreviousWorklog: boolean = false;
     loggedInUser: any;
     loadingUser: boolean = false;
+    userRole: string;
+    resourceIdList: number[] = [101, 84, 89, 118];
+    selectedResourceId: number = 84;
 
     constructor(
         private matDialog: MatDialog,
@@ -79,6 +82,10 @@ export class WorkLogsListComponent implements OnInit {
 
     onYearChange(event: any) {
         this.loadData(event?.value, this.selectedTabIndex);
+    }
+
+    onResourceIdChange(event: any) {
+        this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
     goBack() {
@@ -147,6 +154,8 @@ export class WorkLogsListComponent implements OnInit {
             this.initialLoading = false;
             if (res) {
                 this.loggedInUser = res;
+                this.userRole = res?.role;
+                this.selectedResourceId = this.loggedInUser?.resourceId;
                 this.loadData(this.selectedYear, this.selectedTabIndex);
             }
         });
@@ -179,7 +188,7 @@ export class WorkLogsListComponent implements OnInit {
     private loadData(year: any, month: number) {
         this.initialLoading = true;
         const payload = {
-            resourceId: this.loggedInUser?.resourceId,
+            resourceId: this.selectedResourceId,
             projectId: this.projectId,
             month: ++month,
             year: year,

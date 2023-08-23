@@ -28,45 +28,6 @@
                             ><span>I was on Leave</span></mat-checkbox
                         >
                     </div>
-                    <!-- <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <div class="flex-1 mt-4 sm:col-span-2">
-                            <span class="font-semibold mb-4"
-                                >Description *</span
-                            >
-                            <div class="mt-2">
-                                <quill-editor
-                                    #editor
-                                    [modules]="modules"
-                                    (onContentChanged)="getDescription($event)"
-                                    [(ngModel)]="quillValue"
-                                    [readOnly]="onLeave"
-                                    [ngModelOptions]="{ standalone: true }"
-                                ></quill-editor>
-                            </div>
-                        </div>
-
-                        <div class="flex mt-6">
-                            <mat-form-field
-                                class="w-full"
-                                [floatLabel]="'always'"
-                            >
-                                <mat-label>Hours *</mat-label>
-                                <input
-                                    matInput
-                                    type="number"
-                                    placeholder="Hours"
-                                    formControlName="totalHours"
-                                    min="0"
-                                />
-                            </mat-form-field>
-
-                            <mat-icon
-                                (click)="workLogForm?.valid ? addTask() : null"
-                                class="mt-6 ml-2 cursor-pointer w-10 h-10"
-                                svgIcon="heroicons_outline:plus"
-                            ></mat-icon>
-                        </div>
-                    </div> -->
 
                     <div class="w-full">
                         <div class="flex items-center mt-6">
@@ -222,7 +183,7 @@
 
 <div
     *ngIf="initialLoading"
-    class="w-screen h-screen flex justify-center items-center bg-gray-50"
+    class="w-screen h-screen flex justify-center items-center bg-gray-50 overflow-x-hidden"
 >
     <div class="w-full max-w-screen-md p-2 sm:p-6">
         <div class="w-full flex justify-center mb-2">

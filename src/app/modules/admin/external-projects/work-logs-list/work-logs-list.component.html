@@ -13,6 +13,28 @@
             </div>
             <div class="flex justify-end items-center">
                 <div class="flex items-center">
+                    <mat-label
+                        class="mb-4 mr-2"
+                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                        >Resource</mat-label
+                    >
+                    <mat-form-field
+                        class="mr-8"
+                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                    >
+                        <mat-select
+                            [(value)]="selectedResourceId"
+                            (selectionChange)="onResourceIdChange($event)"
+                            [disabled]="initialLoading"
+                        >
+                            <mat-option
+                                *ngFor="let id of resourceIdList"
+                                value="{{ id }}"
+                                >{{ id }}</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+
                     <mat-label class="mb-4 mr-2">Year</mat-label>
                     <mat-form-field>
                         <mat-select
