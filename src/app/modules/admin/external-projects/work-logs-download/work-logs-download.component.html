@@ -1,14 +1,75 @@
-<div
-    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
->
-    <div class="text-lg font-medium">
-        Download Resource Work Logs
+<div class="flex flex-col max-h-screen -m-6 bg-white">
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+    >
+        <div class="flex text-lg font-medium">Download Resource Work Logs</div>
+
+        <button mat-icon-button (click)="close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"
+            ></mat-icon>
+        </button>
     </div>
 
-    <button mat-icon-button (click)="close()" [tabIndex]="-1">
-        <mat-icon
-            class="text-current"
-            [svgIcon]="'heroicons_outline:x'"
-        ></mat-icon>
-    </button>
+    <div class="flex flex-col">
+        <div class="flex items-center mt-10 px-12 text-lg font-semibold">
+            Select Month and Year
+        </div>
+        <div class="flex items-center justify-between mt-4 px-7">
+            <div class="flex items-center">
+                <div class="flex items-center">
+                    <mat-label class="mb-4 px-5 py-5">Month</mat-label>
+                    <mat-form-field>
+                        <mat-select
+                            [(value)]="selectedTabIndex"
+                            (selectionChange)="onMonthChanged($event)"
+                        >
+                            <mat-option
+                                *ngFor="let month of matTabList"
+                                value="{{ month }}"
+                                >{{ month?.label }}</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex items-center">
+                    <mat-label class="mb-4 px-5 py-5">Year</mat-label>
+                    <mat-form-field>
+                        <mat-select
+                            [(value)]="selectedYear"
+                            (selectionChange)="onYearChange($event)"
+                        >
+                            <mat-option
+                                *ngFor="let year of matSelectYears"
+                                value="{{ year }}"
+                                >{{ year }}</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex items-center pl-5 sm:mt-0 sm:ml-2 space-x-3 mb-4">
+                <button
+                    [color]="'primary'"
+                    [matTooltip]="'Download WorkLog Report'"
+                    class="ml-4"
+                    mat-flat-button
+                    [disabled]="submitInProcess"
+                    (click)="downloadWorklogReport()"
+                >
+                    <mat-icon
+                        [svgIcon]="'heroicons_outline:arrow-circle-down'"
+                    ></mat-icon>
+                    <span class="ml-2 mr-1">Download</span>
+                    <mat-progress-spinner
+                        *ngIf="submitInProcess"
+                        [diameter]="18"
+                        [mode]="'indeterminate'"
+                    ></mat-progress-spinner>
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
