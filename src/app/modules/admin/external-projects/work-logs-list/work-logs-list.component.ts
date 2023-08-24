@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -11,6 +11,7 @@ import {
 import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { map, Observable, startWith } from 'rxjs';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
 
 @Component({
@@ -39,6 +40,15 @@ export class WorkLogsListComponent implements OnInit {
     disablePreviousWorklog: boolean = false;
     loggedInUser: any;
     loadingUser: boolean = false;
+    userRole: string;
+    resourceIdList: number[] = [101, 84, 89, 118];
+    selectedResourceId: number = this.resourceIdList[0];
+    myControl = new FormControl('');
+    options: any[] = [];
+    filteredOptions: Observable<any[]>;
+    isEmailSelected: boolean = false;
+    isResourceLoading: boolean = false;
+    selectedResource: any;
 
     constructor(
         private matDialog: MatDialog,
@@ -58,11 +68,24 @@ export class WorkLogsListComponent implements OnInit {
         this.userState = this.authService.getUser();
         this.initializeConfigForm();
         this.getLoggedInUser();
+        this.valueChangeSubscriptionForEmail();
+    }
+
+    _filter(value: any): any[] {
+        const filterValue = value?.toLowerCase();
+        return this.options.filter((option) =>
+            option?.email?.toLowerCase().includes(filterValue)
+        );
     }
 
     close() {}
 
     onTabChanged(event: any) {
+        if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
+            this.workLogsList = [];
+            this.snackBar.errorSnackBar('Please enter email');
+            return;
+        }
         this.selectedTabIndex = event?.index;
         this.loadData(this.selectedYear, this.selectedTabIndex);
 
@@ -76,9 +99,30 @@ export class WorkLogsListComponent implements OnInit {
             this.disablePreviousWorklog = false;
         }
     }
+    onEmailSelected($event: any) {
+        const resource = this.options.filter((option) =>
+            option?.email?.toLowerCase().includes($event.option.value)
+        );
+        this.selectedResourceId = resource[0]?.id;
+        this.isEmailSelected = true;
+        this.loadData(this.selectedYear, this.selectedTabIndex);
+    }
+    clearSelectedEmail() {
+        this.isEmailSelected = false;
+        this.myControl?.setValue('');
+        this.getCurrentMonthAndYear();
+    }
 
     onYearChange(event: any) {
+        if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
+            this.snackBar.errorSnackBar('Please enter email');
+            return;
+        }
         this.loadData(event?.value, this.selectedTabIndex);
+    }
+
+    onResourceIdChange(event: any) {
+        this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
     goBack() {
@@ -141,13 +185,26 @@ export class WorkLogsListComponent implements OnInit {
         });
     }
 
+    private valueChangeSubscriptionForEmail() {
+        this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map((value) => this._filter(value || ''))
+        );
+    }
+
     private getLoggedInUser() {
         this.initialLoading = true;
         this.loggedInService.getLoggedInUser().subscribe((res: any) => {
             this.initialLoading = false;
             if (res) {
                 this.loggedInUser = res;
-                this.loadData(this.selectedYear, this.selectedTabIndex);
+                this.userRole = res?.role;
+                this.selectedResourceId = this.loggedInUser?.resourceId;
+                if (this.userRole !== 'ADMIN') {
+                    this.loadData(this.selectedYear, this.selectedTabIndex);
+                } else {
+                    this.getProjectResources();
+                }
             }
         });
     }
@@ -178,8 +235,9 @@ export class WorkLogsListComponent implements OnInit {
 
     private loadData(year: any, month: number) {
         this.initialLoading = true;
+
         const payload = {
-            resourceId: this.loggedInUser?.resourceId,
+            resourceId: this.selectedResourceId,
             projectId: this.projectId,
             month: ++month,
             year: year,
@@ -214,5 +272,17 @@ export class WorkLogsListComponent implements OnInit {
                 this.projectId = projectId['id'];
             }
         });
+    }
+
+    private getProjectResources() {
+        this.isResourceLoading = true;
+        this.workLogService
+            .getProjectResource({ projectId: this.projectId })
+            .subscribe((res: any) => {
+                this.isResourceLoading = false;
+                if (res?.data) {
+                    this.options = res?.data;
+                }
+            });
     }
 }

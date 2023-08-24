@@ -41,7 +41,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
         private snackBar: SnackBar,
         private router: Router,
         private loggedInUserService: LoggedInUserService,
-        private clipboard: Clipboard,
+        private clipboard: Clipboard
     ) {}
 
     ngOnInit(): void {
@@ -182,7 +182,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             {
                 disableClose: true,
                 width: '50%',
-                maxHeight:'90vh',
+                maxHeight: '90vh',
                 panelClass: 'warn-dialog-content',
                 autoFocus: false,
                 data: {
@@ -200,6 +200,30 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.loadDeveloperEmails();
             }
         });
+    }
+
+    copyProjectId() {
+        if (this.projectId != null) {
+            const pending = this.clipboard.beginCopy(this.projectId);
+            this.snackBar.successSnackBar('Copied');
+            let remainingAttempts = 100;
+            const attempt = () => {
+                const result = pending.copy();
+                if (!result && --remainingAttempts) {
+                    setTimeout(attempt);
+                } else {
+                    // Remember to destroy when you're done!
+                    pending.destroy();
+                }
+            };
+            attempt();
+        } else {
+            this.snackBar.errorSnackBar('Not Copied');
+        }
+    }
+
+    downloadResouceWorklog() {
+        console.log('Download Worklog');
     }
 
     private getTechnologies() {
@@ -254,33 +278,5 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.isLoadingDevelopersEmail = false;
             }
         );
-    }
-
-    copyProjectId() {
-        if (this.projectId != null) {
-            const pending = this.clipboard.beginCopy(this.projectId);
-            this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 100;
-            const attempt = () => {
-                const result = pending.copy();
-                if (!result && --remainingAttempts) {
-                    setTimeout(attempt);
-                } else {
-                    // Remember to destroy when you're done!
-                    pending.destroy();
-                }
-            };
-            attempt();
-        } else {
-            this.snackBar.errorSnackBar('Not Copied');
-        }
-    }
-
-    viewResourceWorkLogs(){
-        console.log("View Worklog");
-    }
-
-    downloadResouceWorklog(){
-        console.log("Download Worklog");
     }
 }
