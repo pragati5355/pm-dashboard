@@ -44,13 +44,10 @@ export class WorkLogsListComponent implements OnInit {
     resourceIdList: number[] = [101, 84, 89, 118];
     selectedResourceId: number = this.resourceIdList[0];
     myControl = new FormControl('');
-    options: any[] = [
-        { label: 'sanket@mindbowser.com', value: 101 },
-        { label: 'shubham@mindbowser.com', value: 89 },
-        { label: 'ravi@mindbowser.com', value: 84 },
-    ];
+    options: any[] = [];
     filteredOptions: Observable<any[]>;
     isEmailSelected: boolean = false;
+    isResourceLoading: boolean = false;
     selectedResource: any;
 
     constructor(
@@ -71,17 +68,13 @@ export class WorkLogsListComponent implements OnInit {
         this.userState = this.authService.getUser();
         this.initializeConfigForm();
         this.getLoggedInUser();
-
-        this.filteredOptions = this.myControl.valueChanges.pipe(
-            startWith(''),
-            map((value) => this._filter(value || ''))
-        );
+        this.valueChangeSubscriptionForEmail();
     }
 
     _filter(value: any): any[] {
         const filterValue = value?.toLowerCase();
         return this.options.filter((option) =>
-            option?.label?.toLowerCase().includes(filterValue)
+            option?.email?.toLowerCase().includes(filterValue)
         );
     }
 
@@ -103,15 +96,16 @@ export class WorkLogsListComponent implements OnInit {
     }
     onEmailSelected($event: any) {
         const resource = this.options.filter((option) =>
-            option?.label?.toLowerCase().includes($event.option.value)
+            option?.email?.toLowerCase().includes($event.option.value)
         );
-        this.selectedResourceId = resource[0]?.value;
+        this.selectedResourceId = resource[0]?.id;
         this.isEmailSelected = true;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
     clearSelectedEmail() {
         this.isEmailSelected = false;
         this.myControl?.setValue('');
+        this.getCurrentMonthAndYear();
     }
 
     onYearChange(event: any) {
@@ -180,6 +174,13 @@ export class WorkLogsListComponent implements OnInit {
                     });
             }
         });
+    }
+
+    private valueChangeSubscriptionForEmail() {
+        this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map((value) => this._filter(value || ''))
+        );
     }
 
     private getLoggedInUser() {
@@ -256,7 +257,20 @@ export class WorkLogsListComponent implements OnInit {
         this.route.params.subscribe((projectId) => {
             if (projectId['id']) {
                 this.projectId = projectId['id'];
+                this.getProjectResources();
             }
         });
+    }
+
+    private getProjectResources() {
+        this.isResourceLoading = true;
+        this.workLogService
+            .getProjectResource({ projectId: this.projectId })
+            .subscribe((res: any) => {
+                this.isResourceLoading = false;
+                if (res?.data) {
+                    this.options = res?.data;
+                }
+            });
     }
 }
