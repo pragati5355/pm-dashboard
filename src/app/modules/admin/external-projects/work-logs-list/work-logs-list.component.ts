@@ -81,6 +81,11 @@ export class WorkLogsListComponent implements OnInit {
     close() {}
 
     onTabChanged(event: any) {
+        if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
+            this.workLogsList = [];
+            this.snackBar.errorSnackBar('Please enter email');
+            return;
+        }
         this.selectedTabIndex = event?.index;
         this.loadData(this.selectedYear, this.selectedTabIndex);
 
@@ -109,6 +114,10 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     onYearChange(event: any) {
+        if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
+            this.snackBar.errorSnackBar('Please enter email');
+            return;
+        }
         this.loadData(event?.value, this.selectedTabIndex);
     }
 
@@ -191,7 +200,11 @@ export class WorkLogsListComponent implements OnInit {
                 this.loggedInUser = res;
                 this.userRole = res?.role;
                 this.selectedResourceId = this.loggedInUser?.resourceId;
-                this.loadData(this.selectedYear, this.selectedTabIndex);
+                if (this.userRole !== 'ADMIN') {
+                    this.loadData(this.selectedYear, this.selectedTabIndex);
+                } else {
+                    this.getProjectResources();
+                }
             }
         });
     }
@@ -257,7 +270,6 @@ export class WorkLogsListComponent implements OnInit {
         this.route.params.subscribe((projectId) => {
             if (projectId['id']) {
                 this.projectId = projectId['id'];
-                this.getProjectResources();
             }
         });
     }
