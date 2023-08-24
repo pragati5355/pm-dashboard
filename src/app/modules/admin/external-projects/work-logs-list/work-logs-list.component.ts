@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -11,6 +11,7 @@ import {
 import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { map, Observable, startWith } from 'rxjs';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
 
 @Component({
@@ -42,6 +43,15 @@ export class WorkLogsListComponent implements OnInit {
     userRole: string;
     resourceIdList: number[] = [101, 84, 89, 118];
     selectedResourceId: number = this.resourceIdList[0];
+    myControl = new FormControl('');
+    options: any[] = [
+        { label: 'sanket@mindbowser.com', value: 101 },
+        { label: 'shubham@mindbowser.com', value: 89 },
+        { label: 'ravi@mindbowser.com', value: 84 },
+    ];
+    filteredOptions: Observable<any[]>;
+    isEmailSelected: boolean = false;
+    selectedResource: any;
 
     constructor(
         private matDialog: MatDialog,
@@ -61,6 +71,18 @@ export class WorkLogsListComponent implements OnInit {
         this.userState = this.authService.getUser();
         this.initializeConfigForm();
         this.getLoggedInUser();
+
+        this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map((value) => this._filter(value || ''))
+        );
+    }
+
+    _filter(value: any): any[] {
+        const filterValue = value?.toLowerCase();
+        return this.options.filter((option) =>
+            option?.label?.toLowerCase().includes(filterValue)
+        );
     }
 
     close() {}
@@ -78,6 +100,18 @@ export class WorkLogsListComponent implements OnInit {
         } else {
             this.disablePreviousWorklog = false;
         }
+    }
+    onEmailSelected($event: any) {
+        const resource = this.options.filter((option) =>
+            option?.label?.toLowerCase().includes($event.option.value)
+        );
+        this.selectedResourceId = resource[0]?.value;
+        this.isEmailSelected = true;
+        this.loadData(this.selectedYear, this.selectedTabIndex);
+    }
+    clearSelectedEmail() {
+        this.isEmailSelected = false;
+        this.myControl?.setValue('');
     }
 
     onYearChange(event: any) {
@@ -187,6 +221,7 @@ export class WorkLogsListComponent implements OnInit {
 
     private loadData(year: any, month: number) {
         this.initialLoading = true;
+
         const payload = {
             resourceId: this.selectedResourceId,
             projectId: this.projectId,

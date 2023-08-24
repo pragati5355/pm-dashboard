@@ -13,34 +13,45 @@
             </div>
             <div class="flex justify-end items-center">
                 <div class="flex items-center">
-                    <mat-label
-                        class="mb-4 mr-2"
-                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
-                        >Resource</mat-label
-                    >
-                    <mat-form-field
-                        class="mr-8"
-                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
-                    >
-                        <mat-select
-                            [(value)]="selectedResourceId"
-                            (selectionChange)="onResourceIdChange($event)"
-                            [disabled]="initialLoading"
+                    <mat-form-field class="w-[350px] mr-4">
+                        <mat-label>Resource email</mat-label>
+                        <input
+                            type="text"
+                            placeholder="Select resource email"
+                            aria-label="email"
+                            matInput
+                            [formControl]="myControl"
+                            [matAutocomplete]="auto"
+                        />
+                        <mat-autocomplete
+                            autoActiveFirstOption
+                            #auto="matAutocomplete"
+                            (optionSelected)="onEmailSelected($event)"
                         >
                             <mat-option
-                                *ngFor="let id of resourceIdList"
-                                value="{{ id }}"
-                                >{{ id }}</mat-option
+                                *ngFor="let option of filteredOptions | async"
+                                [value]="option?.label"
                             >
-                        </mat-select>
+                                {{ option?.label }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-icon
+                            *ngIf="isEmailSelected"
+                            class="icon-size-5 cursor-pointer"
+                            matSuffix
+                            [svgIcon]="'heroicons_solid:x'"
+                            (click)="
+                                $event.stopPropagation(); clearSelectedEmail()
+                            "
+                        ></mat-icon>
                     </mat-form-field>
 
-                    <mat-label class="mb-4 mr-2">Year</mat-label>
                     <mat-form-field>
+                        <mat-label class="">Year</mat-label>
                         <mat-select
                             [(value)]="selectedYear"
                             (selectionChange)="onYearChange($event)"
-                            [disabled]="initialLoading"
+                            [disabled]="initialLoading || !isEmailSelected"
                         >
                             <mat-option
                                 *ngFor="let year of matSelectYears"
@@ -50,11 +61,11 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div>
+                <div *ngIf="userRole === 'USER' || userRole === 'PM'">
                     <button
                         (click)="addOrEditWorklog(null, 'ADD')"
                         [disabled]="initialLoading"
-                        class="ml-6 mb-4"
+                        class="ml-4"
                         mat-flat-button
                         [color]="'primary'"
                     >
@@ -68,7 +79,7 @@
             </div>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4" *ngIf="isEmailSelected">
             <mat-tab-group
                 [color]="'primary'"
                 mat-stretch-tabs="false"
@@ -90,7 +101,12 @@
                             <div class="font-semibold px-2">Date</div>
                             <div class="font-semibold">Description</div>
                             <div class="font-semibold">Hours</div>
-                            <div class="font-semibold">Actions</div>
+                            <div
+                                class="font-semibold"
+                                *ngIf="userRole === 'USER' || userRole === 'PM'"
+                            >
+                                Actions
+                            </div>
                         </div>
                         <ng-container *ngIf="!initialLoading">
                             <div
@@ -112,7 +128,11 @@
                                     }}
                                 </div>
                                 <div>{{ log?.timeSpent }}</div>
-                                <div>
+                                <div
+                                    *ngIf="
+                                        userRole === 'USER' || userRole === 'PM'
+                                    "
+                                >
                                     <button
                                         (click)="addOrEditWorklog(log, 'EDIT')"
                                     >
