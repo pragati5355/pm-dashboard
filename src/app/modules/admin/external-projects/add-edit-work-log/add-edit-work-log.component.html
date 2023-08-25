@@ -71,14 +71,49 @@
                                     class="w-full"
                                     [floatLabel]="'always'"
                                 >
-                                    <mat-label>Hours *</mat-label>
+                                    <mat-label>Hours</mat-label>
                                     <input
                                         matInput
-                                        type="number"
+                                        type="text"
                                         placeholder="Hours"
                                         formControlName="totalHours"
                                         min="0"
+                                        [ngClass]="{
+                                            'cursor-not-allowed': onLeave
+                                        }"
                                     />
+                                    <mat-error
+                                        *ngIf="
+                                            workLogForm
+                                                ?.get('totalHours')
+                                                ?.hasError('required')
+                                        "
+                                        class="text-red-500"
+                                    >
+                                        <div>Hours is mandatory</div>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="
+                                            workLogForm
+                                                ?.get('totalHours')
+                                                ?.hasError('pattern')
+                                        "
+                                        class="text-red-500"
+                                    >
+                                        <div>Please enter valid hours</div>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="
+                                            workLogForm
+                                                ?.get('totalHours')
+                                                ?.hasError('max')
+                                        "
+                                        class="text-red-500"
+                                    >
+                                        <div>
+                                            Hours should not be greater than 24
+                                        </div>
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
 
@@ -88,6 +123,9 @@
                                 >
                                 <div class="mt-2">
                                     <quill-editor
+                                        [ngClass]="{
+                                            'cursor-not-allowed': onLeave
+                                        }"
                                         [disabled]="disablePreviousWorklog"
                                         #editor
                                         [modules]="modules"
@@ -113,6 +151,9 @@
                                     (click)="
                                         workLogForm?.valid ? addTask() : null
                                     "
+                                    [ngClass]="{
+                                        'cursor-not-allowed': onLeave
+                                    }"
                                 >
                                     <mat-icon
                                         svgIcon="heroicons_outline:plus"

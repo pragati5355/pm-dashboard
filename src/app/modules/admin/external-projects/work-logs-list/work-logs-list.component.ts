@@ -108,6 +108,7 @@ export class WorkLogsListComponent implements OnInit {
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
     clearSelectedEmail() {
+        this.workLogsList = [];
         this.isEmailSelected = false;
         this.myControl?.setValue('');
         this.getCurrentMonthAndYear();
