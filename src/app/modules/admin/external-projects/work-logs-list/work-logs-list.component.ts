@@ -199,6 +199,7 @@ export class WorkLogsListComponent implements OnInit {
             if (res) {
                 this.loggedInUser = res;
                 this.userRole = res?.role;
+                this.userRole = 'USER';
                 this.selectedResourceId = this.loggedInUser?.resourceId;
                 if (this.userRole !== 'ADMIN') {
                     this.loadData(this.selectedYear, this.selectedTabIndex);

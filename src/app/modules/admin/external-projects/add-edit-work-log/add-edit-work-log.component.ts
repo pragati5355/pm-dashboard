@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { AuthService } from '@services/auth/auth.service';
@@ -115,7 +115,7 @@ export class AddEditWorkLogComponent implements OnInit {
 
     calculateTotalHours() {
         this.totalHours = this.tasks?.reduce(
-            (sum, item) => sum + item?.worklogPerTask?.timeSpent,
+            (sum, item) => sum + Number(item?.worklogPerTask?.timeSpent),
             0
         );
     }
@@ -186,9 +186,6 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     private patchValueInEditMode() {
-        console.log(new Date(this.data?.data?.workLogDate).getMonth());
-        console.log(new Date().getMonth());
-
         if (this.data?.mode === 'EDIT') {
             this.quillValue = this.data?.data?.comment;
             this.workLogForm
@@ -303,7 +300,14 @@ export class AddEditWorkLogComponent implements OnInit {
 
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
-            totalHours: [''],
+            totalHours: [
+                '',
+                [
+                    Validators.max(24),
+                    Validators.required,
+                    Validators.pattern(/^[0-9]+$/),
+                ],
+            ],
             workLogDate: [new Date()],
         });
     }
