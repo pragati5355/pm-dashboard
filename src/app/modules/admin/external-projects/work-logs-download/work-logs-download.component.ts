@@ -98,6 +98,8 @@ export class WorkLogsDownloadComponent implements OnInit {
                 this.submitInProcess = false;
                 if (res?.error === false) {
                     this.downloadFile(res?.data);
+                    this.snackbar.successSnackBar(res?.message);
+                    this.close();
                 } else {
                     this.snackbar.errorSnackBar(res?.message);
                 }
