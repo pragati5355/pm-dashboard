@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 export class WorkLogService {
     getWorklogsUrl = AppConstants['PROJECT_API_URL'] + '/worklog-list';
     saveWorklogsUrl = AppConstants['PROJECT_API_URL'] + '/save-worklog-portal';
+    downloadWorkLogUrl = AppConstants['PROJECT_API_URL'] + '/create-worklog-sheet';
+
     constructor(private http: HttpClient) {}
 
     getWorkLogs(obj: any) {
@@ -16,5 +18,9 @@ export class WorkLogService {
 
     saveWorkLogs(obj: any) {
         return this.http.post(this.saveWorklogsUrl, obj);
+    }
+
+    downloadWorklog(obj :any){
+        return this.http.post(this.downloadWorkLogUrl, obj);
     }
 }

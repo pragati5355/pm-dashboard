@@ -291,6 +291,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
+                id: this.projectId,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

@@ -22,12 +22,12 @@
                     <mat-label class="mb-4 px-5 py-5">Month</mat-label>
                     <mat-form-field>
                         <mat-select
-                            [(value)]="selectedTabIndex"
+                            [value]="selectedTabIndex"
                             (selectionChange)="onMonthChanged($event)"
                         >
                             <mat-option
                                 *ngFor="let month of matTabList"
-                                value="{{ month }}"
+                                [value]="month?.value"
                                 >{{ month?.label }}</mat-option
                             >
                         </mat-select>
