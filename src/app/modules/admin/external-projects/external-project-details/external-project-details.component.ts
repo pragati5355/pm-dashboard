@@ -276,11 +276,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             }
         );
     }
-
-    viewResourceWorkLogs(){
-        console.log("View Worklog");
-    }
-
+    
     downloadResouceWorklog(){
         console.log("Download Worklog");
         const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
