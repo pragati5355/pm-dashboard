@@ -12,6 +12,7 @@ import { CreateExternalProjectComponent } from '../create-external-project/creat
 import { ExternalProjectsAddResourceComponent } from '../external-projects-add-resource/external-projects-add-resource.component';
 import { SendRemindersComponent } from '../send-reminders/send-reminders.component';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { WorkLogsDownloadComponent } from '../work-logs-download/work-logs-download.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -222,10 +223,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
         }
     }
 
-    downloadResouceWorklog() {
-        console.log('Download Worklog');
-    }
-
     private getTechnologies() {
         this.isLoadingTechnologies = true;
         this.externalProjectsService.getTechnologies().subscribe((res: any) => {
@@ -278,5 +275,25 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.isLoadingDevelopersEmail = false;
             }
         );
+    }
+    
+    downloadResouceWorklog(){
+        console.log("Download Worklog");
+        const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
+            disableClose: true,
+            width: '98%',
+            maxWidth: '800px',
+            maxHeight: '90vh',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                id: this.projectId,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                window.location.reload();
+            }
+        });
     }
 }

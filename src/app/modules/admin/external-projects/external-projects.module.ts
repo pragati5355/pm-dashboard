@@ -41,6 +41,7 @@ import { WorkLogsListComponent } from './work-logs-list/work-logs-list.component
 import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
 import { QuillModule } from 'ngx-quill';
+import { WorkLogsDownloadComponent } from './work-logs-download/work-logs-download.component';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -52,6 +53,7 @@ import { QuillModule } from 'ngx-quill';
         WorkLogsListComponent,
         StripHtmlPipe,
         AddEditWorkLogComponent,
+        WorkLogsDownloadComponent,
     ],
     imports: [
         CommonModule,
