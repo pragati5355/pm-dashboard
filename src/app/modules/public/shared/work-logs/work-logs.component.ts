@@ -96,7 +96,7 @@ export class WorkLogsComponent implements OnInit {
 
     calculateTotalHours() {
         this.totalHours = this.tasks?.reduce(
-            (sum, item) => sum + item?.timeSpent,
+            (sum, item) => (sum = sum + Number(item?.timeSpent)),
             0
         );
     }
@@ -110,6 +110,7 @@ export class WorkLogsComponent implements OnInit {
             this.snackBar.errorSnackBar('Add Hours');
             return;
         }
+
         const task = {
             description: this.currentDescriptionValue,
             timeSpent: this.workLogForm?.get('totalHours')?.value,
@@ -198,7 +199,14 @@ export class WorkLogsComponent implements OnInit {
 
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
-            totalHours: [''],
+            totalHours: [
+                '',
+                [
+                    Validators.max(24),
+                    Validators.required,
+                    Validators.pattern(/^[0-9]+$/),
+                ],
+            ],
         });
     }
 }

@@ -37,19 +37,14 @@
                 <span class="ml-2 mr-1">Work logs</span>
             </button>
             <mat-menu #menu="matMenu">
-                <button 
-                mat-menu-item 
-                (click)="viewResourceWorkLogs()"
-                >
+                <button mat-menu-item (click)="showWorkLogs()">
                     <mat-icon
                         class="text-gray-400 icon-size-5 cursor-pointer"
                         svgIcon="heroicons_outline:eye"
                     ></mat-icon>
                     <span>View</span>
                 </button>
-                <button 
-                mat-menu-item
-                (click)="downloadResouceWorklog()">
+                <button mat-menu-item (click)="downloadResouceWorklog()">
                     <mat-icon
                         class="text-gray-400 icon-size-5 cursor-pointer"
                         [svgIcon]="'heroicons_outline:arrow-circle-down'"
