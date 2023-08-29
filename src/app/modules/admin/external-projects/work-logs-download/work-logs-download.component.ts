@@ -17,6 +17,7 @@ import {
 import moment, { Moment } from 'moment';
 import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { camelCase } from 'lodash';
 
 @Component({
     selector: 'app-work-logs-download',
@@ -25,7 +26,7 @@ import { SnackBar } from 'app/core/utils/snackBar';
 })
 export class WorkLogsDownloadComponent implements OnInit {
     projectId: any;
-    projectName : any;
+    projectName : string;
     selectedYear: string = '2020';
     initialLoading: boolean = false;
     selectedTabIndex: number = 7;
@@ -119,7 +120,7 @@ export class WorkLogsDownloadComponent implements OnInit {
             var today = new Date();
             var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, this.projectName +'-'+'Worklog' + '-' + dateobj + '.xls');
+            saveAs(blob, this.projectName.toLowerCase().replace(' ','-') +'-'+'worklog' + '-' + dateobj + '.xls');
         }
     }
 
