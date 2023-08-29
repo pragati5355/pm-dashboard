@@ -288,6 +288,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             autoFocus: false,
             data: {
                 id: this.projectId,
+                projectName : this.projectDetails?.project?.name,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

@@ -25,6 +25,7 @@ import { SnackBar } from 'app/core/utils/snackBar';
 })
 export class WorkLogsDownloadComponent implements OnInit {
     projectId: any;
+    projectName : any;
     selectedYear: string = '2020';
     initialLoading: boolean = false;
     selectedTabIndex: number = 7;
@@ -46,6 +47,8 @@ export class WorkLogsDownloadComponent implements OnInit {
 
     ngOnInit(): void {
         this.projectId = this.data?.id;
+        this.projectName = this.data?.projectName;
+        console.log("this.projectName :- " + this.projectName);
         this.getCurrentMonthAndYear();
         this.routeSubscription();
         this.getLoggedInUser();
@@ -116,7 +119,7 @@ export class WorkLogsDownloadComponent implements OnInit {
             var today = new Date();
             var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-worklog' + '-' + dateobj + '.xls');
+            saveAs(blob, this.projectName +'-'+'Worklog' + '-' + dateobj + '.xls');
         }
     }
 
