@@ -26,7 +26,7 @@ import { camelCase } from 'lodash';
 })
 export class WorkLogsDownloadComponent implements OnInit {
     projectId: any;
-    projectName : string;
+    projectName: string;
     selectedYear: string = '2020';
     initialLoading: boolean = false;
     selectedTabIndex: number = 7;
@@ -49,7 +49,7 @@ export class WorkLogsDownloadComponent implements OnInit {
     ngOnInit(): void {
         this.projectId = this.data?.id;
         this.projectName = this.data?.projectName;
-        console.log("this.projectName :- " + this.projectName);
+        console.log('this.projectName :- ' + this.projectName);
         this.getCurrentMonthAndYear();
         this.routeSubscription();
         this.getLoggedInUser();
@@ -92,10 +92,12 @@ export class WorkLogsDownloadComponent implements OnInit {
 
     downloadWorklogReport() {
         this.submitInProcess = true;
+        let month = this.selectedTabIndex;
+        let year = this.selectedYear;
         const payload = {
             projectId: this.projectId,
-            month: ++this.selectedTabIndex,
-            year: this.selectedYear,
+            month: ++month,
+            year: year,
         };
         this.worklogService.downloadWorklog(payload).subscribe(
             (res: any) => {
@@ -120,7 +122,15 @@ export class WorkLogsDownloadComponent implements OnInit {
             var today = new Date();
             var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, this.projectName.toLowerCase().replace(' ','-') +'-'+'worklog' + '-' + dateobj + '.xls');
+            saveAs(
+                blob,
+                this.projectName.toLowerCase().replace(' ', '-') +
+                    '-' +
+                    'worklog' +
+                    '-' +
+                    dateobj +
+                    '.xls'
+            );
         }
     }
 
