@@ -198,6 +198,7 @@ export class WorkLogsComponent implements OnInit {
                 workLogDate: this.resourceData?.workLogDate,
                 worklogPerTasks: tasks,
             },
+            onLeave: this.onLeave,
         };
     }
 
