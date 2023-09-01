@@ -135,6 +135,11 @@ export class WorkLogsComponent implements OnInit {
     private handleSubmitResponse() {
         this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
+
+        if (this.onLeave) {
+            payload.externalWorklog.worklogPerTasks = [{ onLeave: true }];
+        }
+
         this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
@@ -193,7 +198,6 @@ export class WorkLogsComponent implements OnInit {
                 workLogDate: this.resourceData?.workLogDate,
                 worklogPerTasks: tasks,
             },
-            onLeave: this.onLeave,
         };
     }
 
