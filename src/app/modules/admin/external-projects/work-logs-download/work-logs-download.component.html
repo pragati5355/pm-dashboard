@@ -3,7 +3,6 @@
         class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
     >
         <div class="flex text-lg font-medium">Download Resource Work Logs</div>
-
         <button mat-icon-button (click)="close()" [tabIndex]="-1">
             <mat-icon
                 class="text-current"
@@ -11,15 +10,14 @@
             ></mat-icon>
         </button>
     </div>
-
-    <div class="flex flex-col">
-        <div class="flex items-center mt-10 px-12 text-lg font-semibold">
+    <div class="flex flex-col px-8 pt-6">
+        <div class="flex items-center text-lg font-semibold">
             Select Month and Year
         </div>
-        <div class="flex items-center justify-between mt-4 px-7">
+        <div class="flex items-center justify-between">
             <div class="flex items-center">
                 <div class="flex items-center">
-                    <mat-label class="mb-4 px-5 py-5">Month</mat-label>
+                    <mat-label class="mb-4 mr-2 py-5">Month</mat-label>
                     <mat-form-field>
                         <mat-select
                             [value]="selectedTabIndex"
@@ -34,7 +32,7 @@
                     </mat-form-field>
                 </div>
                 <div class="flex items-center">
-                    <mat-label class="mb-4 px-5 py-5">Year</mat-label>
+                    <mat-label class="mb-4 ml-5 mr-2 py-5">Year</mat-label>
                     <mat-form-field>
                         <mat-select
                             [(value)]="selectedYear"
@@ -71,5 +69,4 @@
             </div>
         </div>
     </div>
-
 </div>
