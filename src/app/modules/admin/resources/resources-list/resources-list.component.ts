@@ -242,7 +242,7 @@ export class ResourcesListComponent implements OnInit {
         if (assignedProjects.length == 0) {
             const payload = {
                 id: id,
-                isDeleted: true,
+                deleted: true,
             };
             const dialogRef = this._fuseConfirmationService.open(
                 this.configForm.value
