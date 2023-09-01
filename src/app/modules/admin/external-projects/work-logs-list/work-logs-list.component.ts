@@ -116,7 +116,7 @@ export class WorkLogsListComponent implements OnInit {
 
     onYearChange(event: any) {
         if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
-            this.snackBar.errorSnackBar('Please enter email');
+            this.snackBar.errorSnackBar('Please select email');
             return;
         }
         this.loadData(event?.value, this.selectedTabIndex);
