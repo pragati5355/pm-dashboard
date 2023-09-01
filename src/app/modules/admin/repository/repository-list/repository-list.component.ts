@@ -35,6 +35,7 @@ export class RepositoryListComponent implements OnInit {
 
     ngOnInit(): void {
         this.setJiraProject();
+        this.getUserRole();
     }
 
     getList(id: any) {

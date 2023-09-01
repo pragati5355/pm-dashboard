@@ -28,7 +28,7 @@ const routes: Routes = [
                 path: 'work-logs/:id',
                 component: WorkLogsListComponent,
                 data: {
-                    pageTitle: 'External Project Details',
+                    pageTitle: 'Work Logs',
                 },
             },
             {

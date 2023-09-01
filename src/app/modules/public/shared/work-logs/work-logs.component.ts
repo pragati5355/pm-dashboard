@@ -96,7 +96,7 @@ export class WorkLogsComponent implements OnInit {
 
     calculateTotalHours() {
         this.totalHours = this.tasks?.reduce(
-            (sum, item) => sum + item?.timeSpent,
+            (sum, item) => (sum = sum + Number(item?.timeSpent)),
             0
         );
     }
@@ -110,6 +110,7 @@ export class WorkLogsComponent implements OnInit {
             this.snackBar.errorSnackBar('Add Hours');
             return;
         }
+
         const task = {
             description: this.currentDescriptionValue,
             timeSpent: this.workLogForm?.get('totalHours')?.value,
@@ -134,6 +135,11 @@ export class WorkLogsComponent implements OnInit {
     private handleSubmitResponse() {
         this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
+
+        if (this.onLeave) {
+            payload.externalWorklog.worklogPerTasks = [{ onLeave: true }];
+        }
+
         this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
@@ -191,14 +197,21 @@ export class WorkLogsComponent implements OnInit {
                 projectId: this.resourceData?.projectId,
                 workLogDate: this.resourceData?.workLogDate,
                 worklogPerTasks: tasks,
+                onLeave: this.onLeave,
             },
-            onLeave: this.onLeave,
         };
     }
 
     private initializeForm() {
         this.workLogForm = this.formBuilder.group({
-            totalHours: [''],
+            totalHours: [
+                '',
+                [
+                    Validators.max(24),
+                    Validators.required,
+                    Validators.pattern(/^[0-9]+$/),
+                ],
+            ],
         });
     }
 }

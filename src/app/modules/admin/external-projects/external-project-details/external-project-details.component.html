@@ -1,20 +1,64 @@
 <div *ngIf="!isLoading" class="p-8 w-full flex flex-col">
     <div class="flex flex-row justify-between items-center mb-4">
-        <div
-            class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
-            [routerLink]="['../']"
-        >
-            <mat-icon
-                class="icon-size-6 text-3xl text-black"
-                [svgIcon]="'heroicons_outline:chevron-left'"
-            ></mat-icon>
-            {{ projectDetails?.project?.name | titlecase }}
+        <div class="flex items-center">
+            <div
+                class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
+                [routerLink]="['../']"
+            >
+                <mat-icon
+                    class="icon-size-6 text-black"
+                    [svgIcon]="'heroicons_outline:chevron-left'"
+                ></mat-icon>
+                {{ projectDetails?.project?.name | titlecase }}
+            </div>
+            <div class="flex sm:block">
+                <button
+                    mat-icon-button
+                    [matTooltip]="'Copy Project Id'"
+                    aria-label="Example icon-button with a menu"
+                    (click)="copyProjectId()"
+                >
+                    <mat-icon class="text-gray-400 icon-size-4.5 cursor-pointer"
+                        >content_copy</mat-icon
+                    >
+                </button>
+            </div>
         </div>
+
         <div class="flex items-center">
             <button
+                [matMenuTriggerFor]="menu"
                 class="ml-4"
+                *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                 mat-flat-button
                 [color]="'primary'"
+                [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
+            >
+                <span class="ml-2 mr-1">Work logs</span>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="showWorkLogs()">
+                    <mat-icon
+                        class="text-gray-400 icon-size-5 cursor-pointer"
+                        svgIcon="heroicons_outline:eye"
+                    ></mat-icon>
+                    <span>View</span>
+                </button>
+                <button mat-menu-item (click)="downloadResouceWorklog()">
+                    <mat-icon
+                        class="text-gray-400 icon-size-5 cursor-pointer"
+                        [svgIcon]="'heroicons_outline:arrow-circle-down'"
+                    >
+                    </mat-icon>
+                    <span>Download</span>
+                </button>
+            </mat-menu>
+            <button
+                class="ml-4"
+                *ngIf="userRole === 'USER'"
+                mat-flat-button
+                [color]="'primary'"
+                [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
                 (click)="showWorkLogs()"
             >
                 <span class="ml-2 mr-1">Work logs</span>

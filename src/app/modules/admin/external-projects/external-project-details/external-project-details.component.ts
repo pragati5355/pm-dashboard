@@ -11,6 +11,8 @@ import { ExternalProjectsApiService } from '../common/services/external-projects
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 import { ExternalProjectsAddResourceComponent } from '../external-projects-add-resource/external-projects-add-resource.component';
 import { SendRemindersComponent } from '../send-reminders/send-reminders.component';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { WorkLogsDownloadComponent } from '../work-logs-download/work-logs-download.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -39,7 +41,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
         private _authService: AuthService,
         private snackBar: SnackBar,
         private router: Router,
-        private loggedInUserService: LoggedInUserService
+        private loggedInUserService: LoggedInUserService,
+        private clipboard: Clipboard
     ) {}
 
     ngOnInit(): void {
@@ -180,6 +183,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             {
                 disableClose: true,
                 width: '50%',
+                maxHeight: '90vh',
                 panelClass: 'warn-dialog-content',
                 autoFocus: false,
                 data: {
@@ -197,6 +201,26 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.loadDeveloperEmails();
             }
         });
+    }
+
+    copyProjectId() {
+        if (this.projectId != null) {
+            const pending = this.clipboard.beginCopy(this.projectId);
+            this.snackBar.successSnackBar('Copied');
+            let remainingAttempts = 100;
+            const attempt = () => {
+                const result = pending.copy();
+                if (!result && --remainingAttempts) {
+                    setTimeout(attempt);
+                } else {
+                    // Remember to destroy when you're done!
+                    pending.destroy();
+                }
+            };
+            attempt();
+        } else {
+            this.snackBar.errorSnackBar('Not Copied');
+        }
     }
 
     private getTechnologies() {
@@ -251,5 +275,26 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.isLoadingDevelopersEmail = false;
             }
         );
+    }
+    
+    downloadResouceWorklog(){
+        console.log("Download Worklog");
+        const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
+            disableClose: true,
+            width: '98%',
+            maxWidth: '800px',
+            maxHeight: '90vh',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                id: this.projectId,
+                projectName : this.projectDetails?.project?.name,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                window.location.reload();
+            }
+        });
     }
 }
