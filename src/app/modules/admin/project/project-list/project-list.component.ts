@@ -245,25 +245,4 @@ export class ProjectListComponent implements OnInit {
                 }
             });
     }
-
-    copyProjectId(id: any) {
-        if (id != null) {
-            const pending = this.clipboard.beginCopy(id);
-            this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 100;
-            const attempt = () => {
-                const result = pending.copy();
-                if (!result && --remainingAttempts) {
-                    setTimeout(attempt);
-                } else {
-                    // Remember to destroy when you're done!
-                    pending.destroy();
-                }
-            };
-            attempt();
-        } else {
-            this.snackBar.errorSnackBar('Not Copied');
-        }
-    }
-
 }
