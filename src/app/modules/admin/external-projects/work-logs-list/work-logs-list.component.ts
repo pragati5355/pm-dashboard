@@ -270,11 +270,11 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     private getProjectResources() {
-        this.isResourceLoading = true;
+        this.initialLoading = true;
         this.workLogService
             .getProjectResource({ projectId: this.projectId })
             .subscribe((res: any) => {
-                this.isResourceLoading = false;
+                this.initialLoading = false;
                 if (res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
