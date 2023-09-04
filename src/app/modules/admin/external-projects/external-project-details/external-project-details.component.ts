@@ -225,7 +225,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
     private getUserRole() {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
             if (res?.role) {
-                console.log(res);
                 this.userRole = res?.role;
             }
         });
@@ -258,7 +257,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
     }
     
     downloadResouceWorklog(){
-        console.log("Download Worklog");
         const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
             disableClose: true,
             width: '98%',
