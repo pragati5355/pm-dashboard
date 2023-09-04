@@ -137,7 +137,11 @@ export class WorkLogsComponent implements OnInit {
         const payload = this.getSaveWorkLogsPayload();
 
         if (this.onLeave) {
-            payload.externalWorklog.worklogPerTasks = [{ onLeave: true }];
+            payload.externalWorklog.worklogPerTasks = [{ 
+                onLeave: true,
+                timeSpent : "0",
+                comment : null
+            }];
         }
 
         this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
