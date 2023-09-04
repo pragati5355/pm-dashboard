@@ -21,7 +21,6 @@ import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.
 })
 export class WorkLogsListComponent implements OnInit {
     selectedYear: string = '2020';
-    currentYear: string = '';
     selectedTabIndex: number = 0;
     projectId: any;
     matTabList: any[] = MAT_TAB_MONTHS;
@@ -49,6 +48,9 @@ export class WorkLogsListComponent implements OnInit {
     isEmailSelected: boolean = false;
     isResourceLoading: boolean = false;
     selectedResource: any;
+    defaultResource: any;
+    currentMonth: number;
+    currentYear: string = '';
 
     constructor(
         private matDialog: MatDialog,
@@ -81,11 +83,6 @@ export class WorkLogsListComponent implements OnInit {
     close() {}
 
     onTabChanged(event: any) {
-        if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
-            this.workLogsList = [];
-            this.snackBar.errorSnackBar('Please select email');
-            return;
-        }
         this.selectedTabIndex = event?.index;
         this.loadData(this.selectedYear, this.selectedTabIndex);
 
@@ -101,10 +98,9 @@ export class WorkLogsListComponent implements OnInit {
     }
     onEmailSelected($event: any) {
         const resource = this.options.filter((option) =>
-            option?.email?.toLowerCase().includes($event.option.value)
+            option?.email?.toLowerCase().includes($event.value)
         );
         this.selectedResourceId = resource[0]?.id;
-        this.isEmailSelected = true;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
     clearSelectedEmail() {
@@ -115,10 +111,6 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     onYearChange(event: any) {
-        if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
-            this.snackBar.errorSnackBar('Please select email');
-            return;
-        }
         this.loadData(event?.value, this.selectedTabIndex);
     }
 
@@ -257,7 +249,9 @@ export class WorkLogsListComponent implements OnInit {
 
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
+        this.currentYear = String(new Date().getFullYear());
         this.selectedTabIndex = new Date().getMonth();
+        this.currentMonth = new Date().getMonth();
         if (!(this.selectedTabIndex === new Date().getMonth())) {
             if (new Date().getDate() > 5) {
                 this.disablePreviousWorklog = true;
@@ -283,6 +277,9 @@ export class WorkLogsListComponent implements OnInit {
                 this.isResourceLoading = false;
                 if (res?.data) {
                     this.options = res?.data;
+                    this.defaultResource = res?.data[0]?.email;
+                    this.selectedResourceId = res?.data[0]?.id;
+                    this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
             });
     }

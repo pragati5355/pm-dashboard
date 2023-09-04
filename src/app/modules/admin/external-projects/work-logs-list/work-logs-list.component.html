@@ -13,41 +13,27 @@
             </div>
             <div class="flex justify-end items-center">
                 <div class="flex items-center">
-                    <mat-form-field
-                        class="w-[350px] mr-4"
-                        *ngIf="userRole === 'ADMIN'"
-                    >
-                        <mat-label>Resource email</mat-label>
-                        <input
-                            type="text"
-                            placeholder="Search resource email"
-                            aria-label="email"
-                            matInput
-                            [formControl]="myControl"
-                            [matAutocomplete]="auto"
-                        />
-                        <mat-autocomplete
-                            autoActiveFirstOption
-                            #auto="matAutocomplete"
-                            (optionSelected)="onEmailSelected($event)"
-                        >
-                            <mat-option
-                                *ngFor="let option of filteredOptions | async"
-                                [value]="option?.email"
+                    <div class="w-[350px] mr-4">
+                        <mat-form-field class="w-full">
+                            <mat-label class="">Resource</mat-label>
+                            <mat-select
+                                [(value)]="defaultResource"
+                                (selectionChange)="onEmailSelected($event)"
+                                [disabled]="initialLoading"
                             >
-                                {{ option?.email }}
-                            </mat-option>
-                        </mat-autocomplete>
-                        <mat-icon
-                            *ngIf="isEmailSelected"
-                            class="icon-size-5 cursor-pointer"
-                            matSuffix
-                            [svgIcon]="'heroicons_solid:x'"
-                            (click)="
-                                $event.stopPropagation(); clearSelectedEmail()
-                            "
-                        ></mat-icon>
-                    </mat-form-field>
+                                <mat-option
+                                    *ngFor="let option of options"
+                                    [value]="option?.email"
+                                >
+                                    {{
+                                        option?.firstName +
+                                            " " +
+                                            option?.lastName
+                                    }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
 
                     <mat-form-field>
                         <mat-label class="">Year</mat-label>
@@ -59,6 +45,9 @@
                             <mat-option
                                 *ngFor="let year of matSelectYears"
                                 value="{{ year }}"
+                                [disabled]="
+                                    initialLoading || year > currentYear
+                                "
                                 >{{ year }}</mat-option
                             >
                         </mat-select>
@@ -93,7 +82,7 @@
                 <mat-tab
                     *ngFor="let tab of matTabList"
                     label="{{ tab?.label }}"
-                    [disabled]="initialLoading"
+                    [disabled]="initialLoading || tab?.value > currentMonth"
                 >
                     <ng-container
                         *ngIf="!initialLoading && workLogsList?.length > 0"
