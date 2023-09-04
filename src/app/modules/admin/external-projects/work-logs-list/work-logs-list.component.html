@@ -13,7 +13,7 @@
             </div>
             <div class="flex justify-end items-center">
                 <div class="flex items-center">
-                    <div class="w-[350px] mr-4">
+                    <div class="w-[350px] mr-4" *ngIf="userRole === 'ADMIN'">
                         <mat-form-field class="w-full">
                             <mat-label class="">Resource</mat-label>
                             <mat-select
