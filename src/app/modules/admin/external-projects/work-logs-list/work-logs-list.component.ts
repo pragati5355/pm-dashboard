@@ -83,7 +83,7 @@ export class WorkLogsListComponent implements OnInit {
     onTabChanged(event: any) {
         if (this.userRole === 'ADMIN' && this.myControl?.value === '') {
             this.workLogsList = [];
-            this.snackBar.errorSnackBar('Please enter email');
+            this.snackBar.errorSnackBar('Please select email');
             return;
         }
         this.selectedTabIndex = event?.index;
