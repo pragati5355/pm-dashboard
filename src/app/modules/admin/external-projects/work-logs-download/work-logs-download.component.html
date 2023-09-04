@@ -27,7 +27,7 @@
                                 *ngFor="let month of matTabList"
                                 [value]="month?.value"
                                 [disabled]="
-                                initialLoading || month > currentMonth
+                                initialLoading || month?.value > currentMonth
                                 "
                                 >{{ month?.label }}</mat-option
                             >
