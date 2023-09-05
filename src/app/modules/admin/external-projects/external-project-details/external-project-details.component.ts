@@ -203,26 +203,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
         });
     }
 
-    copyProjectId() {
-        if (this.projectId != null) {
-            const pending = this.clipboard.beginCopy(this.projectId);
-            this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 100;
-            const attempt = () => {
-                const result = pending.copy();
-                if (!result && --remainingAttempts) {
-                    setTimeout(attempt);
-                } else {
-                    // Remember to destroy when you're done!
-                    pending.destroy();
-                }
-            };
-            attempt();
-        } else {
-            this.snackBar.errorSnackBar('Not Copied');
-        }
-    }
-
     private getTechnologies() {
         this.isLoadingTechnologies = true;
         this.externalProjectsService.getTechnologies().subscribe((res: any) => {
@@ -245,7 +225,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
     private getUserRole() {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
             if (res?.role) {
-                console.log(res);
                 this.userRole = res?.role;
             }
         });
@@ -278,7 +257,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
     }
     
     downloadResouceWorklog(){
-        console.log("Download Worklog");
         const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
             disableClose: true,
             width: '98%',

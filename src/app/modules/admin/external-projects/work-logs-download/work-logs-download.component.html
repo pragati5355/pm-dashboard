@@ -26,6 +26,9 @@
                             <mat-option
                                 *ngFor="let month of matTabList"
                                 [value]="month?.value"
+                                [disabled]="
+                                initialLoading || month?.value > currentMonth
+                                "
                                 >{{ month?.label }}</mat-option
                             >
                         </mat-select>
@@ -41,6 +44,9 @@
                             <mat-option
                                 *ngFor="let year of matSelectYears"
                                 value="{{ year }}"
+                                [disabled]="
+                                initialLoading || year > currentYear
+                                "
                                 >{{ year }}</mat-option
                             >
                         </mat-select>

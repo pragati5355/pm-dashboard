@@ -5,12 +5,10 @@ import { FuseLoadingInterceptor } from '@fuse/services/loading/loading.intercept
 @NgModule({
     providers: [
         {
-            provide : HTTP_INTERCEPTORS,
+            provide: HTTP_INTERCEPTORS,
             useClass: FuseLoadingInterceptor,
-            multi   : true
-        }
-    ]
+            multi: true,
+        },
+    ],
 })
-export class FuseLoadingModule
-{
-}
+export class FuseLoadingModule {}

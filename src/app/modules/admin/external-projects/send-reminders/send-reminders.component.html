@@ -18,14 +18,14 @@
                 mat-flat-button
                 color="primary"
                 [disabled]="
-                    isLoading ||
+                    isLoadingclearReminder ||
                     this.data?.projectSettings === null ||
                     this.data?.projectSettings === ''
                 "
                 (click)="clearReminders()"
             >
                 <mat-progress-spinner
-                    *ngIf="isLoading"
+                    *ngIf="isLoadingclearReminder"
                     class="mr-2"
                     mode="indeterminate"
                     diameter="24"

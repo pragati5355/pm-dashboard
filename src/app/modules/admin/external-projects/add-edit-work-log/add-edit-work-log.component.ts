@@ -61,6 +61,9 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     submit() {
+        if (this.data?.mode === 'ADD' && !this.onLeave) {
+            this.addTask();
+        }
         if (
             this.tasks?.length === 0 &&
             !this.onLeave &&
@@ -121,12 +124,16 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     addTask() {
-        if (!this.currentDescriptionValue) {
-            this.snackBar.errorSnackBar('Add description');
+        if (!this.currentDescriptionValue && !this.onLeave) {
+            this.snackBar.errorSnackBar('Please add description');
             return;
         }
-        if (!this.workLogForm?.get('totalHours')?.value) {
-            this.snackBar.errorSnackBar('Add Hours');
+        if (!this.workLogForm?.get('totalHours')?.value && !this.onLeave) {
+            this.snackBar.errorSnackBar('Please add Hours');
+            return;
+        }
+        if (this.workLogForm?.invalid && !this.onLeave) {
+            this.snackBar.errorSnackBar('Please enter valid hours');
             return;
         }
         const workLogDate = new Date(
@@ -144,9 +151,7 @@ export class AddEditWorkLogComponent implements OnInit {
             },
             description: this.currentDescriptionValue,
         };
-
         this.scrollToBottom();
-
         if (this.currentTaskIndex !== null) {
             this.tasks?.splice(this.currentTaskIndex, 1, task);
         } else {
@@ -188,6 +193,7 @@ export class AddEditWorkLogComponent implements OnInit {
     private patchValueInEditMode() {
         if (this.data?.mode === 'EDIT') {
             this.quillValue = this.data?.data?.comment;
+            this.description = this.data?.data?.comment;
             this.workLogForm
                 ?.get('totalHours')
                 ?.setValue(this.data?.data?.timeSpent);
@@ -201,7 +207,6 @@ export class AddEditWorkLogComponent implements OnInit {
                 );
             this.workLogForm?.get('workLogDate')?.disable();
             this.currentDate = this.data?.data?.workLogDate;
-
             if (this.data?.tabIndex !== new Date().getMonth()) {
                 if (
                     new Date().getDate() > 5 ||
@@ -227,8 +232,22 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     private handleSubmitResponse() {
-        this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
+        if (this.data?.mode === 'EDIT') {
+            if (!this.onLeave && !this.description) {
+                this.snackBar.errorSnackBar('Please add description');
+                return;
+            }
+            if (!this.workLogForm?.get('totalHours')?.value && !this.onLeave) {
+                this.snackBar.errorSnackBar('Please add Hours');
+                return;
+            }
+        }
+        if (this.workLogForm?.invalid && !this.onLeave) {
+            this.snackBar.errorSnackBar('Please enter valid hours');
+            return;
+        }
+        this.submitInProgress = true;
         this.workLogService.saveWorkLogs(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
@@ -256,8 +275,6 @@ export class AddEditWorkLogComponent implements OnInit {
         );
         workLogDate.setHours(5);
         workLogDate.setMinutes(30);
-
-        console.log(workLogDate);
 
         if (this.data?.mode === 'EDIT') {
             return {
@@ -305,7 +322,7 @@ export class AddEditWorkLogComponent implements OnInit {
                 [
                     Validators.max(24),
                     Validators.required,
-                    Validators.pattern(/^[0-9]+$/),
+                    Validators.pattern(/^\d+(\.\d+)?$/),
                 ],
             ],
             workLogDate: [new Date()],

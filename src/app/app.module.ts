@@ -5,31 +5,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
+import { ExtraOptions, PreloadAllModules } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './core/services/auth/auth.service';
 import { environment } from '../environments/environment';
 import { FuseModule } from '@fuse';
 import { FuseConfigModule } from '@fuse/services/config';
-import { FuseMockApiModule } from '@fuse/lib/mock-api';
 import { appConfig } from 'app/core/config/app.config';
-import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import {
     SocialLoginModule,
     SocialAuthServiceConfig,
 } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
-import { NgParticlesModule } from "ng-particles";
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { NgParticlesModule } from 'ng-particles';
 
-import { getDatabase, provideDatabase } from '@angular/fire/database';
-import { AngularFireModule } from '@angular/fire/compat';
-import {
-    AngularFireDatabase,
-    AngularFireDatabaseModule,
-} from '@angular/fire/compat/database';
 const GoogleClientId = environment.GoogleClientId;
 const googleLoginOptions = {
     scope: 'email',
@@ -51,10 +42,8 @@ const routerConfig: ExtraOptions = {
         BrowserAnimationsModule,
         HttpClientModule,
         SocialLoginModule,
-        // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
         FuseConfigModule.forRoot(appConfig),
-        FuseMockApiModule.forRoot(mockApiServices),
         LayoutModule,
         NgParticlesModule,
         MarkdownModule.forRoot({}),

@@ -1,20 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, ReplaySubject, tap } from 'rxjs';
+import { Observable, of, ReplaySubject, tap } from 'rxjs';
 import { Navigation } from 'app/core/navigation/navigation.types';
+import { FuseNavigationItem } from '@fuse/components/navigation';
+import {
+    compactNavigation,
+    defaultNavigation,
+    futuristicNavigation,
+    horizontalNavigation,
+} from 'app/mock-api/common/navigation/data';
+import { cloneDeep } from 'lodash';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
-export class NavigationService
-{
-    private _navigation: ReplaySubject<Navigation> = new ReplaySubject<Navigation>(1);
+export class NavigationService {
+    private readonly _compactNavigation: FuseNavigationItem[] =
+        compactNavigation;
+    private readonly _defaultNavigation: FuseNavigationItem[] =
+        defaultNavigation;
+    private readonly _futuristicNavigation: FuseNavigationItem[] =
+        futuristicNavigation;
+    private readonly _horizontalNavigation: FuseNavigationItem[] =
+        horizontalNavigation;
+    private _navigation: ReplaySubject<Navigation> =
+        new ReplaySubject<Navigation>(1);
 
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
-    {
+    constructor(private _httpClient: HttpClient) {
+        this.get();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -24,8 +40,7 @@ export class NavigationService
     /**
      * Getter for navigation
      */
-    get navigation$(): Observable<Navigation>
-    {
+    get navigation$(): Observable<Navigation> {
         return this._navigation.asObservable();
     }
 
@@ -36,12 +51,45 @@ export class NavigationService
     /**
      * Get all navigation data
      */
-    get(): Observable<Navigation>
-    {
-        return this._httpClient.get<Navigation>('api/common/navigation').pipe(
-            tap((navigation) => {
-                this._navigation.next(navigation);
-            })
-        );
+    get() {
+        // Fill compact navigation children using the default navigation
+        this._compactNavigation.forEach((compactNavItem) => {
+            this._defaultNavigation.forEach((defaultNavItem) => {
+                if (defaultNavItem.id === compactNavItem.id) {
+                    compactNavItem.children = cloneDeep(
+                        defaultNavItem.children
+                    );
+                }
+            });
+        });
+
+        // Fill futuristic navigation children using the default navigation
+        this._futuristicNavigation.forEach((futuristicNavItem) => {
+            this._defaultNavigation.forEach((defaultNavItem) => {
+                if (defaultNavItem.id === futuristicNavItem.id) {
+                    futuristicNavItem.children = cloneDeep(
+                        defaultNavItem.children
+                    );
+                }
+            });
+        });
+
+        // Fill horizontal navigation children using the default navigation
+        this._horizontalNavigation.forEach((horizontalNavItem) => {
+            this._defaultNavigation.forEach((defaultNavItem) => {
+                if (defaultNavItem.id === horizontalNavItem.id) {
+                    horizontalNavItem.children = cloneDeep(
+                        defaultNavItem.children
+                    );
+                }
+            });
+        });
+
+        this._navigation.next({
+            compact: cloneDeep(this._compactNavigation),
+            default: cloneDeep(this._defaultNavigation),
+            futuristic: cloneDeep(this._futuristicNavigation),
+            horizontal: cloneDeep(this._horizontalNavigation),
+        });
     }
 }

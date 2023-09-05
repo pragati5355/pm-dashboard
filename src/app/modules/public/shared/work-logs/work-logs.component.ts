@@ -48,6 +48,7 @@ export class WorkLogsComponent implements OnInit {
     }
 
     submit() {
+        this.addTask();
         if (this.tasks?.length === 0 && !this.onLeave) {
             this.snackBar.errorSnackBar('Please add task');
             return;
@@ -137,7 +138,13 @@ export class WorkLogsComponent implements OnInit {
         const payload = this.getSaveWorkLogsPayload();
 
         if (this.onLeave) {
-            payload.externalWorklog.worklogPerTasks = [{ onLeave: true }];
+            payload.externalWorklog.worklogPerTasks = [
+                {
+                    onLeave: true,
+                    timeSpent: '0',
+                    comment: null,
+                },
+            ];
         }
 
         this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
@@ -209,7 +216,7 @@ export class WorkLogsComponent implements OnInit {
                 [
                     Validators.max(24),
                     Validators.required,
-                    Validators.pattern(/^[0-9]+$/),
+                    Validators.pattern(/^\d+(\.\d+)?$/),
                 ],
             ],
         });

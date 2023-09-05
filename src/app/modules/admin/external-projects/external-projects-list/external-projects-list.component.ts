@@ -6,7 +6,6 @@ import { ExternalProjectsApiService } from '../common/services/external-projects
 import { AuthService } from '@services/auth/auth.service';
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 import { FormControl } from '@angular/forms';
-import { project } from 'app/mock-api/dashboards/project/data';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { SnackBar } from 'app/core/utils/snackBar';
@@ -150,26 +149,6 @@ export class ExternalProjectsListComponent implements OnInit {
                 this.initialLoading = false;
             }
         );
-    }
-
-    copyProjectId(id: any) {
-        if (id != null) {
-            const pending = this.clipboard.beginCopy(id);
-            this.snackBar.successSnackBar('Copied');
-            let remainingAttempts = 100;
-            const attempt = () => {
-                const result = pending.copy();
-                if (!result && --remainingAttempts) {
-                    setTimeout(attempt);
-                } else {
-                    // Remember to destroy when you're done!
-                    pending.destroy();
-                }
-            };
-            attempt();
-        } else {
-            this.snackBar.errorSnackBar('Not Copied');
-        }
     }
 
     private getTechnologies() {

@@ -17,7 +17,7 @@ import {
 import moment, { Moment } from 'moment';
 import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { camelCase } from 'lodash';
+
 
 @Component({
     selector: 'app-work-logs-download',
@@ -30,6 +30,8 @@ export class WorkLogsDownloadComponent implements OnInit {
     selectedYear: string = '2020';
     initialLoading: boolean = false;
     selectedTabIndex: number = 7;
+    currentMonth : number;
+    currentYear: string = '';
     matTabList: any[] = MAT_TAB_MONTHS;
     matSelectYears: string[] = MAT_SELECT_YEARS;
     loggedInUser: any;
@@ -49,7 +51,6 @@ export class WorkLogsDownloadComponent implements OnInit {
     ngOnInit(): void {
         this.projectId = this.data?.id;
         this.projectName = this.data?.projectName;
-        console.log('this.projectName :- ' + this.projectName);
         this.getCurrentMonthAndYear();
         this.routeSubscription();
         this.getLoggedInUser();
@@ -87,7 +88,9 @@ export class WorkLogsDownloadComponent implements OnInit {
 
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
+        this.currentYear = String(new Date().getFullYear());
         this.selectedTabIndex = new Date().getMonth();
+        this.currentMonth = new Date().getMonth();
     }
 
     downloadWorklogReport() {
