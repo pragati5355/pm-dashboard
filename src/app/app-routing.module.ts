@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from './core/shared.module';
 import { AuthGuard } from '@services/auth/guards/auth.guard';
 import { NoAuthGuard } from '@services/auth/guards/noAuth.guard';
-import { InitialDataResolver } from 'app/app.resolvers';
 import { LayoutComponent } from './layout/layout.component';
 import { WorkLogsComponent } from '@modules/public/shared/work-logs/work-logs.component';
 import { WrongUrlComponent } from '@modules/public/shared/wrong-url/wrong-url.component';
@@ -38,9 +37,7 @@ export const appRoutes: Routes = [
         data: {
             pageTitle: 'dashboard',
         },
-        resolve: {
-            initialData: InitialDataResolver,
-        },
+
         children: [
             {
                 path: 'dashboard',
