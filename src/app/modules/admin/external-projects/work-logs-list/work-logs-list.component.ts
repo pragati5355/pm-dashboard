@@ -125,7 +125,8 @@ export class WorkLogsListComponent implements OnInit {
     addOrEditWorklog(workLogData: any, mode: string) {
         const workLogdialogRef = this.matDialog.open(AddEditWorkLogComponent, {
             disableClose: true,
-            width: '60%',
+            width: '90%',
+            maxWidth: '800px',
             maxHeight: '90vh',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
