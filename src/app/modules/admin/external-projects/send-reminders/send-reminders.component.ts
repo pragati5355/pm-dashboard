@@ -22,6 +22,7 @@ export class SendRemindersComponent implements OnInit {
     primaryTimings: any[] = PRIMARY_TIMES;
     secondaryTimings: any[] = SECONDARY_TIMES;
     isLoading: boolean = false;
+    isLoadingclearReminder: boolean = false;
     constructor(
         public dialogRef: MatDialogRef<SendRemindersComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -156,11 +157,11 @@ export class SendRemindersComponent implements OnInit {
             projectId: this.data?.projectModel?.id,
             deleted: true,
         };
-        this.isLoading = true;
+        this.isLoadingclearReminder = true;
         this.externalProjectService
             .sendReminder(payload)
             .subscribe((res: any) => {
-                this.isLoading = false;
+                this.isLoadingclearReminder = false;
                 if (!res?.error) {
                     this.snackBar.successSnackBar(res?.message);
                     this.dialogRef.close(true);
