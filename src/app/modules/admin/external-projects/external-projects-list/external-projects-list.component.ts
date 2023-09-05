@@ -6,7 +6,6 @@ import { ExternalProjectsApiService } from '../common/services/external-projects
 import { AuthService } from '@services/auth/auth.service';
 import { CreateExternalProjectComponent } from '../create-external-project/create-external-project.component';
 import { FormControl } from '@angular/forms';
-import { project } from 'app/mock-api/dashboards/project/data';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { SnackBar } from 'app/core/utils/snackBar';
