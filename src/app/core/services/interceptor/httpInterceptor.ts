@@ -8,12 +8,11 @@ import {
 } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { SessionService } from '@services/auth/session.service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { ErrorMessage } from '../../constacts/constacts';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { LocalStorageService } from 'angular-web-storage';
 @Injectable({
     providedIn: 'root',
 })
@@ -22,7 +21,6 @@ export class InterceptorService implements HttpInterceptor {
     constructor(
         private authService: AuthService,
         private router: Router,
-        private storage: LocalStorageService,
         private sessionService: SessionService,
         private _snackBar: MatSnackBar
     ) {
@@ -60,7 +58,6 @@ export class InterceptorService implements HttpInterceptor {
         return next.handle(request).pipe(
             tap((err: any) => {
                 if (err instanceof HttpErrorResponse) {
-                    console.log(err);
                     if (err.status === 401) {
                         this.sessionService.clearStorage();
                         this.snackBarConfig.panelClass = ['red-snackbar'];
@@ -120,6 +117,19 @@ export class InterceptorService implements HttpInterceptor {
                         );
                     }
                 }
+            }),
+            catchError((error: HttpErrorResponse) => {
+                if (error?.status === 401) {
+                    this.sessionService.clearStorage();
+                    this.snackBarConfig.panelClass = ['red-snackbar'];
+                    this._snackBar.open(
+                        'Session expired, Please log back in again.',
+                        'x',
+                        this.snackBarConfig
+                    );
+                    this.router.navigate(['/sign-in']);
+                }
+                return throwError(error);
             })
         );
     }
