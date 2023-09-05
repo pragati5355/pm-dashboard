@@ -61,7 +61,9 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     submit() {
-        this.addTask();
+        if (this.data?.mode === 'ADD' && !this.onLeave) {
+            this.addTask();
+        }
         if (
             this.tasks?.length === 0 &&
             !this.onLeave &&
@@ -122,11 +124,11 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     addTask() {
-        if (!this.currentDescriptionValue) {
+        if (!this.currentDescriptionValue && !this.onLeave) {
             this.snackBar.errorSnackBar('Add description');
             return;
         }
-        if (!this.workLogForm?.get('totalHours')?.value) {
+        if (!this.workLogForm?.get('totalHours')?.value && !this.onLeave) {
             this.snackBar.errorSnackBar('Add Hours');
             return;
         }
@@ -230,6 +232,7 @@ export class AddEditWorkLogComponent implements OnInit {
     private handleSubmitResponse() {
         this.submitInProgress = true;
         const payload = this.getSaveWorkLogsPayload();
+
         this.workLogService.saveWorkLogs(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
