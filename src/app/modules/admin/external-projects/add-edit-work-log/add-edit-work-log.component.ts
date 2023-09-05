@@ -61,6 +61,7 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     submit() {
+        this.addTask();
         if (
             this.tasks?.length === 0 &&
             !this.onLeave &&
@@ -257,8 +258,6 @@ export class AddEditWorkLogComponent implements OnInit {
         workLogDate.setHours(5);
         workLogDate.setMinutes(30);
 
-        console.log(workLogDate);
-
         if (this.data?.mode === 'EDIT') {
             return {
                 externalWorklog: [
@@ -305,7 +304,7 @@ export class AddEditWorkLogComponent implements OnInit {
                 [
                     Validators.max(24),
                     Validators.required,
-                    Validators.pattern(/^[0-9]+$/),
+                    Validators.pattern(/^\d+(\.\d+)?$/),
                 ],
             ],
             workLogDate: [new Date()],
