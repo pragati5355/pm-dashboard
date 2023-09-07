@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { ProfitLossRoutingModule } from './profit-loss-routing.module';
 import { ProfitLossHomeComponent } from './profit-loss-home/profit-loss-home.component';
@@ -69,5 +69,6 @@ import { QuillModule } from 'ngx-quill';
         MatTabsModule,
         QuillModule,
     ],
+    providers: [DatePipe],
 })
 export class ProfitLossModule {}

@@ -41,7 +41,6 @@ export class ExternalProjectsListComponent implements OnInit {
         this.addSearchListener();
         this.loadExternalProjectsList();
         this.loadDeveloperEmailList();
-
         this.getTechnologies();
     }
 
