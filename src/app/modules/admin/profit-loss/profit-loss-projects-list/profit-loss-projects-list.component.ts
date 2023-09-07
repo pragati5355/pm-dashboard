@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { ProfitLossService } from '../common/services/profit-loss.service';
 import { AuthService } from '@services/auth/auth.service';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profit-loss-projects-list',
@@ -46,15 +47,17 @@ export class ProfitLossProjectsListComponent implements OnInit {
     private pNLProjectList : ProfitLossService,
     private _authService: AuthService,
     private datePipe: DatePipe,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
     // this.loadProjectsList();
   }
 
-  goBack(){
-
+  goToStatisticPage(){
+    this.router.navigate([`/profit-loss/statistic`]);
   }
+
 
   // private loadProjectsList() {
   //   this.initialLoading = true;

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProfitLossHomeComponent } from './profit-loss-home/profit-loss-home.component';
 import { ProfitLossProjectsListComponent } from './profit-loss-projects-list/profit-loss-projects-list.component';
+import { ProfitLossProjectStatisticComponent } from './profit-loss-project-statistic/profit-loss-project-statistic.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,13 @@ const routes: Routes = [
         component: ProfitLossProjectsListComponent,
         data: {
             pageTitle: 'Profit & Loss',
+        },
+      },
+      {
+        path: 'statistic',
+        component: ProfitLossProjectStatisticComponent,
+        data: {
+            pageTitle: 'Statistics',
         },
       },
     ]

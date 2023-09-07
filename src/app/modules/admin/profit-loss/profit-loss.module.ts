@@ -31,11 +31,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuillModule } from 'ngx-quill';
+import { ProfitLossProjectStatisticComponent } from './profit-loss-project-statistic/profit-loss-project-statistic.component';
 
 @NgModule({
     declarations: [
       ProfitLossHomeComponent, 
-      ProfitLossProjectsListComponent,
+      ProfitLossProjectsListComponent, ProfitLossProjectStatisticComponent,
     ],
     imports: [
         CommonModule,
