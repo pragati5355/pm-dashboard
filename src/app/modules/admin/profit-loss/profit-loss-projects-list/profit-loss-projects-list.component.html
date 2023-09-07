@@ -34,21 +34,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="overflow-y-auto">
-                <div
-                    class="flex flex-col items-center pb-8 sm:pb-20 px-6 bg-gray-50 dark:bg-gray-800 min-h-[calc(100vh_-_180px)]"
-                >
-                    <div class="w-full max-w-7xl">
-                        <div class="flex items-center justify-between w-full p-4 md:p-6">
-                            <div>
-                                <h2 class="text-3xl font-semibold leading-8 mb-0">Finance dashboard</h2>
-                                <div class="font-medium tracking-tight text-secondary">Keep track of your financial project status</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>  -->
-
             <div class="flex flex-auto overflow-hidden pl-1">
                 <div
                     class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
@@ -63,50 +48,50 @@
                         <div>End Date</div>
                         <div>Project Statistics</div>
                     </div>
-                    <ng-container *ngIf="!initialLoading && filteredProjectList?.length > 0">
+                    <ng-container
+                        *ngIf="!initialLoading && projectList?.length > 0"
+                    >
                         <div class="grid">
-                            <ng-container *ngFor="let list of filteredProjectList">
+                            <ng-container *ngFor="let list of projectList">
                                 <div
                                     class="rowColorChangeHover cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-10 border-b"
                                 >
-                                    <div class="flex items-center">
-                                        <div class="cursor-pointer">
-                                            <div
-                                                class="truncate font-semibold text-black"
-                                            >
-                                                {{ list?.projectName }}
-                                            </div>
+                                    <div class="cursor-pointer">
+                                        <div
+                                            class="truncate font-semibold text-black"
+                                        >
+                                            {{ list?.projectName }}
                                         </div>
+                                    </div>
 
-                                        <div class="hidden md:block truncate">
-                                            {{ list?.projectPM }}
-                                        </div>
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.projectPM }}
+                                    </div>
 
-                                        <div class="hidden md:block truncate">
-                                            {{ list?.startDate }}
-                                        </div>
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.startDate | date }}
+                                    </div>
 
-                                        <div class="hidden md:block truncate">
-                                            {{ list?.endDate }}
-                                        </div>
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.endDate | date}}
+                                    </div>
 
-                                        <div class="hidden md:block truncate">
-                                            {{ list?.statistic }}
-                                        </div>
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.statistic }}
                                     </div>
                                 </div>
                             </ng-container>
                         </div>
                     </ng-container>
-                    <ng-container
-                        *ngIf="filteredProjectList?.length > 0 && !initialLoading"
+                    <!-- <ng-container
+                        *ngIf="projectList?.length === 0 && !initialLoading"
                     >
                         <div
                             class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
                         >
                             Projects not found
                         </div>
-                    </ng-container>
+                    </ng-container> -->
                     <ng-container *ngIf="initialLoading">
                         <app-table-skeleton
                             [skeletonData]="requiredSkeletonData"

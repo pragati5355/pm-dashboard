@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ProfitLossService } from '../common/services/profit-loss.service';
 import { AuthService } from '@services/auth/auth.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-profit-loss-projects-list',
@@ -10,11 +11,12 @@ import { AuthService } from '@services/auth/auth.service';
 })
 export class ProfitLossProjectsListComponent implements OnInit {
 
+  searchValue: string = '';
   requiredSkeletonData = {
     rowsToDisplay: 10,
     displayProfilePicture: false,
   };
-  projectList: [
+  projectList:any[] = [
     {
       "projectName":"Metrics",
       "projectPM" : "Vish Sande",
@@ -37,60 +39,43 @@ export class ProfitLossProjectsListComponent implements OnInit {
       "statistic" : "In Process",
     }
   ];
-  filteredProjectList = [];
+  
   searchControl = new FormControl();
-
   initialLoading: boolean = false;
   constructor(
     private pNLProjectList : ProfitLossService,
     private _authService: AuthService,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit(): void {
-    this.addSearchListener();
-    this.loadProjectsList();
-  }
-
-  addSearchListener() {
-    this.searchControl?.valueChanges.subscribe((searchKey: string) => {
-        searchKey = searchKey?.trim()?.toLowerCase();
-        if (searchKey) {
-            this.filteredProjectList = this.projectList.filter(
-                (project) =>
-                    project?.projectName?.toLowerCase()?.includes(searchKey) ||
-                    project?.statistic?.toLowerCase()?.includes(searchKey)
-            );
-        } else {
-            this.filteredProjectList = this.projectList;
-        }
-    });
+    // this.loadProjectsList();
   }
 
   goBack(){
 
   }
 
-  private loadProjectsList() {
-    this.initialLoading = true;
-    const payload = {
+  // private loadProjectsList() {
+  //   this.initialLoading = true;
+  //   const payload = {
 
-    }
-    this.pNLProjectList.getPNLProjectList(payload).subscribe(
-        (res: any) => {
-            this.initialLoading = false;
-            if (res?.error === false) {
-                this.projectList = res?.data;
-                this.filteredProjectList = res?.data;
-            }
-            if (res?.tokenExpire) {
-                this._authService.updateAndReload(window.location);
-            }
-        },
-        (err) => {
-            this.initialLoading = false;
-        }
-    );
-  }
+  //   }
+  //   this.pNLProjectList.getPNLProjectList(payload).subscribe(
+  //       (res: any) => {
+  //           this.initialLoading = false;
+  //           if (res?.error === false) {
+  //               this.projectList = res?.data;
+  //           }
+  //           if (res?.tokenExpire) {
+  //               this._authService.updateAndReload(window.location);
+  //           }
+  //       },
+  //       (err) => {
+  //           this.initialLoading = false;
+  //       }
+  //   );
+  // }
 
 
 }
