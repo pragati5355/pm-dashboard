@@ -13,7 +13,7 @@ const routes: Routes = [
         path: '',
         component: ProfitLossProjectsListComponent,
         data: {
-            pageTitle: 'Finance Dashboard',
+            pageTitle: 'Profit & Loss',
         },
       },
       {
