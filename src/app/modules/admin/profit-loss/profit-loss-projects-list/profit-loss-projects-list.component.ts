@@ -17,6 +17,29 @@ export class ProfitLossProjectsListComponent implements OnInit {
     rowsToDisplay: 10,
     displayProfilePicture: false,
   };
+  filteredProjectList:any = [
+    {
+      "projectName":"Metrics",
+      "projectPM" : "Vish Sande",
+      "startDate" : 1684416463033,
+      "endDate" : 1684416463033,
+      "statistic" : "In Process",
+    },
+    {
+      "projectName":"AllDay",
+      "projectPM" : "ABCD",
+      "startDate" : 1689897600000,
+      "endDate" : 1689897600000,
+      "statistic"  : "In Process",
+    },
+    {
+      "projectName":"Lorem ipsum",
+      "projectPM" : "MNC MNBBV",
+      "startDate": 1689897600000,
+      "endDate" : 1689897600000,
+      "statistic" : "In Process",
+    }
+  ];
   projectList:any[] = [
     {
       "projectName":"Metrics",
@@ -51,6 +74,7 @@ export class ProfitLossProjectsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.addSearchListener();
     // this.loadProjectsList();
   }
 
@@ -58,6 +82,20 @@ export class ProfitLossProjectsListComponent implements OnInit {
     this.router.navigate([`/profit-loss/statistic`]);
   }
 
+  addSearchListener() {
+    this.searchControl?.valueChanges.subscribe((searchKey: string) => {
+        searchKey = searchKey?.trim()?.toLowerCase();
+        if (searchKey) {
+            this.filteredProjectList = this.projectList.filter(
+                (project) =>
+                    project?.projectName?.toLowerCase()?.includes(searchKey) ||
+                    project?.projectPM?.toLowerCase()?.includes(searchKey)
+            );
+        } else {
+            this.filteredProjectList = this.projectList;
+        }
+    });
+  }
 
   // private loadProjectsList() {
   //   this.initialLoading = true;

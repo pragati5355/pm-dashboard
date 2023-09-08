@@ -52,7 +52,7 @@
                         *ngIf="!initialLoading && projectList?.length > 0"
                     >
                         <div class="grid">
-                            <ng-container *ngFor="let list of projectList">
+                            <ng-container *ngFor="let list of filteredProjectList">
                                 <div
                                     class="rowColorChangeHover cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-10 border-b"
                                     (click)="goToStatisticPage()"
