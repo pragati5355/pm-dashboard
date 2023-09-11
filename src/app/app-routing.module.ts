@@ -6,6 +6,7 @@ import { NoAuthGuard } from '@services/auth/guards/noAuth.guard';
 import { LayoutComponent } from './layout/layout.component';
 import { WorkLogsComponent } from '@modules/public/shared/work-logs/work-logs.component';
 import { WrongUrlComponent } from '@modules/public/shared/wrong-url/wrong-url.component';
+import { WorkLogsListComponent } from '@modules/public/shared/work-logs-list/work-logs-list.component';
 export const appRoutes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'sign-in' },
 
@@ -107,6 +108,7 @@ export const appRoutes: Routes = [
         path: 'wrong-url',
         component: WrongUrlComponent,
     },
+    { path: 'project/:key', component: WorkLogsListComponent },
     {
         path: 'resource',
         loadChildren: () =>
