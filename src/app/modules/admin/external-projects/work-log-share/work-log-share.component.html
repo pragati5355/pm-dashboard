@@ -10,6 +10,18 @@
         ></mat-icon>
     </button>
 </div>
-<form>
-    <mat-slide-toggle [color]="'primary'">Share work log</mat-slide-toggle>
+<form [formGroup]="shareForm">
+    <mat-slide-toggle [color]="'primary'" formControlName="workLogShare"
+        >Share work log</mat-slide-toggle
+    >
+    <!-- <mat-form-field class="w-full" [floatLabel]="'always'">
+        <mat-label>Link</mat-label>
+        <input
+            *ngIf="shareForm?.get('workLogShare')?.value"
+            matInput
+            type="text"
+            formControlName="workLogLink"
+            placeholder="Hours"
+        />
+    </mat-form-field> -->
 </form>

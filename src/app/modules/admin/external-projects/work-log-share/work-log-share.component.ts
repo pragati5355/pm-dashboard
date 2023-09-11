@@ -21,6 +21,7 @@ export class WorkLogShareComponent implements OnInit {
     ngOnInit(): void {
         this.shareForm = this.fb.group({
             workLogShare: false,
+            workLogLink: [''],
         });
     }
 
