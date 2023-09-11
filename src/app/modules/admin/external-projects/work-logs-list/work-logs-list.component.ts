@@ -13,6 +13,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
     selector: 'app-work-logs-list',
@@ -51,6 +52,11 @@ export class WorkLogsListComponent implements OnInit {
     defaultResource: any;
     currentMonth: number;
     currentYear: string = '';
+    editWorklogform: FormGroup;
+    allowEditWorklog: boolean = false;
+    configEditWorklogStatus!: FormGroup;
+    selectedResourceEmail: any[];
+    isChecked: boolean = false;
 
     constructor(
         private matDialog: MatDialog,
@@ -71,6 +77,8 @@ export class WorkLogsListComponent implements OnInit {
         this.initializeConfigForm();
         this.getLoggedInUser();
         this.valueChangeSubscriptionForEmail();
+        this.initializeEditWorklogForm();
+        this.initailizeConfirmationFormPopup();
     }
 
     _filter(value: any): any[] {
@@ -81,6 +89,28 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     close() {}
+
+    editWorklogPopUp($event: MatSlideToggleChange) {
+        console.log(
+            'Edit Worklog assign',
+            this.editWorklogform?.get('editWorklogPopUp')?.value
+        );
+        this.initailizeConfirmationFormPopup();
+        const confirmPopDialog = this.fuseConfirmationService.open(
+            this.configEditWorklogStatus.value
+        );
+        confirmPopDialog.afterClosed().subscribe((result) => {
+            console.log('result', result);
+            if (result == 'confirm') {
+                this.initialLoading = true;
+                this.isChecked = true;
+                console.log('Confirm for editing the worklog');
+            } else if (result == 'cancel') {
+                this.isChecked = false;
+                this.editWorklogform?.get('editWorklogPopUp')?.setValue('false');
+            }
+        });
+    }
 
     onTabChanged(event: any) {
         this.selectedTabIndex = event?.index;
@@ -100,9 +130,15 @@ export class WorkLogsListComponent implements OnInit {
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
+        this.selectedResourceEmail = resource;
+        console.log(
+            ' this.selectedResourceEmail : ',
+            this.selectedResourceEmail
+        );
         this.selectedResourceId = resource[0]?.id;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
+
     clearSelectedEmail() {
         this.workLogsList = [];
         this.isEmailSelected = false;
@@ -283,5 +319,38 @@ export class WorkLogsListComponent implements OnInit {
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
             });
+    }
+
+    private initializeEditWorklogForm() {
+        this.editWorklogform = this.formBuilder.group({
+            editWorklogPopUp: false,
+        });
+    }
+
+    private initailizeConfirmationFormPopup() {
+        this.configEditWorklogStatus = this.formBuilder.group({
+            title: 'Allow Edit Worklog',
+            message:
+                'Do you want allow ' +
+                this.defaultResource +
+                'to edit worklog for {project-name}.',
+            icon: this.formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn',
+            }),
+            actions: this.formBuilder.group({
+                confirm: this.formBuilder.group({
+                    show: true,
+                    label: 'Yes',
+                    color: 'warn',
+                }),
+                cancel: this.formBuilder.group({
+                    show: true,
+                    label: 'No',
+                }),
+            }),
+            dismissible: false,
+        });
     }
 }

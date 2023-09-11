@@ -70,6 +70,23 @@
                 </div>
             </div>
         </div>
+        <div class="flex justify-end items-center">
+            <div class="grid w-[350px] justify-items-end" *ngIf="userRole === 'ADMIN'">
+                <form [formGroup]="editWorklogform">
+                    <div class="flex items-center">
+                        <span class="font-semibold"> Allow Edit Worklog </span>
+                        <mat-slide-toggle
+                            class="px-4"
+                            formControlName="editWorklogPopUp"
+                            [color]="'primary'"
+                            [checked]="isChecked"
+                            (change)="editWorklogPopUp($event)"
+                        >
+                        </mat-slide-toggle>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div class="mt-4">
             <mat-tab-group
