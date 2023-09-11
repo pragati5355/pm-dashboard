@@ -25,6 +25,12 @@ export class WorkLogShareComponent implements OnInit {
         });
     }
 
+    toggle(event: any) {
+        if (event?.checked) {
+            this.shareForm?.get('workLogLink')?.disable();
+        }
+    }
+
     cancel() {
         this.dialogRef.close();
     }

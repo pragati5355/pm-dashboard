@@ -11,17 +11,22 @@
     </button>
 </div>
 <form [formGroup]="shareForm">
-    <mat-slide-toggle [color]="'primary'" formControlName="workLogShare"
-        >Share work log</mat-slide-toggle
-    >
-    <!-- <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>Link</mat-label>
-        <input
-            *ngIf="shareForm?.get('workLogShare')?.value"
-            matInput
-            type="text"
-            formControlName="workLogLink"
-            placeholder="Hours"
-        />
-    </mat-form-field> -->
+    <div class="flex flex-col w-full">
+        <div>
+            <mat-slide-toggle
+                [color]="'primary'"
+                formControlName="workLogShare"
+                (change)="toggle($event)"
+                >Share work log</mat-slide-toggle
+            >
+        </div>
+        <div class="flex-1 mt-6">
+            <mat-form-field
+                *ngIf="shareForm?.get('workLogShare')?.value"
+                class="w-full"
+            >
+                <input matInput placeholder="" formControlName="workLogLink" />
+            </mat-form-field>
+        </div>
+    </div>
 </form>
