@@ -7,3 +7,12 @@
 .text-wrap-container > * {
     overflow-wrap: break-word !important;
 }
+
+.worklog-row {
+    ol,
+    ul,
+    menu {
+        list-style: unset !important;
+        padding-left: 20px;
+    }
+}

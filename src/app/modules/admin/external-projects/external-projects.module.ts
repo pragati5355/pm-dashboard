@@ -43,6 +43,8 @@ import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.c
 import { QuillModule } from 'ngx-quill';
 import { WorkLogsDownloadComponent } from './work-logs-download/work-logs-download.component';
 import { WorkLogShareComponent } from './work-log-share/work-log-share.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -53,6 +55,7 @@ import { WorkLogShareComponent } from './work-log-share/work-log-share.component
         SendRemindersComponent,
         WorkLogsListComponent,
         StripHtmlPipe,
+        SanitizeHtmlPipe,
         AddEditWorkLogComponent,
         WorkLogsDownloadComponent,
         WorkLogShareComponent,
@@ -90,6 +93,7 @@ import { WorkLogShareComponent } from './work-log-share/work-log-share.component
         MatCheckboxModule,
         ReactiveFormsModule,
         MatTabsModule,
+        MatSlideToggleModule,
         QuillModule,
     ],
     providers: [DatePipe],

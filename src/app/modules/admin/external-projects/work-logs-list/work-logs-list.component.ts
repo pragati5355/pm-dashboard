@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,6 +19,7 @@ import { WorkLogShareComponent } from '../work-log-share/work-log-share.componen
     selector: 'app-work-logs-list',
     templateUrl: './work-logs-list.component.html',
     styleUrls: ['./work-logs-list.component.scss'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class WorkLogsListComponent implements OnInit {
     selectedYear: string = '2020';

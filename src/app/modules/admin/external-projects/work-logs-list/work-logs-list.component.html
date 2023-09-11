@@ -75,6 +75,7 @@
                     color="primary"
                     matTooltip="Share"
                     (click)="shareDialog()"
+                    [disabled]="initialLoading"
                 >
                     <mat-icon>share</mat-icon>
                 </button>
@@ -132,8 +133,8 @@
                                     {{ log?.workLogDate | date }}
                                 </div>
                                 <div
-                                    [innerHTML]="log?.comment"
-                                    class="flex flex-wrap truncate text-wrap-container"
+                                    [innerHTML]="log?.comment | sanitizeHtml"
+                                    class="overflow-hidden break-all worklog-row"
                                 >
                                     <!-- {{
                                         log?.onLeave
