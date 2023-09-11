@@ -13,6 +13,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
+import { WorkLogShareComponent } from '../work-log-share/work-log-share.component';
 
 @Component({
     selector: 'app-work-logs-list',
@@ -177,6 +178,23 @@ export class WorkLogsListComponent implements OnInit {
                     });
             }
         });
+    }
+
+    shareDialog() {
+        this.matDialog
+            .open(WorkLogShareComponent, {
+                width: '50%',
+                data: {
+                    projectId: this.projectId,
+                },
+                disableClose: true,
+            })
+            .afterClosed()
+            .subscribe((result) => {
+                if (result) {
+                    window.location.reload();
+                }
+            });
     }
 
     private valueChangeSubscriptionForEmail() {
