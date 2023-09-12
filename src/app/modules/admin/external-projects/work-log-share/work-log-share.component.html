@@ -13,20 +13,68 @@
 <form [formGroup]="shareForm">
     <div class="flex flex-col w-full">
         <div>
-            <mat-slide-toggle
-                [color]="'primary'"
-                formControlName="workLogShare"
-                (change)="toggle($event)"
-                >Share work log</mat-slide-toggle
+            <mat-slide-toggle [color]="'primary'" formControlName="workLogShare"
+                >Enable link for sharing work log</mat-slide-toggle
             >
         </div>
         <div class="flex-1 mt-6">
             <mat-form-field
                 *ngIf="shareForm?.get('workLogShare')?.value"
-                class="w-full"
+                class="w-full max-w-[415px] mb-2 mt-4 sm:mt-0"
+                [floatLabel]="'always'"
             >
-                <input matInput placeholder="" formControlName="workLogLink" />
+                <mat-label>Work log link</mat-label>
+                <input
+                    matInput
+                    formControlName="workLogLink"
+                    placeholder=""
+                    maxlength="4"
+                />
+                <span matPrefix>{{ environments.appUrl + "/project/" }}</span>
+
+                <mat-error
+                    *ngIf="shareForm?.get('workLogLink')?.hasError('required')"
+                >
+                    <div>Key is mandatory</div>
+                </mat-error>
+
+                <mat-error
+                    *ngIf="shareForm?.get('workLogLink')?.hasError('pattern')"
+                >
+                    <div>Please enter valid key</div>
+                </mat-error>
+                <mat-error
+                    *ngIf="shareForm?.get('workLogLink')?.hasError('minlength')"
+                >
+                    <div>Minimum 4 characters required</div>
+                </mat-error>
             </mat-form-field>
+        </div>
+
+        <div
+            mat-dialog-actions
+            class="flex flex-row justify-end"
+            *ngIf="shareForm?.get('workLogShare')?.value"
+        >
+            <button mat-flat-button [color]="'primary'">
+                <!-- <mat-progress-spinner
+                *ngIf="isLoading"
+                class="mr-2"
+                mode="indeterminate"
+                diameter="24"
+            ></mat-progress-spinner> -->
+                <mat-icon>link</mat-icon>
+                Copy link
+            </button>
+            <button mat-flat-button [color]="'primary'" (click)="submit()">
+                <!-- <mat-progress-spinner
+                    *ngIf="isLoading"
+                    class="mr-2"
+                    mode="indeterminate"
+                    diameter="24"
+                ></mat-progress-spinner> -->
+                Share
+            </button>
         </div>
     </div>
 </form>

@@ -187,6 +187,7 @@ export class WorkLogsListComponent implements OnInit {
                 width: '50%',
                 data: {
                     projectId: this.projectId,
+                    projectName: this.projectName,
                 },
                 disableClose: true,
             })
