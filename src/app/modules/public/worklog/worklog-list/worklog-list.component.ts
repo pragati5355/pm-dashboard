@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import {
     MAT_SELECT_YEARS,
     MAT_TAB_MONTHS,
 } from '@modules/admin/project/project-widget/common/constants';
 import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
+import { WorkLogsService } from '@modules/public/services/work-logs.service';
 import { AuthService } from '@services/auth/auth.service';
 import { Observable } from 'rxjs';
 
@@ -52,16 +54,19 @@ export class WorklogListComponent implements OnInit {
     ];
     constructor(
         private workLogService: WorkLogService,
-        private authService: AuthService
+        private authService: AuthService,
+        private route: ActivatedRoute,
+        private publicWorkLogService: WorkLogsService
     ) {}
 
     ngOnInit(): void {
+        this.routeSubscription();
         this.getCurrentMonthAndYear();
         this.getProjectResources();
     }
 
     onYearChange(event: any) {
-        // this.loadData(event?.value, this.selectedTabIndex);
+        this.loadData(event?.value, this.selectedTabIndex);
     }
 
     onEmailSelected($event: any) {
@@ -87,6 +92,14 @@ export class WorklogListComponent implements OnInit {
         }
     }
 
+    private routeSubscription() {
+        this.route.params.subscribe((projectId) => {
+            if (projectId['id']) {
+                this.projectId = projectId['id'];
+            }
+        });
+    }
+
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
         this.currentYear = String(new Date().getFullYear());
@@ -96,17 +109,17 @@ export class WorklogListComponent implements OnInit {
 
     private getProjectResources() {
         this.initialLoading = true;
-        this.workLogService
-            .getProjectResource({ projectId: this.projectId })
+        this.publicWorkLogService
+            .getResourcesPublic(this.projectId)
             .subscribe((res: any) => {
                 this.initialLoading = false;
-                if (res?.data) {
+                if (res?.code === 200 && res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
                     this.selectedResourceId = res?.data[0]?.id;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
-                if (res?.tokenExpire) {
+                if (res?.code === 401) {
                     this.authService.updateAndReload(window.location);
                 }
             });
@@ -117,19 +130,18 @@ export class WorklogListComponent implements OnInit {
 
         const payload = {
             resourceId: this.selectedResourceId,
-            projectId: this.projectId,
+            key: this.projectId,
             month: ++month,
             year: year,
         };
-        this.workLogService.getWorkLogs(payload).subscribe((res: any) => {
-            this.initialLoading = false;
-            if (!res?.error) {
-                this.workLogsList = res?.data?.list;
-                this.projectName = res?.data?.projectName;
-            }
-            if (res?.tokenExpire) {
-                this.authService.updateAndReload(window.location);
-            }
-        });
+        this.publicWorkLogService
+            .getResourceWorkLogPublic(payload)
+            .subscribe((res: any) => {
+                this.initialLoading = false;
+                if (res?.code === 200) {
+                    this.workLogsList = res?.data?.list;
+                    this.projectName = res?.data?.projectName;
+                }
+            });
     }
 }
