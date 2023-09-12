@@ -16,6 +16,14 @@ export class WorkLogService {
         return this.http.post(API_LIST.GET_WORK_LOG_LIST, obj);
     }
 
+    getShareLink(id: number) {
+        return this.http.get(API_LIST.GET_SHARE_WORKLOG + id);
+    }
+
+    saveShareLink(obj: any) {
+        return this.http.post(API_LIST.SAVE_SHARE_WORKLOG, obj);
+    }
+
     getProjectResource(obj: any) {
         return this.http.post(this.getResourceUrl, obj);
     }

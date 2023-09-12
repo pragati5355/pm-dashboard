@@ -60,16 +60,6 @@
                         <div>Minimum 4 characters required</div>
                     </mat-error>
                 </mat-form-field>
-
-                <button
-                    mat-flat-button
-                    [color]="'primary'"
-                    (click)="genrateRandomKeyOnClick()"
-                    matTooltip="Generate random key"
-                    class="ml-4 mt-2"
-                >
-                    <mat-icon>key</mat-icon>
-                </button>
             </div>
         </div>
 
@@ -87,24 +77,16 @@
                     this.projectKey
                 "
                 (click)="copyLink()"
+                [disabled]="isLoading"
             >
-                <!-- <mat-progress-spinner
-                *ngIf="isLoading"
-                class="mr-2"
-                mode="indeterminate"
-                diameter="24"
-            ></mat-progress-spinner> -->
-                <mat-icon>link</mat-icon>
-                Copy link
-            </button>
-            <button mat-flat-button [color]="'primary'" (click)="submit()">
-                <!-- <mat-progress-spinner
+                <mat-progress-spinner
                     *ngIf="isLoading"
                     class="mr-2"
                     mode="indeterminate"
                     diameter="24"
-                ></mat-progress-spinner> -->
-                Share
+                ></mat-progress-spinner>
+                <mat-icon>link</mat-icon>
+                Copy link
             </button>
         </div>
     </div>

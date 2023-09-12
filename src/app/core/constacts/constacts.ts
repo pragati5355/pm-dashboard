@@ -88,6 +88,8 @@ export const ROLE_LIST = [
 export const API_LIST = {
     LOGGED_IN_USER: springBootUrl + '/user',
     GET_WORK_LOG_LIST: springBootUrl + '/worklog/list',
+    GET_SHARE_WORKLOG: springBootUrl + '/worklog/setting/',
+    SAVE_SHARE_WORKLOG: springBootUrl + '/worklog/setting',
 };
 
 export const UTILIZATION_VALUES = [0.25, 0.5, 1];
