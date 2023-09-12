@@ -52,6 +52,15 @@
                             >
                         </mat-select>
                     </mat-form-field>
+
+                    <div class="flex items-center ml-4 mt-2" *ngIf="userRole === 'ADMIN'">
+                        <span class="font-medium pr-3 "> Allow Edit Worklog </span>
+                        <mat-slide-toggle 
+                            [color]="'primary'"
+                            (change)="allowEditWorklog($event)" 
+                            [checked]="checked">
+                        </mat-slide-toggle>
+                    </div>
                 </div>
                 <div *ngIf="userRole === 'USER' || userRole === 'PM'">
                     <button
@@ -70,23 +79,18 @@
                 </div>
             </div>
         </div>
-        <div class="flex justify-end items-center">
+        <!-- <div class="flex justify-end items-center">
             <div class="grid w-[350px] justify-items-end" *ngIf="userRole === 'ADMIN'">
-                <form [formGroup]="editWorklogform">
-                    <div class="flex items-center">
-                        <span class="font-semibold"> Allow Edit Worklog </span>
-                        <mat-slide-toggle
-                            class="px-4"
-                            formControlName="editWorklogPopUp"
-                            [color]="'primary'"
-                            [checked]="isChecked"
-                            (change)="editWorklogPopUp($event)"
-                        >
-                        </mat-slide-toggle>
-                    </div>
-                </form>
+                <div class="flex items-center">
+                    <span class="font-semibold pr-3 "> Allow Edit Worklog </span>
+                    <mat-slide-toggle 
+                        [color]="'primary'"
+                        (change)="allowEditWorklog($event)" 
+                        [checked]="checked">
+                    </mat-slide-toggle>
+                </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="mt-4">
             <mat-tab-group

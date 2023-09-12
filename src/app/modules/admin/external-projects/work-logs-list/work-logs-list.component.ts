@@ -14,6 +14,7 @@ import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { WorkLogAllowEditDialogComponent } from '../work-log-allow-edit-dialog/work-log-allow-edit-dialog.component';
 
 @Component({
     selector: 'app-work-logs-list',
@@ -52,11 +53,10 @@ export class WorkLogsListComponent implements OnInit {
     defaultResource: any;
     currentMonth: number;
     currentYear: string = '';
-    editWorklogform: FormGroup;
-    allowEditWorklog: boolean = false;
     configEditWorklogStatus!: FormGroup;
     selectedResourceEmail: any[];
-    isChecked: boolean = false;
+    checked: boolean = false;
+    isEditAllow : boolean = false;
 
     constructor(
         private matDialog: MatDialog,
@@ -77,8 +77,6 @@ export class WorkLogsListComponent implements OnInit {
         this.initializeConfigForm();
         this.getLoggedInUser();
         this.valueChangeSubscriptionForEmail();
-        this.initializeEditWorklogForm();
-        this.initailizeConfirmationFormPopup();
     }
 
     _filter(value: any): any[] {
@@ -90,26 +88,23 @@ export class WorkLogsListComponent implements OnInit {
 
     close() {}
 
-    editWorklogPopUp($event: MatSlideToggleChange) {
-        console.log(
-            'Edit Worklog assign',
-            this.editWorklogform?.get('editWorklogPopUp')?.value
-        );
-        this.initailizeConfirmationFormPopup();
-        const confirmPopDialog = this.fuseConfirmationService.open(
-            this.configEditWorklogStatus.value
-        );
-        confirmPopDialog.afterClosed().subscribe((result) => {
-            console.log('result', result);
-            if (result == 'confirm') {
-                this.initialLoading = true;
-                this.isChecked = true;
-                console.log('Confirm for editing the worklog');
-            } else if (result == 'cancel') {
-                this.isChecked = false;
-                this.editWorklogform?.get('editWorklogPopUp')?.setValue('false');
-            }
-        });
+    allowEditWorklog(e) {
+        if (!this.checked) {
+            e.source.checked = false;
+            const dialogRef = this.matDialog.open(
+                WorkLogAllowEditDialogComponent
+            );
+            dialogRef.afterClosed().subscribe((result: any) => {
+                console.log('result', result);
+                if (result) {
+                    this.checked = !this.checked;
+                } else {
+                    console.log('this.checked toggle should not : ',this.checked);
+                }
+            });
+        } else {
+            this.checked = !this.checked;
+        }
     }
 
     onTabChanged(event: any) {
@@ -319,38 +314,5 @@ export class WorkLogsListComponent implements OnInit {
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
             });
-    }
-
-    private initializeEditWorklogForm() {
-        this.editWorklogform = this.formBuilder.group({
-            editWorklogPopUp: false,
-        });
-    }
-
-    private initailizeConfirmationFormPopup() {
-        this.configEditWorklogStatus = this.formBuilder.group({
-            title: 'Allow Edit Worklog',
-            message:
-                'Do you want allow ' +
-                this.defaultResource +
-                'to edit worklog for {project-name}.',
-            icon: this.formBuilder.group({
-                show: true,
-                name: 'heroicons_outline:exclamation',
-                color: 'warn',
-            }),
-            actions: this.formBuilder.group({
-                confirm: this.formBuilder.group({
-                    show: true,
-                    label: 'Yes',
-                    color: 'warn',
-                }),
-                cancel: this.formBuilder.group({
-                    show: true,
-                    label: 'No',
-                }),
-            }),
-            dismissible: false,
-        });
     }
 }
