@@ -13,8 +13,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 @NgModule({
-    declarations: [WorklogListComponent],
+    declarations: [WorklogListComponent, SanitizeHtmlPipe],
     imports: [
         CommonModule,
         WorklogRoutingModule,

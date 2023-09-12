@@ -77,14 +77,13 @@
                     this.projectKey
                 "
                 (click)="copyLink()"
-                [disabled]="isLoading"
             >
-                <mat-progress-spinner
+                <!-- <mat-progress-spinner
                     *ngIf="isLoading"
                     class="mr-2"
                     mode="indeterminate"
                     diameter="24"
-                ></mat-progress-spinner>
+                ></mat-progress-spinner> -->
                 <mat-icon>link</mat-icon>
                 Copy link
             </button>

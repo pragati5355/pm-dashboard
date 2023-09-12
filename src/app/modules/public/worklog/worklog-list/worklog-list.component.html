@@ -3,7 +3,7 @@
         <div
             class="flex justify-between items-center bg-white rounded-sm shadow-sm p-6"
         >
-            <h1 class="font-bold mt-4">Metrics - work-logs</h1>
+            <h1 class="font-bold mt-4">{{ projectName }} - work-logs</h1>
             <div>
                 <img class="w-36" src="assets/images/logo/logo.png" alt="" />
             </div>
@@ -67,76 +67,47 @@
                             *ngIf="!initialLoading && workLogsList?.length > 0"
                         >
                             <div
-                                [ngClass]="{
-                                    'inventory-grid-2':
-                                        userRole === 'ADMIN' ||
-                                        userRole === 'PM',
-                                    'inventory-grid': userRole === 'USER'
-                                }"
-                                class="z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                class="z-10 inventory-grid-list-1 sticky top-0 grid gap-2 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                             >
                                 <div class="font-semibold px-2">Date</div>
                                 <div class="font-semibold">Description</div>
                                 <div class="font-semibold">Hours</div>
-                                <div
-                                    class="font-semibold"
-                                    *ngIf="
-                                        userRole === 'USER' || userRole === 'PM'
-                                    "
-                                >
-                                    Actions
-                                </div>
                             </div>
-                            <ng-container *ngIf="!initialLoading">
-                                <div
-                                    *ngFor="let log of workLogsList"
-                                    [ngClass]="{
-                                        'bg-white': !log?.onLeave,
-                                        'bg-red-100': log?.onLeave,
-                                        'inventory-grid-2':
-                                            userRole === 'ADMIN' ||
-                                            userRole === 'PM',
-                                        'inventory-grid': userRole === 'USER'
-                                    }"
-                                    class="grid items-center gap-4 py-3 border-b"
-                                >
-                                    <div class="px-2">
-                                        {{ log?.workLogDate | date }}
+                            <div class="grid gap-2 py-4 inventory-grid-list-1">
+                                <ng-container *ngFor="let log of workLogsList">
+                                    <div class="pl-2">
+                                        {{ log?.worklogDate | date }}
                                     </div>
-                                    <div
-                                        [innerHTML]="log?.comment"
-                                        class="overflow-hidden break-all worklog-row"
-                                    >
-                                        <!-- {{
-                                            log?.onLeave
-                                                ? "On Leave"
-                                                : (log?.comment | stripHtml)
-                                        }} -->
+                                    <div class="">
+                                        <div
+                                            *ngFor="
+                                                let logs of log?.worklogList
+                                            "
+                                            class="overflow-hidden break-all worklog-row"
+                                            [innerHTML]="
+                                                logs?.onLeave
+                                                    ? 'On Leave'
+                                                    : (logs?.comment
+                                                      | sanitizeHtml)
+                                            "
+                                        ></div>
                                     </div>
-                                    <div>{{ log?.timeSpent }}</div>
-                                    <div
-                                        *ngIf="
-                                            userRole === 'USER' ||
-                                            userRole === 'PM'
-                                        "
-                                    >
-                                        <button>
-                                            <mat-icon
-                                                [matTooltip]="'Edit'"
-                                                class="text-gray-400 icon-size-5 cursor-pointer mr-4"
-                                                svgIcon="heroicons_outline:pencil"
-                                            ></mat-icon>
-                                        </button>
-                                        <button>
-                                            <mat-icon
-                                                [matTooltip]="'Delete'"
-                                                class="text-gray-400 icon-size-5 cursor-pointer"
-                                                svgIcon="heroicons_outline:trash"
-                                            ></mat-icon>
-                                        </button>
+                                    <div class="">
+                                        <div
+                                            *ngFor="
+                                                let logs of log?.worklogList
+                                            "
+                                            class="pb-2"
+                                        >
+                                            {{
+                                                logs?.onLeave
+                                                    ? 0
+                                                    : logs?.timeSpent
+                                            }}
+                                        </div>
                                     </div>
-                                </div>
-                            </ng-container>
+                                </ng-container>
+                            </div>
                         </ng-container>
 
                         <ng-container

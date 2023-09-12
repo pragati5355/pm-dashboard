@@ -20,6 +20,7 @@ export class WorkLogShareComponent implements OnInit {
     projectKey: string = '';
     link: string = '';
     isLoading: boolean = false;
+    alreadyEnabled: boolean = false;
     constructor(
         public dialogRef: MatDialogRef<WorkLogShareComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
