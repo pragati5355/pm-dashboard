@@ -130,17 +130,17 @@
                                 class="grid items-center gap-4 py-3 border-b"
                             >
                                 <div class="px-2">
-                                    {{ log?.workLogDate | date }}
+                                    {{ log?.worklogDate | date }}
                                 </div>
-                                <div
-                                    [innerHTML]="log?.comment | sanitizeHtml"
-                                    class="overflow-hidden break-all worklog-row"
-                                >
-                                    <!-- {{
-                                        log?.onLeave
-                                            ? "On Leave"
-                                            : (log?.comment | stripHtml)
-                                    }} -->
+                                <div>
+                                    <div
+                                        *ngFor="let work of log?.worklogList"
+                                        [innerHTML]="
+                                            work?.comment | sanitizeHtml
+                                        "
+                                        class="overflow-hidden break-all worklog-row"
+                                    >
+                                    </div>
                                 </div>
                                 <div>{{ log?.timeSpent }}</div>
                                 <div

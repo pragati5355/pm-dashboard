@@ -260,6 +260,8 @@ export class WorkLogsListComponent implements OnInit {
             this.initialLoading = false;
             if (!res?.error) {
                 this.workLogsList = res?.data?.list;
+                console.log(this.workLogsList);
+
                 this.projectName = res?.data?.projectName;
             }
             if (res?.tokenExpire) {
