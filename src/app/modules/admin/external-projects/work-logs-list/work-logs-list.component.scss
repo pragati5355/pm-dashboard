@@ -4,6 +4,12 @@
 .inventory-grid-2 {
     grid-template-columns: 10% auto 10%;
 }
+.inventory-grid-list {
+    grid-template-columns: 10% auto 5% 5%;
+}
+.inventory-grid-list-1 {
+    grid-template-columns: 10% auto 5%;
+}
 .text-wrap-container > * {
     overflow-wrap: break-word !important;
 }

@@ -98,7 +98,7 @@
                     <ng-container
                         *ngIf="!initialLoading && workLogsList?.length > 0"
                     >
-                        <div
+                        <!-- <div
                             [ngClass]="{
                                 'inventory-grid-2':
                                     userRole === 'ADMIN' || userRole === 'PM',
@@ -118,7 +118,7 @@
                         </div>
                         <ng-container *ngIf="!initialLoading">
                             <div
-                                *ngFor="let log of workLogsList"
+                                *ngFor="let log of workLogsList; let i = index"
                                 [ngClass]="{
                                     'bg-white': !log?.onLeave,
                                     'bg-red-100': log?.onLeave,
@@ -140,6 +140,7 @@
                                         "
                                         class="overflow-hidden break-all worklog-row"
                                     >
+                                        <div></div>
                                     </div>
                                 </div>
                                 <div>{{ log?.timeSpent }}</div>
@@ -166,7 +167,113 @@
                                     </button>
                                 </div>
                             </div>
-                        </ng-container>
+                        </ng-container> -->
+                        <div
+                            class="z-10 sticky top-0 grid gap-2 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            [ngClass]="{
+                                'inventory-grid-list':
+                                    userRole === 'ADMIN' || userRole === 'PM',
+                                'inventory-grid-list-1': userRole === 'USER'
+                            }"
+                        >
+                            <div class="font-semibold px-2">Date</div>
+                            <div class="font-semibold">Description</div>
+                            <div class="font-semibold">Hours</div>
+                            <div class="font-semibold">Actions</div>
+                        </div>
+                        <div
+                            class="grid gap-2 py-4"
+                            [ngClass]="{
+                                'inventory-grid-list':
+                                    userRole === 'ADMIN' || userRole === 'PM',
+                                'inventory-grid-list-1': userRole === 'USER'
+                            }"
+                        >
+                            <ng-container *ngFor="let log of workLogsList">
+                                <div class="pl-2">
+                                    {{ log?.worklogDate | date }}
+                                </div>
+                                <div class="">
+                                    <div
+                                        *ngFor="let logs of log?.worklogList"
+                                        class="overflow-hidden break-all worklog-row"
+                                        [innerHTML]="
+                                            logs?.comment | sanitizeHtml
+                                        "
+                                    ></div>
+                                </div>
+                                <div class="">
+                                    <div
+                                        *ngFor="let logs of log?.worklogList"
+                                        class="pb-2"
+                                    >
+                                        {{ logs?.timeSpent }}
+
+                                        <!-- <div>
+                                            <button
+                                                (click)="
+                                                    addOrEditWorklog(
+                                                        logs,
+                                                        'EDIT'
+                                                    )
+                                                "
+                                            >
+                                                <mat-icon
+                                                    [matTooltip]="'Edit'"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer mr-4"
+                                                    svgIcon="heroicons_outline:pencil"
+                                                ></mat-icon>
+                                            </button>
+                                            <button
+                                                (click)="
+                                                    deleteWorkLog(logs?.id)
+                                                "
+                                            >
+                                                <mat-icon
+                                                    [matTooltip]="'Delete'"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer"
+                                                    svgIcon="heroicons_outline:trash"
+                                                ></mat-icon>
+                                            </button>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div
+                                        *ngFor="let logs of log?.worklogList"
+                                        class="pb-2"
+                                    >
+                                        <div>
+                                            <button
+                                                (click)="
+                                                    addOrEditWorklog(
+                                                        logs,
+                                                        'EDIT'
+                                                    )
+                                                "
+                                            >
+                                                <mat-icon
+                                                    [matTooltip]="'Edit'"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer mr-4"
+                                                    svgIcon="heroicons_outline:pencil"
+                                                ></mat-icon>
+                                            </button>
+                                            <button
+                                                (click)="
+                                                    deleteWorkLog(logs?.id)
+                                                "
+                                            >
+                                                <mat-icon
+                                                    [matTooltip]="'Delete'"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer"
+                                                    svgIcon="heroicons_outline:trash"
+                                                ></mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
                     </ng-container>
 
                     <ng-container
