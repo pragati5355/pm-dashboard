@@ -45,6 +45,7 @@ import { WorkLogsDownloadComponent } from './work-logs-download/work-logs-downlo
 import { WorkLogShareComponent } from './work-log-share/work-log-share.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -94,6 +95,7 @@ import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
         ReactiveFormsModule,
         MatTabsModule,
         MatSlideToggleModule,
+        ClipboardModule,
         QuillModule,
     ],
     providers: [DatePipe],

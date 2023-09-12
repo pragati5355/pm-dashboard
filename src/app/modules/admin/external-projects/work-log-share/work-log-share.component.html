@@ -17,38 +17,60 @@
                 >Enable link for sharing work log</mat-slide-toggle
             >
         </div>
-        <div class="flex-1 mt-6">
-            <mat-form-field
-                *ngIf="shareForm?.get('workLogShare')?.value"
-                class="w-full max-w-[415px] mb-2 mt-4 sm:mt-0"
-                [floatLabel]="'always'"
-            >
-                <mat-label>Work log link</mat-label>
-                <input
-                    matInput
-                    formControlName="workLogLink"
-                    placeholder=""
-                    maxlength="4"
-                />
-                <span matPrefix>{{ environments.appUrl + "/project/" }}</span>
+        <div
+            class="flex-1 mt-6 gap-4"
+            *ngIf="shareForm?.get('workLogShare')?.value"
+        >
+            <div class="flex items-center">
+                <mat-form-field
+                    class="w-full max-w-[415px]"
+                    [floatLabel]="'always'"
+                >
+                    <mat-label>Work log link</mat-label>
+                    <input
+                        matInput
+                        formControlName="workLogLink"
+                        placeholder=""
+                        maxlength="4"
+                    />
+                    <span matPrefix>{{
+                        environments.appUrl + "/project/"
+                    }}</span>
 
-                <mat-error
-                    *ngIf="shareForm?.get('workLogLink')?.hasError('required')"
-                >
-                    <div>Key is mandatory</div>
-                </mat-error>
+                    <mat-error
+                        *ngIf="
+                            shareForm?.get('workLogLink')?.hasError('required')
+                        "
+                    >
+                        <div>Key is mandatory</div>
+                    </mat-error>
 
-                <mat-error
-                    *ngIf="shareForm?.get('workLogLink')?.hasError('pattern')"
+                    <mat-error
+                        *ngIf="
+                            shareForm?.get('workLogLink')?.hasError('pattern')
+                        "
+                    >
+                        <div>Please enter valid key</div>
+                    </mat-error>
+                    <mat-error
+                        *ngIf="
+                            shareForm?.get('workLogLink')?.hasError('minlength')
+                        "
+                    >
+                        <div>Minimum 4 characters required</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <button
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="genrateRandomKeyOnClick()"
+                    matTooltip="Generate random key"
+                    class="ml-4 mt-2"
                 >
-                    <div>Please enter valid key</div>
-                </mat-error>
-                <mat-error
-                    *ngIf="shareForm?.get('workLogLink')?.hasError('minlength')"
-                >
-                    <div>Minimum 4 characters required</div>
-                </mat-error>
-            </mat-form-field>
+                    <mat-icon>key</mat-icon>
+                </button>
+            </div>
         </div>
 
         <div
@@ -56,7 +78,14 @@
             class="flex flex-row justify-end"
             *ngIf="shareForm?.get('workLogShare')?.value"
         >
-            <button mat-flat-button [color]="'primary'">
+            <button
+                mat-flat-button
+                [color]="'primary'"
+                [cdkCopyToClipboard]="
+                    this.environments.appUrl + '/project/' + this.projectKey
+                "
+                (click)="copyLink()"
+            >
                 <!-- <mat-progress-spinner
                 *ngIf="isLoading"
                 class="mr-2"

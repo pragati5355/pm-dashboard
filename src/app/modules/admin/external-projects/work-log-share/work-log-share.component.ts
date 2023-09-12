@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SnackBar } from 'app/core/utils/snackBar';
 import { environment } from 'environments/environment';
 
 @Component({
@@ -15,10 +16,12 @@ export class WorkLogShareComponent implements OnInit {
     shareForm: FormGroup;
     environments: any = environment;
     projectKey: string = '';
+    link: string = '';
     constructor(
         public dialogRef: MatDialogRef<WorkLogShareComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
@@ -31,7 +34,7 @@ export class WorkLogShareComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.shareForm);
+        console.log(this.environments.appUrl + '/project/' + this.projectKey);
     }
 
     generateRandomKey() {
@@ -47,6 +50,15 @@ export class WorkLogShareComponent implements OnInit {
             counter += 1;
         }
         return result;
+    }
+
+    genrateRandomKeyOnClick() {
+        this.projectKey = this.generateRandomKey().substring(0, 4);
+        this.shareForm?.get('workLogLink')?.setValue(this.projectKey);
+    }
+
+    copyLink() {
+        this.snackBar.successSnackBar('Link copied');
     }
 
     private generateProjectKey() {
