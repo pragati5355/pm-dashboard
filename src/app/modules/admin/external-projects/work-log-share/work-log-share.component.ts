@@ -40,6 +40,28 @@ export class WorkLogShareComponent implements OnInit {
         this.dialogRef.close();
     }
 
+    onToggle(event: any) {
+        if (this.alreadyEnabled && !event?.checked) {
+            this.isLoading = true;
+            const payload = {
+                projectId: this.data?.projectId,
+                key: this.projectKey,
+                enabled: false,
+            };
+            this.workLogService
+                ?.saveShareLink(payload)
+                ?.subscribe((res: any) => {
+                    this.isLoading = false;
+                    if (res?.code === 200) {
+                        this.snackBar.successSnackBar('Disabled');
+                    }
+                    if (res?.code === 401) {
+                        this.authService.updateAndReload(window.location);
+                    }
+                });
+        }
+    }
+
     submit() {
         console.log(
             this.environments.appUrl + '/worklog/project/' + this.projectKey
@@ -67,24 +89,28 @@ export class WorkLogShareComponent implements OnInit {
     }
 
     copyLink() {
-        if (this.shareForm?.valid) {
-            this.isLoading = true;
-            const payload = {
-                projectId: this.data?.projectId,
-                key: this.projectKey,
-                enabled: true,
-            };
-            this.workLogService
-                ?.saveShareLink(payload)
-                ?.subscribe((res: any) => {
-                    this.isLoading = false;
-                    if (res?.code === 200) {
-                        this.snackBar.successSnackBar('Link copied');
-                    }
-                    if (res?.code === 401) {
-                        this.authService.updateAndReload(window.location);
-                    }
-                });
+        if (this.alreadyEnabled) {
+            this.snackBar.successSnackBar('Link copied');
+        } else {
+            if (this.shareForm?.valid) {
+                this.isLoading = true;
+                const payload = {
+                    projectId: this.data?.projectId,
+                    key: this.projectKey,
+                    enabled: true,
+                };
+                this.workLogService
+                    ?.saveShareLink(payload)
+                    ?.subscribe((res: any) => {
+                        this.isLoading = false;
+                        if (res?.code === 200) {
+                            this.snackBar.successSnackBar('Link copied');
+                        }
+                        if (res?.code === 401) {
+                            this.authService.updateAndReload(window.location);
+                        }
+                    });
+            }
         }
     }
     private getWorkLogLinkData() {
@@ -100,6 +126,14 @@ export class WorkLogShareComponent implements OnInit {
                     this.shareForm
                         ?.get('workLogShare')
                         ?.setValue(res?.data?.enabled);
+
+                    this.alreadyEnabled = res?.data?.enabled ? true : false;
+                }
+                if (res?.code === 404) {
+                    this.shareForm?.get('workLogShare')?.setValue(false);
+                    this.shareForm
+                        ?.get('workLogLink')
+                        ?.setValue(this.projectKey);
                 }
                 if (res?.code === 401) {
                     this.authService.updateAndReload(window.location);

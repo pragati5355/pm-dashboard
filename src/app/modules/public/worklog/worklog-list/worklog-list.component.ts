@@ -73,7 +73,7 @@ export class WorklogListComponent implements OnInit {
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
-        this.selectedResourceId = resource[0]?.id;
+        this.selectedResourceId = resource[0]?.resourceId;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
@@ -116,7 +116,7 @@ export class WorklogListComponent implements OnInit {
                 if (res?.code === 200 && res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
-                    this.selectedResourceId = res?.data[0]?.id;
+                    this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
                 if (res?.code === 401) {
