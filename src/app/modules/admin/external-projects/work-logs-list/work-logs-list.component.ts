@@ -301,6 +301,9 @@ export class WorkLogsListComponent implements OnInit {
                     this.selectedResourceId = res?.data[0]?.id;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
+                if (res?.tokenExpire) {
+                    this.authService.updateAndReload(window.location);
+                }
             });
     }
 }
