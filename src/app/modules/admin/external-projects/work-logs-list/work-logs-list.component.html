@@ -171,22 +171,27 @@
                         <div
                             class="z-10 sticky top-0 grid gap-2 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                             [ngClass]="{
-                                'inventory-grid-list':
+                                'inventory-grid-list-1':
                                     userRole === 'ADMIN' || userRole === 'PM',
-                                'inventory-grid-list-1': userRole === 'USER'
+                                'inventory-grid-list': userRole === 'USER'
                             }"
                         >
                             <div class="font-semibold px-2">Date</div>
                             <div class="font-semibold">Description</div>
                             <div class="font-semibold">Hours</div>
-                            <div class="font-semibold">Actions</div>
+                            <div
+                                class="font-semibold"
+                                *ngIf="userRole === 'USER'"
+                            >
+                                Actions
+                            </div>
                         </div>
                         <div
                             class="grid gap-2 py-4"
                             [ngClass]="{
-                                'inventory-grid-list':
+                                'inventory-grid-list-1':
                                     userRole === 'ADMIN' || userRole === 'PM',
-                                'inventory-grid-list-1': userRole === 'USER'
+                                'inventory-grid-list': userRole === 'USER'
                             }"
                         >
                             <ng-container *ngFor="let log of workLogsList">
@@ -198,7 +203,9 @@
                                         *ngFor="let logs of log?.worklogList"
                                         class="overflow-hidden break-all worklog-row"
                                         [innerHTML]="
-                                            logs?.comment | sanitizeHtml
+                                            logs?.onLeave
+                                                ? 'On Leave'
+                                                : (logs?.comment | sanitizeHtml)
                                         "
                                     ></div>
                                 </div>
@@ -207,7 +214,9 @@
                                         *ngFor="let logs of log?.worklogList"
                                         class="pb-2"
                                     >
-                                        {{ logs?.timeSpent }}
+                                        {{
+                                            logs?.onLeave ? 0 : logs?.timeSpent
+                                        }}
 
                                         <!-- <div>
                                             <button
@@ -238,7 +247,7 @@
                                         </div> -->
                                     </div>
                                 </div>
-                                <div class="">
+                                <div class="" *ngIf="userRole === 'USER'">
                                     <div
                                         *ngFor="let logs of log?.worklogList"
                                         class="pb-2"
