@@ -108,12 +108,18 @@ export const appRoutes: Routes = [
         path: 'wrong-url',
         component: WrongUrlComponent,
     },
-    { path: 'project/:key', component: WorkLogsListComponent },
     {
         path: 'resource',
         loadChildren: () =>
             import('./modules/public/resource/resource.module').then(
                 (m) => m.ResourceModule
+            ),
+    },
+    {
+        path: 'worklog',
+        loadChildren: () =>
+            import('./modules/public/worklog/worklog.module').then(
+                (m) => m.WorklogModule
             ),
     },
     {
