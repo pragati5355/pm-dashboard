@@ -48,6 +48,115 @@
                     </mat-form-field>
                 </div>
             </div>
+
+            <div class="mt-4">
+                <mat-tab-group
+                    [color]="'primary'"
+                    mat-stretch-tabs="false"
+                    mat-align-tabs="start"
+                    (selectedTabChange)="onTabChanged($event)"
+                    [(selectedIndex)]="selectedTabIndex"
+                >
+                    <mat-tab
+                        *ngFor="let tab of matTabList"
+                        label="{{ tab?.label }}"
+                        [disabled]="initialLoading || tab?.value > currentMonth"
+                    >
+                        <ng-container
+                            *ngIf="!initialLoading && workLogsList?.length > 0"
+                        >
+                            <div
+                                [ngClass]="{
+                                    'inventory-grid-2':
+                                        userRole === 'ADMIN' ||
+                                        userRole === 'PM',
+                                    'inventory-grid': userRole === 'USER'
+                                }"
+                                class="z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            >
+                                <div class="font-semibold px-2">Date</div>
+                                <div class="font-semibold">Description</div>
+                                <div class="font-semibold">Hours</div>
+                                <div
+                                    class="font-semibold"
+                                    *ngIf="
+                                        userRole === 'USER' || userRole === 'PM'
+                                    "
+                                >
+                                    Actions
+                                </div>
+                            </div>
+                            <ng-container *ngIf="!initialLoading">
+                                <div
+                                    *ngFor="let log of workLogsList"
+                                    [ngClass]="{
+                                        'bg-white': !log?.onLeave,
+                                        'bg-red-100': log?.onLeave,
+                                        'inventory-grid-2':
+                                            userRole === 'ADMIN' ||
+                                            userRole === 'PM',
+                                        'inventory-grid': userRole === 'USER'
+                                    }"
+                                    class="grid items-center gap-4 py-3 border-b"
+                                >
+                                    <div class="px-2">
+                                        {{ log?.workLogDate | date }}
+                                    </div>
+                                    <div
+                                        [innerHTML]="log?.comment"
+                                        class="overflow-hidden break-all worklog-row"
+                                    >
+                                        <!-- {{
+                                            log?.onLeave
+                                                ? "On Leave"
+                                                : (log?.comment | stripHtml)
+                                        }} -->
+                                    </div>
+                                    <div>{{ log?.timeSpent }}</div>
+                                    <div
+                                        *ngIf="
+                                            userRole === 'USER' ||
+                                            userRole === 'PM'
+                                        "
+                                    >
+                                        <button>
+                                            <mat-icon
+                                                [matTooltip]="'Edit'"
+                                                class="text-gray-400 icon-size-5 cursor-pointer mr-4"
+                                                svgIcon="heroicons_outline:pencil"
+                                            ></mat-icon>
+                                        </button>
+                                        <button>
+                                            <mat-icon
+                                                [matTooltip]="'Delete'"
+                                                class="text-gray-400 icon-size-5 cursor-pointer"
+                                                svgIcon="heroicons_outline:trash"
+                                            ></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="
+                                !initialLoading && workLogsList?.length === 0
+                            "
+                        >
+                            <div
+                                class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
+                            >
+                                Work logs not found
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="initialLoading">
+                            <app-table-skeleton
+                                [skeletonData]="requiredSprintSkeletonData"
+                            ></app-table-skeleton>
+                        </ng-container>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
         </div>
     </div>
 </div>

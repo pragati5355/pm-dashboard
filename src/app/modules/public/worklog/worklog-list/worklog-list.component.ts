@@ -72,6 +72,21 @@ export class WorklogListComponent implements OnInit {
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
+    onTabChanged(event: any) {
+        this.selectedTabIndex = event?.index;
+        this.loadData(this.selectedYear, this.selectedTabIndex);
+
+        if (!(this.selectedTabIndex === new Date().getMonth())) {
+            if (new Date().getDate() > 5) {
+                this.disablePreviousWorklog = true;
+            } else {
+                this.disablePreviousWorklog = false;
+            }
+        } else {
+            this.disablePreviousWorklog = false;
+        }
+    }
+
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
         this.currentYear = String(new Date().getFullYear());

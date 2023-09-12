@@ -34,7 +34,7 @@ export class WorkLogShareComponent implements OnInit {
     }
 
     submit() {
-        console.log(this.environments.appUrl + '/project/' + this.projectKey);
+        console.log(this.environments.appUrl + '/worklog/project/' + this.projectKey);
     }
 
     generateRandomKey() {

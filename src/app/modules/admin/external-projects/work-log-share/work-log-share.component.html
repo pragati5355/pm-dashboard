@@ -23,7 +23,7 @@
         >
             <div class="flex items-center">
                 <mat-form-field
-                    class="w-full max-w-[415px]"
+                    class="w-full max-w-[465px]"
                     [floatLabel]="'always'"
                 >
                     <mat-label>Work log link</mat-label>
@@ -34,7 +34,7 @@
                         maxlength="4"
                     />
                     <span matPrefix>{{
-                        environments.appUrl + "/project/"
+                        environments.appUrl + "/worklog/project/"
                     }}</span>
 
                     <mat-error
@@ -82,7 +82,9 @@
                 mat-flat-button
                 [color]="'primary'"
                 [cdkCopyToClipboard]="
-                    this.environments.appUrl + '/project/' + this.projectKey
+                    this.environments.appUrl +
+                    '/worklog/project/' +
+                    this.projectKey
                 "
                 (click)="copyLink()"
             >

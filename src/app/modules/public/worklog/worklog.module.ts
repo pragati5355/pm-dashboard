@@ -7,7 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import { MatTabsModule } from '@angular/material/tabs';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
     declarations: [WorklogListComponent],
     imports: [
@@ -17,6 +22,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
+        MatTabsModule,
+        SkeletonModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatTooltipModule,
+        MatIconModule,
     ],
 })
 export class WorklogModule {}
