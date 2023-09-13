@@ -90,14 +90,13 @@ export class WorkLogsListComponent implements OnInit {
 
     close() {}
 
-    allowEditWorklog(e) {
+    allowEditWorklog(e : any) {
         if (!this.checked) {
             e.source.checked = false;
             const dialogRef = this.matDialog.open(
                 WorkLogAllowEditDialogComponent
             );
             dialogRef.afterClosed().subscribe((result: any) => {
-                console.log('result', result);
                 if (result) {
                     this.checked = !this.checked;
                 } else {
@@ -126,6 +125,7 @@ export class WorkLogsListComponent implements OnInit {
             this.disablePreviousWorklog = false;
         }
     }
+
     onEmailSelected($event: any) {
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
