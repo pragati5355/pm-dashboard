@@ -9,16 +9,7 @@ import { BehaviorSubject, map, Observable, of } from 'rxjs';
     providedIn: 'root',
 })
 export class LoggedInUserService {
-    private loggedInUser: BehaviorSubject<any> = new BehaviorSubject({
-        id: 25,
-        email: 'pragati.gawade@mindbowser.com',
-        firstName: 'Pragati',
-        lastName: 'Gawade',
-        status: 'ACTIVATED',
-        role: 'ADMIN',
-        resourceId: 19,
-        deleted: false,
-    });
+    private loggedInUser: BehaviorSubject<any> = new BehaviorSubject(null);
     private userData: any = null;
 
     constructor(private http: HttpClient, private authService: AuthService) {}
@@ -40,16 +31,7 @@ export class LoggedInUserService {
         return this.http.get(API_LIST.LOGGED_IN_USER).pipe(
             map((response: any) => {
                 if (response && response['data']) {
-                    this.setUser({
-                        id: 25,
-                        email: 'pragati.gawade@mindbowser.com',
-                        firstName: 'Pragati',
-                        lastName: 'Gawade',
-                        status: 'ACTIVATED',
-                        role: 'ADMIN',
-                        resourceId: 19,
-                        deleted: false,
-                    });
+                    this.setUser(response['data']);
                     return response['data'];
                 }
                 return null;
