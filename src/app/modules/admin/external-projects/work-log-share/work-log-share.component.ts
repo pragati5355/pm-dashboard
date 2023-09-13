@@ -96,7 +96,7 @@ export class WorkLogShareComponent implements OnInit {
                 this.isLoading = true;
                 const payload = {
                     projectId: this.data?.projectId,
-                    key: this.projectKey,
+                    key: this.shareForm?.get('workLogLink')?.value,
                     enabled: true,
                 };
                 this.workLogService
