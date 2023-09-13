@@ -19,7 +19,8 @@
                         <mat-slide-toggle 
                             [color]="'primary'"
                             (change)="allowEditWorklog($event)" 
-                            [checked]="checked">
+                            [checked]="checked"
+                            [disabled]="initialLoading">
                         </mat-slide-toggle>
                     </div>
 
