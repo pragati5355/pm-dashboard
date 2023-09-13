@@ -68,6 +68,17 @@
                         <span class="ml-2 mr-1">Add worklog</span>
                     </button>
                 </div>
+                <button
+                    *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                    class="ml-3"
+                    mat-mini-fab
+                    color="primary"
+                    matTooltip="Share"
+                    (click)="shareDialog()"
+                    [disabled]="initialLoading"
+                >
+                    <mat-icon>share</mat-icon>
+                </button>
             </div>
         </div>
 
@@ -88,62 +99,92 @@
                         *ngIf="!initialLoading && workLogsList?.length > 0"
                     >
                         <div
-                            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            class="z-10 sticky top-0 grid gap-2 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            [ngClass]="{
+                                'inventory-grid-list-1':
+                                    userRole === 'ADMIN' || userRole === 'PM',
+                                'inventory-grid-list': userRole === 'USER'
+                            }"
                         >
                             <div class="font-semibold px-2">Date</div>
                             <div class="font-semibold">Description</div>
                             <div class="font-semibold">Hours</div>
                             <div
                                 class="font-semibold"
-                                *ngIf="userRole === 'USER' || userRole === 'PM'"
+                                *ngIf="userRole === 'USER'"
                             >
                                 Actions
                             </div>
                         </div>
-                        <ng-container *ngIf="!initialLoading">
-                            <div
-                                *ngFor="let log of workLogsList"
-                                [ngClass]="{
-                                    'bg-white': !log?.onLeave,
-                                    'bg-red-100': log?.onLeave
-                                }"
-                                class="inventory-grid grid items-center gap-4 py-3 border-b"
-                            >
-                                <div class="px-2">
-                                    {{ log?.workLogDate | date }}
+                        <div
+                            class="grid gap-2 py-4"
+                            [ngClass]="{
+                                'inventory-grid-list-1':
+                                    userRole === 'ADMIN' || userRole === 'PM',
+                                'inventory-grid-list': userRole === 'USER'
+                            }"
+                        >
+                            <ng-container *ngFor="let log of workLogsList">
+                                <div class="pl-2">
+                                    {{ log?.worklogDate | date }}
                                 </div>
-                                <div class="truncate">
-                                    {{
-                                        log?.onLeave
-                                            ? "On Leave"
-                                            : (log?.comment | stripHtml)
-                                    }}
+                                <div class="">
+                                    <div
+                                        *ngFor="let logs of log?.worklogList"
+                                        class="overflow-hidden break-all worklog-row"
+                                        [innerHTML]="
+                                            logs?.onLeave
+                                                ? 'On Leave'
+                                                : (logs?.comment | sanitizeHtml)
+                                        "
+                                    ></div>
                                 </div>
-                                <div>{{ log?.timeSpent }}</div>
-                                <div
-                                    *ngIf="
-                                        userRole === 'USER' || userRole === 'PM'
-                                    "
-                                >
-                                    <button
-                                        (click)="addOrEditWorklog(log, 'EDIT')"
+                                <div class="">
+                                    <div
+                                        *ngFor="let logs of log?.worklogList"
+                                        class="pb-2"
                                     >
-                                        <mat-icon
-                                            [matTooltip]="'Edit'"
-                                            class="text-gray-400 icon-size-5 cursor-pointer mr-4"
-                                            svgIcon="heroicons_outline:pencil"
-                                        ></mat-icon>
-                                    </button>
-                                    <button (click)="deleteWorkLog(log?.id)">
-                                        <mat-icon
-                                            [matTooltip]="'Delete'"
-                                            class="text-gray-400 icon-size-5 cursor-pointer"
-                                            svgIcon="heroicons_outline:trash"
-                                        ></mat-icon>
-                                    </button>
+                                        {{
+                                            logs?.onLeave ? 0 : logs?.timeSpent
+                                        }}
+                                    </div>
                                 </div>
-                            </div>
-                        </ng-container>
+                                <div class="" *ngIf="userRole === 'USER'">
+                                    <div
+                                        *ngFor="let logs of log?.worklogList"
+                                        class="pb-2"
+                                    >
+                                        <div>
+                                            <button
+                                                (click)="
+                                                    addOrEditWorklog(
+                                                        logs,
+                                                        'EDIT'
+                                                    )
+                                                "
+                                            >
+                                                <mat-icon
+                                                    [matTooltip]="'Edit'"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer mr-4"
+                                                    svgIcon="heroicons_outline:pencil"
+                                                ></mat-icon>
+                                            </button>
+                                            <button
+                                                (click)="
+                                                    deleteWorkLog(logs?.id)
+                                                "
+                                            >
+                                                <mat-icon
+                                                    [matTooltip]="'Delete'"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer"
+                                                    svgIcon="heroicons_outline:trash"
+                                                ></mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
                     </ng-container>
 
                     <ng-container

@@ -1,0 +1,134 @@
+<div class="w-full min-h-screen bg-gray-50">
+    <div class="w-full">
+        <div
+            class="flex justify-between items-center bg-white rounded-sm shadow-sm p-6"
+        >
+            <h1 class="font-bold mt-4">{{ projectName }} - work-logs</h1>
+            <div>
+                <img class="w-36" src="assets/images/logo/logo.png" alt="" />
+            </div>
+        </div>
+    </div>
+    <div class="w-full px-8">
+        <div class="bg-white rounded-sm shadow-sm p-6 mt-6">
+            <div class="mt-8 flex items-center gap-4">
+                <div>
+                    <mat-form-field>
+                        <mat-label class="">Year</mat-label>
+                        <mat-select
+                            [(value)]="selectedYear"
+                            (selectionChange)="onYearChange($event)"
+                            [disabled]="initialLoading"
+                        >
+                            <mat-option
+                                *ngFor="let year of matSelectYears"
+                                value="{{ year }}"
+                                [disabled]="
+                                    initialLoading || year > currentYear
+                                "
+                                >{{ year }}</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="w-[350px] mr-4">
+                    <mat-form-field class="w-full">
+                        <mat-label class="">Resource</mat-label>
+                        <mat-select
+                            [(value)]="defaultResource"
+                            (selectionChange)="onEmailSelected($event)"
+                            [disabled]="initialLoading"
+                        >
+                            <mat-option
+                                *ngFor="let option of options"
+                                [value]="option?.email"
+                            >
+                                {{ option?.firstName + " " + option?.lastName }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <mat-tab-group
+                    [color]="'primary'"
+                    mat-stretch-tabs="false"
+                    mat-align-tabs="start"
+                    (selectedTabChange)="onTabChanged($event)"
+                    [(selectedIndex)]="selectedTabIndex"
+                >
+                    <mat-tab
+                        *ngFor="let tab of matTabList"
+                        label="{{ tab?.label }}"
+                        [disabled]="initialLoading || tab?.value > currentMonth"
+                    >
+                        <ng-container
+                            *ngIf="!initialLoading && workLogsList?.length > 0"
+                        >
+                            <div
+                                class="z-10 inventory-grid-list-1 sticky top-0 grid gap-2 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            >
+                                <div class="font-semibold px-2">Date</div>
+                                <div class="font-semibold">Description</div>
+                                <div class="font-semibold">Hours</div>
+                            </div>
+                            <div class="grid gap-2 py-4 inventory-grid-list-1">
+                                <ng-container *ngFor="let log of workLogsList">
+                                    <div class="pl-2">
+                                        {{ log?.worklogDate | date }}
+                                    </div>
+                                    <div class="">
+                                        <div
+                                            *ngFor="
+                                                let logs of log?.worklogList
+                                            "
+                                            class="overflow-hidden break-all worklog-row"
+                                            [innerHTML]="
+                                                logs?.onLeave
+                                                    ? 'On Leave'
+                                                    : (logs?.comment
+                                                      | sanitizeHtml)
+                                            "
+                                        ></div>
+                                    </div>
+                                    <div class="">
+                                        <div
+                                            *ngFor="
+                                                let logs of log?.worklogList
+                                            "
+                                            class="pb-2"
+                                        >
+                                            {{
+                                                logs?.onLeave
+                                                    ? 0
+                                                    : logs?.timeSpent
+                                            }}
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="
+                                !initialLoading && workLogsList?.length === 0
+                            "
+                        >
+                            <div
+                                class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
+                            >
+                                Work logs not found
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="initialLoading">
+                            <app-table-skeleton
+                                [skeletonData]="requiredSprintSkeletonData"
+                            ></app-table-skeleton>
+                        </ng-container>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</div>

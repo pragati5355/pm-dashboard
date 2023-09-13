@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,11 +13,13 @@ import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
+import { WorkLogShareComponent } from '../work-log-share/work-log-share.component';
 
 @Component({
     selector: 'app-work-logs-list',
     templateUrl: './work-logs-list.component.html',
     styleUrls: ['./work-logs-list.component.scss'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class WorkLogsListComponent implements OnInit {
     selectedYear: string = '2020';
@@ -179,6 +181,24 @@ export class WorkLogsListComponent implements OnInit {
         });
     }
 
+    shareDialog() {
+        this.matDialog
+            .open(WorkLogShareComponent, {
+                width: '50%',
+                data: {
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                },
+                disableClose: true,
+            })
+            .afterClosed()
+            .subscribe((result) => {
+                if (result) {
+                    window.location.reload();
+                }
+            });
+    }
+
     private valueChangeSubscriptionForEmail() {
         this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(''),
@@ -240,6 +260,8 @@ export class WorkLogsListComponent implements OnInit {
             this.initialLoading = false;
             if (!res?.error) {
                 this.workLogsList = res?.data?.list;
+                console.log(this.workLogsList);
+
                 this.projectName = res?.data?.projectName;
             }
             if (res?.tokenExpire) {
@@ -281,6 +303,9 @@ export class WorkLogsListComponent implements OnInit {
                     this.defaultResource = res?.data[0]?.email;
                     this.selectedResourceId = res?.data[0]?.id;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
+                }
+                if (res?.tokenExpire) {
+                    this.authService.updateAndReload(window.location);
                 }
             });
     }
