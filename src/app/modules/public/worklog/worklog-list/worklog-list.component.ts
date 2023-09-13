@@ -47,6 +47,7 @@ export class WorklogListComponent implements OnInit {
     defaultResource: any;
     currentMonth: number;
     currentYear: string = '';
+    pageDisabledByAdmin: boolean = false;
     foods: any[] = [
         { value: 'steak-0', viewValue: 'Steak' },
         { value: 'pizza-1', viewValue: 'Pizza' },
@@ -119,8 +120,8 @@ export class WorklogListComponent implements OnInit {
                     this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
-                if (res?.code === 401) {
-                    this.authService.updateAndReload(window.location);
+                if (res?.status === 401) {
+                    this.pageDisabledByAdmin = true;
                 }
             });
     }

@@ -61,6 +61,25 @@ export class WorkLogShareComponent implements OnInit {
                     }
                 });
         }
+        if (!this.alreadyEnabled && event?.checked) {
+            this.isLoading = true;
+            const payload = {
+                projectId: this.data?.projectId,
+                key: this.shareForm?.get('workLogLink')?.value,
+                enabled: true,
+            };
+            this.workLogService
+                ?.saveShareLink(payload)
+                ?.subscribe((res: any) => {
+                    this.isLoading = false;
+                    if (res?.code === 200) {
+                        this.snackBar.successSnackBar('Success');
+                    }
+                    if (res?.code === 401) {
+                        this.authService.updateAndReload(window.location);
+                    }
+                });
+        }
     }
 
     submit() {

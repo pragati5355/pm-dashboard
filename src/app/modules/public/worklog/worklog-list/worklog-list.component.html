@@ -1,4 +1,7 @@
-<div *ngIf="!initialLoading" class="w-full min-h-screen bg-gray-50">
+<div
+    *ngIf="!initialLoading && !pageDisabledByAdmin"
+    class="w-full min-h-screen bg-gray-50"
+>
     <div class="w-full">
         <div
             class="flex justify-between items-center bg-white rounded-sm shadow-sm px-8 py-2"
@@ -141,7 +144,7 @@
 </div>
 
 <div
-    *ngIf="initialLoading"
+    *ngIf="initialLoading && !pageDisabledByAdmin"
     class="w-screen h-screen flex justify-center items-center"
 >
     <span class="text-3xl flex"
@@ -152,4 +155,11 @@
             <span></span>
             <span></span></div
     ></span>
+</div>
+
+<div
+    *ngIf="!initialLoading && pageDisabledByAdmin"
+    class="w-screen h-screen flex justify-center items-center"
+>
+    <span class="text-3xl">This page is disabled, Please contact admin !</span>
 </div>
