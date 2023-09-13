@@ -21,6 +21,7 @@ export class WorkLogShareComponent implements OnInit {
     link: string = '';
     isLoading: boolean = false;
     alreadyEnabled: boolean = false;
+    existingKey: string | null = null;
     constructor(
         public dialogRef: MatDialogRef<WorkLogShareComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -45,7 +46,7 @@ export class WorkLogShareComponent implements OnInit {
             this.isLoading = true;
             const payload = {
                 projectId: this.data?.projectId,
-                key: this.projectKey,
+                key: this.shareForm?.get('workLogLink')?.value,
                 enabled: false,
             };
             this.workLogService
@@ -89,28 +90,34 @@ export class WorkLogShareComponent implements OnInit {
     }
 
     copyLink() {
-        if (this.alreadyEnabled) {
+        if (
+            this.existingKey !== this.shareForm?.get('workLogLink')?.value &&
+            this.shareForm?.valid
+        ) {
+            this.isLoading = true;
+            const payload = {
+                projectId: this.data?.projectId,
+                key: this.shareForm?.get('workLogLink')?.value,
+                enabled: true,
+            };
+            this.workLogService
+                ?.saveShareLink(payload)
+                ?.subscribe((res: any) => {
+                    this.isLoading = false;
+                    if (res?.code === 200) {
+                        this.snackBar.successSnackBar('Link copied');
+                    }
+                    if (res?.code === 401) {
+                        this.authService.updateAndReload(window.location);
+                    }
+                });
+        }
+
+        if (
+            this.existingKey === this.shareForm?.get('workLogLink')?.value &&
+            this.shareForm?.valid
+        ) {
             this.snackBar.successSnackBar('Link copied');
-        } else {
-            if (this.shareForm?.valid) {
-                this.isLoading = true;
-                const payload = {
-                    projectId: this.data?.projectId,
-                    key: this.shareForm?.get('workLogLink')?.value,
-                    enabled: true,
-                };
-                this.workLogService
-                    ?.saveShareLink(payload)
-                    ?.subscribe((res: any) => {
-                        this.isLoading = false;
-                        if (res?.code === 200) {
-                            this.snackBar.successSnackBar('Link copied');
-                        }
-                        if (res?.code === 401) {
-                            this.authService.updateAndReload(window.location);
-                        }
-                    });
-            }
         }
     }
     private getWorkLogLinkData() {
@@ -126,7 +133,7 @@ export class WorkLogShareComponent implements OnInit {
                     this.shareForm
                         ?.get('workLogShare')
                         ?.setValue(res?.data?.enabled);
-
+                    this.existingKey = res?.data?.key;
                     this.alreadyEnabled = res?.data?.enabled ? true : false;
                 }
                 if (res?.code === 404) {
