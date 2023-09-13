@@ -42,11 +42,6 @@ import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
 import { QuillModule } from 'ngx-quill';
 import { WorkLogsDownloadComponent } from './work-logs-download/work-logs-download.component';
-import {
-    MatSlideToggleModule,
-    _MatSlideToggleRequiredValidatorModule,
-} from '@angular/material/slide-toggle';
-import { WorkLogAllowEditDialogComponent } from './work-log-allow-edit-dialog/work-log-allow-edit-dialog.component';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -57,9 +52,9 @@ import { WorkLogAllowEditDialogComponent } from './work-log-allow-edit-dialog/wo
         SendRemindersComponent,
         WorkLogsListComponent,
         StripHtmlPipe,
+        SanitizeHtmlPipe,
         AddEditWorkLogComponent,
         WorkLogsDownloadComponent,
-        WorkLogAllowEditDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -94,6 +89,8 @@ import { WorkLogAllowEditDialogComponent } from './work-log-allow-edit-dialog/wo
         MatCheckboxModule,
         ReactiveFormsModule,
         MatTabsModule,
+        MatSlideToggleModule,
+        ClipboardModule,
         QuillModule,
         MatSlideToggleModule,
         _MatSlideToggleRequiredValidatorModule,
