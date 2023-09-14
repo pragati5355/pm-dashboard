@@ -12,7 +12,7 @@ export const AppConstants = {
     PROJECT_API_URL: projectBaseUrl,
     REPO_API_URL: springBootUrl,
     S3_BUCKET_NAME: environment.bucketName,
-    AUTH_USER_API: `${baseUrl}/signin`,
+    AUTH_USER_API: `${springBootUrl}/user/sign-in`,
     UPDATE_ACCESS_TOKEN: `${baseUrl}/get-access-token`,
     CONNECT_PROJECT: `${jiraBaseUrl}/jira-project`,
     CREATE_PROJECT: `${jiraBaseUrl}/connect-jira`,
