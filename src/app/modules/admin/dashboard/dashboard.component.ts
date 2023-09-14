@@ -58,9 +58,6 @@ export class DashboardComponent implements OnInit {
                 this.noOfResources = res?.data?.resourceCount;
                 this.noOfRepos = res?.data?.repoCount;
             }
-            // if (res?.tokenExpire) {
-            //     this._authService.updateAndReload(window.location);
-            // }
         });
     }
 
