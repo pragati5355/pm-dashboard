@@ -53,6 +53,10 @@ export class InterceptorService implements HttpInterceptor {
                 });
                 // }
             }
+        } else {
+            request = request.clone({
+                headers: request.headers.delete('skipToken', 'true'),
+            });
         }
 
         return next.handle(request).pipe(

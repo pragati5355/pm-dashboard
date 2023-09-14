@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
         private dashboardService: DashboardService,
         private dashboardApiService: DashboardApiService,
         private snackbar: SnackBar,
-        public datePipe : DatePipe
+        public datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -58,9 +58,9 @@ export class DashboardComponent implements OnInit {
                 this.noOfResources = res?.data?.resourceCount;
                 this.noOfRepos = res?.data?.repoCount;
             }
-            if (res?.tokenExpire) {
-                this._authService.updateAndReload(window.location);
-            }
+            // if (res?.tokenExpire) {
+            //     this._authService.updateAndReload(window.location);
+            // }
         });
     }
 
@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
             var today = new Date();
             var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-utilization' + '-'+ dateobj + '.xls');
+            saveAs(blob, 'resource-utilization' + '-' + dateobj + '.xls');
         }
     }
 
@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
             var today = new Date();
             var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-availability' + '-' + dateobj+ '.xlsx');
+            saveAs(blob, 'resource-availability' + '-' + dateobj + '.xlsx');
         }
     }
 
@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit {
             var today = new Date();
             var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
             var blob = this.base64ToBlob(b64encodedString, 'text/plain');
-            saveAs(blob, 'resource-generic'+ '-'+ dateobj+'.xlsx');
+            saveAs(blob, 'resource-generic' + '-' + dateobj + '.xlsx');
         }
     }
 
