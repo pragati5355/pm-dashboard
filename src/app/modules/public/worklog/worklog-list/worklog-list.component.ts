@@ -67,9 +67,9 @@ export class WorklogListComponent implements OnInit {
         {
             year: '2023',
             months: [
-                { value: 2, label: 'Feb' },
-                { value: 3, label: 'Mar' },
-                { value: 5, label: 'May' },
+                { value: 7, label: 'Jul' },
+                { value: 8, label: 'Aug' },
+                { value: 9, label: 'Sep' },
             ],
         },
     ];
@@ -116,16 +116,6 @@ export class WorklogListComponent implements OnInit {
             this.selectedYear,
             this.yearAndMonth[index]?.months[this.selectedTabIndex]?.value
         );
-
-        if (!(this.selectedTabIndex === new Date().getMonth())) {
-            if (new Date().getDate() > 5) {
-                this.disablePreviousWorklog = true;
-            } else {
-                this.disablePreviousWorklog = false;
-            }
-        } else {
-            this.disablePreviousWorklog = false;
-        }
     }
 
     private routeSubscription() {
@@ -142,16 +132,32 @@ export class WorklogListComponent implements OnInit {
         this.selectedTabIndex = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
 
-        // this.preSelectedYear = this.yearAndMonth[0];
+        const data = [
+            {
+                year: '2022',
+                months: [
+                    { value: 1, label: 'Jan' },
+                    { value: 2, label: 'Feb' },
+                    { value: 3, label: 'Mar' },
+                ],
+            },
+            {
+                year: '2023',
+                months: [
+                    { value: 7, label: 'Jul' },
+                    { value: 8, label: 'Aug' },
+                    { value: 9, label: 'Sep' },
+                ],
+            },
+        ];
 
-        this.preSelectedYear = {
-            year: 2022,
-            months: [
-                { value: 1, label: 'Jan' },
-                { value: 2, label: 'Feb' },
-                { value: 3, label: 'Mar' },
-            ],
-        };
+        this.selectedYear = data[1]?.year;
+
+        const index = this.yearAndMonth?.findIndex((year) => {
+            return year?.year === this.selectedYear;
+        });
+        this.matTabList = this.yearAndMonth[index]?.months;
+        this.selectedTabIndex = 0;
     }
 
     private getProjectResources() {

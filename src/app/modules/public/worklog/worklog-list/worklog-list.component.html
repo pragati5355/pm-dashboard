@@ -19,7 +19,7 @@
                     <mat-form-field>
                         <mat-label class="">Year</mat-label>
                         <mat-select
-                            [(value)]="preSelectedYear"
+                            [(value)]="selectedYear"
                             (selectionChange)="onYearChange($event)"
                             [disabled]="initialLoading"
                         >
@@ -61,7 +61,6 @@
                     <mat-tab
                         *ngFor="let tab of matTabList"
                         label="{{ tab?.label }}"
-                        [disabled]="initialLoading || tab?.value > currentMonth"
                     >
                         <ng-container
                             *ngIf="!initialLoading && workLogsList?.length > 0"
