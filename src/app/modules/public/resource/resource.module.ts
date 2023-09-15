@@ -20,12 +20,14 @@ import { AddSkillAndIntegrationComponent } from './add-skill-and-integration/add
 import { SuccessPageComponent } from './success-page/success-page.component';
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { RegisterConsultantComponent } from './register-consultant/register-consultant.component';
 @NgModule({
     declarations: [
         RegisterResourceComponent,
         AddSkillAndIntegrationComponent,
         SuccessPageComponent,
         AddTechnologyComponent,
+        RegisterConsultantComponent,
     ],
     imports: [
         CommonModule,
