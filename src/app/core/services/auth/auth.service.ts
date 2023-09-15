@@ -16,7 +16,9 @@ export class AuthService {
     ) {}
 
     login(loginObject: any) {
-        return this.http.post(AppConstants['AUTH_USER_API'], loginObject);
+        return this.http.post(AppConstants['AUTH_USER_API'], loginObject, {
+            headers: { skipToken: 'true' },
+        });
     }
     connectJira(obj: any) {
         return this.http.post(AppConstants['CONNECT_PROJECT'], obj);
