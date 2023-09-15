@@ -93,6 +93,7 @@ export class WorklogListComponent implements OnInit {
         const index = this.yearAndMonth?.findIndex((year) => {
             return year?.year === event?.value;
         });
+
         this.selectedYear = event?.value;
         this.matTabList = this.yearAndMonth[index]?.months;
         this.selectedTabIndex = 0;
@@ -121,14 +122,17 @@ export class WorklogListComponent implements OnInit {
     }
 
     downloadWorklogReport() {
-        this.submitInProcess = true;
-        let month = this.selectedTabIndex;
+        const index = this.yearAndMonth?.findIndex((year) => {
+            return year?.year === this.selectedYear;
+        });
         let year = this.selectedYear;
         const payload = {
             projectId: this.projectId,
-            month: ++month,
+            month: this.yearAndMonth[index]?.months[this.selectedTabIndex]
+                ?.value,
             year: year,
         };
+        this.submitInProcess = true;
         this.publicWorkLogService.downloadWorklog(payload).subscribe(
             (res: any) => {
                 this.submitInProcess = false;

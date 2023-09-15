@@ -60,6 +60,7 @@
                         class="ml-4 bg-primary-500 text-white font-semibold rounded-full"
                         mat-flat-button
                         [disabled]="submitInProcess"
+                        (click)="downloadWorklogReport()"
                     >
                         <mat-icon
                             [svgIcon]="'heroicons_outline:arrow-circle-down'"
