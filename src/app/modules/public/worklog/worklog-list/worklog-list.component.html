@@ -59,11 +59,17 @@
                         [color]="'primary'"
                         class="ml-4 bg-primary-500 text-white font-semibold rounded-full"
                         mat-flat-button
+                        [disabled]="submitInProcess"
                     >
                         <mat-icon
                             [svgIcon]="'heroicons_outline:arrow-circle-down'"
                         ></mat-icon>
                         <span class="ml-2 mr-1">Download</span>
+                        <mat-progress-spinner
+                            *ngIf="submitInProcess"
+                            [diameter]="18"
+                            [mode]="'indeterminate'"
+                        ></mat-progress-spinner>
                     </button>
                 </div>
             </div>

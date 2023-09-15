@@ -14,6 +14,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DatePipe } from '@angular/common';
 @NgModule({
     declarations: [WorklogListComponent, SanitizeHtmlPipe],
     imports: [
@@ -29,6 +31,8 @@ import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
         MatDividerModule,
         MatTooltipModule,
         MatIconModule,
+        MatProgressSpinnerModule,
     ],
+    providers: [DatePipe],
 })
 export class WorklogModule {}

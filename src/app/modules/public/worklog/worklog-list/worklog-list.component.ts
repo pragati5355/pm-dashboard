@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -5,10 +6,10 @@ import {
     MAT_SELECT_YEARS,
     MAT_TAB_MONTHS,
 } from '@modules/admin/project/project-widget/common/constants';
-import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
 import { WorkLogsService } from '@modules/public/services/work-logs.service';
-import { AuthService } from '@services/auth/auth.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 import { Observable } from 'rxjs';
+import saveAs from 'save-as';
 
 @Component({
     selector: 'app-worklog-list',
@@ -16,7 +17,7 @@ import { Observable } from 'rxjs';
     styleUrls: ['./worklog-list.component.scss'],
 })
 export class WorklogListComponent implements OnInit {
-    selectedYear: any = '2020';
+    selectedYear: string = '';
     preSelectedYear: any;
     selectedTabIndex: number = 0;
     projectId: any;
@@ -49,6 +50,7 @@ export class WorklogListComponent implements OnInit {
     currentMonth: number;
     currentYear: string = '';
     pageDisabledByAdmin: boolean = false;
+    submitInProcess: boolean = false;
     foods: any[] = [
         { value: 'steak-0', viewValue: 'Steak' },
         { value: 'pizza-1', viewValue: 'Pizza' },
@@ -75,10 +77,10 @@ export class WorklogListComponent implements OnInit {
     ];
 
     constructor(
-        private workLogService: WorkLogService,
-        private authService: AuthService,
         private route: ActivatedRoute,
-        private publicWorkLogService: WorkLogsService
+        private publicWorkLogService: WorkLogsService,
+        private snackbar: SnackBar,
+        public datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -116,6 +118,70 @@ export class WorklogListComponent implements OnInit {
             this.selectedYear,
             this.yearAndMonth[index]?.months[this.selectedTabIndex]?.value
         );
+    }
+
+    downloadWorklogReport() {
+        this.submitInProcess = true;
+        let month = this.selectedTabIndex;
+        let year = this.selectedYear;
+        const payload = {
+            projectId: this.projectId,
+            month: ++month,
+            year: year,
+        };
+        this.publicWorkLogService.downloadWorklog(payload).subscribe(
+            (res: any) => {
+                this.submitInProcess = false;
+                if (res?.error === false) {
+                    this.downloadFile(res?.data);
+                    this.snackbar.successSnackBar(res?.message);
+                } else {
+                    this.snackbar.errorSnackBar(res?.message);
+                }
+            },
+            (err) => {
+                this.submitInProcess = false;
+                this.snackbar.errorSnackBar('Something went wrong');
+            }
+        );
+    }
+
+    downloadFile(b64encodedString: string) {
+        if (b64encodedString) {
+            var today = new Date();
+            var dateobj = this.datePipe.transform(today, 'dd-MM-yyyy');
+            var blob = this.base64ToBlob(b64encodedString, 'text/plain');
+            saveAs(
+                blob,
+                this.projectName.toLowerCase().replace(' ', '-') +
+                    '-' +
+                    'worklog' +
+                    '-' +
+                    dateobj +
+                    '.xls'
+            );
+        }
+    }
+
+    private base64ToBlob(b64Data, contentType = '', sliceSize = 512) {
+        b64Data = b64Data.replace(/\s/g, ''); //IE compatibility...
+        let byteCharacters = atob(b64Data);
+        let byteArrays = [];
+        for (
+            let offset = 0;
+            offset < byteCharacters.length;
+            offset += sliceSize
+        ) {
+            let slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            let byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            let byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+        return new Blob(byteArrays, { type: contentType });
     }
 
     private routeSubscription() {
