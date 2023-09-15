@@ -16,7 +16,8 @@ import { Observable } from 'rxjs';
     styleUrls: ['./worklog-list.component.scss'],
 })
 export class WorklogListComponent implements OnInit {
-    selectedYear: string = '2020';
+    selectedYear: any = '2020';
+    preSelectedYear: any;
     selectedTabIndex: number = 0;
     projectId: any;
     matTabList: any[] = MAT_TAB_MONTHS;
@@ -53,6 +54,26 @@ export class WorklogListComponent implements OnInit {
         { value: 'pizza-1', viewValue: 'Pizza' },
         { value: 'tacos-2', viewValue: 'Tacos' },
     ];
+
+    yearAndMonth: any[] = [
+        {
+            year: '2022',
+            months: [
+                { value: 1, label: 'Jan' },
+                { value: 2, label: 'Feb' },
+                { value: 3, label: 'Mar' },
+            ],
+        },
+        {
+            year: '2023',
+            months: [
+                { value: 2, label: 'Feb' },
+                { value: 3, label: 'Mar' },
+                { value: 5, label: 'May' },
+            ],
+        },
+    ];
+
     constructor(
         private workLogService: WorkLogService,
         private authService: AuthService,
@@ -67,7 +88,13 @@ export class WorklogListComponent implements OnInit {
     }
 
     onYearChange(event: any) {
-        this.loadData(event?.value, this.selectedTabIndex);
+        const index = this.yearAndMonth?.findIndex((year) => {
+            return year?.year === event?.value;
+        });
+        this.selectedYear = event?.value;
+        this.matTabList = this.yearAndMonth[index]?.months;
+        this.selectedTabIndex = 0;
+        this.loadData(event?.value, this.matTabList[0]?.value);
     }
 
     onEmailSelected($event: any) {
@@ -80,7 +107,15 @@ export class WorklogListComponent implements OnInit {
 
     onTabChanged(event: any) {
         this.selectedTabIndex = event?.index;
-        this.loadData(this.selectedYear, this.selectedTabIndex);
+
+        const index = this.yearAndMonth?.findIndex((year) => {
+            return year?.year === this.selectedYear;
+        });
+
+        this.loadData(
+            this.selectedYear,
+            this.yearAndMonth[index]?.months[this.selectedTabIndex]?.value
+        );
 
         if (!(this.selectedTabIndex === new Date().getMonth())) {
             if (new Date().getDate() > 5) {
@@ -106,6 +141,17 @@ export class WorklogListComponent implements OnInit {
         this.currentYear = String(new Date().getFullYear());
         this.selectedTabIndex = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
+
+        // this.preSelectedYear = this.yearAndMonth[0];
+
+        this.preSelectedYear = {
+            year: 2022,
+            months: [
+                { value: 1, label: 'Jan' },
+                { value: 2, label: 'Feb' },
+                { value: 3, label: 'Mar' },
+            ],
+        };
     }
 
     private getProjectResources() {
@@ -132,7 +178,7 @@ export class WorklogListComponent implements OnInit {
         const payload = {
             resourceId: this.selectedResourceId,
             key: this.projectId,
-            month: ++month,
+            month: month,
             year: year,
         };
         this.publicWorkLogService

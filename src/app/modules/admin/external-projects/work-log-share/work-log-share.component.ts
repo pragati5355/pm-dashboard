@@ -54,7 +54,7 @@ export class WorkLogShareComponent implements OnInit {
                 ?.subscribe((res: any) => {
                     this.isLoading = false;
                     if (res?.code === 200) {
-                        this.snackBar.successSnackBar('Disabled');
+                        this.snackBar.successSnackBar('Disabled link sharing');
                     }
                     if (res?.code === 401) {
                         this.authService.updateAndReload(window.location);
@@ -73,7 +73,6 @@ export class WorkLogShareComponent implements OnInit {
                 ?.subscribe((res: any) => {
                     this.isLoading = false;
                     if (res?.code === 200) {
-                        this.snackBar.successSnackBar('Success');
                     }
                     if (res?.code === 401) {
                         this.authService.updateAndReload(window.location);

@@ -19,17 +19,14 @@
                     <mat-form-field>
                         <mat-label class="">Year</mat-label>
                         <mat-select
-                            [(value)]="selectedYear"
+                            [(value)]="preSelectedYear"
                             (selectionChange)="onYearChange($event)"
                             [disabled]="initialLoading"
                         >
                             <mat-option
-                                *ngFor="let year of matSelectYears"
-                                value="{{ year }}"
-                                [disabled]="
-                                    initialLoading || year > currentYear
-                                "
-                                >{{ year }}</mat-option
+                                *ngFor="let year of yearAndMonth"
+                                value="{{ year?.year }}"
+                                >{{ year?.year }}</mat-option
                             >
                         </mat-select>
                     </mat-form-field>
