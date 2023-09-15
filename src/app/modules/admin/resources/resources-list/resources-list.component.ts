@@ -390,6 +390,7 @@ export class ResourcesListComponent implements OnInit {
         this.loadDataWithFilterPayload(payload);
     }
     clearTechnologySearch() {
+        this.pagination = false;
         this.showTechnologies = [];
         this.technologys.setValue('');
         this.count = 1;
@@ -427,6 +428,7 @@ export class ResourcesListComponent implements OnInit {
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
                 this.initialLoading = false;
+                this.checkForLargerScreen();
             },
             (error) => {
                 this.initialLoading = false;

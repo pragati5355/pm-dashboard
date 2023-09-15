@@ -258,6 +258,15 @@
                                             [color]="'primary'"
                                             class="ml-2"
                                             mat-flat-button
+                                            (click)="showFilter()"
+                                        >
+                                            <span class="ml-2 mr-1">Close</span>
+                                        </button>
+
+                                        <button
+                                            [color]="'primary'"
+                                            class="ml-2"
+                                            mat-flat-button
                                             (click)="clearFilter()"
                                         >
                                             <span class="ml-2 mr-1">Clear</span>
