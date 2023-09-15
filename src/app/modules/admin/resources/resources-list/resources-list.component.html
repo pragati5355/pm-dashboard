@@ -132,6 +132,55 @@
                                             (click)="clearTechnologySearch()"
                                         ></mat-icon>
                                     </mat-form-field>
+
+                                    <mat-form-field
+                                        class="example-chip-list w-full"
+                                        appearance="fill"
+                                    >
+                                        <mat-label>Favorite Fruits</mat-label>
+                                        <mat-chip-list
+                                            #chipList
+                                            aria-label="Fruit selection"
+                                        >
+                                            <mat-chip
+                                                *ngFor="let tech of selectedTechnology"
+                                                (removed)="remove(tech)"
+                                            >
+                                                {{ tech }}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input
+                                                placeholder="New fruit..."
+                                                #fruitInput
+                                                [formControl]="technologyCtrl"
+                                                [matAutocomplete]="auto"
+                                                [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="
+                                                    separatorKeysCodes
+                                                "
+                                                (matChipInputTokenEnd)="
+                                                    add($event)
+                                                "
+                                            />
+                                        </mat-chip-list>
+                                        <mat-autocomplete
+                                            #auto="matAutocomplete"
+                                            (optionSelected)="selected($event)"
+                                        >
+                                            <mat-option
+                                                *ngFor="
+                                                    let tech of filteredTechnology
+                                                        | async
+                                                "
+                                                [value]="tech"
+                                            >
+                                                {{ tech?.name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+
                                     <div
                                         class="justify-between content-center text-gray-400 inline-flex mb-4 py-1.5 rounded-full border border-gray-300 w-full"
                                         *ngIf="maxExprience"
