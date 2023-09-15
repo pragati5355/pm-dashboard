@@ -57,24 +57,7 @@ export class WorklogListComponent implements OnInit {
         { value: 'tacos-2', viewValue: 'Tacos' },
     ];
 
-    yearAndMonth: any[] = [
-        {
-            year: '2022',
-            months: [
-                { value: 1, label: 'Jan' },
-                { value: 2, label: 'Feb' },
-                { value: 3, label: 'Mar' },
-            ],
-        },
-        {
-            year: '2023',
-            months: [
-                { value: 7, label: 'Jul' },
-                { value: 8, label: 'Aug' },
-                { value: 9, label: 'Sep' },
-            ],
-        },
-    ];
+    yearAndMonth: any[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -101,19 +84,49 @@ export class WorklogListComponent implements OnInit {
     }
 
     onEmailSelected($event: any) {
-        const resource = this.options.filter((option) =>
-            option?.email?.toLowerCase().includes($event.value)
+        console.log($event);
+        const resource = this.options.filter(
+            (option) => option?.resource?.email === $event?.value
         );
-        this.selectedResourceId = resource[0]?.resourceId;
-        this.loadData(this.selectedYear, this.selectedTabIndex);
+        this.matTabList = resource[0]?.year[0]?.months;
+
+        this.selectedTabIndex = 0;
+
+        // this.yearAndMonth = [];
+        // const resource = this.options.filter(
+        //     (option) => option?.resource?.email === $event?.value
+        // );
+        // console.log(resource);
+        this.yearAndMonth = resource[0]?.year;
+        // console.log('yearAndMonth-->', this.yearAndMonth);
+        // console.log(
+        //     'selected resource yearAndMonth-->',
+        //     resource[0]?.year[0]?.year
+        // );
+        this.selectedYear = resource[0]?.year[0]?.year;
+        // this.selectedYear = this.matTabList = this.yearAndMonth[0]?.months;
+        // this.selectedResourceId = resource[0]?.resource?.resourceId;
+        // this.selectedTabIndex = 0;
+        this.loadData(
+            this.selectedYear,
+            resource[0]?.year[0]?.months[0]?.value
+        );
     }
 
     onTabChanged(event: any) {
         this.selectedTabIndex = event?.index;
 
+        console.log(this.yearAndMonth);
+
+        console.log(this.selectedTabIndex);
+
         const index = this.yearAndMonth?.findIndex((year) => {
             return year?.year === this.selectedYear;
         });
+
+        console.log(index);
+
+        console.log(this.yearAndMonth[index]?.months[this.selectedTabIndex]);
 
         this.loadData(
             this.selectedYear,
@@ -202,27 +215,6 @@ export class WorklogListComponent implements OnInit {
         this.selectedTabIndex = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
 
-        const data = [
-            {
-                year: '2022',
-                months: [
-                    { value: 1, label: 'Jan' },
-                    { value: 2, label: 'Feb' },
-                    { value: 3, label: 'Mar' },
-                ],
-            },
-            {
-                year: '2023',
-                months: [
-                    { value: 7, label: 'Jul' },
-                    { value: 8, label: 'Aug' },
-                    { value: 9, label: 'Sep' },
-                ],
-            },
-        ];
-
-        this.selectedYear = data[1]?.year;
-
         const index = this.yearAndMonth?.findIndex((year) => {
             return year?.year === this.selectedYear;
         });
@@ -238,9 +230,20 @@ export class WorklogListComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.code === 200 && res?.data) {
                     this.options = res?.data;
-                    this.defaultResource = res?.data[0]?.email;
-                    this.selectedResourceId = res?.data[0]?.resourceId;
-                    this.loadData(this.selectedYear, this.selectedTabIndex);
+                    this.yearAndMonth = res?.data[0]?.year;
+                    console.log(this.yearAndMonth);
+
+                    this.matTabList = this.yearAndMonth[0]?.months;
+
+                    this.defaultResource = res?.data[0]?.resource?.email;
+                    this.selectedResourceId =
+                        res?.data[0]?.resource?.resourceId;
+
+                    this.selectedYear = this.yearAndMonth[0]?.year;
+                    this.loadData(
+                        this.selectedYear,
+                        this.yearAndMonth[0]?.months[0]?.value
+                    );
                 }
                 if (res?.status === 401) {
                     this.pageDisabledByAdmin = true;

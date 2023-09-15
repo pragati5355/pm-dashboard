@@ -42,12 +42,12 @@
                             >
                                 <mat-option
                                     *ngFor="let option of options"
-                                    [value]="option?.email"
+                                    [value]="option?.resource?.email"
                                 >
                                     {{
-                                        option?.firstName +
+                                        option?.resource?.firstName +
                                             " " +
-                                            option?.lastName
+                                            option?.resource?.lastName
                                     }}
                                 </mat-option>
                             </mat-select>
@@ -59,7 +59,7 @@
                         [color]="'primary'"
                         class="ml-4 bg-primary-500 text-white font-semibold rounded-full"
                         mat-flat-button
-                        [disabled]="submitInProcess"
+                        [disabled]="submitInProcess || initialLoading"
                         (click)="downloadWorklogReport()"
                     >
                         <mat-icon
