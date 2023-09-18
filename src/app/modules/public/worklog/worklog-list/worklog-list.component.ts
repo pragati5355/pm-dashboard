@@ -117,7 +117,7 @@ export class WorklogListComponent implements OnInit {
         });
         let year = this.selectedYear;
         const payload = {
-            projectId: this.projectId,
+            key: this.projectId,
             month: this.yearAndMonth[index]?.months[this.selectedTabIndex]
                 ?.value,
             year: year,
