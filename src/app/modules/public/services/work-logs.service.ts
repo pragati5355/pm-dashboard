@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 
 @Injectable({
     providedIn: 'root',
@@ -11,5 +11,17 @@ export class WorkLogsService {
 
     saveAndGetWorkLogsData(obj: any) {
         return this.http.post(this.workLogsUrl, obj);
+    }
+
+    getResourcesPublic(key: any) {
+        return this.http.get(API_LIST.GET_RESOURCE_PUBLIC + key);
+    }
+
+    getResourceWorkLogPublic(obj: any) {
+        return this.http.post(API_LIST.GET_RESOURCE_WORKLOG_PUBLIC, obj);
+    }
+
+    downloadWorklog(obj: any) {
+        return this.http.post('', obj);
     }
 }

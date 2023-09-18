@@ -46,3 +46,25 @@
 .alert-success {
     display: none !important;
 }
+//scroll-bar
+
+ /* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #DEE2E6; 
+}
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ADB5BD; 
+    border-radius: 4px;
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #ADB5BD; 
+}

@@ -22,4 +22,5 @@ export const environment = {
     },
     csvTemplateUrl:
         'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/resources-csv/template/resources-bulk-upload.csv',
+    appUrl: 'https://dashboard.mindbowser.com',
 };

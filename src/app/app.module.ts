@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -52,6 +52,7 @@ const routerConfig: ExtraOptions = {
         // AngularFireModule.initializeApp(environment.firebaseConfig),
         // AngularFireDatabaseModule,
     ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         AuthService,
         {

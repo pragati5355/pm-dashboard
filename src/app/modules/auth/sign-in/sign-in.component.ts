@@ -45,7 +45,11 @@ export class AuthSignInComponent implements OnInit {
             .signIn(GoogleLoginProvider.PROVIDER_ID)
             .then((result) => {
                 this.showAlert = false;
-                this._authService.login(JSON.stringify(result)).subscribe(
+                const payload = {
+                    email: result?.email,
+                    providerId: result?.id,
+                };
+                this._authService.login(payload).subscribe(
                     (res: any) => {
                         this.submitInProcess = false;
 
