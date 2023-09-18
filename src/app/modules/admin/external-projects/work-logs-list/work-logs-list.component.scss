@@ -5,13 +5,19 @@
     grid-template-columns: 10% auto 10%;
 }
 .inventory-grid-list {
-    grid-template-columns: 10% auto 5% 5%;
+    grid-template-columns: 8% auto;
 }
 .inventory-grid-list-1 {
-    grid-template-columns: 10% auto 5%;
+    grid-template-columns: 8% auto;
 }
 .text-wrap-container > * {
     overflow-wrap: break-word !important;
+}
+.inventory-grid-list-inner-list-user {
+    grid-template-columns: auto 5% 5%;
+}
+.inventory-grid-list-inner-list-admin {
+    grid-template-columns: auto 5%;
 }
 
 .worklog-row {
@@ -20,5 +26,8 @@
     menu {
         list-style: unset !important;
         padding-left: 20px;
+    }
+    p {
+        margin: 0 !important;
     }
 }
