@@ -17,7 +17,11 @@ export class WorkLogsService {
         return this.http.get(API_LIST.GET_RESOURCE_PUBLIC + key);
     }
 
-    getResourceWorkLogPublic(obj:any){
-        return this.http.post(API_LIST.GET_RESOURCE_WORKLOG_PUBLIC,obj)
+    getResourceWorkLogPublic(obj: any) {
+        return this.http.post(API_LIST.GET_RESOURCE_WORKLOG_PUBLIC, obj);
+    }
+
+    downloadWorklog(obj: any) {
+        return this.http.post('', obj);
     }
 }

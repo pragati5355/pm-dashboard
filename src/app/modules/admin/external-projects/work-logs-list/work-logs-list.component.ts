@@ -60,6 +60,21 @@ export class WorkLogsListComponent implements OnInit {
     checked: boolean = false;
     isEditAllow: boolean = false;
 
+    yearAndMonth: any[] = [
+        {
+            '2022': [
+                { value: 1, label: 'Jan' },
+                { value: 2, label: 'Feb' },
+                { value: 3, label: 'Mar' },
+                { value: 4, label: 'Apr' },
+            ],
+            '2023': [
+                { value: 2, label: 'Feb' },
+                { value: 3, label: 'Mar' },
+            ],
+        },
+    ];
+
     constructor(
         private matDialog: MatDialog,
         private router: Router,
