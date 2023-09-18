@@ -7,7 +7,6 @@ import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 })
 export class WorkLogsService {
     workLogsUrl = AppConstants['PROJECT_API_URL'] + '/save-worklog';
-    downloadWorkLogUrl = AppConstants['REPO_API_URL']+ '/worklog/download-sheet';
 
     constructor(private http: HttpClient) {}
 
@@ -24,6 +23,6 @@ export class WorkLogsService {
     }
 
     downloadWorklog(obj: any) {
-        return this.http.post(this.downloadWorkLogUrl, obj);
+        return this.http.post(API_LIST.DOWNLOAD_WORKLOG_SHEET, obj);
     }
 }

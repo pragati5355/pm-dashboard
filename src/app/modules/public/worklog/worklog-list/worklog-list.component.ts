@@ -1,3 +1,4 @@
+import { PAUSE } from '@angular/cdk/keycodes';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -10,6 +11,8 @@ import { WorkLogsService } from '@modules/public/services/work-logs.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { Observable } from 'rxjs';
 import saveAs from 'save-as';
+import { WorklogDownloadComponent } from '../worklog-download/worklog-download.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-worklog-list',
@@ -63,7 +66,8 @@ export class WorklogListComponent implements OnInit {
         private route: ActivatedRoute,
         private publicWorkLogService: WorkLogsService,
         private snackbar: SnackBar,
-        public datePipe: DatePipe
+        public datePipe: DatePipe,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -112,32 +116,52 @@ export class WorklogListComponent implements OnInit {
     }
 
     downloadWorklogReport() {
-        const index = this.yearAndMonth?.findIndex((year) => {
-            return year?.year === this.selectedYear;
-        });
-        let year = this.selectedYear;
-        const payload = {
-            key: this.projectId,
-            month: this.yearAndMonth[index]?.months[this.selectedTabIndex]
-                ?.value,
-            year: year,
-        };
-        this.submitInProcess = true;
-        this.publicWorkLogService.downloadWorklog(payload).subscribe(
-            (res: any) => {
-                this.submitInProcess = false;
-                if (res?.error === false) {
-                    this.downloadFile(res?.data);
-                    this.snackbar.successSnackBar(res?.message);
-                } else {
-                    this.snackbar.errorSnackBar(res?.message);
-                }
+        const dialogRef = this.dialog.open(WorklogDownloadComponent, {
+            disableClose: true,
+            width: '98%',
+            maxWidth: '800px',
+            maxHeight: '90vh',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                key: this.projectId,
+                projectName: this.projectName,
             },
-            (err) => {
-                this.submitInProcess = false;
-                this.snackbar.errorSnackBar('Something went wrong');
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                window.location.reload();
+                this.getProjectResources();
             }
-        );
+        });
+
+        // const index = this.yearAndMonth?.findIndex((year) => {
+        //     return year?.year === this.selectedYear;
+        // });
+        // let year = this.selectedYear;
+        // const payload = {
+        //     key: this.projectId,
+        //     month: this.yearAndMonth[index]?.months[this.selectedTabIndex]
+        //         ?.value,
+        //     year: year,
+        // };
+        // this.submitInProcess = true;
+        // console.log("Paylod :- " , payload);
+        // this.publicWorkLogService.downloadWorklog(payload).subscribe(
+        //     (res: any) => {
+        //         this.submitInProcess = false;
+        //         if (res?.code === 200) {
+        //             this.downloadFile(res?.data);
+        //             this.snackbar.successSnackBar(res?.message);
+        //         } else {
+        //             this.snackbar.errorSnackBar(res?.message);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.submitInProcess = false;
+        //         this.snackbar.errorSnackBar('Something went wrong');
+        //     }
+        // );
     }
 
     downloadFile(b64encodedString: string) {
