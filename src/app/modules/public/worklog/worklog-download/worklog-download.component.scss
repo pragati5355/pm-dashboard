@@ -1,0 +1,7 @@
+.mat-option.mat-option-disabled, body .light .mat-option.mat-option-disabled {
+    color: #94a3b8;
+}
+
+.mat-option.mat-selected:not(.mat-option-disabled), body .light .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: #4f46e5;
+}
