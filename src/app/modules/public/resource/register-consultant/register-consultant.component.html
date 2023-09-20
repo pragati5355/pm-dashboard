@@ -24,7 +24,7 @@
                     <span class="text-2xl">Personal details</span>
                 </div>
                 <div
-                    class="flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 mt-8"
+                    class="flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 mt-8 px-1"
                 >
                     <div
                         class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
@@ -69,7 +69,7 @@
                         </mat-form-field>
                     </div>
                     <div
-                        class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4"
+                        class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4 px-1"
                     >
                         <mat-form-field [floatLabel]="'always'" class="w-full">
                             <mat-label>Last Name</mat-label>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-0 flex-wrap sm:flex-nowrap">
+                <div class="flex flex-0 flex-wrap sm:flex-nowrap px-1">
                     <div class="w-full">
                         <div
                             class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
@@ -178,7 +178,7 @@
                 </div>
 
                 <div
-                    class="mt-6 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                    class="mt-6 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 px-1"
                 >
                     <div
                         class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
@@ -338,7 +338,7 @@
                     </div>
                 </div>
 
-                <div class="flex">
+                <div class="flex px-1">
                     Did not find the technology?
 
                     <span
@@ -353,7 +353,7 @@
                 </div>
 
                 <div
-                    class="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-1 gap-y-3 mt-8"
+                    class="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-1 gap-y-3 mt-8 px-1"
                 >
                     <div *ngFor="let skill of integrations; let i = index">
                         <mat-checkbox
@@ -367,7 +367,7 @@
                     </div>
                 </div>
 
-                <div class="mt-8 flex">
+                <div class="mt-8 flex px-1">
                     Did not find the skill/integration?
 
                     <span
@@ -381,7 +381,7 @@
                     <span class="text-2xl">Resume</span>
                 </div>
 
-                <div class="flex flex-col mt-8">
+                <div class="flex flex-col mt-8 px-1">
                     <div
                         *ngIf="preSignedUrl !== null"
                         class="flex item-center w-1/2"
@@ -401,7 +401,7 @@
                         <span>Upload your updated resume</span>
 
                         <button
-                            class="ml-4 bg-primary-500 text-white"
+                            class="ml-4 bg-primary-500 text-white font-bold"
                             mat-raised-button
                             (click)="onClick()"
                             [disabled]="submitInProgress"
@@ -430,7 +430,7 @@
                         (click)="submit()"
                         type="submit"
                         [color]="'primary'"
-                        class="order-first sm:order-last ml-4 bg-primary-500 text-white"
+                        class="order-first sm:order-last ml-4 bg-primary-500 text-white font-bold"
                         mat-flat-button
                         [disabled]="submitInProgress"
                     >
