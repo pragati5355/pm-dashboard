@@ -37,7 +37,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         title: 'P & L',
         type: 'basic',
         icon: 'mat_outline:trending_up',
-        link: '/profit-loss',
+        link: '/p&l',
         allowedRoles: ['ADMIN'],
     },
     {

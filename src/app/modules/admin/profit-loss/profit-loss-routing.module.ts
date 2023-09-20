@@ -17,7 +17,7 @@ const routes: Routes = [
         },
       },
       {
-        path: 'statistic',
+        path: ':id',
         component: ProfitLossProjectStatisticComponent,
         data: {
             pageTitle: 'Statistics',

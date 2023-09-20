@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profit-loss-project-statistic',
@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 })
 export class ProfitLossProjectStatisticComponent implements OnInit {
 
+  routeSubscribe: any;
+  projectId = 0;
   requiredSkeletonData = {
     rowsToDisplay: 10,
     displayProfilePicture: true,
@@ -38,14 +40,21 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
   initialLoading : boolean = false;
   constructor(
     private router: Router,
+    private _route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.routeSubscribe = this._route.params.subscribe((id) => {
+      if (id['id']) {
+          this.projectId = id['id'];
+          console.log("this.projectId : " , this.projectId);
+      }
+    });
 
   }
 
   goBack(){
-    this.router.navigate([`/profit-loss`]);
+    this.router.navigate([`/p&l`]);
   }
 
 }
