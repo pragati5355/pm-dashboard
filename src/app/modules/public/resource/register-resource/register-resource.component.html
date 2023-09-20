@@ -3,8 +3,21 @@
 >
     <div
         *ngIf="!initialLoading"
-        class="w-full max-w-4xl px-4 py-8 sm:px-8 sm:py-12 shadow-sm rounded bg-white"
+        class="w-full max-w-4xl px-4 py-8 sm:px-8 sm:py-12 shadow-sm rounded bg-white relative"
     >
+        <div class="absolute top-1 right-2 z-40">
+            <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                class="opacity-10"
+            >
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button (click)="consultantForm()" mat-menu-item>Fill form as consultant</button>
+            </mat-menu>
+        </div>
+
         <div class="w-full flex justify-center mb-2">
             <div>
                 <img

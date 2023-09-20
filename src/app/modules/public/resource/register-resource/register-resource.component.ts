@@ -100,6 +100,10 @@ export class RegisterResourceComponent implements OnInit {
         this.maxToDate = new Date();
     }
 
+    consultantForm(){
+        
+    }
+
     getRadioBtnValues($event: any) {
         if ($event?.value === 'yes') {
             this.showExperience = false;
