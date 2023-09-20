@@ -21,6 +21,7 @@ import { SuccessPageComponent } from './success-page/success-page.component';
 import { AddTechnologyComponent } from './add-technology/add-technology.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { RegisterConsultantComponent } from './register-consultant/register-consultant.component';
+import { MatMenuModule } from '@angular/material/menu';
 @NgModule({
     declarations: [
         RegisterResourceComponent,
@@ -48,6 +49,7 @@ import { RegisterConsultantComponent } from './register-consultant/register-cons
         ReactiveFormsModule,
         MatNativeDateModule,
         ResourceRoutingModule,
+        MatMenuModule,
     ],
 })
 export class ResourceModule {}
