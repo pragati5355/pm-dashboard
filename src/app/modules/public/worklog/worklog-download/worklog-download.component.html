@@ -3,7 +3,7 @@
         class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
     >
         <div class="flex text-lg font-medium">Download Resource Work Logs</div>
-        <button mat-icon-button (click)="close()" [tabIndex]="-1">
+        <button mat-icon-button (click)="close()">
             <mat-icon
                 class="text-current"
                 [svgIcon]="'heroicons_outline:x'"
@@ -27,7 +27,7 @@
                                 *ngFor="let month of matTabList"
                                 [value]="month?.value"
                                 [disabled]="
-                                (month?.value > currentMonth && selectedYear >= currentYear)
+                                    (month?.value > currentMonth && selectedYear >= currentYear)
                                 "
                                 >{{ month?.label }}</mat-option
                             >
@@ -45,7 +45,7 @@
                                 *ngFor="let year of matSelectYears"
                                 value="{{ year }}"
                                 [disabled]="
-                                initialLoading || year > currentYear
+                                 year > currentYear
                                 "
                                 >{{ year }}</mat-option
                             >
@@ -57,9 +57,8 @@
                 <button
                     [color]="'primary'"
                     [matTooltip]="'Download WorkLog Report'"
-                    class="ml-4"
+                    class="ml-4 bg-primary-500 text-white font-semibold rounded-full"
                     mat-flat-button
-                    [disabled]="submitInProcess"
                     (click)="downloadWorklogReport()"
                 >
                     <mat-icon
