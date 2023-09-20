@@ -178,52 +178,7 @@
                 </div>
 
                 <div
-                    class="w-full font-extrabold tracking-tight ng-tns-c274-3859"
-                >
-                    <mat-form-field
-                        [floatLabel]="'always'"
-                        appearance="fill"
-                        class="w-full mt-4"
-                    >
-                        <mat-label>Your current team</mat-label>
-                        <mat-select
-                            formControlName="role"
-                            placeholder="Select Team"
-                            type="text"
-                            (selectionChange)="teamType($event)"
-                            [disableOptionCentering]="true"
-                        >
-                            <mat-option
-                                *ngFor="let role of selectTeamList"
-                                [value]="role"
-                            >
-                                {{ role }}
-                            </mat-option>
-                        </mat-select>
-                        <mat-error
-                            *ngIf="
-                                resourcesValidForm['role'].errors &&
-                                resourcesValidForm['role']?.invalid &&
-                                resourcesValidForm['role']?.touched
-                            "
-                        >
-                            <div
-                                *ngIf="
-                                    resourcesValidForm['role'].errors[
-                                        'required'
-                                    ]
-                                "
-                                class="text-red-500"
-                            >
-                                Team is mandatory
-                            </div>
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
-                <div
-                    *ngIf="!isPm"
-                    class="mt-4 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
+                    class="mt-6 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
                 >
                     <div
                         class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
@@ -233,7 +188,7 @@
                             appearance="fill"
                             class="example-chip-list w-full flex-0 mb-2"
                         >
-                            <mat-label>Technology</mat-label>
+                            <mat-label>Technology *</mat-label>
                             <mat-chip-list #chipList>
                                 <input
                                     placeholder="New technology..."
@@ -443,7 +398,7 @@
                         </div>
                     </div>
                     <div *ngIf="!isFileUploadedToS3">
-                        <span>Upload your updated resume *</span>
+                        <span>Upload your updated resume</span>
 
                         <button
                             class="ml-4 bg-primary-500 text-white"

@@ -46,7 +46,7 @@ export class RegisterConsultantComponent implements OnInit {
     addOnBlur = false;
     userData: any;
     filteredTechnologies: Observable<any[]> | undefined;
-    alltechnologys: any[] = [];
+    alltechnologys: any[] = TECHNOLOGIES_V2;
     technologys: any = [];
     emailList: any[] = [];
     allTeamsTechnologyList: any = TECHNOLOGIES;
@@ -94,7 +94,8 @@ export class RegisterConsultantComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        // this.getEmails();
+
+        this.technologiesForVendors();
 
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
@@ -255,8 +256,6 @@ export class RegisterConsultantComponent implements OnInit {
         }
 
         this.resourcesForm?.get('technology')?.reset();
-
-        // this.filteredTechnologies = of(this.alltechnologys);
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
@@ -271,49 +270,9 @@ export class RegisterConsultantComponent implements OnInit {
     }
 
     submit() {
-        // console.log(this.resourcesForm?.get('technologies')?.value);
-        // this.resourcesForm?.get('technologies')?.value?.map((item) => {
-        //     if (item?.experienceMonth === 0 && item?.experienceYear === 0) {
-        //         this.snackBar?.errorSnackBar('Add technology experience');
-        //     }
-        // });
-
-        const technologyWithNoExperience = this.resourcesForm
-            ?.get('technologies')
-            ?.value?.filter(
-                (item) =>
-                    item?.experienceMonth === 0 && item?.experienceYear === 0
-            );
-
         if (this.resourcesForm?.valid) {
-            if (
-                this.showExperience &&
-                this.resourcesForm?.get('month')?.value === 0 &&
-                this.resourcesForm?.get('year')?.value === 0
-            ) {
-                this.snackBar.errorSnackBar('Fill previous experience');
-                return;
-            }
-            if (
-                this.resourcesForm?.get('role')?.value !== 'PM' &&
-                this.resourcesForm?.get('technologies')?.value?.length === 0
-            ) {
-                this.snackBar.errorSnackBar('choose technologies');
-                return;
-            }
-
-            if (this.resourcesForm?.get('integrations')?.value?.length === 0) {
-                this.snackBar.errorSnackBar('choose skill/integrations');
-                return;
-            }
-
-            if (!this.isFileUploadedToS3) {
-                this.snackBar.errorSnackBar('Upload resume');
-                return;
-            }
-
-            if (technologyWithNoExperience?.length > 0) {
-                this.snackBar?.errorSnackBar('Add technology experience');
+            if (this.resourcesForm?.get('technologies')?.value?.length === 0) {
+                this.snackBar.errorSnackBar('Please choose technologies');
                 return;
             }
 
@@ -330,59 +289,61 @@ export class RegisterConsultantComponent implements OnInit {
     }
 
     saveResource() {
-        this.submitInProgress = true;
         const payload = this.saveResourcePayload();
-        this.resourceService?.saveResource(payload)?.subscribe(
-            (res: any) => {
-                this.submitInProgress = false;
-                if (!res?.error && !res?.data?.alreadyExist) {
-                    this.router.navigate([`/resource/success`]);
-                }
-                if (res?.data?.alreadyExist) {
-                    const dialogRef = this.fuseConfirmationService.open(
-                        this.AlreadyExistConfigForm.value
-                    );
+        console.log('payload-->', payload);
 
-                    dialogRef.afterClosed().subscribe((result) => {
-                        if (result == 'confirmed') {
-                            this.submitInProgress = true;
-                            const payload = this.saveResourcePayload();
-                            payload.confirmed = true;
+        // this.submitInProgress = true;
+        // this.resourceService?.saveResource(payload)?.subscribe(
+        //     (res: any) => {
+        //         this.submitInProgress = false;
+        //         if (!res?.error && !res?.data?.alreadyExist) {
+        //             this.router.navigate([`/resource/success`]);
+        //         }
+        //         if (res?.data?.alreadyExist) {
+        //             const dialogRef = this.fuseConfirmationService.open(
+        //                 this.AlreadyExistConfigForm.value
+        //             );
 
-                            this.resourceService
-                                ?.saveResource(payload)
-                                ?.subscribe(
-                                    (res: any) => {
-                                        this.submitInProgress = false;
-                                        if (!res?.error) {
-                                            this.router.navigate([
-                                                `/resource/success`,
-                                            ]);
-                                        } else {
-                                            this.snackBar.errorSnackBar(
-                                                'Something went wrong'
-                                            );
-                                        }
-                                    },
-                                    (err) => {
-                                        this.submitInProgress = false;
-                                        this.snackBar.errorSnackBar(
-                                            'Something went wrong'
-                                        );
-                                    }
-                                );
-                        }
-                    });
-                }
-                if (res?.error && !res?.data?.alreadyExist) {
-                    this.snackBar.errorSnackBar('Something went wrong');
-                }
-            },
-            (err) => {
-                this.submitInProgress = false;
-                this.snackBar.errorSnackBar('Something went wrong');
-            }
-        );
+        //             dialogRef.afterClosed().subscribe((result) => {
+        //                 if (result == 'confirmed') {
+        //                     this.submitInProgress = true;
+        //                     const payload = this.saveResourcePayload();
+        //                     payload.confirmed = true;
+
+        //                     this.resourceService
+        //                         ?.saveResource(payload)
+        //                         ?.subscribe(
+        //                             (res: any) => {
+        //                                 this.submitInProgress = false;
+        //                                 if (!res?.error) {
+        //                                     this.router.navigate([
+        //                                         `/resource/success`,
+        //                                     ]);
+        //                                 } else {
+        //                                     this.snackBar.errorSnackBar(
+        //                                         'Something went wrong'
+        //                                     );
+        //                                 }
+        //                             },
+        //                             (err) => {
+        //                                 this.submitInProgress = false;
+        //                                 this.snackBar.errorSnackBar(
+        //                                     'Something went wrong'
+        //                                 );
+        //                             }
+        //                         );
+        //                 }
+        //             });
+        //         }
+        //         if (res?.error && !res?.data?.alreadyExist) {
+        //             this.snackBar.errorSnackBar('Something went wrong');
+        //         }
+        //     },
+        //     (err) => {
+        //         this.submitInProgress = false;
+        //         this.snackBar.errorSnackBar('Something went wrong');
+        //     }
+        // );
     }
 
     addSkillAndIntegrations() {
@@ -484,14 +445,8 @@ export class RegisterConsultantComponent implements OnInit {
         }
     }
 
-    private getEmails() {
-        this.initialLoading = true;
-        this.resourceService.getEmails().subscribe((res: any) => {
-            this.initialLoading = false;
-            if (res?.data) {
-                this.emailList = res?.data;
-            }
-        });
+    private technologiesForVendors() {
+        this.alltechnologys = TECHNOLOGIES_V2?.map((item) => item?.name);
     }
 
     private initializeConfigForm() {
@@ -584,7 +539,7 @@ export class RegisterConsultantComponent implements OnInit {
                     Validators.pattern(/@mindbowser.com\s*$/),
                 ],
             ],
-            role: ['', [Validators.required]],
+            role: [''],
             technology: [],
             technologies: this.formBuilder.array([]),
             integrations: this.formBuilder.array([]),
