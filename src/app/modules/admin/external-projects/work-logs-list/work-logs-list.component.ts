@@ -105,27 +105,7 @@ export class WorkLogsListComponent implements OnInit {
 
     close() {}
 
-    allowEditWorklog(e : any) {
-        if (!this.checked) {
-            e.source.checked = false;
-            const dialogRef = this.matDialog.open(
-                WorkLogAllowEditDialogComponent
-            );
-            dialogRef.afterClosed().subscribe((result: any) => {
-                if (result) {
-                    this.checked = !this.checked;
-                } else {
-                    console.log(
-                        'this.checked toggle should not : ',
-                        this.checked
-                    );
-                }
-            });
-        } else {
-            this.checked = !this.checked;
-        }
-    }
-
+    
     onTabChanged(event: any) {
         this.selectedTabIndex = event?.index;
         this.loadData(this.selectedYear, this.selectedTabIndex);
@@ -142,6 +122,7 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     onEmailSelected($event: any) {
+        console.log("Resource Event :- ", $event);
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
@@ -171,6 +152,33 @@ export class WorkLogsListComponent implements OnInit {
 
     goBack() {
         this.router.navigate([`/external-projects/details/${this.projectId}`]);
+    }
+
+    allowEditWorklog(e : any) {
+        if (!this.checked) {
+            e.source.checked = false;
+            const dialogRef = this.matDialog.open(
+                WorkLogAllowEditDialogComponent , {
+                    disableClose: true,
+                    autoFocus: false,
+                    data:{
+
+                    }
+                }
+            );
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result) {
+                    this.checked = !this.checked;
+                } else {
+                    console.log(
+                        'this.checked toggle should not : ',
+                        this.checked
+                    );
+                }
+            });
+        } else {
+            this.checked = !this.checked;
+        }
     }
 
     addOrEditWorklog(workLogData: any, mode: string) {
