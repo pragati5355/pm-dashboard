@@ -100,8 +100,8 @@ export class RegisterResourceComponent implements OnInit {
         this.maxToDate = new Date();
     }
 
-    consultantForm(){
-        
+    consultantForm() {
+        this.router.navigate([`/resource/consultant`]);
     }
 
     getRadioBtnValues($event: any) {
