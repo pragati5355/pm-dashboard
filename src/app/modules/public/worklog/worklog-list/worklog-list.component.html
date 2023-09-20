@@ -1,9 +1,12 @@
-<div class="w-full min-h-screen bg-gray-50">
+<div
+    *ngIf="!initialLoading && !pageDisabledByAdmin"
+    class="w-full min-h-screen bg-gray-50"
+>
     <div class="w-full">
         <div
-            class="flex justify-between items-center bg-white rounded-sm shadow-sm p-6"
+            class="flex justify-between items-center bg-white rounded-sm shadow-sm px-8 py-2"
         >
-            <h1 class="font-bold mt-4">{{ projectName }} - work-logs</h1>
+            <h1 class="font-bold mt-4">{{ projectName }} / work-logs</h1>
             <div>
                 <img class="w-36" src="assets/images/logo/logo.png" alt="" />
             </div>
@@ -11,46 +14,71 @@
     </div>
     <div class="w-full px-8">
         <div class="bg-white rounded-sm shadow-sm p-6 mt-6">
-            <div class="mt-8 flex items-center gap-4">
-                <div>
-                    <mat-form-field>
-                        <mat-label class="">Year</mat-label>
-                        <mat-select
-                            [(value)]="selectedYear"
-                            (selectionChange)="onYearChange($event)"
-                            [disabled]="initialLoading"
-                        >
-                            <mat-option
-                                *ngFor="let year of matSelectYears"
-                                value="{{ year }}"
-                                [disabled]="
-                                    initialLoading || year > currentYear
-                                "
-                                >{{ year }}</mat-option
+            <div class="mt-8 flex justify-between items-center gap-4">
+                <div class="flex gap-4">
+                    <div>
+                        <mat-form-field>
+                            <mat-label class="">Year</mat-label>
+                            <mat-select
+                                [(value)]="selectedYear"
+                                (selectionChange)="onYearChange($event)"
+                                [disabled]="initialLoading"
                             >
-                        </mat-select>
-                    </mat-form-field>
+                                <mat-option
+                                    *ngFor="let year of yearAndMonth"
+                                    value="{{ year?.year }}"
+                                    >{{ year?.year }}</mat-option
+                                >
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="w-[350px] mr-4">
+                        <mat-form-field class="w-full">
+                            <mat-label class="">Resource</mat-label>
+                            <mat-select
+                                [(value)]="defaultResource"
+                                (selectionChange)="onEmailSelected($event)"
+                                [disabled]="initialLoading"
+                            >
+                                <mat-option
+                                    *ngFor="let option of options"
+                                    [value]="option?.resource?.email"
+                                >
+                                    {{
+                                        option?.resource?.firstName +
+                                            " " +
+                                            option?.resource?.lastName
+                                    }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
                 </div>
-                <div class="w-[350px] mr-4">
-                    <mat-form-field class="w-full">
-                        <mat-label class="">Resource</mat-label>
-                        <mat-select
-                            [(value)]="defaultResource"
-                            (selectionChange)="onEmailSelected($event)"
-                            [disabled]="initialLoading"
-                        >
-                            <mat-option
-                                *ngFor="let option of options"
-                                [value]="option?.email"
-                            >
-                                {{ option?.firstName + " " + option?.lastName }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                <div>
+                    <button
+                        [color]="'primary'"
+                        [matTooltip]="
+                                'Download Worklog Report'
+                            "
+                        class="ml-4 bg-primary-500 text-white font-semibold rounded-full"
+                        mat-flat-button
+                        [disabled]="submitInProcess || initialLoading"
+                        (click)="downloadWorklogReport()"
+                    >
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:arrow-circle-down'"
+                        ></mat-icon>
+                        <span class="ml-2 mr-1">Download</span>
+                        <mat-progress-spinner
+                            *ngIf="submitInProcess"
+                            [diameter]="18"
+                            [mode]="'indeterminate'"
+                        ></mat-progress-spinner>
+                    </button>
                 </div>
             </div>
 
-            <div class="mt-4">
+            <div class="my-4">
                 <mat-tab-group
                     [color]="'primary'"
                     mat-stretch-tabs="false"
@@ -61,7 +89,6 @@
                     <mat-tab
                         *ngFor="let tab of matTabList"
                         label="{{ tab?.label }}"
-                        [disabled]="initialLoading || tab?.value > currentMonth"
                     >
                         <ng-container
                             *ngIf="!initialLoading && workLogsList?.length > 0"
@@ -70,19 +97,33 @@
                                 class="z-10 inventory-grid-list-1 sticky top-0 grid gap-2 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                             >
                                 <div class="font-semibold px-2">Date</div>
-                                <div class="font-semibold">Description</div>
-                                <div class="font-semibold">Hours</div>
+                                <div
+                                    class="grid gap-2 inventory-grid-list-inner-list-admin"
+                                >
+                                    <div class="font-semibold">Description</div>
+                                    <div class="font-semibold">Hours</div>
+                                </div>
                             </div>
-                            <div class="grid gap-2 py-4 inventory-grid-list-1">
-                                <ng-container *ngFor="let log of workLogsList">
-                                    <div class="pl-2">
-                                        {{ log?.worklogDate | date }}
-                                    </div>
-                                    <div class="">
+
+                            <div
+                                *ngFor="let log of workLogsList"
+                                class="grid gap-2 py-2 border-b-2 border-b-gray-300 inventory-grid-list-1"
+                            >
+                                <div class="pl-2 mt-2">
+                                    {{ log?.worklogDate | date }}
+                                </div>
+                                <div class="flex flex-col">
+                                    <div
+                                        class="grid gap-2 border-b-2 border-b-gray-300 py-2 inventory-grid-list-inner-list-admin"
+                                        *ngFor="
+                                            let logs of log?.worklogList;
+                                            let last = last
+                                        "
+                                        [ngClass]="{
+                                            'border-b-0 pb-0': last
+                                        }"
+                                    >
                                         <div
-                                            *ngFor="
-                                                let logs of log?.worklogList
-                                            "
                                             class="overflow-hidden break-all worklog-row"
                                             [innerHTML]="
                                                 logs?.onLeave
@@ -91,14 +132,7 @@
                                                       | sanitizeHtml)
                                             "
                                         ></div>
-                                    </div>
-                                    <div class="">
-                                        <div
-                                            *ngFor="
-                                                let logs of log?.worklogList
-                                            "
-                                            class="pb-2"
-                                        >
+                                        <div class="pb-2">
                                             {{
                                                 logs?.onLeave
                                                     ? 0
@@ -106,7 +140,7 @@
                                             }}
                                         </div>
                                     </div>
-                                </ng-container>
+                                </div>
                             </div>
                         </ng-container>
 
@@ -131,4 +165,25 @@
             </div>
         </div>
     </div>
+</div>
+
+<div
+    *ngIf="initialLoading && !pageDisabledByAdmin"
+    class="w-screen h-screen flex justify-center items-center"
+>
+    <span class="text-3xl flex"
+        >Loading
+        <div class="btnLoader text-green-600 -ml-0 mt-4">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span></div
+    ></span>
+</div>
+
+<div
+    *ngIf="!initialLoading && pageDisabledByAdmin"
+    class="w-screen h-screen flex justify-center items-center"
+>
+    <span class="text-3xl">This page is disabled, Please contact admin !</span>
 </div>

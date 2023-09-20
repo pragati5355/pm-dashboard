@@ -77,7 +77,7 @@
                 [cdkCopyToClipboard]="
                     this.environments.appUrl +
                     '/worklog/project/' +
-                    this.projectKey
+                    shareForm?.get('workLogLink')?.value
                 "
                 (click)="copyLink()"
             >

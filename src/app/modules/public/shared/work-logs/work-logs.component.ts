@@ -103,11 +103,11 @@ export class WorkLogsComponent implements OnInit {
     }
 
     addTask() {
-        if (!this.currentDescriptionValue) {
+        if (!this.currentDescriptionValue && !this.onLeave) {
             this.snackBar.errorSnackBar('Add description');
             return;
         }
-        if (!this.workLogForm?.get('totalHours')?.value) {
+        if (!this.workLogForm?.get('totalHours')?.value && !this.onLeave) {
             this.snackBar.errorSnackBar('Add Hours');
             return;
         }
