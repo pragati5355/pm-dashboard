@@ -16,8 +16,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DatePipe } from '@angular/common';
+import { WorklogDownloadComponent } from './worklog-download/worklog-download.component';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
-    declarations: [WorklogListComponent, SanitizeHtmlPipe],
+    declarations: [
+        WorklogListComponent,
+        SanitizeHtmlPipe,
+        WorklogDownloadComponent,
+    ],
     imports: [
         CommonModule,
         WorklogRoutingModule,
@@ -32,6 +38,7 @@ import { DatePipe } from '@angular/common';
         MatTooltipModule,
         MatIconModule,
         MatProgressSpinnerModule,
+        MatDialogModule,
     ],
     providers: [DatePipe],
 })
