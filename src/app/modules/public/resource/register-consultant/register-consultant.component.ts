@@ -270,9 +270,22 @@ export class RegisterConsultantComponent implements OnInit {
     }
 
     submit() {
+        const technologyWithNoExperience = this.resourcesForm
+            ?.get('technologies')
+            ?.value?.filter(
+                (item) =>
+                    item?.experienceMonth === 0 && item?.experienceYear === 0
+            );
         if (this.resourcesForm?.valid) {
             if (this.resourcesForm?.get('technologies')?.value?.length === 0) {
                 this.snackBar.errorSnackBar('Please choose technologies');
+                return;
+            }
+
+            if (technologyWithNoExperience?.length > 0) {
+                this.snackBar?.errorSnackBar(
+                    'Please add technology experience'
+                );
                 return;
             }
 
