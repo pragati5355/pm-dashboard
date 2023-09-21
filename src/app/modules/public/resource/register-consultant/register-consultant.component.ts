@@ -303,60 +303,58 @@ export class RegisterConsultantComponent implements OnInit {
 
     saveResource() {
         const payload = this.saveResourcePayload();
-        console.log('payload-->', payload);
+        this.submitInProgress = true;
+        this.resourceService?.saveResourceAsVendor(payload)?.subscribe(
+            (res: any) => {
+                this.submitInProgress = false;
+                if (res?.code === 200) {
+                    this.router.navigate([`/resource/success`]);
+                }
+                if (res?.code === 208) {
+                    const dialogRef = this.fuseConfirmationService.open(
+                        this.AlreadyExistConfigForm.value
+                    );
 
-        // this.submitInProgress = true;
-        // this.resourceService?.saveResource(payload)?.subscribe(
-        //     (res: any) => {
-        //         this.submitInProgress = false;
-        //         if (!res?.error && !res?.data?.alreadyExist) {
-        //             this.router.navigate([`/resource/success`]);
-        //         }
-        //         if (res?.data?.alreadyExist) {
-        //             const dialogRef = this.fuseConfirmationService.open(
-        //                 this.AlreadyExistConfigForm.value
-        //             );
+                    dialogRef.afterClosed().subscribe((result) => {
+                        if (result == 'confirmed') {
+                            this.submitInProgress = true;
+                            const payload = this.saveResourcePayload();
+                            payload.confirmed = true;
 
-        //             dialogRef.afterClosed().subscribe((result) => {
-        //                 if (result == 'confirmed') {
-        //                     this.submitInProgress = true;
-        //                     const payload = this.saveResourcePayload();
-        //                     payload.confirmed = true;
-
-        //                     this.resourceService
-        //                         ?.saveResource(payload)
-        //                         ?.subscribe(
-        //                             (res: any) => {
-        //                                 this.submitInProgress = false;
-        //                                 if (!res?.error) {
-        //                                     this.router.navigate([
-        //                                         `/resource/success`,
-        //                                     ]);
-        //                                 } else {
-        //                                     this.snackBar.errorSnackBar(
-        //                                         'Something went wrong'
-        //                                     );
-        //                                 }
-        //                             },
-        //                             (err) => {
-        //                                 this.submitInProgress = false;
-        //                                 this.snackBar.errorSnackBar(
-        //                                     'Something went wrong'
-        //                                 );
-        //                             }
-        //                         );
-        //                 }
-        //             });
-        //         }
-        //         if (res?.error && !res?.data?.alreadyExist) {
-        //             this.snackBar.errorSnackBar('Something went wrong');
-        //         }
-        //     },
-        //     (err) => {
-        //         this.submitInProgress = false;
-        //         this.snackBar.errorSnackBar('Something went wrong');
-        //     }
-        // );
+                            this.resourceService
+                                ?.saveResource(payload)
+                                ?.subscribe(
+                                    (res: any) => {
+                                        this.submitInProgress = false;
+                                        if (res?.code === 200) {
+                                            this.router.navigate([
+                                                `/resource/success`,
+                                            ]);
+                                        } else {
+                                            this.snackBar.errorSnackBar(
+                                                'Something went wrong'
+                                            );
+                                        }
+                                    },
+                                    (err) => {
+                                        this.submitInProgress = false;
+                                        this.snackBar.errorSnackBar(
+                                            'Something went wrong'
+                                        );
+                                    }
+                                );
+                        }
+                    });
+                }
+                if (res?.error && !res?.data?.alreadyExist) {
+                    this.snackBar.errorSnackBar('Something went wrong');
+                }
+            },
+            (err) => {
+                this.submitInProgress = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
     addSkillAndIntegrations() {
@@ -512,20 +510,33 @@ export class RegisterConsultantComponent implements OnInit {
     }
 
     private saveResourcePayload() {
+        this.markAllIntegrationsAsTrue();
+        const details = this.removeKeyWithNullValues();
+
+        return {
+            email: this.resourcesForm?.get('email')?.value,
+            details: {
+                ...details,
+                resourceUrl: this.resourceUrl ? this.resourceUrl : '',
+            },
+            confirmed: false,
+            vendor: true,
+        };
+    }
+
+    private markAllIntegrationsAsTrue() {
         const integration = (<FormArray>(
             this.resourcesForm.get('integrations')
         )) as FormArray;
 
         integration?.value?.map((item) => (item.checked = true));
+    }
 
-        return {
-            email: this.resourcesForm?.get('email')?.value,
-            details: {
-                ...this.resourcesForm?.value,
-                resourceUrl: this.resourceUrl,
-            },
-            confirmed: false,
-        };
+    private removeKeyWithNullValues() {
+        const details = { ...this.resourcesForm?.value };
+
+        for (let k in details) if (details[k] === null) delete details[k];
+        return details;
     }
 
     private initializeForm() {
@@ -552,7 +563,6 @@ export class RegisterConsultantComponent implements OnInit {
                     Validators.pattern(/@mindbowser.com\s*$/),
                 ],
             ],
-            role: [''],
             technology: [],
             technologies: this.formBuilder.array([]),
             integrations: this.formBuilder.array([]),
