@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 
 @Injectable({
     providedIn: 'root',
@@ -42,6 +42,9 @@ export class ResourcesService {
     }
 
     saveOnboardedResource(obj: any) {
-        return this.http.post(this.acceptOnboardResource, obj);
+        return this.http.post(
+            API_LIST.SPRING_BOOT_URL + '/resource/accept',
+            obj
+        );
     }
 }

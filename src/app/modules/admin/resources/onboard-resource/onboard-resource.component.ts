@@ -87,35 +87,70 @@ export class OnboardResourceComponent implements OnInit {
     }
 
     gotoDetailspage(mode: String, data: any) {
-        const dialogRef = this.dialog.open(OnboardResourceDetailsComponent, {
-            disableClose: true,
-            width: '98%',
-            maxWidth: '800px',
-            maxHeight: '90vh',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                mode: mode,
-                editData: data,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result == 'success') {
-                this.count = 1;
-                this.totalPerPageData = 1000;
-                // this.getList();
-                window.location.reload();
-            }
-        });
+        const isVendor = data?.details?.vendor ? true : false;
+
+        if (isVendor) {
+            const dialogRef = this.dialog.open(OnboardVendorDetailsComponent, {
+                disableClose: true,
+                width: '98%',
+                maxWidth: '800px',
+                maxHeight: '90vh',
+                panelClass: 'warn-dialog-content',
+                autoFocus: false,
+                data: {
+                    mode: mode,
+                    editData: data,
+                },
+            });
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result == 'success') {
+                    this.count = 1;
+                    this.totalPerPageData = 1000;
+                    // this.getList();
+                    window.location.reload();
+                }
+            });
+        } else {
+            const dialogRef = this.dialog.open(
+                OnboardResourceDetailsComponent,
+                {
+                    disableClose: true,
+                    width: '98%',
+                    maxWidth: '800px',
+                    maxHeight: '90vh',
+                    panelClass: 'warn-dialog-content',
+                    autoFocus: false,
+                    data: {
+                        mode: mode,
+                        editData: data,
+                    },
+                }
+            );
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result == 'success') {
+                    this.count = 1;
+                    this.totalPerPageData = 1000;
+                    // this.getList();
+                    window.location.reload();
+                }
+            });
+        }
     }
 
     submit(resource: any) {
+        const isVendor = resource?.details?.vendor ? true : false;
+
+        let details = resource?.details;
+
+        if (isVendor) {
+            details = { ...details, vendor: true };
+        }
         this.submitInProgress = true;
         this.resourceService
-            .saveOnboardedResource(resource?.details)
+            .saveOnboardedResource(details)
             ?.subscribe((res: any) => {
                 this.submitInProgress = false;
-                if (!res?.error) {
+                if (res?.code === 200) {
                     this.snackBar.successSnackBar(res?.message);
                     this.getList();
                 } else {
