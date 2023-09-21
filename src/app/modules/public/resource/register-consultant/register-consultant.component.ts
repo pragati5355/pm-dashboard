@@ -310,7 +310,7 @@ export class RegisterConsultantComponent implements OnInit {
                 if (res?.code === 200) {
                     this.router.navigate([`/resource/success`]);
                 }
-                if (res?.code === 208) {
+                if (res?.status === 208) {
                     const dialogRef = this.fuseConfirmationService.open(
                         this.AlreadyExistConfigForm.value
                     );
@@ -346,13 +346,9 @@ export class RegisterConsultantComponent implements OnInit {
                         }
                     });
                 }
-                if (res?.error && !res?.data?.alreadyExist) {
-                    this.snackBar.errorSnackBar('Something went wrong');
-                }
             },
             (err) => {
                 this.submitInProgress = false;
-                this.snackBar.errorSnackBar('Something went wrong');
             }
         );
     }

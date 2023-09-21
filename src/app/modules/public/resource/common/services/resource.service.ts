@@ -6,7 +6,7 @@ import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
     providedIn: 'root',
 })
 export class ResourceService {
-    saveResourceUrl = AppConstants['PROJECT_API_URL'] + '/resource-register';
+    saveResourceUrl = API_LIST.SPRING_BOOT_URL + '/resource/register';
     preSignedUrl = AppConstants['PROJECT_API_URL'] + '/upload-resource-resume';
     getEmailsUrl = AppConstants['PROJECT_API_URL'] + '/emails';
     constructor(private http: HttpClient) {}
@@ -16,10 +16,7 @@ export class ResourceService {
     }
 
     saveResourceAsVendor(obj: any) {
-        return this.http.post(
-            API_LIST.SPRING_BOOT_URL + '/resource/register',
-            obj
-        );
+        return this.http.post(this.saveResourceUrl, obj);
     }
 
     getPreSignedUrl(obj: any) {

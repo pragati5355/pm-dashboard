@@ -339,10 +339,10 @@ export class RegisterResourceComponent implements OnInit {
         this.resourceService?.saveResource(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
-                if (!res?.error && !res?.data?.alreadyExist) {
+                if (res?.code === 200) {
                     this.router.navigate([`/resource/success`]);
                 }
-                if (res?.data?.alreadyExist) {
+                if (res?.status === 208) {
                     const dialogRef = this.fuseConfirmationService.open(
                         this.AlreadyExistConfigForm.value
                     );
@@ -358,7 +358,7 @@ export class RegisterResourceComponent implements OnInit {
                                 ?.subscribe(
                                     (res: any) => {
                                         this.submitInProgress = false;
-                                        if (!res?.error) {
+                                        if (res?.code === 200) {
                                             this.router.navigate([
                                                 `/resource/success`,
                                             ]);
@@ -378,13 +378,9 @@ export class RegisterResourceComponent implements OnInit {
                         }
                     });
                 }
-                if (res?.error && !res?.data?.alreadyExist) {
-                    this.snackBar.errorSnackBar('Something went wrong');
-                }
             },
             (err) => {
                 this.submitInProgress = false;
-                this.snackBar.errorSnackBar('Something went wrong');
             }
         );
     }
