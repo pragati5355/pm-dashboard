@@ -37,8 +37,14 @@ export class ResourcesService {
         });
     }
 
-    getRegisteredResource(obj: any) {
-        return this.http.post(this.getRegisteredResourceUrl, obj);
+    getRegisteredResource() {
+        return this.http.get(API_LIST.SPRING_BOOT_URL + '/resource/registerd');
+    }
+
+    getResourceBySearch(searchKey: string) {
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/resource/registerd/' + searchKey
+        );
     }
 
     saveOnboardedResource(obj: any) {
