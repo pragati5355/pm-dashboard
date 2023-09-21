@@ -334,7 +334,8 @@ export class OnboardVendorDetailsComponent implements OnInit {
             (res: any) => {
                 this.submitInProgress = false;
                 if (res?.code === 200) {
-                    this.router.navigate([`/resource/success`]);
+                    this.snackBar.successSnackBar('Update success');
+                    this.matDialogRef.close('success');
                 }
                 if (res?.status === 208) {
                     const dialogRef = this.fuseConfirmationService.open(
@@ -353,9 +354,16 @@ export class OnboardVendorDetailsComponent implements OnInit {
                                     (res: any) => {
                                         this.submitInProgress = false;
                                         if (res?.code === 200) {
-                                            this.router.navigate([
-                                                `/resource/success`,
-                                            ]);
+                                            this.snackBar.successSnackBar(
+                                                'Update success'
+                                            );
+                                            const integration = (<FormArray>(
+                                                this.resourcesForm.get(
+                                                    'integrations'
+                                                )
+                                            )) as FormArray;
+                                            integration?.clear();
+                                            this.matDialogRef.close('success');
                                         } else {
                                             this.snackBar.errorSnackBar(
                                                 'Something went wrong'

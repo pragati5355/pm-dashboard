@@ -87,7 +87,7 @@ export class OnboardResourceComponent implements OnInit {
     }
 
     gotoDetailspage(mode: String, data: any) {
-        const dialogRef = this.dialog.open(OnboardVendorDetailsComponent, {
+        const dialogRef = this.dialog.open(OnboardResourceDetailsComponent, {
             disableClose: true,
             width: '98%',
             maxWidth: '800px',
