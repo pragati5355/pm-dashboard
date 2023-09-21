@@ -13,6 +13,7 @@ import { take } from 'rxjs/internal/operators/take';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { FormControl } from '@angular/forms';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs';
+import { OnboardVendorDetailsComponent } from '../onboard-vendor-details/onboard-vendor-details.component';
 
 @Component({
     selector: 'app-onboard-resource',
@@ -86,7 +87,7 @@ export class OnboardResourceComponent implements OnInit {
     }
 
     gotoDetailspage(mode: String, data: any) {
-        const dialogRef = this.dialog.open(OnboardResourceDetailsComponent, {
+        const dialogRef = this.dialog.open(OnboardVendorDetailsComponent, {
             disableClose: true,
             width: '98%',
             maxWidth: '800px',
