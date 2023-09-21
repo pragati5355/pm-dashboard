@@ -1,17 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ResourceService {
-    saveResourceUrl = AppConstants['PROJECT_API_URL'] + '/resource-register';
+    saveResourceUrl = API_LIST.SPRING_BOOT_URL + '/resource/register';
     preSignedUrl = AppConstants['PROJECT_API_URL'] + '/upload-resource-resume';
     getEmailsUrl = AppConstants['PROJECT_API_URL'] + '/emails';
     constructor(private http: HttpClient) {}
 
     saveResource(obj: any) {
+        return this.http.post(this.saveResourceUrl, obj);
+    }
+
+    saveResourceAsVendor(obj: any) {
         return this.http.post(this.saveResourceUrl, obj);
     }
 

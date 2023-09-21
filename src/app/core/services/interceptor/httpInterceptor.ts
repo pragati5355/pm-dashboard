@@ -63,14 +63,14 @@ export class InterceptorService implements HttpInterceptor {
             tap((err: any) => {
                 if (err instanceof HttpErrorResponse) {
                     if (err.status === 401) {
-                        this.sessionService.clearStorage();
-                        this.snackBarConfig.panelClass = ['red-snackbar'];
-                        this._snackBar.open(
-                            'Token is invalid or expired.',
-                            'x',
-                            this.snackBarConfig
-                        );
-                        this.router.navigate(['/sign-in']);
+                        // this.sessionService.clearStorage();
+                        // this.snackBarConfig.panelClass = ['red-snackbar'];
+                        // this._snackBar.open(
+                        //     'Token is invalid or expired.',
+                        //     'x',
+                        //     this.snackBarConfig
+                        // );
+                        // this.router.navigate(['/sign-in']);
                     } else if (err.status === 403) {
                         this.sessionService.clearStorage();
                         this.snackBarConfig.panelClass = ['red-snackbar'];

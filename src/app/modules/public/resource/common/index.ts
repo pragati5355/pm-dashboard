@@ -1285,6 +1285,18 @@ export const TECHNOLOGIES_V2: TechnologyModel[] = [
         team: [TEAM_LIST.FRONTEND],
     },
     {
+        name: 'Shopify',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Hydrogen',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
+        name: 'Wordpress',
+        team: [TEAM_LIST.FRONTEND],
+    },
+    {
         name: 'Java',
         team: [TEAM_LIST.BACKEND],
     },
