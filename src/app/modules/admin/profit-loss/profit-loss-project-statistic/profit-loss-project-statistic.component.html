@@ -29,58 +29,62 @@
                         class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                         matSortDisableClear
                     >
-                        <div></div>
-                        <div>Resource Name</div>
-                        <div>Ideal Hours</div>
-                        <div>Actual Hours</div>
+                        <div>Resource Email</div>
+                        <div>Ideal Hourly Rate</div>
+                        <div>Actual Hourly Rate</div>
+                        <div>Difference</div>
+                        <div>Total Ideal Worklog</div>
+                        <div>Total Actual Worklog</div>
                     </div>
                     <ng-container>
                         <div class="grid">
-                            <ng-container *ngFor="let list of resourceList">
+                            <ng-container *ngFor="let list of statList">
                                 <div
                                     class="cursor-pointer inventory-grid grid items-center gap-4 py-2 px-4 md:px-10 border-b"
                                 >
-                                    <div class="flex items-center">
-                                        <div
-                                            class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                        >
-                                            {{
-                                                list?.resourceName
-                                                    ? list?.resourceName.charAt(
-                                                          0
-                                                      )
-                                                    : "NA"
-                                            }}
-                                        </div>
-                                    </div>
-                                    <!-- Name -->
+                                    <!-- Email -->
                                     <div class="hidden md:block truncate">
-                                        {{ list?.resourceName }}
+                                        {{ list?.email }}
                                     </div>
 
-                                    <!-- Ideal Hours -->
+                                    <!-- Ideal Hourly Rate -->
                                     <div class="hidden md:block truncate">
-                                        {{ list?.idealHours }}
+                                        {{ list?.idealHourlyRate }}
                                     </div>
 
-                                    <!-- Actual Hours -->
+                                    <!-- Actual Hourly Rate -->
                                     <div class="hidden md:block truncate">
-                                        {{ list?.actualHours }}
+                                        {{ list?.actualHourlyRate }}
+                                    </div>
+
+                                    <!-- Difference -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.diff }}
+                                    </div>
+
+                                    <!-- Total Ideal Worklog -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.totalIdealWorklogHrs }}
+                                    </div>
+
+                                    <!-- Total Actual Worklog -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.totalActualWorklogHrs }}
                                     </div>
                                 </div>
                             </ng-container>
                         </div>
                     </ng-container>
 
-                    <!-- <ng-container
-                *ngIf="registeredList?.length == 0 && !initialLoading"
-                >
-                <div
-                    class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
-                >
-                    Onboard resources not found
-                </div>
-                </ng-container> -->
+                    <ng-container
+                        *ngIf="statList?.length == 0 && !initialLoading"
+                    >
+                        <div
+                            class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
+                        >
+                            Stat Resources not found
+                        </div>
+                    </ng-container>
                     <ng-container *ngIf="initialLoading">
                         <app-table-skeleton
                             [skeletonData]="requiredSkeletonData"

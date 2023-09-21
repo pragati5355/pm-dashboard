@@ -16,6 +16,6 @@ export class ProfitLossService {
   }
 
   getPNLStatList(id:number){
-    return this.http.get(AppConstants['GET_PNL_STAT_LIST'] + `/get-project-stats/${id}`);
+    return this.http.get(`https://dev-api.metrics.mindbowser.com/api/v1/project/get-project-stats/${id}`);
   }
 }
