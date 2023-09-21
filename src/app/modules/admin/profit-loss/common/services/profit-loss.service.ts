@@ -9,15 +9,13 @@ export class ProfitLossService {
 
   pNLProjectListUrl = AppConstants['GET_PROJECTS'];
 
-  pNlStatListUrl = AppConstants['GET_PNL_STAT_LIST'];
-
   constructor(private http: HttpClient) { }
 
   getPNLProjectList(obj: any) {
     return this.http.post(this.pNLProjectListUrl, obj);
   }
 
-  getPNLStatList(){
-    return this.http.get(this.pNlStatListUrl);
+  getPNLStatList(id:number){
+    return this.http.get(AppConstants['GET_PNL_STAT_LIST'] + `/get-project-stats/${id}`);
   }
 }

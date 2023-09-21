@@ -4,7 +4,11 @@ import { ProfitLossService } from '../common/services/profit-loss.service';
 import { AuthService } from '@services/auth/auth.service';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
+import {
+    BreakpointObserver,
+    BreakpointState,
+    Breakpoints,
+} from '@angular/cdk/layout';
 import { take } from 'rxjs/internal/operators/take';
 
 @Component({
@@ -19,8 +23,8 @@ export class ProfitLossProjectsListComponent implements OnInit {
     totalPageData = 10;
     totalProject = 0;
     projectList: any = [];
-    projectId : number ;
-    filteredProjectList : any = [];
+    projectId: number;
+    filteredProjectList: any = [];
     searchValue: string = '';
     requiredSkeletonData = {
         rowsToDisplay: 10,
@@ -33,7 +37,7 @@ export class ProfitLossProjectsListComponent implements OnInit {
         private _authService: AuthService,
         private datePipe: DatePipe,
         private router: Router,
-        public breakpointObserver: BreakpointObserver,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     ngOnInit(): void {
@@ -41,20 +45,16 @@ export class ProfitLossProjectsListComponent implements OnInit {
         this.loadProjectsList();
     }
 
-    goToStatisticPage(id:any) {
-        this.router.navigate([`/p&l/${id}`]);
+    goToStatisticPage(id: any) {
+        this.router.navigate([`/profit-loss/${id}`]);
     }
 
     addSearchListener() {
         this.searchControl?.valueChanges.subscribe((searchKey: string) => {
             searchKey = searchKey?.trim()?.toLowerCase();
             if (searchKey) {
-                this.filteredProjectList = this.projectList.filter(
-                    (project) =>
-                        project?.projectName
-                            ?.toLowerCase()
-                            ?.includes(searchKey) ||
-                        project?.projectPM?.toLowerCase()?.includes(searchKey)
+                this.filteredProjectList = this.projectList.filter((project) =>
+                    project?.name?.toLowerCase()?.includes(searchKey)
                 );
             } else {
                 this.filteredProjectList = this.projectList;
@@ -120,13 +120,13 @@ export class ProfitLossProjectsListComponent implements OnInit {
     }
 
     private checkForLargerScreen() {
-      this.breakpointObserver
-          .observe([Breakpoints.XLarge, Breakpoints.Large])
-          .pipe(take(1))
-          .subscribe((state: BreakpointState) => {
-              if (state.matches) {
-                  this.handleScroll();
-              }
-          });
-  }
+        this.breakpointObserver
+            .observe([Breakpoints.XLarge, Breakpoints.Large])
+            .pipe(take(1))
+            .subscribe((state: BreakpointState) => {
+                if (state.matches) {
+                    this.handleScroll();
+                }
+            });
+    }
 }

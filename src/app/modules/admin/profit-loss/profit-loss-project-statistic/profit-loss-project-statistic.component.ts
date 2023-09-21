@@ -54,7 +54,9 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
   }
 
   goBack(){
-    this.router.navigate([`/p&l`]);
+    this.router.navigate([`/profit-loss`]);
   }
+
+  
 
 }

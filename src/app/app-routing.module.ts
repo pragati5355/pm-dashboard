@@ -83,7 +83,7 @@ export const appRoutes: Routes = [
                     ).then((m) => m.ExternalProjectsModule),
             },
             {
-                path: 'p&l',
+                path: 'profit-loss',
                 loadChildren: () =>
                     import(
                         './modules/admin/profit-loss/profit-loss.module'

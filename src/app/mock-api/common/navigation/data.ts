@@ -37,7 +37,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         title: 'P & L',
         type: 'basic',
         icon: 'mat_outline:trending_up',
-        link: '/p&l',
+        link: '/profit-loss',
         allowedRoles: ['ADMIN'],
     },
     {
@@ -56,7 +56,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/platform-users',
         allowedRoles: ['ADMIN'],
     },
-   
 ];
 export const compactNavigation: FuseNavigationItem[] = [];
 export const futuristicNavigation: FuseNavigationItem[] = [];
