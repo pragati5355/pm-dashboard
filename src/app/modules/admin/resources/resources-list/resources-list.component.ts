@@ -28,6 +28,7 @@ import {
     debounceTime,
     distinctUntilChanged,
     map,
+    startWith,
     Subject,
     takeUntil,
 } from 'rxjs';
@@ -42,6 +43,10 @@ import moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { ResourceUploadCsvComponent } from '../resource-upload-csv/resource-upload-csv.component';
 import { ResourceModel } from '../common/models/resource.model';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Observable } from 'rxjs';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -93,6 +98,20 @@ export class ResourcesListComponent implements OnInit {
     showFilterArea: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+    technologyCtrl = new FormControl();
+    filteredTechnology: Observable<any[]>;
+    selectedTechnology: any[] = [];
+    allTechnologyList: any[] = [
+        'Apple',
+        'Lemon',
+        'Lime',
+        'Orange',
+        'Strawberry',
+    ];
+
+    @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
+
     constructor(
         private _authService: AuthService,
         private projectService: CreateProjecteService,
@@ -105,7 +124,52 @@ export class ResourcesListComponent implements OnInit {
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         public breakpointObserver: BreakpointObserver,
         private matDialog: MatDialog
-    ) {}
+    ) {
+        this.filteredTechnology = this.technologyCtrl.valueChanges.pipe(
+            startWith(null),
+            map((tech: string | null) =>
+                tech ? this._filter(tech) : this.allTechnologyList.slice()
+            )
+        );
+    }
+
+    add(event: MatChipInputEvent): void {
+        const value = (event.value || '').trim();
+
+        // Add our fruit
+        if (value) {
+            this.selectedTechnology.push(value);
+        }
+
+        // Clear the input value
+        event.chipInput!.clear();
+
+        this.technologyCtrl.setValue(null);
+    }
+
+    remove(fruit: string): void {
+        const index = this.selectedTechnology.indexOf(fruit);
+
+        if (index >= 0) {
+            this.selectedTechnology.splice(index, 1);
+        }
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        this.selectedTechnology.push(event.option.viewValue);
+        this.fruitInput.nativeElement.value = '';
+        this.technologyCtrl.setValue(null);
+
+        console.log(this.selectedTechnology);
+    }
+
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+
+        return this.allTechnologyList.filter((tech) =>
+            tech?.name?.toLowerCase().includes(filterValue)
+        );
+    }
 
     ngOnInit(): void {
         this.loadData();
@@ -172,6 +236,7 @@ export class ResourcesListComponent implements OnInit {
         this.projectService.getTechnology().subscribe(
             (res: any) => {
                 this.technologyList = res?.data;
+                this.allTechnologyList = res?.data;
             },
             (error) => {}
         );
@@ -390,6 +455,7 @@ export class ResourcesListComponent implements OnInit {
         this.loadDataWithFilterPayload(payload);
     }
     clearTechnologySearch() {
+        this.pagination = false;
         this.showTechnologies = [];
         this.technologys.setValue('');
         this.count = 1;
@@ -427,6 +493,7 @@ export class ResourcesListComponent implements OnInit {
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
                 this.initialLoading = false;
+                this.checkForLargerScreen();
             },
             (error) => {
                 this.initialLoading = false;

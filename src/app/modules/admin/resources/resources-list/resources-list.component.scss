@@ -1,9 +1,9 @@
 .inventory-grid {
-    grid-template-columns: 40px 18% 15% 23% 14% 12% 10%;
+    grid-template-columns: 40px 18% auto 23% 8% 10% 5%;
 }
 .filter-content {
     position: absolute;
-    top:4rem;
+    top: 4rem;
     right: 0;
     min-width: 250px;
     background-color: rgb(255, 255, 255);
