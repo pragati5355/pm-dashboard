@@ -3,23 +3,8 @@
 >
     <div
         *ngIf="!initialLoading"
-        class="w-full max-w-4xl px-4 py-8 sm:px-8 sm:py-12 shadow-sm rounded bg-white relative"
+        class="w-full max-w-4xl px-4 py-8 sm:px-8 sm:py-12 shadow-sm rounded bg-white"
     >
-        <div class="absolute top-1 right-2 z-40">
-            <button
-                mat-icon-button
-                [matMenuTriggerFor]="menu"
-                class="opacity-10"
-            >
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <button (click)="consultantForm()" mat-menu-item>
-                    Fill form as consultant
-                </button>
-            </mat-menu>
-        </div>
-
         <div class="w-full flex justify-center mb-2">
             <div>
                 <img
@@ -84,7 +69,7 @@
                         </mat-form-field>
                     </div>
                     <div
-                        class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4"
+                        class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4 px-1"
                     >
                         <mat-form-field [floatLabel]="'always'" class="w-full">
                             <mat-label>Last Name</mat-label>
@@ -186,163 +171,6 @@
                             </mat-form-field>
                         </div>
                     </div>
-
-                    <div class="w-full sm:ml-4">
-                        <div
-                            class="w-full mb-2 font-extrabold tracking-tight ng-tns-c274-3859"
-                        >
-                            <mat-form-field
-                                [floatLabel]="'always'"
-                                class="w-full"
-                            >
-                                <mat-label>Date of joining</mat-label>
-                                <input
-                                    matInput
-                                    #inputJoining
-                                    [placeholder]="'Date of joining'"
-                                    formControlName="dateOfJoining"
-                                    [matDatepicker]="dateOfJoiningDatepicker"
-                                    (focus)="dateOfJoiningDatepicker.open()"
-                                    min="2012-04-24"
-                                    [max]="maxToDate"
-                                />
-                                <mat-datepicker-toggle
-                                    matSuffix
-                                    [for]="dateOfJoiningDatepicker"
-                                >
-                                </mat-datepicker-toggle>
-                                <mat-datepicker
-                                    #dateOfJoiningDatepicker
-                                    (closed)="inputJoining.blur()"
-                                    class="bg-gray-100"
-                                >
-                                </mat-datepicker>
-                                <mat-error
-                                    *ngIf="
-                                        resourcesForm
-                                            ?.get('dateOfJoining')
-                                            ?.hasError('required')
-                                    "
-                                    class="text-red-500"
-                                >
-                                    <div>Date of joining is mandatory</div>
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-full px-1">
-                    <mat-radio-group
-                        aria-label="Select an option"
-                        class="flex items-center"
-                        (change)="getRadioBtnValues($event)"
-                    >
-                        <mat-label class="mb-2 font-semibold"
-                            >Is Mindbowser your first company?</mat-label
-                        >
-
-                        <mat-radio-button value="yes" class="mx-4"
-                            >Yes</mat-radio-button
-                        >
-                        <mat-radio-button value="no" [checked]="true"
-                            >No</mat-radio-button
-                        >
-                    </mat-radio-group>
-                </div>
-
-                <div *ngIf="showExperience" class="w-full flex flex-wrap my-4 px-1">
-                    <mat-label class="w-full font-semibold"
-                        >Previous Experience</mat-label
-                    >
-                    <div
-                        class="mb-1font-extrabold tracking-tight ng-tns-c274-3859 flex-1"
-                    >
-                        <mat-form-field [floatLabel]="'always'" class="w-full">
-                            <input
-                                formControlName="year"
-                                matInput
-                                placeholder="Year"
-                                InputFormatter="numeric"
-                                type="number"
-                                min="0"
-                            />
-                            <span matPrefix>YY</span>
-                            <mat-error
-                                *ngIf="
-                                    resourcesValidForm['year'].errors &&
-                                    resourcesValidForm['year']?.invalid &&
-                                    resourcesValidForm['year']?.touched
-                                "
-                                class="text-red-500"
-                            >
-                                <div
-                                    *ngIf="
-                                        resourcesValidForm['year'].errors[
-                                            'required'
-                                        ]
-                                    "
-                                    class="text-red-500"
-                                >
-                                    Year is mandatory
-                                </div>
-                                <div
-                                    *ngIf="
-                                        resourcesValidForm['year'].errors[
-                                            'pattern'
-                                        ]
-                                    "
-                                    class="text-red-500"
-                                >
-                                    Enter valid Year
-                                </div>
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div
-                        class="font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4 flex-1"
-                    >
-                        <mat-form-field [floatLabel]="'always'" class="w-full">
-                            <input
-                                class=""
-                                formControlName="month"
-                                InputFormatter="numeric"
-                                matInput
-                                placeholder="Month"
-                                type="number"
-                                min="0"
-                            />
-                            <span matPrefix>MM</span>
-                            <mat-error
-                                *ngIf="
-                                    resourcesValidForm['month'].errors &&
-                                    resourcesValidForm['month']?.invalid &&
-                                    resourcesValidForm['month']?.touched
-                                "
-                            >
-                                <div
-                                    *ngIf="
-                                        resourcesValidForm['month'].errors[
-                                            'required'
-                                        ]
-                                    "
-                                    class="text-red-500"
-                                >
-                                    Month is mandatory
-                                </div>
-                                <div
-                                    *ngIf="
-                                        resourcesValidForm['month'].errors[
-                                            'pattern'
-                                        ] || resourcesValidForm['month'].errors
-                                    "
-                                    class="text-red-500"
-                                >
-                                    Enter valid month
-                                </div>
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
@@ -350,52 +178,7 @@
                 </div>
 
                 <div
-                    class="w-full font-extrabold tracking-tight ng-tns-c274-3859 px-1"
-                >
-                    <mat-form-field
-                        [floatLabel]="'always'"
-                        appearance="fill"
-                        class="w-full mt-4"
-                    >
-                        <mat-label>Your current team</mat-label>
-                        <mat-select
-                            formControlName="role"
-                            placeholder="Select Team"
-                            type="text"
-                            (selectionChange)="teamType($event)"
-                            [disableOptionCentering]="true"
-                        >
-                            <mat-option
-                                *ngFor="let role of selectTeamList"
-                                [value]="role"
-                            >
-                                {{ role }}
-                            </mat-option>
-                        </mat-select>
-                        <mat-error
-                            *ngIf="
-                                resourcesValidForm['role'].errors &&
-                                resourcesValidForm['role']?.invalid &&
-                                resourcesValidForm['role']?.touched
-                            "
-                        >
-                            <div
-                                *ngIf="
-                                    resourcesValidForm['role'].errors[
-                                        'required'
-                                    ]
-                                "
-                                class="text-red-500"
-                            >
-                                Team is mandatory
-                            </div>
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
-                <div
-                    *ngIf="!isPm"
-                    class="mt-4 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 px-1"
+                    class="mt-6 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4 px-1"
                 >
                     <div
                         class="chip-input w-full font-extrabold tracking-tight ng-tns-c274-3859"
@@ -405,7 +188,7 @@
                             appearance="fill"
                             class="example-chip-list w-full flex-0 mb-2"
                         >
-                            <mat-label>Technology</mat-label>
+                            <mat-label>Technology *</mat-label>
                             <mat-chip-list #chipList>
                                 <input
                                     placeholder="New technology..."
@@ -570,7 +353,7 @@
                 </div>
 
                 <div
-                    class="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-1 gap-y-3 mt-8 px-1"
+                    class="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-1 gap-y-3 mt-8 px-1 truncate"
                 >
                     <div *ngFor="let skill of integrations; let i = index">
                         <mat-checkbox
@@ -595,150 +378,10 @@
                 </div>
 
                 <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
-                    <span class="text-2xl">Certification (Optional)</span>
-                </div>
-
-                <div formArrayName="certificates" class="px-1">
-                    <ng-container
-                        *ngFor="
-                            let certificate of certificates?.controls;
-                            let i = index;
-                            let last = last
-                        "
-                    >
-                        <form
-                            class="flex flex-0 flex-wrap sm:flex-nowrap flex-row justify-center items-center mt-8"
-                            [formGroupName]="i"
-                        >
-                            <mat-form-field
-                                class="w-full mr-4 userlist"
-                                id="userlist"
-                                [floatLabel]="'always'"
-                            >
-                                <mat-label>Name</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="Certificate Name"
-                                    formControlName="name"
-                                    class="inputlist"
-                                />
-                            </mat-form-field>
-
-                            <mat-form-field
-                                class="w-full mr-4 sm:mt-0 userlist"
-                                id="userlist"
-                                [floatLabel]="'always'"
-                            >
-                                <mat-label
-                                    >Certificate Link(Optional)</mat-label
-                                >
-                                <input
-                                    matInput
-                                    placeholder="certificate link"
-                                    formControlName="link"
-                                    class="inputlist"
-                                />
-                            </mat-form-field>
-                            <mat-icon
-                                *ngIf="last"
-                                class="cursor-pointer mr-2"
-                                color="primary"
-                                matTooltip="Add more certificates"
-                                (click)="
-                                    certificate?.valid
-                                        ? addNewCertificate()
-                                        : certificate?.markAllAsTouched()
-                                "
-                                >add</mat-icon
-                            >
-                            <mat-icon
-                                *ngIf="i != 0"
-                                class="cursor-pointer"
-                                color="warn"
-                                matTooltip="Remove"
-                                (click)="remove(i)"
-                                >delete</mat-icon
-                            >
-                        </form>
-                    </ng-container>
-                </div>
-
-                <div
-                    class="bg-gray-100 flex flex-col py-2 px-1 shadow rounded mt-6 mb-4"
-                >
-                    <span class="text-2xl">Mindbowser projects</span>
-                    <span class="mt-2"
-                        >Name the projects you have worked on in
-                        Mindbowser</span
-                    >
-                </div>
-
-                <div formArrayName="mbProjects" class="mt-4 px-1">
-                    <ng-container
-                        *ngFor="
-                            let project of mbProjects?.controls;
-                            let i = index;
-                            let last = last
-                        "
-                    >
-                        <form
-                            class="flex flex-row justify-center items-center"
-                            [formGroupName]="i"
-                        >
-                            <mat-form-field
-                                class="w-full mr-4 userlist mt-4"
-                                id="userlist"
-                                [floatLabel]="'always'"
-                            >
-                                <mat-label>Project name</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="Project Name"
-                                    formControlName="name"
-                                    class="inputlist"
-                                />
-                                <mat-error
-                                    *ngIf="
-                                        project
-                                            ?.get('name')
-                                            ?.hasError('required')
-                                    "
-                                >
-                                    <div class="text-red-500">
-                                        Project Name is Mandatory
-                                    </div>
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-icon
-                                *ngIf="last"
-                                class="cursor-pointer mt-4 mr-2"
-                                color="primary"
-                                matTooltip="Add more projects"
-                                (click)="
-                                    project?.valid
-                                        ? addNewProject()
-                                        : project?.markAllAsTouched()
-                                "
-                                >add</mat-icon
-                            >
-                            <mat-icon
-                                *ngIf="i != 0"
-                                class="cursor-pointer mt-4"
-                                color="warn"
-                                matTooltip="Remove"
-                                (click)="removeProject(i)"
-                                >delete</mat-icon
-                            >
-                        </form>
-                    </ng-container>
-                </div>
-
-                <div class="bg-gray-100 py-2 px-1 shadow rounded mt-6 mb-4">
                     <span class="text-2xl">Resume</span>
                 </div>
 
-                <div class="flex flex-col mt-8">
+                <div class="flex flex-col mt-8 px-1">
                     <div
                         *ngIf="preSignedUrl !== null"
                         class="flex item-center w-1/2"
@@ -755,10 +398,10 @@
                         </div>
                     </div>
                     <div *ngIf="!isFileUploadedToS3">
-                        <span>Upload your updated resume *</span>
+                        <span>Upload your updated resume</span>
 
                         <button
-                            class="ml-4 bg-primary-500 text-white"
+                            class="ml-4 bg-primary-500 text-white font-bold"
                             mat-raised-button
                             (click)="onClick()"
                             [disabled]="submitInProgress"
@@ -787,7 +430,7 @@
                         (click)="submit()"
                         type="submit"
                         [color]="'primary'"
-                        class="order-first sm:order-last ml-4 bg-primary-500 text-white"
+                        class="order-first sm:order-last ml-4 bg-primary-500 text-white font-bold"
                         mat-flat-button
                         [disabled]="submitInProgress"
                     >

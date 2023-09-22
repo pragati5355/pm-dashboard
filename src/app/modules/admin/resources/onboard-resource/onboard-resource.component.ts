@@ -13,6 +13,7 @@ import { take } from 'rxjs/internal/operators/take';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { FormControl } from '@angular/forms';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs';
+import { OnboardVendorDetailsComponent } from '../onboard-vendor-details/onboard-vendor-details.component';
 
 @Component({
     selector: 'app-onboard-resource',
@@ -55,18 +56,16 @@ export class OnboardResourceComponent implements OnInit {
             searchString: this.searchValue,
         };
         this.initialLoading = true;
-        this.resourceService
-            .getRegisteredResource(payload)
-            .subscribe((res: any) => {
-                this.initialLoading = false;
-                if (!res?.error) {
-                    this.handleGetResourceMemberResponse(res);
-                    // this.checkForLargerScreen();
-                }
-                if (res?.tokenExpire) {
-                    this._authService.updateAndReload(window.location);
-                }
-            });
+        this.resourceService.getRegisteredResource().subscribe((res: any) => {
+            this.initialLoading = false;
+            if (res?.code === 200) {
+                this.handleGetResourceMemberResponse(res);
+                // this.checkForLargerScreen();
+            }
+            if (res?.tokenExpire) {
+                this._authService.updateAndReload(window.location);
+            }
+        });
     }
 
     handleGetResourceMemberResponse(res: any) {
@@ -86,35 +85,70 @@ export class OnboardResourceComponent implements OnInit {
     }
 
     gotoDetailspage(mode: String, data: any) {
-        const dialogRef = this.dialog.open(OnboardResourceDetailsComponent, {
-            disableClose: true,
-            width: '98%',
-            maxWidth: '800px',
-            maxHeight: '90vh',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                mode: mode,
-                editData: data,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result == 'success') {
-                this.count = 1;
-                this.totalPerPageData = 1000;
-                // this.getList();
-                window.location.reload();
-            }
-        });
+        const isVendor = data?.vendor ? true : false;
+
+        if (isVendor) {
+            const dialogRef = this.dialog.open(OnboardVendorDetailsComponent, {
+                disableClose: true,
+                width: '98%',
+                maxWidth: '800px',
+                maxHeight: '90vh',
+                panelClass: 'warn-dialog-content',
+                autoFocus: false,
+                data: {
+                    mode: mode,
+                    editData: data,
+                },
+            });
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result == 'success') {
+                    this.count = 1;
+                    this.totalPerPageData = 1000;
+                    // this.getList();
+                    window.location.reload();
+                }
+            });
+        } else {
+            const dialogRef = this.dialog.open(
+                OnboardResourceDetailsComponent,
+                {
+                    disableClose: true,
+                    width: '98%',
+                    maxWidth: '800px',
+                    maxHeight: '90vh',
+                    panelClass: 'warn-dialog-content',
+                    autoFocus: false,
+                    data: {
+                        mode: mode,
+                        editData: data,
+                    },
+                }
+            );
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result == 'success') {
+                    this.count = 1;
+                    this.totalPerPageData = 1000;
+                    // this.getList();
+                    window.location.reload();
+                }
+            });
+        }
     }
 
     submit(resource: any) {
+        const isVendor = resource?.vendor ? true : false;
+
+        let details = resource?.details;
+
+        if (isVendor) {
+            details = { ...details, vendor: true };
+        }
         this.submitInProgress = true;
         this.resourceService
-            .saveOnboardedResource(resource?.details)
+            .saveOnboardedResource(details)
             ?.subscribe((res: any) => {
                 this.submitInProgress = false;
-                if (!res?.error) {
+                if (res?.code === 200) {
                     this.snackBar.successSnackBar(res?.message);
                     this.getList();
                 } else {
@@ -130,7 +164,7 @@ export class OnboardResourceComponent implements OnInit {
             this.count = this.count + this.totalPerPageData;
             const payload = this.getDefaultSearchPayload(this.count);
             this.pagination = true;
-            this.resourceService.getRegisteredResource(payload).subscribe(
+            this.resourceService.getRegisteredResource().subscribe(
                 (res: any) => {
                     this.pagination = false;
                     if (res?.data) {
@@ -168,14 +202,9 @@ export class OnboardResourceComponent implements OnInit {
         this.count = 1;
         this.totalPerPageData = 1000;
         this.registeredList = [];
-        const payload = {
-            perPageData: this.count,
-            totalPerPageData: this.totalPerPageData,
-            searchString: searchKey,
-        };
         this.initialLoading = true;
         this.resourceService
-            .getRegisteredResource(payload)
+            .getResourceBySearch(searchKey)
             .subscribe((res: any) => {
                 this.initialLoading = false;
                 if (!res?.error) {

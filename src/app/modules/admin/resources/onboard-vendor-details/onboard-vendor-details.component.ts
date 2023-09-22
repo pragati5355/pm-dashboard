@@ -1,5 +1,12 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import {
+    Component,
+    ElementRef,
+    Inject,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import {
     AbstractControl,
     FormArray,
@@ -11,30 +18,33 @@ import {
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MatDialog } from '@angular/material/dialog';
+import {
+    MAT_DIALOG_DATA,
+    MatDialogRef,
+    MatDialog,
+} from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { AddSkillAndIntegrationComponent } from '@modules/public/resource/add-skill-and-integration/add-skill-and-integration.component';
+import { AddTechnologyComponent } from '@modules/public/resource/add-technology/add-technology.component';
+import {
+    TEAM_LIST,
+    TECHNOLOGIES,
+    TECHNOLOGIES_V2,
+} from '@modules/public/resource/common';
+import { ResourceService } from '@modules/public/resource/common/services/resource.service';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { MonthValdation } from 'app/core/utils/Validations';
 import moment from 'moment';
-import { map, Observable, of, startWith } from 'rxjs';
-import { AddSkillAndIntegrationComponent } from '../add-skill-and-integration/add-skill-and-integration.component';
-import { AddTechnologyComponent } from '../add-technology/add-technology.component';
-import {
-    EMAIL_LIST,
-    TEAM_LIST,
-    TECHNOLOGIES,
-    TECHNOLOGIES_V2,
-} from '../common';
-import { ResourceService } from '../common/services/resource.service';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
-    selector: 'app-register-resource',
-    templateUrl: './register-resource.component.html',
-    styleUrls: ['./register-resource.component.scss'],
+    selector: 'app-onboard-vendor-details',
+    templateUrl: './onboard-vendor-details.component.html',
+    styleUrls: ['./onboard-vendor-details.component.scss'],
 })
-export class RegisterResourceComponent implements OnInit {
+export class OnboardVendorDetailsComponent implements OnInit {
     @ViewChild('fileUpload') fileUpload: ElementRef;
     resourcesForm!: FormGroup;
     initialLoading: boolean = false;
@@ -46,7 +56,7 @@ export class RegisterResourceComponent implements OnInit {
     addOnBlur = false;
     userData: any;
     filteredTechnologies: Observable<any[]> | undefined;
-    alltechnologys: any[] = [];
+    alltechnologys: any[] = TECHNOLOGIES_V2;
     technologys: any = [];
     emailList: any[] = [];
     allTeamsTechnologyList: any = TECHNOLOGIES;
@@ -66,6 +76,8 @@ export class RegisterResourceComponent implements OnInit {
     maxFromDate: Date | null;
     minToDate: Date | null;
     maxToDate: Date;
+    mode: string;
+    patchData: any;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -89,19 +101,21 @@ export class RegisterResourceComponent implements OnInit {
         private snackBar: SnackBar,
         private resourceService: ResourceService,
         private fuseConfirmationService: FuseConfirmationService,
-        private router: Router
+        private router: Router,
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        public matDialogRef: MatDialogRef<OnboardVendorDetailsComponent>
     ) {}
 
     ngOnInit(): void {
         this.initializeForm();
-        // this.getEmails();
+
+        this.technologiesForVendors();
 
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
-    }
 
-    consultantForm() {
-        this.router.navigate([`/resource/consultant`]);
+        this.mode = this.data?.mode;
+        this.patchData = this.data?.editData;
     }
 
     getRadioBtnValues($event: any) {
@@ -111,6 +125,15 @@ export class RegisterResourceComponent implements OnInit {
         if ($event?.value === 'no') {
             this.showExperience = true;
         }
+    }
+
+    close() {
+        this.integrations?.map((item) => (item.checked = false));
+        this.matDialogRef.close();
+    }
+
+    viewResume() {
+        window.open(this.patchData?.details?.resourceUrl, '_blank');
     }
 
     onCheckBoxChange(selectedOption: MatCheckboxChange) {
@@ -259,8 +282,6 @@ export class RegisterResourceComponent implements OnInit {
         }
 
         this.resourcesForm?.get('technology')?.reset();
-
-        // this.filteredTechnologies = of(this.alltechnologys);
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
@@ -275,49 +296,22 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     submit() {
-        // console.log(this.resourcesForm?.get('technologies')?.value);
-        // this.resourcesForm?.get('technologies')?.value?.map((item) => {
-        //     if (item?.experienceMonth === 0 && item?.experienceYear === 0) {
-        //         this.snackBar?.errorSnackBar('Add technology experience');
-        //     }
-        // });
-
         const technologyWithNoExperience = this.resourcesForm
             ?.get('technologies')
             ?.value?.filter(
                 (item) =>
                     item?.experienceMonth === 0 && item?.experienceYear === 0
             );
-
         if (this.resourcesForm?.valid) {
-            if (
-                this.showExperience &&
-                this.resourcesForm?.get('month')?.value === 0 &&
-                this.resourcesForm?.get('year')?.value === 0
-            ) {
-                this.snackBar.errorSnackBar('Fill previous experience');
-                return;
-            }
-            if (
-                this.resourcesForm?.get('role')?.value !== 'PM' &&
-                this.resourcesForm?.get('technologies')?.value?.length === 0
-            ) {
-                this.snackBar.errorSnackBar('choose technologies');
-                return;
-            }
-
-            if (this.resourcesForm?.get('integrations')?.value?.length === 0) {
-                this.snackBar.errorSnackBar('choose skill/integrations');
-                return;
-            }
-
-            if (!this.isFileUploadedToS3) {
-                this.snackBar.errorSnackBar('Upload resume');
+            if (this.resourcesForm?.get('technologies')?.value?.length === 0) {
+                this.snackBar.errorSnackBar('Please choose technologies');
                 return;
             }
 
             if (technologyWithNoExperience?.length > 0) {
-                this.snackBar?.errorSnackBar('Add technology experience');
+                this.snackBar?.errorSnackBar(
+                    'Please add technology experience'
+                );
                 return;
             }
 
@@ -334,13 +328,14 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     saveResource() {
-        this.submitInProgress = true;
         const payload = this.saveResourcePayload();
-        this.resourceService?.saveResource(payload)?.subscribe(
+        this.submitInProgress = true;
+        this.resourceService?.saveResourceAsVendor(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
                 if (res?.code === 200) {
-                    this.router.navigate([`/resource/success`]);
+                    this.snackBar.successSnackBar('Update success');
+                    this.matDialogRef.close('success');
                 }
                 if (res?.status === 208) {
                     const dialogRef = this.fuseConfirmationService.open(
@@ -359,9 +354,16 @@ export class RegisterResourceComponent implements OnInit {
                                     (res: any) => {
                                         this.submitInProgress = false;
                                         if (res?.code === 200) {
-                                            this.router.navigate([
-                                                `/resource/success`,
-                                            ]);
+                                            this.snackBar.successSnackBar(
+                                                'Update success'
+                                            );
+                                            const integration = (<FormArray>(
+                                                this.resourcesForm.get(
+                                                    'integrations'
+                                                )
+                                            )) as FormArray;
+                                            integration?.clear();
+                                            this.matDialogRef.close('success');
                                         } else {
                                             this.snackBar.errorSnackBar(
                                                 'Something went wrong'
@@ -484,14 +486,8 @@ export class RegisterResourceComponent implements OnInit {
         }
     }
 
-    private getEmails() {
-        this.initialLoading = true;
-        this.resourceService.getEmails().subscribe((res: any) => {
-            this.initialLoading = false;
-            if (res?.data) {
-                this.emailList = res?.data;
-            }
-        });
+    private technologiesForVendors() {
+        this.alltechnologys = TECHNOLOGIES_V2?.map((item) => item?.name);
     }
 
     private initializeConfigForm() {
@@ -544,85 +540,120 @@ export class RegisterResourceComponent implements OnInit {
     }
 
     private saveResourcePayload() {
+        this.markAllIntegrationsAsTrue();
+        const details = this.removeKeyWithNullValues();
+
+        return {
+            email: this.resourcesForm?.get('email')?.value,
+            details: {
+                ...details,
+                resourceUrl: this.resourceUrl ? this.resourceUrl : '',
+            },
+            confirmed: false,
+            vendor: true,
+        };
+    }
+
+    private markAllIntegrationsAsTrue() {
         const integration = (<FormArray>(
             this.resourcesForm.get('integrations')
         )) as FormArray;
 
         integration?.value?.map((item) => (item.checked = true));
+    }
 
-        return {
-            email: this.resourcesForm?.get('email')?.value,
-            details: {
-                ...this.resourcesForm?.value,
-                resourceUrl: this.resourceUrl,
-            },
-            confirmed: false,
-        };
+    private removeKeyWithNullValues() {
+        const details = { ...this.resourcesForm?.value };
+
+        for (let k in details) if (details[k] === null) delete details[k];
+        return details;
     }
 
     private initializeForm() {
-        this.resourcesForm = this.formBuilder.group(
-            {
-                firstName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(ValidationConstants.NAME_VALIDATION),
-                    ],
+        this.resourcesForm = this.formBuilder.group({
+            firstName: [
+                this.data?.editData?.details?.firstName
+                    ? this.data?.editData?.details?.firstName
+                    : '',
+                [
+                    Validators.required,
+                    Validators.pattern(ValidationConstants.NAME_VALIDATION),
                 ],
-                lastName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(ValidationConstants.NAME_VALIDATION),
-                    ],
+            ],
+            lastName: [
+                this.data?.editData?.details?.lastName
+                    ? this.data?.editData?.details?.lastName
+                    : '',
+                [
+                    Validators.required,
+                    Validators.pattern(ValidationConstants.NAME_VALIDATION),
                 ],
-                email: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.email,
-                        Validators.pattern(/@mindbowser.com\s*$/),
-                    ],
+            ],
+            email: [
+                this.data?.editData?.details?.email
+                    ? this.data?.editData?.details?.email
+                    : '',
+                [
+                    Validators.required,
+                    Validators.email,
+                    Validators.pattern(/@mindbowser.com\s*$/),
                 ],
-                role: ['', [Validators.required]],
-                year: [
-                    0,
-                    [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
-                ],
-                month: [
-                    0,
-                    [Validators.pattern(ValidationConstants.YEAR_VALIDATION)],
-                ],
-                dateOfJoining: ['', [Validators.required]],
-                salary: [
-                    '',
-                    [Validators.pattern(ValidationConstants.SALARY_VALIDATION)],
-                ],
-                technology: [],
-                technologies: this.formBuilder.array([]),
-                certificates: this.getCertifcatesControls(),
-                mbProjects: this.getMbProjectsControls(),
-                integrations: this.formBuilder.array([]),
-            },
-            {
-                validator: [MonthValdation('month')],
-            }
-        );
-
-        this.pmMentorFilterInitialization();
-        this.dynamicFieldValidation();
+            ],
+            technology: [],
+            technologies: this.formBuilder.array([]),
+            integrations: this.formBuilder.array([]),
+        });
+        this.patchTechnologies();
+        this.patchIntegrations();
         this.getTechnologiesList();
         this.initializeConfigForm();
         this.initializeAlreadyExistConfigForm();
     }
 
-    private getMbProjectsControls(): FormArray {
-        return this.formBuilder.array([this.getSingleProjectsControl()]);
+    private patchTechnologies() {
+        this.data?.editData?.details?.technologies?.map((tech) => {
+            const control = this.formBuilder.group({
+                name: this.formBuilder.control(tech?.name, [
+                    Validators.required,
+                ]),
+                experienceYear: this.formBuilder.control(tech?.experienceYear, [
+                    Validators.required,
+                ]),
+                experienceMonth: this.formBuilder.control(
+                    tech?.experienceMonth
+                ),
+            });
+            this.technologies.push(control);
+        });
     }
 
-    private getCertifcatesControls(): FormArray {
-        return this.formBuilder.array([this.getSingleControl()]);
+    private patchIntegrations() {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        this.data?.editData?.details?.integrations?.map((item) => {
+            integration.push(new FormControl(item));
+        });
+
+        this.integrations?.map((item) => {
+            const skill = this.data?.editData?.details?.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+            if (skill > -1) {
+                item.checked = true;
+            }
+        });
+
+        this.data?.editData?.details?.integrations?.map((item) => {
+            const id = this.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+
+            if (id === -1) {
+                this.integrations?.push(item);
+            }
+        });
     }
 
     private getSingleControl(): FormGroup {
@@ -640,43 +671,5 @@ export class RegisterResourceComponent implements OnInit {
         });
 
         return control;
-    }
-
-    private dynamicFieldValidation() {
-        this.resourcesForm.get('role').valueChanges.subscribe((res: any) => {
-            // if (res != 'PM') {
-            //     this.resourcesForm
-            //         .get('pmOrMentorEmail')
-            //         .setValidators(Validators.required);
-            //     this.resourcesForm
-            //         .get('pmOrMentorEmail')
-            //         .updateValueAndValidity();
-            // } else {
-            //     this.resourcesForm.get('pmOrMentorEmail').clearValidators();
-            //     this.resourcesForm
-            //         .get('pmOrMentorEmail')
-            //         .updateValueAndValidity();
-            // }
-        });
-    }
-
-    private pmMentorFilterInitialization() {
-        // this.filteredEmails = this.resourcesForm
-        //     .get('pmOrMentorEmail')
-        //     .valueChanges.pipe(
-        //         startWith(null),
-        //         map((email) =>
-        //             email ? this.filterEmails(email) : this.emailList?.slice()
-        //         )
-        //     );
-    }
-
-    private filterEmails(email: string) {
-        let arr = this.emailList.filter(
-            (item) =>
-                item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
-        );
-
-        return arr.length ? arr : [{ email: 'No Emails found' }];
     }
 }
