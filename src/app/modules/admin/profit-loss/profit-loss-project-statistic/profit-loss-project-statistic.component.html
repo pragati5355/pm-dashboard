@@ -30,11 +30,11 @@
                         matSortDisableClear
                     >
                         <div>Resource Email</div>
-                        <div>Ideal Hourly Rate</div>
-                        <div>Actual Hourly Rate</div>
+                        <div>Ideal Work Hrs</div>
+                        <div>Actual Work Hrs</div>
+                        <div>Ideal Cost</div>
+                        <div>Actual Cost</div>
                         <div>Difference</div>
-                        <div>Total Ideal Worklog</div>
-                        <div>Total Actual Worklog</div>
                     </div>
                     <ng-container>
                         <div class="grid">
@@ -45,6 +45,16 @@
                                     <!-- Email -->
                                     <div class="hidden md:block truncate">
                                         {{ list?.email }}
+                                    </div>
+
+                                     <!-- Total Ideal Worklog -->
+                                     <div class="hidden md:block truncate">
+                                        {{ list?.totalIdealWorklogHrs }}
+                                    </div>
+
+                                    <!-- Total Actual Worklog -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.totalActualWorklogHrs }}
                                     </div>
 
                                     <!-- Ideal Hourly Rate -->
@@ -60,16 +70,6 @@
                                     <!-- Difference -->
                                     <div class="hidden md:block truncate">
                                         {{ list?.diff }}
-                                    </div>
-
-                                    <!-- Total Ideal Worklog -->
-                                    <div class="hidden md:block truncate">
-                                        {{ list?.totalIdealWorklogHrs }}
-                                    </div>
-
-                                    <!-- Total Actual Worklog -->
-                                    <div class="hidden md:block truncate">
-                                        {{ list?.totalActualWorklogHrs }}
                                     </div>
                                 </div>
                             </ng-container>

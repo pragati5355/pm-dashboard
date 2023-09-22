@@ -16,6 +16,6 @@ export class ProfitLossService {
   }
 
   getPNLStatList(id:number){
-    return this.http.get(AppConstants['SPRING_BOOT_URL'] + `/project/get-project-stats/${id}`);
+    return this.http.get(AppConstants['GET_STAT_RESOURCE_LIST'] + `/get-project-stats/${id}`);
   }
 }
