@@ -369,39 +369,52 @@ export class OnboardResourceDetailsComponent implements OnInit {
         this.resourceService?.saveResource(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
-                if (!res?.error && !res?.data?.alreadyExist) {
+                if (res?.code === 200) {
                     this.snackBar.successSnackBar('Update success');
                     this.matDialogRef.close('success');
                 }
-                if (res?.data?.alreadyExist) {
-                    this.submitInProgress = true;
-                    const payload = this.saveResourcePayload();
-                    payload.confirmed = true;
-
-                    this.resourceService?.saveResource(payload)?.subscribe(
-                        (res: any) => {
-                            this.submitInProgress = false;
-                            if (!res?.error) {
-                                this.snackBar.successSnackBar('Update success');
-                                const integration = (<FormArray>(
-                                    this.resourceForm.get('integrations')
-                                )) as FormArray;
-                                integration?.clear();
-                                this.matDialogRef.close('success');
-                            } else {
-                                this.snackBar.errorSnackBar(
-                                    'Something went wrong'
-                                );
-                            }
-                        },
-                        (err) => {
-                            this.submitInProgress = false;
-                            this.snackBar.errorSnackBar('Something went wrong');
-                        }
+                if (res?.status === 208) {
+                    const dialogRef = this.fuseConfirmationService.open(
+                        this.AlreadyExistConfigForm.value
                     );
-                }
-                if (res?.error && !res?.data?.alreadyExist) {
-                    this.snackBar.errorSnackBar('Something went wrong');
+
+                    dialogRef.afterClosed().subscribe((result) => {
+                        if (result == 'confirmed') {
+                            this.submitInProgress = true;
+                            const payload = this.saveResourcePayload();
+                            payload.confirmed = true;
+
+                            this.resourceService
+                                ?.saveResource(payload)
+                                ?.subscribe(
+                                    (res: any) => {
+                                        this.submitInProgress = false;
+                                        if (res?.code === 200) {
+                                            this.snackBar.successSnackBar(
+                                                'Update success'
+                                            );
+                                            const integration = (<FormArray>(
+                                                this.resourceForm.get(
+                                                    'integrations'
+                                                )
+                                            )) as FormArray;
+                                            integration?.clear();
+                                            this.matDialogRef.close('success');
+                                        } else {
+                                            this.snackBar.errorSnackBar(
+                                                'Something went wrong'
+                                            );
+                                        }
+                                    },
+                                    (err) => {
+                                        this.submitInProgress = false;
+                                        this.snackBar.errorSnackBar(
+                                            'Something went wrong'
+                                        );
+                                    }
+                                );
+                        }
+                    });
                 }
             },
             (err) => {

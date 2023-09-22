@@ -53,7 +53,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div *ngIf="userRole === 'USER' || userRole === 'PM'">
+                <div *ngIf="userRole !== 'ADMIN'">
                     <button
                         (click)="addOrEditWorklog(null, 'ADD')"
                         [disabled]="initialLoading"
@@ -103,7 +103,8 @@
                             [ngClass]="{
                                 'inventory-grid-list-1':
                                     userRole === 'ADMIN' || userRole === 'PM',
-                                'inventory-grid-list': userRole === 'USER'
+                                'inventory-grid-list':
+                                    userRole === 'USER' || userRole === 'VENDOR'
                             }"
                         >
                             <div class="font-semibold px-2">Date</div>
@@ -114,14 +115,18 @@
                                         userRole === 'ADMIN' ||
                                         userRole === 'PM',
                                     'inventory-grid-list-inner-list-user':
-                                        userRole === 'USER'
+                                        userRole === 'USER' ||
+                                        userRole === 'VENDOR'
                                 }"
                             >
                                 <div class="font-semibold">Description</div>
                                 <div class="font-semibold">Hours</div>
                                 <div
                                     class="font-semibold"
-                                    *ngIf="userRole === 'USER'"
+                                    *ngIf="
+                                        userRole === 'USER' ||
+                                        userRole === 'VENDOR'
+                                    "
                                 >
                                     Actions
                                 </div>
@@ -134,7 +139,8 @@
                             [ngClass]="{
                                 'inventory-grid-list-1':
                                     userRole === 'ADMIN' || userRole === 'PM',
-                                'inventory-grid-list': userRole === 'USER'
+                                'inventory-grid-list':
+                                    userRole === 'USER' || userRole === 'VENDOR'
                             }"
                         >
                             <div class="pl-2 mt-2">
@@ -148,8 +154,9 @@
                                             userRole === 'ADMIN' ||
                                             userRole === 'PM',
                                         'inventory-grid-list-inner-list-user':
-                                            userRole === 'USER',
-                                        'border-b-0 pb-0':last
+                                            userRole === 'USER' ||
+                                            userRole === 'VENDOR',
+                                        'border-b-0 pb-0': last
                                     }"
                                     *ngFor="
                                         let logs of log?.worklogList;
@@ -170,7 +177,13 @@
                                         }}
                                     </div>
 
-                                    <div class="" *ngIf="userRole === 'USER'">
+                                    <div
+                                        class=""
+                                        *ngIf="
+                                            userRole === 'USER' ||
+                                            userRole === 'VENDOR'
+                                        "
+                                    >
                                         <div class="pb-2">
                                             <div>
                                                 <button
