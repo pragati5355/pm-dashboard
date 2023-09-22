@@ -96,6 +96,7 @@ export class ResourcesListComponent implements OnInit {
     isBench: boolean = false;
     isShadow: boolean = false;
     showFilterArea: boolean = false;
+    selectedTechnologiesForSearch: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -152,19 +153,46 @@ export class ResourcesListComponent implements OnInit {
 
         if (index >= 0) {
             this.selectedTechnology.splice(index, 1);
+            this.selectedTechnologiesForSearch.splice(index, 1);
         }
+
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
-        this.selectedTechnology.push(event.option.viewValue);
+        this.selectedTechnology.push(event.option.value.name);
         this.fruitInput.nativeElement.value = '';
         this.technologyCtrl.setValue(null);
 
-        console.log(this.selectedTechnology);
+        this.selectedTechnologiesForSearch?.push(event.option.value.id);
+
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
     }
 
     private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
+        const filterValue = value;
 
         return this.allTechnologyList.filter((tech) =>
             tech?.name?.toLowerCase().includes(filterValue)
@@ -228,6 +256,8 @@ export class ResourcesListComponent implements OnInit {
         this.isShadowIsBench.setValue('');
         this.pagination = false;
         this.selectedProject = false;
+        this.selectedTechnologiesForSearch = [];
+        this.selectedTechnology = [];
         // this.showFilterArea = false;
         this.getList();
     }
@@ -247,6 +277,7 @@ export class ResourcesListComponent implements OnInit {
             this.totalRecored = res?.data?.totalRecored;
             this.resources = res?.data?.teamMember;
             this.initialLoading = false;
+            this.checkForLargerScreen();
         } else if (res?.data == null) {
             this.totalRecored = 0;
             this.initialLoading = false;
@@ -518,8 +549,8 @@ export class ResourcesListComponent implements OnInit {
         const expriencePayload = this.getExperiencePayload();
         return {
             technology:
-                this.technologys?.value.length > 0
-                    ? this.technologys?.value
+                this.selectedTechnologiesForSearch?.length > 0
+                    ? this.selectedTechnologiesForSearch
                     : [],
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,

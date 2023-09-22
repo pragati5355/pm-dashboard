@@ -43,7 +43,7 @@
             </mat-menu>
             <button
                 class="ml-4"
-                *ngIf="userRole === 'USER'"
+                *ngIf="userRole === 'USER' || userRole === 'VENDOR'"
                 mat-flat-button
                 [color]="'primary'"
                 [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"

@@ -92,7 +92,7 @@
                                             (click)="clearProjectSearch()"
                                         ></mat-icon>
                                     </mat-form-field>
-                                    <mat-form-field
+                                    <!-- <mat-form-field
                                         class="mb-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
                                     >
                                         <mat-select
@@ -131,13 +131,13 @@
                                             [svgIcon]="'heroicons_solid:x'"
                                             (click)="clearTechnologySearch()"
                                         ></mat-icon>
-                                    </mat-form-field>
+                                    </mat-form-field> -->
 
                                     <mat-form-field
                                         class="example-chip-list w-full"
                                         appearance="fill"
                                     >
-                                        <mat-label>Favorite Fruits</mat-label>
+                                        <mat-label>Choose technologies</mat-label>
                                         <mat-chip-list
                                             #chipList
                                             aria-label="Fruit selection"
@@ -152,7 +152,7 @@
                                                 </button>
                                             </mat-chip>
                                             <input
-                                                placeholder="New fruit..."
+                                                placeholder="Choose technologies."
                                                 #fruitInput
                                                 [formControl]="technologyCtrl"
                                                 [matAutocomplete]="auto"
