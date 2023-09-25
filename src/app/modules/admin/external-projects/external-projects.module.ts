@@ -46,6 +46,7 @@ import { WorkLogShareComponent } from './work-log-share/work-log-share.component
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { ExternalProjectSettingsComponent } from './external-project-settings/external-project-settings.component';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -60,6 +61,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         AddEditWorkLogComponent,
         WorkLogsDownloadComponent,
         WorkLogShareComponent,
+        ExternalProjectSettingsComponent,
     ],
     imports: [
         CommonModule,

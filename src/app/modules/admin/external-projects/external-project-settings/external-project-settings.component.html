@@ -1,0 +1,25 @@
+<div
+    matDialogTitle
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -mt-6 -mx-6"
+>
+    <div class="text-lg font-medium">Project settings</div>
+    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
+        <mat-icon
+            class="text-current"
+            [svgIcon]="'heroicons_outline:x'"
+        ></mat-icon>
+    </button>
+</div>
+
+<mat-tab-group [@.disabled]="true">
+    <mat-tab>
+        <ng-template mat-tab-label> Project reminders </ng-template>
+        <app-send-reminders></app-send-reminders>
+        <!-- <div class="min-h-[500px]">
+        </div> -->
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label> Cost type </ng-template>
+        <div class="min-h-[500px]">cost type</div>
+    </mat-tab>
+</mat-tab-group>

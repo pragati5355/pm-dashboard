@@ -13,6 +13,7 @@ import { ExternalProjectsAddResourceComponent } from '../external-projects-add-r
 import { SendRemindersComponent } from '../send-reminders/send-reminders.component';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { WorkLogsDownloadComponent } from '../work-logs-download/work-logs-download.component';
+import { ExternalProjectSettingsComponent } from '../external-project-settings/external-project-settings.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -85,9 +86,11 @@ export class ExternalProjectDetailsComponent implements OnInit {
 
     settings() {
         this.dialog
-            .open(SendRemindersComponent, {
+            .open(ExternalProjectSettingsComponent, {
+                disableClose: true,
                 width: '50%',
                 height: 'auto',
+                maxHeight: '90vh',
                 data: {
                     projectModel: this.projectDetails?.project,
                     clientModels: this.projectDetails?.clientModels,
@@ -255,8 +258,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
             }
         );
     }
-    
-    downloadResouceWorklog(){
+
+    downloadResouceWorklog() {
         const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
             disableClose: true,
             width: '98%',
@@ -266,7 +269,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             autoFocus: false,
             data: {
                 id: this.projectId,
-                projectName : this.projectDetails?.project?.name,
+                projectName: this.projectDetails?.project?.name,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
