@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
+    FormArray,
     FormBuilder,
     FormControl,
     FormGroup,
     Validators,
 } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
+import { SnackBar } from 'app/core/utils/snackBar';
+import { ExternalProjectService } from '../common/services/external-project.service';
 
 interface costTypeInterface {
     value: string;
@@ -41,7 +45,18 @@ export class CostTypeSettingComponent implements OnInit {
             label: 'Resource specific',
         },
     ];
-    constructor(private fb: FormBuilder) {}
+
+    get resources() {
+        return this.timeAndMaterialForm?.get('resources') as FormArray;
+    }
+
+    constructor(
+        private fb: FormBuilder,
+        public dialogRef: MatDialogRef<CostTypeSettingComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        private snackBar: SnackBar,
+        private externalProjectService: ExternalProjectService
+    ) {}
 
     ngOnInit(): void {
         this.fixedCostForm = this.fb.group({
@@ -60,6 +75,19 @@ export class CostTypeSettingComponent implements OnInit {
             ],
             resources: this.fb.array([]),
         });
+
+        this.data?.teamModel?.map((resource) => {
+            const control = this.fb.group({
+                name: [resource?.firstName + ' ' + resource?.lastName],
+                cost: [
+                    '',
+                    [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
+                ],
+            });
+            this.resources?.push(control);
+        });
+
+        console.log(this.timeAndMaterialForm);
     }
 
     costTypeChange(event: MatSelectChange) {

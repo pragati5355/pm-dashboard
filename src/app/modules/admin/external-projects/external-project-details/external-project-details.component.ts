@@ -95,6 +95,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                     projectModel: this.projectDetails?.project,
                     clientModels: this.projectDetails?.clientModels,
                     projectSettings: this.projectDetails?.projectSettings,
+                    teamModel: this.projectDetails?.teamModel,
                 },
             })
             .afterClosed()
