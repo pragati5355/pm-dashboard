@@ -47,6 +47,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ExternalProjectSettingsComponent } from './external-project-settings/external-project-settings.component';
+import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.component';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -62,6 +63,7 @@ import { ExternalProjectSettingsComponent } from './external-project-settings/ex
         WorkLogsDownloadComponent,
         WorkLogShareComponent,
         ExternalProjectSettingsComponent,
+        CostTypeSettingComponent,
     ],
     imports: [
         CommonModule,
