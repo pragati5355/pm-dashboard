@@ -58,6 +58,7 @@ export class CostTypeSettingComponent implements OnInit {
                 '',
                 [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
             ],
+            resources: this.fb.array([]),
         });
     }
 
