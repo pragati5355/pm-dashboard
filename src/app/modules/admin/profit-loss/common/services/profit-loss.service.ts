@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,6 @@ export class ProfitLossService {
   }
 
   getPNLStatList(id:number){
-    return this.http.get(AppConstants['GET_STAT_RESOURCE_LIST'] + `/get-project-stats/${id}`);
+    return this.http.get(API_LIST.SPRING_BOOT_URL + `/project/get-project-stats/${id}`)
   }
 }
