@@ -1207,8 +1207,8 @@ export enum TEAM_LIST {
     PM = 'PM',
     DEVOPS = 'DEVOPS',
     QA = 'QA',
-    DESIGNER = 'UI/UX',
-    DATASCIENCE = 'DATA SCIENCE',
+    DESIGNER = 'DESIGNER',
+    DATASCIENCE = 'DATASCIENCE',
 }
 
 export const TECHNOLOGIES_V2: TechnologyModel[] = [
