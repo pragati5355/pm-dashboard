@@ -24,8 +24,8 @@ export class WorkLogService {
         return this.http.post(API_LIST.SAVE_SHARE_WORKLOG, obj);
     }
 
-    getProjectResource(obj: any) {
-        return this.http.post(this.getResourceUrl, obj);
+    getProjectResource(id: any) {
+        return this.http.get(API_LIST.PROJECT_SPRING_BOOT_URL + `/get-resource-by-project/${id}`);
     }
 
     saveWorkLogs(obj: any) {

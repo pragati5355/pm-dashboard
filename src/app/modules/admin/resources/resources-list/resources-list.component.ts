@@ -28,6 +28,7 @@ import {
     debounceTime,
     distinctUntilChanged,
     map,
+    startWith,
     Subject,
     takeUntil,
 } from 'rxjs';
@@ -42,6 +43,10 @@ import moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { ResourceUploadCsvComponent } from '../resource-upload-csv/resource-upload-csv.component';
 import { ResourceModel } from '../common/models/resource.model';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Observable } from 'rxjs';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -91,7 +96,22 @@ export class ResourcesListComponent implements OnInit {
     isBench: boolean = false;
     isShadow: boolean = false;
     showFilterArea: boolean = false;
+    selectedTechnologiesForSearch: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+    technologyCtrl = new FormControl();
+    filteredTechnology: Observable<any[]>;
+    selectedTechnology: any[] = [];
+    allTechnologyList: any[] = [
+        'Apple',
+        'Lemon',
+        'Lime',
+        'Orange',
+        'Strawberry',
+    ];
+
+    @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
     constructor(
         private _authService: AuthService,
@@ -105,7 +125,79 @@ export class ResourcesListComponent implements OnInit {
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         public breakpointObserver: BreakpointObserver,
         private matDialog: MatDialog
-    ) {}
+    ) {
+        this.filteredTechnology = this.technologyCtrl.valueChanges.pipe(
+            startWith(null),
+            map((tech: string | null) =>
+                tech ? this._filter(tech) : this.allTechnologyList.slice()
+            )
+        );
+    }
+
+    add(event: MatChipInputEvent): void {
+        const value = (event.value || '').trim();
+
+        // Add our fruit
+        if (value) {
+            this.selectedTechnology.push(value);
+        }
+
+        // Clear the input value
+        event.chipInput!.clear();
+
+        this.technologyCtrl.setValue(null);
+    }
+
+    remove(fruit: string): void {
+        const index = this.selectedTechnology.indexOf(fruit);
+
+        if (index >= 0) {
+            this.selectedTechnology.splice(index, 1);
+            this.selectedTechnologiesForSearch.splice(index, 1);
+        }
+
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        this.selectedTechnology.push(event.option.value.name);
+        this.fruitInput.nativeElement.value = '';
+        this.technologyCtrl.setValue(null);
+
+        this.selectedTechnologiesForSearch?.push(event.option.value.id);
+
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
+    private _filter(value: string): string[] {
+        const filterValue = value;
+
+        return this.allTechnologyList.filter((tech) =>
+            tech?.name?.toLowerCase().includes(filterValue)
+        );
+    }
 
     ngOnInit(): void {
         this.loadData();
@@ -164,6 +256,8 @@ export class ResourcesListComponent implements OnInit {
         this.isShadowIsBench.setValue('');
         this.pagination = false;
         this.selectedProject = false;
+        this.selectedTechnologiesForSearch = [];
+        this.selectedTechnology = [];
         // this.showFilterArea = false;
         this.getList();
     }
@@ -172,6 +266,7 @@ export class ResourcesListComponent implements OnInit {
         this.projectService.getTechnology().subscribe(
             (res: any) => {
                 this.technologyList = res?.data;
+                this.allTechnologyList = res?.data;
             },
             (error) => {}
         );
@@ -182,6 +277,7 @@ export class ResourcesListComponent implements OnInit {
             this.totalRecored = res?.data?.totalRecored;
             this.resources = res?.data?.teamMember;
             this.initialLoading = false;
+            this.checkForLargerScreen();
         } else if (res?.data == null) {
             this.totalRecored = 0;
             this.initialLoading = false;
@@ -390,6 +486,7 @@ export class ResourcesListComponent implements OnInit {
         this.loadDataWithFilterPayload(payload);
     }
     clearTechnologySearch() {
+        this.pagination = false;
         this.showTechnologies = [];
         this.technologys.setValue('');
         this.count = 1;
@@ -427,6 +524,7 @@ export class ResourcesListComponent implements OnInit {
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
                 this.initialLoading = false;
+                this.checkForLargerScreen();
             },
             (error) => {
                 this.initialLoading = false;
@@ -451,8 +549,8 @@ export class ResourcesListComponent implements OnInit {
         const expriencePayload = this.getExperiencePayload();
         return {
             technology:
-                this.technologys?.value.length > 0
-                    ? this.technologys?.value
+                this.selectedTechnologiesForSearch?.length > 0
+                    ? this.selectedTechnologiesForSearch
                     : [],
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,

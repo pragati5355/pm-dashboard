@@ -73,3 +73,5 @@ export const StaticData = {
 export interface StaticInterface {
     [key: string]: string;
 }
+
+

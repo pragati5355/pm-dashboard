@@ -105,7 +105,6 @@ export class WorkLogsListComponent implements OnInit {
 
     close() {}
 
-    
     onTabChanged(event: any) {
         this.selectedTabIndex = event?.index;
         this.loadData(this.selectedYear, this.selectedTabIndex);
@@ -122,16 +121,11 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     onEmailSelected($event: any) {
-        console.log("Resource Event :- ", $event);
+        console.log('Resource Event :- ', $event);
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
-        this.selectedResourceEmail = resource;
-        console.log(
-            ' this.selectedResourceEmail : ',
-            this.selectedResourceEmail
-        );
-        this.selectedResourceId = resource[0]?.id;
+        this.selectedResourceId = resource[0]?.resourceId;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
@@ -154,16 +148,15 @@ export class WorkLogsListComponent implements OnInit {
         this.router.navigate([`/external-projects/details/${this.projectId}`]);
     }
 
-    allowEditWorklog(e : any) {
+    allowEditWorklog(e: any) {
         if (!this.checked) {
             e.source.checked = false;
             const dialogRef = this.matDialog.open(
-                WorkLogAllowEditDialogComponent , {
+                WorkLogAllowEditDialogComponent,
+                {
                     disableClose: true,
                     autoFocus: false,
-                    data:{
-
-                    }
+                    data: {},
                 }
             );
             dialogRef.afterClosed().subscribe((result: any) => {
@@ -352,13 +345,13 @@ export class WorkLogsListComponent implements OnInit {
     private getProjectResources() {
         this.initialLoading = true;
         this.workLogService
-            .getProjectResource({ projectId: this.projectId })
+            .getProjectResource(this.projectId)
             .subscribe((res: any) => {
                 this.initialLoading = false;
                 if (res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
-                    this.selectedResourceId = res?.data[0]?.id;
+                    this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
                 if (res?.tokenExpire) {

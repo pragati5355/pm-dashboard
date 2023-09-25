@@ -93,6 +93,8 @@ export const API_LIST = {
     GET_RESOURCE_PUBLIC: springBootUrl + '/project/resource/',
     GET_RESOURCE_WORKLOG_PUBLIC: springBootUrl + '/worklog/list-by-key',
     DOWNLOAD_WORKLOG_SHEET : springBootUrl + '/worklog/download-sheet',
+    SPRING_BOOT_URL:springBootUrl,
+    PROJECT_SPRING_BOOT_URL : springBootUrl + '/project',
 };
 
 export const UTILIZATION_VALUES = [0.25, 0.5, 1];
