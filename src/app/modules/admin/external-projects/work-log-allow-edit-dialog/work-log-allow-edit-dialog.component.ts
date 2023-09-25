@@ -9,7 +9,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class WorkLogAllowEditDialogComponent implements OnInit {
 
   submitInProcess = false;
-  mode: string;
+  defaultResource: string;
+  selectedResource : string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -22,6 +23,9 @@ export class WorkLogAllowEditDialogComponent implements OnInit {
 
 
   private loadData() {
-    this.mode = this.data?.mode;
+    this.defaultResource = this.data?.defaultResource;
+    console.log("this.defaultResource : ", this.defaultResource);
+    this.selectedResource = this.data?.selectedResource;
+    console.log("this.selectedResource : " ,  this.selectedResource)
   }
 }

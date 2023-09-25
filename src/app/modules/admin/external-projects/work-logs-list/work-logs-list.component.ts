@@ -53,6 +53,7 @@ export class WorkLogsListComponent implements OnInit {
     isResourceLoading: boolean = false;
     selectedResource: any;
     defaultResource: any;
+    defaultResourceName : any;
     currentMonth: number;
     currentYear: string = '';
     configEditWorklogStatus!: FormGroup;
@@ -125,7 +126,10 @@ export class WorkLogsListComponent implements OnInit {
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
+        this.selectedResource = resource[0]?.firstName + " " + resource[0]?.lastName;
+        console.log("this.selectedResource : ", this.selectedResource);
         this.selectedResourceId = resource[0]?.resourceId;
+        console.log(" this.selectedResourceId : " ,  this.selectedResourceId);
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
@@ -156,7 +160,11 @@ export class WorkLogsListComponent implements OnInit {
                 {
                     disableClose: true,
                     autoFocus: false,
-                    data: {},
+                    data: {
+                        defaultResource : this.defaultResourceName,
+                        selectedResource : this.selectedResource,
+                        selectedResourceId : this.selectedResourceId
+                    },
                 }
             );
             dialogRef.afterClosed().subscribe((result: any) => {
@@ -351,6 +359,7 @@ export class WorkLogsListComponent implements OnInit {
                 if (res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
+                    this.defaultResourceName = res?.data[0]?.firstName + " " + res?.data[0]?.lastName;
                     this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
