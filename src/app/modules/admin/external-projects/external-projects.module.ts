@@ -42,8 +42,12 @@ import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
 import { QuillModule } from 'ngx-quill';
 import { WorkLogsDownloadComponent } from './work-logs-download/work-logs-download.component';
+import {
+    MatSlideToggleModule,
+    _MatSlideToggleRequiredValidatorModule,
+} from '@angular/material/slide-toggle';
+import { WorkLogAllowEditDialogComponent } from './work-log-allow-edit-dialog/work-log-allow-edit-dialog.component';
 import { WorkLogShareComponent } from './work-log-share/work-log-share.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 @NgModule({
@@ -59,6 +63,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         SanitizeHtmlPipe,
         AddEditWorkLogComponent,
         WorkLogsDownloadComponent,
+        WorkLogAllowEditDialogComponent,
         WorkLogShareComponent,
     ],
     imports: [
@@ -97,6 +102,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         MatSlideToggleModule,
         ClipboardModule,
         QuillModule,
+        MatSlideToggleModule,
+        _MatSlideToggleRequiredValidatorModule,
     ],
     providers: [DatePipe],
 })
