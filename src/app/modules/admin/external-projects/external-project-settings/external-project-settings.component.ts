@@ -34,7 +34,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
     secondaryTimings: any[] = SECONDARY_TIMES;
     isLoading: boolean = false;
     isLoadingclearReminder: boolean = false;
-    showStep: number = 1;
+    showStep: number = 0;
     fixedCostForm: FormGroup;
     fixedCostInput: FormControl;
     timeAndMaterialForm: FormGroup;
@@ -170,7 +170,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
         const payload = this.getPayload();
         this.isLoading = true;
         this.externalProjectService
-            .sendReminder(payload)
+            .saveSettings(payload)
             .subscribe((res: any) => {
                 this.isLoading = false;
                 if (!res?.error) {
@@ -215,7 +215,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
             const control = this.fb.group({
                 name: [resource?.firstName + ' ' + resource?.lastName],
                 cost: [
-                    '',
+                    0,
                     [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
                 ],
             });

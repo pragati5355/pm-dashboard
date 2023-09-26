@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -28,5 +28,12 @@ export class ExternalProjectService {
 
     sendReminder(obj: any) {
         return this.http.post(this.sendRemindersUrl, obj);
+    }
+
+    saveSettings(obj: any) {
+        return this.http.post(
+            API_LIST.SPRING_BOOT_URL + '/project/setting/save',
+            obj
+        );
     }
 }
