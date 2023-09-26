@@ -117,7 +117,7 @@ export class WorkLogsListComponent implements OnInit {
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
-        this.selectedResourceId = resource[0]?.id;
+        this.selectedResourceId = resource[0]?.resourceId;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
     clearSelectedEmail() {
@@ -310,13 +310,13 @@ export class WorkLogsListComponent implements OnInit {
     private getProjectResources() {
         this.initialLoading = true;
         this.workLogService
-            .getProjectResource({ projectId: this.projectId })
+            .getProjectResource(this.projectId)
             .subscribe((res: any) => {
                 this.initialLoading = false;
                 if (res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
-                    this.selectedResourceId = res?.data[0]?.id;
+                    this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
                 if (res?.tokenExpire) {
