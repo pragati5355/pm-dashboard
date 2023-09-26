@@ -16,29 +16,21 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         displayProfilePicture: true,
     };
     statList: any = [];
-    resourceList: any[] = [
-        {
-            resourceName: 'Dhruv Kumar',
-            actualHours: 90,
-            idealHours: 60,
-        },
-        {
-            resourceName: 'Anjali Gupta',
-            actualHours: 70,
-            idealHours: 55,
-        },
-        {
-            resourceName: 'Jaya Bhat',
-            actualHours: 100,
-            idealHours: 94,
-        },
-        {
-            resourceName: 'Nila Patil',
-            actualHours: 80,
-            idealHours: 80,
-        },
-    ];
-
+    sumActualCost : number;
+    addActualCost: any[] = [];
+    actualCost: number;
+    sumIdealCost: number;
+    addIdealCost: any[] = [];
+    idealCost: number;
+    sumdifference:number;
+    adddifference: any[] = [];
+    difference: number;
+    sumActualWorkHrs:number;
+    addActualWorkHrs: any[] = [];
+    actualWorkHrs: number;
+    sumIdealWorkHrs:number;
+    addIdealWorkHrs: any[] = [];
+    idealWorkHrs: number;
     initialLoading: boolean = false;
     constructor(
         private router: Router,
@@ -54,6 +46,63 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
     goBack() {
         this.router.navigate([`/profit-loss`]);
+    }
+
+    private filterTotalOfAllColumns() {
+        /* Total Ideal Work Hrs */
+        this.statList.forEach((data) => {
+            this.idealWorkHrs = data?.totalIdealWorklogHrs;
+            this.addIdealWorkHrs.push(this.idealWorkHrs);
+        });
+        let resultIdealWorkHrs = 0;
+        this.addIdealWorkHrs.forEach((number) => {
+            resultIdealWorkHrs += number;
+        });
+        this.sumIdealWorkHrs = resultIdealWorkHrs;
+
+        /* Total Actual Work Hrs */
+        this.statList.forEach((data) => {
+            this.actualWorkHrs = data?.totalActualWorklogHrs;
+            this.addActualWorkHrs.push(this.actualWorkHrs);
+        });
+        let resultActualWorkHrs = 0;
+        this.addActualWorkHrs.forEach((number) => {
+            resultActualWorkHrs += number;
+        });
+        this.sumActualWorkHrs = resultActualWorkHrs;
+
+        /* Total Ideal Cost */
+        this.statList.forEach((data) => {
+            this.idealCost = data?.idealHourlyRate;
+            this.addIdealCost.push(this.idealCost);
+        });
+        let resultIdealCost = 0;
+        this.addIdealCost.forEach((number) => {
+            resultIdealCost += number;
+        });
+        this.sumIdealCost = resultIdealCost;
+
+        /* Total Actual Cost */
+        this.statList.forEach((data) => {
+            this.actualCost = data?.actualHourlyRate;
+            this.addActualCost.push(this.actualCost);
+        });
+        let result = 0;
+        this.addActualCost.forEach((number) => {
+            result += number;
+        });
+        this.sumActualCost = result;
+
+        /* Total Difference */
+        this.statList.forEach((data) => {
+            this.difference = data?.diff;
+            this.adddifference.push(this.difference);
+        });
+        let resultdiff = 0;
+        this.adddifference.forEach((number) => {
+            resultdiff += number;
+        });
+        this.sumdifference = resultdiff;
     }
 
     private routeSubscribeId() {
@@ -72,7 +121,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
                     this.statList = res?.data;
-                    console.log('this.statList : ', this.statList);
+                    this.filterTotalOfAllColumns();
                 } else if (res?.data == null) {
                     this.statList = [];
                 }
