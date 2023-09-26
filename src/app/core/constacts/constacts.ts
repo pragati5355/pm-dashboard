@@ -81,8 +81,8 @@ export const ROLE_LIST = [
     'PM',
     'DEVOPS',
     'QA',
-    'UI/UX',
-    'DATA SCIENCE',
+    'DESIGNER',
+    'DATASCIENCE',
 ];
 
 export const API_LIST = {
