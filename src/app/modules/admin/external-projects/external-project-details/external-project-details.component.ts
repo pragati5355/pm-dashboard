@@ -56,9 +56,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
 
     getProjectDetails() {
         this.projectService
-            .getOneProjectDetails({
-                id: this.projectId,
-            })
+            .getProjectById(this.projectId)
             .subscribe((res: any) => {
                 this.projectDetails = res?.data;
                 this.isLoading = false;
