@@ -16,6 +16,7 @@ import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { WorkLogAllowEditDialogComponent } from '../work-log-allow-edit-dialog/work-log-allow-edit-dialog.component';
 import { WorkLogShareComponent } from '../work-log-share/work-log-share.component';
+import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
 
 @Component({
     selector: 'app-work-logs-list',
@@ -59,8 +60,6 @@ export class WorkLogsListComponent implements OnInit {
     configEditWorklogStatus!: FormGroup;
     selectedResourceEmail: any[];
     checked: boolean = false;
-    isEditAllow: boolean = false;
-
     yearAndMonth: any[] = [
         {
             '2022': [
@@ -85,7 +84,8 @@ export class WorkLogsListComponent implements OnInit {
         private fuseConfirmationService: FuseConfirmationService,
         private workLogService: WorkLogService,
         private snackBar: SnackBar,
-        private loggedInService: LoggedInUserService
+        private loggedInService: LoggedInUserService,
+        private externalProjectServiceApi : ExternalProjectsApiService
     ) {}
 
     ngOnInit(): void {
@@ -122,14 +122,12 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     onEmailSelected($event: any) {
-        console.log('Resource Event :- ', $event);
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
         this.selectedResource = resource[0]?.firstName + " " + resource[0]?.lastName;
-        console.log("this.selectedResource : ", this.selectedResource);
         this.selectedResourceId = resource[0]?.resourceId;
-        console.log(" this.selectedResourceId : " ,  this.selectedResourceId);
+        this.checked = resource[0]?.allowEdit;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
 
@@ -163,7 +161,7 @@ export class WorkLogsListComponent implements OnInit {
                     data: {
                         defaultResource : this.defaultResourceName,
                         selectedResource : this.selectedResource,
-                        selectedResourceId : this.selectedResourceId
+                        selectedResourceId : this.selectedResourceId,
                     },
                 }
             );
@@ -171,13 +169,46 @@ export class WorkLogsListComponent implements OnInit {
                 if (result) {
                     this.checked = !this.checked;
                     console.log('Saying Yes',this.checked);
+                    const payload = {
+                        projectId : this.projectId,
+                        allowEdit : "true",
+                        resourceId : this.selectedResourceId
+                    };
+                    this.initialLoading = true;
+                    this.externalProjectServiceApi.getAllowEditWorklog(payload).subscribe(
+                        (res:any) => {
+                            this.initialLoading = false;
+                            if(res?.statusCode == 200) {
+                                this.snackBar.successSnackBar("Turned On Allow Edit Toggle");
+                            }
+                        },
+                        (err) => {
+                            this.snackBar.errorSnackBar(err?.message);
+                        }
+                    )
                 } else {
                     console.log('Saying NO',this.checked);
                 }
             });
         } else {
             this.checked = !this.checked;
-            console.log('Toggle Off : ',this.checked);
+            const payload = {
+                projectId : this.projectId,
+                allowEdit : "false",
+                resourceId : this.selectedResourceId
+            };
+            this.initialLoading = true;
+            this.externalProjectServiceApi.getAllowEditWorklog(payload).subscribe(
+                (res:any) => {
+                    this.initialLoading = false;
+                    if(res?.statusCode == 200) {
+                        this.snackBar.successSnackBar("Turned Off Allow Edit Toggle");
+                    }
+                },
+                (err) => {
+                    this.snackBar.errorSnackBar(err?.message);
+                }
+            )
         }
     }
 
@@ -317,8 +348,6 @@ export class WorkLogsListComponent implements OnInit {
             this.initialLoading = false;
             if (!res?.error) {
                 this.workLogsList = res?.data?.list;
-                console.log(this.workLogsList);
-
                 this.projectName = res?.data?.projectName;
             }
             if (res?.tokenExpire) {
@@ -359,6 +388,7 @@ export class WorkLogsListComponent implements OnInit {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
                     this.defaultResourceName = res?.data[0]?.firstName + " " + res?.data[0]?.lastName;
+                    this.checked = res?.data[0]?.allowEdit;
                     this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }

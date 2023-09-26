@@ -11,6 +11,7 @@ export class WorkLogAllowEditDialogComponent implements OnInit {
   submitInProcess = false;
   defaultResource: string;
   selectedResource : string;
+  id : number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -22,6 +23,7 @@ export class WorkLogAllowEditDialogComponent implements OnInit {
   }
 
   private loadData() {
+    this.id = this.data?.selectedResourceId;
     if(this.data?.selectedResource == undefined){
       this.defaultResource = this.data?.defaultResource;
     }else{
