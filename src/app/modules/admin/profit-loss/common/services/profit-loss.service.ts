@@ -7,12 +7,12 @@ import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 })
 export class ProfitLossService {
 
-  pNLProjectListUrl = AppConstants['GET_PROJECTS'];
+  pNLProjectListUrl = API_LIST.PROJECT_SPRING_BOOT_URL;
 
   constructor(private http: HttpClient) { }
 
-  getPNLProjectList(obj: any) {
-    return this.http.post(this.pNLProjectListUrl, obj);
+  getPNLProjectList() {
+    return this.http.get(this.pNLProjectListUrl + `/list`);
   }
 
   getPNLStatList(id:number){

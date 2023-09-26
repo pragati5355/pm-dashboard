@@ -65,15 +65,15 @@
                                     </div>
 
                                     <div class="hidden md:block truncate">
-                                        {{ list?.startDate | date }}
+                                        {{ (list?.startDate | date)  || "-"}}
                                     </div>
 
                                     <div class="hidden md:block truncate">
-                                        {{ list?.endDate | date}}
+                                        {{ (list?.endDate | date) || "-"}}
                                     </div>
 
                                     <div class="hidden md:block truncate">
-                                       {{"Profit"}}
+                                       {{ list?.status || "-"}}
                                     </div>
                                 </div>
                             </ng-container>

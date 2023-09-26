@@ -72,7 +72,7 @@ export class ProfitLossProjectsListComponent implements OnInit {
                 projectName: this.searchValue,
             };
             this.pagination = true;
-            this.pNLProjectList.getPNLProjectList(payload).subscribe({
+            this.pNLProjectList.getPNLProjectList().subscribe({
                 next: (res: any) => {
                     this.pagination = false;
                     if (res) {
@@ -97,13 +97,12 @@ export class ProfitLossProjectsListComponent implements OnInit {
             projectKey: '',
             projectName: this.searchValue,
         };
-        this.pNLProjectList.getPNLProjectList(payload).subscribe(
+        this.pNLProjectList.getPNLProjectList().subscribe(
             (res: any) => {
                 this.initialLoading = false;
-                if (res?.error === false) {
-                    this.projectList = res?.data?.projects;
-                    this.filteredProjectList = res?.data?.projects;
-                    this.totalProject = res?.data?.totalRecored;
+                if (res?.statusCode === 200) {
+                    this.projectList = res?.data;
+                    this.filteredProjectList = res?.data;
                     this.checkForLargerScreen();
                 } else if (res?.data == null) {
                     this.projectList = [];
