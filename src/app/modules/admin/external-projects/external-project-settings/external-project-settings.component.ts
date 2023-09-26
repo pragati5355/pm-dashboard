@@ -155,17 +155,17 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
-        if (
-            !this.firstReminderCheck &&
-            this.firstReminderControl === '' &&
-            !this.secondReminderCheck &&
-            this.secondReminderControl === '' &&
-            !this.thirdReminderCheck &&
-            this.thirdReminderControl === ''
-        ) {
-            this.snackBar.errorSnackBar('Select reminder');
-            return;
-        }
+        // if (
+        //     !this.firstReminderCheck &&
+        //     this.firstReminderControl === '' &&
+        //     !this.secondReminderCheck &&
+        //     this.secondReminderControl === '' &&
+        //     !this.thirdReminderCheck &&
+        //     this.thirdReminderControl === ''
+        // ) {
+        //     this.snackBar.errorSnackBar('Select reminder');
+        //     return;
+        // }
 
         const payload = this.getPayload();
         this.isLoading = true;
