@@ -11,13 +11,365 @@
     </button>
 </div>
 
-<mat-tab-group [@.disabled]="true">
-    <mat-tab>
-        <ng-template mat-tab-label> Project reminders </ng-template>
-        <app-send-reminders></app-send-reminders>
-    </mat-tab>
-    <mat-tab>
-        <ng-template mat-tab-label> Cost type </ng-template>
-        <app-cost-type-setting></app-cost-type-setting>
-    </mat-tab>
-</mat-tab-group>
+<div class="relative h-[620px] overflow-auto">
+    <div class="fixed min-h-[620px] w-[200px] shadow rounded p-2">
+        <div
+            class="text-center font-semibold py-2 mb-2 cursor-pointer"
+            [ngClass]="{
+                'bg-gray-200': showStep === 0,
+                'bg-gray-50 ': showStep !== 0
+            }"
+            (click)="changeStep(0)"
+        >
+            Project reminders
+        </div>
+        <div
+            class="text-center font-semibold py-2 mb-2 cursor-pointer"
+            [ngClass]="{
+                'bg-gray-200': showStep === 1,
+                'bg-gray-50 ': showStep !== 1
+            }"
+            (click)="changeStep(1)"
+        >
+            Cost setting
+        </div>
+    </div>
+    <div
+        class="ml-[220px] min-h-[620px] shadow rounded p-2"
+        *ngIf="showStep === 0"
+    >
+        <div class="">
+            <div>
+                <div class="flex items-center justify-between">
+                    <div class="text-xl font-semibold">Reminders</div>
+                    <button
+                        mat-flat-button
+                        color="primary"
+                        [disabled]="
+                            isLoadingclearReminder ||
+                            this.data?.projectSettings === null ||
+                            this.data?.projectSettings === ''
+                        "
+                        (click)="clearReminders()"
+                    >
+                        <mat-progress-spinner
+                            *ngIf="isLoadingclearReminder"
+                            class="mr-2"
+                            mode="indeterminate"
+                            diameter="24"
+                        ></mat-progress-spinner>
+                        Clear reminders
+                    </button>
+                </div>
+                <div class="mt-4">
+                    <div class="font-medium">First reminder</div>
+                    <div class="flex items-center mt-1">
+                        <mat-checkbox
+                            [color]="'primary'"
+                            class="font-medium mr-4"
+                            [(ngModel)]="firstReminderCheck"
+                            (change)="firstReminderCheckbox($event)"
+                            >On slack</mat-checkbox
+                        >
+                        <mat-form-field class="w-60">
+                            <mat-select
+                                [placeholder]="'Select time'"
+                                (selectionChange)="changeTime($event)"
+                                [disabled]="!firstReminderCheck"
+                                [(ngModel)]="firstSelect"
+                            >
+                                <mat-option
+                                    *ngFor="let time of primaryTimings"
+                                    [value]="time"
+                                >
+                                    {{ time?.viewValue }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <div class="font-medium">Second reminder</div>
+                    <div class="flex items-center mt-1">
+                        <mat-checkbox
+                            [color]="'primary'"
+                            class="font-medium mr-4"
+                            [checked]="secondReminderCheck"
+                            (change)="secondReminderCheckbox($event)"
+                            [disabled]="
+                                firstReminderControl === '' ||
+                                !firstReminderCheck
+                            "
+                            >On slack</mat-checkbox
+                        >
+                        <mat-form-field class="w-60">
+                            <mat-select
+                                [placeholder]="'Select time'"
+                                (selectionChange)="changeTimeSecond($event)"
+                                [(ngModel)]="secondSelect"
+                                [disabled]="
+                                    firstReminderControl === '' ||
+                                    !secondReminderCheck
+                                "
+                            >
+                                <mat-option
+                                    *ngFor="let time of primaryTimings"
+                                    [value]="time"
+                                    [disabled]="
+                                        time?.id <= firstReminderControl?.id
+                                    "
+                                >
+                                    {{ time?.viewValue }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <div class="font-medium">Third reminder</div>
+                    <div class="flex items-center mt-1">
+                        <mat-checkbox
+                            [color]="'primary'"
+                            class="font-medium mr-4"
+                            [checked]="thirdReminderCheck"
+                            (change)="thirdReminderCheckbox($event)"
+                            [disabled]="!secondReminderCheck"
+                            >On slack</mat-checkbox
+                        >
+                        <mat-form-field class="w-60">
+                            <mat-select
+                                [placeholder]="'Select time'"
+                                (selectionChange)="changeTimeThird($event)"
+                                [(ngModel)]="thirdSelect"
+                                [disabled]="
+                                    secondReminderControl === '' ||
+                                    !thirdReminderCheck
+                                "
+                            >
+                                <mat-option
+                                    *ngFor="let time of secondaryTimings"
+                                    [value]="time"
+                                    [disabled]="
+                                        time?.id <= secondReminderControl?.id
+                                    "
+                                >
+                                    {{ time?.viewValue }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="ml-[220px] min-h-[620px] shadow rounded p-2"
+        *ngIf="showStep === 1"
+    >
+        <div class="">
+            <div class="text-xl font-semibold mt-2 mb-4">Cost type</div>
+
+            <form [formGroup]="fixedCostForm">
+                <div class="flex flex-col w-full">
+                    <div class="w-[200px]">
+                        <mat-form-field class="w-full">
+                            <mat-label>Select cost type</mat-label>
+                            <mat-select
+                                formControlName="costType"
+                                name="food"
+                                (selectionChange)="costTypeChange($event)"
+                            >
+                                <mat-option
+                                    *ngFor="let type of costTypes"
+                                    [value]="type"
+                                >
+                                    {{ type?.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div
+                        class="w-[200px]"
+                        *ngIf="
+                            fixedCostForm?.get('costType')?.value?.value ===
+                            'fixedCost'
+                        "
+                    >
+                        <mat-form-field class="w-full">
+                            <mat-label>Enter cost</mat-label>
+                            <input
+                                type="number"
+                                matInput
+                                formControlName="costInput"
+                                placeholder="Enter cost"
+                            />
+                            <mat-error
+                                *ngIf="
+                                    fixedCostForm
+                                        ?.get('costInput')
+                                        .hasError('required')
+                                "
+                            >
+                                Cost is <strong>required</strong>
+                            </mat-error>
+                            <mat-error
+                                *ngIf="
+                                    fixedCostForm
+                                        ?.get('costInput')
+                                        ?.hasError('pattern')
+                                "
+                            >
+                                <div>
+                                    Please enter valid <strong>cost</strong>
+                                </div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+
+            <form [formGroup]="timeAndMaterialForm">
+                <div
+                    class="w-[200px]"
+                    *ngIf="
+                        fixedCostForm?.get('costType')?.value?.value ===
+                        'timeAndMaterial'
+                    "
+                >
+                    <mat-form-field class="w-full">
+                        <mat-label>Nature of cost</mat-label>
+                        <mat-select
+                            formControlName="type"
+                            name="food"
+                            (selectionChange)="costTypeChange($event)"
+                        >
+                            <mat-option
+                                *ngFor="let type of timeAndMaterialType"
+                                [value]="type"
+                            >
+                                {{ type?.label }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div
+                    class="w-[200px]"
+                    *ngIf="
+                        timeAndMaterialForm?.get('type')?.value?.value ===
+                            'flatRate' &&
+                        fixedCostForm?.get('costType')?.value?.value ===
+                            'timeAndMaterial'
+                    "
+                >
+                    <mat-form-field class="w-full">
+                        <mat-label>Enter cost</mat-label>
+                        <input
+                            type="number"
+                            matInput
+                            formControlName="costInput"
+                            placeholder="Enter cost"
+                        />
+                        <mat-error
+                            *ngIf="
+                                timeAndMaterialForm
+                                    ?.get('costInput')
+                                    .hasError('required')
+                            "
+                        >
+                            Cost is <strong>required</strong>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="
+                                timeAndMaterialForm
+                                    ?.get('costInput')
+                                    ?.hasError('pattern')
+                            "
+                        >
+                            <div>Please enter valid <strong>cost</strong></div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div
+                    formArrayName="resources"
+                    class="w-full"
+                    *ngIf="
+                        timeAndMaterialForm?.get('type')?.value?.value ===
+                            'RESOURCE_SPECIFIC' &&
+                        fixedCostForm?.get('costType')?.value?.value ===
+                            'timeAndMaterial'
+                    "
+                >
+                    <ng-container
+                        *ngFor="
+                            let resource of resources?.controls;
+                            let i = index;
+                            let last = last
+                        "
+                    >
+                        <form [formGroupName]="i">
+                            <div class="flex gap-4 w-full">
+                                <div class="flex-1">
+                                    <mat-form-field
+                                        class="w-full"
+                                        id="userlist"
+                                        [floatLabel]="'always'"
+                                    >
+                                        <mat-label>Name</mat-label>
+                                        <input
+                                            matInput
+                                            placeholder="Certificate Name"
+                                            formControlName="name"
+                                            class="inputlist"
+                                        />
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="flex-2">
+                                    <mat-form-field class="w-full">
+                                        <mat-label>Hourly cost</mat-label>
+                                        <input
+                                            type="number"
+                                            matInput
+                                            formControlName="cost"
+                                            placeholder="Enter cost"
+                                        />
+                                        <mat-error
+                                            *ngIf="
+                                                resource
+                                                    ?.get('cost')
+                                                    .hasError('required')
+                                            "
+                                        >
+                                            Cost is <strong>required</strong>
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="
+                                                !resource
+                                                    ?.get('cost')
+                                                    .hasError('required') &&
+                                                resource
+                                                    ?.get('cost')
+                                                    ?.hasError('pattern')
+                                            "
+                                        >
+                                            <div>
+                                                Please enter valid
+                                                <strong>cost</strong>
+                                            </div>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
