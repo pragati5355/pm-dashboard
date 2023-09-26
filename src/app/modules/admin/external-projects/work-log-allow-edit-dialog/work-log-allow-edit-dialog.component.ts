@@ -21,11 +21,11 @@ export class WorkLogAllowEditDialogComponent implements OnInit {
     this.loadData();
   }
 
-
   private loadData() {
-    this.defaultResource = this.data?.defaultResource;
-    console.log("this.defaultResource : ", this.defaultResource);
-    this.selectedResource = this.data?.selectedResource;
-    console.log("this.selectedResource : " ,  this.selectedResource)
+    if(this.data?.selectedResource == undefined){
+      this.defaultResource = this.data?.defaultResource;
+    }else{
+      this.defaultResource = this.data?.selectedResource;
+    }
   }
 }
