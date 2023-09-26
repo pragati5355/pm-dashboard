@@ -76,7 +76,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
     }
 
     costTypeChange(event: MatSelectChange) {
-        console.log(this.fixedCostForm?.value);
+        // console.log(this.fixedCostForm?.value);
     }
 
     cancel() {
@@ -168,18 +168,18 @@ export class ExternalProjectSettingsComponent implements OnInit {
         // }
 
         const payload = this.getPayload();
-        this.isLoading = true;
-        this.externalProjectService
-            .saveSettings(payload)
-            .subscribe((res: any) => {
-                this.isLoading = false;
-                if (!res?.error) {
-                    this.snackBar.successSnackBar(res?.message);
-                    this.dialogRef.close(true);
-                } else {
-                    this.snackBar.errorSnackBar(res?.message);
-                }
-            });
+        // this.isLoading = true;
+        // this.externalProjectService
+        //     .saveSettings(payload)
+        //     .subscribe((res: any) => {
+        //         this.isLoading = false;
+        //         if (!res?.error) {
+        //             this.snackBar.successSnackBar(res?.message);
+        //             this.dialogRef.close(true);
+        //         } else {
+        //             this.snackBar.errorSnackBar(res?.message);
+        //         }
+        //     });
     }
 
     clearReminders() {
@@ -214,6 +214,8 @@ export class ExternalProjectSettingsComponent implements OnInit {
         this.data?.teamModel?.map((resource) => {
             const control = this.fb.group({
                 name: [resource?.firstName + ' ' + resource?.lastName],
+                resourceId: resource?.resourceId,
+                vendor: resource?.vendor ? true : false,
                 cost: [
                     0,
                     [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
@@ -296,6 +298,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     time: this.thirdReminderControl?.value,
                 },
             ],
+            projectCostModel: {},
         };
         for (let i = 0; i < payload?.sourceType?.length - 1; i++) {
             if (payload?.reminderModel[i]?.time === undefined) {
@@ -304,6 +307,53 @@ export class ExternalProjectSettingsComponent implements OnInit {
         }
         const timeModel = payload?.reminderModel?.filter((item) => item);
         payload.reminderModel = timeModel;
+
+        const resourceCostModel = this.getResourceCostModel();
+
+        if (this.fixedCostForm?.get('costType')?.value?.value === 'fixedCost') {
+            payload.projectCostModel = {
+                costType: 'FIXED_COST',
+                flatRate: this.fixedCostForm?.get('costInput')?.value,
+            };
+        } else {
+            if (
+                this.timeAndMaterialForm?.get('type')?.value?.value ===
+                'flatRate'
+            ) {
+                payload.projectCostModel = {
+                    costType: 'TANDM',
+                    flatRate: this.timeAndMaterialForm?.get('costInput')?.value,
+                    tmType: 'FLAT_RATE',
+                };
+            } else {
+                payload.projectCostModel = {
+                    costType: 'TANDM',
+                    tmType: 'RESOURCE_SPECIFIC',
+                    resourceCostModel: resourceCostModel,
+                };
+            }
+        }
+
+        console.log(payload);
+
         return payload;
+    }
+
+    private getResourceCostModel() {
+        return this.timeAndMaterialForm
+            ?.get('resources')
+            ?.value?.map((resource: any) => {
+                if (resource?.vendor) {
+                    return {
+                        resourceId: resource?.resourceId,
+                        cost: resource?.cost,
+                        vendorHourlyCost: 400,
+                    };
+                }
+                return {
+                    resourceId: resource?.resourceId,
+                    cost: resource?.cost,
+                };
+            });
     }
 }
