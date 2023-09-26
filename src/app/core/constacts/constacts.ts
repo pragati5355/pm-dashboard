@@ -81,8 +81,8 @@ export const ROLE_LIST = [
     'PM',
     'DEVOPS',
     'QA',
-    'UI/UX',
-    'DATA SCIENCE',
+    'DESIGNER',
+    'DATASCIENCE',
 ];
 
 export const API_LIST = {
@@ -92,8 +92,8 @@ export const API_LIST = {
     SAVE_SHARE_WORKLOG: springBootUrl + '/worklog/setting',
     GET_RESOURCE_PUBLIC: springBootUrl + '/project/resource/',
     GET_RESOURCE_WORKLOG_PUBLIC: springBootUrl + '/worklog/list-by-key',
-    DOWNLOAD_WORKLOG_SHEET : springBootUrl + '/worklog/download-sheet',
-    SPRING_BOOT_URL:springBootUrl,
+    DOWNLOAD_WORKLOG_SHEET: springBootUrl + '/worklog/download-sheet',
+    SPRING_BOOT_URL: springBootUrl,
 };
 
 export const UTILIZATION_VALUES = [0.25, 0.5, 1];
