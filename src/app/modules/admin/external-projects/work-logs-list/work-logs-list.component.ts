@@ -170,15 +170,14 @@ export class WorkLogsListComponent implements OnInit {
             dialogRef.afterClosed().subscribe((result: any) => {
                 if (result) {
                     this.checked = !this.checked;
+                    console.log('Saying Yes',this.checked);
                 } else {
-                    console.log(
-                        'this.checked toggle should not : ',
-                        this.checked
-                    );
+                    console.log('Saying NO',this.checked);
                 }
             });
         } else {
             this.checked = !this.checked;
+            console.log('Toggle Off : ',this.checked);
         }
     }
 
