@@ -168,7 +168,6 @@ export class WorkLogsListComponent implements OnInit {
             dialogRef.afterClosed().subscribe((result: any) => {
                 if (result) {
                     this.checked = !this.checked;
-                    console.log('Saying Yes',this.checked);
                     const payload = {
                         projectId : this.projectId,
                         allowEdit : "true",
