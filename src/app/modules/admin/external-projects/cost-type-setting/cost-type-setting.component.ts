@@ -84,6 +84,7 @@ export class CostTypeSettingComponent implements OnInit {
                     [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
                 ],
             });
+            control?.get('name')?.disable();
             this.resources?.push(control);
         });
 
