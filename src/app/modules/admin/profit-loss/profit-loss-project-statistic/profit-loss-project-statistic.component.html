@@ -72,7 +72,7 @@
                                         <div class="">
                                             $ {{ list?.diff }} 
                                         </div>
-                                        <div class="flex items-end ml-2" *ngIf="list?.idealHourlyRate >= list?.actualHourlyRate">
+                                        <div class="flex items-end ml-2" *ngIf="list?.idealHourlyRate > list?.actualHourlyRate">
                                             <mat-icon class="flex" style="color: rgb(74 222 128)!important;">arrow_upward</mat-icon>
                                         </div>   
                                         <div class="flex items-end ml-2" *ngIf="list?.idealHourlyRate < list?.actualHourlyRate">
