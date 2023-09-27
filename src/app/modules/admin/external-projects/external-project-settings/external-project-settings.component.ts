@@ -73,8 +73,6 @@ export class ExternalProjectSettingsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        console.log(this.data?.projectSettings);
-
         this.patchReminders();
         this.initializeForm();
     }
@@ -159,18 +157,6 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
-        // if (
-        //     !this.firstReminderCheck &&
-        //     this.firstReminderControl === '' &&
-        //     !this.secondReminderCheck &&
-        //     this.secondReminderControl === '' &&
-        //     !this.thirdReminderCheck &&
-        //     this.thirdReminderControl === ''
-        // ) {
-        //     this.snackBar.errorSnackBar('Select reminder');
-        //     return;
-        // }
-
         const payload = this.getPayload();
         this.isLoading = true;
         this.externalProjectService
@@ -208,9 +194,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
     private initializeForm() {
         this.initializeFixedCostForm();
-
         this.initializeTimeAndMaterialForm();
-
         this.patchResourcesForTandM();
     }
 
@@ -222,14 +206,16 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     resourceId: resource?.resourceId,
                     vendor: resource?.vendor ? true : false,
                     cost: [
-                        0,
+                        resource?.cost ? resource?.cost : 0,
                         [
                             Validators.required,
                             Validators.pattern(/^\d+(\.\d+)?$/),
                         ],
                     ],
                     costToCompany: [
-                        0,
+                        resource?.vendorHourlyCost
+                            ? resource?.vendorHourlyCost
+                            : 0,
                         [
                             Validators.required,
                             Validators.pattern(/^\d+(\.\d+)?$/),
@@ -244,7 +230,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     resourceId: resource?.resourceId,
                     vendor: resource?.vendor ? true : false,
                     cost: [
-                        0,
+                        resource?.cost ? resource?.cost : 0,
                         [
                             Validators.required,
                             Validators.pattern(/^\d+(\.\d+)?$/),
@@ -255,6 +241,30 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 this.resources?.push(control);
             }
         });
+
+        this.patchTandMCost();
+    }
+
+    private patchTandMCost() {
+        this.timeAndMaterialForm
+            ?.get('resources')
+            ?.value?.map((resource: any, index) => {
+                const match =
+                    this.data?.projectSettings?.projectCostModel?.resourceCostModel?.filter(
+                        (innerResource) => {
+                            return (
+                                resource?.resourceId ===
+                                innerResource?.resourceId
+                            );
+                        }
+                    );
+
+                if (match?.length > 0) {
+                    this.resources
+                        ?.at(index)
+                        ?.patchValue({ ...resource, cost: match[0]?.cost });
+                }
+            });
     }
 
     private initializeTimeAndMaterialForm() {
