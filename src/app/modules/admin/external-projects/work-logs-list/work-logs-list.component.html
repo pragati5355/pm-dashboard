@@ -13,6 +13,17 @@
             </div>
             <div class="flex justify-end items-center">
                 <div class="flex items-center">
+                    
+                    <div class="flex items-center px-5 mt-2" *ngIf="userRole === 'ADMIN'">
+                        <span class="font-medium pr-3 "> Allow Edit Worklog </span>
+                        <mat-slide-toggle 
+                            [color]="'primary'"
+                            (change)="allowEditWorklog($event)" 
+                            [checked]="checked"
+                            [disabled]="initialLoading">
+                        </mat-slide-toggle>
+                    </div>
+
                     <div class="w-[350px] mr-4" *ngIf="userRole === 'ADMIN'">
                         <mat-form-field class="w-full">
                             <mat-label class="">Resource</mat-label>
@@ -52,6 +63,7 @@
                             >
                         </mat-select>
                     </mat-form-field>
+
                 </div>
                 <div *ngIf="userRole !== 'ADMIN'">
                     <button
@@ -70,7 +82,7 @@
                 </div>
                 <button
                     *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
-                    class="ml-3"
+                    class="ml-3 mr-2 mt-2"
                     mat-mini-fab
                     color="primary"
                     matTooltip="Share"
@@ -81,7 +93,6 @@
                 </button>
             </div>
         </div>
-
         <div class="mt-4">
             <mat-tab-group
                 [color]="'primary'"
@@ -187,6 +198,7 @@
                                         <div class="pb-2">
                                             <div>
                                                 <button
+                                                [disabled]="logs?.allowEdit === false"
                                                     (click)="
                                                         addOrEditWorklog(
                                                             logs,
@@ -195,7 +207,7 @@
                                                     "
                                                 >
                                                     <mat-icon
-                                                        [matTooltip]="'Edit'"
+                                                        [matTooltip]="'Edit'" 
                                                         class="text-gray-400 icon-size-5 cursor-pointer mr-4"
                                                         svgIcon="heroicons_outline:pencil"
                                                     ></mat-icon>

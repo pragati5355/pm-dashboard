@@ -1,0 +1,21 @@
+<div class="items-center">
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-2 sm:pl-4"
+    >
+        <div class="flex text-lg font-medium">
+            <mat-icon style="color: rgb(250, 88, 88)">new_releases</mat-icon>
+            <span class="px-2 leading-6 font-semibold">Allow Edit Worklog</span>
+        </div>
+    </div>
+    <mat-dialog-content >
+        <div class="m-0 ml-4"  style="font-size: medium;">
+            Do you want to allow 
+            <span class="font-semibold">{{defaultResource}}</span> 
+            to Edit the worklog.
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="justify-end mt-5">
+        <button mat-button [mat-dialog-close]="null" [color]="''">No</button>
+        <button mat-button [mat-dialog-close]="true" cdkFocusInitial [color]="'primary'">Yes</button>
+    </mat-dialog-actions>
+</div>

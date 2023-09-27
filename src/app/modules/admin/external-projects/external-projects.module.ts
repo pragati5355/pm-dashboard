@@ -42,8 +42,12 @@ import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
 import { QuillModule } from 'ngx-quill';
 import { WorkLogsDownloadComponent } from './work-logs-download/work-logs-download.component';
+import {
+    MatSlideToggleModule,
+    _MatSlideToggleRequiredValidatorModule,
+} from '@angular/material/slide-toggle';
+import { WorkLogAllowEditDialogComponent } from './work-log-allow-edit-dialog/work-log-allow-edit-dialog.component';
 import { WorkLogShareComponent } from './work-log-share/work-log-share.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ExternalProjectSettingsComponent } from './external-project-settings/external-project-settings.component';
@@ -61,6 +65,7 @@ import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.
         SanitizeHtmlPipe,
         AddEditWorkLogComponent,
         WorkLogsDownloadComponent,
+        WorkLogAllowEditDialogComponent,
         WorkLogShareComponent,
         ExternalProjectSettingsComponent,
         CostTypeSettingComponent,
@@ -101,6 +106,8 @@ import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.
         MatSlideToggleModule,
         ClipboardModule,
         QuillModule,
+        MatSlideToggleModule,
+        _MatSlideToggleRequiredValidatorModule,
     ],
     providers: [DatePipe],
 })
