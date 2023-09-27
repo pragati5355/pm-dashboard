@@ -165,23 +165,48 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
-        // if (this.fixedCostForm?.get('costType')?.value?.value === ) console.log(this.fixedCostForm);
+        if (
+            this.fixedCostForm?.get('costType')?.value?.value ===
+                'FIXED_COST' &&
+            this.fixedCostForm?.invalid
+        ) {
+            this.snackBar.errorSnackBar('Please enter valid data');
+            return;
+        }
 
+        if (
+            this.fixedCostForm?.get('costType')?.value?.value === 'TANDM' &&
+            this.timeAndMaterialForm?.get('type')?.value === null
+        ) {
+            this.snackBar.errorSnackBar('Please select nature of cost');
+            return;
+        }
+
+        if (
+            this.fixedCostForm?.get('costType')?.value?.value === 'TANDM' &&
+            (this.timeAndMaterialForm?.get('type')?.value.value ===
+                'FLAT_RATE' ||
+                this.timeAndMaterialForm?.get('type')?.value.value ===
+                    'RESOURCE_SPECIFIC') &&
+            this.timeAndMaterialForm?.invalid
+        ) {
+            this.snackBar.errorSnackBar('Please enter valid data');
+            return;
+        }
         const payload = this.getPayload();
-        console.log(payload);
 
-        // this.isLoading = true;
-        // this.externalProjectService
-        //     .saveSettings(payload)
-        //     .subscribe((res: any) => {
-        //         this.isLoading = false;
-        //         if (!res?.error) {
-        //             this.snackBar.successSnackBar(res?.message);
-        //             this.dialogRef.close(true);
-        //         } else {
-        //             this.snackBar.errorSnackBar(res?.message);
-        //         }
-        //     });
+        this.isLoading = true;
+        this.externalProjectService
+            .saveSettings(payload)
+            .subscribe((res: any) => {
+                this.isLoading = false;
+                if (!res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.dialogRef.close(true);
+                } else {
+                    this.snackBar.errorSnackBar(res?.message);
+                }
+            });
     }
 
     clearReminders() {
