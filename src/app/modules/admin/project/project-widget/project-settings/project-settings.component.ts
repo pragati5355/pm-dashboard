@@ -8,19 +8,22 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
+import {
+    PRIMARY_TIMES,
+    SECONDARY_TIMES,
+} from '@modules/admin/external-projects/common/constants';
+import { ExternalProjectService } from '@modules/admin/external-projects/common/services/external-project.service';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { PRIMARY_TIMES, SECONDARY_TIMES } from '../common/constants';
-import { ExternalProjectService } from '../common/services/external-project.service';
 interface costTypeInterface {
     value: string;
     label: string;
 }
 @Component({
-    selector: 'app-external-project-settings',
-    templateUrl: './external-project-settings.component.html',
-    styleUrls: ['./external-project-settings.component.scss'],
+    selector: 'app-project-settings',
+    templateUrl: './project-settings.component.html',
+    styleUrls: ['./project-settings.component.scss'],
 })
-export class ExternalProjectSettingsComponent implements OnInit {
+export class ProjectSettingsComponent implements OnInit {
     firstReminderCheck: boolean = false;
     secondReminderCheck: boolean = false;
     thirdReminderCheck: boolean = false;
@@ -73,7 +76,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
         return this.timeAndMaterialForm?.get('resources') as FormArray;
     }
     constructor(
-        public dialogRef: MatDialogRef<ExternalProjectSettingsComponent>,
+        public dialogRef: MatDialogRef<ProjectSettingsComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private snackBar: SnackBar,
         private externalProjectService: ExternalProjectService,
