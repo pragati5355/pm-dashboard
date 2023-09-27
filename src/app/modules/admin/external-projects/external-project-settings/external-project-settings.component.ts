@@ -203,7 +203,6 @@ export class ExternalProjectSettingsComponent implements OnInit {
         }
 
         const payload = this.getPayload();
-
         this.isLoading = true;
         this.externalProjectService
             .saveSettings(payload)
@@ -265,6 +264,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                         [
                             Validators.required,
                             Validators.pattern(/^\d+(\.\d+)?$/),
+                            Validators.max(1000),
                         ],
                     ],
                 });
@@ -280,6 +280,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                         [
                             Validators.required,
                             Validators.pattern(/^\d+(\.\d+)?$/),
+                            Validators.max(1000),
                         ],
                     ],
                 });
@@ -336,7 +337,11 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 this.data?.projectSettings?.projectCostModel?.flatRate
                     ? this.data?.projectSettings?.projectCostModel?.flatRate
                     : 0,
-                [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
+                [
+                    Validators.required,
+                    Validators.pattern(/^\d+(\.\d+)?$/),
+                    Validators.max(1000),
+                ],
             ],
             resources: this.fb.array([]),
         });
@@ -361,7 +366,11 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 this.data?.projectSettings?.projectCostModel?.flatRate
                     ? this.data?.projectSettings?.projectCostModel?.flatRate
                     : 0,
-                [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
+                [
+                    Validators.required,
+                    Validators.pattern(/^\d+(\.\d+)?$/),
+                    Validators.max(1000),
+                ],
             ],
         });
 

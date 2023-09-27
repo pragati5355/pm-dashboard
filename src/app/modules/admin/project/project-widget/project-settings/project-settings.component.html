@@ -93,6 +93,16 @@
                                         Please enter valid <strong>cost</strong>
                                     </div>
                                 </mat-error>
+                                <mat-error
+                                    *ngIf="
+                                        fixedCostForm
+                                            ?.get('costInput')
+                                            ?.hasError('max')
+                                    "
+                                    class="text-red-500"
+                                >
+                                    <div>Cost must be less than 1000</div>
+                                </mat-error>
                             </mat-form-field>
                         </div>
                     </div>
@@ -160,6 +170,16 @@
                                 <div>
                                     Please enter valid <strong>cost</strong>
                                 </div>
+                            </mat-error>
+                            <mat-error
+                                *ngIf="
+                                    timeAndMaterialForm
+                                        ?.get('costInput')
+                                        ?.hasError('max')
+                                "
+                                class="text-red-500"
+                            >
+                                <div>Cost must be less than 1000</div>
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -245,6 +265,19 @@
                                                         <strong>cost</strong>
                                                     </div>
                                                 </mat-error>
+                                                <mat-error
+                                                    *ngIf="
+                                                        resource
+                                                            ?.get('cost')
+                                                            ?.hasError('max')
+                                                    "
+                                                    class="text-red-500"
+                                                >
+                                                    <div>
+                                                        Cost must be less than
+                                                        1000
+                                                    </div>
+                                                </mat-error>
                                             </mat-form-field>
 
                                             <mat-form-field
@@ -299,6 +332,22 @@
                                                     <div>
                                                         Please enter valid
                                                         <strong>cost</strong>
+                                                    </div>
+                                                </mat-error>
+
+                                                <mat-error
+                                                    *ngIf="
+                                                        resource
+                                                            ?.get(
+                                                                'costToCompany'
+                                                            )
+                                                            ?.hasError('max')
+                                                    "
+                                                    class="text-red-500"
+                                                >
+                                                    <div>
+                                                        Cost must be less than
+                                                        1000
                                                     </div>
                                                 </mat-error>
                                             </mat-form-field>
