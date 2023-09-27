@@ -40,6 +40,10 @@ export class ExternalProjectSettingsComponent implements OnInit {
     timeAndMaterialForm: FormGroup;
     costTypes: costTypeInterface[] = [
         {
+            value: 'Select',
+            label: 'Select',
+        },
+        {
             value: 'FIXED_COST',
             label: 'Fixed cost',
         },
@@ -49,6 +53,10 @@ export class ExternalProjectSettingsComponent implements OnInit {
         },
     ];
     timeAndMaterialType: costTypeInterface[] = [
+        {
+            value: 'Select',
+            label: 'Select',
+        },
         {
             value: 'FLAT_RATE',
             label: 'Flat rate',
@@ -157,19 +165,23 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
+        // if (this.fixedCostForm?.get('costType')?.value?.value === ) console.log(this.fixedCostForm);
+
         const payload = this.getPayload();
-        this.isLoading = true;
-        this.externalProjectService
-            .saveSettings(payload)
-            .subscribe((res: any) => {
-                this.isLoading = false;
-                if (!res?.error) {
-                    this.snackBar.successSnackBar(res?.message);
-                    this.dialogRef.close(true);
-                } else {
-                    this.snackBar.errorSnackBar(res?.message);
-                }
-            });
+        console.log(payload);
+
+        // this.isLoading = true;
+        // this.externalProjectService
+        //     .saveSettings(payload)
+        //     .subscribe((res: any) => {
+        //         this.isLoading = false;
+        //         if (!res?.error) {
+        //             this.snackBar.successSnackBar(res?.message);
+        //             this.dialogRef.close(true);
+        //         } else {
+        //             this.snackBar.errorSnackBar(res?.message);
+        //         }
+        //     });
     }
 
     clearReminders() {
@@ -404,7 +416,10 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     flatRate: this.timeAndMaterialForm?.get('costInput')?.value,
                     tmType: 'FLAT_RATE',
                 };
-            } else {
+            } else if (
+                this.timeAndMaterialForm?.get('type')?.value?.value ===
+                'RESOURCE_SPECIFIC'
+            ) {
                 payload.projectCostModel = {
                     costType: 'TANDM',
                     tmType: 'RESOURCE_SPECIFIC',
