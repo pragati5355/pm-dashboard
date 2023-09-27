@@ -260,9 +260,17 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     );
 
                 if (match?.length > 0) {
-                    this.resources
-                        ?.at(index)
-                        ?.patchValue({ ...resource, cost: match[0]?.cost });
+                    if (resource?.vendor) {
+                        this.resources?.at(index)?.patchValue({
+                            ...resource,
+                            cost: match[0]?.cost,
+                            costToCompany: match[0]?.vendorHourlyCost,
+                        });
+                    } else {
+                        this.resources
+                            ?.at(index)
+                            ?.patchValue({ ...resource, cost: match[0]?.cost });
+                    }
                 }
             });
     }
