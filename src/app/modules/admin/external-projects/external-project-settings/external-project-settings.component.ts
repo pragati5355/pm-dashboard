@@ -40,17 +40,17 @@ export class ExternalProjectSettingsComponent implements OnInit {
     timeAndMaterialForm: FormGroup;
     costTypes: costTypeInterface[] = [
         {
-            value: 'fixedCost',
+            value: 'FIXED_COST',
             label: 'Fixed cost',
         },
         {
-            value: 'timeAndMaterial',
+            value: 'TANDM',
             label: 'T&M',
         },
     ];
     timeAndMaterialType: costTypeInterface[] = [
         {
-            value: 'flatRate',
+            value: 'FLAT_RATE',
             label: 'Flat rate',
         },
         {
@@ -58,6 +58,8 @@ export class ExternalProjectSettingsComponent implements OnInit {
             label: 'Resource specific',
         },
     ];
+    patchCostType: any = null;
+    patchtimeAndMaterialType: any = null;
 
     get resources() {
         return this.timeAndMaterialForm?.get('resources') as FormArray;
@@ -71,6 +73,8 @@ export class ExternalProjectSettingsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        console.log(this.data?.projectSettings);
+
         this.patchReminders();
         this.initializeForm();
     }
@@ -168,18 +172,18 @@ export class ExternalProjectSettingsComponent implements OnInit {
         // }
 
         const payload = this.getPayload();
-        // this.isLoading = true;
-        // this.externalProjectService
-        //     .saveSettings(payload)
-        //     .subscribe((res: any) => {
-        //         this.isLoading = false;
-        //         if (!res?.error) {
-        //             this.snackBar.successSnackBar(res?.message);
-        //             this.dialogRef.close(true);
-        //         } else {
-        //             this.snackBar.errorSnackBar(res?.message);
-        //         }
-        //     });
+        this.isLoading = true;
+        this.externalProjectService
+            .saveSettings(payload)
+            .subscribe((res: any) => {
+                this.isLoading = false;
+                if (!res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.dialogRef.close(true);
+                } else {
+                    this.snackBar.errorSnackBar(res?.message);
+                }
+            });
     }
 
     clearReminders() {
@@ -212,39 +216,94 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
     private patchResourcesForTandM() {
         this.data?.teamModel?.map((resource) => {
-            const control = this.fb.group({
-                name: [resource?.firstName + ' ' + resource?.lastName],
-                resourceId: resource?.resourceId,
-                vendor: resource?.vendor ? true : false,
-                cost: [
-                    0,
-                    [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
-                ],
-            });
-            control?.get('name')?.disable();
-            this.resources?.push(control);
+            if (resource?.vendor) {
+                const control = this.fb.group({
+                    name: [resource?.firstName + ' ' + resource?.lastName],
+                    resourceId: resource?.resourceId,
+                    vendor: resource?.vendor ? true : false,
+                    cost: [
+                        0,
+                        [
+                            Validators.required,
+                            Validators.pattern(/^\d+(\.\d+)?$/),
+                        ],
+                    ],
+                    costToCompany: [
+                        0,
+                        [
+                            Validators.required,
+                            Validators.pattern(/^\d+(\.\d+)?$/),
+                        ],
+                    ],
+                });
+                control?.get('name')?.disable();
+                this.resources?.push(control);
+            } else {
+                const control = this.fb.group({
+                    name: [resource?.firstName + ' ' + resource?.lastName],
+                    resourceId: resource?.resourceId,
+                    vendor: resource?.vendor ? true : false,
+                    cost: [
+                        0,
+                        [
+                            Validators.required,
+                            Validators.pattern(/^\d+(\.\d+)?$/),
+                        ],
+                    ],
+                });
+                control?.get('name')?.disable();
+                this.resources?.push(control);
+            }
         });
     }
 
     private initializeTimeAndMaterialForm() {
+        this.patchtimeAndMaterialType = this.timeAndMaterialType?.filter(
+            (type) =>
+                type?.value ===
+                this.data?.projectSettings?.projectCostModel?.tmType
+        );
+
         this.timeAndMaterialForm = this.fb.group({
-            type: this.timeAndMaterialType[0],
+            type: this.patchtimeAndMaterialType
+                ? this.patchtimeAndMaterialType
+                : this.timeAndMaterialType[0],
             costInput: [
-                '',
+                this.data?.projectSettings?.projectCostModel?.flatRate
+                    ? this.data?.projectSettings?.projectCostModel?.flatRate
+                    : 0,
                 [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
             ],
             resources: this.fb.array([]),
         });
+
+        if (this.data?.projectSettings?.projectCostModel?.tmType) {
+            this.timeAndMaterialForm?.get('type')?.disable();
+        }
     }
 
     private initializeFixedCostForm() {
+        this.patchCostType = this.costTypes?.filter(
+            (type) =>
+                type?.value ===
+                this.data?.projectSettings?.projectCostModel?.costType
+        );
+
         this.fixedCostForm = this.fb.group({
-            costType: this.costTypes[0],
+            costType: this.patchCostType
+                ? this.patchCostType
+                : this.costTypes[0],
             costInput: [
-                '',
+                this.data?.projectSettings?.projectCostModel?.flatRate
+                    ? this.data?.projectSettings?.projectCostModel?.flatRate
+                    : 0,
                 [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)],
             ],
         });
+
+        if (this.data?.projectSettings?.projectCostModel?.costType) {
+            this.fixedCostForm?.get('costType')?.disable();
+        }
     }
 
     private patchReminders() {
@@ -310,7 +369,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
         const resourceCostModel = this.getResourceCostModel();
 
-        if (this.fixedCostForm?.get('costType')?.value?.value === 'fixedCost') {
+        if (
+            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST'
+        ) {
             payload.projectCostModel = {
                 costType: 'FIXED_COST',
                 flatRate: this.fixedCostForm?.get('costInput')?.value,
@@ -318,7 +379,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
         } else {
             if (
                 this.timeAndMaterialForm?.get('type')?.value?.value ===
-                'flatRate'
+                'FLAT_RATE'
             ) {
                 payload.projectCostModel = {
                     costType: 'TANDM',
@@ -334,8 +395,6 @@ export class ExternalProjectSettingsComponent implements OnInit {
             }
         }
 
-        console.log(payload);
-
         return payload;
     }
 
@@ -347,7 +406,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     return {
                         resourceId: resource?.resourceId,
                         cost: resource?.cost,
-                        vendorHourlyCost: 400,
+                        vendorHourlyCost: resource?.costToCompany,
                     };
                 }
                 return {

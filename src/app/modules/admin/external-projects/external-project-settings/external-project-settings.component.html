@@ -12,7 +12,7 @@
 </div>
 
 <div class="relative h-[620px]">
-    <div class="fixed min-h-[620px] w-[200px] shadow rounded p-2">
+    <div class="fixed min-h-[620px] w-[200px] p-2">
         <div
             class="text-center py-2 mb-2 cursor-pointer"
             [ngClass]="{
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div
-        class="sticky ml-[220px] min-h-[620px] shadow rounded p-2"
+        class="sticky ml-[220px] min-h-[620px] p-2"
         *ngIf="showStep === 0"
     >
         <div class="">
@@ -168,7 +168,7 @@
     </div>
 
     <div
-        class="ml-[220px] min-h-[620px] shadow rounded p-2"
+        class="ml-[220px] min-h-[620px] p-2"
         *ngIf="showStep === 1"
     >
         <div class="">
@@ -414,13 +414,12 @@
 
 <!-- <h2 mat-dialog-title>Project settings</h2> -->
 <mat-dialog-content class="mat-typography">
-    <div class="relative h-[420px]">
-        <div class="fixed min-h-[420px] w-[200px] shadow rounded p-2">
+    <div class="relative h-[620px]">
+        <div class="fixed min-h-[620px] w-[200px] pt-2">
             <div
-                class="text-center py-2 mb-2 cursor-pointer"
+                class="pl-3 py-2 mb-2 cursor-pointer"
                 [ngClass]="{
                     'bg-gray-200': showStep === 0,
-                    'bg-gray-50 ': showStep !== 0,
                     'font-semibold': showStep === 0
                 }"
                 (click)="changeStep(0)"
@@ -428,10 +427,9 @@
                 Project reminders
             </div>
             <div
-                class="text-center font-semibold py-2 mb-2 cursor-pointer"
+                class="pl-3 font-semibold py-2 mb-2 cursor-pointer"
                 [ngClass]="{
                     'bg-gray-200': showStep === 1,
-                    'bg-gray-50 ': showStep !== 1,
                     'font-semibold': showStep === 1
                 }"
                 (click)="changeStep(1)"
@@ -439,10 +437,7 @@
                 Cost setting
             </div>
         </div>
-        <div
-            class="ml-[220px] min-h-[420px] shadow rounded p-2"
-            *ngIf="showStep === 0"
-        >
+        <div class="ml-[220px] min-h-[620px] p-2" *ngIf="showStep === 0">
             <div class="">
                 <div>
                     <div class="flex items-center justify-between">
@@ -571,10 +566,7 @@
             </div>
         </div>
 
-        <div
-            class="ml-[220px] min-h-[420px] shadow rounded p-2"
-            *ngIf="showStep === 1"
-        >
+        <div class="ml-[220px] min-h-[620px] p-2" *ngIf="showStep === 1">
             <div class="">
                 <div class="text-xl font-semibold mt-2 mb-4">Cost setting</div>
 
@@ -608,7 +600,7 @@
                             class="w-[200px]"
                             *ngIf="
                                 fixedCostForm?.get('costType')?.value?.value ===
-                                'fixedCost'
+                                'FIXED_COST'
                             "
                         >
                             <mat-form-field class="w-full">
@@ -649,7 +641,7 @@
                         class="w-[200px]"
                         *ngIf="
                             fixedCostForm?.get('costType')?.value?.value ===
-                            'timeAndMaterial'
+                            'TANDM'
                         "
                     >
                         <mat-form-field class="w-full">
@@ -673,9 +665,9 @@
                         class="w-[200px]"
                         *ngIf="
                             timeAndMaterialForm?.get('type')?.value?.value ===
-                                'flatRate' &&
+                                'FLAT_RATE' &&
                             fixedCostForm?.get('costType')?.value?.value ===
-                                'timeAndMaterial'
+                                'TANDM'
                         "
                     >
                         <mat-form-field class="w-full">
@@ -716,7 +708,7 @@
                             timeAndMaterialForm?.get('type')?.value?.value ===
                                 'RESOURCE_SPECIFIC' &&
                             fixedCostForm?.get('costType')?.value?.value ===
-                                'timeAndMaterial'
+                                'TANDM'
                         "
                     >
                         <ng-container
@@ -744,41 +736,108 @@
                                         </mat-form-field>
                                     </div>
 
-                                    <div class="flex-2 mr-2">
-                                        <mat-form-field class="w-full">
-                                            <mat-label>Hourly cost</mat-label>
-                                            <input
-                                                type="number"
-                                                matInput
-                                                formControlName="cost"
-                                                placeholder="Enter cost"
-                                            />
-                                            <mat-error
+                                    <div class="flex-1">
+                                        <div class="w-full flex gap-2">
+                                            <mat-form-field
+                                                class="w-full max-w-[125px]"
+                                            >
+                                                <mat-label
+                                                    >Hourly cost</mat-label
+                                                >
+                                                <input
+                                                    type="number"
+                                                    matInput
+                                                    formControlName="cost"
+                                                    placeholder="Enter cost"
+                                                />
+                                                <mat-error
+                                                    *ngIf="
+                                                        resource
+                                                            ?.get('cost')
+                                                            .hasError(
+                                                                'required'
+                                                            )
+                                                    "
+                                                >
+                                                    Cost is
+                                                    <strong>required</strong>
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="
+                                                        !resource
+                                                            ?.get('cost')
+                                                            .hasError(
+                                                                'required'
+                                                            ) &&
+                                                        resource
+                                                            ?.get('cost')
+                                                            ?.hasError(
+                                                                'pattern'
+                                                            )
+                                                    "
+                                                >
+                                                    <div>
+                                                        Please enter valid
+                                                        <strong>cost</strong>
+                                                    </div>
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field
+                                                class="w-full"
                                                 *ngIf="
-                                                    resource
-                                                        ?.get('cost')
-                                                        .hasError('required')
+                                                    resource?.get('vendor')
+                                                        ?.value
                                                 "
                                             >
-                                                Cost is
-                                                <strong>required</strong>
-                                            </mat-error>
-                                            <mat-error
-                                                *ngIf="
-                                                    !resource
-                                                        ?.get('cost')
-                                                        .hasError('required') &&
-                                                    resource
-                                                        ?.get('cost')
-                                                        ?.hasError('pattern')
-                                                "
-                                            >
-                                                <div>
-                                                    Please enter valid
-                                                    <strong>cost</strong>
-                                                </div>
-                                            </mat-error>
-                                        </mat-form-field>
+                                                <mat-label
+                                                    >Cost to company</mat-label
+                                                >
+                                                <input
+                                                    type="number"
+                                                    matInput
+                                                    formControlName="costToCompany"
+                                                    placeholder="Enter cost"
+                                                />
+                                                <mat-error
+                                                    *ngIf="
+                                                        resource
+                                                            ?.get(
+                                                                'costToCompany'
+                                                            )
+                                                            .hasError(
+                                                                'required'
+                                                            )
+                                                    "
+                                                >
+                                                    Cost is
+                                                    <strong>required</strong>
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="
+                                                        !resource
+                                                            ?.get(
+                                                                'costToCompany'
+                                                            )
+                                                            .hasError(
+                                                                'required'
+                                                            ) &&
+                                                        resource
+                                                            ?.get(
+                                                                'costToCompany'
+                                                            )
+                                                            ?.hasError(
+                                                                'pattern'
+                                                            )
+                                                    "
+                                                >
+                                                    <div>
+                                                        Please enter valid
+                                                        <strong>cost</strong>
+                                                    </div>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
