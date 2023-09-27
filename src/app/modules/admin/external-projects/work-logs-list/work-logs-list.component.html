@@ -198,6 +198,7 @@
                                         <div class="pb-2">
                                             <div>
                                                 <button
+                                                [disabled]="logs?.allowEdit === false"
                                                     (click)="
                                                         addOrEditWorklog(
                                                             logs,
@@ -206,7 +207,7 @@
                                                     "
                                                 >
                                                     <mat-icon
-                                                        [matTooltip]="'Edit'"
+                                                        [matTooltip]="'Edit'" 
                                                         class="text-gray-400 icon-size-5 cursor-pointer mr-4"
                                                         svgIcon="heroicons_outline:pencil"
                                                     ></mat-icon>
