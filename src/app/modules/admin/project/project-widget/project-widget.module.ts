@@ -53,6 +53,8 @@ import { CrDetailsComponent } from './cr-details/cr-details.component';
 import { AddEditWorkLogComponent } from './add-edit-work-log/add-edit-work-log.component';
 import { QuillModule } from 'ngx-quill';
 import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ProjectSettingsComponent } from './project-settings/project-settings.component';
 
 @NgModule({
     declarations: [
@@ -79,6 +81,7 @@ import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
         CrDetailsComponent,
         AddEditWorkLogComponent,
         StripHtmlPipe,
+        ProjectSettingsComponent,
     ],
     imports: [
         FormsModule,
@@ -117,6 +120,7 @@ import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
         MatDatepickerModule,
         MatChipsModule,
         QuillModule,
+        MatDialogModule,
     ],
     exports: [
         ProjectDetailsComponent,

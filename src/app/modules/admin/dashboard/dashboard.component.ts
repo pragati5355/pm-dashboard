@@ -114,7 +114,7 @@ export class DashboardComponent implements OnInit {
         this.dashboardApiService.getUtilisationExcelReport().subscribe(
             (res: any) => {
                 this.submitInProcess = false;
-                if (res?.error === false) {
+                if (res?.code === 200) {
                     this.downloadFile(res?.data);
                 } else {
                     this.snackbar.errorSnackBar(res?.message);
@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
         this.dashboardApiService.getAvailabilityExcelReport().subscribe(
             (res: any) => {
                 this.submitInProcess3 = false;
-                if (res?.error === false) {
+                if (res?.code === 200) {
                     this.downloadAvailabilityFile(res?.data);
                 } else {
                     this.snackbar.errorSnackBar(res?.message);
