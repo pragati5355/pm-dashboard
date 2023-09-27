@@ -36,7 +36,7 @@
                         <div>Actual Cost</div>
                         <div>Difference</div>
                     </div>
-                    <ng-container>
+                    <ng-container *ngIf="statList?.length > 0 && !initialLoading">
                         <div class="grid">
                             <ng-container *ngFor="let list of statList">
                                 <div
@@ -58,37 +58,57 @@
                                     </div>
 
                                     <!--Ideal Cost -->
-                                    <div class="hidden md:block truncate">
-                                        {{ list?.idealHourlyRate }}
+                                    <div class="flex  md:block truncate">
+                                        $ {{ list?.idealHourlyRate }}
                                     </div>
 
                                     <!--Actual Cost -->
                                     <div class="hidden md:block truncate">
-                                        {{ list?.actualHourlyRate }}
+                                        $ {{ list?.actualHourlyRate }}
                                     </div>
 
                                     <!-- Difference -->
-                                    <div class="hidden md:block truncate">
-                                        {{ list?.diff }}
+                                    <div class="hidden lg:flex items-center">
+                                        <div class="">
+                                            $ {{ list?.diff }} 
+                                        </div>
+                                        <div class="flex items-end ml-2" *ngIf="list?.idealHourlyRate >= list?.actualHourlyRate">
+                                            <mat-icon class="flex" style="color: rgb(74 222 128)!important;">arrow_upward</mat-icon>
+                                        </div>   
+                                        <div class="flex items-end ml-2" *ngIf="list?.idealHourlyRate < list?.actualHourlyRate">
+                                            <mat-icon class="flex" style="color: rgb(220 38 38)!important;">arrow_downward</mat-icon>
+                                        </div>   
                                     </div>
                                 </div>
                             </ng-container>
                         </div>
                     </ng-container>
-                    <div
-                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-base font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                        matSortDisableClear
-                    >
-                        <div class="text-black">Total</div>
-                        <div class="text-black">{{sumIdealWorkHrs}}</div>
-                        <div class="text-black">{{sumActualWorkHrs}}</div>
-                        <div class="text-black">{{sumIdealCost}}</div>
-                        <div class="text-black">{{sumActualCost}}</div>
-                        <div class="text-black">{{sumdifference}}</div>
-                    </div>
+                    <ng-container *ngIf="statList?.length > 0 && !initialLoading">
+                        <div
+                            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-base font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            matSortDisableClear
+                        >
+                            <div class="text-black">Total</div>
+                            <div class="text-black">{{sumIdealWorkHrs}}</div>
+                            <div class="text-black">{{sumActualWorkHrs}}</div>
+                            <div class="text-black">$ {{sumIdealCost}}</div>
+                            <div class="text-black">$ {{sumActualCost}}</div>
+                            <div class="text-black hidden lg:flex items-center">   
+                                <div>
+                                    $ {{sumdifference}}
+                                </div>
+                                <div class="flex items-end ml-2" *ngIf="sumIdealCost > sumActualCost">
+                                    <mat-icon class="flex" style="color: rgb(74 222 128)!important;">arrow_upward</mat-icon>
+                                </div>   
+                                <div class="flex items-end ml-2" *ngIf="sumIdealCost < sumActualCost">
+                                    <mat-icon class="flex" style="color: rgb(220 38 38)!important;">arrow_downward</mat-icon>
+                                </div>   
+                            </div>
+                        </div>
+                    </ng-container>
 
                     <ng-container
-                        *ngIf="statList?.length == 0 && !initialLoading"
+                        *ngIf="statList?.length === 0 && !initialLoading"
                     >
                         <div
                             class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
