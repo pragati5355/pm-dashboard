@@ -116,7 +116,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
     private loadStatList() {
         this.initialLoading = true;
-        this.pNLProjectServie.getPNLStatList(335).subscribe(
+        this.pNLProjectServie.getPNLStatList(this.projectId).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
