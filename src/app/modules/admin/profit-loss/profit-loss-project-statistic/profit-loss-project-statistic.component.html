@@ -107,6 +107,14 @@
                         </div>
                     </ng-container>
 
+                    <div *ngIf="sumIdealCost > sumActualCost" class="gap-4 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
+                        Great ! This project has made the profit of <span class="text-green-500">$ {{sumdifference}}</span> .
+                    </div>
+
+                    <div *ngIf="sumIdealCost < sumActualCost" class="gap-4 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
+                        Oh ! Looks like we are in loss of <span class="text-red-500">$ {{sumdifference}}</span> for this project.
+                    </div>
+
                     <ng-container
                         *ngIf="statList?.length === 0 && !initialLoading"
                     >
