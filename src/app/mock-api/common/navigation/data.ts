@@ -33,6 +33,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/external-projects',
     },
     {
+        id: 'profit-loss',
+        title: 'P & L',
+        type: 'basic',
+        icon: 'mat_outline:trending_up',
+        link: '/profit-loss',
+        allowedRoles: ['ADMIN'],
+    },
+    {
         id: 'forms',
         title: 'Forms',
         type: 'basic',
