@@ -43,10 +43,6 @@ export class ProjectSettingsComponent implements OnInit {
     timeAndMaterialForm: FormGroup;
     costTypes: costTypeInterface[] = [
         {
-            value: 'Select',
-            label: 'Select',
-        },
-        {
             value: 'FIXED_COST',
             label: 'Fixed cost',
         },
@@ -56,10 +52,6 @@ export class ProjectSettingsComponent implements OnInit {
         },
     ];
     timeAndMaterialType: costTypeInterface[] = [
-        {
-            value: 'Select',
-            label: 'Select',
-        },
         {
             value: 'FLAT_RATE',
             label: 'Flat rate',
