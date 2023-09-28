@@ -286,7 +286,7 @@
                     </div>
                 </ng-container>
 
-                <ng-container>
+                <ng-container *ngIf="!resourceDetails?.vendor">
                     <div class="flex">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:currency-dollar'"

@@ -547,10 +547,11 @@
 
                                             <div class="md:block">
                                                 <mat-icon
+                                                    *ngIf="!resources?.vendor"
                                                     [matTooltip]="
                                                         'Edit Resource'
                                                     "
-                                                    class="text-gray-400 icon-size-5 cursor-pointer"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer mr-4"
                                                     svgIcon="heroicons_outline:pencil"
                                                     (click)="
                                                         edit(resources?.id)
@@ -560,7 +561,7 @@
                                                     [matTooltip]="
                                                         'Delete Resource'
                                                     "
-                                                    class="ml-4 text-gray-400 icon-size-5 cursor-pointer"
+                                                    class="text-gray-400 icon-size-5 cursor-pointer"
                                                     svgIcon="heroicons_outline:trash"
                                                     (click)="
                                                         deleteResource(
