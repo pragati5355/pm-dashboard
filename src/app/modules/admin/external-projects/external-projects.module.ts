@@ -50,6 +50,8 @@ import { WorkLogAllowEditDialogComponent } from './work-log-allow-edit-dialog/wo
 import { WorkLogShareComponent } from './work-log-share/work-log-share.component';
 import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { ExternalProjectSettingsComponent } from './external-project-settings/external-project-settings.component';
+import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.component';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -65,6 +67,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         WorkLogsDownloadComponent,
         WorkLogAllowEditDialogComponent,
         WorkLogShareComponent,
+        ExternalProjectSettingsComponent,
+        CostTypeSettingComponent,
     ],
     imports: [
         CommonModule,

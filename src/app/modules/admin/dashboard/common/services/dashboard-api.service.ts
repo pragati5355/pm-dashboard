@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 @Injectable({
     providedIn: 'root',
 })
@@ -17,7 +17,9 @@ export class DashboardApiService {
     constructor(private http: HttpClient) {}
 
     getUtilisationExcelReport() {
-        return this.http.get(this.downloadExcelUrl);
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/resource/utilization-report'
+        );
     }
 
     getGenericExcelReport() {
@@ -25,6 +27,8 @@ export class DashboardApiService {
     }
 
     getAvailabilityExcelReport() {
-        return this.http.get(this.downloadExcelAvailabilityUrl);
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/resource/availability-report'
+        );
     }
 }
