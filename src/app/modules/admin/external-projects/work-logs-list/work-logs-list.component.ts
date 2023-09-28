@@ -178,7 +178,7 @@ export class WorkLogsListComponent implements OnInit {
                         (res:any) => {
                             this.initialLoading = false;
                             if(res?.statusCode == 200) {
-                                this.snackBar.successSnackBar("Turned On Allow Edit Toggle");
+                                this.snackBar.successSnackBar("Worklog Edit Enabled");
                             }
                         },
                         (err) => {
@@ -201,7 +201,7 @@ export class WorkLogsListComponent implements OnInit {
                 (res:any) => {
                     this.initialLoading = false;
                     if(res?.statusCode == 200) {
-                        this.snackBar.successSnackBar("Turned Off Allow Edit Toggle");
+                        this.snackBar.successSnackBar("Worklog Edit Disabled");
                     }
                 },
                 (err) => {
