@@ -40,10 +40,6 @@ export class ExternalProjectSettingsComponent implements OnInit {
     timeAndMaterialForm: FormGroup;
     costTypes: costTypeInterface[] = [
         {
-            value: 'Select',
-            label: 'Select',
-        },
-        {
             value: 'FIXED_COST',
             label: 'Fixed cost',
         },
@@ -53,10 +49,6 @@ export class ExternalProjectSettingsComponent implements OnInit {
         },
     ];
     timeAndMaterialType: costTypeInterface[] = [
-        {
-            value: 'Select',
-            label: 'Select',
-        },
         {
             value: 'FLAT_RATE',
             label: 'Flat rate',
@@ -203,6 +195,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
         }
 
         const payload = this.getPayload();
+
         this.isLoading = true;
         this.externalProjectService
             .saveSettings(payload)
