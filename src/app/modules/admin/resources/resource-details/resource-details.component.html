@@ -230,7 +230,7 @@
                     </div>
                 </ng-container>
 
-                <ng-container>
+                <ng-container *ngIf="!resourceDetails?.vendor">
                     <div class="flex mt-2">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:code'"
@@ -261,7 +261,7 @@
                     </div>
                 </ng-container>
 
-                <ng-container>
+                <ng-container *ngIf="!resourceDetails?.vendor">
                     <div class="flex mt-2">
                         <mat-icon
                             [svgIcon]="'heroicons_outline:briefcase'"
