@@ -51,7 +51,10 @@
             </div>
             <div class="flex items-center ml-6">
                 <div
-                    *ngIf="repoCount == 0 && (userRole === 'ADMIN' || userRole === 'PM')"
+                    *ngIf="
+                        repoCount == 0 &&
+                        (userRole === 'ADMIN' || userRole === 'PM')
+                    "
                     [matTooltip]="
                         !project?.repoProjectId
                             ? 'Please assign Bitbucket project to continue'
@@ -100,6 +103,21 @@
                         aria-label="Example icon button with a menu icon"
                     >
                         <mat-icon>check</mat-icon>
+                    </button>
+                </div>
+                <div
+                    *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                    class="ml-2"
+                    [matTooltip]="'Project settings'"
+                >
+                    <button
+                        class="shadow-none"
+                        mat-mini-fab
+                        color="primary"
+                        (click)="projectSettingsDialog()"
+                        aria-label="Example icon button with a menu icon"
+                    >
+                        <mat-icon>settings</mat-icon>
                     </button>
                 </div>
                 <div

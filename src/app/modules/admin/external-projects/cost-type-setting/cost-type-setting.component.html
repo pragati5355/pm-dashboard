@@ -1,0 +1,205 @@
+<div class="ml-6">
+    <div class="text-xl font-semibold mt-2 mb-4">Cost type</div>
+
+    <form [formGroup]="fixedCostForm">
+        <div class="flex flex-col w-full">
+            <div class="w-[200px]">
+                <mat-form-field class="w-full">
+                    <mat-label>Select cost type</mat-label>
+                    <mat-select
+                        formControlName="costType"
+                        name="food"
+                        (selectionChange)="costTypeChange($event)"
+                    >
+                        <mat-option
+                            *ngFor="let type of costTypes"
+                            [value]="type"
+                        >
+                            {{ type?.label }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div
+                class="w-[200px]"
+                *ngIf="
+                    fixedCostForm?.get('costType')?.value?.value === 'fixedCost'
+                "
+            >
+                <mat-form-field class="w-full">
+                    <mat-label>Enter cost</mat-label>
+                    <input
+                        type="number"
+                        matInput
+                        formControlName="costInput"
+                        placeholder="Enter cost"
+                    />
+                    <mat-error
+                        *ngIf="
+                            fixedCostForm?.get('costInput').hasError('required')
+                        "
+                    >
+                        Cost is <strong>required</strong>
+                    </mat-error>
+                    <mat-error
+                        *ngIf="
+                            fixedCostForm?.get('costInput')?.hasError('pattern')
+                        "
+                    >
+                        <div>Please enter valid <strong>cost</strong></div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+    <form [formGroup]="timeAndMaterialForm">
+        <div
+            class="w-[200px]"
+            *ngIf="
+                fixedCostForm?.get('costType')?.value?.value ===
+                'timeAndMaterial'
+            "
+        >
+            <mat-form-field class="w-full">
+                <mat-label>Nature of cost</mat-label>
+                <mat-select
+                    formControlName="type"
+                    name="food"
+                    (selectionChange)="costTypeChange($event)"
+                >
+                    <mat-option
+                        *ngFor="let type of timeAndMaterialType"
+                        [value]="type"
+                    >
+                        {{ type?.label }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div
+            class="w-[200px]"
+            *ngIf="
+                timeAndMaterialForm?.get('type')?.value?.value === 'flatRate' &&
+                fixedCostForm?.get('costType')?.value?.value ===
+                    'timeAndMaterial'
+            "
+        >
+            <mat-form-field class="w-full">
+                <mat-label>Enter cost</mat-label>
+                <input
+                    type="number"
+                    matInput
+                    formControlName="costInput"
+                    placeholder="Enter cost"
+                />
+                <mat-error
+                    *ngIf="
+                        timeAndMaterialForm
+                            ?.get('costInput')
+                            .hasError('required')
+                    "
+                >
+                    Cost is <strong>required</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="
+                        timeAndMaterialForm
+                            ?.get('costInput')
+                            ?.hasError('pattern')
+                    "
+                >
+                    <div>Please enter valid <strong>cost</strong></div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div
+            formArrayName="resources"
+            class="w-full"
+            *ngIf="
+                timeAndMaterialForm?.get('type')?.value?.value ===
+                    'RESOURCE_SPECIFIC' &&
+                fixedCostForm?.get('costType')?.value?.value ===
+                    'timeAndMaterial'
+            "
+        >
+            <ng-container
+                *ngFor="
+                    let resource of resources?.controls;
+                    let i = index;
+                    let last = last
+                "
+            >
+                <form [formGroupName]="i">
+                    <div class="flex gap-4 w-full">
+                        <div class="flex-1">
+                            <mat-form-field
+                                class="w-full"
+                                id="userlist"
+                                [floatLabel]="'always'"
+                            >
+                                <mat-label>Name</mat-label>
+                                <input
+                                    matInput
+                                    placeholder="Certificate Name"
+                                    formControlName="name"
+                                    class="inputlist"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="flex-2">
+                            <mat-form-field class="w-full">
+                                <mat-label>Hourly cost</mat-label>
+                                <input
+                                    type="number"
+                                    matInput
+                                    formControlName="cost"
+                                    placeholder="Enter cost"
+                                />
+                                <mat-error
+                                    *ngIf="
+                                        resource
+                                            ?.get('cost')
+                                            .hasError('required')
+                                    "
+                                >
+                                    Cost is <strong>required</strong>
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="
+                                        !resource
+                                            ?.get('cost')
+                                            .hasError('required') &&
+                                        resource
+                                            ?.get('cost')
+                                            ?.hasError('pattern')
+                                    "
+                                >
+                                    <div>
+                                        Please enter valid <strong>cost</strong>
+                                    </div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+            </ng-container>
+        </div>
+    </form>
+
+    <div class="flex flex-row justify-end mt-4">
+        <button mat-flat-button [color]="'primary'">
+            <mat-progress-spinner
+                *ngIf="false"
+                class="mr-2"
+                mode="indeterminate"
+                diameter="24"
+            ></mat-progress-spinner>
+            Save
+        </button>
+    </div>
+</div>
