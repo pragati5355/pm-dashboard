@@ -12,7 +12,7 @@
                 Back
             </div>
             <div class="flex justify-end items-center">
-                <div class="flex items-center">
+                <div class="flex items-center gap-3">
             
                     <div class="w-[350px] mr-4" *ngIf="userRole === 'ADMIN'">
                         <mat-form-field class="w-full">
@@ -83,7 +83,7 @@
                 </div>
                 <button
                     *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
-                    class="ml-3 mr-2 mt-2"
+                    class="ml-3 mr-2"
                     mat-mini-fab
                     color="primary"
                     matTooltip="Share"
