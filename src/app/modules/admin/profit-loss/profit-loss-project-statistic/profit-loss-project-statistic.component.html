@@ -32,6 +32,7 @@
                         <div>Resource Email</div>
                         <div>Ideal Work Hrs</div>
                         <div>Actual Work Hrs</div>
+                        <div>Hourty Cost</div>
                         <div>Ideal Cost</div>
                         <div>Actual Cost</div>
                         <div>Difference</div>
@@ -55,6 +56,11 @@
                                     <!-- Actual Work Hrs -->
                                     <div class="hidden md:block truncate">
                                         {{ list?.totalActualWorklogHrs }}
+                                    </div>
+
+                                     <!-- Hourly Cost -->
+                                     <div class="hidden md:block truncate">
+                                        $ {{ list?.totalIdealWorklogHrs }}
                                     </div>
 
                                     <!--Ideal Cost -->
@@ -91,6 +97,7 @@
                             <div class="text-black">Total</div>
                             <div class="text-black">{{sumIdealWorkHrs}}</div>
                             <div class="text-black">{{sumActualWorkHrs}}</div>
+                            <div class="text-black">$ 0</div>
                             <div class="text-black">$ {{sumIdealCost}}</div>
                             <div class="text-black">$ {{sumActualCost}}</div>
                             <div class="text-black hidden lg:flex items-center">   
