@@ -13,18 +13,7 @@
             </div>
             <div class="flex justify-end items-center">
                 <div class="flex items-center">
-                    
-                    <div class="flex flex-col items-center pr-4 mb-8" *ngIf="userRole === 'ADMIN'">
-                        <span class="font-medium text-md mb-2">Allow Edit</span>
-                        <mat-slide-toggle 
-                            class="justify-start mr-8"
-                            [color]="'primary'"
-                            (change)="allowEditWorklog($event)" 
-                            [checked]="checked"
-                            [disabled]="initialLoading">
-                        </mat-slide-toggle>
-                    </div>
-
+            
                     <div class="w-[350px] mr-4" *ngIf="userRole === 'ADMIN'">
                         <mat-form-field class="w-full">
                             <mat-label class="">Resource</mat-label>
@@ -45,6 +34,17 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
+                    </div>
+
+                    <div class="flex flex-col items-center pr-4 mb-8" *ngIf="userRole === 'ADMIN'">
+                        <span class="font-medium text-md mb-4">Allow Edit</span>
+                        <mat-slide-toggle 
+                            class="justify-start mr-8"
+                            [color]="'primary'"
+                            (change)="allowEditWorklog($event)" 
+                            [checked]="checked"
+                            [disabled]="initialLoading">
+                        </mat-slide-toggle>
                     </div>
 
                     <mat-form-field>
