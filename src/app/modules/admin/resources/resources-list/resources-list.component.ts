@@ -47,6 +47,8 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatSelectChange } from '@angular/material/select';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -110,6 +112,7 @@ export class ResourcesListComponent implements OnInit {
         'Orange',
         'Strawberry',
     ];
+    showVendorsOnly: boolean = false;
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
@@ -284,6 +287,14 @@ export class ResourcesListComponent implements OnInit {
         } else if (res.tokenExpire == true) {
             this.handleTokenExpiry();
         }
+    }
+
+    showOnlyVendors(event: MatCheckboxChange) {
+        this.showVendorsOnly = event?.checked;
+        this.clearFilter();
+        // if (this.showVendorsOnly) {
+        //     this.resourceSearchInput?.disable();
+        // }
     }
 
     handleScroll() {
@@ -560,6 +571,7 @@ export class ResourcesListComponent implements OnInit {
             name: this.searchValue,
             bench: this.isBench,
             shadow: this.isShadow,
+            vendor: this.showVendorsOnly,
         };
     }
 
