@@ -7,16 +7,16 @@
             <div class="p-4 h-full">
                 <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
                     [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
-                    <mat-step label="Project Details" [completed]="!projectDetails.invalid">
+                    <mat-step label="Project Details" [completed]="!projectDetails?.invalid">
 
                     </mat-step>
 
-                    <mat-step label="Client Details" [completed]="!clientDetials.invalid">
+                    <mat-step label="Client Details" [completed]="!clientDetials?.invalid">
 
                     </mat-step>
 
                     <mat-step label="PM Tool Settings"
-                        [completed]="!projectSetting.invalid && settingProjectName.length !==0">
+                        [completed]="!projectSetting?.invalid && settingProjectName?.length !==0">
 
                     </mat-step>
 
@@ -88,62 +88,37 @@
                             </mat-form-field>
                             <div class="w-full sm:w-140 mt-4 mb-2 sm:mt-0 flex flex-col">
                                 <div class="w-full flex flex-1">
-                                    <div class="w-full">            
+                                    <div class="w-full">
                                         <mat-form-field [floatLabel]="'always'" class="w-full">
                                             <mat-label>Start Date</mat-label>
-                                            <input
-                                                matInput
-                                                #inputJoining
-                                                [placeholder]="'Start Date'"
-                                                formControlName="startDate"
-                                                [matDatepicker]="dateOfJoiningDatepicker"
-                                                (focus)="dateOfJoiningDatepicker.open()"
-                                            />
-                                            <mat-datepicker-toggle
-                                                matSuffix
-                                                [for]="dateOfJoiningDatepicker"
-                                            >
+                                            <input matInput #inputJoining [placeholder]="'Start Date'"
+                                                formControlName="startDate" [matDatepicker]="dateOfJoiningDatepicker"
+                                                (focus)="dateOfJoiningDatepicker.open()" />
+                                            <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker">
                                             </mat-datepicker-toggle>
-                                            <mat-datepicker
-                                                #dateOfJoiningDatepicker
-                                                (closed)="inputJoining.blur()"
-                                            >
+                                            <mat-datepicker #dateOfJoiningDatepicker (closed)="inputJoining.blur()">
                                             </mat-datepicker>
-                                            <mat-error
-                                                *ngIf="
+                                            <mat-error *ngIf="
                                                 projectDetails?.get('startDate')?.hasError('required')
-                                                "
-                                            >
+                                                ">
                                                 <div>Start Date is mandatory</div>
                                             </mat-error>
-                                        </mat-form-field></div>
+                                        </mat-form-field>
+                                    </div>
                                     <div class="w-full ml-4">
                                         <mat-form-field [floatLabel]="'always'" class="w-full">
                                             <mat-label>End Date</mat-label>
-                                            <input
-                                                matInput
-                                                #inputJoining
-                                                [placeholder]="'End Date'"
-                                                formControlName="endDate"
-                                                [matDatepicker]="dateOfJoiningDatepicker1"
+                                            <input matInput #inputJoining [placeholder]="'End Date'"
+                                                formControlName="endDate" [matDatepicker]="dateOfJoiningDatepicker1"
                                                 (focus)="dateOfJoiningDatepicker1.open()"
-                                                [min]="projectDetails?.get('startDate')?.value"
-                                            />
-                                            <mat-datepicker-toggle
-                                                matSuffix
-                                                [for]="dateOfJoiningDatepicker1"
-                                            >
+                                                [min]="projectDetails?.get('startDate')?.value" />
+                                            <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker1">
                                             </mat-datepicker-toggle>
-                                            <mat-datepicker
-                                                #dateOfJoiningDatepicker1
-                                                (closed)="inputJoining.blur()"
-                                            >
+                                            <mat-datepicker #dateOfJoiningDatepicker1 (closed)="inputJoining.blur()">
                                             </mat-datepicker>
-                                            <mat-error
-                                                *ngIf="
+                                            <mat-error *ngIf="
                                                     projectDetails?.get('endDate')?.hasError('required')
-                                                "
-                                            >
+                                                ">
                                                 <div>End Date is mandatory</div>
                                             </mat-error>
                                         </mat-form-field>
@@ -152,16 +127,12 @@
                                 <div class="w-full sm:w-140 flex flex-col" *ngIf="editProjectEndDateReason !== ''">
                                     <div class="flex items-center">
                                         <mat-label class="font-semibold mr-2">Reason for date change</mat-label>
-                                        <mat-icon
-                                        [matTooltip]="
+                                        <mat-icon [matTooltip]="
                                             'Edit Reason'
-                                        "
-                                        class="text-gray-400 icon-size-5 cursor-pointer"
-                                        svgIcon="heroicons_outline:pencil"
-                                        (click)="
+                                        " class="text-gray-400 icon-size-5 cursor-pointer"
+                                            svgIcon="heroicons_outline:pencil" (click)="
                                             addReasonForProjectEndDate()
-                                        "
-                                        >
+                                        ">
                                         </mat-icon>
                                     </div>
                                     <div class="w-full">
@@ -169,13 +140,8 @@
                                             <p>Date changed from {{this.prevDate}} to {{this.newDate}}</p>
                                         </div>
                                         <div class="w-full mt-3">
-                                            <textarea  
-                                            class="w-full"                       
-                                            trim="blur"
-                                            rows="6"
-                                            style="resize: none"
-                                            [value]="this.editProjectEndDateReason" 
-                                            [readOnly]="true">
+                                            <textarea class="w-full" trim="blur" rows="6" style="resize: none"
+                                                [value]="this.editProjectEndDateReason" [readOnly]="true">
                                             </textarea>
                                         </div>
                                     </div>
@@ -604,29 +570,15 @@
 
                                         <mat-form-field [floatLabel]="'always'" class="w-full h-4">
                                             <mat-label class="">Email</mat-label>
-                                            <input
-                                                matInput
-                                                [placeholder]="'Email'"
-                                                aria-label="email"
-                                                #emailInput
-                                                [matAutocomplete]="auto1"
-                                                formControlName="team_member"
-                                            />
-                                            <mat-autocomplete
-                                                #auto1="matAutocomplete"
-                                                [displayWith]="displayFnResource"
-                                                (optionSelected)="getSelectedEmail($event.option.value)"
-                                            >
-                                                <mat-option
-                                                    *ngFor="let item of filteredEmails | async"
-                                                    [value]="item"
-                                                >
+                                            <input matInput [placeholder]="'Email'" aria-label="email" #emailInput
+                                                [matAutocomplete]="auto1" formControlName="team_member" />
+                                            <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFnResource"
+                                                (optionSelected)="getSelectedEmail($event.option.value)">
+                                                <mat-option *ngFor="let item of filteredEmails | async" [value]="item">
                                                     <span>{{ item?.email }}</span>
                                                 </mat-option>
                                             </mat-autocomplete>
-                                            <mat-error
-                                                *ngIf="projectTeam?.get('email')?.hasError('required')"
-                                            >
+                                            <mat-error *ngIf="projectTeam?.get('email')?.hasError('required')">
                                                 <div>Email is mandatory</div>
                                             </mat-error>
                                             <!-- <mat-icon
@@ -691,7 +643,7 @@
                                             <mat-select formControlName="tm_utilization" type="text"
                                                 placeholder="Select Utilization" [disableOptionCentering]="true">
                                                 <mat-option *ngFor="let u of utilizationValues" [value]="u"
-                                                [disabled]="u > currentCapacity">
+                                                    [disabled]="u > currentCapacity">
                                                     {{ u }}
                                                 </mat-option>
                                             </mat-select>
@@ -709,7 +661,8 @@
                                             <mat-label>Start Date</mat-label>
                                             <input matInput #inputJoining [placeholder]="'Start Date'"
                                                 formControlName="startDate" [matDatepicker]="dateOfJoiningDatepicker"
-                                                (focus)="dateOfJoiningDatepicker.open()" [min]="projectDetails?.get('startDate')?.value"/>
+                                                (focus)="dateOfJoiningDatepicker.open()"
+                                                [min]="projectDetails?.get('startDate')?.value" />
                                             <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker">
                                             </mat-datepicker-toggle>
                                             <mat-datepicker #dateOfJoiningDatepicker (closed)="inputJoining.blur()">
@@ -744,38 +697,27 @@
 
                                 </div>
                                 <div class="w-full flex">
-                                        <mat-form-field
-                                        class="w-full mr-3"
-                                    >
-                                    <mat-label>Technology *</mat-label>
-                                        <mat-select
-                                            [disableOptionCentering]="true"
-                                            [(ngModel)]="resourceTechnologyList"
-                                            [ngModelOptions]="{standalone: true}"
-                                            [placeholder]="'Select technology'"
-                                            multiple
-                                            panelClass="multiple-select-style"
-                                        >
-                                            <mat-option *ngFor="let tech of resourceSpecificTechnologies" [value]="tech">
+                                    <mat-form-field class="w-full mr-3">
+                                        <mat-label>Technology *</mat-label>
+                                        <mat-select [disableOptionCentering]="true" [(ngModel)]="resourceTechnologyList"
+                                            [ngModelOptions]="{standalone: true}" [placeholder]="'Select technology'"
+                                            multiple panelClass="multiple-select-style">
+                                            <mat-option *ngFor="let tech of resourceSpecificTechnologies"
+                                                [value]="tech">
                                                 {{tech?.name}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                     <div class="flex w-full items-center">
-                                        <div class="flex w-full items-center">                                
+                                        <div class="flex w-full items-center">
                                             <div class="">
-                                                <mat-checkbox
-                                                    [color]="'primary'"
-                                                    [(ngModel)]="markResourceAsShadow"
-                                                    [ngModelOptions]="{standalone: true}"
-                                                    ><span class="font-semibold"
-                                                        >Shadow Resource</span
-                                                    ></mat-checkbox
-                                                >
+                                                <mat-checkbox [color]="'primary'" [(ngModel)]="markResourceAsShadow"
+                                                    [ngModelOptions]="{standalone: true}"><span
+                                                        class="font-semibold">Shadow Resource</span></mat-checkbox>
                                             </div>
                                         </div>
-                            
+
                                     </div>
                                     <div class="w-full">
 
@@ -820,7 +762,8 @@
                                                                     {{teamMember?.utilization}}
                                                                 </div>
                                                                 <div class="truncate">
-                                                                    <span *ngIf="teamMember?.shadow"> {{teamMember?.shadow ? 'Shadow' : null}}</span>
+                                                                    <span *ngIf="teamMember?.shadow">
+                                                                        {{teamMember?.shadow ? 'Shadow' : null}}</span>
                                                                 </div>
                                                                 <div class="hidden md:block truncate">
                                                                     {{teamMember?.startDate | date}}
