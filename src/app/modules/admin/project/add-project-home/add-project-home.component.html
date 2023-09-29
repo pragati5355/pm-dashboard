@@ -7,16 +7,16 @@
             <div class="p-4 h-full">
                 <mat-vertical-stepper class="pr-sidebar h-full" [linear]="true" #verticalStepper
                     [selectedIndex]="this.selectedIndex" (selectionChange)="selectionChange($event)">
-                    <mat-step label="Project Details" [completed]="!projectDetails.invalid">
+                    <mat-step label="Project Details" [completed]="!projectDetails?.invalid">
 
                     </mat-step>
 
-                    <mat-step label="Client Details" [completed]="!clientDetials.invalid">
+                    <mat-step label="Client Details" [completed]="!clientDetials?.invalid">
 
                     </mat-step>
 
                     <mat-step label="PM Tool Settings"
-                        [completed]="!projectSetting.invalid && settingProjectName.length !==0">
+                        [completed]="!projectSetting?.invalid && settingProjectName?.length !==0">
 
                     </mat-step>
 
