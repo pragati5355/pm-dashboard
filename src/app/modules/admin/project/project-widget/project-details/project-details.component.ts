@@ -87,7 +87,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.matDialog
             .open(ProjectSettingsComponent, {
                 disableClose: true,
-                width: '50%',
+                width: '70%',
                 height: 'auto',
                 maxHeight: '90vh',
                 data: {
