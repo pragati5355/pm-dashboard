@@ -86,7 +86,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
         this.dialog
             .open(ExternalProjectSettingsComponent, {
                 disableClose: true,
-                width: '50%',
+                width: '70%',
                 height: 'auto',
                 maxHeight: '90vh',
                 data: {
