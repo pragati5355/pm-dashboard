@@ -1638,5 +1638,16 @@ export class AddProjectHomeComponent
                 validator: [noWhitespaceValidator('projectDescription')],
             }
         );
+
+        this.projectDetails?.get('startDate')?.valueChanges.subscribe((res) => {
+            if (res) {
+                this.projectTeam?.get('startDate')?.setValue(res);
+            }
+        });
+        this.projectDetails?.get('endDate')?.valueChanges.subscribe((res) => {
+            if (res) {
+                this.projectTeam?.get('endDate')?.setValue(res);
+            }
+        });
     }
 }
