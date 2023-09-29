@@ -248,6 +248,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                         [
                             Validators.required,
                             Validators.pattern(/^\d+(\.\d+)?$/),
+                            Validators.max(1000),
                         ],
                     ],
                     costToCompany: [
