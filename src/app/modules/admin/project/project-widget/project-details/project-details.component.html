@@ -51,7 +51,10 @@
             </div>
             <div class="flex items-center ml-6">
                 <div
-                    *ngIf="repoCount == 0 && (userRole === 'ADMIN' || userRole === 'PM')"
+                    *ngIf="
+                        repoCount == 0 &&
+                        (userRole === 'ADMIN' || userRole === 'PM')
+                    "
                     [matTooltip]="
                         !project?.repoProjectId
                             ? 'Please assign Bitbucket project to continue'
@@ -103,6 +106,21 @@
                     </button>
                 </div>
                 <div
+                    *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                    class="ml-2"
+                    [matTooltip]="'Project settings'"
+                >
+                    <button
+                        class="shadow-none"
+                        mat-mini-fab
+                        color="primary"
+                        (click)="projectSettingsDialog()"
+                        aria-label="Example icon button with a menu icon"
+                    >
+                        <mat-icon>settings</mat-icon>
+                    </button>
+                </div>
+                <div
                     class="inline-block"
                     *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                 >
@@ -144,7 +162,7 @@
                 class="items-center justify-between text-lg font-semibold tracking-tight leading-8 mr-8"
             >
                 <span class="font-normal">Start Date :&nbsp;</span>
-                {{ project?.createdAt | date }}
+                {{ project?.startDate | date }}
             </div>
             <div
                 class="flex items-center justify-between text-lg font-semibold tracking-tight leading-8"

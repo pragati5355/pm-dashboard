@@ -13,6 +13,7 @@ import { ExternalProjectsAddResourceComponent } from '../external-projects-add-r
 import { SendRemindersComponent } from '../send-reminders/send-reminders.component';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { WorkLogsDownloadComponent } from '../work-logs-download/work-logs-download.component';
+import { ExternalProjectSettingsComponent } from '../external-project-settings/external-project-settings.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -55,9 +56,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
 
     getProjectDetails() {
         this.projectService
-            .getOneProjectDetails({
-                id: this.projectId,
-            })
+            .getProjectById(this.projectId)
             .subscribe((res: any) => {
                 this.projectDetails = res?.data;
                 this.isLoading = false;
@@ -85,13 +84,16 @@ export class ExternalProjectDetailsComponent implements OnInit {
 
     settings() {
         this.dialog
-            .open(SendRemindersComponent, {
-                width: '50%',
+            .open(ExternalProjectSettingsComponent, {
+                disableClose: true,
+                width: '70%',
                 height: 'auto',
+                maxHeight: '90vh',
                 data: {
                     projectModel: this.projectDetails?.project,
                     clientModels: this.projectDetails?.clientModels,
                     projectSettings: this.projectDetails?.projectSettings,
+                    teamModel: this.projectDetails?.teamModel,
                 },
             })
             .afterClosed()
@@ -255,8 +257,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
             }
         );
     }
-    
-    downloadResouceWorklog(){
+
+    downloadResouceWorklog() {
         const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
             disableClose: true,
             width: '98%',
@@ -266,7 +268,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             autoFocus: false,
             data: {
                 id: this.projectId,
-                projectName : this.projectDetails?.project?.name,
+                projectName: this.projectDetails?.project?.name,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

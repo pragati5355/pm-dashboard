@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from 'angular-web-storage';
-import { AppConstants } from '../constacts/constacts';
+import { API_LIST, AppConstants } from '../constacts/constacts';
 
 @Injectable({
     providedIn: 'root',
@@ -39,6 +39,11 @@ export class CreateProjecteService {
     }
     getOneProjectDetails(obj: any) {
         return this.http.post(AppConstants['GET_PROJECT_DETAILS'], obj);
+    }
+    getProjectById(id: number) {
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/project/get-project-by-id/' + id
+        );
     }
     getResourceMember(obj: any) {
         return this.http.post(AppConstants['GET_RESOURCE_LIST'], obj);

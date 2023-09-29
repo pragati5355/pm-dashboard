@@ -18,6 +18,7 @@ import { DatePipe } from '@angular/common';
 import { ProjectMembersDetailsComponent } from '../project-members-details/project-members-details.component';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { ProjectSettingsComponent } from '../project-settings/project-settings.component';
 
 @Component({
     selector: 'app-project-details',
@@ -39,6 +40,7 @@ export class ProjectDetailsComponent implements OnInit {
     teamMembers = [];
     crList = [];
     userRole: string = '';
+    projectSettings: any;
 
     @Input() dataId: any;
     checked: false;
@@ -54,7 +56,7 @@ export class ProjectDetailsComponent implements OnInit {
         private datePipe: DatePipe,
         private loggedInUserService: LoggedInUserService,
         private clipboard: Clipboard,
-        private snackBar: SnackBar,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
@@ -69,16 +71,36 @@ export class ProjectDetailsComponent implements OnInit {
     getProjectDetails() {
         this.initialLoading = true;
         this.projectService
-            .getOneProjectDetails({
-                id: this.projectId,
-            })
+            .getProjectById(Number(this.projectId))
             .subscribe((res: any) => {
                 this.project = res?.data?.project;
                 this.teamMembers = res?.data?.teamModel;
                 this.crList = res?.data?.changeRequestProject;
+                this.projectSettings = res?.data?.projectSettings;
                 this.repoCount = res?.data?.repoCount;
                 this._authService.setProjectDetails(this.project);
                 this.initialLoading = false;
+            });
+    }
+
+    projectSettingsDialog() {
+        this.matDialog
+            .open(ProjectSettingsComponent, {
+                disableClose: true,
+                width: '50%',
+                height: 'auto',
+                maxHeight: '90vh',
+                data: {
+                    projectModel: this.project,
+                    projectSettings: this.projectSettings,
+                    teamModel: this.teamMembers,
+                },
+            })
+            .afterClosed()
+            .subscribe((result) => {
+                if (result) {
+                    this.getProjectDetails();
+                }
             });
     }
 

@@ -727,7 +727,7 @@ export class AddProjectHomeComponent
             return;
         }
 
-        if(this.projectTeam?.value?.team_jira_user === ''){
+        if (this.projectTeam?.value?.team_jira_user === '') {
             this.snackBar.errorSnackBar('Select Jira Username');
             return;
         }
@@ -1074,15 +1074,9 @@ export class AddProjectHomeComponent
 
                 const projectsetting = res?.data?.authUser;
 
-                const dummyStartDate = this.datePipe.transform(
-                    1686894251322,
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
-                );
+                const dummyStartDate = new Date();
 
-                const dummyEndDate = this.datePipe.transform(
-                    1689791400000,
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
-                );
+                const dummyEndDate = new Date();
 
                 this.projectDetails.patchValue({
                     projectName: this.projectData?.name

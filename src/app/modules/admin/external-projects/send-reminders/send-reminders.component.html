@@ -1,16 +1,4 @@
-<div
-    matDialogTitle
-    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -mt-6 -mx-6"
->
-    <div class="text-lg font-medium">Project settings</div>
-    <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
-        <mat-icon
-            class="text-current"
-            [svgIcon]="'heroicons_outline:x'"
-        ></mat-icon>
-    </button>
-</div>
-<div>
+<div class="ml-6">
     <div>
         <div class="flex items-center justify-between">
             <div class="text-xl font-semibold">Reminders</div>
@@ -128,12 +116,7 @@
         </div>
     </div>
 </div>
-
-<div mat-dialog-actions class="flex flex-row justify-end">
-    <!-- <button mat-stroked-button (click)="dialogRef.close()">
-        <mat-icon class="mr-2">close</mat-icon>
-        Cancel
-    </button> -->
+<div class="flex flex-row justify-end mb-4">
     <button
         mat-flat-button
         [color]="'primary'"

@@ -59,6 +59,7 @@ export const AppConstants = {
     GET_STATISTICS_COUNT: `${projectBaseUrl}/dashboard-stats`,
     CREATE_PLATFORM_USER: `${projectBaseUrl}/`,
     GET_PLATFORM_USERs: `${projectBaseUrl}/`,
+    GET_STAT_RESOURCE_LIST : `${springBootUrl}/project`,
 };
 export const ValidationConstants = {
     EMAIL_VALIDATION:
@@ -94,6 +95,7 @@ export const API_LIST = {
     GET_RESOURCE_WORKLOG_PUBLIC: springBootUrl + '/worklog/list-by-key',
     DOWNLOAD_WORKLOG_SHEET: springBootUrl + '/worklog/download-sheet',
     SPRING_BOOT_URL: springBootUrl,
+    PROJECT_SPRING_BOOT_URL : springBootUrl + '/project',
 };
 
 export const UTILIZATION_VALUES = [0.25, 0.5, 1];

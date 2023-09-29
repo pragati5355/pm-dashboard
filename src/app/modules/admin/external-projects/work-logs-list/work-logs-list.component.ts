@@ -13,7 +13,10 @@ import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { WorkLogAllowEditDialogComponent } from '../work-log-allow-edit-dialog/work-log-allow-edit-dialog.component';
 import { WorkLogShareComponent } from '../work-log-share/work-log-share.component';
+import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
 
 @Component({
     selector: 'app-work-logs-list',
@@ -51,9 +54,12 @@ export class WorkLogsListComponent implements OnInit {
     isResourceLoading: boolean = false;
     selectedResource: any;
     defaultResource: any;
+    defaultResourceName : any;
     currentMonth: number;
     currentYear: string = '';
-
+    configEditWorklogStatus!: FormGroup;
+    selectedResourceEmail: any[];
+    checked: boolean = false;
     yearAndMonth: any[] = [
         {
             '2022': [
@@ -78,7 +84,8 @@ export class WorkLogsListComponent implements OnInit {
         private fuseConfirmationService: FuseConfirmationService,
         private workLogService: WorkLogService,
         private snackBar: SnackBar,
-        private loggedInService: LoggedInUserService
+        private loggedInService: LoggedInUserService,
+        private externalProjectServiceApi : ExternalProjectsApiService
     ) {}
 
     ngOnInit(): void {
@@ -113,13 +120,17 @@ export class WorkLogsListComponent implements OnInit {
             this.disablePreviousWorklog = false;
         }
     }
+
     onEmailSelected($event: any) {
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
-        this.selectedResourceId = resource[0]?.id;
+        this.selectedResource = resource[0]?.firstName + " " + resource[0]?.lastName;
+        this.selectedResourceId = resource[0]?.resourceId;
+        this.checked = resource[0]?.allowEdit;
         this.loadData(this.selectedYear, this.selectedTabIndex);
     }
+
     clearSelectedEmail() {
         this.workLogsList = [];
         this.isEmailSelected = false;
@@ -137,6 +148,67 @@ export class WorkLogsListComponent implements OnInit {
 
     goBack() {
         this.router.navigate([`/external-projects/details/${this.projectId}`]);
+    }
+
+    allowEditWorklog(e: any) {
+        if (!this.checked) {
+            e.source.checked = false;
+            const dialogRef = this.matDialog.open(
+                WorkLogAllowEditDialogComponent,
+                {
+                    disableClose: true,
+                    autoFocus: false,
+                    data: {
+                        defaultResource : this.defaultResourceName,
+                        selectedResource : this.selectedResource,
+                        selectedResourceId : this.selectedResourceId,
+                    },
+                }
+            );
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result) {
+                    this.checked = !this.checked;
+                    const payload = {
+                        projectId : this.projectId,
+                        allowEdit : "true",
+                        resourceId : this.selectedResourceId
+                    };
+                    this.initialLoading = true;
+                    this.externalProjectServiceApi.getAllowEditWorklog(payload).subscribe(
+                        (res:any) => {
+                            this.initialLoading = false;
+                            if(res?.statusCode == 200) {
+                                this.snackBar.successSnackBar("Worklog Edit Enabled");
+                            }
+                        },
+                        (err) => {
+                            this.snackBar.errorSnackBar(err?.message);
+                        }
+                    )
+                } else {
+                    console.log('Saying NO',this.checked);
+                }
+            });
+        } else {
+            this.checked = !this.checked;
+            const payload = {
+                projectId : this.projectId,
+                allowEdit : "false",
+                resourceId : this.selectedResourceId
+            };
+            this.initialLoading = true;
+            this.externalProjectServiceApi.getAllowEditWorklog(payload).subscribe(
+                (res:any) => {
+                    this.initialLoading = false;
+                    if(res?.statusCode == 200) {
+                        this.snackBar.successSnackBar("Worklog Edit Disabled");
+                    }
+                },
+                (err) => {
+                    this.snackBar.errorSnackBar(err?.message);
+                }
+            )
+        }
     }
 
     addOrEditWorklog(workLogData: any, mode: string) {
@@ -275,8 +347,6 @@ export class WorkLogsListComponent implements OnInit {
             this.initialLoading = false;
             if (!res?.error) {
                 this.workLogsList = res?.data?.list;
-                console.log(this.workLogsList);
-
                 this.projectName = res?.data?.projectName;
             }
             if (res?.tokenExpire) {
@@ -310,13 +380,15 @@ export class WorkLogsListComponent implements OnInit {
     private getProjectResources() {
         this.initialLoading = true;
         this.workLogService
-            .getProjectResource({ projectId: this.projectId })
+            .getProjectResource(this.projectId)
             .subscribe((res: any) => {
                 this.initialLoading = false;
                 if (res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
-                    this.selectedResourceId = res?.data[0]?.id;
+                    this.defaultResourceName = res?.data[0]?.firstName + " " + res?.data[0]?.lastName;
+                    this.checked = res?.data[0]?.allowEdit;
+                    this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 }
                 if (res?.tokenExpire) {
