@@ -14,9 +14,10 @@
             <div class="flex justify-end items-center">
                 <div class="flex items-center">
                     
-                    <div class="flex items-center px-5 mt-2" *ngIf="userRole === 'ADMIN'">
-                        <span class="font-medium pr-3 "> Allow Edit Worklog </span>
+                    <div class="flex flex-col items-center pr-4 mb-8" *ngIf="userRole === 'ADMIN'">
+                        <span class="font-medium text-md mb-2">Allow Edit</span>
                         <mat-slide-toggle 
+                            class="justify-start mr-8"
                             [color]="'primary'"
                             (change)="allowEditWorklog($event)" 
                             [checked]="checked"
