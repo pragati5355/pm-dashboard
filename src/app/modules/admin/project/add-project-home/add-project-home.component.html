@@ -433,11 +433,11 @@
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto">
 
                                 <div class="flex items-center ml-auto mt-4 sm:mt-0">
-                                    <button mat-stroked-button type="button" (click)="goBack(1)">
+                                    <button mat-stroked-button type="button" (click)="goBack(1)" [disabled]="submitInProcess">
                                         Back
                                     </button>
                                     <!-- Send -->
-                                    <button *ngIf="!settingProjectName" class="order-first sm:order-last ml-4 min-w-12"
+                                    <button *ngIf="!settingProjectName" [disabled]="submitInProcess" class="order-first sm:order-last ml-4 min-w-12"
                                         mat-flat-button [color]="'primary'" (click)="send()">
                                         <span *ngIf="!submitInProcess">
                                             Fetch Project
