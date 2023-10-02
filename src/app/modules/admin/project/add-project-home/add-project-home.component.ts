@@ -845,7 +845,6 @@ export class AddProjectHomeComponent
                     teamDetails: this.teamMemberList,
                 };
 
-                console.log(payload);
 
                 this.submitInProcess = true;
 
@@ -1353,14 +1352,6 @@ export class AddProjectHomeComponent
         this.resourceSpecificTechnologies = resource?.technologies;
         this.getAvailableCapacity(resource.email);
     }
-
-    // private getCurrentResourceTechnology(email: string) {
-    //     const value = this.emailList?.filter((item: any) => {
-    //         return item?.email === email;
-    //     });
-
-    //     console.log('resourceSpecificTechnologies :', value[0]?.technologies);
-    // }
 
     private initializeAllForms() {
         this.initializeProjectDetailsForm();
