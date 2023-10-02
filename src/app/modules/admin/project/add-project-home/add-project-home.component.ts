@@ -50,6 +50,7 @@ import {
 import { DatePipe } from '@angular/common';
 import { UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
 import { EditProjectReasonDialogComponent } from '../edit-project-reason-dialog/edit-project-reason-dialog.component';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-add-project-home',
@@ -153,6 +154,7 @@ export class AddProjectHomeComponent
     newDate: any;
     resourcePrevDate: any;
     resourceNewDate: any;
+    originalTeamMemberList: any[] = [];
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -225,6 +227,18 @@ export class AddProjectHomeComponent
     }
 
     editMember(index: number, teamMember: any) {
+        this.getAvailableCapacity(teamMember?.email);
+
+        const currentResource = this.originalTeamMemberList?.filter(
+            (resource) => resource?.email === teamMember?.email
+        );
+
+
+        if (currentResource?.length > 0) {
+            this.currentCapacity =
+                this.currentCapacity + (currentResource[0]?.utilization || 0);
+        }
+
         this.editResourceEndDateReason = teamMember?.extendedReason
             ? teamMember?.extendedReason
             : '';
@@ -845,7 +859,6 @@ export class AddProjectHomeComponent
                     teamDetails: this.teamMemberList,
                 };
 
-
                 this.submitInProcess = true;
 
                 this.ProjectService.createProject(payload).subscribe(
@@ -1145,8 +1158,9 @@ export class AddProjectHomeComponent
                 //         pm_utilization: pm[0]?.utilization,
                 //     });
                 // }
+                this.teamMemberList = _.cloneDeep(projectTeam);
+                this.originalTeamMemberList = _.cloneDeep(projectTeam);
 
-                this.teamMemberList = projectTeam;
                 // this.managerEditTeamLIst = projectTeam.filter(
                 //     (item: any) => item?.role == 'Manager'
                 // );
