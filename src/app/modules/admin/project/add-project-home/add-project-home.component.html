@@ -697,7 +697,7 @@
 
                                 </div>
                                 <div class="w-full flex">
-                                    <mat-form-field class="w-full mr-3">
+                                    <mat-form-field class="w-full mr-3" *ngIf="this.projectTeam?.get('select_role')?.value !== 'PM'">
                                         <mat-label>Technology *</mat-label>
                                         <mat-select [disableOptionCentering]="true" [(ngModel)]="resourceTechnologyList"
                                             [ngModelOptions]="{standalone: true}" [placeholder]="'Select technology'"
