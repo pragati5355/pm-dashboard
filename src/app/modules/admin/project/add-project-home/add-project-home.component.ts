@@ -194,7 +194,7 @@ export class AddProjectHomeComponent
     }
 
     resourceEndDate(event: any) {
-        if (this.editMemberMode) {
+        if (this.editProject) {
             const newDate = this.datePipe.transform(
                 event?.target?.value,
                 'dd-MM-yyyy'
@@ -719,26 +719,26 @@ export class AddProjectHomeComponent
             return;
         }
 
-        if (
-            this.resourceTechnologyList?.length < 1 &&
-            this.projectTeam?.value?.select_role != 'PM'
-        ) {
-            this.snackBar.errorSnackBar('Add technologies');
-            return;
-        }
-
-        if (this.projectTeam?.value?.team_jira_user === '') {
-            this.snackBar.errorSnackBar('Select Jira Username');
-            return;
-        }
-
-        if (this.projectTeam?.value?.select_role === '') {
+        if (this.projectTeam?.get('select_role')?.value === '') {
             this.snackBar.errorSnackBar('Select role');
+            return;
+        }
+
+        if (this.projectTeam?.get('team_jira_user')?.value === '') {
+            this.snackBar.errorSnackBar('Select Jira Username');
             return;
         }
 
         if (this.projectTeam?.value?.tm_utilization === '') {
             this.snackBar.errorSnackBar('Select utilization');
+            return;
+        }
+
+        if (
+            this.resourceTechnologyList?.length < 1 &&
+            this.projectTeam?.get('select_role')?.value !== 'PM'
+        ) {
+            this.snackBar.errorSnackBar('Add technologies');
             return;
         }
 
@@ -763,6 +763,7 @@ export class AddProjectHomeComponent
                     item.shadow = this.markResourceAsShadow;
                     item.extendedReason = this.editResourceEndDateReason;
                 }
+                this.editMemberMode = false;
                 return item;
             });
         } else {
@@ -800,8 +801,12 @@ export class AddProjectHomeComponent
         this.projectTeam.controls['team_member'].reset();
         this.projectTeam.controls['select_role'].reset();
         this.projectTeam.controls['team_jira_user'].reset();
-        this.projectTeam.controls['startDate'].reset();
-        this.projectTeam.controls['endDate'].reset();
+        this.projectTeam.controls['startDate'].setValue(
+            this.projectDetails?.get('startDate')?.value
+        );
+        this.projectTeam.controls['endDate'].setValue(
+            this.projectDetails?.get('endDate')?.value
+        );
         this.projectTeam.controls['tm_utilization'].reset();
         this.markResourceAsBench = false;
         this.markResourceAsShadow = false;
@@ -906,7 +911,8 @@ export class AddProjectHomeComponent
                     adminEmail: this.projectSetting?.value?.email,
                     addedBy: this.userData?.userId,
                     teamDetails: this.teamMemberList,
-                };
+                };                
+
                 this.submitInProcess = true;
 
                 this.ProjectService.createProject(payload).subscribe(
