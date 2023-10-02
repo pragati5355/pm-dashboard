@@ -194,7 +194,7 @@ export class AddProjectHomeComponent
     }
 
     resourceEndDate(event: any) {
-        if (this.editMemberMode) {
+        if (this.editProject) {
             const newDate = this.datePipe.transform(
                 event?.target?.value,
                 'dd-MM-yyyy'
@@ -638,77 +638,6 @@ export class AddProjectHomeComponent
         }
     }
     addTeamMember() {
-        // if (this.projectTeam.controls['team_member'].valid) {
-        //     // if (!this.projectTeam.value.team_jira_user) {
-        //     //     this.teamJiraUser = true;
-        //     // this.projectTeam.value.team_jira_user &&
-
-        //     // }
-        //     if (
-        //         this.projectTeam.value.team_member &&
-        //         this.projectTeam.value.select_role &&
-        //         this.projectTeam.value.tm_utilization &&
-        //         this.projectTeam.value.startDate &&
-        //         this.projectTeam.value.endDate
-        //     ) {
-        //         if (this.editMemberMode) {
-        //             this.teamMemberList.map((item) => {
-        //                 if (
-        //                     item?.resourceId ===
-        //                     this.projectTeam?.value?.team_member?.id
-        //                 ) {
-        //                     item.resourceId =
-        //                         this.projectTeam?.value?.team_member?.id;
-        //                     item.firstname =
-        //                         this.projectTeam?.value?.team_member?.firstname;
-        //                     item.startDate = this.projectTeam?.value?.startDate;
-        //                     item.endDate = this.projectTeam?.value?.endDate;
-        //                     item.role = this.projectTeam?.value?.select_role;
-        //                     item.utilization =
-        //                         this.projectTeam?.value?.tm_utilization;
-        //                     item.deleted = false;
-
-        //                 }
-        //                 return item;
-        //             });
-        //         } else {
-        //             this.teamMemberList = [
-        //                 ...this.teamMemberList,
-        //                 {
-        //                     resourceId:
-        //                         this.projectTeam?.value?.team_member?.id,
-        //                     firstname:
-        //                         this.projectTeam?.value?.team_member?.firstname,
-        //                     startDate: this.projectTeam?.value?.startDate,
-        //                     endDate: this.projectTeam?.value?.endDate,
-        //                     role: this.projectTeam?.value?.select_role,
-        //                     utilization:
-        //                         this.projectTeam?.value?.tm_utilization,
-        //                     deleted: false,
-        //                     bench: this.isResourceOnBench,
-        //                     shadow: this.isShadowResource,
-        //                     technologies: this.resourceTechnologyList,
-        //                 },
-        //             ];
-        //             this.selectedJiraUser = [
-        //                 ...this.selectedJiraUser,
-        //                 this.projectTeam?.value?.team_jira_user?.displayName,
-        //             ];
-        //             this.selectedTeamMember = [
-        //                 ...this.selectedTeamMember,
-        //                 this.projectTeam?.value?.team_member?.id,
-        //             ];
-        //         }
-
-        //         this.projectTeam.controls['team_member'].reset();
-        //         this.projectTeam.controls['select_role'].reset();
-        //         this.projectTeam.controls['team_jira_user'].reset();
-        //         this.projectTeam.controls['startDate'].reset();
-        //         this.projectTeam.controls['endDate'].reset();
-        //         this.projectTeam.controls['tm_utilization'].reset();
-        //     }
-        // }
-
         if (this.projectTeam?.value?.startDate === '') {
             this.snackBar.errorSnackBar('Start date is mandatory');
             return;
@@ -719,26 +648,26 @@ export class AddProjectHomeComponent
             return;
         }
 
-        if (
-            this.resourceTechnologyList?.length < 1 &&
-            this.projectTeam?.value?.select_role != 'PM'
-        ) {
-            this.snackBar.errorSnackBar('Add technologies');
-            return;
-        }
-
-        if (this.projectTeam?.value?.team_jira_user === '') {
-            this.snackBar.errorSnackBar('Select Jira Username');
-            return;
-        }
-
-        if (this.projectTeam?.value?.select_role === '') {
+        if (this.projectTeam?.get('select_role')?.value === '') {
             this.snackBar.errorSnackBar('Select role');
+            return;
+        }
+
+        if (this.projectTeam?.get('team_jira_user')?.value === '') {
+            this.snackBar.errorSnackBar('Select Jira Username');
             return;
         }
 
         if (this.projectTeam?.value?.tm_utilization === '') {
             this.snackBar.errorSnackBar('Select utilization');
+            return;
+        }
+
+        if (
+            this.resourceTechnologyList?.length < 1 &&
+            this.projectTeam?.get('select_role')?.value !== 'PM'
+        ) {
+            this.snackBar.errorSnackBar('Add technologies');
             return;
         }
 
@@ -758,11 +687,15 @@ export class AddProjectHomeComponent
                     item.jiraUserName =
                         this.projectTeam?.value?.team_jira_user?.accountId;
                     item.deleted = false;
-                    item.technologies = this.resourceTechnologyList;
+                    item.technologies =
+                        this.projectTeam?.get('select_role')?.value === 'PM'
+                            ? []
+                            : this.resourceTechnologyList;
                     item.bench = this.markResourceAsBench;
                     item.shadow = this.markResourceAsShadow;
                     item.extendedReason = this.editResourceEndDateReason;
                 }
+                this.editMemberMode = false;
                 return item;
             });
         } else {
@@ -800,8 +733,12 @@ export class AddProjectHomeComponent
         this.projectTeam.controls['team_member'].reset();
         this.projectTeam.controls['select_role'].reset();
         this.projectTeam.controls['team_jira_user'].reset();
-        this.projectTeam.controls['startDate'].reset();
-        this.projectTeam.controls['endDate'].reset();
+        this.projectTeam.controls['startDate'].setValue(
+            this.projectDetails?.get('startDate')?.value
+        );
+        this.projectTeam.controls['endDate'].setValue(
+            this.projectDetails?.get('endDate')?.value
+        );
         this.projectTeam.controls['tm_utilization'].reset();
         this.markResourceAsBench = false;
         this.markResourceAsShadow = false;
@@ -907,6 +844,8 @@ export class AddProjectHomeComponent
                     addedBy: this.userData?.userId,
                     teamDetails: this.teamMemberList,
                 };
+
+
                 this.submitInProcess = true;
 
                 this.ProjectService.createProject(payload).subscribe(
@@ -1413,14 +1352,6 @@ export class AddProjectHomeComponent
         this.resourceSpecificTechnologies = resource?.technologies;
         this.getAvailableCapacity(resource.email);
     }
-
-    // private getCurrentResourceTechnology(email: string) {
-    //     const value = this.emailList?.filter((item: any) => {
-    //         return item?.email === email;
-    //     });
-
-    //     console.log('resourceSpecificTechnologies :', value[0]?.technologies);
-    // }
 
     private initializeAllForms() {
         this.initializeProjectDetailsForm();
