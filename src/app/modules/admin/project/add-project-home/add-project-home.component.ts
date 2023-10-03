@@ -48,7 +48,7 @@ import {
     JiraTeamUser,
 } from './model/add-project-models';
 import { DatePipe } from '@angular/common';
-import { UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
+import { UPDATED_UTILIZATION_VALUES, UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
 import { EditProjectReasonDialogComponent } from '../edit-project-reason-dialog/edit-project-reason-dialog.component';
 import _ from 'lodash';
 
@@ -146,7 +146,7 @@ export class AddProjectHomeComponent
     editMemberMode = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-    utilizationValues: number[] = UTILIZATION_VALUES;
+    utilizationValues: any[] = UPDATED_UTILIZATION_VALUES;
     currentCapacity: number;
     editProjectEndDateReason: string = '';
     editResourceEndDateReason: string = '';
@@ -713,6 +713,7 @@ export class AddProjectHomeComponent
                 return item;
             });
         } else {
+            
             this.teamMemberList = [
                 ...this.teamMemberList,
                 {
