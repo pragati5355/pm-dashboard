@@ -161,7 +161,7 @@ export class AddCrComponent implements OnInit {
             .subscribe(
                 (res: any) => {
                     this.isLoading = false;
-                    if (res?.error === false) {
+                    if (res?.statusCode === 200) {
                         this.projectDetails = res?.data;
                         this.projectEndDate = this.datePipe.transform(
                             this.projectDetails?.project?.endDate,

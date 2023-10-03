@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 
 @Injectable({
     providedIn: 'root',
@@ -18,7 +18,9 @@ export class AddCrService {
     }
 
     getProjectDetailsById(obj: any) {
-        return this.http.post(this.projectDetailsByIdUrl, obj);
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/project/get-project-by-id/' + obj?.id
+        );
     }
 
     mapResource(obj: any) {
