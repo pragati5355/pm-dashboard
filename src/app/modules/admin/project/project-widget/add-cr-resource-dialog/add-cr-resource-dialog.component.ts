@@ -15,6 +15,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { DatePipe } from '@angular/common';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { UPDATED_UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
 
 @Component({
     selector: 'app-add-cr-resource-dialog',
@@ -31,6 +32,7 @@ export class AddCrResourceDialogComponent implements OnInit {
     emailList: any[] = [];
     utilizationValue: string;
     utilizationValues: number[] = UTILIZATION_VALUES;
+    newUtilizationValues: any[] = UPDATED_UTILIZATION_VALUES;
     ROLE_LIST: string[] = ROLE_LIST;
     resourceId: Number;
     userID: Number;

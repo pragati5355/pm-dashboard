@@ -280,8 +280,8 @@
                     </div>
 
                     <div class="flex flex-1 items-center">
-                        <div class="w-full flex flex-row ml-2">
-                            <label class="font-semibold mt-1"
+                        <div class="w-full flex flex-row">
+                            <!-- <label class="font-semibold mt-1"
                                 >Utilization *</label
                             >
                             <mat-radio-group
@@ -298,7 +298,25 @@
                                 >
                                     {{ value }}
                                 </mat-radio-button>
-                            </mat-radio-group>
+                            </mat-radio-group> -->
+
+                            <mat-form-field class="w-full">
+                                <mat-label>Utilization</mat-label>
+                                <mat-select
+                                    formControlName="utilization"
+                                    name="food"
+                                >
+                                    <mat-option
+                                        *ngFor="
+                                            let utilization of newUtilizationValues
+                                        "
+                                        [value]="utilization?.value"
+                                        [disabled]="utilization?.value > currentCapacity"
+                                    >
+                                        {{ utilization?.label }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
 
                         <div class="flex w-full mt-3 ml-3 items-center">
