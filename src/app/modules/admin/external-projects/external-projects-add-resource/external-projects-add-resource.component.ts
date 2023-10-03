@@ -15,7 +15,11 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackBar } from '../../../../core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
-import { ROLE_LIST, UTILIZATION_VALUES } from '../common/constants';
+import {
+    ROLE_LIST,
+    UPDATED_UTILIZATION_VALUES,
+    UTILIZATION_VALUES,
+} from '../common/constants';
 import { AuthService } from '@services/auth/auth.service';
 import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
 import { DatePipe } from '@angular/common';
@@ -38,6 +42,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     emailList: any[] = [];
     utilizationValue: string;
     utilizationValues: number[] = UTILIZATION_VALUES;
+    newUtilizationValues: any[] = UPDATED_UTILIZATION_VALUES;
     ROLE_LIST: string[] = ROLE_LIST;
     resourceId: Number;
     userID: Number;
