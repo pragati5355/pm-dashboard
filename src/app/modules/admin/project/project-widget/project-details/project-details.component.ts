@@ -142,6 +142,30 @@ export class ProjectDetailsComponent implements OnInit {
         this.router.navigate([`/projects/${this.projectId}/worklogs`]);
     }
 
+    viewWorkLogs() {
+        this.router.navigate([`/projects/work-logs/${this.projectId}`]);
+    }
+
+    downloadResouceWorklog() {
+        // const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
+        //     disableClose: true,
+        //     width: '98%',
+        //     maxWidth: '800px',
+        //     maxHeight: '90vh',
+        //     panelClass: 'warn-dialog-content',
+        //     autoFocus: false,
+        //     data: {
+        //         id: this.projectId,
+        //         projectName: this.projectDetails?.project?.name,
+        //     },
+        // });
+        // dialogRef.afterClosed().subscribe((result: any) => {
+        //     if (result == 'success') {
+        //         window.location.reload();
+        //     }
+        // });
+    }
+
     historyDetails() {
         const dialogRef = this.matDialog.open(ProjectMembersDetailsComponent, {
             disableClose: true,

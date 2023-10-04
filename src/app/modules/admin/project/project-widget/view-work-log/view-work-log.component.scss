@@ -1,0 +1,33 @@
+.inventory-grid {
+    grid-template-columns: 12% auto 8% 12%;
+}
+.inventory-grid-2 {
+    grid-template-columns: 10% auto 10%;
+}
+.inventory-grid-list {
+    grid-template-columns: 8% auto;
+}
+.inventory-grid-list-1 {
+    grid-template-columns: 10% auto;
+}
+.text-wrap-container > * {
+    overflow-wrap: break-word !important;
+}
+.inventory-grid-list-inner-list-user {
+    grid-template-columns: auto 5% 8%;
+}
+.inventory-grid-list-inner-list-admin {
+    grid-template-columns: auto 5%;
+}
+
+.worklog-row {
+    ol,
+    ul,
+    menu {
+        list-style: unset !important;
+        padding-left: 20px;
+    }
+    p {
+        margin: 0 !important;
+    }
+}

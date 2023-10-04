@@ -1,0 +1,206 @@
+<div class="p-8 pt-4 w-full mt-8">
+    <div class="p-8 bg-white shadow rounded">
+        <div class="flex justify-between items-center">
+            <div
+                class="tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
+                (click)="goBack()"
+            >
+                <mat-icon
+                    class="icon-size-6 text-3xl text-black"
+                    [svgIcon]="'heroicons_outline:chevron-left'"
+                ></mat-icon>
+                Back
+            </div>
+            <div class="flex justify-end items-center">
+                <div class="flex items-center">
+                    <div class="w-[350px] mr-4" *ngIf="userRole === 'ADMIN'">
+                        <mat-form-field class="w-full">
+                            <mat-label class="">Resource</mat-label>
+                            <mat-select
+                                [(value)]="defaultResource"
+                                (selectionChange)="onEmailSelected($event)"
+                                [disabled]="initialLoading"
+                            >
+                                <mat-option
+                                    *ngFor="let option of options"
+                                    [value]="option?.email"
+                                >
+                                    {{
+                                        option?.firstName +
+                                            " " +
+                                            option?.lastName
+                                    }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <mat-form-field>
+                        <mat-label class="">Year</mat-label>
+                        <mat-select
+                            [(value)]="selectedYear"
+                            (selectionChange)="onYearChange($event)"
+                            [disabled]="initialLoading"
+                        >
+                            <mat-option
+                                *ngFor="let year of matSelectYears"
+                                value="{{ year }}"
+                                [disabled]="
+                                    initialLoading || year > currentYear
+                                "
+                                >{{ year }}</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <mat-tab-group
+                [color]="'primary'"
+                mat-stretch-tabs="false"
+                mat-align-tabs="start"
+                (selectedTabChange)="onTabChanged($event)"
+                [(selectedIndex)]="selectedTabIndex"
+            >
+                <mat-tab
+                    *ngFor="let tab of matTabList"
+                    label="{{ tab?.label }}"
+                    [disabled]="initialLoading || tab?.value > currentMonth"
+                >
+                    <ng-container
+                        *ngIf="!initialLoading && workLogsList?.length > 0"
+                    >
+                        <div
+                            class="z-10 sticky top-0 grid gap-2 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            [ngClass]="{
+                                'inventory-grid-list-1':
+                                    userRole === 'ADMIN' || userRole === 'PM',
+                                'inventory-grid-list':
+                                    userRole === 'USER' || userRole === 'VENDOR'
+                            }"
+                        >
+                            <div class="font-semibold px-2">Date</div>
+                            <div
+                                class="grid gap-2"
+                                [ngClass]="{
+                                    'inventory-grid-list-inner-list-admin':
+                                        userRole === 'ADMIN' ||
+                                        userRole === 'PM',
+                                    'inventory-grid-list-inner-list-user':
+                                        userRole === 'USER' ||
+                                        userRole === 'VENDOR'
+                                }"
+                            >
+                                <div class="font-semibold">Description</div>
+                                <div class="font-semibold">Hours</div>
+                                <div
+                                    class="font-semibold"
+                                    *ngIf="
+                                        userRole === 'USER' ||
+                                        userRole === 'VENDOR'
+                                    "
+                                >
+                                    Actions
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            *ngFor="let log of workLogsList"
+                            class="grid gap-2 py-2 border-b-2"
+                            [ngClass]="{
+                                'inventory-grid-list-1':
+                                    userRole === 'ADMIN' || userRole === 'PM',
+                                'inventory-grid-list':
+                                    userRole === 'USER' || userRole === 'VENDOR'
+                            }"
+                        >
+                            <div class="pl-2 mt-2">
+                                {{ log?.worklogDate | date }}
+                            </div>
+                            <div class="flex flex-col">
+                                <div
+                                    class="grid gap-2 border-b-2 py-2"
+                                    [ngClass]="{
+                                        'inventory-grid-list-inner-list-admin':
+                                            userRole === 'ADMIN' ||
+                                            userRole === 'PM',
+                                        'inventory-grid-list-inner-list-user':
+                                            userRole === 'USER' ||
+                                            userRole === 'VENDOR',
+                                        'border-b-0 pb-0': last
+                                    }"
+                                    *ngFor="
+                                        let logs of log?.worklogList;
+                                        let last = last
+                                    "
+                                >
+                                    <div
+                                        class="overflow-hidden break-all worklog-row"
+                                        [innerHTML]="
+                                            logs?.onLeave
+                                                ? 'On Leave'
+                                                : logs?.comment
+                                        "
+                                    ></div>
+                                    <div class="pb-2">
+                                        {{
+                                            logs?.onLeave ? 0 : logs?.timeSpent
+                                        }}
+                                    </div>
+
+                                    <div
+                                        class=""
+                                        *ngIf="
+                                            userRole === 'USER' ||
+                                            userRole === 'VENDOR'
+                                        "
+                                    >
+                                        <div class="pb-2">
+                                            <div>
+                                                <button
+                                                    *ngIf="
+                                                        logs?.allowEdit === true
+                                                    "
+                                                >
+                                                    <mat-icon
+                                                        [matTooltip]="'Edit'"
+                                                        class="text-gray-400 icon-size-5 cursor-pointer mr-4"
+                                                        svgIcon="heroicons_outline:pencil"
+                                                    ></mat-icon>
+                                                </button>
+                                                <button>
+                                                    <mat-icon
+                                                        [matTooltip]="'Delete'"
+                                                        class="text-gray-400 icon-size-5 cursor-pointer"
+                                                        svgIcon="heroicons_outline:trash"
+                                                    ></mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container
+                        *ngIf="!initialLoading && workLogsList?.length === 0"
+                    >
+                        <div
+                            class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
+                        >
+                            Work logs not found
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="initialLoading">
+                        <app-table-skeleton
+                            [skeletonData]="requiredSprintSkeletonData"
+                        ></app-table-skeleton>
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
