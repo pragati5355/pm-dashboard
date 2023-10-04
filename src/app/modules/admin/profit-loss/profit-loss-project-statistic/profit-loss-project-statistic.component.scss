@@ -1,6 +1,7 @@
 .inventory-grid {
-    grid-template-columns: 34% 10% 10% 10% 10% 10% 10%
-}
+    grid-template-columns: 24% 10% 11% 8% 14% 12% 11% 8% 10% 10%
+    // grid-template-columns: repeat(9, minmax(0, 1fr));
+}    
 
 .mat-icon {
     font-size: 18px;

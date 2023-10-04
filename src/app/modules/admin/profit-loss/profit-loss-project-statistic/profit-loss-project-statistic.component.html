@@ -26,100 +26,170 @@
                     class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
                 >
                     <div
-                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 sm:px-10 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                         matSortDisableClear
                     >
                         <div>Resource Email</div>
                         <div>Ideal Work Hrs</div>
                         <div>Actual Work Hrs</div>
-                        <div>Hourty Cost</div>
-                        <div>Ideal Cost</div>
+                        <div>Hourly Cost</div>
+                        <div>Ideal Resource Cost</div>
+                        <div>Ideal Project Cost</div>
+                        <div>Cost On Project</div>
                         <div>Actual Cost</div>
                         <div>Difference</div>
                     </div>
-                    <ng-container *ngIf="statList?.length > 0 && !initialLoading">
+                    <ng-container
+                        *ngIf="statList?.length > 0 && !initialLoading"
+                    >
                         <div class="grid">
                             <ng-container *ngFor="let list of statList">
                                 <div
-                                    class="cursor-pointer inventory-grid grid items-center gap-4 py-2 px-4 md:px-10 border-b"
+                                    class="inventory-grid grid cursor-pointer items-center gap-4 py-2 px-4 md:px-10 border-b"
                                 >
                                     <!-- Email -->
                                     <div class="hidden md:block truncate">
-                                        {{ list?.email }}
+                                        {{ list?.email || "-"}}
                                     </div>
 
                                     <!-- Ideal Work Hrs -->
                                     <div class="hidden md:block truncate">
-                                        {{ list?.totalIdealWorklogHrs }}
+                                        {{ list?.totalIdealWorklogHrs || "0"}}
                                     </div>
 
                                     <!-- Actual Work Hrs -->
                                     <div class="hidden md:block truncate">
-                                        {{ list?.totalActualWorklogHrs }}
+                                        {{ list?.totalActualWorklogHrs || "0"}}
                                     </div>
 
-                                     <!-- Hourly Cost -->
-                                     <div class="hidden md:block truncate">
-                                        $ {{ list?.hourlyCost }}
+                                    <!-- Hourly Cost -->
+                                    <div class="hidden md:block truncate">
+                                        $ {{ list?.hourlyCost || "0"}}
+                                    </div>
+
+                                    <!-- Ideal Resource Cost -->
+                                    <div class="hidden md:block truncate">
+                                        $ {{ list?.idealResourceCost || "0"}}
+                                    </div>
+
+                                    <!-- Ideal Project Cost -->
+                                    <div class="hidden md:block truncate">
+                                        $ {{ list?.idealProjectCost || "0"}}
                                     </div>
 
                                     <!--Ideal Cost -->
-                                    <div class="flex  md:block truncate">
-                                        $ {{ list?.idealHourlyRate }}
+                                    <div class="flex md:block truncate">
+                                        $ {{ list?.costOnProject || "0"}}
                                     </div>
 
                                     <!--Actual Cost -->
                                     <div class="hidden md:block truncate">
-                                        $ {{ list?.actualHourlyRate }}
+                                        $ {{ list?.actualCost || "0"}}
                                     </div>
 
                                     <!-- Difference -->
                                     <div class="hidden lg:flex items-center">
-                                        <div class="">
-                                            $ {{ list?.diff }} 
+                                        <div class="">$ {{ list?.diff || "0"}}</div>
+                                        <div
+                                            class="flex items-end ml-2"
+                                            *ngIf="
+                                                list?.idealHourlyRate >
+                                                list?.actualHourlyRate
+                                            "
+                                        >
+                                            <mat-icon
+                                                class="flex"
+                                                style="
+                                                    color: rgb(
+                                                        74 222 128
+                                                    ) !important;
+                                                "
+                                                >arrow_upward</mat-icon
+                                            >
                                         </div>
-                                        <div class="flex items-end ml-2" *ngIf="list?.idealHourlyRate > list?.actualHourlyRate">
-                                            <mat-icon class="flex" style="color: rgb(74 222 128)!important;">arrow_upward</mat-icon>
-                                        </div>   
-                                        <div class="flex items-end ml-2" *ngIf="list?.idealHourlyRate < list?.actualHourlyRate">
-                                            <mat-icon class="flex" style="color: rgb(220 38 38)!important;">arrow_downward</mat-icon>
-                                        </div>   
+                                        <div
+                                            class="flex items-end ml-2"
+                                            *ngIf="
+                                                list?.idealHourlyRate <
+                                                list?.actualHourlyRate
+                                            "
+                                        >
+                                            <mat-icon
+                                                class="flex"
+                                                style="
+                                                    color: rgb(
+                                                        220 38 38
+                                                    ) !important;
+                                                "
+                                                >arrow_downward</mat-icon
+                                            >
+                                        </div>
                                     </div>
                                 </div>
                             </ng-container>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="statList?.length > 0 && !initialLoading">
+                    <ng-container
+                        *ngIf="statList?.length > 0 && !initialLoading"
+                    >
                         <div
                             class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-base font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                             matSortDisableClear
                         >
                             <div class="text-black">Total</div>
-                            <div class="text-black">{{sumIdealWorkHrs}}</div>
-                            <div class="text-black">{{sumActualWorkHrs}}</div>
+                            <div class="text-black">{{ sumIdealWorkHrs || "0"}}</div>
+                            <div class="text-black">{{ sumActualWorkHrs || "0"}}</div>
                             <div class="text-black"> </div>
-                            <div class="text-black">$ {{sumIdealCost}}</div>
-                            <div class="text-black">$ {{sumActualCost}}</div>
-                            <div class="text-black hidden lg:flex items-center">   
-                                <div>
-                                    $ {{sumdifference}}
+                            <div class="text-black">$ {{ sumResourceCost || "0"}}</div>
+                            <div class="text-black">$ {{ sumProjectCost || "0"}}</div>
+                            <div class="text-black">$ {{ sumIdealCost || "0"}}</div>
+                            <div class="text-black">$ {{ sumActualCost || "0"}}</div>
+                            <div class="text-black hidden lg:flex items-center">
+                                <div>$ {{ sumdifference || "0"}}</div>
+                                <div
+                                    class="flex items-end ml-2"
+                                    *ngIf="sumIdealCost > sumActualCost"
+                                >
+                                    <mat-icon
+                                        class="flex"
+                                        style="
+                                            color: rgb(74 222 128) !important;
+                                        "
+                                        >arrow_upward</mat-icon
+                                    >
                                 </div>
-                                <div class="flex items-end ml-2" *ngIf="sumIdealCost > sumActualCost">
-                                    <mat-icon class="flex" style="color: rgb(74 222 128)!important;">arrow_upward</mat-icon>
-                                </div>   
-                                <div class="flex items-end ml-2" *ngIf="sumIdealCost < sumActualCost">
-                                    <mat-icon class="flex" style="color: rgb(220 38 38)!important;">arrow_downward</mat-icon>
-                                </div>   
+                                <div
+                                    class="flex items-end ml-2"
+                                    *ngIf="sumIdealCost < sumActualCost"
+                                >
+                                    <mat-icon
+                                        class="flex"
+                                        style="color: rgb(220 38 38) !important"
+                                        >arrow_downward</mat-icon
+                                    >
+                                </div>
                             </div>
                         </div>
                     </ng-container>
 
-                    <div *ngIf="sumIdealCost > sumActualCost" class="gap-4 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
-                        Great ! This project has made the profit of <span class="text-green-500">$ {{sumdifference}}</span> .
+                    <div
+                        *ngIf="sumIdealCost > sumActualCost"
+                        class="gap-4 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black"
+                    >
+                        Great ! This project has made the profit of
+                        <span class="text-green-500"
+                            >$ {{ sumdifference }}</span
+                        >
+                        .
                     </div>
 
-                    <div *ngIf="sumIdealCost < sumActualCost" class="gap-4 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
-                        Oh ! Looks like we are in loss of <span class="text-red-500">$ {{sumdifference}}</span> for this project.
+                    <div
+                        *ngIf="sumIdealCost < sumActualCost"
+                        class="gap-4 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black"
+                    >
+                        Oh ! Looks like we are in loss of
+                        <span class="text-red-500">$ {{ sumdifference }}</span>
+                        for this project.
                     </div>
 
                     <ng-container

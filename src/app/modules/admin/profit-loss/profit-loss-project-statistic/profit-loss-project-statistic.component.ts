@@ -16,21 +16,35 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         displayProfilePicture: true,
     };
     statList: any = [];
+
     sumActualCost : number;
     addActualCost: any[] = [];
     actualCost: number;
+
     sumIdealCost: number;
     addIdealCost: any[] = [];
     idealCost: number;
+
     sumdifference:number;
     adddifference: any[] = [];
     difference: number;
+
     sumActualWorkHrs:number;
     addActualWorkHrs: any[] = [];
     actualWorkHrs: number;
+
     sumIdealWorkHrs:number;
     addIdealWorkHrs: any[] = [];
     idealWorkHrs: number;
+
+    projectCost : number;
+    addProjectCost : any[] = [];
+    sumProjectCost: number;
+
+    resourceCost : number;
+    addResourceCost : any[] = [];
+    sumResourceCost : number;
+
     initialLoading: boolean = false;
     constructor(
         private router: Router,
@@ -71,9 +85,32 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         });
         this.sumActualWorkHrs = resultActualWorkHrs;
 
-        /* Total Ideal Cost */
+         /* Total Resource Cost */
         this.statList.forEach((data) => {
-            this.idealCost = data?.idealHourlyRate;
+            this.resourceCost = data?.idealResourceCost;
+            this.addResourceCost.push(this.resourceCost);
+        });
+        let resultResourceCost = 0;
+        this.addResourceCost.forEach((number) => {
+            resultResourceCost += number;
+        });
+        this.sumResourceCost = resultResourceCost;
+
+        /* Total Project Cost */
+        this.statList.forEach((data) => {
+            this.projectCost = data?.idealProjectCost;
+            this.addProjectCost.push(this.projectCost);
+        });
+        let resultProjectCost = 0;
+        this.addProjectCost.forEach((number) => {
+            resultProjectCost += number;
+        });
+        this.sumProjectCost = resultProjectCost;
+        
+
+        /* Total Cost on Project */
+        this.statList.forEach((data) => {
+            this.idealCost = data?.costOnProject;
             this.addIdealCost.push(this.idealCost);
         });
         let resultIdealCost = 0;
@@ -84,7 +121,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
         /* Total Actual Cost */
         this.statList.forEach((data) => {
-            this.actualCost = data?.actualHourlyRate;
+            this.actualCost = data?.actualCost;
             this.addActualCost.push(this.actualCost);
         });
         let result = 0;
