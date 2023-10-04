@@ -94,15 +94,6 @@
                             >
                                 <div class="font-semibold">Description</div>
                                 <div class="font-semibold">Hours</div>
-                                <div
-                                    class="font-semibold"
-                                    *ngIf="
-                                        userRole === 'USER' ||
-                                        userRole === 'VENDOR'
-                                    "
-                                >
-                                    Actions
-                                </div>
                             </div>
                         </div>
 
@@ -148,37 +139,6 @@
                                         {{
                                             logs?.onLeave ? 0 : logs?.timeSpent
                                         }}
-                                    </div>
-
-                                    <div
-                                        class=""
-                                        *ngIf="
-                                            userRole === 'USER' ||
-                                            userRole === 'VENDOR'
-                                        "
-                                    >
-                                        <div class="pb-2">
-                                            <div>
-                                                <button
-                                                    *ngIf="
-                                                        logs?.allowEdit === true
-                                                    "
-                                                >
-                                                    <mat-icon
-                                                        [matTooltip]="'Edit'"
-                                                        class="text-gray-400 icon-size-5 cursor-pointer mr-4"
-                                                        svgIcon="heroicons_outline:pencil"
-                                                    ></mat-icon>
-                                                </button>
-                                                <button>
-                                                    <mat-icon
-                                                        [matTooltip]="'Delete'"
-                                                        class="text-gray-400 icon-size-5 cursor-pointer"
-                                                        svgIcon="heroicons_outline:trash"
-                                                    ></mat-icon>
-                                                </button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
