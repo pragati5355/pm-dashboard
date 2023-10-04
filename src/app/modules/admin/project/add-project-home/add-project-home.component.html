@@ -167,7 +167,7 @@
                 </div>
 
             </div>
-            <div *ngIf="showStep === 2" class="flex flex-col flex-auto w-full ">
+            <div *ngIf="showStep === 2 && !initialLoading" class="flex flex-col flex-auto w-full ">
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
 
                     <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full bg-card dark:bg-transparent">
@@ -370,7 +370,7 @@
 
 
 
-            <div *ngIf="showStep === 3" class="flex flex-col flex-auto w-full  overflow-y-auto ">
+            <div *ngIf="showStep === 3 && !initialLoading" class="flex flex-col flex-auto w-full  overflow-y-auto ">
 
                 <div class="flex flex-wrap w-full max-w-screen-xl mx-auto min-h-full">
 
@@ -446,7 +446,7 @@
                                         <mat-progress-spinner *ngIf="submitInProcess" [diameter]="24"
                                             [mode]="'indeterminate'"></mat-progress-spinner>
                                     </button>
-                                    <button *ngIf="settingProjectName" class="order-first sm:order-last ml-4"
+                                    <button [disabled]="submitInProcess" *ngIf="settingProjectName" class="order-first sm:order-last ml-4"
                                         mat-flat-button [color]="'primary'" (click)="submitProjectSetting()">
                                         <span *ngIf="!submitInProcess">
                                             Next Step
@@ -470,104 +470,11 @@
                             <div class="w-full">
                                 <h2 class="text-3xl font-semibold tracking-tight leading-8">Team</h2>
                             </div>
-                            <!-- <div class="w-full flex flex-row flex-0 justify-between">
-
-                                <div class="w-full mb-2 font-extrabold tracking-tight">
-                                    <mat-form-field class="w-full  " [floatLabel]="'always'">
-                                        <mat-label>Project Lead/Manager</mat-label>
-                                        <input type="text" placeholder="Project Lead/Manager"
-                                            formControlName="project_manager" aria-label="managerList"
-                                            [matAutocomplete]="autoManagerList" maxlength="50" matInput>
-                                        <mat-error *ngIf="projectTeamForm['project_manager'].errors &&
-                                                    projectTeamForm['project_manager']?.invalid &&
-                                                    projectTeamForm['project_manager']?.touched ">
-                                            <div *ngIf="projectTeamForm['project_manager'].errors['required']">Project
-                                                manager name is mandatory</div>
-                                            <div
-                                                *ngIf="projectTeamForm['project_manager'].invalid && !projectTeamForm['project_manager'].errors['required']">
-                                                Choose valid project manager name</div>
-                                        </mat-error>
-                                        <mat-autocomplete #autoManagerList="matAutocomplete" [displayWith]="displayFn"
-                                            (optionSelected)="selectedManagerOption($event)">
-                                            <mat-option
-                                                *ngFor="let managerList of filteredManagerLists | async, let i=index"
-                                                [value]="managerList?.id">
-
-                                                <span>{{ managerList.firstName +" "+managerList.lastName }}</span>
-                                            </mat-option>
-                                        </mat-autocomplete>
-                                    </mat-form-field>
-                                </div>
-                                <div class="w-full font-extrabold tracking-tight sm:ml-4">
-                                    <mat-form-field [floatLabel]="'always'" class="w-full">
-                                        <mat-label>Map Jira Username</mat-label>
-                                        <input matInput type="text" placeholder="Jira User Name" maxlength="50"
-                                            aria-label="JiraUser" [matAutocomplete]="autojiraUser"
-                                            formControlName="jira_user">
-                                        <mat-error *ngIf="projectTeamForm['jira_user'].errors &&
-                                                    projectTeamForm['jira_user']?.invalid &&
-                                                    projectTeamForm['jira_user']?.touched ">
-                                            <div *ngIf="projectTeamForm['jira_user'].errors['required']">Jira User name
-                                                is mandatory</div>
-                                            <div
-                                                *ngIf="projectTeamForm['jira_user'].invalid && !projectTeamForm['jira_user'].errors['required']">
-                                                Choose valid user name</div>
-                                        </mat-error>
-                                        <mat-autocomplete #autojiraUser="matAutocomplete"
-                                            [displayWith]="displayFnJiraManager"
-                                            (optionSelected)="selectedJiraUserOption($event)">
-                                            <mat-option *ngFor="let jiraUser of filteredJiraUsers | async, let i=index"
-                                                [value]="jiraUser">
-
-                                                <span>{{ jiraUser.displayName }}</span>
-                                            </mat-option>
-                                        </mat-autocomplete>
-                                    </mat-form-field>
-                                </div>
-                                <div class="w-full font-extrabold tracking-tight sm:ml-4">
-
-                                    <mat-form-field [floatLabel]="'always'" class="w-full">
-                                        <mat-label>Utilization *</mat-label>
-                                        <mat-select formControlName="pm_utilization" type="text"
-                                            placeholder="Select Role" [disableOptionCentering]="true">
-                                            <mat-option *ngFor="let u of [0.25, 0.5, 1]" [value]="u">
-                                                {{ u }}
-                                            </mat-option>
-                                        </mat-select>
-                                        <mat-error *ngIf="projectTeamForm['pm_utilization'].errors &&
-                                    projectTeamForm['pm_utilization']?.invalid &&
-                                    projectTeamForm['pm_utilization']?.touched ">
-                                            <div *ngIf="projectTeamForm['pm_utilization'].errors['required']">Role is
-                                                mandatory</div>
-                                        </mat-error>
-                                    </mat-form-field>
-                                </div>
-                            </div> -->
+                           
                             <div class="flex flex-col flex-0  col-span-4 sm:col-span-4 ">
                                 <div class="w-full flex flex-row justify-between flex-0  col-span-4 sm:col-span-4 ">
                                     <div class="w-full mb-2 font-extrabold tracking-tight">
-                                        <!-- <mat-form-field class="w-full" [floatLabel]="'always'">
-                                            <mat-label>Team Member *</mat-label>
-                                            <input matInput type="text" placeholder="Team Member" maxlength="50"
-                                                aria-label="teamMember" [matAutocomplete]="auto"
-                                                [readonly]="editMemberMode" formControlName="team_member">
-                                            <mat-error *ngIf="projectTeamForm['team_member'].errors &&
-                                            projectTeamForm['team_member']?.invalid &&
-                                            projectTeamForm['team_member']?.touched ">
-                                                <div *ngIf="projectTeamForm['team_member'].errors['required']">Team
-                                                    member name is mandatory</div>
-                                                <div *ngIf="projectTeamForm['team_member'].invalid">Choose valid team
-                                                    member name</div>
-                                            </mat-error>
-                                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnTeam">
-                                                <mat-option *ngFor="let teamMember of filteredTeamMembers | async"
-                                                    [value]="teamMember">
-
-                                                    <span>{{ teamMember?.firstname +" "+teamMember?.lastname}} </span>
-                                                </mat-option>
-                                            </mat-autocomplete>
-                                        </mat-form-field> -->
-
+                                       
                                         <mat-form-field [floatLabel]="'always'" class="w-full h-4">
                                             <mat-label class="">Email</mat-label>
                                             <input matInput [placeholder]="'Email'" aria-label="email" #emailInput
@@ -581,13 +488,7 @@
                                             <mat-error *ngIf="projectTeam?.get('email')?.hasError('required')">
                                                 <div>Email is mandatory</div>
                                             </mat-error>
-                                            <!-- <mat-icon
-                                                *ngIf="isEmailSelected"
-                                                class="icon-size-5 cursor-pointer"
-                                                matSuffix
-                                                [svgIcon]="'heroicons_solid:x'"
-                                                (click)="$event.stopPropagation(); clearSelectedEmail()"
-                                            ></mat-icon> -->
+                                            
                                         </mat-form-field>
                                     </div>
                                     <div class="w-full font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
@@ -642,9 +543,9 @@
                                             <mat-label>Utilization *</mat-label>
                                             <mat-select formControlName="tm_utilization" type="text"
                                                 placeholder="Select Utilization" [disableOptionCentering]="true">
-                                                <mat-option *ngFor="let u of utilizationValues" [value]="u"
-                                                    [disabled]="u > currentCapacity">
-                                                    {{ u }}
+                                                <mat-option *ngFor="let u of utilizationValues" [value]="u?.value"
+                                                    [disabled]="u?.value > currentCapacity">
+                                                    {{ u?.label }}
                                                 </mat-option>
                                             </mat-select>
                                             <mat-error *ngIf="projectTeamForm['tm_utilization'].errors &&
@@ -697,7 +598,7 @@
 
                                 </div>
                                 <div class="w-full flex">
-                                    <mat-form-field class="w-full mr-3">
+                                    <mat-form-field class="w-full mr-3" *ngIf="this.projectTeam?.get('select_role')?.value !== 'PM'">
                                         <mat-label>Technology *</mat-label>
                                         <mat-select [disableOptionCentering]="true" [(ngModel)]="resourceTechnologyList"
                                             [ngModelOptions]="{standalone: true}" [placeholder]="'Select technology'"
@@ -724,11 +625,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 ng-tns-c274-3859">
-                                <span class="text-primary cursor-pointer mt-8p" (click)="addTeamMember()">
+                            <div class="flex shrink-0 items-center ng-tns-c274-3859">
+                                <span class="cursor-pointer mt-8p bg-primary-500 text-white px-4 py-2 rounded-full" (click)="addTeamMember()">
                                     {{editMemberMode ? 'Save' : 'Add'}}</span>
 
-                                <span class="text-primary cursor-pointer mt-8p ml-4" (click)="clearProjectTeam()">
+                                <span class="cursor-pointer mt-8p ml-4 border-2 bg-white text-black px-4 py-2 rounded-full" (click)="clearProjectTeam()">
                                     Clear</span>
                             </div>
                             <div class="w-full mt-8">
@@ -824,6 +725,41 @@
 
                 </div>
 
+            </div>
+
+            <div *ngIf="showStep === 1 && initialLoading" class="w-full h-full p-6 bg-white">
+                <div class="skeleton-loader mt-8 relative w-full h-full">
+                    <div class="w-[560px] h-[48px] table_row rounded-2xl"></div>
+                    <div class="w-[560px] h-[65px] table_row rounded-2xl mt-8"></div>
+                    <div class="w-[560px] h-[48px] table_row rounded-2xl mt-8"></div>
+                    <div class="w-[560px] h-[48px] table_row rounded-2xl mt-8"></div>
+                    <div class="absolute bottom-8 right-3 w-[200px] h-[48px] rounded-2xl"></div>
+                </div>
+            </div>
+
+            <div *ngIf="showStep === 4 && initialLoading" class="w-full h-full p-6 bg-white">
+                    <div class="skeleton-loader mt-12 flex">
+                        <div class="w-[284px] h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-[284px] ml-4 h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-[284px] ml-4 h-[48px] table_row rounded-2xl"></div>
+                    </div>
+                    <div class="skeleton-loader flex mt-6">
+                        <div class="w-[284px] h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-[284px] ml-4 h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-[284px] ml-4 h-[48px] table_row rounded-2xl"></div>
+                    </div>                    
+                    <div class="skeleton-loader flex mt-6">
+                        <div class="w-[284px] h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-[284px] ml-4 h-[48px] table_row rounded-2xl"></div>
+                    </div>
+
+                    <div class="skeleton-loader mt-16">
+                        <div class="w-full h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-full mt-4 h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-full mt-4 h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-full mt-4 h-[48px] table_row rounded-2xl"></div>
+                        <div class="w-full mt-4 h-[48px] table_row rounded-2xl"></div>
+                    </div>
             </div>
         </mat-drawer-content>
 
