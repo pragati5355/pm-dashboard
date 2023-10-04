@@ -19,6 +19,7 @@ import { ProjectMembersDetailsComponent } from '../project-members-details/proje
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ProjectSettingsComponent } from '../project-settings/project-settings.component';
+import { DownloadWorkLogComponent } from '../download-work-log/download-work-log.component';
 
 @Component({
     selector: 'app-project-details',
@@ -147,23 +148,23 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     downloadResouceWorklog() {
-        // const dialogRef = this.dialog.open(WorkLogsDownloadComponent, {
-        //     disableClose: true,
-        //     width: '98%',
-        //     maxWidth: '800px',
-        //     maxHeight: '90vh',
-        //     panelClass: 'warn-dialog-content',
-        //     autoFocus: false,
-        //     data: {
-        //         id: this.projectId,
-        //         projectName: this.projectDetails?.project?.name,
-        //     },
-        // });
-        // dialogRef.afterClosed().subscribe((result: any) => {
-        //     if (result == 'success') {
-        //         window.location.reload();
-        //     }
-        // });
+        const dialogRef = this.matDialog.open(DownloadWorkLogComponent, {
+            disableClose: true,
+            width: '98%',
+            maxWidth: '800px',
+            maxHeight: '90vh',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                id: this.projectId,
+                projectName: this.project?.name,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                window.location.reload();
+            }
+        });
     }
 
     historyDetails() {
