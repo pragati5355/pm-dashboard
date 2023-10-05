@@ -23,16 +23,13 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     ];
 
     list: StatList[] = [
-        {email: 'Hydrogen', idealworkhrs: 1.0079, actualworkhrs : 1.1, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Helium', idealworkhrs: 4.0026, actualworkhrs: 1.2, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Lithium', idealworkhrs: 6.941, actualworkhrs: 1.3, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Beryllium', idealworkhrs: 9.0122, actualworkhrs: 1.4, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Boron', idealworkhrs: 10.811, actualworkhrs: 1.5, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Carbon', idealworkhrs: 12.0107, actualworkhrs: 1.6, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Nitrogen', idealworkhrs: 14.0067, actualworkhrs: 1.7, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Oxygen', idealworkhrs: 15.9994, actualworkhrs: 1.8, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Fluorine', idealworkhrs: 18.9984, actualworkhrs: 1.9, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
-        {email: 'Neon', idealworkhrs: 20.1797, actualworkhrs: 1.10, hourlycost: 1.0079, resourcecost : 1.1, projectcost: 1.0079, idealcost : 1.1, actualcost: 1.0079, difference : 1.1},
+        {email: 'Hydrogen', idealworkhrs: 1.0079, actualworkhrs : 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 1, difference : 1},
+        {email: 'Helium', idealworkhrs: 4.0026, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 9, difference : 1},
+        {email: 'Lithium', idealworkhrs: 6.941, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 79, difference : 1},
+        {email: 'Beryllium', idealworkhrs: 9.0122, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 179, difference : 1},
+        {email: 'Boron', idealworkhrs: 10.811, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 9, difference : 1},
+        {email: 'Carbon', idealworkhrs: 12.0107, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1.7, idealcost : 1, actualcost: 1, difference : 1},
+        {email: 'Nitrogen', idealworkhrs: 14.0067, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 1, difference : 1},
     ];
 
     routeSubscribe: any;
@@ -124,6 +121,31 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     getTotalCost(){
         return this.list.map(t => t.idealworkhrs).reduce((acc, value) => acc + value, 0);
     }
+
+    getTotalActualWorkHrs(){
+        return this.list.map(t => t.actualworkhrs).reduce((acc, value) => acc + value, 0);
+    }
+
+    getTotalResourceCost(){
+        return this.list.map(t => t.resourcecost).reduce((acc, value) => acc + value, 0);
+    }
+
+    getTotalProjectCost(){
+        return this.list.map(t => t.projectcost).reduce((acc, value) => acc + value, 0);
+    }
+
+    getTotalIdealCost(){
+        return this.list.map(t => t.idealcost).reduce((acc, value) => acc + value, 0);
+    }
+
+    getTotalActualCost(){
+        return this.list.map(t => t.actualcost).reduce((acc, value) => acc + value, 0);
+    }
+
+    getTotalDifference(){
+        return this.list.map(t => t.difference).reduce((acc, value) => acc + value, 0);
+    }
+
 
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
