@@ -121,6 +121,10 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         console.log("this.currentMonth : ", this.currentMonth);
     }
 
+    getTotalCost(){
+        return this.list.map(t => t.idealworkhrs).reduce((acc, value) => acc + value, 0);
+    }
+
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
         this.currentYear = String(new Date().getFullYear());

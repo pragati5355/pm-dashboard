@@ -1,4 +1,4 @@
-<div class="absolute inset-0 flex flex-col min-w-0 overflow-auto">
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
     <div class="flex-auto">
         <div
             class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
@@ -268,66 +268,69 @@
                 </div>
             </div>  -->
             
-            <div class="">
+            <div class="overflow-hidden sm:overflow-y-auto overflow-x-auto">
                 <div class="table-responsive mat-elevation-z8 max-w-full">
                     <table mat-table [dataSource]="dataSource" matSort>
                   
                       <!-- Email -->
                       <ng-container matColumnDef="email" mat-column-email>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-                        <td mat-cell *matCellDef="let row">{{row?.email}}</td>
+                        <td mat-cell *matCellDef="let row">{{row?.email || "-"}}</td>
+                        <td mat-footer-cell *matFooterCellDef> Total </td>
                       </ng-container>
                   
                       <!-- Ideal Work Hrs -->
                       <ng-container matColumnDef="idealworkhrs" mat-column-idealworkhrs>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Ideal Work Hrs </th>
-                        <td mat-cell *matCellDef="let row"> {{row?.idealworkhrs}} </td>
+                        <td mat-cell *matCellDef="let row"> {{row?.idealworkhrs || "-"}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td>
                       </ng-container>
                   
                       <!-- Actual Work Hrs -->
                       <ng-container matColumnDef="actualworkhrs" mat-column-actualworkhrs>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Actual Work Hrs </th>
-                        <td mat-cell *matCellDef="let row"> {{row?.actualworkhrs }} </td>
+                        <td mat-cell *matCellDef="let row"> {{row?.actualworkhrs || "-"}} </td>
                       </ng-container>
                   
                       <!-- Hourly Cost -->
                       <ng-container matColumnDef="hourlycost" mat-column-hourlycost>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Hourly Cost </th>
-                        <td mat-cell *matCellDef="let row"> $ {{ row?.hourlycost }} </td>
+                        <td mat-cell *matCellDef="let row"> $ {{ row?.hourlycost || "0"}} </td>
                       </ng-container>
     
                        <!-- Resource Cost -->
                        <ng-container matColumnDef="resourcecost" mat-column-resourcecost>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Resource Cost </th>
-                        <td mat-cell *matCellDef="let row"> $ {{ row?.resourcecost }} </td>
+                        <td mat-cell *matCellDef="let row"> $ {{ row?.resourcecost || "0"}} </td>
                       </ng-container>
     
                        <!-- Project Cost -->
                        <ng-container matColumnDef="projectcost" mat-column-projectcost>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Cost </th>
-                        <td mat-cell *matCellDef="let row"> $ {{ row?.projectcost }} </td>
+                        <td mat-cell *matCellDef="let row"> $ {{ row?.projectcost || "0"}} </td>
                       </ng-container>
     
                        <!-- Ideal Cost -->
                        <ng-container matColumnDef="idealcost" mat-column-idealcost>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Ideal Cost </th>
-                        <td mat-cell *matCellDef="let row"> $ {{ row?.idealcost }} </td>
+                        <td mat-cell *matCellDef="let row"> $ {{ row?.idealcost || "0"}} </td>
                       </ng-container>
     
                        <!-- Actual Cost -->
                        <ng-container matColumnDef="actualcost" mat-column-actualcost>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Actual Cost </th>
-                        <td mat-cell *matCellDef="let row"> $ {{ row?.actualcost }} </td>
+                        <td mat-cell *matCellDef="let row"> $ {{ row?.actualcost || "0"}} </td>
                       </ng-container>
     
                        <!-- Difference -->
                        <ng-container matColumnDef="difference" mat-column-difference>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Difference </th>
-                        <td mat-cell *matCellDef="let row"> $ {{ row?.difference }} </td>
+                        <td mat-cell *matCellDef="let row"> $ {{ row?.difference || "0"}} </td>
                       </ng-container>
                   
                       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                      <!-- <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr> -->
                       
                       <!-- Row shown when there is no matching data. -->
                       <tr class="mat-row" *matNoDataRow>

@@ -15,8 +15,6 @@
     display: block;
     width: 100%;
     overflow-x: auto;
-    height: 400px;
-    overflow: auto;
 }
 
 .mat-header-cell{
@@ -70,6 +68,10 @@
 
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 42px;
+}
+
+tr.mat-footer-row {
+    font-weight: bold;
 }
 
 
