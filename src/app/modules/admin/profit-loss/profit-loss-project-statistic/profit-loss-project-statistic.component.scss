@@ -1,8 +1,76 @@
 .inventory-grid {
-    grid-template-columns: 24% 10% 11% 8% 14% 12% 11% 8% 10% 10%
+    grid-template-columns:  266px 104px 104px 88px 132px 122px 113px 84px 70px;
     // grid-template-columns: repeat(9, minmax(0, 1fr));
 }    
 
 .mat-icon {
     font-size: 18px;
 }
+
+.mat-row .mat-cell{
+    text-align: start;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    height: 400px;
+    overflow: auto;
+}
+
+.mat-header-cell{
+    background-color: rgb(248 250 252 / var(--tw-bg-opacity)) !important;;
+}
+
+.mat-table {
+    width: 1500px;
+    max-width: 1500px;
+    margin-bottom: 1rem;
+    display: table;
+    border-collapse: collapse;
+    margin: 0px;
+}
+
+.mat-row,
+.mat-header-row {
+    display: table-row;
+}
+
+.mat-cell,
+.mat-header-cell {
+    word-wrap: initial;
+    display: table-cell;
+    padding: 0px 5px;
+    line-break: unset;
+    width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    font-size: revert;
+}
+
+.mat-column-email{
+    width:350px;
+}
+
+.mat-column-idealworkhrs, 
+.mat-column-actualworkhrs,
+.mat-column-resourcecost,
+.mat-column-difference{
+    width: 130px;
+}
+
+.mat-column-hourlycost,
+.mat-column-projectcost,
+.mat-column-idealcost,
+.mat-column-actualcost {
+    width: 100px;
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    padding-left: 42px;
+}
+
+
+  
