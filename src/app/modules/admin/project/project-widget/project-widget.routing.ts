@@ -3,12 +3,20 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
 import { SprintDetailsComponent } from './sprint-details/sprint-details.component';
 import { NgModule } from '@angular/core';
 import { AddCrComponent } from './add-cr/add-cr.component';
+import { ViewWorkLogComponent } from './view-work-log/view-work-log.component';
 export const projectWidgetRoutes: Route[] = [
     {
         path: 'details',
         component: ProjectDetailsComponent,
         data: {
             pageTitle: 'Project Details',
+        },
+    },
+    {
+        path: 'work-logs/:id',
+        component: ViewWorkLogComponent,
+        data: {
+            pageTitle: 'Work Logs',
         },
     },
     {

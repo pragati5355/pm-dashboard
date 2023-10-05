@@ -75,6 +75,45 @@
                         <span class="ml-2 mr-1">Create Repository</span>
                     </button>
                 </div>
+                <div class="flex items-center">
+                    <button
+                        [matMenuTriggerFor]="menu"
+                        class="ml-2"
+                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                        mat-flat-button
+                        [color]="'primary'"
+                        [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
+                    >
+                        <span class="ml-2 mr-1">Work logs</span>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="viewWorkLogs()">
+                            <mat-icon
+                                class="text-gray-400 icon-size-5 cursor-pointer"
+                                svgIcon="heroicons_outline:eye"
+                            ></mat-icon>
+                            <span>View</span>
+                        </button>
+                        <button mat-menu-item (click)="downloadResouceWorklog()">
+                            <mat-icon
+                                class="text-gray-400 icon-size-5 cursor-pointer"
+                                [svgIcon]="'heroicons_outline:arrow-circle-down'"
+                            >
+                            </mat-icon>
+                            <span>Download</span>
+                        </button>
+                    </mat-menu>
+                    <button
+                        class="ml-4"
+                        *ngIf="userRole === 'USER' || userRole === 'VENDOR'"
+                        mat-flat-button
+                        [color]="'primary'"
+                        [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
+                        (click)="showWorkLogs()"
+                    >
+                        <span class="ml-2 mr-1">Work logs</span>
+                    </button>
+                </div>
                 <div *ngIf="repoCount > 0" [matTooltip]="'View repository'">
                     <button
                         class="ml-4"
