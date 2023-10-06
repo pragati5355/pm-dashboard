@@ -54,7 +54,7 @@ export class ProjectListComponent implements OnInit {
         private dialog: MatDialog,
         private weeklyStatusService: WeeklyStatusService,
         private loggedInUserService: LoggedInUserService,
-        private clipboard: Clipboard,
+        private clipboard: Clipboard
     ) {}
 
     ngOnInit() {
@@ -103,10 +103,12 @@ export class ProjectListComponent implements OnInit {
                 next: (res: any) => {
                     this.pagination = false;
                     if (res) {
-                        this.projectList = [
-                            ...this.projectList,
-                            ...res.data.projects,
-                        ];
+                        if (res?.data?.projects?.length > 0) {
+                            this.projectList = [
+                                ...this.projectList,
+                                ...res?.data?.projects,
+                            ];
+                        }
                     }
                 },
                 error: (err: any) => {
