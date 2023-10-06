@@ -18,19 +18,17 @@
                             ></mat-icon>
                             Back
                         </div>
-                        <div class="flex justify-end items-center">
-                            <div class="flex items-center gap-3">
-                                <mat-form-field appearance="fill" class="w-60">
+                        <div class="w-60">
+                                <mat-form-field appearance="fill" class="w-full">
                                     <mat-label>Enter a date range</mat-label>
-                                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-                                      <input matStartDate required formControlName="startDate" placeholder="Start date">
-                                      <input matEndDate required formControlName="endDate" placeholder="End date">
+                                    <mat-date-range-input [formGroup]="range" [min]="range?.value?.startDate" [max]="range?.value?.endDate" [rangePicker]="picker">
+                                      <input matStartDate formControlName="startDate" >
+                                      <input matEndDate formControlName="endDate"  >
                                     </mat-date-range-input>
                                     <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-date-range-picker #picker></mat-date-range-picker>
                                 </mat-form-field>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -130,15 +128,24 @@
                 
                       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                      <ng-container *ngIf="showFooter">
+                          <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                      </ng-container>
                       
                       <!-- Row shown when there is no matching data. -->
                       <tr class="mat-row" *matNoDataRow>
-                            <td class="mat-cell" colspan="9">Data Not Found</td>
+                          <td class="mat-cell" colspan="9">Data Not Found</td>
                       </tr>
                     </table>
                 </div>
             </div>    
+            <ng-container
+                    *ngIf="statList?.length === 0 && !initialLoading">
+                    <div
+                            class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                                Data not found
+                    </div>
+            </ng-container>
             <div   
                 *ngIf = "getTotalIdealCost() > getTotalActualCost()"
                 class="mb-8 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">

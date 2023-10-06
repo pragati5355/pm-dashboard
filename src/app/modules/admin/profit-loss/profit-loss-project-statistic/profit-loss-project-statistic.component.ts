@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MAT_SELECT_YEARS, MAT_TAB_MONTHS } from '@modules/admin/project/project-widget/common/constants';
 import { StatList } from '../common/constant';
 import { FormControl, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-profit-loss-project-statistic',
@@ -35,28 +36,26 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     matSelectYears: string[] = MAT_SELECT_YEARS;
     currentMonth: number;
     currentYear: string = '';
-    
     statList: StatList[] = [];
     months : any [] = [];
     range!:FormGroup ;
+    showFooter : boolean = false;
     initialLoading: boolean = false;
+
     constructor(
         private router: Router,
         private _route: ActivatedRoute,
         private pNLProjectServie: ProfitLossService,
-        private _authService: AuthService   
+        private _authService: AuthService,
+        private datePipe : DatePipe   
     ) {}
 
     ngOnInit(): void {
         this.getCurrentMonthAndYear();
         this.initializeForm();
         this.routeSubscribeId();
-        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
-        this.months = [];
-    }
-
-    ngAfterViewInit() {
-        this.dataSource.sort = this.sort;
+        this.loadProjectDetails();
+        this.loadStatList();
     }
 
     goBack() {
@@ -91,6 +90,40 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         return this.statList.map(t => t.diff).reduce((acc, value) => acc + value, 0);
     }
 
+    loadStatList() {
+        this.initialLoading = true;
+        const payload = {
+            projectId : this.projectId,
+            startDate : this.datePipe.transform(this.range?.value?.startDate,'yyyy-MM-dd'),
+            endDate : this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd')
+        }
+        
+        if(this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd') != null){
+            console.log("End Date Null");
+            console.log("Payload : ", payload);
+            this.pNLProjectServie.getPNLStatList(payload).subscribe(
+                (res: any) => {
+                    this.initialLoading = false;
+                    if (res?.statusCode === 200) {
+                        this.statList = res?.data?.stats;
+                        this.dataSource = new MatTableDataSource(this.statList);
+                        console.log("this.statList : " , this.statList);
+                        if(this.statList.length != 0){
+                            this.showFooter = true;
+                        }
+                    } else if (res?.data == null) {
+                        this.statList = [];
+                    }
+                    if (res?.tokenExpire) {
+                        this._authService.updateAndReload(window.location);
+                    }
+                },
+                (err) => {
+                    this.initialLoading = false;
+                }
+            );
+        }
+    }
 
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());
@@ -98,8 +131,6 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.selectedMonth = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
         this.previousMonth = new Date().getMonth() - 1;
-        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
-        this.months = [];
     }
 
     private routeSubscribeId() {
@@ -111,20 +142,21 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         });
     }
 
-    private loadStatList(projectId:any ,year:any , fromMonth:any , toMonth:any) {
+    private loadProjectDetails(){
         this.initialLoading = true;
-        this.months.push(++fromMonth, ++toMonth);
         const payload = {
-            projectId : projectId,
-            year : this.selectedYear,
-            months : this.months
+            projectId : this.projectId,
         }
         this.pNLProjectServie.getPNLStatList(payload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
-                    this.statList = res?.data;
-                    this.dataSource = new MatTableDataSource(this.statList);
+                    this.statList = res?.data?.projectDetails;
+                    this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate);
+                    this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate);
+                    if(this.statList.length != 0){
+                        this.showFooter = true;
+                    }
                     console.log("this.statList : " , this.statList);
                 } else if (res?.data == null) {
                     this.statList = [];
@@ -141,9 +173,9 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     
     private initializeForm(){
         this.range = new FormGroup({
-            startDate: new FormControl(new Date()),
-            endDate: new FormControl(new Date())
-        })
+            startDate: new FormControl(),
+            endDate: new FormControl()
+        });
     }
 }
  
