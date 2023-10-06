@@ -18,27 +18,15 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
     dataSource: MatTableDataSource<any>;
     displayedColumns: string[] = [
-        'email', 'idealworkhrs', 'actualworkhrs', 'hourlycost', 
-        'resourcecost', 'projectcost', 'idealcost', 'actualcost', 'difference'
+        'email', 'totalIdealWorklogHrs', 'totalActualWorklogHrs', 'hourlyCost', 
+        'idealResourceCost', 'idealProjectCost', 'costOnProject', 'actualCost', 'diff'
     ];
-
-    list: StatList[] = [
-        {email: 'Hydrogen', idealworkhrs: 1.0079, actualworkhrs : 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 1, difference : 1},
-        {email: 'Helium', idealworkhrs: 4.0026, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 9, difference : 1},
-        {email: 'Lithium', idealworkhrs: 6.941, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 79, difference : 1},
-        {email: 'Beryllium', idealworkhrs: 9.0122, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 179, difference : 1},
-        {email: 'Boron', idealworkhrs: 10.811, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 9, difference : 1},
-        {email: 'Carbon', idealworkhrs: 12.0107, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1.7, idealcost : 1, actualcost: 1, difference : 1},
-        {email: 'Nitrogen', idealworkhrs: 14.0067, actualworkhrs: 1, hourlycost: 1.0079, resourcecost : 1, projectcost: 1, idealcost : 1, actualcost: 1, difference : 1},
-    ];
-
     routeSubscribe: any;
     projectId = 0;
     requiredSkeletonData = {
         rowsToDisplay: 10,
         displayProfilePicture: true,
     };
-
     selectedYear: string = '2020';
     selectedMonth: number = 0;
     previousMonth : number = 0;
@@ -48,49 +36,22 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     currentMonth: number;
     currentYear: string = '';
    
-    statList: any = [];
-    sumActualCost : number;
-    addActualCost: any[] = [];
-    actualCost: number;
-
-    sumIdealCost: number;
-    addIdealCost: any[] = [];
-    idealCost: number;
-
-    sumdifference:number;
-    adddifference: any[] = [];
-    difference: number;
-
-    sumActualWorkHrs:number;
-    addActualWorkHrs: any[] = [];
-    actualWorkHrs: number;
-
-    sumIdealWorkHrs:number;
-    addIdealWorkHrs: any[] = [];
-    idealWorkHrs: number;
-
-    projectCost : number;
-    addProjectCost : any[] = [];
-    sumProjectCost: number;
-
-    resourceCost : number;
-    addResourceCost : any[] = [];
-    sumResourceCost : number;
-
+    statList: StatList[] = [];
+    months : any [] = [];
+   
     initialLoading: boolean = false;
     constructor(
         private router: Router,
         private _route: ActivatedRoute,
         private pNLProjectServie: ProfitLossService,
         private _authService: AuthService   
-    ) {
-        this.dataSource = new MatTableDataSource(this.list);
-    }
+    ) {}
 
     ngOnInit(): void {
         this.getCurrentMonthAndYear();
         this.routeSubscribeId();
-        this.loadStatList();
+        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
+        this.months = [];
     }
 
     ngAfterViewInit() {
@@ -103,47 +64,48 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
     onYearChange(event: any) {
         this.selectedYear = event?.value;
-        console.log("this.selectedYear : ", this.selectedYear);
+        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
+        this.months = [];
     }
 
     onFromMonthChange(event:any){
-        this.fromMonth = event?.value;
-        console.log("this.fromMonth : " , this.fromMonth);
         this.previousMonth = event?.value;
-        console.log("this.previousMonth  : ", this.previousMonth );
+        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
+        this.months = [];
     }
 
     onToMonthChange(event:any){
         this.currentMonth = event?.value;
-        console.log("this.currentMonth : ", this.currentMonth);
+        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
+        this.months = [];
     }
 
     getTotalCost(){
-        return this.list.map(t => t.idealworkhrs).reduce((acc, value) => acc + value, 0);
+        return this.statList.map(t => t.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalActualWorkHrs(){
-        return this.list.map(t => t.actualworkhrs).reduce((acc, value) => acc + value, 0);
+        return this.statList.map(t => t.totalActualWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalResourceCost(){
-        return this.list.map(t => t.resourcecost).reduce((acc, value) => acc + value, 0);
+        return this.statList.map(t => t.idealResourceCost).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalProjectCost(){
-        return this.list.map(t => t.projectcost).reduce((acc, value) => acc + value, 0);
+        return this.statList.map(t => t.idealProjectCost).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalIdealCost(){
-        return this.list.map(t => t.idealcost).reduce((acc, value) => acc + value, 0);
+        return this.statList.map(t => t.costOnProject).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalActualCost(){
-        return this.list.map(t => t.actualcost).reduce((acc, value) => acc + value, 0);
+        return this.statList.map(t => t.actualCost).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalDifference(){
-        return this.list.map(t => t.difference).reduce((acc, value) => acc + value, 0);
+        return this.statList.map(t => t.diff).reduce((acc, value) => acc + value, 0);
     }
 
 
@@ -153,87 +115,9 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.selectedMonth = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
         this.previousMonth = new Date().getMonth() - 1;
+        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
+        this.months = [];
     }
-
-    // private filterTotalOfAllColumns() {
-    //     /* Total Ideal Work Hrs */
-    //     this.statList.forEach((data) => {
-    //         this.idealWorkHrs = data?.totalIdealWorklogHrs;
-    //         this.addIdealWorkHrs.push(this.idealWorkHrs);
-    //     });
-    //     let resultIdealWorkHrs = 0;
-    //     this.addIdealWorkHrs.forEach((number) => {
-    //         resultIdealWorkHrs += number;
-    //     });
-    //     this.sumIdealWorkHrs = resultIdealWorkHrs;
-
-    //     /* Total Actual Work Hrs */
-    //     this.statList.forEach((data) => {
-    //         this.actualWorkHrs = data?.totalActualWorklogHrs;
-    //         this.addActualWorkHrs.push(this.actualWorkHrs);
-    //     });
-    //     let resultActualWorkHrs = 0;
-    //     this.addActualWorkHrs.forEach((number) => {
-    //         resultActualWorkHrs += number;
-    //     });
-    //     this.sumActualWorkHrs = resultActualWorkHrs;
-
-    //      /* Total Resource Cost */
-    //     this.statList.forEach((data) => {
-    //         this.resourceCost = data?.idealResourceCost;
-    //         this.addResourceCost.push(this.resourceCost);
-    //     });
-    //     let resultResourceCost = 0;
-    //     this.addResourceCost.forEach((number) => {
-    //         resultResourceCost += number;
-    //     });
-    //     this.sumResourceCost = resultResourceCost;
-
-    //     /* Total Project Cost */
-    //     this.statList.forEach((data) => {
-    //         this.projectCost = data?.idealProjectCost;
-    //         this.addProjectCost.push(this.projectCost);
-    //     });
-    //     let resultProjectCost = 0;
-    //     this.addProjectCost.forEach((number) => {
-    //         resultProjectCost += number;
-    //     });
-    //     this.sumProjectCost = resultProjectCost;
-        
-
-    //     /* Total Cost on Project */
-    //     this.statList.forEach((data) => {
-    //         this.idealCost = data?.costOnProject;
-    //         this.addIdealCost.push(this.idealCost);
-    //     });
-    //     let resultIdealCost = 0;
-    //     this.addIdealCost.forEach((number) => {
-    //         resultIdealCost += number;
-    //     });
-    //     this.sumIdealCost = resultIdealCost;
-
-    //     /* Total Actual Cost */
-    //     this.statList.forEach((data) => {
-    //         this.actualCost = data?.actualCost;
-    //         this.addActualCost.push(this.actualCost);
-    //     });
-    //     let result = 0;
-    //     this.addActualCost.forEach((number) => {
-    //         result += number;
-    //     });
-    //     this.sumActualCost = result;
-
-    //     /* Total Difference */
-    //     this.statList.forEach((data) => {
-    //         this.difference = data?.diff;
-    //         this.adddifference.push(this.difference);
-    //     });
-    //     let resultdiff = 0;
-    //     this.adddifference.forEach((number) => {
-    //         resultdiff += number;
-    //     });
-    //     this.sumdifference = resultdiff;
-    // }
 
     private routeSubscribeId() {
         this.routeSubscribe = this._route.params.subscribe((id) => {
@@ -244,13 +128,21 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         });
     }
 
-    private loadStatList() {
+    private loadStatList(projectId:any ,year:any , fromMonth:any , toMonth:any) {
         this.initialLoading = true;
-        this.pNLProjectServie.getPNLStatList(this.projectId).subscribe(
+        this.months.push(++fromMonth, ++toMonth);
+        const payload = {
+            projectId : projectId,
+            year : this.selectedYear,
+            months : this.months
+        }
+        this.pNLProjectServie.getPNLStatList(payload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
                     this.statList = res?.data;
+                    this.dataSource = new MatTableDataSource(this.statList);
+                    console.log("this.statList : " , this.statList);
                 } else if (res?.data == null) {
                     this.statList = [];
                 }
