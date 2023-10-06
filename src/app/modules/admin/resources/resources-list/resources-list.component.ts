@@ -49,6 +49,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSelectChange } from '@angular/material/select';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -113,6 +114,7 @@ export class ResourcesListComponent implements OnInit {
         'Strawberry',
     ];
     showVendorsOnly: boolean = false;
+    userRole: string = '';
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
@@ -127,7 +129,8 @@ export class ResourcesListComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         public breakpointObserver: BreakpointObserver,
-        private matDialog: MatDialog
+        private matDialog: MatDialog,
+        private loggedInUserService: LoggedInUserService
     ) {
         this.filteredTechnology = this.technologyCtrl.valueChanges.pipe(
             startWith(null),
@@ -206,6 +209,7 @@ export class ResourcesListComponent implements OnInit {
         this.loadData();
         this.initializeForms();
         this.addRequiredSubscriptions();
+        this.getUserRole();
     }
 
     get exprienceValidForm(): { [key: string]: AbstractControl } {
@@ -526,6 +530,13 @@ export class ResourcesListComponent implements OnInit {
         this.searchValue = '';
         this.pagination = false;
         this.getList();
+    }
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
     }
 
     private loadDataWithFilterPayload(payload: any) {

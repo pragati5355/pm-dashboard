@@ -9,7 +9,7 @@ export const resourcesRoutes: Route[] = [
         path: '',
         component: ResourcesHomeComponent,
         data: {
-            allowedRoles: ['ADMIN'],
+            allowedRoles: ['ADMIN','SALES'],
         },
         children: [
             {

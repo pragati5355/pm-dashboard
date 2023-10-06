@@ -23,7 +23,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:user-add',
         link: '/resources',
-        allowedRoles: ['ADMIN'],
+        allowedRoles: ['ADMIN', 'SALES'],
     },
     {
         id: 'external-projects',

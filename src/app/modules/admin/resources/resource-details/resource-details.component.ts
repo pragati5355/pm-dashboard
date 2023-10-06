@@ -12,6 +12,7 @@ import { round } from 'lodash';
 import { CreateResumeComponent } from '../create-resume/create-resume.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ResumeVersionsComponent } from '../resume-versions/resume-versions.component';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 @Component({
     selector: 'app-resource-details',
     templateUrl: './resource-details.component.html',
@@ -22,6 +23,7 @@ export class ResourceDetailsComponent implements OnInit {
     score: any = 0;
     outOfScore: any = 10;
     mbProjects: string[] = [];
+    userRole: string = '';
     certificates: any[] = [
         'Full stack we development',
         'AWS s3 full course',
@@ -53,7 +55,8 @@ export class ResourceDetailsComponent implements OnInit {
         private snackBar: SnackBar,
         private activatedRoute: ActivatedRoute,
         private dialog: MatDialog,
-        private _resourcesListComponent: ResourcesListComponent
+        private _resourcesListComponent: ResourcesListComponent,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
@@ -65,6 +68,7 @@ export class ResourceDetailsComponent implements OnInit {
                 this.getResourceHappinessScore(resourceId);
             }
         });
+        this.getUserRole();
     }
 
     loadData(id: any) {
@@ -143,5 +147,12 @@ export class ResourceDetailsComponent implements OnInit {
 
     closeDrawer(): Promise<MatDrawerToggleResult> {
         return this._resourcesListComponent.matDrawer.close();
+    }
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
     }
 }
