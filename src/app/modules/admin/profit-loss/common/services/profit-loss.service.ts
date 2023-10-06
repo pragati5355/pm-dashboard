@@ -15,7 +15,7 @@ export class ProfitLossService {
     return this.http.get(this.pNLProjectListUrl + `/list`);
   }
 
-  getPNLStatList(id:number){
-    return this.http.get(API_LIST.SPRING_BOOT_URL + `/project/get-project-stats/${id}`)
+  getPNLStatList(obj:any){
+    return this.http.post(API_LIST.SPRING_BOOT_URL + `/project/get-project-stats`, obj);
   }
 }
