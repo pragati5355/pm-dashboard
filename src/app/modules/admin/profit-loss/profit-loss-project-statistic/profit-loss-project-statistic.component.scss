@@ -15,6 +15,7 @@
     display: block;
     width: 100%;
     overflow-x: auto;
+    overflow: auto;
 }
 
 .mat-header-cell{
@@ -22,8 +23,8 @@
 }
 
 .mat-table {
-    width: 1500px;
-    max-width: 1500px;
+    width: 1400px;
+    max-width: 1400px;
     margin-bottom: 1rem;
     display: table;
     border-collapse: collapse;
@@ -36,7 +37,8 @@
 }
 
 .mat-cell,
-.mat-header-cell {
+.mat-header-cell,
+.mat-footer-cell {
     word-wrap: initial;
     display: table-cell;
     padding: 0px 5px;
@@ -49,19 +51,19 @@
 }
 
 .mat-column-email{
-    width:350px;
+    width:330px;
 }
 
 .mat-column-idealworkhrs, 
 .mat-column-actualworkhrs,
 .mat-column-resourcecost,
+.mat-column-idealcost,
 .mat-column-difference{
     width: 130px;
 }
 
 .mat-column-hourlycost,
 .mat-column-projectcost,
-.mat-column-idealcost,
 .mat-column-actualcost {
     width: 100px;
 }
@@ -74,5 +76,12 @@ tr.mat-footer-row {
     font-weight: bold;
 }
 
+.mat-form-field
+.mat-form-field-appearance-fill 
+.mat-form-field-wrapper 
+.mat-form-field-flex 
+.mat-form-field-infix {
+    width: 162px;
+}
 
   

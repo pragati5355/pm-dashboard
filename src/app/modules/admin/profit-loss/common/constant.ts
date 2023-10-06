@@ -1,11 +1,28 @@
-export interface StatList {
+export class ProjectStatModel {
+    stats: StatModel[];
+    projectDetails: ProjectDetailsModel;
+}
+
+export class ProjectDetailsModel {
+    endDate : string;
+    name : string;
+    startDate:string;
+}
+
+export class StatModel {
     email: string;
-    idealworkhrs: number;
-    actualworkhrs: number;
-    hourlycost: number;
-    resourcecost: number;
-    projectcost: number;
-    idealcost: number;
-    actualcost: number;
-    difference: number;
+    totalIdealWorklogHrs: number;
+    totalActualWorklogHrs: number;
+    hourlyCost: number;
+    idealResourceCost: number;
+    idealProjectCost: number;
+    costOnProject: number;
+    actualCost: number;
+    diff: number;
+    firstName: string;
+    lastName: string;
+    projectCostType: string;
+    projectName: string;
+    projectEndDate: string;
+    projectStartDate: string;
 }
