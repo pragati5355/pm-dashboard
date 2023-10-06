@@ -898,7 +898,7 @@ export class AddProjectHomeComponent
                 );
             } else {
                 this.isAddTeam = false;
-                this.snackBar.errorSnackBar('Add team member and role');
+                this.snackBar.errorSnackBar('Please feel free to click Add button above, before submitting !');
             }
         }
     }

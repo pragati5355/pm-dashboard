@@ -1,4 +1,15 @@
-export interface StatList {
+export class ProjectStatModel {
+    stats: StatModel[];
+    projectDetails: ProjectDetailsModel;
+}
+
+export class ProjectDetailsModel {
+    endDate : string;
+    name : string;
+    startDate:string;
+}
+
+export class StatModel {
     email: string;
     totalIdealWorklogHrs: number;
     totalActualWorklogHrs: number;
@@ -12,4 +23,6 @@ export interface StatList {
     lastName: string;
     projectCostType: string;
     projectName: string;
+    projectEndDate: string;
+    projectStartDate: string;
 }

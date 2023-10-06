@@ -5,9 +5,11 @@ import { AuthService } from '@services/auth/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MAT_SELECT_YEARS, MAT_TAB_MONTHS } from '@modules/admin/project/project-widget/common/constants';
-import { StatList } from '../common/constant';
+import { ProjectStatModel, StatModel } from '../common/constant';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { debounce } from 'lodash';
+import { debounceTime } from 'rxjs';
 
 @Component({
     selector: 'app-profit-loss-project-statistic',
@@ -36,7 +38,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     matSelectYears: string[] = MAT_SELECT_YEARS;
     currentMonth: number;
     currentYear: string = '';
-    statList: StatList[] = [];
+    projectStatDetails: ProjectStatModel;
     months : any [] = [];
     range!:FormGroup ;
     showFooter : boolean = false;
@@ -56,6 +58,8 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.routeSubscribeId();
         this.loadProjectDetails();
         this.loadStatList();
+
+
     }
 
     goBack() {
@@ -63,34 +67,35 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     }
 
     getTotalCost(){
-        return this.statList.map(t => t.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalActualWorkHrs(){
-        return this.statList.map(t => t.totalActualWorklogHrs).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.totalActualWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalResourceCost(){
-        return this.statList.map(t => t.idealResourceCost).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.idealResourceCost).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalProjectCost(){
-        return this.statList.map(t => t.idealProjectCost).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.idealProjectCost).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalIdealCost(){
-        return this.statList.map(t => t.costOnProject).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.costOnProject).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalActualCost(){
-        return this.statList.map(t => t.actualCost).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.actualCost).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalDifference(){
-        return this.statList.map(t => t.diff).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.diff).reduce((acc, value) => acc + value, 0);
     }
 
     loadStatList() {
+        console.log("----------- Data -------");
         this.initialLoading = true;
         const payload = {
             projectId : this.projectId,
@@ -105,14 +110,14 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                 (res: any) => {
                     this.initialLoading = false;
                     if (res?.statusCode === 200) {
-                        this.statList = res?.data?.stats;
-                        this.dataSource = new MatTableDataSource(this.statList);
-                        console.log("this.statList : " , this.statList);
-                        if(this.statList.length != 0){
+                        this.projectStatDetails = res?.data;
+                        this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
+                        console.log("this.statList : " , this.projectStatDetails);
+                        if(this.projectStatDetails?.stats?.length != 0){
                             this.showFooter = true;
                         }
-                    } else if (res?.data == null) {
-                        this.statList = [];
+                    } else if (res?.data?.stats == null) {
+                        this.projectStatDetails.stats = [];
                     }
                     if (res?.tokenExpire) {
                         this._authService.updateAndReload(window.location);
@@ -151,15 +156,17 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
-                    this.statList = res?.data?.projectDetails;
+                    this.projectStatDetails = res?.data;
                     this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate);
                     this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate);
-                    if(this.statList.length != 0){
+                    console.log(this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate));
+                    if(this.projectStatDetails?.stats?.length != 0){
                         this.showFooter = true;
                     }
-                    console.log("this.statList : " , this.statList);
-                } else if (res?.data == null) {
-                    this.statList = [];
+                    this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
+                    console.log("this.statList : " , this.projectStatDetails);
+                } else if (res?.data?.stats == null) {
+                    this.projectStatDetails.stats = [];
                 }
                 if (res?.tokenExpire) {
                     this._authService.updateAndReload(window.location);
@@ -167,6 +174,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             },
             (err) => {
                 this.initialLoading = false;
+                this.projectStatDetails = null;
             }
         );
     }
@@ -176,6 +184,10 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             startDate: new FormControl(),
             endDate: new FormControl()
         });
+
+        this.range.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+            this.loadStatList();
+        })
     }
 }
  
