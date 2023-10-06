@@ -16,7 +16,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class ProfitLossProjectStatisticComponent implements OnInit {
 
     @ViewChild(MatSort) sort: MatSort;
-
     dataSource: MatTableDataSource<any>;
     displayedColumns: string[] = [
         'email', 'totalIdealWorklogHrs', 'totalActualWorklogHrs', 'hourlyCost', 
@@ -36,10 +35,10 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     matSelectYears: string[] = MAT_SELECT_YEARS;
     currentMonth: number;
     currentYear: string = '';
-   
+    
     statList: StatList[] = [];
     months : any [] = [];
-    picker:any ;
+    range!:FormGroup ;
     initialLoading: boolean = false;
     constructor(
         private router: Router,
@@ -50,6 +49,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
     ngOnInit(): void {
         this.getCurrentMonthAndYear();
+        this.initializeForm();
         this.routeSubscribeId();
         this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
         this.months = [];
@@ -59,31 +59,8 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    range = new FormGroup({
-        startDate: new FormControl(),
-        endDate: new FormControl(),
-    });
-
     goBack() {
         this.router.navigate([`/profit-loss`]);
-    }
-
-    onYearChange(event: any) {
-        this.selectedYear = event?.value;
-        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
-        this.months = [];
-    }
-
-    onFromMonthChange(event:any){
-        this.previousMonth = event?.value;
-        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
-        this.months = [];
-    }
-
-    onToMonthChange(event:any){
-        this.currentMonth = event?.value;
-        this.loadStatList(this.projectId, this.selectedYear , this.previousMonth, this.currentMonth);
-        this.months = [];
     }
 
     getTotalCost(){
@@ -160,6 +137,13 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                 this.initialLoading = false;
             }
         );
+    }
+    
+    private initializeForm(){
+        this.range = new FormGroup({
+            startDate: new FormControl(new Date()),
+            endDate: new FormControl(new Date())
+        })
     }
 }
  
