@@ -158,7 +158,7 @@ export class ViewWorkLogComponent implements OnInit {
                 this.loggedInUser = res;
                 this.userRole = res?.role;
                 this.selectedResourceId = this.loggedInUser?.resourceId;
-                if (this.userRole !== 'ADMIN') {
+                if (this.userRole === 'USER' || this.userRole === 'VENDOR') {
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 } else {
                     this.getProjectResources();
