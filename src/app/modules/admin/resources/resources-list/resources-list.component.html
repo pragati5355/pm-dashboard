@@ -364,6 +364,7 @@
                                             [matMenuTriggerFor]="listCard07Menu"
                                             class="ml-2"
                                             mat-flat-button
+                                            *ngIf="userRole === 'ADMIN'"
                                         >
                                             <mat-icon
                                                 [svgIcon]="
@@ -399,6 +400,7 @@
                                             class="ml-2"
                                             mat-flat-button
                                             (click)="gotoOnboardResource()"
+                                            *ngIf="userRole === 'ADMIN'"
                                         >
                                             <span class="ml-2 mr-1"
                                                 >Onboard Resource</span
@@ -440,7 +442,7 @@
                                 </div>
                                 <div class="hidden lg:block">Team</div>
                                 <div class="hidden sm:block">Experience</div>
-                                <div>Action</div>
+                                <div *ngIf="userRole === 'ADMIN'">Action</div>
                             </div>
                             <ng-container
                                 *ngIf="!initialLoading && totalRecored > 0"
@@ -545,7 +547,7 @@
                                                 }}
                                             </div>
 
-                                            <div class="md:block">
+                                            <div class="md:block" *ngIf="userRole === 'ADMIN'">
                                                 <mat-icon
                                                     *ngIf="!resources?.vendor"
                                                     [matTooltip]="
