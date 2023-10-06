@@ -12,18 +12,8 @@
                 Back
             </div>
             <div class="flex justify-end items-center">
-                <div class="flex items-center">
-                    
-                    <div class="flex items-center px-5 mt-2" *ngIf="userRole === 'ADMIN'">
-                        <span class="font-medium pr-3 "> Allow Edit Worklog </span>
-                        <mat-slide-toggle 
-                            [color]="'primary'"
-                            (change)="allowEditWorklog($event)" 
-                            [checked]="checked"
-                            [disabled]="initialLoading">
-                        </mat-slide-toggle>
-                    </div>
-
+                <div class="flex items-center gap-3">
+            
                     <div class="w-[350px] mr-4" *ngIf="userRole === 'ADMIN'">
                         <mat-form-field class="w-full">
                             <mat-label class="">Resource</mat-label>
@@ -46,7 +36,7 @@
                         </mat-form-field>
                     </div>
 
-                    <mat-form-field>
+                    <mat-form-field class="mr-4">
                         <mat-label class="">Year</mat-label>
                         <mat-select
                             [(value)]="selectedYear"
@@ -63,6 +53,17 @@
                             >
                         </mat-select>
                     </mat-form-field>
+
+                    <div class="flex flex-col items-center mb-8" *ngIf="userRole === 'ADMIN'">
+                        <span class="font-medium text-md mb-4">Allow Edit</span>
+                        <mat-slide-toggle 
+                            class="justify-start mr-8"
+                            [color]="'primary'"
+                            (change)="allowEditWorklog($event)" 
+                            [checked]="checked"
+                            [disabled]="initialLoading">
+                        </mat-slide-toggle>
+                    </div>
 
                 </div>
                 <div *ngIf="userRole !== 'ADMIN'">
@@ -82,7 +83,7 @@
                 </div>
                 <button
                     *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
-                    class="ml-3 mr-2 mt-2"
+                    class="ml-3 mr-2"
                     mat-mini-fab
                     color="primary"
                     matTooltip="Share"

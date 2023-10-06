@@ -43,6 +43,7 @@
                         matSortDisableClear
                     >
                         <div>Project Name</div>
+                        <div>Type</div>
                         <div>Start Date</div>
                         <div>End Date</div>
                         <div>Actions</div>
@@ -62,6 +63,10 @@
                                         >
                                             {{ list?.name }}
                                         </div>
+                                    </div>
+
+                                    <div class="hidden md:block truncate">
+                                        {{ (list?.type) || "-"}}
                                     </div>
 
                                     <div class="hidden md:block truncate">
