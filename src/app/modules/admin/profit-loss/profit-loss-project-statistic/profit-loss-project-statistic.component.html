@@ -20,7 +20,7 @@
                         </div>
                         <div class="flex justify-end items-center">
                             <div class="flex items-center gap-3">
-                                <div class="flex items-center gap-3">
+                                <!-- <div class="flex items-center gap-3">
                                     <mat-form-field class="">
                                         <mat-label class="">Month</mat-label>
                                         <mat-select
@@ -73,14 +73,32 @@
                                             >{{ year }}</mat-option
                                         >
                                     </mat-select>
-                                </mat-form-field>
+                                </mat-form-field> -->
+                                <form [formGroup]="range">
+                                    {{range.value | json}}
+                                    <mat-form-field color="accent" appearance="fill">
+                                        <mat-label>Start Date</mat-label>
+                                        <input matInput [matDatepicker]="startDate" formControlName="startDate">
+                                        <mat-hint>MM/DD/YYYY</mat-hint>
+                                        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #startDate></mat-datepicker>
+                                      </mat-form-field>
+                                      
+                                      <mat-form-field color="accent" appearance="fill">
+                                        <mat-label>End Date</mat-label>
+                                        <input matInput [matDatepicker]="endDate" formControlName="endDate">
+                                        <mat-hint>MM/DD/YYYY</mat-hint>
+                                        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #endDate color="primary"></mat-datepicker>
+                                    </mat-form-field>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col flex-auto">
-                <div class="table-responsive mat-elevation-z8 max-w-full">
+            <div class="flex">
+                <div class="table-responsive mat-elevation-z8">
                     <table mat-table [dataSource]="dataSource" matSort>
                   
                       <!-- Email -->
@@ -108,7 +126,7 @@
                       <ng-container matColumnDef="hourlyCost" mat-column-hourlycost>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Hourly Cost </th>
                         <td mat-cell *matCellDef="let row"> $ {{ row?.hourlyCost || "0"}} </td>
-                        <td mat-footer-cell *matFooterCellDef>  </td>
+                        <td mat-footer-cell *matFooterCellDef>{{"-"}}</td>
                       </ng-container>
     
                        <!-- Resource Cost -->
@@ -143,13 +161,13 @@
                        <ng-container matColumnDef="diff" mat-column-difference>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Difference </th>
                         <td mat-cell *matCellDef="let row" class="lg:flex py-3"> $ {{ row?.diff || "0"}} 
-                            <div *ngIf="row?.idealcost > row?.actualcost">
+                            <div *ngIf="row?.costOnProject > row?.actualCost">
                                 <mat-icon
                                     class="flex items-end ml-2"
                                     style="color: rgb(74 222 128) !important;">arrow_upward
                                 </mat-icon>
                             </div>
-                            <div *ngIf="row?.idealcost < row?.actualcost">
+                            <div *ngIf="row?.costOnProject < row?.actualCost">
                                 <mat-icon 
                                     class="flex"
                                     style="color: rgb(220 38 38) !important;">arrow_downward
@@ -185,7 +203,7 @@
             </div>    
             <div
             *ngIf = "getTotalIdealCost() > getTotalActualCost()"
-                class="gap-4 mt-8 mb-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
+                class="mb-8 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
                     Great ! This project has made the profit of
                         <span class="text-green-500"
                         >$ {{ getTotalDifference() || "0"}}</span>
@@ -193,7 +211,7 @@
             </div> 
             <div
                 *ngIf = "getTotalIdealCost() < getTotalActualCost()"
-                class="gap-4 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
+                class="mt-8 mb-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
                     Oh ! Looks like we are in loss of
                     <span class="text-red-500">$ {{ getTotalDifference() || "0" }}</span>
                     for this project.

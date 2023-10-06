@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MAT_SELECT_YEARS, MAT_TAB_MONTHS } from '@modules/admin/project/project-widget/common/constants';
 import { StatList } from '../common/constant';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-profit-loss-project-statistic',
@@ -38,7 +39,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
    
     statList: StatList[] = [];
     months : any [] = [];
-   
+    picker:any ;
     initialLoading: boolean = false;
     constructor(
         private router: Router,
@@ -155,4 +156,10 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             }
         );
     }
+
+    range = new FormGroup({
+        startDate: new FormControl(),
+        endDate: new FormControl(),
+    });
 }
+ 
