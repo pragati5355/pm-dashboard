@@ -79,7 +79,7 @@
                     <button
                         [matMenuTriggerFor]="menu"
                         class="ml-2"
-                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                        *ngIf="userRole === 'ADMIN' || userRole === 'PM' || userRole === 'SALES'" 
                         mat-flat-button
                         [color]="'primary'"
                         [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
@@ -114,7 +114,7 @@
                         <span class="ml-2 mr-1">Work logs</span>
                     </button>
                 </div>
-                <div *ngIf="repoCount > 0" [matTooltip]="'View repository'">
+                <div *ngIf="repoCount > 0 && (userRole === 'ADMIN' || userRole === 'PM')" [matTooltip]="'View repository'">
                     <button
                         class="ml-4"
                         mat-flat-button
