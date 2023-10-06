@@ -71,7 +71,7 @@
                         </mat-slide-toggle>
                     </div>
                 </div>
-                <div *ngIf="userRole === 'USER'">
+                <div *ngIf="userRole === 'USER' || userRole === 'VENDOR'">
                     <button
                         (click)="addOrEditWorklog(null, 'ADD')"
                         [disabled]="initialLoading"
