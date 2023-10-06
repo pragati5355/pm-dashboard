@@ -54,7 +54,7 @@ export class WorkLogsListComponent implements OnInit {
     isResourceLoading: boolean = false;
     selectedResource: any;
     defaultResource: any;
-    defaultResourceName : any;
+    defaultResourceName: any;
     currentMonth: number;
     currentYear: string = '';
     configEditWorklogStatus!: FormGroup;
@@ -85,7 +85,7 @@ export class WorkLogsListComponent implements OnInit {
         private workLogService: WorkLogService,
         private snackBar: SnackBar,
         private loggedInService: LoggedInUserService,
-        private externalProjectServiceApi : ExternalProjectsApiService
+        private externalProjectServiceApi: ExternalProjectsApiService
     ) {}
 
     ngOnInit(): void {
@@ -125,7 +125,8 @@ export class WorkLogsListComponent implements OnInit {
         const resource = this.options.filter((option) =>
             option?.email?.toLowerCase().includes($event.value)
         );
-        this.selectedResource = resource[0]?.firstName + " " + resource[0]?.lastName;
+        this.selectedResource =
+            resource[0]?.firstName + ' ' + resource[0]?.lastName;
         this.selectedResourceId = resource[0]?.resourceId;
         this.checked = resource[0]?.allowEdit;
         this.loadData(this.selectedYear, this.selectedTabIndex);
@@ -159,9 +160,9 @@ export class WorkLogsListComponent implements OnInit {
                     disableClose: true,
                     autoFocus: false,
                     data: {
-                        defaultResource : this.defaultResourceName,
-                        selectedResource : this.selectedResource,
-                        selectedResourceId : this.selectedResourceId,
+                        defaultResource: this.defaultResourceName,
+                        selectedResource: this.selectedResource,
+                        selectedResourceId: this.selectedResourceId,
                     },
                 }
             );
@@ -169,45 +170,53 @@ export class WorkLogsListComponent implements OnInit {
                 if (result) {
                     this.checked = !this.checked;
                     const payload = {
-                        projectId : this.projectId,
-                        allowEdit : "true",
-                        resourceId : this.selectedResourceId
+                        projectId: this.projectId,
+                        allowEdit: 'true',
+                        resourceId: this.selectedResourceId,
                     };
                     this.initialLoading = true;
-                    this.externalProjectServiceApi.getAllowEditWorklog(payload).subscribe(
-                        (res:any) => {
-                            this.initialLoading = false;
-                            if(res?.statusCode == 200) {
-                                this.snackBar.successSnackBar("Worklog Edit Enabled");
+                    this.externalProjectServiceApi
+                        .getAllowEditWorklog(payload)
+                        .subscribe(
+                            (res: any) => {
+                                this.initialLoading = false;
+                                if (res?.statusCode == 200) {
+                                    this.snackBar.successSnackBar(
+                                        'Worklog Edit Enabled'
+                                    );
+                                }
+                            },
+                            (err) => {
+                                this.snackBar.errorSnackBar(err?.message);
                             }
-                        },
-                        (err) => {
-                            this.snackBar.errorSnackBar(err?.message);
-                        }
-                    )
+                        );
                 } else {
-                    console.log('Saying NO',this.checked);
+                    console.log('Saying NO', this.checked);
                 }
             });
         } else {
             this.checked = !this.checked;
             const payload = {
-                projectId : this.projectId,
-                allowEdit : "false",
-                resourceId : this.selectedResourceId
+                projectId: this.projectId,
+                allowEdit: 'false',
+                resourceId: this.selectedResourceId,
             };
             this.initialLoading = true;
-            this.externalProjectServiceApi.getAllowEditWorklog(payload).subscribe(
-                (res:any) => {
-                    this.initialLoading = false;
-                    if(res?.statusCode == 200) {
-                        this.snackBar.successSnackBar("Worklog Edit Disabled");
+            this.externalProjectServiceApi
+                .getAllowEditWorklog(payload)
+                .subscribe(
+                    (res: any) => {
+                        this.initialLoading = false;
+                        if (res?.statusCode == 200) {
+                            this.snackBar.successSnackBar(
+                                'Worklog Edit Disabled'
+                            );
+                        }
+                    },
+                    (err) => {
+                        this.snackBar.errorSnackBar(err?.message);
                     }
-                },
-                (err) => {
-                    this.snackBar.errorSnackBar(err?.message);
-                }
-            )
+                );
         }
     }
 
@@ -301,7 +310,7 @@ export class WorkLogsListComponent implements OnInit {
                 this.loggedInUser = res;
                 this.userRole = res?.role;
                 this.selectedResourceId = this.loggedInUser?.resourceId;
-                if (this.userRole !== 'ADMIN') {
+                if (this.userRole === 'USER') {
                     this.loadData(this.selectedYear, this.selectedTabIndex);
                 } else {
                     this.getProjectResources();
@@ -386,7 +395,8 @@ export class WorkLogsListComponent implements OnInit {
                 if (res?.data) {
                     this.options = res?.data;
                     this.defaultResource = res?.data[0]?.email;
-                    this.defaultResourceName = res?.data[0]?.firstName + " " + res?.data[0]?.lastName;
+                    this.defaultResourceName =
+                        res?.data[0]?.firstName + ' ' + res?.data[0]?.lastName;
                     this.checked = res?.data[0]?.allowEdit;
                     this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
