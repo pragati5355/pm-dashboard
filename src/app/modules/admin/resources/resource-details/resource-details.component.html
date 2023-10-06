@@ -30,6 +30,7 @@
                 [matTooltip]="'Edit'"
                 [routerLink]="['../']"
                 (click)="edit(resourceDetails.id)"
+                *ngIf="userRole === 'ADMIN'"
             >
                 <mat-icon
                     class="text-white"

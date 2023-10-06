@@ -55,6 +55,12 @@ import { QuillModule } from 'ngx-quill';
 import { StripHtmlPipe } from './common/pipes/strip-html.pipe';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProjectSettingsComponent } from './project-settings/project-settings.component';
+import { ViewWorkLogComponent } from './view-work-log/view-work-log.component';
+import {
+    MatSlideToggleModule,
+    _MatSlideToggleRequiredValidatorModule,
+} from '@angular/material/slide-toggle';
+import { DownloadWorkLogComponent } from './download-work-log/download-work-log.component';
 
 @NgModule({
     declarations: [
@@ -82,6 +88,8 @@ import { ProjectSettingsComponent } from './project-settings/project-settings.co
         AddEditWorkLogComponent,
         StripHtmlPipe,
         ProjectSettingsComponent,
+        ViewWorkLogComponent,
+        DownloadWorkLogComponent,
     ],
     imports: [
         FormsModule,
@@ -121,6 +129,8 @@ import { ProjectSettingsComponent } from './project-settings/project-settings.co
         MatChipsModule,
         QuillModule,
         MatDialogModule,
+        MatSlideToggleModule,
+        _MatSlideToggleRequiredValidatorModule
     ],
     exports: [
         ProjectDetailsComponent,

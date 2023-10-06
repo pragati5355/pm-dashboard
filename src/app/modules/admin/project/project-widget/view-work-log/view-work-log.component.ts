@@ -1,30 +1,22 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
-import {
-    MAT_SELECT_YEARS,
-    MAT_TAB_MONTHS,
-} from '@modules/admin/project/project-widget/common/constants';
-import { WorkLogService } from '@modules/admin/project/project-widget/common/services/work-log.service';
+import { ExternalProjectsApiService } from '@modules/admin/external-projects/common/services/external-projects-api.service';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
-import { AddEditWorkLogComponent } from '../add-edit-work-log/add-edit-work-log.component';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { WorkLogAllowEditDialogComponent } from '../work-log-allow-edit-dialog/work-log-allow-edit-dialog.component';
-import { WorkLogShareComponent } from '../work-log-share/work-log-share.component';
-import { ExternalProjectsApiService } from '../common/services/external-projects-api.service';
+import { MAT_SELECT_YEARS, MAT_TAB_MONTHS } from '../common/constants';
+import { WorkLogService } from '../common/services/work-log.service';
 
 @Component({
-    selector: 'app-work-logs-list',
-    templateUrl: './work-logs-list.component.html',
-    styleUrls: ['./work-logs-list.component.scss'],
-    encapsulation: ViewEncapsulation.None,
+    selector: 'app-view-work-log',
+    templateUrl: './view-work-log.component.html',
+    styleUrls: ['./view-work-log.component.scss'],
 })
-export class WorkLogsListComponent implements OnInit {
+export class ViewWorkLogComponent implements OnInit {
     selectedYear: string = '2020';
     selectedTabIndex: number = 0;
     projectId: any;
@@ -148,151 +140,7 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     goBack() {
-        this.router.navigate([`/external-projects/details/${this.projectId}`]);
-    }
-
-    allowEditWorklog(e: any) {
-        if (!this.checked) {
-            e.source.checked = false;
-            const dialogRef = this.matDialog.open(
-                WorkLogAllowEditDialogComponent,
-                {
-                    disableClose: true,
-                    autoFocus: false,
-                    data: {
-                        defaultResource: this.defaultResourceName,
-                        selectedResource: this.selectedResource,
-                        selectedResourceId: this.selectedResourceId,
-                    },
-                }
-            );
-            dialogRef.afterClosed().subscribe((result: any) => {
-                if (result) {
-                    this.checked = !this.checked;
-                    const payload = {
-                        projectId: this.projectId,
-                        allowEdit: 'true',
-                        resourceId: this.selectedResourceId,
-                    };
-                    this.initialLoading = true;
-                    this.externalProjectServiceApi
-                        .getAllowEditWorklog(payload)
-                        .subscribe(
-                            (res: any) => {
-                                this.initialLoading = false;
-                                if (res?.statusCode == 200) {
-                                    this.snackBar.successSnackBar(
-                                        'Worklog Edit Enabled'
-                                    );
-                                }
-                            },
-                            (err) => {
-                                this.snackBar.errorSnackBar(err?.message);
-                            }
-                        );
-                } else {
-                    console.log('Saying NO', this.checked);
-                }
-            });
-        } else {
-            this.checked = !this.checked;
-            const payload = {
-                projectId: this.projectId,
-                allowEdit: 'false',
-                resourceId: this.selectedResourceId,
-            };
-            this.initialLoading = true;
-            this.externalProjectServiceApi
-                .getAllowEditWorklog(payload)
-                .subscribe(
-                    (res: any) => {
-                        this.initialLoading = false;
-                        if (res?.statusCode == 200) {
-                            this.snackBar.successSnackBar(
-                                'Worklog Edit Disabled'
-                            );
-                        }
-                    },
-                    (err) => {
-                        this.snackBar.errorSnackBar(err?.message);
-                    }
-                );
-        }
-    }
-
-    addOrEditWorklog(workLogData: any, mode: string) {
-        const workLogdialogRef = this.matDialog.open(AddEditWorkLogComponent, {
-            disableClose: true,
-            width: '90%',
-            maxWidth: '800px',
-            maxHeight: '90vh',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                data: workLogData,
-                mode: mode,
-                userState: this.userState,
-                projectName: this.projectName,
-                projectId: this.projectId,
-                tabIndex: this.selectedTabIndex,
-                loggedInUser: this.loggedInUser,
-            },
-        });
-        workLogdialogRef.afterClosed().subscribe((result: any) => {
-            if (result) {
-                this.loadData(this.selectedYear, this.selectedTabIndex);
-            }
-        });
-    }
-
-    deleteWorkLog(id: number) {
-        const dialogRef = this.fuseConfirmationService.open(
-            this.configForm.value
-        );
-
-        dialogRef.afterClosed().subscribe((result) => {
-            if (result == 'confirmed') {
-                this.initialLoading = true;
-                const payload = {
-                    externalWorklog: [
-                        {
-                            id: id,
-                            deleted: true,
-                        },
-                    ],
-                };
-                this.workLogService
-                    .saveWorkLogs(payload)
-                    .subscribe((res: any) => {
-                        this.initialLoading = false;
-                        if (!res?.error) {
-                            this.snackBar.successSnackBar(res?.message);
-                            this.loadData(
-                                this.selectedYear,
-                                this.selectedTabIndex
-                            );
-                        }
-                    });
-            }
-        });
-    }
-
-    shareDialog() {
-        this.matDialog
-            .open(WorkLogShareComponent, {
-                width: '50%',
-                data: {
-                    projectId: this.projectId,
-                    projectName: this.projectName,
-                },
-                disableClose: true,
-            })
-            .afterClosed()
-            .subscribe((result) => {
-                if (result) {
-                    window.location.reload();
-                }
-            });
+        this.router.navigate([`/projects/${this.projectId}/details`]);
     }
 
     private valueChangeSubscriptionForEmail() {

@@ -12,7 +12,7 @@
                 Back
             </div>
             <div class="flex justify-end items-center">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center">
                     <div
                         class="w-[350px] mr-4"
                         *ngIf="userRole === 'ADMIN' || userRole === 'SALES'"
@@ -38,7 +38,7 @@
                         </mat-form-field>
                     </div>
 
-                    <mat-form-field class="mr-4">
+                    <mat-form-field>
                         <mat-label class="">Year</mat-label>
                         <mat-select
                             [(value)]="selectedYear"
@@ -55,48 +55,7 @@
                             >
                         </mat-select>
                     </mat-form-field>
-
-                    <div
-                        class="flex flex-col items-center mb-8"
-                        *ngIf="userRole === 'ADMIN'"
-                    >
-                        <span class="font-medium text-md mb-4">Allow Edit</span>
-                        <mat-slide-toggle
-                            class="justify-start mr-8"
-                            [color]="'primary'"
-                            (change)="allowEditWorklog($event)"
-                            [checked]="checked"
-                            [disabled]="initialLoading"
-                        >
-                        </mat-slide-toggle>
-                    </div>
                 </div>
-                <div *ngIf="userRole === 'USER' || userRole === 'VENDOR'">
-                    <button
-                        (click)="addOrEditWorklog(null, 'ADD')"
-                        [disabled]="initialLoading"
-                        class="ml-4"
-                        mat-flat-button
-                        [color]="'primary'"
-                    >
-                        <mat-icon
-                            class="icon-size-5"
-                            [svgIcon]="'heroicons_outline:plus'"
-                        ></mat-icon>
-                        <span class="ml-2 mr-1">Add worklog</span>
-                    </button>
-                </div>
-                <button
-                    *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
-                    class="ml-3 mr-2"
-                    mat-mini-fab
-                    color="primary"
-                    matTooltip="Share"
-                    (click)="shareDialog()"
-                    [disabled]="initialLoading"
-                >
-                    <mat-icon>share</mat-icon>
-                </button>
             </div>
         </div>
         <div class="mt-4">
@@ -141,15 +100,6 @@
                             >
                                 <div class="font-semibold">Description</div>
                                 <div class="font-semibold">Hours</div>
-                                <div
-                                    class="font-semibold"
-                                    *ngIf="
-                                        userRole === 'USER' ||
-                                        userRole === 'VENDOR'
-                                    "
-                                >
-                                    Actions
-                                </div>
                             </div>
                         </div>
 
@@ -191,54 +141,13 @@
                                         [innerHTML]="
                                             logs?.onLeave
                                                 ? 'On Leave'
-                                                : (logs?.comment | sanitizeHtml)
+                                                : logs?.comment
                                         "
                                     ></div>
                                     <div class="pb-2">
                                         {{
                                             logs?.onLeave ? 0 : logs?.timeSpent
                                         }}
-                                    </div>
-
-                                    <div
-                                        class=""
-                                        *ngIf="
-                                            userRole === 'USER' ||
-                                            userRole === 'VENDOR'
-                                        "
-                                    >
-                                        <div class="pb-2">
-                                            <div>
-                                                <button
-                                                    *ngIf="
-                                                        logs?.allowEdit === true
-                                                    "
-                                                    (click)="
-                                                        addOrEditWorklog(
-                                                            logs,
-                                                            'EDIT'
-                                                        )
-                                                    "
-                                                >
-                                                    <mat-icon
-                                                        [matTooltip]="'Edit'"
-                                                        class="text-gray-400 icon-size-5 cursor-pointer mr-4"
-                                                        svgIcon="heroicons_outline:pencil"
-                                                    ></mat-icon>
-                                                </button>
-                                                <button
-                                                    (click)="
-                                                        deleteWorkLog(logs?.id)
-                                                    "
-                                                >
-                                                    <mat-icon
-                                                        [matTooltip]="'Delete'"
-                                                        class="text-gray-400 icon-size-5 cursor-pointer"
-                                                        svgIcon="heroicons_outline:trash"
-                                                    ></mat-icon>
-                                                </button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
