@@ -59,6 +59,11 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
+    range = new FormGroup({
+        startDate: new FormControl(),
+        endDate: new FormControl(),
+    });
+
     goBack() {
         this.router.navigate([`/profit-loss`]);
     }
@@ -156,10 +161,5 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             }
         );
     }
-
-    range = new FormGroup({
-        startDate: new FormControl(),
-        endDate: new FormControl(),
-    });
 }
  
