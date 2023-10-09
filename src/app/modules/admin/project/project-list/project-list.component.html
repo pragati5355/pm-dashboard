@@ -47,7 +47,8 @@
                     <span class="ml-2">List</span>
                 </button>
             </div>
-            <button *ngIf="userRole === 'ADMIN'" class="ml-4" mat-flat-button [color]="'primary'" (click)="gotoAddProject()">
+            <button *ngIf="userRole === 'ADMIN'" class="ml-4" mat-flat-button [color]="'primary'"
+                (click)="gotoAddProject()">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Add New Project</span>
             </button>
@@ -76,23 +77,21 @@
                                                 <div class="min-w-4">
                                                     <span
                                                         class="py-1 px-120 mb-3 rounded-full text-xs font-semibold text-white bg-yellow-500 ng-star-inserted"
-                                                        *ngIf="project?.status == 'COMPLETED'"
-                                                    >
+                                                        *ngIf="project?.status == 'COMPLETED'">
                                                         Completed
                                                     </span>
                                                     <span
                                                         class="px-2 pt-0.5 pb-1 rounded-full text-xs font-semibold text-white bg-green-500 ng-star-inserted"
-                                                        *ngIf="project?.status == 'ACTIVE'"
-                                                    >
+                                                        *ngIf="project?.status == 'ACTIVE'">
                                                         Active
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
-                                       
+
                                         <div *ngIf="userRole === 'ADMIN' || userRole === 'PM'">
-                                            <button class="inline-flex items-center"
-                                                *ngIf="!project.lastSyncDate" mat-flat-button [color]="'primary'"
+                                            <button class="inline-flex items-center" *ngIf="!project.lastSyncDate"
+                                                mat-flat-button [color]="'primary'"
                                                 (click)="syncProject($event,project.id)">
                                                 <span class="ml-2 mr-1">Sync Now</span>
                                             </button>
@@ -104,8 +103,7 @@
                                             <span class="" *ngIf="project.lastSyncDate">Last updated on
                                                 {{project.lastSyncDate | date}}</span>
                                         </div>
-                                        <span
-                                            *ngIf="userRole === 'ADMIN' || userRole === 'PM'"   
+                                        <span *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                                             class=" ml-auto  inline-flex items-center font-bold  px-3 py-1 rounded-full tracking-wide">
                                             <span class="leading-relaxed whitespace-nowrap border-b-a cursor-pointer"
                                                 (click)="syncProject($event,project.id)">Sync Now</span>
@@ -164,7 +162,7 @@
                                     </div>
 
 
-                                    <div *ngIf="project.done == 'NaN' || project.done <= 0"
+                                    <div *ngIf="!project?.lastSyncDate"
                                         class="mx-6 sm:mx-8 mt-2 mb-6 text-primary dark:text-primary-500">
                                         Not sync with Jira . Project details will appear here when the sync is complete.
                                     </div>
@@ -245,23 +243,15 @@
                                         (click)="syncProject($event,project.id)">Sync Now</span>
                                 </span> -->
 
-                                <button
-                                mat-icon-button
-                                [matMenuTriggerFor]="menu"
-                                aria-label="Example icon-button with a menu"
-                            >
-                                <mat-icon>more_vert</mat-icon>
+                                <button mat-icon-button [matMenuTriggerFor]="menu"
+                                    aria-label="Example icon-button with a menu">
+                                    <mat-icon>more_vert</mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button
-                                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
-                                        mat-menu-item
-                                        (click)="syncProject($event,project?.id)"
-                                    >
-                                        <span
-                                            >
-                                            Sync Now</span
-                                        >
+                                    <button *ngIf="userRole === 'ADMIN' || userRole === 'PM'" mat-menu-item
+                                        (click)="syncProject($event,project?.id)">
+                                        <span>
+                                            Sync Now</span>
                                     </button>
                                 </mat-menu>
                             </div>
