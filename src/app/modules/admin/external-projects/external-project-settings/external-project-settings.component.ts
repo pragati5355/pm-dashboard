@@ -75,6 +75,8 @@ export class ExternalProjectSettingsComponent implements OnInit {
     ngOnInit(): void {
         this.patchReminders();
         this.initializeForm();
+        this.showStep = this.data?.showStep;
+        console.log("this.showStep : " , this.showStep);
     }
 
     costTypeChange(event: MatSelectChange) {
