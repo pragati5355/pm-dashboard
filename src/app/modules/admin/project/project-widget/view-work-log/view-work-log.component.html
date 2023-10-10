@@ -152,6 +152,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div
+                        class="z-10 sticky top-0 grid gap-2 py-4 shadow text-base font-semibold text-black bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        [ngClass]="{
+                            'inventory-grid-list-1':
+                                userRole === 'ADMIN' ||
+                                userRole === 'PM' ||
+                                userRole === 'SALES',
+                            'inventory-grid-list':
+                                userRole === 'USER' || userRole === 'VENDOR'
+                        }"
+                    >
+                        <div class="font-semibold px-2 ">Total</div>
+                        <div class="flex justify-end mr-8">
+                            <div class="overflow-hidden break-all worklog-row">{{ totalhours || '0'}}</div>  
+                        </div>
+                    </div>
                     </ng-container>
 
                     <ng-container
