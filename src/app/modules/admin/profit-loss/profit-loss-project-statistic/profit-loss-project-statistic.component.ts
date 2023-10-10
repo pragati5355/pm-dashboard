@@ -37,6 +37,8 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     matMonthList: any[] = MAT_TAB_MONTHS;
     matSelectYears: string[] = MAT_SELECT_YEARS;
     currentMonth: number;
+    currentMonthFirstDate: any = '';
+    currentMonthCurrentDate : any = '';
     currentYear: string = '';
     projectStatDetails: ProjectStatModel;
     months : any [] = [];
@@ -95,7 +97,6 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     }
 
     loadStatList() {
-        console.log("----------- Data -------");
         this.initialLoading = true;
         const payload = {
             projectId : this.projectId,
@@ -104,15 +105,12 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         }
         
         if(this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd') != null){
-            console.log("End Date Null");
-            console.log("Payload : ", payload);
             this.pNLProjectServie.getPNLStatList(payload).subscribe(
                 (res: any) => {
                     this.initialLoading = false;
                     if (res?.statusCode === 200) {
                         this.projectStatDetails = res?.data;
                         this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
-                        console.log("this.statList : " , this.projectStatDetails);
                         if(this.projectStatDetails?.stats?.length != 0){
                             this.showFooter = true;
                         }
@@ -131,10 +129,13 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     }
 
     private getCurrentMonthAndYear() {
+        var date = new Date();
         this.selectedYear = String(new Date().getFullYear());
         this.currentYear = String(new Date().getFullYear());
         this.selectedMonth = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
+        this.currentMonthFirstDate = new Date(date.getFullYear(), date.getMonth(), 1);
+        this.currentMonthCurrentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         this.previousMonth = new Date().getMonth() - 1;
     }
 
@@ -151,20 +152,22 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.initialLoading = true;
         const payload = {
             projectId : this.projectId,
+            startDate : this.datePipe.transform(this.currentMonthFirstDate,'yyyy-MM-dd'),
+            endDate : this.datePipe.transform(this.currentMonthCurrentDate,'yyyy-MM-dd')
         }
+        
         this.pNLProjectServie.getPNLStatList(payload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
+                console.log("payload : ", payload);
                 if (res?.statusCode === 200) {
                     this.projectStatDetails = res?.data;
-                    this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate);
-                    this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate);
-                    console.log(this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate));
+                    this.range.controls['startDate'].patchValue((res?.data?.projectDetails?.startDate));
+                    this.range.controls['endDate'].patchValue((res?.data?.projectDetails?.endDate));
                     if(this.projectStatDetails?.stats?.length != 0){
                         this.showFooter = true;
                     }
                     this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
-                    console.log("this.statList : " , this.projectStatDetails);
                 } else if (res?.data?.stats == null) {
                     this.projectStatDetails.stats = [];
                 }
