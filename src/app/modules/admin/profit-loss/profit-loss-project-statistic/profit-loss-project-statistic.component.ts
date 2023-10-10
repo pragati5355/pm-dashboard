@@ -47,6 +47,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     showFooter : boolean = false;
     initialLoading: boolean = false;
     projectHistory: any;
+    payload:any;
 
     constructor(
         private router: Router,
@@ -75,7 +76,19 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             .getProjectById(this.projectId)
             .subscribe((res: any) => {
                 this.projectHistory = res?.data?.project;
+                if(res?.data?.project?.startDate == null && res?.data?.project?.endDate == null){
+                    this.range.controls['startDate'].patchValue(this.currentMonthFirstDate);
+                    this.range.controls['endDate'].patchValue(this.currentMonthCurrentDate);
+                }
+                else{
+                    this.range.controls['startDate'].patchValue(res?.data?.project?.startDate);
+                    this.range.controls['endDate'].patchValue(res?.data?.project?.endDate);
+                }
                 this.initialLoading = false;
+            },
+            (err) => {
+                this.initialLoading = false;
+                this.projectStatDetails = null;
             });
     }
 
@@ -109,14 +122,14 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
     loadStatList() {
         this.initialLoading = true;
-        const payload = {
+        this.payload = {
             projectId : this.projectId,
             startDate : this.datePipe.transform(this.range?.value?.startDate ,'yyyy-MM-dd'),
             endDate : this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd')
         }
         
         if(this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd') != null){
-            this.pNLProjectServie.getPNLStatList(payload).subscribe(
+            this.pNLProjectServie.getPNLStatList(this.payload).subscribe(
                 (res: any) => {
                     this.initialLoading = false;
                     if (res?.statusCode === 200) {
@@ -161,19 +174,34 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
 
     private loadProjectDetails(){
         this.initialLoading = true;
-        const payload = {
-            projectId : this.projectId,
-            startDate : this.datePipe.transform((this.projectHistory?.startDate ||this.currentMonthFirstDate),'yyyy-MM-dd'),
-            endDate : this.datePipe.transform((this.projectHistory?.endDate || this.currentMonthCurrentDate),'yyyy-MM-dd')
+        if(this.projectHistory?.startDate == null && this.projectHistory?.endDate == null){
+            this.payload = {
+                projectId : this.projectId,
+                startDate : this.datePipe.transform(this.currentMonthFirstDate,'yyyy-MM-dd'),
+                endDate : this.datePipe.transform(this.currentMonthCurrentDate,'yyyy-MM-dd')
+            }
+        }
+        else {
+            this.payload = {
+                projectId : this.projectId,
+                startDate : this.datePipe.transform(this.projectHistory?.startDate,'yyyy-MM-dd'),
+                endDate : this.datePipe.transform(this.projectHistory?.endDate,'yyyy-MM-dd')
+            }
         }
         
-        this.pNLProjectServie.getPNLStatList(payload).subscribe(
+        this.pNLProjectServie.getPNLStatList(this.payload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
                     this.projectStatDetails = res?.data;
-                    this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate || this.currentMonthFirstDate);
-                    this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate || this.currentMonthCurrentDate);
+                    if(res?.data?.projectDetails == null){
+                        this.range.controls['startDate'].patchValue(this.currentMonthFirstDate);
+                        this.range.controls['endDate'].patchValue(this.currentMonthCurrentDate);
+                    }
+                    else{
+                        this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate);
+                        this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate);
+                    }
                     if(this.projectStatDetails?.stats?.length != 0){
                         this.showFooter = true;
                     }
