@@ -25,12 +25,16 @@ export class ExternalProjectDetailsComponent implements OnInit {
     isLoadingDevelopersEmail: boolean = false;
     projectId: any;
     projectDetails: any;
+    projectHistory : any;
+    projectSetting: any;
     isLoading = false;
     configFormStatus: FormGroup;
     currentProjectEmail: any[];
     userRole: string;
     technologies: any;
     isLoadingTechnologies: boolean = false;
+    isprojectCostSettingsAdded: boolean = false;
+    isprojectStartEndDateAdded : boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -59,6 +63,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
             .getProjectById(this.projectId)
             .subscribe((res: any) => {
                 this.projectDetails = res?.data;
+                this.projectHistory = res?.data?.project;
+                this.projectSetting = res?.data?.projectSettings;
                 this.isLoading = false;
             });
     }
@@ -79,7 +85,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 if (result) {
                     window.location.reload();
                 }
-            });
+        });
     }
 
     settings() {
@@ -203,6 +209,39 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.loadDeveloperEmails();
             }
         });
+    }
+
+    openEditProjectDialog(){
+        this.isprojectStartEndDateAdded = true;
+        this.edit();
+        this.isprojectStartEndDateAdded = false;
+    }
+
+    openCostProjectSettingDialog(){
+        this.isprojectCostSettingsAdded = true;
+        this.dialog
+            .open(ExternalProjectSettingsComponent, {
+                disableClose: true,
+                width: '70%',
+                height: 'auto',
+                maxHeight: '90vh',
+                data: {
+                    projectModel: this.projectDetails?.project,
+                    clientModels: this.projectDetails?.clientModels,
+                    projectSettings: this.projectDetails?.projectSettings,
+                    teamModel: this.projectDetails?.teamModel,
+                    showStep : 1,
+                },
+            })
+            .afterClosed()
+            .subscribe((result) => {
+                if (result) {
+                    this.isLoading = true;
+                    this.setProjectIdSubscription();
+                    this.loadDeveloperEmails();
+                }
+        });
+        this.isprojectCostSettingsAdded = false;
     }
 
     private getTechnologies() {

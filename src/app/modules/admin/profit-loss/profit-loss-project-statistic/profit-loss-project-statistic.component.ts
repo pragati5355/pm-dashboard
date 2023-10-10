@@ -10,6 +10,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { debounce } from 'lodash';
 import { debounceTime } from 'rxjs';
+import { CreateProjecteService } from '@services/create-projecte.service';
 
 @Component({
     selector: 'app-profit-loss-project-statistic',
@@ -37,19 +38,23 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     matMonthList: any[] = MAT_TAB_MONTHS;
     matSelectYears: string[] = MAT_SELECT_YEARS;
     currentMonth: number;
+    currentMonthFirstDate: any = '';
+    currentMonthCurrentDate : any = '';
     currentYear: string = '';
     projectStatDetails: ProjectStatModel;
     months : any [] = [];
     range!:FormGroup ;
     showFooter : boolean = false;
     initialLoading: boolean = false;
+    projectHistory: any;
 
     constructor(
         private router: Router,
         private _route: ActivatedRoute,
         private pNLProjectServie: ProfitLossService,
         private _authService: AuthService,
-        private datePipe : DatePipe   
+        private datePipe : DatePipe,
+        private projectService: CreateProjecteService,   
     ) {}
 
     ngOnInit(): void {
@@ -58,12 +63,20 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.routeSubscribeId();
         this.loadProjectDetails();
         this.loadStatList();
-
-
     }
 
     goBack() {
         this.router.navigate([`/profit-loss`]);
+    }
+
+    getProjectDetails() {
+        this.initialLoading = true;
+        this.projectService
+            .getProjectById(this.projectId)
+            .subscribe((res: any) => {
+                this.projectHistory = res?.data?.project;
+                this.initialLoading = false;
+            });
     }
 
     getTotalCost(){
@@ -95,24 +108,20 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     }
 
     loadStatList() {
-        console.log("----------- Data -------");
         this.initialLoading = true;
         const payload = {
             projectId : this.projectId,
-            startDate : this.datePipe.transform(this.range?.value?.startDate,'yyyy-MM-dd'),
+            startDate : this.datePipe.transform(this.range?.value?.startDate ,'yyyy-MM-dd'),
             endDate : this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd')
         }
         
         if(this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd') != null){
-            console.log("End Date Null");
-            console.log("Payload : ", payload);
             this.pNLProjectServie.getPNLStatList(payload).subscribe(
                 (res: any) => {
                     this.initialLoading = false;
                     if (res?.statusCode === 200) {
                         this.projectStatDetails = res?.data;
                         this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
-                        console.log("this.statList : " , this.projectStatDetails);
                         if(this.projectStatDetails?.stats?.length != 0){
                             this.showFooter = true;
                         }
@@ -131,10 +140,13 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     }
 
     private getCurrentMonthAndYear() {
+        var date = new Date();
         this.selectedYear = String(new Date().getFullYear());
         this.currentYear = String(new Date().getFullYear());
         this.selectedMonth = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
+        this.currentMonthFirstDate = new Date(date.getFullYear(), date.getMonth(), 1);
+        this.currentMonthCurrentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         this.previousMonth = new Date().getMonth() - 1;
     }
 
@@ -142,7 +154,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.routeSubscribe = this._route.params.subscribe((id) => {
             if (id['id']) {
                 this.projectId = id['id'];
-                console.log('this.projectId : ', this.projectId);
+                this.getProjectDetails();
             }
         });
     }
@@ -151,20 +163,21 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.initialLoading = true;
         const payload = {
             projectId : this.projectId,
+            startDate : this.datePipe.transform((this.projectHistory?.startDate ||this.currentMonthFirstDate),'yyyy-MM-dd'),
+            endDate : this.datePipe.transform((this.projectHistory?.endDate || this.currentMonthCurrentDate),'yyyy-MM-dd')
         }
+        
         this.pNLProjectServie.getPNLStatList(payload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
                     this.projectStatDetails = res?.data;
-                    this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate);
-                    this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate);
-                    console.log(this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate));
+                    this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate || this.currentMonthFirstDate);
+                    this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate || this.currentMonthCurrentDate);
                     if(this.projectStatDetails?.stats?.length != 0){
                         this.showFooter = true;
                     }
                     this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
-                    console.log("this.statList : " , this.projectStatDetails);
                 } else if (res?.data?.stats == null) {
                     this.projectStatDetails.stats = [];
                 }

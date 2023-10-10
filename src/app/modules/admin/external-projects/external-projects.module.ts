@@ -52,6 +52,7 @@ import { SanitizeHtmlPipe } from './common/pipes/sanitize-html.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ExternalProjectSettingsComponent } from './external-project-settings/external-project-settings.component';
 import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.component';
+import { FuseAlertModule } from '@fuse/components/alert';
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -108,6 +109,7 @@ import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.
         QuillModule,
         MatSlideToggleModule,
         _MatSlideToggleRequiredValidatorModule,
+        FuseAlertModule,
     ],
     providers: [DatePipe],
 })
