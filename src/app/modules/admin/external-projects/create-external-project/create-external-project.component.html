@@ -12,9 +12,9 @@
 </div>
 <div mat-dialog-content class="w-full flex flex-col p-0 m-0 pr-4">
     <form *ngIf="projectForm" [formGroup]="projectForm">
-        <div class="flex flex-row justify-start items-start">
+        <div class="flex flex-row justify-start items-start gap-4">
             <mat-form-field
-                class="w-1/3 userlist mr-4"
+                class="w-1/2 userlist mr-4"
                 id="userlist"
                 [floatLabel]="'always'"
             >
@@ -32,44 +32,34 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field
-                class="w-1/3 userlist mr-4"
-                id="userlist"
-                [floatLabel]="'always'"
-            >
+            <mat-form-field [floatLabel]="'always'" class="w-1/3 userlist">
                 <mat-label>Start Date</mat-label>
-                <input
-                    matInput
-                    placeholder="Start Date"
-                    formControlName="startDate"
-                    class="inputlist"
-                />
-                <mat-error
-                    *ngIf="projectForm?.get('startDate')?.hasError('required')"
-                >
+                <input matInput #inputJoining [placeholder]="'Start Date'"
+                    formControlName="startDate" [matDatepicker]="dateOfJoiningDatepicker"
+                    (focus)="dateOfJoiningDatepicker.open()" />
+                <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker">
+                </mat-datepicker-toggle>
+                <mat-datepicker #dateOfJoiningDatepicker (closed)="inputJoining.blur()">
+                </mat-datepicker>
+                <mat-error *ngIf="projectForm?.get('startDate')?.hasError('required')">
                     <div>Start Date is mandatory</div>
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field
-                class="w-1/3 userlist mr-4"
-                id="userlist"
-                [floatLabel]="'always'"
-            >
+            <mat-form-field [floatLabel]="'always'" class="w-1/3 userlist">
                 <mat-label>End Date</mat-label>
-                <input
-                    matInput
-                    placeholder="End Date"
-                    formControlName="endDate"
-                    class="inputlist"
-                />
-                <mat-error
-                    *ngIf="projectForm?.get('endDate')?.hasError('required')"
-                >
+                <input matInput #inputJoining [placeholder]="'End Date'"
+                    formControlName="endDate" [matDatepicker]="dateOfJoiningDatepicker1"
+                    (focus)="dateOfJoiningDatepicker1.open()"
+                    [min]="projectForm?.get('startDate')?.value" />
+                <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker1">
+                </mat-datepicker-toggle>
+                <mat-datepicker #dateOfJoiningDatepicker1 (closed)="inputJoining.blur()">
+                </mat-datepicker>
+                <mat-error *ngIf="projectForm?.get('endDate')?.hasError('required')">
                     <div>End Date is mandatory</div>
                 </mat-error>
             </mat-form-field>
-
         </div>
 
         <div class="w-full">
@@ -149,7 +139,7 @@
         </div>
 
         <mat-form-field
-            class="w-full userlist"
+            class="w-full userlist mt-4"
             id="userlist"
             [floatLabel]="'always'"
         >
