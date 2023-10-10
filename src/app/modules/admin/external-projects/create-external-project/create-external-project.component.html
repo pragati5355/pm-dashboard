@@ -2,7 +2,7 @@
     matDialogTitle
     class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -mt-6 -mx-6"
 >
-    <div class="text-lg font-medium">Add External Project</div>
+    <div class="text-lg font-medium">{{mode === "create" ? "Add" : "Update"}} External Project</div>
     <button mat-icon-button (click)="cancel()" [tabIndex]="-1">
         <mat-icon
             class="text-current"
@@ -32,81 +32,120 @@
                 </mat-error>
             </mat-form-field>
 
-            <div class="w-full">
-                <mat-form-field
-                    [floatLabel]="'always'"
-                    appearance="fill"
-                    class="example-chip-list w-full flex-0"
+            <mat-form-field
+                class="w-1/3 userlist mr-4"
+                id="userlist"
+                [floatLabel]="'always'"
+            >
+                <mat-label>Start Date</mat-label>
+                <input
+                    matInput
+                    placeholder="Start Date"
+                    formControlName="startDate"
+                    class="inputlist"
+                />
+                <mat-error
+                    *ngIf="projectForm?.get('startDate')?.hasError('required')"
                 >
-                    <mat-label>Technology</mat-label>
-                    <div class="flex flex-col">
-                        <div>
-                            <mat-chip-list #chipList class="flex">
-                                <input
-                                    placeholder="Select technology..."
-                                    #technologyInput
-                                    formControlName="technology"
-                                    [matAutocomplete]="auto"
-                                    [matChipInputFor]="chipList"
-                                    [matChipInputSeparatorKeyCodes]="
-                                        separatorKeysCodes
+                    <div>Start Date is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field
+                class="w-1/3 userlist mr-4"
+                id="userlist"
+                [floatLabel]="'always'"
+            >
+                <mat-label>End Date</mat-label>
+                <input
+                    matInput
+                    placeholder="End Date"
+                    formControlName="endDate"
+                    class="inputlist"
+                />
+                <mat-error
+                    *ngIf="projectForm?.get('endDate')?.hasError('required')"
+                >
+                    <div>End Date is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="w-full">
+            <mat-form-field
+                [floatLabel]="'always'"
+                appearance="fill"
+                class="example-chip-list w-full flex-0"
+            >
+                <mat-label>Technology</mat-label>
+                <div class="flex flex-col">
+                    <div>
+                        <mat-chip-list #chipList class="flex">
+                            <input
+                                placeholder="Select technology..."
+                                #technologyInput
+                                formControlName="technology"
+                                [matAutocomplete]="auto"
+                                [matChipInputFor]="chipList"
+                                [matChipInputSeparatorKeyCodes]="
+                                    separatorKeysCodes
+                                "
+                                [matChipInputAddOnBlur]="addOnBlur"
+                                (matChipInputTokenEnd)="addTech($event)"
+                                class="w-full"
+                            />
+                            <mat-chip-list #chipList class="m-2">
+                                <mat-chip
+                                    *ngFor="
+                                        let technology of technologys;
+                                        let selectIndex = index
                                     "
-                                    [matChipInputAddOnBlur]="addOnBlur"
-                                    (matChipInputTokenEnd)="addTech($event)"
-                                    class="w-full"
-                                />
-                                <mat-chip-list #chipList class="m-2">
-                                    <mat-chip
+                                    [selectable]="selectable"
+                                    [removable]="removable"
+                                    (removed)="
+                                        remove(technology, selectIndex)
+                                    "
+                                >
+                                    <div
                                         *ngFor="
-                                            let technology of technologys;
-                                            let selectIndex = index
-                                        "
-                                        [selectable]="selectable"
-                                        [removable]="removable"
-                                        (removed)="
-                                            remove(technology, selectIndex)
+                                            let technologyi of alltechnologys
                                         "
                                     >
                                         <div
-                                            *ngFor="
-                                                let technologyi of alltechnologys
+                                            *ngIf="
+                                                technologyi?.name ==
+                                                technology
                                             "
                                         >
-                                            <div
-                                                *ngIf="
-                                                    technologyi?.name ==
-                                                    technology
-                                                "
-                                            >
-                                                {{ technologyi?.name }}
-                                            </div>
+                                            {{ technologyi?.name }}
                                         </div>
-                                        <mat-icon
-                                            matChipRemove
-                                            *ngIf="removable"
-                                            >cancel</mat-icon
-                                        >
-                                    </mat-chip>
-                                </mat-chip-list>
+                                    </div>
+                                    <mat-icon
+                                        matChipRemove
+                                        *ngIf="removable"
+                                        >cancel</mat-icon
+                                    >
+                                </mat-chip>
                             </mat-chip-list>
-                            <mat-autocomplete
-                                #auto="matAutocomplete"
-                                (optionSelected)="selected($event)"
+                        </mat-chip-list>
+                        <mat-autocomplete
+                            #auto="matAutocomplete"
+                            (optionSelected)="selected($event)"
+                        >
+                            <mat-option
+                                *ngFor="
+                                    let technology of filteredTechnologies
+                                        | async
+                                "
+                                [value]="technology"
                             >
-                                <mat-option
-                                    *ngFor="
-                                        let technology of filteredTechnologies
-                                            | async
-                                    "
-                                    [value]="technology"
-                                >
-                                    {{ technology.name }}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </div>
+                                {{ technology.name }}
+                            </mat-option>
+                        </mat-autocomplete>
                     </div>
-                </mat-form-field>
-            </div>
+                </div>
+            </mat-form-field>
         </div>
 
         <mat-form-field

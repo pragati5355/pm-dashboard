@@ -1,5 +1,57 @@
-<div *ngIf="!isLoading" class="p-8 w-full flex flex-col">
-    <div class="flex flex-row justify-between items-center mb-4">
+<div *ngIf="!isLoading" class="p-6 w-full flex flex-col">
+    <div
+        class="w-full max-w-screen-xl mx-auto pr-4 pl-4">
+        <div class="py-2" *ngIf="projectHistory?.startDate == null && projectHistory?.endDate == null">
+            <fuse-alert [type]="'warning'">
+                <span fuseAlertTitle>Warning alert</span>
+                <div class="flex flex-wrap items-center">
+                    This project is not assigned with the Start and End Date yet.
+                    Please add it to your project.
+                    <button
+                        class="ml-4"
+                        mat-button
+                        [color]="'primary'"
+                        (click)="openEditProjectDialog()"
+                    >
+                        <mat-spinner
+                            *ngIf="isprojectStartEndDateAdded ; else buttonContentRef"
+                            [diameter]="24"
+                        ></mat-spinner>
+                        <ng-template #buttonContentRef>
+                            <mat-icon class="icon-size-5">add_task</mat-icon>
+                            <span class="ml-2 mr-1">Add start and end date</span>
+                        </ng-template>
+                    </button>
+                </div>
+            </fuse-alert>
+        </div>
+        <div class="py-2" *ngIf="projectSetting?.projectCostModel == null">
+            <fuse-alert [type]="'warning'">
+                <span fuseAlertTitle>Warning alert</span>
+                <div class="flex flex-wrap items-center">
+                    This project cost setting is not added in the setting of your project yet.
+                    Please add the cost setting of your project.
+                    <button
+                        class="ml-4"
+                        mat-button
+                        [color]="'primary'"
+                        (click)="openCostProjectSettingDialog()"
+                    >
+                        <mat-spinner
+                            *ngIf="isprojectCostSettingsAdded ; else buttonContent"
+                            [diameter]="24"
+                        ></mat-spinner>
+                        <ng-template #buttonContent>
+                            <mat-icon class="icon-size-5">add_task</mat-icon>
+                            <span class="ml-2 mr-1">Add cost setting</span>
+                        </ng-template>
+                    </button>
+                </div>
+            </fuse-alert>
+        </div>
+    </div>
+
+    <div class="flex flex-row justify-between items-center mb-4 mt-6">
         <div class="flex items-center">
             <div
                 class="text-3xl font-semibold tracking-tight leading-8 flex items-center -ml-1 cursor-pointer"
@@ -20,6 +72,7 @@
                 *ngIf="userRole === 'ADMIN' || userRole === 'PM' || userRole === 'SALES'"
                 mat-flat-button
                 [color]="'primary'"
+                [disabled]="isLoadingTechnologies"
                 [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
             >
                 <span class="ml-2 mr-1">Work logs</span>
@@ -69,7 +122,7 @@
                 color="primary"
                 matTooltip="Project settings"
                 (click)="settings()"
-                [disabled]="isLoading"
+                [disabled]="isLoadingTechnologies || isLoading"
             >
                 <mat-icon>settings</mat-icon>
             </button>

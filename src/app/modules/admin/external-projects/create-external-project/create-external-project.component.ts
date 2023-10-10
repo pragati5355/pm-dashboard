@@ -102,6 +102,8 @@ export class CreateExternalProjectComponent implements OnInit {
             name: this.fb.control(this.projectModel?.name || null, [
                 Validators.required,
             ]),
+            startDate : this.fb.control(this.projectModel?.startDate || null, [Validators.required]),
+            endDate : this.fb.control(this.projectModel?.endDate || null,[Validators.required]),
             description: this.fb.control(
                 this.projectModel?.description || null
             ),
