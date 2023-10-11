@@ -20,21 +20,10 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 export class ProfitLossProjectStatisticComponent implements OnInit {
 
     @ViewChild(MatSort) sort: MatSort;
-    dataSourceResource: MatTableDataSource<any>;
     dataSourceProject: MatTableDataSource<any>;
-    displayedResourceCostColumns: string[]=[
-        'resourceName', 'ctcInr', 'salaryPerMonthINR', 'salaryPerMonthUSD', 'utilization', 'role'
-    ];
     displayedProjectCostColumns: string[] = [
         'email', 'totalIdealWorklogHrs', 'totalActualWorklogHrs', 'hourlyCost', 
         'idealResourceCost', 'idealProjectCost', 'costOnProject', 'actualCost', 'diff'
-    ];
-    list = [
-        {resourceName : 'Pragati Gawade', ctcInr : '20000', salaryPerMonthINR : '16888', salaryPerMonthUSD : '234.5', utilization : '1', role : 'Frontend'},
-        {resourceName : 'Pragati Gawade', ctcInr : '20000', salaryPerMonthINR : '16888', salaryPerMonthUSD : '234.5', utilization : '1', role : 'Frontend'},
-        {resourceName : 'Pragati Gawade', ctcInr : '20000', salaryPerMonthINR : '16888', salaryPerMonthUSD : '234.5', utilization : '1', role : 'Frontend'},
-        {resourceName : 'Pragati Gawade', ctcInr : '20000', salaryPerMonthINR : '16888', salaryPerMonthUSD : '234.5', utilization : '1', role : 'Frontend'},
-        {resourceName : 'Pragati Gawade', ctcInr : '20000', salaryPerMonthINR : '16888', salaryPerMonthUSD : '234.5', utilization : '1', role : 'Frontend'}
     ];
     routeSubscribe: any;
     projectId = 0;
@@ -67,9 +56,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         private _authService: AuthService,
         private datePipe : DatePipe,
         private projectService: CreateProjecteService,   
-    ){
-        this.dataSourceResource = new MatTableDataSource(this.list);
-    }
+    ){}
 
     ngOnInit(): void {
         this.getCurrentMonthAndYear();

@@ -22,8 +22,8 @@
 }
 
 .mat-table {
-    width: 1200px;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 100%;
     margin-bottom: 1rem;
     display: table;
     border-collapse: collapse;
@@ -83,15 +83,4 @@ tr.mat-footer-row {
     width: 162px;
 }
 
-.mat-column-resourcename{
-    width: 40%;
-}
-
-.mat-column-ctcinr,
-.mat-column-salarypermonthinr,
-.mat-column-salarypermonthusd,
-.mat-column-utilization,
-.mat-column-role{
-    width: 10%;
-}
   
