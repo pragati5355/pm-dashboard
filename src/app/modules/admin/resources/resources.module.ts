@@ -43,6 +43,7 @@ import { NameResumeVersionComponent } from './name-resume-version/name-resume-ve
 import { OnboardResourceComponent } from './onboard-resource/onboard-resource.component';
 import { OnboardResourceDetailsComponent } from './onboard-resource-details/onboard-resource-details.component';
 import { OnboardVendorDetailsComponent } from './onboard-vendor-details/onboard-vendor-details.component';
+import { ResourceInviteFormComponent } from './resource-invite-form/resource-invite-form.component';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import { OnboardVendorDetailsComponent } from './onboard-vendor-details/onboard-
         OnboardResourceComponent,
         OnboardResourceDetailsComponent,
         OnboardVendorDetailsComponent,
+        ResourceInviteFormComponent,
     ],
     imports: [
         CommonModule,

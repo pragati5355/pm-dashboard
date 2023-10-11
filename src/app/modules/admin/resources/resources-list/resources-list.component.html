@@ -372,7 +372,7 @@
                                                 "
                                             ></mat-icon>
                                             <span class="ml-2 mr-1"
-                                                >Add Resource</span
+                                                >Add</span
                                             >
                                         </button>
 
@@ -403,10 +403,27 @@
                                             *ngIf="userRole === 'ADMIN'"
                                         >
                                             <span class="ml-2 mr-1"
-                                                >Onboard Resource</span
+                                                >Request</span
                                             >
                                         </button>
                                     </div>
+
+                                     <div class="">
+                                        <button
+                                            [color]="'primary'"
+                                            [matTooltip]="'Invite Resource'"
+                                            class="ml-2"
+                                            mat-flat-button
+                                            (click)="openDialog('ADD', null)"
+                                            *ngIf="userRole === 'ADMIN'"
+                                        >
+                                            <span class="ml-2 mr-1"
+                                                >Invite</span
+                                            >
+                                        </button>
+                                    </div>
+
+                                    
                                 </div>
                             </div>
                         </div>
