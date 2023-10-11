@@ -93,6 +93,7 @@ export class WorklogDownloadComponent implements OnInit {
                 if (res?.code === 200) {
                     this.downloadFile(res?.data);
                     this.snackbar.successSnackBar(res?.message);
+                    this.close();
                 } else {
                     this.snackbar.errorSnackBar(res?.message);
                 }
