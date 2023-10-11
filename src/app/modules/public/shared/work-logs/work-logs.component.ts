@@ -48,7 +48,9 @@ export class WorkLogsComponent implements OnInit {
     }
 
     submit() {
-        this.addTask();
+        if (!this.onLeave) {
+            this.addTask();
+        }
         if (this.tasks?.length === 0 && !this.onLeave) {
             this.snackBar.errorSnackBar('Please add task');
             return;
@@ -103,11 +105,11 @@ export class WorkLogsComponent implements OnInit {
     }
 
     addTask() {
-        if (!this.currentDescriptionValue && !this.onLeave) {
+        if (!this.currentDescriptionValue && this.onLeave) {
             this.snackBar.errorSnackBar('Add description');
             return;
         }
-        if (!this.workLogForm?.get('totalHours')?.value && !this.onLeave) {
+        if (!this.workLogForm?.get('totalHours')?.value && this.onLeave) {
             this.snackBar.errorSnackBar('Add Hours');
             return;
         }
