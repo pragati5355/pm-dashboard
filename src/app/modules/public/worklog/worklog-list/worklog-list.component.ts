@@ -268,7 +268,7 @@ export class WorklogListComponent implements OnInit {
                 if (res?.code === 200) {
                     this.workLogsList = res?.data?.list;
                     this.projectName = res?.data?.projectName;
-                    this.totalHours = res?.data?.total;
+                    this.totalHours = res?.data?.totalHours;
                 }
             });
     }

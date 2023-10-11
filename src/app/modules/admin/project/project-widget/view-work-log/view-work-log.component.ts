@@ -205,7 +205,7 @@ export class ViewWorkLogComponent implements OnInit {
             this.initialLoading = false;
             if (!res?.error) {
                 this.workLogsList = res?.data?.list;
-                this.totalhours = res?.data?.total;
+                this.totalhours = res?.data?.totalhours;
                 this.projectName = res?.data?.projectName;
             }
             if (res?.tokenExpire) {
