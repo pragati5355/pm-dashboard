@@ -1,6 +1,5 @@
 .inventory-grid {
     grid-template-columns:  266px 104px 104px 88px 132px 122px 113px 84px 70px;
-    // grid-template-columns: repeat(9, minmax(0, 1fr));
 }    
 
 .mat-icon {
@@ -25,6 +24,15 @@
 .mat-table {
     width: 1400px;
     max-width: 1400px;
+    margin-bottom: 1rem;
+    display: table;
+    border-collapse: collapse;
+    margin: 0px;
+}
+
+.mat-table-resource{
+    width: 800px;
+    max-width: 800px;
     margin-bottom: 1rem;
     display: table;
     border-collapse: collapse;
@@ -84,4 +92,15 @@ tr.mat-footer-row {
     width: 162px;
 }
 
+.mat-column-resourceName{
+    width: 90px;
+}
+
+.mat-column-ctcInr,
+.mat-column-salaryPerMonthINR,
+.mat-column-salaryPerMonthUSD,
+.mat-column-utilization,
+.mat-column-role{
+    width: 60px;
+}
   
