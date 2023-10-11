@@ -20,8 +20,8 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 export class ProfitLossProjectStatisticComponent implements OnInit {
 
     @ViewChild(MatSort) sort: MatSort;
-    dataSource: MatTableDataSource<any>;
-    displayedColumns: string[] = [
+    dataSourceProject: MatTableDataSource<any>;
+    displayedProjectCostColumns: string[] = [
         'email', 'totalIdealWorklogHrs', 'totalActualWorklogHrs', 'hourlyCost', 
         'idealResourceCost', 'idealProjectCost', 'costOnProject', 'actualCost', 'diff'
     ];
@@ -56,7 +56,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         private _authService: AuthService,
         private datePipe : DatePipe,
         private projectService: CreateProjecteService,   
-    ) {}
+    ){}
 
     ngOnInit(): void {
         this.getCurrentMonthAndYear();
@@ -134,7 +134,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                     this.initialLoading = false;
                     if (res?.statusCode === 200) {
                         this.projectStatDetails = res?.data;
-                        this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
+                        this.dataSourceProject = new MatTableDataSource(this.projectStatDetails?.stats);
                         if(this.projectStatDetails?.stats?.length != 0){
                             this.showFooter = true;
                         }
@@ -205,7 +205,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                     if(this.projectStatDetails?.stats?.length != 0){
                         this.showFooter = true;
                     }
-                    this.dataSource = new MatTableDataSource(this.projectStatDetails?.stats);
+                    this.dataSourceProject = new MatTableDataSource(this.projectStatDetails?.stats);
                 } else if (res?.data?.stats == null) {
                     this.projectStatDetails.stats = [];
                 }

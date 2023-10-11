@@ -1,6 +1,5 @@
 .inventory-grid {
     grid-template-columns:  266px 104px 104px 88px 132px 122px 113px 84px 70px;
-    // grid-template-columns: repeat(9, minmax(0, 1fr));
 }    
 
 .mat-icon {
@@ -23,8 +22,8 @@
 }
 
 .mat-table {
-    width: 1400px;
-    max-width: 1400px;
+    width: 100%;
+    max-width: 100%;
     margin-bottom: 1rem;
     display: table;
     border-collapse: collapse;
