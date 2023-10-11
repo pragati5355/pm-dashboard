@@ -38,42 +38,42 @@
                     Resource Cost Table
                 </div>
                 <div class="table-responsive mat-elevation-z8">
-                    <table *ngIf="dataSourceResource?.data.length > 0" mat-table-resource [dataSource]="dataSourceResource" matSort >
+                    <table *ngIf="dataSourceResource?.data.length > 0" mat-table [dataSource]="dataSourceResource" matSort >
                   
                       <!-- Resource Name -->
-                      <ng-container matColumnDef="resourceName" mat-column-resourceName>
+                      <ng-container matColumnDef="resourceName" mat-column-resourcename>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Resource Name </th>
-                        <td mat-cell *matCellDef="let row">{{row?.email || "-"}}</td>
+                        <td mat-cell *matCellDef="let row">{{row?.resourceName || "-"}}</td>
                       </ng-container>
                   
                       <!-- CTC INR -->
-                      <ng-container matColumnDef="ctcInr" mat-column-ctcInr>
+                      <ng-container matColumnDef="ctcInr" mat-column-ctcinr>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>CTC (INR)</th>
-                        <td mat-cell *matCellDef="let row"> {{ row?.totalIdealWorklogHrs || "-"}} </td>
+                        <td mat-cell *matCellDef="let row"> $ {{ row?.ctcInr || "-"}} </td>
                       </ng-container>
                   
                       <!-- Salary Per Month INR -->
-                      <ng-container matColumnDef="salaryPerMonthINR" mat-column-salaryPerMonthINR>
+                      <ng-container matColumnDef="salaryPerMonthINR" mat-column-salarypermonthinr>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Salary per month (INR)</th>
-                        <td mat-cell *matCellDef="let row"> {{ row?.totalActualWorklogHrs || "-"}} </td>
+                        <td mat-cell *matCellDef="let row"> ${{ row?.salaryPerMonthINR || "-"}} </td>
                       </ng-container>
                   
                       <!-- Salary Per Month USD -->
-                      <ng-container matColumnDef="salaryPerMonthUSD" mat-column-salaryPerMonthUSD>
+                      <ng-container matColumnDef="salaryPerMonthUSD" mat-column-salarypermonthusd>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Salary per month (USD) </th>
-                        <td mat-cell *matCellDef="let row"> {{ (row?.hourlyCost | currency) || "0"}} </td>
+                        <td mat-cell *matCellDef="let row"> {{ (row?.salaryPerMonthUSD | currency) || "0"}} </td>
                       </ng-container>
     
                        <!-- Utilization -->
                        <ng-container matColumnDef="utilization" mat-column-utilization>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Utilization on project</th>
-                        <td mat-cell *matCellDef="let row">{{ (row?.idealResourceCost | currency) || "0"}} </td>
+                        <td mat-cell *matCellDef="let row">{{ row?.utilization  || "0"}} </td>
                       </ng-container>
     
                        <!-- Role -->
                        <ng-container matColumnDef="role" mat-column-role>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Role on project</th>
-                        <td mat-cell *matCellDef="let row"> {{ (row?.idealProjectCost | currency) || "0"}} </td>
+                        <td mat-cell *matCellDef="let row"> {{ row?.role || "-"}} </td>
                       </ng-container>
     
                       <tr mat-header-row *matHeaderRowDef="displayedResourceCostColumns; sticky: true"></tr>

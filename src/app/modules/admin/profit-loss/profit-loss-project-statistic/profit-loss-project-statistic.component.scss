@@ -22,17 +22,8 @@
 }
 
 .mat-table {
-    width: 1400px;
-    max-width: 1400px;
-    margin-bottom: 1rem;
-    display: table;
-    border-collapse: collapse;
-    margin: 0px;
-}
-
-.mat-table-resource{
-    width: 800px;
-    max-width: 800px;
+    width: 1200px;
+    max-width: 1200px;
     margin-bottom: 1rem;
     display: table;
     border-collapse: collapse;
@@ -92,15 +83,15 @@ tr.mat-footer-row {
     width: 162px;
 }
 
-.mat-column-resourceName{
-    width: 90px;
+.mat-column-resourcename{
+    width: 40%;
 }
 
-.mat-column-ctcInr,
-.mat-column-salaryPerMonthINR,
-.mat-column-salaryPerMonthUSD,
+.mat-column-ctcinr,
+.mat-column-salarypermonthinr,
+.mat-column-salarypermonthusd,
 .mat-column-utilization,
 .mat-column-role{
-    width: 60px;
+    width: 10%;
 }
   
