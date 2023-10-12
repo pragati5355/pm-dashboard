@@ -22,8 +22,8 @@
 }
 
 .mat-table {
-    width: 100%;
-    max-width: 100%;
+    width: 1500px;
+    max-width: 1500px;
     margin-bottom: 1rem;
     display: table;
     border-collapse: collapse;
@@ -49,23 +49,22 @@
     font-size: revert;
 }
 
-.mat-column-email{
-    width:330px;
+.mat-column-resourcename{
+    width:300px;
+    min-width:250px;
 }
 
-.mat-column-idealworkhrs, 
-.mat-column-actualworkhrs,
-.mat-column-resourcecost,
-.mat-column-idealcost,
-.mat-column-difference{
-    width: 130px;
-}
-
-.mat-column-hourlycost,
-.mat-column-projectcost,
-.mat-column-actualcost {
-    width: 100px;
-}
+// .mat-column-roleonproject, 
+// .mat-column-utilizationonproject,
+// .mat-column-idealworkhrs,
+// .mat-column-hoursasperprojectplan,
+// .mat-column-actualworkhrs,
+// .mat-column-hourlycostonproject,
+// .mat-column-costasperprojectplan,
+// .mat-column-actualcostonproject,
+// .mat-column-difference{
+//     width: 150px;
+// }
 
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 42px;
@@ -75,12 +74,12 @@ tr.mat-footer-row {
     font-weight: bold;
 }
 
-.mat-form-field
-.mat-form-field-appearance-fill 
-.mat-form-field-wrapper 
-.mat-form-field-flex 
-.mat-form-field-infix {
-    width: 162px;
-}
+// .mat-form-field
+// .mat-form-field-appearance-fill 
+// .mat-form-field-wrapper 
+// .mat-form-field-flex 
+// .mat-form-field-infix {
+//     width: 162px;
+// }
 
   
