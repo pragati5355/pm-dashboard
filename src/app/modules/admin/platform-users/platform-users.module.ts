@@ -42,7 +42,7 @@ const routes: Routes = [
                 component: PlatformUsersListComponent,
                 data: {
                     pageTitle: 'Platform Users',
-                    allowedRoles: ['ADMIN', 'HR'],
+                    allowedRoles: ['ADMIN'],
                 },
             },
             {

@@ -56,7 +56,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:users',
         link: '/platform-users',
-        allowedRoles: ['ADMIN', 'HR'],
+        allowedRoles: ['ADMIN'],
     },
 ];
 export const compactNavigation: FuseNavigationItem[] = [];
