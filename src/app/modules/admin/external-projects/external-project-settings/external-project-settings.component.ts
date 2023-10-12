@@ -75,10 +75,12 @@ export class ExternalProjectSettingsComponent implements OnInit {
     ngOnInit(): void {
         this.patchReminders();
         this.initializeForm();
-        if(this.data?.showStep != undefined){
-            this.showStep = this.data?.showStep;
-        }else{
+        if(this.data?.showStep == undefined){
             this.showStep = 0;
+            console.log("this.showStep if part : ", this.showStep);
+        }else{
+            this.showStep = this.data?.showStep;
+            console.log("this.showStep else part : ", this.showStep);
         }
     }
 
