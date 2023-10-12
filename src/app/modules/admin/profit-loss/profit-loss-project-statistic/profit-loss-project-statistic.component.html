@@ -33,112 +33,123 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col p-4 mt-4">
-                <div class="table-responsive mat-elevation-z8">
-                    <table *ngIf="dataSourceProject?.data.length > 0" mat-table [dataSource]="dataSourceProject" matSort >
+            <div class="table-responsive mat-elevation-z8">
+                <table *ngIf="dataSourceProject?.data.length > 0" mat-table [dataSource]="dataSourceProject" matSort >
+              
+                  <!-- Resource Name -->
+                  <ng-container matColumnDef="resourceName" mat-column-resourcename>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Resource Name </th>
+                    <td mat-cell *matCellDef="let row">{{row?.firstName + " " + row?.lastName || "-"}}</td>
+                    <td mat-footer-cell *matFooterCellDef> Total </td>
+                  </ng-container>
+
+                  <!-- Role On Project -->
+                  <ng-container matColumnDef="roleOnProject" mat-column-roleonproject>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Role on project</th>
+                    <td mat-cell *matCellDef="let row"> {{ row?.role || "-"}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{"-"}} </td>
+                  </ng-container>
+
+                   <!-- Utilization on Project -->
+                   <ng-container matColumnDef="utilizationOnProject" mat-column-utilizationonproject>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Utilization on Project</th>
+                    <td mat-cell *matCellDef="let row"> {{ row?.utilization || "-"}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{"-"}} </td>
+                  </ng-container>
+              
+                  <!-- Ideal Work Hrs -->
+                  <ng-container matColumnDef="IdealWorklogHrs" mat-column-idealworkhrs>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                    title="Difference between the days of start and end date * 8(exclude weekends) * utilization" class="cursor-pointer">Ideal Work Hrs </th>
+                    <td mat-cell *matCellDef="let row"> {{ row?.totalIdealWorklogHrs || "-"}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{ getIdealWorkHrsTotal() || "0"}} </td>
+                  </ng-container>
+
+                  <!-- Hours as per Project Plan -->
+                  <ng-container matColumnDef="hoursasperProjectPlan" mat-column-hoursasperprojectplan>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Hours as per Project Plan </th>
+                    <td mat-cell *matCellDef="let row"> {{ row?.worklogHrsAsPerProjectPlan || "-"}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{ getWorklogHrsAsPerProjectPlan() || "0"}} </td>
+                  </ng-container>
+              
+                  <!-- Actual Work Hrs -->
+                  <ng-container matColumnDef="ActualWorklogHrs" mat-column-actualworkhrs>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                    title="Worklog done by resource between start and end date" class="cursor-pointer"> Actual Work Hrs </th>
+                    <td mat-cell *matCellDef="let row"> {{ row?.totalActualWorklogHrs || "-"}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{ getActualWorkHrsTotal() || "0"}} </td>
+                  </ng-container>
+              
+                  <!--  Hourly Cost on Project -->
+                  <ng-container matColumnDef="hourlyCostonProject" mat-column-hourlycostonproject>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                    title="Resource hourly cost on the project." class="cursor-pointer"> Hourly Cost on Project </th>
+                    <td mat-cell *matCellDef="let row"> {{ (row?.hourlyCost | currency) || "0"}} </td>
+                    <td mat-footer-cell *matFooterCellDef>{{"-"}}</td>
+                  </ng-container>
+
+                   <!-- Cost as per Project Plan -->
+                   <ng-container matColumnDef="costasperProjectPlan" mat-column-costasperprojectplan>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                    title="Resource per hour salary in usd." class="cursor-pointer">Cost as per Project Plan</th>
+                    <td mat-cell *matCellDef="let row">{{ (row?.costAsPerProjectPlan | currency) || "0"}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{ (getCostAsPerProjectPlanTotal() | currency) || "0"}} </td>
+                  </ng-container>
+
+                   <!-- Actual Cost on Project -->
+                   <ng-container matColumnDef="actualCostOnProject" mat-column-actualcostonproject>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                    title="Resource Ideal working hrs * per hr salary in usd" class="cursor-pointer">Actual Cost on Project</th>
+                    <td mat-cell *matCellDef="let row"> {{ (row?.actualCostOnProject | currency) || "0"}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{ (getTotalActualCost() | currency) || "0"}} </td>
+                  </ng-container>
+
+                   <!-- Difference -->
+                   <ng-container matColumnDef="costDifference" mat-column-difference>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                    title="(Cost on Project - Actual Cost)" class="cursor-pointer"> Cost Difference </th>
+                    <td mat-cell *matCellDef="let row" class="lg:flex py-3"> {{ (row?.costDiff | currency) || "0"}} 
+                        <!-- <div *ngIf="row?.costOnProject > row?.actualCost">
+                            <mat-icon
+                                class="flex items-end ml-2"
+                                style="color: rgb(74 222 128) !important;">arrow_upward
+                            </mat-icon>
+                        </div>
+                        <div *ngIf="row?.costOnProject < row?.actualCost">
+                            <mat-icon 
+                                class="flex"
+                                style="color: rgb(220 38 38) !important;">arrow_downward
+                            </mat-icon>
+                        </div> -->
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="lg:flex py-3"> {{ (getTotalDifference() | currency) || "0"}} 
+                        <!-- <div *ngIf="getTotalIdealCost() > getTotalActualCost()">
+                            <mat-icon
+                                class="flex items-end ml-2"
+                                style="color: rgb(74 222 128) !important;">arrow_upward
+                            </mat-icon>
+                        </div>
+                        <div *ngIf="getTotalIdealCost() < getTotalActualCost()">
+                            <mat-icon 
+                                class="flex"
+                                style="color: rgb(220 38 38) !important;">arrow_downward
+                            </mat-icon>
+                        </div> -->
+                    </td>
+                  </ng-container>
+            
+                  <tr mat-header-row *matHeaderRowDef="displayedProjectCostColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedProjectCostColumns;"></tr>
+                  <ng-container *ngIf="showFooter">
+                      <tr mat-footer-row *matFooterRowDef="displayedProjectCostColumns; sticky: true"></tr>
+                  </ng-container>
                   
-                      <!-- Email -->
-                      <ng-container matColumnDef="email" mat-column-email>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-                        <td mat-cell *matCellDef="let row">{{row?.email || "-"}}</td>
-                        <td mat-footer-cell *matFooterCellDef> Total </td>
-                      </ng-container>
-                  
-                      <!-- Ideal Work Hrs -->
-                      <ng-container matColumnDef="totalIdealWorklogHrs" mat-column-idealworkhrs>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title="Difference between the days of start and end date * 8(exclude weekends) * utilization" class="cursor-pointer">Ideal Work Hrs </th>
-                        <td mat-cell *matCellDef="let row"> {{ row?.totalIdealWorklogHrs || "-"}} </td>
-                        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost() || "0"}} </td>
-                      </ng-container>
-                  
-                      <!-- Actual Work Hrs -->
-                      <ng-container matColumnDef="totalActualWorklogHrs" mat-column-actualworkhrs>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title="Worklog done by resource between start and end date" class="cursor-pointer"> Actual Work Hrs </th>
-                        <td mat-cell *matCellDef="let row"> {{ row?.totalActualWorklogHrs || "-"}} </td>
-                        <td mat-footer-cell *matFooterCellDef> {{ getTotalActualWorkHrs() || "0"}} </td>
-                      </ng-container>
-                  
-                      <!-- Hourly Cost -->
-                      <ng-container matColumnDef="hourlyCost" mat-column-hourlycost>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title="Resource hourly cost on the project." class="cursor-pointer"> Hourly Cost </th>
-                        <td mat-cell *matCellDef="let row"> {{ (row?.hourlyCost | currency) || "0"}} </td>
-                        <td mat-footer-cell *matFooterCellDef>{{"-"}}</td>
-                      </ng-container>
-    
-                       <!-- Resource Cost -->
-                       <ng-container matColumnDef="idealResourceCost" mat-column-resourcecost>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title="Resource per hour salary in usd." class="cursor-pointer">Ideal Resource Cost </th>
-                        <td mat-cell *matCellDef="let row">{{ (row?.idealResourceCost | currency) || "0"}} </td>
-                        <td mat-footer-cell *matFooterCellDef> {{ (getTotalResourceCost() | currency) || "0"}} </td>
-                      </ng-container>
-    
-                       <!-- Project Cost -->
-                       <ng-container matColumnDef="idealProjectCost" mat-column-projectcost>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title="Resource Ideal working hrs * per hr salary in usd" class="cursor-pointer">Ideal Project Cost </th>
-                        <td mat-cell *matCellDef="let row"> {{ (row?.idealProjectCost | currency) || "0"}} </td>
-                        <td mat-footer-cell *matFooterCellDef> {{ (getTotalProjectCost() | currency) || "0"}} </td>
-                      </ng-container>
-    
-                       <!--Cost On Project-->
-                       <ng-container matColumnDef="costOnProject" mat-column-idealcost>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title=" Resource (flat rate or resource rate) * actual working hrs" class="cursor-pointer">Cost On Project</th>
-                        <td mat-cell *matCellDef="let row"> {{ (row?.costOnProject | currency) || "0"}} </td>
-                        <td mat-footer-cell *matFooterCellDef> {{ (getTotalIdealCost() | currency) || "0"}} </td>
-                      </ng-container>
-    
-                       <!-- Actual Cost -->
-                       <ng-container matColumnDef="actualCost" mat-column-actualcost>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title="Resource per hour salary in usd  * actual working hrs" class="cursor-pointer"> Actual Cost </th>
-                        <td mat-cell *matCellDef="let row"> {{ (row?.actualCost | currency) || "0"}} </td>
-                        <td mat-footer-cell *matFooterCellDef> {{ (getTotalActualCost() | currency) || "0"}} </td>
-                      </ng-container>
-    
-                       <!-- Difference -->
-                       <ng-container matColumnDef="diff" mat-column-difference>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header title="(Cost on Project - Actual Cost)" class="cursor-pointer"> Difference </th>
-                        <td mat-cell *matCellDef="let row" class="lg:flex py-3"> {{ (row?.diff | currency) || "0"}} 
-                            <div *ngIf="row?.costOnProject > row?.actualCost">
-                                <mat-icon
-                                    class="flex items-end ml-2"
-                                    style="color: rgb(74 222 128) !important;">arrow_upward
-                                </mat-icon>
-                            </div>
-                            <div *ngIf="row?.costOnProject < row?.actualCost">
-                                <mat-icon 
-                                    class="flex"
-                                    style="color: rgb(220 38 38) !important;">arrow_downward
-                                </mat-icon>
-                            </div>
-                        </td>
-                        <td mat-footer-cell *matFooterCellDef class="lg:flex py-3"> {{ (getTotalDifference() | currency) || "0"}} 
-                            <div *ngIf="getTotalIdealCost() > getTotalActualCost()">
-                                <mat-icon
-                                    class="flex items-end ml-2"
-                                    style="color: rgb(74 222 128) !important;">arrow_upward
-                                </mat-icon>
-                            </div>
-                            <div *ngIf="getTotalIdealCost() < getTotalActualCost()">
-                                <mat-icon 
-                                    class="flex"
-                                    style="color: rgb(220 38 38) !important;">arrow_downward
-                                </mat-icon>
-                            </div>
-                        </td>
-                      </ng-container>
-                
-                      <tr mat-header-row *matHeaderRowDef="displayedProjectCostColumns; sticky: true"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedProjectCostColumns;"></tr>
-                      <ng-container *ngIf="showFooter">
-                          <tr mat-footer-row *matFooterRowDef="displayedProjectCostColumns; sticky: true"></tr>
-                      </ng-container>
-                      
-                      <!-- Row shown when there is no matching data. -->
-                      <tr class="mat-row" *matNoDataRow>
-                          <td class="mat-cell" colspan="9">Data Not Found</td>
-                      </tr>
-                    </table>
-                </div>
-            </div>    
+                  <!-- Row shown when there is no matching data. -->
+                  <tr class="mat-row" *matNoDataRow>
+                      <td class="mat-cell" colspan="9">Data Not Found</td>
+                  </tr>
+                </table>
+            </div>  
             <ng-container
                     *ngIf="(projectStatDetails == null || projectStatDetails?.stats?.length === 0 ) && !initialLoading">
                     <div
@@ -147,7 +158,7 @@
                     </div>
             </ng-container>
             <div   
-                *ngIf = "getTotalIdealCost() > getTotalActualCost()"
+                *ngIf = "getCostAsPerProjectPlanTotal() > getTotalActualCost()"
                 class="mb-8 mt-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
                     Great ! This project has made the profit of
                         <span class="text-green-500"
@@ -155,7 +166,7 @@
                     .
             </div> 
             <div
-                *ngIf = "getTotalIdealCost() < getTotalActualCost()"
+                *ngIf = "getCostAsPerProjectPlanTotal() < getTotalActualCost()"
                 class="mt-8 mb-8 py-4 px-6 md:px-10 text-xl font-bold text-black">
                     Oh ! Looks like we are in loss of
                     <span class="text-red-500">{{ (getTotalDifference() | currency) || "0" }}</span>

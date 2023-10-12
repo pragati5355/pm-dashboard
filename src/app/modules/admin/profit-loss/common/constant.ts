@@ -11,18 +11,19 @@ export class ProjectDetailsModel {
 
 export class StatModel {
     email: string;
+    role : string;
+    utilization : string;
     totalIdealWorklogHrs: number;
     totalActualWorklogHrs: number;
     hourlyCost: number;
-    idealResourceCost: number;
-    idealProjectCost: number;
-    costOnProject: number;
-    actualCost: number;
-    diff: number;
+    costAsPerProjectPlan: number;
+    actualCostOnProject: number;
+    costDiff: number;
     firstName: string;
     lastName: string;
     projectCostType: string;
     projectName: string;
     projectEndDate: string;
     projectStartDate: string;
+    worklogHrsAsPerProjectPlan : number;
 }

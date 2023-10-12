@@ -22,8 +22,8 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     dataSourceProject: MatTableDataSource<any>;
     displayedProjectCostColumns: string[] = [
-        'email', 'totalIdealWorklogHrs', 'totalActualWorklogHrs', 'hourlyCost', 
-        'idealResourceCost', 'idealProjectCost', 'costOnProject', 'actualCost', 'diff'
+        'resourceName', 'roleOnProject','utilizationOnProject','IdealWorklogHrs', 'hoursasperProjectPlan',
+        'ActualWorklogHrs', 'hourlyCostonProject', 'costasperProjectPlan','actualCostOnProject', 'costDifference'
     ];
     routeSubscribe: any;
     projectId = 0;
@@ -92,32 +92,32 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             });
     }
 
-    getTotalCost(){
+    getIdealWorkHrsTotal(){
         return this.projectStatDetails?.stats?.map(t => t?.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
-    getTotalActualWorkHrs(){
+    getActualWorkHrsTotal(){
         return this.projectStatDetails?.stats?.map(t => t?.totalActualWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
-    getTotalResourceCost(){
-        return this.projectStatDetails?.stats?.map(t => t?.idealResourceCost).reduce((acc, value) => acc + value, 0);
+    getWorklogHrsAsPerProjectPlan(){
+        return this.projectStatDetails?.stats?.map(t => t?.worklogHrsAsPerProjectPlan).reduce((acc, value) => acc + value, 0);
     }
 
-    getTotalProjectCost(){
-        return this.projectStatDetails?.stats?.map(t => t?.idealProjectCost).reduce((acc, value) => acc + value, 0);
+    getHourlyCostTotal(){
+        return this.projectStatDetails?.stats?.map(t => t?.hourlyCost).reduce((acc, value) => acc + value, 0);
     }
 
-    getTotalIdealCost(){
-        return this.projectStatDetails?.stats?.map(t => t?.costOnProject).reduce((acc, value) => acc + value, 0);
+    getCostAsPerProjectPlanTotal(){
+        return this.projectStatDetails?.stats?.map(t => t?.costAsPerProjectPlan).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalActualCost(){
-        return this.projectStatDetails?.stats?.map(t => t?.actualCost).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.actualCostOnProject).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalDifference(){
-        return this.projectStatDetails?.stats?.map(t => t?.diff).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.stats?.map(t => t?.costDiff).reduce((acc, value) => acc + value, 0);
     }
 
     loadStatList() {
@@ -194,6 +194,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
                     this.projectStatDetails = res?.data;
+                    console.log("this.projectStatDetails : ", this.projectStatDetails);
                     if(res?.data?.projectDetails == null){
                         this.range.controls['startDate'].patchValue(this.currentMonthFirstDate);
                         this.range.controls['endDate'].patchValue(this.currentMonthCurrentDate);
