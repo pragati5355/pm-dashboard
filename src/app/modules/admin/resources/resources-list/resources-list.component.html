@@ -364,7 +364,7 @@
                                             [matMenuTriggerFor]="listCard07Menu"
                                             class="ml-2"
                                             mat-flat-button
-                                            *ngIf="userRole === 'ADMIN'"
+                                            *ngIf="userRole === 'ADMIN' || 'HR'"
                                         >
                                             <mat-icon
                                                 [svgIcon]="
@@ -400,7 +400,7 @@
                                             class="ml-2"
                                             mat-flat-button
                                             (click)="gotoOnboardResource()"
-                                            *ngIf="userRole === 'ADMIN'"
+                                            *ngIf="userRole === 'ADMIN' || 'HR'"
                                         >
                                             <span class="ml-2 mr-1"
                                                 >Request</span
@@ -415,7 +415,7 @@
                                             class="ml-2"
                                             mat-flat-button
                                             (click)="openDialog('ADD', null)"
-                                            *ngIf="userRole === 'ADMIN'"
+                                            *ngIf="userRole === 'ADMIN' || 'HR'"
                                         >
                                             <span class="ml-2 mr-1"
                                                 >Invite</span
