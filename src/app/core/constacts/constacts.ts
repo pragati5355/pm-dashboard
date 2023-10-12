@@ -93,9 +93,10 @@ export const API_LIST = {
     SAVE_SHARE_WORKLOG: springBootUrl + '/worklog/setting',
     GET_RESOURCE_PUBLIC: springBootUrl + '/project/resource/',
     GET_RESOURCE_WORKLOG_PUBLIC: springBootUrl + '/worklog/list-by-key',
-    DOWNLOAD_WORKLOG_SHEET: springBootUrl + '/worklog/download-sheet',
+    DOWNLOAD_WORKLOG_SHEET: springBootUrl + '/worklog/download-sheet-by-key',
     SPRING_BOOT_URL: springBootUrl,
     PROJECT_SPRING_BOOT_URL : springBootUrl + '/project',
+    DOWNLOAD_WORKLOG_EXTERNAl_SHEET : springBootUrl + '/worklog/download-sheet',
 };
 
 export const UTILIZATION_VALUES = [0.25, 0.5, 1];
