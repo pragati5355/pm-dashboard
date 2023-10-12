@@ -22,8 +22,8 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     dataSourceProject: MatTableDataSource<any>;
     displayedProjectCostColumns: string[] = [
-        'resourceName', 'roleOnProject','utilizationOnProject','IdealWorklogHrs', 'hoursasperProjectPlan',
-        'ActualWorklogHrs', 'hourlyCostonProject', 'costasperProjectPlan','actualCostOnProject', 'costDifference'
+        'resourcename', 'roleonproject','utilizationonproject','idealworkloghrs', 'hoursasperprojectplan',
+        'actualworkloghrs', 'hourlycostonproject', 'costasperprojectplan','actualcostonproject', 'costdifference'
     ];
     routeSubscribe: any;
     projectId = 0;

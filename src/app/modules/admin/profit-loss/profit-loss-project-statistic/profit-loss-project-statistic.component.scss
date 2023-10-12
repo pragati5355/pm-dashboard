@@ -49,9 +49,10 @@
     font-size: revert;
 }
 
-// .mat-column-resourcename{
-//     width:300px;
-// }
+.mat-column-resourcename{
+    width:300px;
+    min-width:250px;
+}
 
 // .mat-column-roleonproject, 
 // .mat-column-utilizationonproject,
@@ -62,7 +63,7 @@
 // .mat-column-costasperprojectplan,
 // .mat-column-actualcostonproject,
 // .mat-column-difference{
-//     width: 100px;
+//     width: 150px;
 // }
 
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
