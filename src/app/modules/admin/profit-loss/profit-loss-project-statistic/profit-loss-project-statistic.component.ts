@@ -66,6 +66,15 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.loadStatList();
     }
 
+    showForEntireProject(){
+        this.initialLoading = true;
+        this.getCurrentMonthAndYear();
+        this.initializeForm();
+        this.routeSubscribeId();
+        this.loadProjectDetails();
+        this.loadStatList();
+    }
+
     goBack() {
         this.router.navigate([`/profit-loss`]);
     }
