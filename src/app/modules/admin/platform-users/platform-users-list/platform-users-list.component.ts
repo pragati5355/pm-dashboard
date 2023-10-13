@@ -6,6 +6,7 @@ import { PlatformUsersFormComponent } from '../platform-users-form/platform-user
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 
 @Component({
     selector: 'app-platform-users-list',
@@ -23,17 +24,21 @@ export class PlatformUsersListComponent implements OnInit {
     configFormStatus!: FormGroup;
     totalRecords: number = 0;
     platformSearchInput = new FormControl();
+    userRole: string = '';
+
     constructor(
         private dialog: MatDialog,
         private platformUsersService: PlatformUsersService,
         private _authService: AuthService,
         private _fuseConfirmationService: FuseConfirmationService,
         private _formBuilder: FormBuilder,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
         this.getList();
+        this.getUserRole();
     }
 
     getList() {
@@ -50,6 +55,13 @@ export class PlatformUsersListComponent implements OnInit {
         });
     }
 
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.userRole = res?.role;
+            }
+        });
+    }
     clearSearch() {
         this.searchValue = '';
     }
