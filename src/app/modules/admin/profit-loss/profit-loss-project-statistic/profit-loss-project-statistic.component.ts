@@ -22,7 +22,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     dataSourceProject: MatTableDataSource<any>;
     displayedProjectCostColumns: string[] = [
-        'resourcename', 'roleonproject','utilizationonproject','idealworkloghrs', 'hoursasperprojectplan',
+        'resourcename', 'roleonproject','utilizationonproject', 'hoursasperprojectplan',
         'actualworkloghrs', 'hourlycostonproject', 'costasperprojectplan','actualcostonproject', 'costdifference'
     ];
     routeSubscribe: any;
@@ -66,6 +66,15 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.loadStatList();
     }
 
+    showForEntireProject(){
+        this.initialLoading = true;
+        this.getCurrentMonthAndYear();
+        this.initializeForm();
+        this.routeSubscribeId();
+        this.loadProjectDetails();
+        this.loadStatList();
+    }
+
     goBack() {
         this.router.navigate([`/profit-loss`]);
     }
@@ -92,9 +101,9 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             });
     }
 
-    getIdealWorkHrsTotal(){
-        return this.projectStatDetails?.stats?.map(t => t?.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
-    }
+    // getIdealWorkHrsTotal(){
+    //     return this.projectStatDetails?.stats?.map(t => t?.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
+    // }
 
     getActualWorkHrsTotal(){
         return this.projectStatDetails?.stats?.map(t => t?.totalActualWorklogHrs).reduce((acc, value) => acc + value, 0);
