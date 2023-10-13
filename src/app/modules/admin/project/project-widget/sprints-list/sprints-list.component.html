@@ -12,7 +12,7 @@
             <div class="hidden sm:block">Invoice Percentage</div>
             <div class="hidden sm:block">Status</div>
             <div class="hidden lg:block">State</div>
-            <div class="hidden lg:block">Actions</div>
+            <div class="hidden lg:block" *ngIf="(userRole === 'ADMIN' || userRole === 'PM')">Actions</div>
         </div>
         <ng-container *ngIf="!initialLoading && totalRecored > 0">
             <div *ngIf="totalRecored > 0" class="grid">
