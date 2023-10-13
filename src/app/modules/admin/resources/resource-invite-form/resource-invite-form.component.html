@@ -137,7 +137,7 @@
 <!-- Invited Resouce Table -->
 <div>
     <div class="text-lg font-medium my-4">Invited Resource</div>
-    <div class="flex flex-auto overflow-hidden">
+    <div class="flex flex-auto overflow-y-scroll h-128">
         <div
             class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
         >
@@ -149,6 +149,14 @@
                 <div>Last Name</div>
                 <div>Email</div>
                 <div>Action</div>
+            </div>
+            <div>
+                <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b" *ngFor="let usr of users">
+                    <div>{{usr.position}}</div>
+                    <div>{{usr.name}}</div>
+                    <div>{{usr.weight}}</div>
+                    <div>{{usr.symbol}}</div>
+                </div>
             </div>
         </div>
     </div>
