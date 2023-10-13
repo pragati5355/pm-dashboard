@@ -140,7 +140,7 @@
                                 }"
                             >
                                 <div class="font-semibold">Description</div>
-                                <div class="font-semibold">Hours</div>
+                                <div class="font-semibold pl-2 ml-2">Hours</div>
                                 <div
                                     class="font-semibold"
                                     *ngIf="
@@ -187,7 +187,7 @@
                                     "
                                 >
                                     <div
-                                        class="overflow-hidden break-all worklog-row"
+                                        class="overflow-hidden break-all worklog-row pl-2"
                                         [innerHTML]="
                                             logs?.onLeave
                                                 ? 'On Leave'
@@ -246,11 +246,11 @@
                         <div
                             class="z-10 sticky top-0 grid gap-2 py-4 shadow text-base font-semibold text-black bg-gray-50 dark:bg-black dark:bg-opacity-5"
                             [ngClass]="{
-                                'inventory-grid-total-list-admin':
+                                'inventory-grid-list-inner-list-admin':
                                     userRole === 'ADMIN' ||
                                     userRole === 'PM' ||
                                     userRole === 'SALES',
-                                'inventory-grid-total-list-user':
+                                'inventory-grid-list-inner-list-user ':
                                     userRole === 'USER' || userRole === 'VENDOR'
                             }"
                         >
