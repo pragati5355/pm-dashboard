@@ -9,8 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class ResourceInviteFormComponent implements OnInit {
     inviteResourceForm: FormGroup;
-    submitInProcess : boolean = false;
-
+    submitInProcess: boolean = false;
     constructor(
         private _fb: FormBuilder,
         private matDialogRef: MatDialogRef<ResourceInviteFormComponent>

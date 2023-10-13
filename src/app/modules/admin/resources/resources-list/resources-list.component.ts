@@ -721,6 +721,7 @@ export class ResourcesListComponent implements OnInit {
         const dialogRef = this.matDialog.open(ResourceInviteFormComponent, {
             disableClose: true,
             width: '50%',
+            height: '90vh',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
