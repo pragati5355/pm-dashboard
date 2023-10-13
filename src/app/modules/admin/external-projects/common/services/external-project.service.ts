@@ -7,8 +7,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root',
 })
 export class ExternalProjectService {
-    createExternalProjectUrl =
-        AppConstants['PROJECT_API_URL'] + '/external-project';
+    createExternalProjectUrl =  API_LIST.PROJECT_SPRING_BOOT_URL + '/external';
 
     sendRemindersUrl =
         AppConstants['PROJECT_API_URL'] + '/save-project-setting';
