@@ -54,18 +54,6 @@
     min-width:250px;
 }
 
-// .mat-column-roleonproject, 
-// .mat-column-utilizationonproject,
-// .mat-column-idealworkhrs,
-// .mat-column-hoursasperprojectplan,
-// .mat-column-actualworkhrs,
-// .mat-column-hourlycostonproject,
-// .mat-column-costasperprojectplan,
-// .mat-column-actualcostonproject,
-// .mat-column-difference{
-//     width: 150px;
-// }
-
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 42px;
 }
@@ -74,12 +62,10 @@ tr.mat-footer-row {
     font-weight: bold;
 }
 
-// .mat-form-field
-// .mat-form-field-appearance-fill 
-// .mat-form-field-wrapper 
-// .mat-form-field-flex 
-// .mat-form-field-infix {
-//     width: 162px;
-// }
-
+.cost-diff-profit{
+    text-decoration-color: green;
+}
   
+.cost-diff-loss {
+    text-decoration-color: red;
+}
