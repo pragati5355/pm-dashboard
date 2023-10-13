@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ResourcesService } from '../common/services/resources.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 
 @Component({
     selector: 'app-resource-invite-form',
@@ -10,35 +12,18 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class ResourceInviteFormComponent implements OnInit {
     inviteResourceForm: FormGroup;
     submitInProcess: boolean = false;
-    users : any  = [
-        {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-        {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-        {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-        {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-        {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-        {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-        {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-        {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-        {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-        {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-        {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-        {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-        {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-        {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-        {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-        {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-        {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-        {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-        {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-        {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-      ];
+    invitedResources: any = [];
+
     constructor(
         private _fb: FormBuilder,
-        private matDialogRef: MatDialogRef<ResourceInviteFormComponent>
+        private matDialogRef: MatDialogRef<ResourceInviteFormComponent>,
+        private resourcesService: ResourcesService,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
         this.onInviteResouceFormInit();
+        this.getInvitedRourceList();
     }
 
     cancel() {
@@ -61,7 +46,44 @@ export class ResourceInviteFormComponent implements OnInit {
         });
     }
 
-    onInviteResource() {
-        console.log('FormValue ::', this.inviteResourceForm.value);
+    onInviteResource(formValues: any) {
+        const payload = { ...formValues };
+        console.log('FormValues', payload);
+        this.resourcesService.inviteResource(payload).subscribe({
+            next: (res: any) => {
+                if (res.status == 200 || res.code == 200) {
+                    this.snackBar.successSnackBar('Invitation has been sent !');
+                    this.cancel();
+                } else if (res.status == 208 || res.code == 208) {
+                    this.snackBar.successSnackBar('Invitation already sent !');
+                    this.cancel();
+                } else {
+                    this.snackBar.successSnackBar('Something wents wrong !');
+                    this.cancel();
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    }
+
+    getInvitedRourceList() {
+        this.resourcesService.getResourcesList().subscribe({
+            next: (res: any) => {
+                if (res.code == 200) {
+                    this.invitedResources = res?.data;
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    }
+
+    onReinviteResource(idx: number) {
+        const payload = { ...this.invitedResources[idx] };
+        payload.reInvite = true;
+        this.onInviteResource(payload);
     }
 }

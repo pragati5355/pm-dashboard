@@ -11,7 +11,7 @@
 </div>
 <form
     [formGroup]="inviteResourceForm"
-    (ngSubmit)="onInviteResource()"
+    (ngSubmit)="onInviteResource(inviteResourceForm.value)"
     class="mt-12"
 >
     <div class="w-full flex flex-1">
@@ -142,7 +142,7 @@
             class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
         >
             <div
-                class="inventory-grid  z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                 matSortDisableClear
             >
                 <div>First Name</div>
@@ -151,11 +151,23 @@
                 <div>Action</div>
             </div>
             <div>
-                <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b" *ngFor="let usr of users">
-                    <div>{{usr.position}}</div>
-                    <div>{{usr.name}}</div>
-                    <div>{{usr.weight}}</div>
-                    <div>{{usr.symbol}}</div>
+                <div class="inventory-grid grid items-center gap-4 py-3 px-8 md:px-10 border-b" *ngFor="let resource of invitedResources; index as idx">
+                    <div>{{resource.firstName}}</div>
+                    <div>{{resource.lastName}}</div>
+                    <div>{{ resource.email }}</div>
+                    <div> <button
+                        mat-flat-button
+                        [color]="'primary'"
+                        [disabled]="submitInProcess"
+                        (click)="onReinviteResource(idx)"
+                    >
+                        <span class="mx-2">Reinvite</span>
+                        <mat-progress-spinner
+                            *ngIf="submitInProcess"
+                            [diameter]="18"
+                            [mode]="'indeterminate'"
+                        ></mat-progress-spinner>
+                    </button></div>
                 </div>
             </div>
         </div>
