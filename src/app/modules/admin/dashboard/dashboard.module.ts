@@ -13,7 +13,7 @@ const dashboardRoutes: Route[] = [
         path: '',
         data: {
             pageTitle: 'Dashboard',
-            allowedRoles: ['ADMIN'],
+            allowedRoles: ['ADMIN', 'SALES'],
         },
         component: DashboardComponent,
     },

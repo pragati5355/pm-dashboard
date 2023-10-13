@@ -1,5 +1,5 @@
 .inventory-grid {
-    grid-template-columns: 24% 13% 14% 14% 15% 6% 6%;
+    grid-template-columns: 24% 13% 13% 14% 15% 6% 6%;
 }
 
 .h-67 {
@@ -12,3 +12,7 @@
 .h400 {
     height: 400px;
 }
+
+// ::ng-deep .mat-menu-panel {
+//     width: 99%!important;
+// }
