@@ -17,7 +17,7 @@ export class PlatformUsersFormComponent implements OnInit {
     patchData: [] | null;
     disableEmailField: boolean = false;
 
-    roles: any[] = [{ name: 'ADMIN' }, { name: 'PM' }, { name: 'USER' }, {name: 'SALES'}];
+    roles: any[] = [{ name: 'ADMIN' }, { name: 'PM' }, { name: 'USER' }, {name: 'SALES'}, {name: 'HR'}];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,

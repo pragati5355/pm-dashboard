@@ -54,6 +54,7 @@ export class WorklogListComponent implements OnInit {
     currentYear: string = '';
     pageDisabledByAdmin: boolean = false;
     submitInProcess: boolean = false;
+    totalHours : number;
     foods: any[] = [
         { value: 'steak-0', viewValue: 'Steak' },
         { value: 'pizza-1', viewValue: 'Pizza' },
@@ -267,6 +268,7 @@ export class WorklogListComponent implements OnInit {
                 if (res?.code === 200) {
                     this.workLogsList = res?.data?.list;
                     this.projectName = res?.data?.projectName;
+                    this.totalHours = res?.data?.totalHours;
                 }
             });
     }

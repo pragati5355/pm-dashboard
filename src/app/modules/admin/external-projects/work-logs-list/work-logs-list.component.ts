@@ -60,6 +60,7 @@ export class WorkLogsListComponent implements OnInit {
     configEditWorklogStatus!: FormGroup;
     selectedResourceEmail: any[];
     checked: boolean = false;
+    totalhours : number;
     yearAndMonth: any[] = [
         {
             '2022': [
@@ -356,6 +357,7 @@ export class WorkLogsListComponent implements OnInit {
             this.initialLoading = false;
             if (!res?.error) {
                 this.workLogsList = res?.data?.list;
+                this.totalhours = res?.data?.totalhours;
                 this.projectName = res?.data?.projectName;
             }
             if (res?.tokenExpire) {

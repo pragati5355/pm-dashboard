@@ -16,6 +16,8 @@ export class ResourcesService {
     getRegisteredResourceUrl =
         AppConstants['PROJECT_API_URL'] + '/get-registered-resource';
     acceptOnboardResource = AppConstants['PROJECT_API_URL'] + '/add-resource';
+    inviteResourceUrl = API_LIST.SPRING_BOOT_URL + '/user/invite';
+    invitedResourceListUrl = API_LIST.SPRING_BOOT_URL + '/user/invited';
 
     constructor(private http: HttpClient) {}
 
@@ -52,5 +54,13 @@ export class ResourcesService {
             API_LIST.SPRING_BOOT_URL + '/resource/accept',
             obj
         );
+    }
+
+    inviteResource(obj:any) {
+        return this.http.post(this.inviteResourceUrl, obj);
+    }
+
+    getResourcesList() {
+        return this.http.get(this.invitedResourceListUrl);
     }
 }

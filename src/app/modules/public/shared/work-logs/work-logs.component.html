@@ -101,7 +101,7 @@
 
                         <div class="flex justify-end mt-4">
                             <button
-                                [disabled]="workLogForm?.invalid"
+                                [disabled]="workLogForm?.invalid || onLeave"
                                 class="bg-primary-500 text-white font-bold ml-2"
                                 mat-flat-button
                                 type="submit"

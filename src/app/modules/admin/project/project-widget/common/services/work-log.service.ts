@@ -33,6 +33,6 @@ export class WorkLogService {
     }
 
     downloadWorklog(obj: any) {
-        return this.http.post(this.downloadWorkLogUrl, obj);
+        return this.http.post(API_LIST.DOWNLOAD_WORKLOG_EXTERNAl_SHEET, obj);
     }
 }
