@@ -81,6 +81,11 @@
                                     "
                                 ></mat-icon>
                             </mat-form-field>
+                            <mat-error
+                                    *ngIf="currentCapacity === 0"
+                                >
+                                    <div>Resource is fully utilized on other projects.</div>
+                            </mat-error>
                         </div>
                         <div class="w-full">
                             <mat-form-field
