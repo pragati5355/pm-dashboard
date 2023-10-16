@@ -124,7 +124,7 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     addTask() {
-        if (!this.description  && !this.currentDescriptionValue && this.onLeave) {
+        if (!this.description  && !this.currentDescriptionValue && !this.onLeave) {
             this.snackBar.errorSnackBar('Please add description');
             return;
         }
