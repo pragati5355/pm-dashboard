@@ -48,7 +48,7 @@ export class ResourceInviteFormComponent implements OnInit {
 
     onInviteResource(formValues: any) {
         const payload = { ...formValues };
-        console.log('FormValues', payload);
+        if (this.inviteResourceForm.invalid) return;
         this.resourcesService.inviteResource(payload).subscribe({
             next: (res: any) => {
                 if (res.status == 200 || res.code == 200) {
