@@ -1,6 +1,5 @@
 .inventory-grid {
     grid-template-columns:  266px 104px 104px 88px 132px 122px 113px 84px 70px;
-    // grid-template-columns: repeat(9, minmax(0, 1fr));
 }    
 
 .mat-icon {
@@ -23,8 +22,8 @@
 }
 
 .mat-table {
-    width: 1400px;
-    max-width: 1400px;
+    width: 1500px;
+    max-width: 1500px;
     margin-bottom: 1rem;
     display: table;
     border-collapse: collapse;
@@ -50,22 +49,9 @@
     font-size: revert;
 }
 
-.mat-column-email{
-    width:330px;
-}
-
-.mat-column-idealworkhrs, 
-.mat-column-actualworkhrs,
-.mat-column-resourcecost,
-.mat-column-idealcost,
-.mat-column-difference{
-    width: 130px;
-}
-
-.mat-column-hourlycost,
-.mat-column-projectcost,
-.mat-column-actualcost {
-    width: 100px;
+.mat-column-resourcename{
+    width:300px;
+    min-width:250px;
 }
 
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
@@ -76,12 +62,10 @@ tr.mat-footer-row {
     font-weight: bold;
 }
 
-.mat-form-field
-.mat-form-field-appearance-fill 
-.mat-form-field-wrapper 
-.mat-form-field-flex 
-.mat-form-field-infix {
-    width: 162px;
+.cost-diff-profit{
+    text-decoration-color: green;
 }
-
   
+.cost-diff-loss {
+    text-decoration-color: red;
+}

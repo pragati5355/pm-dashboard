@@ -50,6 +50,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSelectChange } from '@angular/material/select';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { ResourceInviteFormComponent } from '../resource-invite-form/resource-invite-form.component';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -714,5 +715,24 @@ export class ResourcesListComponent implements OnInit {
                     this.handleScroll();
                 }
             });
+    }
+
+    openDialog(mode: String, data: any) {
+        const dialogRef = this.matDialog.open(ResourceInviteFormComponent, {
+            disableClose: true,
+            width: '60%',
+            height: '90vh',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                mode: mode,
+                editData: data,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                window.location.reload();
+            }
+        });
     }
 }

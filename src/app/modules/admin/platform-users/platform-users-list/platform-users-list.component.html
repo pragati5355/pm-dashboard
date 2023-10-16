@@ -42,6 +42,7 @@
                             class="ml-4"
                             mat-flat-button
                             (click)="openDialog('ADD', null)"
+                            *ngIf="userRole ==='ADMIN'"
                         >
                             <mat-icon
                                 [svgIcon]="'heroicons_outline:plus'"
@@ -64,7 +65,7 @@
                         <div>Last Name</div>
                         <div>Role</div>
                         <div>Status</div>
-                        <div>Actions</div>
+                        <div *ngIf="userRole==='ADMIN'">Actions</div>
                     </div>
                     <ng-container *ngIf="!false && userList?.length > 0">
                         <div class="grid">
@@ -125,7 +126,8 @@
 
                                     <div
                                         class="sm:block flex flex-row items-center w-full cursor-pointer"
-                                    >
+                                        *ngIf="userRole==='ADMIN'"
+                                        >
                                         <mat-icon
                                             class="mr-4"
                                             [matTooltip]="'Edit User'"

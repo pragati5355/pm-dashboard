@@ -65,6 +65,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alltechnologys: any[] = [];
     currentResourceTechnologyList: any[] = [];
     isEmailSelected: boolean = false;
+    resourceCapacity: any;
 
     constructor(
         private matDialogRef: MatDialogRef<ExternalProjectsAddResourceComponent>,
@@ -157,6 +158,9 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     getSelectedEmail(email: string) {
+        this.currentCapacity =
+                this.getCurrentResourceCapacity(this.data?.editData?.email) +
+                this.data?.editData?.utilization;
         this.addResourceForm.get('utilization').setValue(null);
         this.isEmailSelected = true;
         this.alltechnologys = [];
@@ -167,6 +171,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.utilizationValue = '';
         this.getAlreadyAssignedProjectsData(email);
     }
+
     clearSelectedEmail() {
         this.alltechnologys = [];
         this.technologys = [];

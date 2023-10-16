@@ -364,7 +364,7 @@
                                             [matMenuTriggerFor]="listCard07Menu"
                                             class="ml-2"
                                             mat-flat-button
-                                            *ngIf="userRole === 'ADMIN'"
+                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
                                         >
                                             <mat-icon
                                                 [svgIcon]="
@@ -372,7 +372,7 @@
                                                 "
                                             ></mat-icon>
                                             <span class="ml-2 mr-1"
-                                                >Add Resource</span
+                                                >Add</span
                                             >
                                         </button>
 
@@ -400,13 +400,30 @@
                                             class="ml-2"
                                             mat-flat-button
                                             (click)="gotoOnboardResource()"
-                                            *ngIf="userRole === 'ADMIN'"
+                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
                                         >
                                             <span class="ml-2 mr-1"
-                                                >Onboard Resource</span
+                                                >Request</span
                                             >
                                         </button>
                                     </div>
+
+                                     <div class="">
+                                        <button
+                                            [color]="'primary'"
+                                            [matTooltip]="'Invite Resource'"
+                                            class="ml-2"
+                                            mat-flat-button
+                                            (click)="openDialog('ADD', null)"
+                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
+                                        >
+                                            <span class="ml-2 mr-1"
+                                                >Invite</span
+                                            >
+                                        </button>
+                                    </div>
+
+                                    
                                 </div>
                             </div>
                         </div>

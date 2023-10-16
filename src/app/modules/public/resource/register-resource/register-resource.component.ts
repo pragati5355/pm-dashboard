@@ -12,7 +12,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ROLE_LIST, ValidationConstants } from 'app/core/constacts/constacts';
 import { SnackBar } from 'app/core/utils/snackBar';
@@ -28,6 +28,7 @@ import {
     TECHNOLOGIES_V2,
 } from '../common';
 import { ResourceService } from '../common/services/resource.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-register-resource',
@@ -66,6 +67,8 @@ export class RegisterResourceComponent implements OnInit {
     maxFromDate: Date | null;
     minToDate: Date | null;
     maxToDate: Date;
+    token: string = '';
+    isDisableEmail : boolean = false;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -89,7 +92,8 @@ export class RegisterResourceComponent implements OnInit {
         private snackBar: SnackBar,
         private resourceService: ResourceService,
         private fuseConfirmationService: FuseConfirmationService,
-        private router: Router
+        private router: Router,
+        private activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -98,8 +102,27 @@ export class RegisterResourceComponent implements OnInit {
 
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
-    }
+        this.patchResourceForm();
 
+    }
+    
+    patchResourceForm() {
+        this.activatedRoute.queryParams.subscribe({
+            next: (res: any) => {
+                if (Object.keys(res).length !== 0) {
+                    this.token = res?.data;
+                }
+                const decodedPayload = jwt_decode(this.token);
+                this.resourcesForm.patchValue(decodedPayload);
+                this.isDisableEmail = true;
+    
+            },
+            error: (err: any) => {
+                console.log(err);
+            },
+        });
+
+    }
     consultantForm() {
         this.router.navigate([`/resource/consultant`]);
     }

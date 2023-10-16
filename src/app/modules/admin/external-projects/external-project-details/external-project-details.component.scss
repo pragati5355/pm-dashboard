@@ -99,7 +99,7 @@
 }
 
 ::ng-deep .mat-menu-panel {
-    max-width: 25% !important;
+    min-width: 25% !important;
     border-radius: 6px;
     padding: 0 5px!important;
 }
