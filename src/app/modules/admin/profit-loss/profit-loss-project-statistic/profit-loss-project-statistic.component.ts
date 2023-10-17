@@ -12,6 +12,7 @@ import { debounce } from 'lodash';
 import { debounceTime } from 'rxjs';
 import { CreateProjecteService } from '@services/create-projecte.service';
 
+
 @Component({
     selector: 'app-profit-loss-project-statistic',
     templateUrl: './profit-loss-project-statistic.component.html',
@@ -20,8 +21,31 @@ import { CreateProjecteService } from '@services/create-projecte.service';
 export class ProfitLossProjectStatisticComponent implements OnInit {
 
     @ViewChild(MatSort) sort: MatSort;
-    dataSourceProject: MatTableDataSource<any>;
-    displayedProjectCostColumns: string[] = [
+    dataSourceResource: MatTableDataSource<any>;
+    dataSourceProject : MatTableDataSource<any>;
+    displayProjectCostColumns = [
+        {
+            title : 'Billed cost to client',
+            cost : '$8,000',
+        },
+        {
+            title : 'Flat rate for project',
+            cost : '$10',
+        },
+        {
+            title : 'Actual hours on project',
+            cost : '1020',
+        },
+        {
+            title : 'Actual project cost',
+            cost : '$10,200',
+        },
+        {
+            title : 'Cost Variance',
+            cost : '-$2,200',
+        }
+    ];
+    displayedResoureCostColumns: string[] = [
         'resourcename', 'roleonproject','utilizationonproject', 'hoursasperprojectplan',
         'actualworkloghrs', 'hourlycostonproject', 'costasperprojectplan','actualcostonproject', 'costdifference'
     ];
@@ -143,7 +167,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                     this.initialLoading = false;
                     if (res?.statusCode === 200) {
                         this.projectStatDetails = res?.data;
-                        this.dataSourceProject = new MatTableDataSource(this.projectStatDetails?.stats);
+                        this.dataSourceResource = new MatTableDataSource(this.projectStatDetails?.stats);
                         if(this.projectStatDetails?.stats?.length != 0){
                             this.showFooter = true;
                         }
@@ -215,7 +239,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                     if(this.projectStatDetails?.stats?.length != 0){
                         this.showFooter = true;
                     }
-                    this.dataSourceProject = new MatTableDataSource(this.projectStatDetails?.stats);
+                    this.dataSourceResource = new MatTableDataSource(this.projectStatDetails?.stats);
                 } else if (res?.data?.stats == null) {
                     this.projectStatDetails.stats = [];
                 }

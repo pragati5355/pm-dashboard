@@ -1,12 +1,17 @@
 export class ProjectStatModel {
     stats: StatModel[];
     projectDetails: ProjectDetailsModel;
+    projectCost : ProjectCostModel [];
 }
 
 export class ProjectDetailsModel {
     endDate : string;
     name : string;
     startDate:string;
+}
+
+export class ProjectCostModel {
+    title : string;
 }
 
 export class StatModel {
