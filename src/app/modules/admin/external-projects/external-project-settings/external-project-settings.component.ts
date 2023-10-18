@@ -9,8 +9,11 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { PRIMARY_TIMES, SECONDARY_TIMES } from '../common/constants';
+import { PRIMARY_TIMES, ROLE_LIST, SECONDARY_TIMES } from '../common/constants';
 import { ExternalProjectService } from '../common/services/external-project.service';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 interface costTypeInterface {
     value: string;
     label: string;
@@ -32,6 +35,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
     firstSelect: any = null;
     primaryTimings: any[] = PRIMARY_TIMES;
     secondaryTimings: any[] = SECONDARY_TIMES;
+    selectTechnologyList: any[] = ROLE_LIST;
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+    addOnBlur = false;
     isLoading: boolean = false;
     isLoadingclearReminder: boolean = false;
     showStep: number = 0;
@@ -77,11 +83,13 @@ export class ExternalProjectSettingsComponent implements OnInit {
         this.initializeForm();
         if(this.data?.showStep == undefined){
             this.showStep = 0;
-            console.log("this.showStep if part : ", this.showStep);
         }else{
             this.showStep = this.data?.showStep;
-            console.log("this.showStep else part : ", this.showStep);
         }
+    }
+
+    get technologies() {
+        return this.fixedCostForm?.get('technologies') as FormArray;
     }
 
     costTypeChange(event: MatSelectChange) {
@@ -237,6 +245,63 @@ export class ExternalProjectSettingsComponent implements OnInit {
             });
     }
 
+    add(event: MatChipInputEvent): void {
+        console.log("Add tech");
+        const isAlreadyExist =
+            this.technologies?.value?.filter(
+                (item) =>
+                    item?.name?.toLowerCase() === event?.value.toLowerCase()
+            )?.length > 0;
+
+        if (event?.value && !isAlreadyExist) {
+            const technologyControl = this.fb.group({
+                name: [event?.value || null],
+                techHours: [0, [Validators.required]],
+                techRate: [0, [Validators.required]],
+            });
+            console.log("Add technologyControl: ", technologyControl);
+            this.technologies.push(technologyControl);
+        }
+        this.fixedCostForm.get('technology')?.reset();
+        const input = event.input;
+        if (input) {
+            input.value = '';
+        }
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        console.log("select tech");
+        const technology = event?.option?.value;
+        console.log("select technology : ", technology);
+        const isAlreadyExist =
+            this.technologies?.value?.filter(
+                (item) =>
+                    item?.name?.toLowerCase() === technology.toLowerCase()
+            )?.length > 0;
+
+        if (technology && !isAlreadyExist) {
+            const technologyControl = this.fb.group({
+                name: [technology || null],
+                techHours: [0, [Validators.required]],
+                techRate: [0, [Validators.required]],
+            });
+            console.log("select technologyControl : ", technologyControl);
+            this.technologies.push(technologyControl);
+        }
+        this.fixedCostForm.get('technology')?.reset();
+    }
+
+    removeTechnology(index: number, technologyControlValue: any) {
+        if (technologyControlValue?.id) {
+            const control = this.technologies?.at(index);
+            control?.get('experienceYear').setErrors(null);
+            control?.get('experienceMonth').setErrors(null);
+            control?.get('deleted')?.setValue(true);
+        } else {
+            this.technologies.removeAt(index);
+        }
+    }
+
     private initializeForm() {
         this.initializeFixedCostForm();
         this.initializeTimeAndMaterialForm();
@@ -373,6 +438,8 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     Validators.max(1000),
                 ],
             ],
+            technology: [],
+            technologies: this.fb.array([]),
         });
 
         if (this.data?.projectSettings?.projectCostModel?.costType) {

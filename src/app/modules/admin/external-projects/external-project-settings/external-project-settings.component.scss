@@ -1,3 +1,7 @@
+.inventory-grid {
+    grid-template-columns: 21% 24% 24% 10%;
+}
+
 :host ::ng-deep .mat-tab-labels {
     flex-direction: column;
 }
