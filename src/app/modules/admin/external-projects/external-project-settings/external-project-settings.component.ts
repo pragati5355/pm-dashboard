@@ -518,6 +518,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 },
             ],
             projectCostModel: {},
+            projectTechCostModel : [],
         };
         for (let i = 0; i < payload?.sourceType?.length - 1; i++) {
             if (payload?.reminderModel[i]?.time === undefined) {
@@ -528,15 +529,15 @@ export class ExternalProjectSettingsComponent implements OnInit {
         payload.reminderModel = timeModel;
 
         const resourceCostModel = this.getResourceCostModel();
-        const technologyRateModel = this.getTechnologyHourlyRate();
-
+        const projectTechCostModel = this.getTechnologyHourlyRate();
+        payload.projectTechCostModel = projectTechCostModel;
+       
         if (
-            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST' && this.fixedCostForm?.valid
+            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST' 
         ) {
             payload.projectCostModel = {
                 costType: 'FIXED_COST',
                 flatRate: this.fixedCostForm?.get('costInput')?.value,
-                technologyRateModel : technologyRateModel,
             };
         } else {
             if (
@@ -586,9 +587,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
         return this.fixedCostForm?.get('technologies')
             ?.value?.map((tech: any) => {
                return { 
-                techName : tech?.name,
-                techHours : tech?.techHours,
-                techRate : tech?.techRate
+                technology : tech?.name,
+                hours : tech?.techHours,
+                rate : tech?.techRate
                }
             }) 
     }

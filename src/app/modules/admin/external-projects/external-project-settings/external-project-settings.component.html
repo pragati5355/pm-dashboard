@@ -198,8 +198,7 @@
                         <div
                             *ngIf="
                                 fixedCostForm?.get('costType')?.value?.value ===
-                                'FIXED_COST'
-                            "
+                                'FIXED_COST'"
                         >
                             <div class="w-full flex flex-col flex-wrap">
                                 <mat-label class="w-[400px] mb-1">Enter cost</mat-label>
@@ -275,6 +274,9 @@
                                             {{ technology }}
                                         </mat-option>
                                     </mat-autocomplete>
+                                    <mat-error *ngIf="fixedCostForm?.get('technology')?.hasError('required')">
+                                        <div>Add technology houry rate</div>
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
                             <div
