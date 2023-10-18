@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
+    AbstractControl,
     FormArray,
     FormBuilder,
     FormControl,
@@ -92,6 +93,10 @@ export class ExternalProjectSettingsComponent implements OnInit {
         return this.fixedCostForm?.get('technologies') as FormArray;
     }
 
+    get resourcesValidForm(): { [key: string]: AbstractControl } {
+        return this.fixedCostForm.controls;
+    }
+
     costTypeChange(event: MatSelectChange) {
         // console.log(this.fixedCostForm?.value);
     }
@@ -181,6 +186,20 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
+        if(this.fixedCostForm?.get('technology')?.value?.value === 'FIXED_COST' &&
+            this.fixedCostForm?.invalid
+        ){
+            this.snackBar.errorSnackBar('Please enter technology hourly rate');
+            return;
+        }
+
+        if(this.fixedCostForm?.get('technologies')?.value?.value === 'FIXED_COST' &&
+            this.fixedCostForm?.invalid
+        ){
+            this.snackBar.errorSnackBar('Please Enter technology hourly rate');
+            return;
+        }
+
         if (
             this.fixedCostForm?.get('costType')?.value?.value === 'TANDM' &&
             this.timeAndMaterialForm?.get('type')?.value === null
@@ -210,19 +229,19 @@ export class ExternalProjectSettingsComponent implements OnInit {
         }
 
         const payload = this.getPayload();
-
-        this.isLoading = true;
-        this.externalProjectService
-            .saveSettings(payload)
-            .subscribe((res: any) => {
-                this.isLoading = false;
-                if (!res?.error) {
-                    this.snackBar.successSnackBar(res?.message);
-                    this.dialogRef.close(true);
-                } else {
-                    this.snackBar.errorSnackBar(res?.message);
-                }
-            });
+        console.log("payload : ", payload);
+        // this.isLoading = true;
+        // this.externalProjectService
+        //     .saveSettings(payload)
+        //     .subscribe((res: any) => {
+        //         this.isLoading = false;
+        //         if (!res?.error) {
+        //             this.snackBar.successSnackBar(res?.message);
+        //             this.dialogRef.close(true);
+        //         } else {
+        //             this.snackBar.errorSnackBar(res?.message);
+        //         }
+        //     });
     }
 
     clearReminders() {
@@ -509,13 +528,15 @@ export class ExternalProjectSettingsComponent implements OnInit {
         payload.reminderModel = timeModel;
 
         const resourceCostModel = this.getResourceCostModel();
+        const technologyRateModel = this.getTechnologyHourlyRate();
 
         if (
-            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST'
+            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST' && this.fixedCostForm?.valid
         ) {
             payload.projectCostModel = {
                 costType: 'FIXED_COST',
                 flatRate: this.fixedCostForm?.get('costInput')?.value,
+                technologyRateModel : technologyRateModel,
             };
         } else {
             if (
@@ -558,5 +579,17 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     cost: resource?.cost,
                 };
             });
+    }
+
+    private getTechnologyHourlyRate(){
+
+        return this.fixedCostForm?.get('technologies')
+            ?.value?.map((tech: any) => {
+               return { 
+                techName : tech?.name,
+                techHours : tech?.techHours,
+                techRate : tech?.techRate
+               }
+            }) 
     }
 }
