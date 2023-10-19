@@ -124,7 +124,7 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     addTask() {
-        if (!this.description  && !this.currentDescriptionValue && !this.onLeave) {
+        if (!this.description  && !this.currentDescriptionValue && this.onLeave) {
             this.snackBar.errorSnackBar('Please add description');
             return;
         }
@@ -234,11 +234,11 @@ export class AddEditWorkLogComponent implements OnInit {
     private handleSubmitResponse() {
         const payload = this.getSaveWorkLogsPayload();
         if (this.data?.mode === 'EDIT') {
-            if (!this.onLeave && !this.description) {
+            if (this.onLeave && !this.description && !this.currentDescriptionValue) {
                 this.snackBar.errorSnackBar('Please add description');
                 return;
             }
-            if (!this.workLogForm?.get('totalHours')?.value && !this.onLeave) {
+            if (!this.workLogForm?.get('totalHours')?.value && this.onLeave) {
                 this.snackBar.errorSnackBar('Please add Hours');
                 return;
             }

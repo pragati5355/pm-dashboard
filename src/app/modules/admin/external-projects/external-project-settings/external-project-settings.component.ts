@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
+    AbstractControl,
     FormArray,
     FormBuilder,
     FormControl,
@@ -9,8 +10,11 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { PRIMARY_TIMES, SECONDARY_TIMES } from '../common/constants';
+import { PRIMARY_TIMES, ROLE_LIST, SECONDARY_TIMES } from '../common/constants';
 import { ExternalProjectService } from '../common/services/external-project.service';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 interface costTypeInterface {
     value: string;
     label: string;
@@ -32,6 +36,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
     firstSelect: any = null;
     primaryTimings: any[] = PRIMARY_TIMES;
     secondaryTimings: any[] = SECONDARY_TIMES;
+    selectTechnologyList: any[] = ROLE_LIST;
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+    addOnBlur = false;
     isLoading: boolean = false;
     isLoadingclearReminder: boolean = false;
     showStep: number = 0;
@@ -64,6 +71,15 @@ export class ExternalProjectSettingsComponent implements OnInit {
     get resources() {
         return this.timeAndMaterialForm?.get('resources') as FormArray;
     }
+
+    get technologies() {
+        return this.fixedCostForm?.get('technologies') as FormArray;
+    }
+
+    get resourcesValidForm(): { [key: string]: AbstractControl } {
+        return this.fixedCostForm.controls;
+    }
+
     constructor(
         public dialogRef: MatDialogRef<ExternalProjectSettingsComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -77,10 +93,8 @@ export class ExternalProjectSettingsComponent implements OnInit {
         this.initializeForm();
         if(this.data?.showStep == undefined){
             this.showStep = 0;
-            console.log("this.showStep if part : ", this.showStep);
         }else{
             this.showStep = this.data?.showStep;
-            console.log("this.showStep else part : ", this.showStep);
         }
     }
 
@@ -164,6 +178,29 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
+        if(this.fixedCostForm?.get('costType')?.value?.value ===
+            'FIXED_COST' 
+            && this.fixedCostForm?.get('technologies')?.value?.length === 0
+        ){
+            this.snackBar.errorSnackBar('Please select technology');
+            return;
+        }
+
+        const technologyWithNoHourlyRate = this.fixedCostForm
+            ?.get('technologies')
+            ?.value?.filter(
+                (item) =>
+                    item?.techHours === 0 && item?.techRate === 0
+        );
+
+        if(this.fixedCostForm?.get('costType')?.value?.value ===
+            'FIXED_COST' 
+            && technologyWithNoHourlyRate?.length > 0
+        ){
+            this.snackBar.errorSnackBar('Please add selected technology Hours and Rate');
+            return;
+        }
+
         if (
             this.fixedCostForm?.get('costType')?.value?.value ===
                 'FIXED_COST' &&
@@ -171,7 +208,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
         ) {
             this.snackBar.errorSnackBar('Please enter valid data');
             return;
-        }
+        }  
 
         if (
             this.fixedCostForm?.get('costType')?.value?.value === 'TANDM' &&
@@ -202,7 +239,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
         }
 
         const payload = this.getPayload();
-
+        console.log("payload : ", payload);
         this.isLoading = true;
         this.externalProjectService
             .saveSettings(payload)
@@ -235,6 +272,57 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     this.snackBar.errorSnackBar(res?.message);
                 }
             });
+    }
+
+    add(event: MatChipInputEvent): void {
+        const isAlreadyExist =
+            this.technologies?.value?.filter(
+                (item) =>
+                    item?.name?.toLowerCase() === event?.value.toLowerCase()
+            )?.length > 0;
+
+        if (event?.value && !isAlreadyExist) {
+            const technologyControl = this.fb.group({
+                name: [event?.value || null],
+                techHours: [0, [Validators.required]],
+                techRate: [0, [Validators.required]],
+            });
+            this.technologies.push(technologyControl);
+        }
+        const input = event.input;
+        if (input) {
+            input.value = '';
+        }
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        const technology = event?.option?.value;
+        const isAlreadyExist =
+            this.technologies?.value?.filter(
+                (item) =>
+                    item?.name?.toLowerCase() === technology.toLowerCase()
+            )?.length > 0;
+
+        if (technology && !isAlreadyExist) {
+            const technologyControl = this.fb.group({
+                name: [technology || null],
+                techHours: [0, [Validators.required]],
+                techRate: [0, [Validators.required]],
+            });
+            this.technologies.push(technologyControl);
+        }
+        this.fixedCostForm.get('technology')?.reset();
+    }
+
+    removeTechnology(index: number, technologyControlValue: any) {
+        if (technologyControlValue?.id) {
+            const control = this.technologies?.at(index);
+            control?.get('techHours').setErrors(null);
+            control?.get('techRate').setErrors(null);
+            control?.get('deleted')?.setValue(true);
+        } else {
+            this.technologies.removeAt(index);
+        }
     }
 
     private initializeForm() {
@@ -373,11 +461,27 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     Validators.max(1000),
                 ],
             ],
+            technology: [],
+            technologies: this.fb.array([]),
         });
+
+        this.setTechnologiesListForUpdate();
 
         if (this.data?.projectSettings?.projectCostModel?.costType) {
             this.fixedCostForm?.get('costType')?.disable();
         }
+    }
+
+    private setTechnologiesListForUpdate() {
+        this.data?.projectSettings?.projectTechCostModel?.map((item) => {
+            this.technologies.push(
+                this.fb.group({
+                    name : [item?.technology || null],
+                    techHours : [item?.hours,[Validators.required]],
+                    techRate : [item?.rate, [Validators.required]]
+                })
+            )
+        })
     }
 
     private patchReminders() {
@@ -432,6 +536,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 },
             ],
             projectCostModel: {},
+            projectTechCostModel : [],
         };
         for (let i = 0; i < payload?.sourceType?.length - 1; i++) {
             if (payload?.reminderModel[i]?.time === undefined) {
@@ -442,9 +547,11 @@ export class ExternalProjectSettingsComponent implements OnInit {
         payload.reminderModel = timeModel;
 
         const resourceCostModel = this.getResourceCostModel();
-
+        const projectTechCostModel = this.getTechnologyHourlyRate();
+        payload.projectTechCostModel = projectTechCostModel;
+       
         if (
-            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST'
+            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST' 
         ) {
             payload.projectCostModel = {
                 costType: 'FIXED_COST',
@@ -491,5 +598,17 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     cost: resource?.cost,
                 };
             });
+    }
+
+    private getTechnologyHourlyRate(){
+
+        return this.fixedCostForm?.get('technologies')
+            ?.value?.map((tech: any) => {
+               return { 
+                technology : tech?.name,
+                hours : tech?.techHours,
+                rate : tech?.techRate
+               }
+            }) 
     }
 }
