@@ -1,7 +1,7 @@
 export class ProjectStatModel {
-    stats: StatModel[];
+    resourceCost: StatModel[];
     projectDetails: ProjectDetailsModel;
-    projectCost : ProjectCostModel [];
+    projectCost : ProjectCostModel;
 }
 
 export class ProjectDetailsModel {
@@ -11,7 +11,11 @@ export class ProjectDetailsModel {
 }
 
 export class ProjectCostModel {
-    title : string;
+    actualHoursOnProject : number;
+    actualProjectCost : number;
+    billedCostToClient : number;
+    costVarience : number;
+    flatRateForProject : number;   
 }
 
 export class StatModel {
