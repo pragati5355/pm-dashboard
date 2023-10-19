@@ -243,7 +243,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="w-full flex flex-col flex-wrap">
-                                <mat-label class="w-[400px] mb-1">Enter Technologies Hourly Rate</mat-label>
+                                <mat-label class="w-[400px] mb-1">Select Technologies Hourly Rate</mat-label>
                                 <mat-form-field 
                                     [floatLabel]="'always'"
                                     appearance="fill"
@@ -251,7 +251,7 @@
                                     <mat-chip-list #chipList>
                                         <input
                                             #technologyInput
-                                            placeholder="New technology..."
+                                            placeholder="select technology"
                                             formControlName="technology"
                                             [matAutocomplete]="auto"
                                             [matChipInputFor]="chipList"
