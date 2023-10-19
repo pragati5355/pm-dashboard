@@ -22,7 +22,7 @@ export class StatModel {
     email: string;
     role : string;
     utilization : string;
-    totalIdealWorklogHrs: number;
+    idealWorklogHrs: number;
     totalActualWorklogHrs: number;
     hourlyCost: number;
     costAsPerProjectPlan: number;

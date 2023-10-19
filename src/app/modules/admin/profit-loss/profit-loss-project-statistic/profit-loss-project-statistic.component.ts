@@ -86,7 +86,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     }
 
     getIdealWorkHrsTotal(){
-        return this.projectStatDetails?.resourceCost?.map(t => t?.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.resourceCost?.map(t => t?.idealWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
     getActualWorkHrsTotal(){
