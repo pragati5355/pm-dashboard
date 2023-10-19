@@ -60,34 +60,6 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     projectHistory: any;
     payload: any;
 
-    displayProjectCostColumns = [
-        {
-            title: 'Billed cost to client',
-            key: 'billedCostToClient',
-            cost: null
-        },
-        {
-            title: 'Flat rate for project',
-            key: 'flatRateForProject',
-            cost: null
-        },
-        {
-            title: 'Actual hours on project',
-            key: 'actualHoursOnProject',
-            cost: null
-        },
-        {
-            title: 'Actual project cost',
-            key: 'actualProjectCost',
-            cost: null
-        },
-        {
-            title: 'Cost Variance',
-            key: 'costVarience',
-            cost: null
-        },
-    ];
-
     constructor(
         private router: Router,
         private _route: ActivatedRoute,
@@ -113,60 +85,63 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.router.navigate([`/profit-loss`]);
     }
 
-    getIdealWorkHrsTotal() {
-        return this.projectStatDetails?.resourceCost
-            ?.map((t) => t?.totalIdealWorklogHrs)
-            .reduce((acc, value) => acc + value, 0);
+    getIdealWorkHrsTotal(){
+        return this.projectStatDetails?.resourceCost?.map(t => t?.totalIdealWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
-    getActualWorkHrsTotal() {
-        return this.projectStatDetails?.resourceCost
-            ?.map((t) => t?.totalActualWorklogHrs)
-            .reduce((acc, value) => acc + value, 0);
+    getActualWorkHrsTotal(){
+        return this.projectStatDetails?.resourceCost?.map(t => t?.totalActualWorklogHrs).reduce((acc, value) => acc + value, 0);
     }
 
-    getWorklogHrsAsPerProjectPlan() {
-        return this.projectStatDetails?.resourceCost
-            ?.map((t) => t?.worklogHrsAsPerProjectPlan)
-            .reduce((acc, value) => acc + value, 0);
+    getWorklogHrsAsPerProjectPlan(){
+        return this.projectStatDetails?.resourceCost?.map(t => t?.worklogHrsAsPerProjectPlan).reduce((acc, value) => acc + value, 0);
     }
 
-    getHourlyCostTotal() {
-        return this.projectStatDetails?.resourceCost
-            ?.map((t) => t?.hourlyCost)
-            .reduce((acc, value) => acc + value, 0);
+
+    getHourlyCostTotal(){
+        return this.projectStatDetails?.resourceCost?.map(t => t?.hourlyCost).reduce((acc, value) => acc + value, 0);
     }
 
     getCostAsPerProjectPlanTotal() {
-        return this.projectStatDetails?.resourceCost
-            ?.map((t) => t?.costAsPerProjectPlan)
-            .reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.resourceCost?.map((t) => t?.costAsPerProjectPlan).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalActualCost() {
-        return this.projectStatDetails?.resourceCost
-            ?.map((t) => t?.actualCostOnProject)
-            .reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.resourceCost?.map((t) => t?.actualCostOnProject).reduce((acc, value) => acc + value, 0);
     }
 
     getTotalDifference() {
-        return this.projectStatDetails?.resourceCost
-            ?.map((t) => t?.costDiff)
-            .reduce((acc, value) => acc + value, 0);
+        return this.projectStatDetails?.resourceCost?.map((t) => t?.costDiff).reduce((acc, value) => acc + value, 0);
     }
+
+    getProjectDetails() {
+        this.initialLoading = true;
+        this.projectService
+            .getProjectById(this.projectId)
+            .subscribe((res: any) => {
+                this.projectHistory = res?.data?.project;
+                if(res?.data?.project?.startDate == null && res?.data?.project?.endDate == null){
+                    this.range.controls['startDate'].patchValue(this.currentMonthFirstDate);
+                    this.range.controls['endDate'].patchValue(this.currentMonthCurrentDate);
+                }
+                else{
+                    this.range.controls['startDate'].patchValue(res?.data?.project?.startDate);
+                    this.range.controls['endDate'].patchValue(res?.data?.project?.endDate);
+                }
+                this.initialLoading = false;
+            },
+            (err) => {
+                this.initialLoading = false;
+                this.projectStatDetails = null;
+            });
+    }        
 
     loadStatList() {
         this.initialLoading = true;
         this.payload = {
             projectId: this.projectId,
-            startDate: this.datePipe.transform(
-                this.range?.value?.startDate,
-                'yyyy-MM-dd'
-            ),
-            endDate: this.datePipe.transform(
-                this.range?.value?.endDate,
-                'yyyy-MM-dd'
-            ),
+            startDate: this.datePipe.transform(this.range?.value?.startDate,'yyyy-MM-dd'),
+            endDate: this.datePipe.transform(this.range?.value?.endDate,'yyyy-MM-dd'),
         };
 
         if (
@@ -223,6 +198,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
         this.routeSubscribe = this._route.params.subscribe((id) => {
             if (id['id']) {
                 this.projectId = id['id'];
+                this.getProjectDetails();
                 this.loadProjectDetails();
             }
         });
@@ -231,31 +207,19 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
     private loadProjectDetails() {
         this.initialLoading = true;
         if (
-            this.projectHistory?.startDate == null &&
-            this.projectHistory?.endDate == null
+            this.projectHistory?.startDate != null &&
+            this.projectHistory?.endDate != null
         ) {
             this.payload = {
                 projectId: this.projectId,
-                startDate: this.datePipe.transform(
-                    this.currentMonthFirstDate,
-                    'yyyy-MM-dd'
-                ),
-                endDate: this.datePipe.transform(
-                    this.currentMonthCurrentDate,
-                    'yyyy-MM-dd'
-                ),
+                startDate: this.datePipe.transform(this.projectHistory?.startDate,'yyyy-MM-dd'),
+                endDate: this.datePipe.transform(this.projectHistory?.endDate,'yyyy-MM-dd'),
             };
         } else {
             this.payload = {
                 projectId: this.projectId,
-                startDate: this.datePipe.transform(
-                    this.projectHistory?.startDate,
-                    'yyyy-MM-dd'
-                ),
-                endDate: this.datePipe.transform(
-                    this.projectHistory?.endDate,
-                    'yyyy-MM-dd'
-                ),
+                startDate: this.datePipe.transform(this.currentMonthFirstDate,'yyyy-MM-dd'),
+                endDate: this.datePipe.transform(this.currentMonthCurrentDate,'yyyy-MM-dd'),
             };
         }
 
@@ -264,34 +228,13 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
                     this.projectStatDetails = res?.data;
-                    console.log(
-                        'this.projectStatDetails',
-                        this.projectStatDetails.projectCost
-                    );
-                    this.displayProjectCostColumns.forEach((displayedValue) => {
-                        Object.keys(
-                            this.projectStatDetails.projectCost
-                        ).forEach((keys: any) => {
-                            if(keys == displayedValue.key){
-                                displayedValue['cost'] = this.projectStatDetails.projectCost[keys]; 
-                            }
-                        });
-                    });
-                    console.log(this.displayProjectCostColumns,'this.displayProjectCostColumns')
-                    if (res?.data?.projectDetails == null) {
-                        this.range.controls['startDate'].patchValue(
-                            this.currentMonthFirstDate
-                        );
-                        this.range.controls['endDate'].patchValue(
-                            this.currentMonthCurrentDate
-                        );
-                    } else {
-                        this.range.controls['startDate'].patchValue(
-                            res?.data?.projectDetails?.startDate
-                        );
-                        this.range.controls['endDate'].patchValue(
-                            res?.data?.projectDetails?.endDate
-                        );
+                    if(res?.data?.projectDetails?.startDate == null && res?.data?.projectDetails?.endDate == null){
+                        this.range.controls['startDate'].patchValue(this.currentMonthFirstDate);
+                        this.range.controls['endDate'].patchValue(this.currentMonthCurrentDate);
+                    }
+                    else{
+                        this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate);
+                        this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate);
                     }
                     if (this.projectStatDetails?.resourceCost?.length != 0) {
                         this.showFooter = true;
@@ -299,7 +242,7 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                     this.dataSourceResource = new MatTableDataSource(
                         this.projectStatDetails?.resourceCost
                     );
-                } else if (res?.data?.stats == null) {
+                } else if (res?.data?.resourceCost == null) {
                     this.projectStatDetails.resourceCost = [];
                 }
                 if (res?.tokenExpire) {

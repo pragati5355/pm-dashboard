@@ -1,5 +1,5 @@
 .inventory-grid {
-    grid-template-columns: 72% 34%;
+    grid-template-columns: 100%;
 }    
 
 .mat-icon {
@@ -68,4 +68,9 @@ tr.mat-footer-row {
   
 .cost-diff-loss {
     text-decoration-color: red;
+}
+
+hr{
+    margin: 5px;
+    width: 100%;
 }
