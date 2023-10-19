@@ -166,7 +166,7 @@
                                                 Billed cost to client 
                                             </div>
                                             <div class="ml-6 hidden md:block truncate text-black">
-                                                {{projectStatDetails?.projectCost?.billedCostToClient}}
+                                               {{projectStatDetails?.projectCost?.billedCostToClient | currency}}
                                             </div>
                                         </div>
                                         <hr>
@@ -177,7 +177,7 @@
                                                 Flat rate for project
                                             </div>
                                             <div class="ml-6 hidden md:block truncate text-black">
-                                                {{projectStatDetails?.projectCost?.flatRateForProject}}
+                                                {{projectStatDetails?.projectCost?.flatRateForProject | currency}}
                                             </div>
                                         </div>
                                         <hr>
@@ -199,7 +199,7 @@
                                                 Actual project cost
                                             </div>
                                             <div class="ml-6 hidden md:block truncate text-black">
-                                                {{projectStatDetails?.projectCost?.actualProjectCost}}
+                                                {{projectStatDetails?.projectCost?.actualProjectCost | currency}}
                                             </div>
                                         </div>
                                         <hr>
@@ -210,7 +210,7 @@
                                                 Cost Variance
                                             </div>
                                             <div class="ml-6 hidden md:block truncate text-black">
-                                                {{projectStatDetails?.projectCost?.costVarience}}
+                                                {{projectStatDetails?.projectCost?.costVarience | currency}}
                                             </div>
                                         </div>
     
