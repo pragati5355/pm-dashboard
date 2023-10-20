@@ -247,11 +247,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
             (res: any) => {
                 this.isLoading = false;
                 if (res?.status === 200) {
-                    this.isLoading = false;
                     this.snackBar.successSnackBar(res?.message);
                     this.dialogRef.close(true);
-                } else if (res?.status === 500) {
-                    this.isLoading = false;
+                } else{
                     this.snackBar.errorSnackBar(res?.message);
                 }
             },
