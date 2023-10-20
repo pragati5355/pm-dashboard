@@ -364,7 +364,7 @@
                                             [matMenuTriggerFor]="listCard07Menu"
                                             class="ml-2"
                                             mat-flat-button
-                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
+                                            *ngIf="userRole === 'ADMIN'"
                                         >
                                             <mat-icon
                                                 [svgIcon]="
@@ -395,39 +395,39 @@
                                     <div class="">
                                         <button
                                             [color]="'primary'"
-                                            [matTooltip]="'Onboard Resource'"
-                                            [matMenuTriggerFor]="listCard07Menu"
-                                            class="ml-2"
-                                            mat-flat-button
-                                            (click)="gotoOnboardResource()"
-                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
-                                        >
-                                            <span class="ml-2 mr-1"
-                                                >Request</span
-                                            >
-                                        </button>
-                                    </div>
-
-                                     <div class="">
-                                        <button
-                                            [color]="'primary'"
                                             [matTooltip]="'Invite Resource'"
                                             class="ml-2"
                                             mat-flat-button
                                             (click)="openDialog('ADD', null)"
                                             *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
                                         >
-                                            <span class="ml-2 mr-1"
-                                                >Invite</span
-                                            >
+                                            <mat-icon
+                                            [svgIcon]="'heroicons_outline:plus'"
+                                            ></mat-icon>
+                                                <span class="ml-2 mr-1"
+                                                    >Invite</span
+                                                >
                                         </button>
                                     </div>
 
-                                    
+                                    <div class="">
+                                        <button
+                                            [color]="'primary'"
+                                            [matTooltip]="'Onboard Resource'"
+                                            [matMenuTriggerFor]="listCard07Menu"
+                                            class="ml-2"
+                                            mat-stroked-button 
+                                            (click)="gotoOnboardResource()"
+                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
+                                        >
+                                            <span class="ml-2 mr-1"
+                                                >Requests</span
+                                            >
+                                        </button>
+                                    </div>         
                                 </div>
                             </div>
                         </div>
-
                         <div
                             class="w-screen h-screen z-9999 absolute top-0 right-0"
                             *ngIf="showFilterArea"

@@ -1,6 +1,7 @@
 export class ProjectStatModel {
-    stats: StatModel[];
+    resourceCost: StatModel[];
     projectDetails: ProjectDetailsModel;
+    projectCost : ProjectCostModel;
 }
 
 export class ProjectDetailsModel {
@@ -9,11 +10,19 @@ export class ProjectDetailsModel {
     startDate:string;
 }
 
+export class ProjectCostModel {
+    actualHoursOnProject : number;
+    actualProjectCost : number;
+    billedCostToClient : number;
+    costVarience : number;
+    flatRateForProject : number;   
+}
+
 export class StatModel {
     email: string;
     role : string;
     utilization : string;
-    totalIdealWorklogHrs: number;
+    idealWorklogHrs: number;
     totalActualWorklogHrs: number;
     hourlyCost: number;
     costAsPerProjectPlan: number;

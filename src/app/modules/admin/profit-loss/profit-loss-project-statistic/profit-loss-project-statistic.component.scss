@@ -1,5 +1,5 @@
 .inventory-grid {
-    grid-template-columns:  266px 104px 104px 88px 132px 122px 113px 84px 70px;
+    grid-template-columns: 100%;
 }    
 
 .mat-icon {
@@ -55,7 +55,7 @@
 }
 
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
-    padding-left: 42px;
+    padding-left: 30px;
 }
 
 tr.mat-footer-row {
@@ -68,4 +68,9 @@ tr.mat-footer-row {
   
 .cost-diff-loss {
     text-decoration-color: red;
+}
+
+hr{
+    margin: 5px;
+    width: 100%;
 }
