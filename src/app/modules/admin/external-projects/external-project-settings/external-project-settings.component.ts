@@ -91,9 +91,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
     ngOnInit(): void {
         this.patchReminders();
         this.initializeForm();
-        if(this.data?.showStep == undefined){
+        if (this.data?.showStep == undefined) {
             this.showStep = 0;
-        }else{
+        } else {
             this.showStep = this.data?.showStep;
         }
     }
@@ -178,10 +178,11 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
-        if(this.fixedCostForm?.get('costType')?.value?.value ===
-            'FIXED_COST' 
-            && this.fixedCostForm?.get('technologies')?.value?.length === 0
-        ){
+        if (
+            this.fixedCostForm?.get('costType')?.value?.value ===
+                'FIXED_COST' &&
+            this.fixedCostForm?.get('technologies')?.value?.length === 0
+        ) {
             this.snackBar.errorSnackBar('Please select technology');
             return;
         }
@@ -189,15 +190,17 @@ export class ExternalProjectSettingsComponent implements OnInit {
         const technologyWithNoHourlyRate = this.fixedCostForm
             ?.get('technologies')
             ?.value?.filter(
-                (item) =>
-                    item?.techHours === 0 && item?.techRate === 0
-        );
+                (item) => item?.techHours === 0 && item?.techRate === 0
+            );
 
-        if(this.fixedCostForm?.get('costType')?.value?.value ===
-            'FIXED_COST' 
-            && technologyWithNoHourlyRate?.length > 0
-        ){
-            this.snackBar.errorSnackBar('Please add selected technology Hours and Rate');
+        if (
+            this.fixedCostForm?.get('costType')?.value?.value ===
+                'FIXED_COST' &&
+            technologyWithNoHourlyRate?.length > 0
+        ) {
+            this.snackBar.errorSnackBar(
+                'Please add selected technology Hours and Rate'
+            );
             return;
         }
 
@@ -208,7 +211,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
         ) {
             this.snackBar.errorSnackBar('Please enter valid data');
             return;
-        }  
+        }
 
         if (
             this.fixedCostForm?.get('costType')?.value?.value === 'TANDM' &&
@@ -239,19 +242,22 @@ export class ExternalProjectSettingsComponent implements OnInit {
         }
 
         const payload = this.getPayload();
-        console.log("payload : ", payload);
         this.isLoading = true;
-        this.externalProjectService
-            .saveSettings(payload)
-            .subscribe((res: any) => {
+        this.externalProjectService.saveSettings(payload).subscribe(
+            (res: any) => {
                 this.isLoading = false;
-                if (!res?.error) {
+                if (res?.status === 200) {
                     this.snackBar.successSnackBar(res?.message);
                     this.dialogRef.close(true);
-                } else {
+                } else{
                     this.snackBar.errorSnackBar(res?.message);
                 }
-            });
+            },
+            (err) => {
+                this.isLoading = false;
+                this.snackBar.errorSnackBar(err?.message);
+            }
+        );
     }
 
     clearReminders() {
@@ -283,6 +289,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
         if (event?.value && !isAlreadyExist) {
             const technologyControl = this.fb.group({
+                id: [null],
                 name: [event?.value || null],
                 techHours: [0, [Validators.required]],
                 techRate: [0, [Validators.required]],
@@ -299,16 +306,17 @@ export class ExternalProjectSettingsComponent implements OnInit {
         const technology = event?.option?.value;
         const isAlreadyExist =
             this.technologies?.value?.filter(
-                (item) =>
-                    item?.name?.toLowerCase() === technology.toLowerCase()
+                (item) => item?.name?.toLowerCase() === technology.toLowerCase()
             )?.length > 0;
 
         if (technology && !isAlreadyExist) {
             const technologyControl = this.fb.group({
+                id: [null],
                 name: [technology || null],
                 techHours: [0, [Validators.required]],
                 techRate: [0, [Validators.required]],
             });
+            console.log('technologyControl : ', technologyControl);
             this.technologies.push(technologyControl);
         }
         this.fixedCostForm.get('technology')?.reset();
@@ -476,12 +484,13 @@ export class ExternalProjectSettingsComponent implements OnInit {
         this.data?.projectSettings?.projectTechCostModel?.map((item) => {
             this.technologies.push(
                 this.fb.group({
-                    name : [item?.technology || null],
-                    techHours : [item?.hours,[Validators.required]],
-                    techRate : [item?.rate, [Validators.required]]
+                    id: [item?.id],
+                    name: [item?.technology || null],
+                    techHours: [item?.hours, [Validators.required]],
+                    techRate: [item?.rate, [Validators.required]],
                 })
-            )
-        })
+            );
+        });
     }
 
     private patchReminders() {
@@ -536,7 +545,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 },
             ],
             projectCostModel: {},
-            projectTechCostModel : [],
+            projectTechCostModel: [],
         };
         for (let i = 0; i < payload?.sourceType?.length - 1; i++) {
             if (payload?.reminderModel[i]?.time === undefined) {
@@ -548,10 +557,11 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
         const resourceCostModel = this.getResourceCostModel();
         const projectTechCostModel = this.getTechnologyHourlyRate();
+        console.log('projectTechCostModel : ', projectTechCostModel);
         payload.projectTechCostModel = projectTechCostModel;
-       
+
         if (
-            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST' 
+            this.fixedCostForm?.get('costType')?.value?.value === 'FIXED_COST'
         ) {
             payload.projectCostModel = {
                 costType: 'FIXED_COST',
@@ -600,15 +610,16 @@ export class ExternalProjectSettingsComponent implements OnInit {
             });
     }
 
-    private getTechnologyHourlyRate(){
-
-        return this.fixedCostForm?.get('technologies')
+    private getTechnologyHourlyRate() {
+        return this.fixedCostForm
+            ?.get('technologies')
             ?.value?.map((tech: any) => {
-               return { 
-                technology : tech?.name,
-                hours : tech?.techHours,
-                rate : tech?.techRate
-               }
-            }) 
+                return {
+                    id: tech?.id || null,
+                    technology: tech?.name,
+                    hours: tech?.techHours,
+                    rate: tech?.techRate,
+                };
+            });
     }
 }
