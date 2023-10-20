@@ -287,12 +287,12 @@
                                     class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
                                 >
                                     <div
-                                        class="inventory-grid z-10 sticky top-0 grid grid-cols-7 gap-4 py-4 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 px-2"
+                                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                         matSortDisableClear
                                     >
-                                        <div class="col-span-2">Technology</div>
-                                        <div class="col-span-2">Hours</div>
-                                        <div class="col-span-2">Rate</div>
+                                        <div>Technology</div>
+                                        <div>Hours</div>
+                                        <div>Rate</div>
                                         <!-- <div>Action</div> -->
                                     </div>
                                     <ng-container>
@@ -311,20 +311,20 @@
                                                     *ngIf="
                                                         !technology?.value?.deleted
                                                     "
-                                                    class="flex flex-row items-center pt-2 border-b bg-white px-2"
+                                                    class="items-center border-b bg-white px-2"
                                                     [formGroupName]="i"
                                                 >
                                                     <div
-                                                        class="inventory-grid grid grid-cols-7 md:grid-cols-7 gap-6 py-2 items-center"
+                                                        class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
                                                     >
                                                         <div
-                                                            class="col-span-2 hidden md:block truncate -mt-5"
+                                                            class="hidden md:block truncate -mt-5"
                                                         >
                                                             {{
                                                                 technology?.value?.name
                                                             }}
                                                         </div>
-                                                        <div class="col-span-2"> 
+                                                        <div class=""> 
                                                             <mat-form-field
                                                                 [floatLabel]="'always'"
                                                                 class="w-full"
@@ -350,7 +350,7 @@
                                                             </mat-form-field>
                                                         </div>
 
-                                                        <div class="col-span-2">
+                                                        <div class="">
                                                             <mat-form-field
                                                                 [floatLabel]="'always'"
                                                                 class="w-full"
