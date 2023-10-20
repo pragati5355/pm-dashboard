@@ -246,11 +246,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
         this.externalProjectService.saveSettings(payload).subscribe(
             (res: any) => {
                 this.isLoading = false;
-                if (res?.status === 200) {
+                if (res?.statusCode === 200) {
                     this.snackBar.successSnackBar(res?.message);
                     this.dialogRef.close(true);
-                } else{
-                    this.snackBar.errorSnackBar(res?.message);
                 }
             },
             (err) => {

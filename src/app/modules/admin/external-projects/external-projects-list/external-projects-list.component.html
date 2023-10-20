@@ -32,7 +32,7 @@
                             ></mat-icon>
                         </mat-form-field>
                         <button
-                            *ngIf="userRole === 'ADMIN'"
+                            *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                             class="ml-4 px-8"
                             mat-flat-button
                             [color]="'primary'"
