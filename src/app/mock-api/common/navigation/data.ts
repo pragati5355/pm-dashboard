@@ -16,7 +16,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:table',
         link: '/projects',
-        allowedRoles : ['ADMIN', 'SALES', 'USER', 'PM']
+        allowedRoles : ['ADMIN', 'SALES', 'USER', 'PM', 'VENDOR']
     },
     {
         id: 'resources',
@@ -32,7 +32,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:view-grid-add',
         link: '/external-projects',
-        allowedRoles:['ADMIN', 'SALES', 'USER', 'PM']
+        allowedRoles:['ADMIN', 'SALES', 'USER', 'PM', 'VENDOR']
     },
     {
         id: 'profit-loss',
