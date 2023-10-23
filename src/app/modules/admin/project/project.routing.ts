@@ -14,7 +14,7 @@ export const projectRoutes: Route[] = [
                 component: AddProjectHomeComponent,
                 data: {
                     pageTitle: 'Add New Project',
-                    allowedRoles: ['ADMIN'],
+                    allowedRoles: ['ADMIN', 'PM'],
                 },
             },
             {
