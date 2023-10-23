@@ -555,7 +555,6 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
         const resourceCostModel = this.getResourceCostModel();
         const projectTechCostModel = this.getTechnologyHourlyRate();
-        console.log('projectTechCostModel : ', projectTechCostModel);
         payload.projectTechCostModel = projectTechCostModel;
 
         if (

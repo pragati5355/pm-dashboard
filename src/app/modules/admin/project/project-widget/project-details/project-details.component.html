@@ -1,38 +1,92 @@
 <div class="flex flex-col flex-auto w-full" *ngIf="!initialLoading">
-    <div
-        class="w-full max-w-screen-xl mx-auto pt-6 pr-6 pl-6"
-        *ngIf="!project?.repoProjectId && userRole === 'ADMIN'"
-    >
-        <fuse-alert [type]="'warning'">
-            <span fuseAlertTitle>Warning alert</span>
-            <div class="flex flex-wrap items-center">
-                This project is not assigned with the Bitbucket project yet.
-                Please assign it to your Bitbucket project
-                <button
-                    class="ml-4"
-                    mat-button
-                    [color]="'primary'"
-                    (click)="assignBitbucketProject()"
-                >
-                    <mat-spinner
-                        *ngIf="
-                            isBitbucketProjectListLoading;
-                            else buttonContentRef
-                        "
-                        [diameter]="24"
-                    ></mat-spinner>
-                    <span
-                        *ngIf="isBitbucketProjectListLoading"
-                        class="ml-2 mr-1"
-                        >Connecting to Bitbucket</span
+    <div class="w-full max-w-screen-xl mx-auto pt-6 pr-6 pl-6">
+        <div
+            class="py-2"
+            *ngIf="!project?.repoProjectId && userRole === 'ADMIN'"
+        >
+            <fuse-alert [type]="'warning'">
+                <span fuseAlertTitle>Warning alert</span>
+                <div class="flex flex-wrap items-center">
+                    This project is not assigned with the Bitbucket project yet.
+                    Please assign it to your Bitbucket project
+                    <button
+                        class="ml-4"
+                        mat-button
+                        [color]="'primary'"
+                        (click)="assignBitbucketProject()"
                     >
-                    <ng-template #buttonContentRef>
-                        <mat-icon class="icon-size-5">add_task</mat-icon>
-                        <span class="ml-2 mr-1">Assign Bitbucket Project</span>
-                    </ng-template>
-                </button>
-            </div>
-        </fuse-alert>
+                        <mat-spinner
+                            *ngIf="
+                                isBitbucketProjectListLoading;
+                                else buttonContentRef
+                            "
+                            [diameter]="24"
+                        ></mat-spinner>
+                        <span
+                            *ngIf="isBitbucketProjectListLoading"
+                            class="ml-2 mr-1"
+                            >Connecting to Bitbucket</span
+                        >
+                        <ng-template #buttonContentRef>
+                            <mat-icon class="icon-size-5">add_task</mat-icon>
+                            <span class="ml-2 mr-1">Assign Bitbucket Project</span>
+                        </ng-template>
+                    </button>
+                </div>
+            </fuse-alert>
+        </div>
+
+        <!-- <div class="py-2" 
+            *ngIf="(userRole === 'ADMIN' || userRole === 'PM') 
+            && (project?.startDate == null || project?.endDate == null)">
+            <fuse-alert [type]="'warning'">
+                <span fuseAlertTitle>Warning alert</span>
+                <div class="flex flex-wrap items-center">
+                    This project is not assigned with the Start and End Date yet.
+                    Please add it to your project.
+                    <button
+                        class="ml-4"
+                        mat-button
+                        [color]="'primary'"
+                        (click)="openEditProjectDialog()"
+                    >
+                        <mat-spinner
+                            *ngIf="isprojectStartEndDateAdded ; else buttonContentRef"
+                            [diameter]="24"
+                        ></mat-spinner>
+                        <ng-template #buttonContentRef>
+                            <mat-icon class="icon-size-5">add_task</mat-icon>
+                            <span class="ml-2 mr-1">Add start and end date</span>
+                        </ng-template>
+                    </button>
+                </div>
+            </fuse-alert>
+        </div> -->
+
+        <div class="py-2" *ngIf="(userRole === 'ADMIN' || userRole === 'PM') && (projectSettings?.projectCostModel == null)">
+            <fuse-alert [type]="'warning'">
+                <span fuseAlertTitle>Warning alert</span>
+                <div class="flex flex-wrap items-center">
+                    This project cost setting is not added in the setting of your project yet.
+                    Please add the cost setting of your project.
+                    <button
+                        class="ml-4"
+                        mat-button
+                        [color]="'primary'"
+                        (click)="openCostProjectSettingDialog()"
+                    >
+                        <mat-spinner
+                            *ngIf="isprojectCostSettingsAdded ; else buttonContent"
+                            [diameter]="24"
+                        ></mat-spinner>
+                        <ng-template #buttonContent>
+                            <mat-icon class="icon-size-5">add_task</mat-icon>
+                            <span class="ml-2 mr-1">Add cost setting</span>
+                        </ng-template>
+                    </button>
+                </div>
+            </fuse-alert>
+        </div>
     </div>
     <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
         <!-- Title and action buttons -->
