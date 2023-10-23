@@ -54,8 +54,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alreadyAssignedProjects: any[];
     isResourceOnBench: boolean = false;
     isShadowResource: boolean = false;
+    isapplicable : boolean = false;
     markResourceAsBench: boolean = false;
     markResourceAsShadow: boolean = false;
+    markResourceAsApplicable : boolean = false;
     selectable = true;
     removable = true;
     addOnBlur = false;
@@ -157,6 +159,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isShadowResource = value ? true : false;
     }
 
+    notApplicableForBilling(value : boolean){
+        this.isapplicable = value ? true : false;
+    }
+
     getSelectedEmail(email: string) {
         this.currentCapacity =
                 this.getCurrentResourceCapacity(this.data?.editData?.email) +
@@ -234,8 +240,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     private loadCheckBoxData() {
         this.isResourceOnBench = this.data?.editData?.isBench || false;
         this.isShadowResource = this.data?.editData?.isShadow || false;
+        // this.isapplicable = this.data?.editData?.isapplicable || false;
         this.markResourceAsBench = this.data?.editData?.isBench || false;
         this.markResourceAsShadow = this.data?.editData?.isShadow || false;
+        // this.markResourceAsApplicable = this.data?.editData?.isapplicable || false;
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
