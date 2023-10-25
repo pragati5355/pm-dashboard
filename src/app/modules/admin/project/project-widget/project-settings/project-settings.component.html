@@ -34,7 +34,7 @@
                 <form [formGroup]="fixedCostForm">
                     <div class="flex flex-col w-full">
                         <div class="w-full flex flex-col flex-wrap">
-                            <mat-label class="w-[400px]"
+                            <mat-label class="w-[400px] mb-1"
                                 >Select cost type
                                 <span class="text-gray-400"
                                     >(This setting can never be changed
@@ -58,52 +58,210 @@
                         </div>
 
                         <div
-                            class="w-[200px]"
                             *ngIf="
                                 fixedCostForm?.get('costType')?.value?.value ===
                                 'FIXED_COST'
                             "
                         >
-                            <mat-form-field class="w-full">
-                                <mat-label>Enter cost</mat-label>
-                                <input
-                                    type="number"
-                                    matInput
-                                    formControlName="costInput"
-                                    placeholder="Enter cost"
-                                    min="0"
-                                />
-                                <mat-error
-                                    *ngIf="
-                                        fixedCostForm
-                                            ?.get('costInput')
-                                            .hasError('required')
-                                    "
-                                >
-                                    Cost is <strong>required</strong>
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="
-                                        fixedCostForm
-                                            ?.get('costInput')
-                                            ?.hasError('pattern')
-                                    "
-                                >
-                                    <div>
-                                        Please enter valid <strong>cost</strong>
-                                    </div>
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="
-                                        fixedCostForm
-                                            ?.get('costInput')
-                                            ?.hasError('max')
-                                    "
-                                    class="text-red-500"
-                                >
-                                    <div>Cost must be less than 1000</div>
-                                </mat-error>
+                            <div class="w-full flex flex-col flex-wrap">
+                            <mat-label class="w-[400px] mb-1">Enter cost</mat-label>
+                            <mat-form-field class="w-[200px]">
+                                    <input
+                                        type="number"
+                                        matInput
+                                        formControlName="costInput"
+                                        placeholder="Enter cost"
+                                        min="0"
+                                    />
+                                    <mat-error
+                                        *ngIf="
+                                            fixedCostForm
+                                                ?.get('costInput')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Cost is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="
+                                            fixedCostForm
+                                                ?.get('costInput')
+                                                ?.hasError('pattern')
+                                        "
+                                    >
+                                        <div>
+                                            Please enter valid <strong>cost</strong>
+                                        </div>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="
+                                            fixedCostForm
+                                                ?.get('costInput')
+                                                ?.hasError('max')
+                                        "
+                                        class="text-red-500"
+                                    >
+                                        <div>Cost must be less than 1000</div>
+                                    </mat-error>
                             </mat-form-field>
+                            </div>
+
+                            <div class="w-full flex flex-col flex-wrap">
+                                <mat-label class="w-[400px] mb-1">Select Technologies Hourly Rate</mat-label>
+                                <mat-form-field 
+                                    [floatLabel]="'always'"
+                                    appearance="fill"
+                                    class="w-[200px] example-chip-list flex-0 mb-2">
+                                    <mat-chip-list #chipList>
+                                        <input
+                                            #technologyInput
+                                            placeholder="select technology"
+                                            formControlName="technology"
+                                            [matAutocomplete]="auto"
+                                            [matChipInputFor]="chipList"
+                                            [matChipInputSeparatorKeyCodes]="
+                                                separatorKeysCodes
+                                            "
+                                            [matChipInputAddOnBlur]="addOnBlur"
+                                            (matChipInputTokenEnd)="add($event)"
+                                            class="w-full"
+                                        />
+                                    </mat-chip-list>
+                                    <mat-autocomplete
+                                        #auto="matAutocomplete"
+                                        (optionSelected)="selected($event)"
+                                    >
+                                        <mat-option
+                                            *ngFor="let technology of selectTechnologyList"
+                                            [value]="technology"
+                                        >
+                                            {{ technology }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="fixedCostForm?.get('technology')?.hasError('required')">
+                                        <div>Add technology houry rate</div>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div
+                                *ngIf="technologies?.length > 0"
+                                class="flex w-2/3 sm:min-w-1/2 flex-col overflow-hidden mt-4"
+                            >
+                                <div
+                                    class="flex flex-col overflow-hidden sm:overflow-y-auto overflow-x-auto"
+                                >
+                                    <div
+                                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                        matSortDisableClear
+                                    >
+                                        <div>Technology</div>
+                                        <div>Hours</div>
+                                        <div>Rate</div>
+                                        <!-- <div>Action</div> -->
+                                    </div>
+                                    <ng-container>
+                                        <div
+                                            formArrayName="technologies"
+                                            class="grid shadow"
+                                        >
+                                            <ng-container
+                                                *ngFor="
+                                                    let technology of technologies?.controls;
+                                                    let i = index;
+                                                    let last = last
+                                                "
+                                            >
+                                                <form
+                                                    *ngIf="
+                                                        !technology?.value?.deleted
+                                                    "
+                                                    class="items-center border-b bg-white px-2"
+                                                    [formGroupName]="i"
+                                                >
+                                                    <div
+                                                        class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
+                                                    >
+                                                        <div
+                                                            class="hidden md:block truncate -mt-5"
+                                                        >
+                                                            {{
+                                                                technology?.value?.name
+                                                            }}
+                                                        </div>
+                                                        <div class=""> 
+                                                            <mat-form-field
+                                                                [floatLabel]="'always'"
+                                                                class="w-full"
+                                                            >
+                                                                <input
+                                                                    formControlName="techHours"
+                                                                    matInput
+                                                                    placeholder="Hours"
+                                                                    InputFormatter="numeric"
+                                                                    type="number"
+                                                                    min="0"
+                                                                />
+                                                                <mat-error
+                                                                    class="text-xs"
+                                                                    *ngIf="
+                                                                        technology.get(
+                                                                            'techHours'
+                                                                        )?.invalid
+                                                                    "
+                                                                >
+                                                                    Enter valid Hours
+                                                                </mat-error>
+                                                            </mat-form-field>
+                                                        </div>
+
+                                                        <div class="">
+                                                            <mat-form-field
+                                                                [floatLabel]="'always'"
+                                                                class="w-full"
+                                                            >
+                                                                <input
+                                                                    class=""
+                                                                    formControlName="techRate"
+                                                                    InputFormatter="numeric"
+                                                                    matInput
+                                                                    placeholder="Rate"
+                                                                    min="0"
+                                                                    type="number"
+                                                                />
+                                                                <mat-error
+                                                                    class="text-xs"
+                                                                    *ngIf="
+                                                                        technology.get(
+                                                                        'techRate'
+                                                                        )?.invalid
+                                                                    "
+                                                                >
+                                                                    Enter valid Rate
+                                                                </mat-error>
+                                                            </mat-form-field>
+                                                        </div>
+
+                                                        <div class="">
+                                                            <!-- <mat-icon
+                                                                class="cursor-pointer -mt-5 ml-1"
+                                                                color="warn"
+                                                                matTooltip="Remove"
+                                                                (click)="
+                                                                    removeTechnology(
+                                                                        i,
+                                                                        technology?.value
+                                                                    )
+                                                                "
+                                                                >cancel</mat-icon
+                                                            > -->
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

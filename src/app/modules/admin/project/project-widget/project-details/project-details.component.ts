@@ -20,6 +20,7 @@ import { LoggedInUserService } from '@modules/admin/common/services/logged-in-us
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ProjectSettingsComponent } from '../project-settings/project-settings.component';
 import { DownloadWorkLogComponent } from '../download-work-log/download-work-log.component';
+import { ExternalProjectSettingsComponent } from '@modules/admin/external-projects/external-project-settings/external-project-settings.component';
 
 @Component({
     selector: 'app-project-details',
@@ -42,6 +43,8 @@ export class ProjectDetailsComponent implements OnInit {
     crList = [];
     userRole: string = '';
     projectSettings: any;
+    isprojectCostSettingsAdded: boolean = false;
+    isprojectStartEndDateAdded : boolean = false;
 
     @Input() dataId: any;
     checked: false;
@@ -69,6 +72,7 @@ export class ProjectDetailsComponent implements OnInit {
         });
         this.getUserRole();
     }
+
     getProjectDetails() {
         this.initialLoading = true;
         this.projectService
@@ -103,6 +107,37 @@ export class ProjectDetailsComponent implements OnInit {
                     this.getProjectDetails();
                 }
             });
+    }
+
+    openCostProjectSettingDialog(){
+        this.isprojectCostSettingsAdded = true;
+        this.matDialog
+            .open(ExternalProjectSettingsComponent, {
+                disableClose: true,
+                width: '70%',
+                height: 'auto',
+                maxHeight: '90vh',
+                data: {
+                    projectModel: this.project,
+                    projectSettings: this.projectSettings,
+                    teamModel: this.teamMembers,
+                    showStep : 1,
+                },
+            })
+            .afterClosed()
+            .subscribe((result) => {
+                if (result) {
+                    this.initialLoading = true;
+                    this.getProjectDetails();
+                }
+        });
+        this.isprojectCostSettingsAdded = false;
+    }
+
+    openEditProjectDialog(){
+        this.isprojectStartEndDateAdded = true;
+        this.editProject();
+        this.isprojectStartEndDateAdded = false;
     }
 
     editProject() {
