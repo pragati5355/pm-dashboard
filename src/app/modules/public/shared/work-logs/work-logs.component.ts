@@ -48,9 +48,10 @@ export class WorkLogsComponent implements OnInit {
     }
 
     submit(){
-        
-        this.addTask();
-        
+        if(this.onLeave === false){
+            this.addTask();
+        }
+    
         if (this.tasks?.length === 0 && !this.onLeave) {
             this.snackBar.errorSnackBar('Please add task');
             return;
@@ -122,7 +123,7 @@ export class WorkLogsComponent implements OnInit {
 
         if (this.currentTaskIndex !== null) {
             this.tasks?.splice(this.currentTaskIndex, 1, task);
-        } else {
+        } else if(task?.timeSpent !== '' && task?.comment !== '') {
             this.tasks?.push(task);
         }
         this.currentDescriptionValue = '';
@@ -185,13 +186,14 @@ export class WorkLogsComponent implements OnInit {
                 this.initialLoading = false;
                 if (!res?.data?.expired) {
                     this.resourceData = res?.data;
-                } else {
+                } 
+                else {
                     this.router.navigate(['/wrong-url']);
                 }
             },
             (err) => {
                 this.initialLoading = false;
-                this.snackBar?.errorSnackBar('Somethin went wrong');
+                this.snackBar?.errorSnackBar('Something went wrong');
             }
         );
     }
