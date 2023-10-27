@@ -66,7 +66,7 @@ export class AddEditWorkLogComponent implements OnInit {
         }
         if (
             this.tasks?.length === 0 &&
-            this.onLeave === false &&
+            !this.onLeave &&
             this.data?.mode === 'ADD'
         ) {
             this.snackBar.errorSnackBar('Please add task');
@@ -154,7 +154,7 @@ export class AddEditWorkLogComponent implements OnInit {
         this.scrollToBottom();
         if (this.currentTaskIndex !== null) {
             this.tasks?.splice(this.currentTaskIndex, 1, task);
-        } else {
+        } else if(task?.worklogPerTask?.timeSpent !== '' && task?.worklogPerTask?.comment !== ''){
             this.tasks?.push(task);
         }
         this.currentDescriptionValue = '';
