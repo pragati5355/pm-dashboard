@@ -61,12 +61,12 @@ export class AddEditWorkLogComponent implements OnInit {
     }
 
     submit() {
-        if (this.data?.mode === 'ADD' && this.onLeave) {
+        if (this.data?.mode === 'ADD' && this.onLeave === false) {
             this.addTask();
         }
         if (
             this.tasks?.length === 0 &&
-            !this.onLeave &&
+            this.onLeave === false &&
             this.data?.mode === 'ADD'
         ) {
             this.snackBar.errorSnackBar('Please add task');
