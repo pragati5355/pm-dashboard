@@ -151,7 +151,7 @@
                                     class="grid gap-2 inventory-grid-list-inner-list-admin"
                                 >
                                     <div class="font-semibold"></div>
-                                    <div class="font-semibold">{{ totalHours || '0'}} h</div>
+                                    <div class="font-semibold">{{ (totalHours | number:'1.2-2') || '0'}} h</div>
                                 </div>
                             </div>
 
