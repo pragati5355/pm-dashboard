@@ -238,12 +238,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     private loadCheckBoxData() {
-        this.isResourceOnBench = this.data?.editData?.isBench || false;
-        this.isShadowResource = this.data?.editData?.isShadow || false;
-        // this.isapplicable = this.data?.editData?.isapplicable || false;
-        this.markResourceAsBench = this.data?.editData?.isBench || false;
-        this.markResourceAsShadow = this.data?.editData?.isShadow || false;
-        // this.markResourceAsApplicable = this.data?.editData?.isapplicable || false;
+        this.isResourceOnBench = this.data?.editData?.bench || false;
+        this.isShadowResource = this.data?.editData?.shadow || false;
+        this.markResourceAsBench = this.data?.editData?.bench || false;
+        this.markResourceAsShadow = this.data?.editData?.shadow || false;
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
