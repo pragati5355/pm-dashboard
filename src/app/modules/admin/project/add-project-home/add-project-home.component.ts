@@ -48,7 +48,10 @@ import {
     JiraTeamUser,
 } from './model/add-project-models';
 import { DatePipe } from '@angular/common';
-import { UPDATED_UTILIZATION_VALUES, UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
+import {
+    UPDATED_UTILIZATION_VALUES,
+    UTILIZATION_VALUES,
+} from '@modules/admin/external-projects/common/constants';
 import { EditProjectReasonDialogComponent } from '../edit-project-reason-dialog/edit-project-reason-dialog.component';
 import _ from 'lodash';
 
@@ -232,7 +235,6 @@ export class AddProjectHomeComponent
         const currentResource = this.originalTeamMemberList?.filter(
             (resource) => resource?.email === teamMember?.email
         );
-
 
         if (currentResource?.length > 0) {
             this.currentCapacity =
@@ -685,6 +687,19 @@ export class AddProjectHomeComponent
             return;
         }
 
+        let foundResourceEmail = false;
+
+        this.teamMemberList.forEach((item) => {
+            if (item?.email === this.projectTeam.get('email')?.value) {
+                foundResourceEmail = true;
+            }
+        });
+
+        // if (!foundResourceEmail && !this.editMemberMode) {
+        //     this.snackBar.errorSnackBar('Resource email not found');
+        //     return;
+        // }
+
         if (this.editMemberMode) {
             this.teamMemberList.map((item) => {
                 if (
@@ -713,7 +728,6 @@ export class AddProjectHomeComponent
                 return item;
             });
         } else {
-            
             this.teamMemberList = [
                 ...this.teamMemberList,
                 {
@@ -782,6 +796,12 @@ export class AddProjectHomeComponent
         this.markResourceAsShadow = false;
         this.resourceSpecificTechnologies = [];
         this.resourceTechnologyList = [];
+        this.projectTeam
+            ?.get('startDate')
+            ?.setValue(this.projectDetails?.get('startDate')?.value);
+        this.projectTeam
+            ?.get('endDate')
+            ?.setValue(this.projectDetails?.get('endDate')?.value);
     }
     submitProjectDetails() {
         if (!this.projectDetails.invalid) {
@@ -898,7 +918,9 @@ export class AddProjectHomeComponent
                 );
             } else {
                 this.isAddTeam = false;
-                this.snackBar.errorSnackBar('Please feel free to click Add button above, before submitting !');
+                this.snackBar.errorSnackBar(
+                    'Please feel free to click Add button above, before submitting !'
+                );
             }
         }
     }
