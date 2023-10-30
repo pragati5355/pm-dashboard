@@ -158,6 +158,8 @@ export class AddProjectHomeComponent
     resourcePrevDate: any;
     resourceNewDate: any;
     originalTeamMemberList: any[] = [];
+    currentResourceIdInEditMode: any;
+    currentResourceCapacityInEditMode: any;
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -206,6 +208,33 @@ export class AddProjectHomeComponent
             );
 
             if (newDate !== this.resourcePrevDate) {
+                const idx = this.teamMemberList?.findIndex(
+                    (item) => item?.id === this.currentResourceIdInEditMode
+                );
+                if (
+                    this.teamMemberList[idx]?.status === 'COMPLETED' &&
+                    this.currentResourceCapacityInEditMode === 0
+                ) {
+                    this.datePipe.transform(
+                        this.projectData?.startDate,
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                    );
+
+                    this.projectTeam
+                        ?.get('endDate')
+                        ?.setValue(
+                            this.datePipe.transform(
+                                this.teamMemberList[idx]?.endDate,
+                                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                            )
+                        );
+                    this.snackBar.errorSnackBar(
+                        "Can't extend resource date becauses resource is fully utilized on different project"
+                    );
+
+                    return;
+                }
+
                 const dialogRef = this.dialog.open(
                     EditProjectReasonDialogComponent,
                     {
@@ -230,6 +259,7 @@ export class AddProjectHomeComponent
     }
 
     editMember(index: number, teamMember: any) {
+        this.currentResourceIdInEditMode = teamMember?.id;
         this.getAvailableCapacity(teamMember?.email);
 
         const currentResource = this.originalTeamMemberList?.filter(
@@ -321,6 +351,7 @@ export class AddProjectHomeComponent
             return item?.email === email;
         });
         this.currentCapacity = value[0]?.capacity;
+        this.currentResourceCapacityInEditMode = value[0]?.capacity;
     }
 
     private findTeamMember(id) {
