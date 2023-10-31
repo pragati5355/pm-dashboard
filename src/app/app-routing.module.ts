@@ -89,6 +89,13 @@ export const appRoutes: Routes = [
                         './modules/admin/profit-loss/profit-loss.module'
                     ).then((m) => m.ProfitLossModule),
             },
+            {
+                path: 'mentee',
+                loadChildren: () =>
+                    import('./modules/admin/mentee/mentee.module').then(
+                        (m) => m.MenteeModule
+                    ),
+            },
         ],
     },
     {

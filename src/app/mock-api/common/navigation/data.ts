@@ -27,6 +27,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         allowedRoles: ['ADMIN', 'SALES', 'HR'],
     },
     {
+        id: 'mentee',
+        title: 'Mentee',
+        type: 'basic',
+        icon: 'heroicons_outline:users',
+        link: '/mentee',
+        // allowedRoles: ['ADMIN', 'SALES', 'HR'],
+    },
+    {
         id: 'external-projects',
         title: 'External Projects',
         type: 'basic',
