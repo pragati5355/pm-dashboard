@@ -266,11 +266,6 @@ export class AddProjectHomeComponent
             (resource) => resource?.email === teamMember?.email
         );
 
-        if (currentResource?.length > 0) {
-            this.currentCapacity =
-                this.currentCapacity + (currentResource[0]?.utilization || 0);
-        }
-
         this.editResourceEndDateReason = teamMember?.extendedReason
             ? teamMember?.extendedReason
             : '';
@@ -303,6 +298,21 @@ export class AddProjectHomeComponent
                   )
                 : null,
         });
+
+        if (currentResource?.length > 0) {
+            if (teamMember?.status === 'ACTIVE') {
+                this.currentCapacity =
+                    this.currentCapacity +
+                    (currentResource[0]?.utilization || 0);
+            } else if (teamMember?.status === 'COMPLETED') {
+                this.projectTeam.patchValue({
+                    tm_utilization:
+                        this.currentCapacity === 0
+                            ? teamMember?.utilization
+                            : this.currentCapacity,
+                });
+            }
+        }
 
         this.markResourceAsBench = teamMember?.bench;
         this.markResourceAsShadow = teamMember?.shadow;
@@ -748,7 +758,10 @@ export class AddProjectHomeComponent
             return;
         }
 
-        if (this.projectTeam?.get('team_jira_user')?.value === '') {
+        if (
+            this.projectTeam?.get('team_jira_user')?.value === '' ||
+            this.projectTeam?.get('team_jira_user')?.value === null
+        ) {
             this.snackBar.errorSnackBar('Select Jira Username');
             return;
         }
@@ -773,6 +786,11 @@ export class AddProjectHomeComponent
                 foundResourceEmail = true;
             }
         });
+
+        if (this.projectTeam?.invalid) {
+            this.snackBar.errorSnackBar('Please enter valid data');
+            return;
+        }
 
         // if (!foundResourceEmail && !this.editMemberMode) {
         //     this.snackBar.errorSnackBar('Resource email not found');
@@ -881,6 +899,7 @@ export class AddProjectHomeComponent
         this.projectTeam
             ?.get('endDate')
             ?.setValue(this.projectDetails?.get('endDate')?.value);
+        this.editMemberMode = false;
     }
     submitProjectDetails() {
         if (!this.projectDetails.invalid) {
