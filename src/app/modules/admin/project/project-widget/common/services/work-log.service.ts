@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root',
 })
 export class WorkLogService {
-    saveWorklogsUrl = AppConstants['PROJECT_API_URL'] + '/save-worklog-portal';
+    saveWorklogsUrl = API_LIST.SPRING_BOOT_URL + '/worklog';
     downloadWorkLogUrl =
         AppConstants['PROJECT_API_URL'] + '/create-worklog-sheet';
     getResourceUrl = AppConstants['PROJECT_API_URL'] + '/project-team';
