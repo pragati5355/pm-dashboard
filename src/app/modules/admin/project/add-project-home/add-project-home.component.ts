@@ -201,7 +201,7 @@ export class AddProjectHomeComponent
     }
 
     resourceEndDate(event: any) {
-        if (this.editProject) {
+        if (this.editProject && this.editMemberMode) {
             const newDate = this.datePipe.transform(
                 event?.target?.value,
                 'dd-MM-yyyy'
