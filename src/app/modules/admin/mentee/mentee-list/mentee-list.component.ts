@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 
 @Component({
@@ -7,6 +9,7 @@ import { LoggedInUserService } from '@modules/admin/common/services/logged-in-us
     styleUrls: ['./mentee-list.component.scss'],
 })
 export class MenteeListComponent implements OnInit {
+    @ViewChild('matDrawer', { static: true }) matDrawer!: MatDrawer;
     userRole: string = '';
     loggedInUserId: number;
     initialLoading: boolean = false;
@@ -37,10 +40,20 @@ export class MenteeListComponent implements OnInit {
             ],
         },
     ];
-    constructor(private loggedInUserService: LoggedInUserService) {}
+    constructor(
+        private loggedInUserService: LoggedInUserService,
+        private router: Router,
+        private _activatedRoute: ActivatedRoute
+    ) {}
 
     ngOnInit(): void {
         this.getUserRole();
+    }
+
+    viewMentee() {
+        const rpit = this.router.navigate(['./view/', 78], {
+            relativeTo: this._activatedRoute,
+        });
     }
 
     private getUserRole() {

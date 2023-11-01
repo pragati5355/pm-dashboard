@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MenteeHomeComponent } from './mentee-home/mentee-home.component';
 import { MenteeListComponent } from './mentee-list/mentee-list.component';
+import { ViewMenteeComponent } from './view-mentee/view-mentee.component';
 
 const routes: Routes = [
     {
@@ -14,6 +15,12 @@ const routes: Routes = [
                 data: {
                     pageTitle: 'Mentee',
                 },
+                children: [
+                    {
+                        path: 'view/:id',
+                        component: ViewMenteeComponent,
+                    },
+                ],
             },
             {
                 path: '',
