@@ -26,10 +26,14 @@
     >
         <div class="w-full">
             <div class="w-full p-2 sm:px-8 rounded-lg bg-white">
+                <mat-hint *ngIf="disableUpdate" class="text-red-500"
+                    >This resource has been released from this project, please
+                    extend its end date so that it can be updated.</mat-hint
+                >
                 <form
                     *ngIf="addResourceForm"
                     [formGroup]="addResourceForm"
-                    class="mt-5 mb-5"
+                    class="mt-2 mb-5"
                 >
                     <div class="w-full flex flex-1">
                         <div class="w-full mr-3">
@@ -81,10 +85,11 @@
                                     "
                                 ></mat-icon>
                             </mat-form-field>
-                            <mat-error
-                                    *ngIf="currentCapacity === 0"
-                                >
-                                    <div>Resource is fully utilized on other projects.</div>
+                            <mat-error *ngIf="currentCapacity === 0">
+                                <div>
+                                    Resource is fully utilized on other
+                                    projects.
+                                </div>
                             </mat-error>
                         </div>
                         <div class="w-full">
@@ -179,6 +184,7 @@
                                     [min]="
                                         addResourceForm.get('startDate').value
                                     "
+                                    (dateChange)="resourceEndDate($event)"
                                 />
                                 <mat-datepicker-toggle
                                     matSuffix
@@ -316,7 +322,9 @@
                                             let utilization of newUtilizationValues
                                         "
                                         [value]="utilization?.value"
-                                        [disabled]="utilization?.value > currentCapacity"
+                                        [disabled]="
+                                            utilization?.value > currentCapacity
+                                        "
                                     >
                                         {{ utilization?.label }}
                                     </mat-option>
@@ -407,7 +415,11 @@
                             [color]="'primary'"
                             (click)="submitResourceData()"
                             [disabled]="submitInProcess"
-                            [disabled]="currentCapacity === 0 ? true : false"
+                            [disabled]="
+                                currentCapacity === 0
+                                    ? true
+                                    : false || disableUpdate
+                            "
                         >
                             <span class="mx-2">{{
                                 mode === "EDIT" ? "Update" : "Add"
