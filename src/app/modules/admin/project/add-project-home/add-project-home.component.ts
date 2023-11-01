@@ -160,6 +160,8 @@ export class AddProjectHomeComponent
     originalTeamMemberList: any[] = [];
     currentResourceIdInEditMode: any;
     currentResourceCapacityInEditMode: any;
+    currentResourceInEditMode: any;
+    disableUpdate: boolean = false;
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -255,11 +257,30 @@ export class AddProjectHomeComponent
                     }
                 });
             }
+
+            if (newDate > this.resourcePrevDate) {
+                this.disableUpdate = false;
+                this.projectTeam?.get('tm_utilization')?.enable();
+            } else {
+                this.disableUpdate = true;
+                this.projectTeam?.get('tm_utilization')?.disable();
+                this.getAvailableCapacity(
+                    this.currentResourceInEditMode?.email
+                );
+                this.projectTeam.patchValue({
+                    tm_utilization:
+                        this.currentCapacity === 0
+                            ? this.currentResourceInEditMode?.utilization
+                            : this.currentCapacity,
+                });
+            }
         }
     }
 
     editMember(index: number, teamMember: any) {
+        this.disableUpdate = false;
         this.currentResourceIdInEditMode = teamMember?.id;
+        this.currentResourceInEditMode = teamMember;
         this.getAvailableCapacity(teamMember?.email);
 
         const currentResource = this.originalTeamMemberList?.filter(
@@ -298,13 +319,17 @@ export class AddProjectHomeComponent
                   )
                 : null,
         });
-
+        this.projectTeam?.get('tm_utilization')?.enable();
         if (currentResource?.length > 0) {
             if (teamMember?.status === 'ACTIVE') {
                 this.currentCapacity =
                     this.currentCapacity +
                     (currentResource[0]?.utilization || 0);
             } else if (teamMember?.status === 'COMPLETED') {
+                if (this.currentCapacity > 0) {
+                    this.disableUpdate = true;
+                    this.projectTeam?.get('tm_utilization')?.disable();
+                }
                 this.projectTeam.patchValue({
                     tm_utilization:
                         this.currentCapacity === 0
