@@ -48,7 +48,10 @@ import {
     JiraTeamUser,
 } from './model/add-project-models';
 import { DatePipe } from '@angular/common';
-import { UPDATED_UTILIZATION_VALUES, UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
+import {
+    UPDATED_UTILIZATION_VALUES,
+    UTILIZATION_VALUES,
+} from '@modules/admin/external-projects/common/constants';
 import { EditProjectReasonDialogComponent } from '../edit-project-reason-dialog/edit-project-reason-dialog.component';
 import _ from 'lodash';
 
@@ -155,6 +158,8 @@ export class AddProjectHomeComponent
     resourcePrevDate: any;
     resourceNewDate: any;
     originalTeamMemberList: any[] = [];
+    currentResourceIdInEditMode: any;
+    currentResourceCapacityInEditMode: any;
 
     constructor(
         private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -196,13 +201,40 @@ export class AddProjectHomeComponent
     }
 
     resourceEndDate(event: any) {
-        if (this.editProject) {
+        if (this.editProject && this.editMemberMode) {
             const newDate = this.datePipe.transform(
                 event?.target?.value,
                 'dd-MM-yyyy'
             );
 
             if (newDate !== this.resourcePrevDate) {
+                const idx = this.teamMemberList?.findIndex(
+                    (item) => item?.id === this.currentResourceIdInEditMode
+                );
+                if (
+                    this.teamMemberList[idx]?.status === 'COMPLETED' &&
+                    this.currentResourceCapacityInEditMode === 0
+                ) {
+                    this.datePipe.transform(
+                        this.projectData?.startDate,
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                    );
+
+                    this.projectTeam
+                        ?.get('endDate')
+                        ?.setValue(
+                            this.datePipe.transform(
+                                this.teamMemberList[idx]?.endDate,
+                                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                            )
+                        );
+                    this.snackBar.errorSnackBar(
+                        "Can't extend resource date becauses resource is fully utilized on different project"
+                    );
+
+                    return;
+                }
+
                 const dialogRef = this.dialog.open(
                     EditProjectReasonDialogComponent,
                     {
@@ -227,17 +259,12 @@ export class AddProjectHomeComponent
     }
 
     editMember(index: number, teamMember: any) {
+        this.currentResourceIdInEditMode = teamMember?.id;
         this.getAvailableCapacity(teamMember?.email);
 
         const currentResource = this.originalTeamMemberList?.filter(
             (resource) => resource?.email === teamMember?.email
         );
-
-
-        if (currentResource?.length > 0) {
-            this.currentCapacity =
-                this.currentCapacity + (currentResource[0]?.utilization || 0);
-        }
 
         this.editResourceEndDateReason = teamMember?.extendedReason
             ? teamMember?.extendedReason
@@ -271,6 +298,21 @@ export class AddProjectHomeComponent
                   )
                 : null,
         });
+
+        if (currentResource?.length > 0) {
+            if (teamMember?.status === 'ACTIVE') {
+                this.currentCapacity =
+                    this.currentCapacity +
+                    (currentResource[0]?.utilization || 0);
+            } else if (teamMember?.status === 'COMPLETED') {
+                this.projectTeam.patchValue({
+                    tm_utilization:
+                        this.currentCapacity === 0
+                            ? teamMember?.utilization
+                            : this.currentCapacity,
+                });
+            }
+        }
 
         this.markResourceAsBench = teamMember?.bench;
         this.markResourceAsShadow = teamMember?.shadow;
@@ -319,6 +361,7 @@ export class AddProjectHomeComponent
             return item?.email === email;
         });
         this.currentCapacity = value[0]?.capacity;
+        this.currentResourceCapacityInEditMode = value[0]?.capacity;
     }
 
     private findTeamMember(id) {
@@ -557,6 +600,7 @@ export class AddProjectHomeComponent
                     '.atlassian.net',
                 email: this.projectSetting?.value?.email,
                 password: this.projectSetting?.value?.token,
+                jiraKey: this.projectSetting?.get('project')?.value,
             };
             this.submitInProcess = true;
             this._authService.connectJira(payload).subscribe(
@@ -589,6 +633,52 @@ export class AddProjectHomeComponent
                                                 item.key ==
                                                 this.settingProjectName
                                         );
+
+                                    payload.jiraKey = result?.project;
+
+                                    this.ProjectService.getJiraUser(
+                                        payload
+                                    ).subscribe(
+                                        (res: any) => {
+                                            this.submitInProcess = false;
+                                            if (res?.data?.length > 0) {
+                                                this.jiraUsers = res?.data;
+                                                this.jiraTeamUsers = res?.data;
+                                                if (this.editProject == true) {
+                                                    let projectManagerdata =
+                                                        this.jiraUsers?.filter(
+                                                            (JiraUsers: any) =>
+                                                                JiraUsers.displayName ==
+                                                                this
+                                                                    .managerEditTeamLIst[0]
+                                                                    ?.jiraUser
+                                                        );
+                                                    this.projectTeam.patchValue(
+                                                        {
+                                                            jira_user:
+                                                                projectManagerdata[0]
+                                                                    ? projectManagerdata[0]
+                                                                    : null,
+                                                        }
+                                                    );
+                                                }
+                                            } else {
+                                                this.submitInProcess = false;
+                                                if (res?.data?.error) {
+                                                    this.snackBar.errorSnackBar(
+                                                        res?.data?.error
+                                                    );
+                                                } else {
+                                                    this.snackBar.errorSnackBar(
+                                                        'Jira user not found'
+                                                    );
+                                                }
+                                            }
+                                        },
+                                        (error) => {
+                                            this.submitInProcess = false;
+                                        }
+                                    );
                                 }
                             });
                         }
@@ -599,6 +689,7 @@ export class AddProjectHomeComponent
                                     item.key == this.settingProjectName
                             );
                         }
+
                         this.ProjectService.getJiraUser(payload).subscribe(
                             (res: any) => {
                                 this.submitInProcess = false;
@@ -667,7 +758,10 @@ export class AddProjectHomeComponent
             return;
         }
 
-        if (this.projectTeam?.get('team_jira_user')?.value === '') {
+        if (
+            this.projectTeam?.get('team_jira_user')?.value === '' ||
+            this.projectTeam?.get('team_jira_user')?.value === null
+        ) {
             this.snackBar.errorSnackBar('Select Jira Username');
             return;
         }
@@ -684,6 +778,24 @@ export class AddProjectHomeComponent
             this.snackBar.errorSnackBar('Add technologies');
             return;
         }
+
+        let foundResourceEmail = false;
+
+        this.teamMemberList.forEach((item) => {
+            if (item?.email === this.projectTeam.get('email')?.value) {
+                foundResourceEmail = true;
+            }
+        });
+
+        if (this.projectTeam?.invalid) {
+            this.snackBar.errorSnackBar('Please enter valid data');
+            return;
+        }
+
+        // if (!foundResourceEmail && !this.editMemberMode) {
+        //     this.snackBar.errorSnackBar('Resource email not found');
+        //     return;
+        // }
 
         if (this.editMemberMode) {
             this.teamMemberList.map((item) => {
@@ -713,7 +825,6 @@ export class AddProjectHomeComponent
                 return item;
             });
         } else {
-            
             this.teamMemberList = [
                 ...this.teamMemberList,
                 {
@@ -782,6 +893,13 @@ export class AddProjectHomeComponent
         this.markResourceAsShadow = false;
         this.resourceSpecificTechnologies = [];
         this.resourceTechnologyList = [];
+        this.projectTeam
+            ?.get('startDate')
+            ?.setValue(this.projectDetails?.get('startDate')?.value);
+        this.projectTeam
+            ?.get('endDate')
+            ?.setValue(this.projectDetails?.get('endDate')?.value);
+        this.editMemberMode = false;
     }
     submitProjectDetails() {
         if (!this.projectDetails.invalid) {
@@ -898,7 +1016,9 @@ export class AddProjectHomeComponent
                 );
             } else {
                 this.isAddTeam = false;
-                this.snackBar.errorSnackBar('Please feel free to click Add button above, before submitting !');
+                this.snackBar.errorSnackBar(
+                    'Please feel free to click Add button above, before submitting !'
+                );
             }
         }
     }
