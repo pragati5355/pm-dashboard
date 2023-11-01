@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { UPDATED_UTILIZATION_VALUES } from '@modules/admin/external-projects/common/constants';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
     selector: 'app-add-cr-resource-dialog',
@@ -56,6 +57,7 @@ export class AddCrResourceDialogComponent implements OnInit {
     currentResourceTechnologyList: any[] = [];
     isEmailSelected: boolean = false;
     showNoOfHoursField: boolean = false;
+    disableUpdate: boolean = false;
 
     constructor(
         private matDialogRef: MatDialogRef<AddCrResourceDialogComponent>,
@@ -186,6 +188,34 @@ export class AddCrResourceDialogComponent implements OnInit {
         return arr.length ? arr : [{ email: '' }];
     }
 
+    resourceEndDate(event: any) {
+        const newDate = this.datePipe.transform(
+            event?.target?.value,
+            'dd-MM-yyyy'
+        );
+        const prevDate = this.datePipe.transform(
+            this.data?.editData?.endDate,
+            'dd-MM-yyyy'
+        );
+        if (newDate > prevDate) {
+            this.disableUpdate = false;
+            this.addResourceForm.get('utilization')?.enable();
+        } else {
+            this.disableUpdate = true;
+            this.addResourceForm.get('utilization')?.disable();
+            this.addResourceForm?.patchValue({
+                utilization:
+                    this.getCurrentResourceCapacity(
+                        this.data?.editData?.email
+                    ) <= 0
+                        ? this.data?.editData?.utilization
+                        : this.getCurrentResourceCapacity(
+                              this.data?.editData?.email
+                          ),
+            });
+        }
+    }
+
     private loadData() {
         this.emailList = this.data?.developerEmails;
         this.loadCheckBoxData();
@@ -203,6 +233,14 @@ export class AddCrResourceDialogComponent implements OnInit {
                         this.data?.editData?.email
                     ) + this.data?.editData?.utilization;
             } else {
+                if (
+                    this.getCurrentResourceCapacity(
+                        this.data?.editData?.email
+                    ) > 0
+                ) {
+                    this.disableUpdate = true;
+                    this.addResourceForm.get('utilization')?.disable();
+                }
                 this.addResourceForm?.patchValue({
                     utilization:
                         this.getCurrentResourceCapacity(
