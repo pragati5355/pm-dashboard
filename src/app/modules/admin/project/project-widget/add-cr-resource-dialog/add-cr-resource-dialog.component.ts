@@ -192,15 +192,32 @@ export class AddCrResourceDialogComponent implements OnInit {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         this.userID = this.authService.getUser()?.userId;
-        this.checkEditMode();
     }
 
     private checkEditMode() {
         if (this.mode === 'EDIT') {
             this.disableEmailField = true;
-            this.currentCapacity =
-                this.getCurrentResourceCapacity(this.data?.editData?.email) +
-                this.data?.editData?.utilization;
+            if (this.data?.editData?.status === 'ACTIVE') {
+                this.currentCapacity =
+                    this.getCurrentResourceCapacity(
+                        this.data?.editData?.email
+                    ) + this.data?.editData?.utilization;
+            } else {
+                this.addResourceForm?.patchValue({
+                    utilization:
+                        this.getCurrentResourceCapacity(
+                            this.data?.editData?.email
+                        ) <= 0
+                            ? this.data?.editData?.utilization
+                            : this.getCurrentResourceCapacity(
+                                  this.data?.editData?.email
+                              ),
+                });
+
+                this.currentCapacity = this.getCurrentResourceCapacity(
+                    this.data?.editData?.email
+                );
+            }
         }
     }
 
@@ -283,6 +300,7 @@ export class AddCrResourceDialogComponent implements OnInit {
             );
 
         this.patchValuesInEditMode();
+        this.checkEditMode();
         this.addEmailFilteringAndSubscription();
         if (this.mode === 'EDIT') {
             this.addResourceForm.controls['email'].disable();

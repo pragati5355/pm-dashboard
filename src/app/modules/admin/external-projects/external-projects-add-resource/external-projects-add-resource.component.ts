@@ -165,8 +165,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
 
     getSelectedEmail(email: string) {
         this.currentCapacity =
-                this.getCurrentResourceCapacity(this.data?.editData?.email) +
-                this.data?.editData?.utilization;
+            this.getCurrentResourceCapacity(this.data?.editData?.email) +
+            this.data?.editData?.utilization;
         this.addResourceForm.get('utilization').setValue(null);
         this.isEmailSelected = true;
         this.alltechnologys = [];
@@ -224,16 +224,32 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
-        this.checkEditMode();
     }
 
     private checkEditMode() {
         if (this.mode === 'EDIT') {
             this.disableEmailField = true;
-            this.currentCapacity =
-                this.getCurrentResourceCapacity(this.data?.editData?.email) +
-                this.data?.editData?.utilization;
-            this.cd.detectChanges();
+            if (this.data?.editData?.status === 'ACTIVE') {
+                this.currentCapacity =
+                    this.getCurrentResourceCapacity(
+                        this.data?.editData?.email
+                    ) + this.data?.editData?.utilization;
+            } else {
+                this.addResourceForm?.patchValue({
+                    utilization:
+                        this.getCurrentResourceCapacity(
+                            this.data?.editData?.email
+                        ) <= 0
+                            ? this.data?.editData?.utilization
+                            : this.getCurrentResourceCapacity(
+                                  this.data?.editData?.email
+                              ),
+                });
+
+                this.currentCapacity = this.getCurrentResourceCapacity(
+                    this.data?.editData?.email
+                );
+            }
         }
     }
 
@@ -309,6 +325,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             );
 
         this.patchValuesInEditMode();
+        this.checkEditMode();
         this.addEmailFilteringAndSubscription();
         if (this.mode === 'EDIT') {
             this.addResourceForm.controls['email'].disable();
