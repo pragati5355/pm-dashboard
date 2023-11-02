@@ -19,12 +19,17 @@
         ></mat-icon>
     </button>
 </div>
+
 <form
     *ngIf="addResourceForm"
     [formGroup]="addResourceForm"
     class="mt-12 overscroll-contain"
 >
-    <div class="w-full flex flex-1">
+    <mat-hint *ngIf="disableUpdate" class="text-red-500"
+        >This resource has been released from this project, please extend its
+        end date so that it can be updated.</mat-hint
+    >
+    <div class="w-full flex flex-1 mt-2">
         <div class="w-full mr-3">
             <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
                 <mat-label class="">Email</mat-label>
@@ -126,6 +131,7 @@
                     [disabled]="currentCapacity === 0 ? true : false"
                     [min]="addResourceForm.get('startDate').value"
                     [max]="this.data?.projectEndDate"
+                    (dateChange)="resourceEndDate($event)"
                 />
                 <mat-datepicker-toggle
                     matSuffix
@@ -311,7 +317,7 @@
             [color]="'primary'"
             (click)="submitResourceData()"
             [disabled]="submitInProcess"
-            [disabled]="currentCapacity === 0 ? true : false"
+            [disabled]="currentCapacity === 0 ? true : false || disableUpdate"
         >
             <span class="mx-2">{{ mode === "EDIT" ? "Update" : "Add" }}</span>
             <mat-progress-spinner
