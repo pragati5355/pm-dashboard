@@ -12,6 +12,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DiffDatePipe } from './pipes/diff-date.pipe';
 import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.component';
+import { ViewFormComponent } from './view-form/view-form.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 @NgModule({
     declarations: [
         MenteeHomeComponent,
@@ -19,6 +21,7 @@ import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.com
         ViewMenteeComponent,
         DiffDatePipe,
         MenteeFormListComponent,
+        ViewFormComponent,
     ],
     imports: [
         CommonModule,
@@ -28,6 +31,7 @@ import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.com
         MatSidenavModule,
         MatProgressBarModule,
         MatTooltipModule,
+        NgxExtendedPdfViewerModule,
     ],
 })
 export class MenteeModule {}
