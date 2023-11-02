@@ -65,6 +65,10 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     mode: 'edit' | 'add';
     emailList: any[] = [];
     loadingAllEmails: boolean = false;
+    personalDetailsArrow : boolean = true;
+    technologyArrow : boolean = false;
+    otherSkillsArrow : boolean = false;
+    certificationArrow : boolean = false;
     resourceId: any;
     existingResource: ResourceModel;
 
@@ -92,6 +96,22 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         this.addRouteSubscription();
         this.initializeForm();
         this.userData = this._authService.getUser();
+    }
+
+    onClickPersonalDetailsArrow(value : boolean){
+        this.personalDetailsArrow = value;
+    }
+
+    onClickTechnologyArrow(value : boolean) {
+        this.technologyArrow = value;
+    }
+
+    onClickOtherSkillsArrow(value : boolean){
+        this.otherSkillsArrow = value;
+    }
+
+    onClickCertificationArrow(value : boolean) {
+        this.certificationArrow = value;
     }
 
     getAvtarInit() {
