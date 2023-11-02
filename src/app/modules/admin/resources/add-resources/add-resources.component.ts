@@ -37,6 +37,10 @@ import { DatePipe } from '@angular/common';
 import moment from 'moment';
 import { ResourcesService } from '../common/services/resources.service';
 import { ResourceModel } from '../common/models/resource.model';
+import { TECHNOLOGIES } from '@modules/public/resource/common';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { AddSkillAndIntegrationComponent } from '@modules/public/resource/add-skill-and-integration/add-skill-and-integration.component';
 export class Technology {
     constructor(public id: number, public name: string) {}
 }
@@ -71,6 +75,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     certificationArrow : boolean = false;
     resourceId: any;
     existingResource: ResourceModel;
+    integrations: any = TECHNOLOGIES?.integrations;
 
     constructor(
         private _formBuilder: FormBuilder,
@@ -80,6 +85,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
         private datePipe: DatePipe,
+        private dialog: MatDialog,
         private resourceService: ResourcesService
     ) {}
 
@@ -266,31 +272,75 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         // Return if canceled
     }
 
+    addSkillAndIntegrations() {
+        const dialogRef = this.dialog.open(AddSkillAndIntegrationComponent, {
+            disableClose: true,
+            width: '98%',
+            maxHeight: '700px',
+            maxWidth: '700px',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                integrations: this.integrations,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                this.integrations.push(...result);
+
+                const integration = (<FormArray>(
+                    this.resourcesForm.get('integrations')
+                )) as FormArray;
+
+                result?.map((item) => {
+                    if (item?.checked) {
+                        integration.push(new FormControl(item));
+                    }
+                });
+            }
+        });
+    }
+
+    onCheckBoxIntergationsChange(selectedOption: MatCheckboxChange) {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        if (selectedOption?.checked) {
+            integration.push(new FormControl(selectedOption.source.value));
+        } else {
+            const i = integration?.controls.findIndex(
+                (x) => x.value === selectedOption.source.value
+            );
+            integration?.removeAt(i);
+        }
+    }
+
     fetchEditData(id: number) {
         let payload = { id: id };
         this.initialLoading = true;
-        this.ProjectService.getresource(payload).subscribe(
-            (res: any) => {
-                if (res?.data && !res?.error) {
-                    this.existingResource = res?.data;
-                    this.resourcesForm?.addControl(
-                        'id',
-                        this._formBuilder.control(this.existingResource?.id)
-                    );
-                    this.resourcesForm?.patchValue(this.existingResource);
-                    this.setTechnologiesListForUpdate();
+        // this.ProjectService.getresource(payload).subscribe(
+        //     (res: any) => {
+        //         if (res?.data && !res?.error) {
+        //             this.existingResource = res?.data;
+        //             this.resourcesForm?.addControl(
+        //                 'id',
+        //                 this._formBuilder.control(this.existingResource?.id)
+        //             );
+        //             this.resourcesForm?.patchValue(this.existingResource);
+        //             this.setTechnologiesListForUpdate();
 
-                    this.setDateOfJoiningForUpdate();
-                }
-                this.initialLoading = false;
-                if (res.tokenExpire == true) {
-                    this._authService.updateAndReload(window.location);
-                }
-            },
-            (error) => {
-                this.initialLoading = false;
-            }
-        );
+        //             this.setDateOfJoiningForUpdate();
+        //         }
+        //         this.initialLoading = false;
+        //         if (res.tokenExpire == true) {
+        //             this._authService.updateAndReload(window.location);
+        //         }
+        //     },
+        //     (error) => {
+        //         this.initialLoading = false;
+        //     }
+        // );
     }
 
     private setDateOfJoiningForUpdate() {
@@ -413,6 +463,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 technology: [],
                 technologies: this._formBuilder.array([]),
                 pmOrMentorEmail: [''],
+                integrations: this._formBuilder.array([]),
             },
             {
                 validator: [MonthValdation('month')],
