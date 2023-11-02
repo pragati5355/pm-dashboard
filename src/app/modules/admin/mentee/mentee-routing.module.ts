@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.component';
 import { MenteeHomeComponent } from './mentee-home/mentee-home.component';
 import { MenteeListComponent } from './mentee-list/mentee-list.component';
 import { ViewMenteeComponent } from './view-mentee/view-mentee.component';
@@ -21,6 +22,13 @@ const routes: Routes = [
                         component: ViewMenteeComponent,
                     },
                 ],
+            },
+            {
+                path: 'form-list/:id',
+                component: MenteeFormListComponent,
+                data: {
+                    pageTitle: '1 to 1 Forms',
+                },
             },
             {
                 path: '',

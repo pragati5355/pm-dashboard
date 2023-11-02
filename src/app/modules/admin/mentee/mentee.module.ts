@@ -11,12 +11,14 @@ import { ViewMenteeComponent } from './view-mentee/view-mentee.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DiffDatePipe } from './pipes/diff-date.pipe';
+import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.component';
 @NgModule({
     declarations: [
         MenteeHomeComponent,
         MenteeListComponent,
         ViewMenteeComponent,
         DiffDatePipe,
+        MenteeFormListComponent,
     ],
     imports: [
         CommonModule,
