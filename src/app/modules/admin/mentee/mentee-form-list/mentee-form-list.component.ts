@@ -47,6 +47,7 @@ export class MenteeFormListComponent implements OnInit {
         const dialogRef = this.dialog.open(ViewFormComponent, {
             disableClose: true,
             width: '70%',
+            height: '95%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
