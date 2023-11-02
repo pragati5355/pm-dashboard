@@ -184,6 +184,10 @@
                                     [min]="
                                         addResourceForm.get('startDate').value
                                     "
+                                    [max]="
+                                        this.data?.projectDetails?.project
+                                            ?.endDate
+                                    "
                                     (dateChange)="resourceEndDate($event)"
                                 />
                                 <mat-datepicker-toggle

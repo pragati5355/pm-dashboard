@@ -25,7 +25,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
     isLoadingDevelopersEmail: boolean = false;
     projectId: any;
     projectDetails: any;
-    projectHistory : any;
+    projectHistory: any;
     projectSetting: any;
     isLoading = false;
     configFormStatus: FormGroup;
@@ -34,7 +34,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
     technologies: any;
     isLoadingTechnologies: boolean = false;
     isprojectCostSettingsAdded: boolean = false;
-    isprojectStartEndDateAdded : boolean = false;
+    isprojectStartEndDateAdded: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -85,7 +85,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 if (result) {
                     window.location.reload();
                 }
-        });
+            });
     }
 
     settings() {
@@ -200,6 +200,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                     projectId: this.projectId,
                     mode: mode,
                     editData: data,
+                    projectDetails: this.projectDetails,
                 },
             }
         );
@@ -211,13 +212,13 @@ export class ExternalProjectDetailsComponent implements OnInit {
         });
     }
 
-    openEditProjectDialog(){
+    openEditProjectDialog() {
         this.isprojectStartEndDateAdded = true;
         this.edit();
         this.isprojectStartEndDateAdded = false;
     }
 
-    openCostProjectSettingDialog(){
+    openCostProjectSettingDialog() {
         this.isprojectCostSettingsAdded = true;
         this.dialog
             .open(ExternalProjectSettingsComponent, {
@@ -230,7 +231,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                     clientModels: this.projectDetails?.clientModels,
                     projectSettings: this.projectDetails?.projectSettings,
                     teamModel: this.projectDetails?.teamModel,
-                    showStep : 1,
+                    showStep: 1,
                 },
             })
             .afterClosed()
@@ -240,7 +241,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                     this.setProjectIdSubscription();
                     this.loadDeveloperEmails();
                 }
-        });
+            });
         this.isprojectCostSettingsAdded = false;
     }
 
