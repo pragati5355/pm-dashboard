@@ -20,6 +20,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { NgParticlesModule } from 'ng-particles';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 const GoogleClientId = environment.GoogleClientId;
 const googleLoginOptions = {
@@ -46,6 +47,7 @@ const routerConfig: ExtraOptions = {
         FuseConfigModule.forRoot(appConfig),
         LayoutModule,
         NgParticlesModule,
+        NgxExtendedPdfViewerModule,
         MarkdownModule.forRoot({}),
         // provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         // provideDatabase(() => getDatabase()),
