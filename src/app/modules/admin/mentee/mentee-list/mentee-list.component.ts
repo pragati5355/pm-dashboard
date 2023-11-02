@@ -56,6 +56,10 @@ export class MenteeListComponent implements OnInit {
         });
     }
 
+    viewMenteeFormList() {
+        this.router.navigate([`/mentee/form-list/123`]);
+    }
+
     private getUserRole() {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
             if (res?.role) {
