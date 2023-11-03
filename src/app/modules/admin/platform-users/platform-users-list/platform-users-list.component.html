@@ -63,6 +63,7 @@
                     >
                         <div>First Name</div>
                         <div>Last Name</div>
+                        <div>Email</div>
                         <div>Role</div>
                         <div>Status</div>
                         <div *ngIf="userRole==='ADMIN'">Actions</div>
@@ -86,6 +87,10 @@
 
                                     <div class="hidden md:block truncate">
                                         {{ list?.lastName }}
+                                    </div>
+
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.email }}
                                     </div>
 
                                     <div class="hidden md:block truncate">
