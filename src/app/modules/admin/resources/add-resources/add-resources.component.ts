@@ -319,28 +319,28 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     fetchEditData(id: number) {
         let payload = { id: id };
         this.initialLoading = true;
-        // this.ProjectService.getresource(payload).subscribe(
-        //     (res: any) => {
-        //         if (res?.data && !res?.error) {
-        //             this.existingResource = res?.data;
-        //             this.resourcesForm?.addControl(
-        //                 'id',
-        //                 this._formBuilder.control(this.existingResource?.id)
-        //             );
-        //             this.resourcesForm?.patchValue(this.existingResource);
-        //             this.setTechnologiesListForUpdate();
+        this.ProjectService.getresource(payload).subscribe(
+            (res: any) => {
+                if (res?.data && !res?.error) {
+                    this.existingResource = res?.data;
+                    this.resourcesForm?.addControl(
+                        'id',
+                        this._formBuilder.control(this.existingResource?.id)
+                    );
+                    this.resourcesForm?.patchValue(this.existingResource);
+                    this.setTechnologiesListForUpdate();
 
-        //             this.setDateOfJoiningForUpdate();
-        //         }
-        //         this.initialLoading = false;
-        //         if (res.tokenExpire == true) {
-        //             this._authService.updateAndReload(window.location);
-        //         }
-        //     },
-        //     (error) => {
-        //         this.initialLoading = false;
-        //     }
-        // );
+                    this.setDateOfJoiningForUpdate();
+                }
+                this.initialLoading = false;
+                if (res.tokenExpire == true) {
+                    this._authService.updateAndReload(window.location);
+                }
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
     }
 
     private setDateOfJoiningForUpdate() {
