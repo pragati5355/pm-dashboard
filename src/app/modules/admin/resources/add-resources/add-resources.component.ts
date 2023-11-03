@@ -69,10 +69,10 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     mode: 'edit' | 'add';
     emailList: any[] = [];
     loadingAllEmails: boolean = false;
-    personalDetailsArrow : boolean = true;
-    technologyArrow : boolean = false;
-    otherSkillsArrow : boolean = false;
-    certificationArrow : boolean = false;
+    personalDetailsArrow: boolean = true;
+    technologyArrow: boolean = false;
+    otherSkillsArrow: boolean = false;
+    certificationArrow: boolean = false;
     resourceId: any;
     existingResource: ResourceModel;
     integrations: any = TECHNOLOGIES?.integrations;
@@ -104,19 +104,19 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         this.userData = this._authService.getUser();
     }
 
-    onClickPersonalDetailsArrow(value : boolean){
+    onClickPersonalDetailsArrow(value: boolean) {
         this.personalDetailsArrow = value;
     }
 
-    onClickTechnologyArrow(value : boolean) {
+    onClickTechnologyArrow(value: boolean) {
         this.technologyArrow = value;
     }
 
-    onClickOtherSkillsArrow(value : boolean){
+    onClickOtherSkillsArrow(value: boolean) {
         this.otherSkillsArrow = value;
     }
 
-    onClickCertificationArrow(value : boolean) {
+    onClickCertificationArrow(value: boolean) {
         this.certificationArrow = value;
     }
 
@@ -323,14 +323,18 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             (res: any) => {
                 if (res?.data && !res?.error) {
                     this.existingResource = res?.data;
+                    console.log(
+                        'this.existingResource : ',
+                        this.existingResource
+                    );
                     this.resourcesForm?.addControl(
                         'id',
                         this._formBuilder.control(this.existingResource?.id)
                     );
                     this.resourcesForm?.patchValue(this.existingResource);
                     this.setTechnologiesListForUpdate();
-
                     this.setDateOfJoiningForUpdate();
+                    this.patchIntegrations();
                 }
                 this.initialLoading = false;
                 if (res.tokenExpire == true) {
@@ -471,6 +475,36 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         );
         this.dynamicFieldValidation();
         this.pmMentorFilterInitialization();
+    }
+
+    private patchIntegrations() {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        this.existingResource?.integrations?.map((item) => {
+            integration.push(new FormControl(item));
+        });
+
+        this.integrations?.map((item) => {
+            const skill = this.existingResource?.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+            if (skill > -1) {
+                item.checked = true;
+            }
+        });
+
+        this.existingResource?.integrations?.map((item) => {
+            const id = this.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+
+            if (id === -1) {
+                this.integrations?.push(item);
+                item.checked = true;
+            }
+        });
     }
 
     private dynamicFieldValidation() {

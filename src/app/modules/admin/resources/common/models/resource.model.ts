@@ -11,6 +11,7 @@ export class ResourceModel {
     technologies?: ResourceTechnologyModel[];
     month?: number;
     year?: number;
+    integrations?: ResourceIntegrations[];
 }
 
 export class ResourceTechnologyModel {
@@ -20,4 +21,13 @@ export class ResourceTechnologyModel {
     name?: string;
     experienceYear?: number;
     experienceMonth?: number;
+}
+
+export class ResourceIntegrations {
+    id?: number;
+    name?: string;
+    resourceId?: number;
+    integrationsAndSkillsId?: number;
+    IntegrationsAndSkillsId?: number;
+    checked?: boolean;
 }
