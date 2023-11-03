@@ -226,18 +226,41 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.disableUpdate = false;
             this.addResourceForm.get('utilization')?.enable();
         } else if (this.data?.editData?.status === 'COMPLETED') {
-            this.disableUpdate = true;
-            this.addResourceForm.get('utilization')?.disable();
-            this.addResourceForm?.patchValue({
-                utilization:
-                    this.getCurrentResourceCapacity(
-                        this.data?.editData?.email
-                    ) <= 0
-                        ? this.data?.editData?.utilization
-                        : this.getCurrentResourceCapacity(
-                              this.data?.editData?.email
-                          ),
-            });
+            if (
+                newDate <= prevDate &&
+                this.getCurrentResourceFromEmailsApi(this.data?.editData?.email)
+                    ?.capacity === 0
+            ) {
+                this.disableUpdate = true;
+                this.addResourceForm.get('utilization')?.disable();
+                this.addResourceForm?.patchValue({
+                    utilization:
+                        this.getCurrentResourceCapacity(
+                            this.data?.editData?.email
+                        ) <= 0
+                            ? this.data?.editData?.utilization
+                            : this.getCurrentResourceCapacity(
+                                  this.data?.editData?.email
+                              ),
+                });
+            }
+
+            if (
+                newDate > prevDate &&
+                this.getCurrentResourceFromEmailsApi(this.data?.editData?.email)
+                    ?.capacity > 0
+            ) {
+                this.disableUpdate = false;
+                this.addResourceForm.get('utilization')?.enable();
+            }
+
+            if (
+                newDate < prevDate &&
+                this.getCurrentResourceFromEmailsApi(this.data?.editData?.email)
+                    ?.capacity > 0
+            ) {
+                this.disableUpdate = true;
+            }
         }
     }
 
@@ -247,6 +270,15 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
         this.userID = this._authService.getUser()?.userId;
+        this.getCurrentResourceFromEmailsApi(this.data?.editData?.email);
+    }
+
+    private getCurrentResourceFromEmailsApi(email: string) {
+        const obj = this.data?.allResources?.filter((item: any) => {
+            return item?.email === email;
+        });
+        console.log(obj[0]);
+        return obj[0];
     }
 
     private checkEditMode() {

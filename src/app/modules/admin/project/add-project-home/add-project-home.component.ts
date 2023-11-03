@@ -326,7 +326,7 @@ export class AddProjectHomeComponent
                     this.currentCapacity +
                     (currentResource[0]?.utilization || 0);
             } else if (teamMember?.status === 'COMPLETED') {
-                if (this.currentCapacity > 0) {
+                if (this.currentCapacity >= 0) {
                     this.disableUpdate = true;
                     this.projectTeam?.get('tm_utilization')?.disable();
                 }
