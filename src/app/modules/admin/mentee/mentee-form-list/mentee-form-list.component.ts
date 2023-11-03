@@ -3006,6 +3006,7 @@ export class MenteeFormListComponent implements OnInit {
             date: 'Dec 02 2023',
         },
     ];
+    initialLoading:boolean = false;
     constructor(private router: Router, private dialog: MatDialog) {}
 
     ngOnInit(): void {}
