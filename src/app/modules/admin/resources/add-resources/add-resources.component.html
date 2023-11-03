@@ -554,7 +554,7 @@
                             </div>
                         </div>
 
-                        /*technologies form*/
+                        <!-- technologies form -->
 
                         <div *ngIf="technologyArrow" class="pl-11">
                             <div
@@ -828,7 +828,12 @@
 
 <div
     *ngIf="initialLoading"
-    class="w-full flex bg-gray-50 overflow-x-hidden"
->
-    <app-resource-edit-skeleton></app-resource-edit-skeleton>
+    class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col flex-auto w-full overflow-y-auto">
+        <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
+            <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
+                <app-resource-edit-skeleton></app-resource-edit-skeleton>
+            </div>
+        </div>
+    </div>
 </div>
