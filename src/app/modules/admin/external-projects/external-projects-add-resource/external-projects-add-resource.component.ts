@@ -228,10 +228,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.data?.editData?.endDate,
             'dd-MM-yyyy'
         );
-        if (newDate > prevDate) {
+        if (newDate > prevDate && this.data?.editData?.status === 'ACTIVE') {
             this.disableUpdate = false;
             this.addResourceForm.get('utilization')?.enable();
-        } else {
+        } else if (this.data?.editData?.status === 'COMPLETED') {
             this.disableUpdate = true;
             this.addResourceForm.get('utilization')?.disable();
             this.addResourceForm?.patchValue({
@@ -263,7 +263,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                     this.getCurrentResourceCapacity(
                         this.data?.editData?.email
                     ) + this.data?.editData?.utilization;
-            } else {
+            } else if (this.data?.editData?.status === 'COMPLETED') {
                 if (
                     this.getCurrentResourceCapacity(
                         this.data?.editData?.email
