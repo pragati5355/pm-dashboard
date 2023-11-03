@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { AddFormComponent } from '../add-form/add-form.component';
 import { ViewFormComponent } from '../view-form/view-form.component';
 
 @Component({
@@ -41,6 +42,22 @@ export class MenteeFormListComponent implements OnInit {
 
     goBack() {
         this.router.navigate([`/mentee`]);
+    }
+
+    addForm() {
+        const dialogRef = this.dialog.open(AddFormComponent, {
+            disableClose: true,
+            width: '60%',
+            height: '95%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {},
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                window.location.reload();
+            }
+        });
     }
 
     viewForm() {

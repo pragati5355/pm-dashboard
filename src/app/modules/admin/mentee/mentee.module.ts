@@ -14,6 +14,7 @@ import { DiffDatePipe } from './pipes/diff-date.pipe';
 import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.component';
 import { ViewFormComponent } from './view-form/view-form.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { AddFormComponent } from './add-form/add-form.component';
 @NgModule({
     declarations: [
         MenteeHomeComponent,
@@ -22,6 +23,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         DiffDatePipe,
         MenteeFormListComponent,
         ViewFormComponent,
+        AddFormComponent,
     ],
     imports: [
         CommonModule,
