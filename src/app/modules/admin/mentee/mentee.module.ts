@@ -15,6 +15,7 @@ import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.com
 import { ViewFormComponent } from './view-form/view-form.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { AddFormComponent } from './add-form/add-form.component';
+import { FormioModule } from 'angular-formio';
 @NgModule({
     declarations: [
         MenteeHomeComponent,
@@ -33,6 +34,7 @@ import { AddFormComponent } from './add-form/add-form.component';
         MatSidenavModule,
         MatProgressBarModule,
         MatTooltipModule,
+        FormioModule,
         NgxExtendedPdfViewerModule,
     ],
 })

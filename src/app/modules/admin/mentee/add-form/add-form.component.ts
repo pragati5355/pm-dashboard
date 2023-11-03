@@ -7,12 +7,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     styleUrls: ['./add-form.component.scss'],
 })
 export class AddFormComponent implements OnInit {
+    public form!: Object;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddFormComponent>
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.form = this.data?.formData;
+    }
 
     close() {
         this.matDialogRef.close();
