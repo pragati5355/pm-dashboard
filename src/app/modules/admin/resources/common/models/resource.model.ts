@@ -12,6 +12,7 @@ export class ResourceModel {
     month?: number;
     year?: number;
     integrations?: ResourceIntegrations[];
+    certificates?: ResourceCertificates[];
 }
 
 export class ResourceTechnologyModel {
@@ -30,4 +31,9 @@ export class ResourceIntegrations {
     integrationsAndSkillsId?: number;
     IntegrationsAndSkillsId?: number;
     checked?: boolean;
+}
+
+export class ResourceCertificates {
+    name? : string;
+    link? : string;
 }

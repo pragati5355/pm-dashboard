@@ -93,6 +93,10 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         return this.resourcesForm?.get('technologies') as FormArray;
     }
 
+    get certificates() {
+        return this.resourcesForm?.get('certificates') as FormArray;
+    }
+
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
     }
@@ -262,6 +266,17 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         }
     }
 
+    addNewCertificate() {
+        this.certificates.push(this.getSingleControl());
+    }
+
+    remove(index: number) {
+        if (index !== 0) {
+            this.certificates.removeAt(index);
+        }
+    }
+
+
     /**
      * Upload avatar
      *
@@ -335,6 +350,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                     this.setTechnologiesListForUpdate();
                     this.setDateOfJoiningForUpdate();
                     this.patchIntegrations();
+                    this.patchCertificates();
                 }
                 this.initialLoading = false;
                 if (res.tokenExpire == true) {
@@ -468,6 +484,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 technologies: this._formBuilder.array([]),
                 pmOrMentorEmail: [''],
                 integrations: this._formBuilder.array([]),
+                certificates: this._formBuilder.array([]),
             },
             {
                 validator: [MonthValdation('month')],
@@ -475,6 +492,26 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         );
         this.dynamicFieldValidation();
         this.pmMentorFilterInitialization();
+    }
+
+    private patchCertificates() {
+        this.existingResource?.certificates?.map((certificate) => {
+            const control = this._formBuilder.group({
+                name: [certificate?.name],
+                link: [certificate?.link],
+            });
+
+            this.certificates?.push(control);
+        });
+    }
+
+    private getSingleControl(): FormGroup {
+        const control = this._formBuilder.group({
+            name: [''],
+            link: [''],
+        });
+
+        return control;
     }
 
     private patchIntegrations() {
