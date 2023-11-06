@@ -101,7 +101,7 @@
 
                                         <div class="flex flex-col">
                                             <span class="" *ngIf="project.lastSyncDate">Last updated on
-                                                {{project.lastSyncDate | date}}</span>
+                                                {{project.lastSyncDate | date:'medium'}}</span>
                                         </div>
                                         <span *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                                             class=" ml-auto  inline-flex items-center font-bold  px-3 py-1 rounded-full tracking-wide">
