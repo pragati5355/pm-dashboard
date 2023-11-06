@@ -336,7 +336,7 @@
                             </mat-form-field>
                         </div>
 
-                        <div class="flex w-full mt-3 ml-3 items-center">
+                        <div class="flex flex-col w-full mt-3 ml-6">
                             <!-- <div class="mb-4 mr-8">
                 <mat-checkbox
                     [color]="'primary'"
@@ -346,13 +346,24 @@
                 >
             </div> -->
 
-                            <div class="mb-4">
+                            <div class="mb-2">
                                 <mat-checkbox
                                     [color]="'primary'"
                                     [checked]="markResourceAsShadow"
                                     (change)="shadowResource($event?.checked)"
                                     ><span class="font-semibold"
                                         >Shadow Resource</span
+                                    ></mat-checkbox
+                                >
+                            </div>
+
+                            <div class="mb-2">
+                                <mat-checkbox
+                                    [color]="'primary'"
+                                    [checked]="markResourceAsApplicableForBilling"
+                                    (change)="notApplicableForBilling($event?.checked)"
+                                    ><span class="font-semibold"
+                                        >Do not consider for billing/worklog</span
                                     ></mat-checkbox
                                 >
                             </div>

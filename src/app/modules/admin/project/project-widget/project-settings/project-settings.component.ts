@@ -49,6 +49,7 @@ export class ProjectSettingsComponent implements OnInit {
     fixedCostForm: FormGroup;
     fixedCostInput: FormControl;
     timeAndMaterialForm: FormGroup;
+    paidLeaveHolidayForm : FormGroup;
     costTypes: costTypeInterface[] = [
         {
             value: 'FIXED_COST',
@@ -330,6 +331,7 @@ export class ProjectSettingsComponent implements OnInit {
     }
 
     private initializeForm() {
+        this.initializeProjectSettingForm();
         this.initializeFixedCostForm();
         this.initializeTimeAndMaterialForm();
         this.patchResourcesForTandM();
@@ -441,6 +443,15 @@ export class ProjectSettingsComponent implements OnInit {
         if (this.data?.projectSettings?.projectCostModel?.tmType) {
             this.timeAndMaterialForm?.get('type')?.disable();
         }
+    }
+
+    private initializeProjectSettingForm(){
+        this.paidLeaveHolidayForm = this.fb.group({
+            paidLeaves : [0,[
+                Validators.required,
+                Validators.max(5),
+            ],]
+        })
     }
 
     private initializeFixedCostForm() {
