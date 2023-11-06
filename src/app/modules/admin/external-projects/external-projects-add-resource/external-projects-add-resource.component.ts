@@ -214,14 +214,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     resourceEndDate(event: any) {
-        const newDate = this.datePipe.transform(
-            event?.target?.value,
-            'dd-MM-yyyy'
-        );
-        const prevDate = this.datePipe.transform(
-            this.data?.editData?.endDate,
-            'dd-MM-yyyy'
-        );
+        const newDate = new Date(event?.target?.value).getTime();
+        const prevDate = new Date(this.data?.editData?.endDate)?.getTime();
         if (newDate > prevDate && this.data?.editData?.status === 'ACTIVE') {
             this.disableUpdate = false;
             this.addResourceForm.get('utilization')?.enable();
@@ -277,7 +271,6 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         const obj = this.data?.allResources?.filter((item: any) => {
             return item?.email === email;
         });
-        console.log(obj[0]);
         return obj[0];
     }
 
