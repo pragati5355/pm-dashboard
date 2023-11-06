@@ -60,7 +60,7 @@ export class WorkLogsListComponent implements OnInit {
     configEditWorklogStatus!: FormGroup;
     selectedResourceEmail: any[];
     checked: boolean = false;
-    totalhours : number;
+    totalhours: number;
     yearAndMonth: any[] = [
         {
             '2022': [
@@ -75,6 +75,7 @@ export class WorkLogsListComponent implements OnInit {
             ],
         },
     ];
+    isPmAddedAsResource: boolean = false;
 
     constructor(
         private matDialog: MatDialog,
@@ -402,10 +403,17 @@ export class WorkLogsListComponent implements OnInit {
                     this.checked = res?.data[0]?.allowEdit;
                     this.selectedResourceId = res?.data[0]?.resourceId;
                     this.loadData(this.selectedYear, this.selectedTabIndex);
+                    this.checkPmAddedAsResource();
                 }
                 if (res?.tokenExpire) {
                     this.authService.updateAndReload(window.location);
                 }
             });
+    }
+    private checkPmAddedAsResource() {
+        const data = this.options?.filter((item) => {
+            return item.resourceId === this.loggedInUser?.resourceId;
+        });
+        this.isPmAddedAsResource = data?.length > 0 ? true : false;
     }
 }
