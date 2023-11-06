@@ -166,22 +166,20 @@ export class WorkLogsComponent implements OnInit {
             ];
         }
 
-        console.log("payload : ", payload);
-
-        // this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
-        //     (res: any) => {
-        //         this.submitInProgress = false;
-        //         if (!res?.error && res?.message === 'Success') {
-        //             this.responseSubmitted = true;
-        //         } else {
-        //             this.snackBar.errorSnackBar('Something went wrong');
-        //         }
-        //     },
-        //     (err) => {
-        //         this.submitInProgress = false;
-        //         this.snackBar.errorSnackBar('Something went wrong');
-        //     }
-        // );
+        this.workLogsService.saveAndGetWorkLogsData(payload)?.subscribe(
+            (res: any) => {
+                this.submitInProgress = false;
+                if (!res?.error && res?.message === 'Success') {
+                    this.responseSubmitted = true;
+                } else {
+                    this.snackBar.errorSnackBar('Something went wrong');
+                }
+            },
+            (err) => {
+                this.submitInProgress = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
     private setTokenSubscription() {
@@ -205,9 +203,9 @@ export class WorkLogsComponent implements OnInit {
                 if (!res?.data?.expired) {
                     this.resourceData = res?.data;
                 } 
-                // else {
-                //     this.router.navigate(['/wrong-url']);
-                // }
+                else {
+                    this.router.navigate(['/wrong-url']);
+                }
             },
             (err) => {
                 this.initialLoading = false;
