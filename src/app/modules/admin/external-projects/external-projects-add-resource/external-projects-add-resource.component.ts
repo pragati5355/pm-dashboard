@@ -54,10 +54,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alreadyAssignedProjects: any[];
     isResourceOnBench: boolean = false;
     isShadowResource: boolean = false;
-    isapplicable : boolean = false;
+    isapplicableForBilling : boolean = false;
     markResourceAsBench: boolean = false;
     markResourceAsShadow: boolean = false;
-    markResourceAsApplicable : boolean = false;
+    markResourceAsApplicableForBilling : boolean = false;
     selectable = true;
     removable = true;
     addOnBlur = false;
@@ -161,7 +161,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     }
 
     notApplicableForBilling(value : boolean){
-        this.isapplicable = value ? true : false;
+        this.isapplicableForBilling = value ? true : false;
     }
 
     getSelectedEmail(email: string) {
@@ -320,6 +320,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isShadowResource = this.data?.editData?.shadow || false;
         this.markResourceAsBench = this.data?.editData?.bench || false;
         this.markResourceAsShadow = this.data?.editData?.shadow || false;
+        this.markResourceAsApplicableForBilling = this.data?.editData?.billing || false;
+        
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
@@ -347,6 +349,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             bench: this.isResourceOnBench,
             shadow: this.isShadowResource,
             technologies: this.technologys,
+            billing : this.isapplicableForBilling,
         };
         if (this.mode === 'EDIT') {
             return {
@@ -362,6 +365,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 bench: this.isResourceOnBench,
                 shadow: this.isShadowResource,
                 technologies: this.technologys,
+                billing : this.isapplicableForBilling,
             };
         }
         return payload;
