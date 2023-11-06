@@ -27,6 +27,12 @@
                         <mat-checkbox (change)="checkBox($event?.checked)"
                             ><span>I was on Leave</span></mat-checkbox
                         >
+
+                        <mat-checkbox 
+                        class="ml-6"
+                        (change)="checkBoxHoliday($event?.checked)"
+                        ><span>Holiday</span></mat-checkbox
+                        >
                     </div>
 
                     <div class="w-full">
@@ -42,7 +48,7 @@
                                     placeholder="Hours"
                                     formControlName="totalHours"
                                     [ngClass]="{
-                                        'cursor-not-allowed': onLeave
+                                        'cursor-not-allowed': onLeave || onHoliday
                                     }"
                                 />
                                 <mat-error
@@ -87,7 +93,7 @@
                             <div class="mt-2">
                                 <quill-editor
                                     [ngClass]="{
-                                        'cursor-not-allowed': onLeave
+                                        'cursor-not-allowed': onLeave || onHoliday
                                     }"
                                     #editor
                                     [modules]="modules"
@@ -101,12 +107,12 @@
 
                         <div class="flex justify-end mt-4">
                             <button
-                                [disabled]="workLogForm?.invalid || onLeave"
+                                [disabled]="onLeave || onHoliday"
                                 class="bg-primary-500 text-white font-bold ml-2"
                                 mat-flat-button
                                 type="submit"
                                 [ngClass]="{
-                                    'cursor-not-allowed': onLeave
+                                    'cursor-not-allowed': onLeave || onHoliday
                                 }"
                                 (click)="workLogForm?.valid ? addTask() : null"
                             >

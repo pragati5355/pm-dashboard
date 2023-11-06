@@ -37,6 +37,10 @@ import { DatePipe } from '@angular/common';
 import moment from 'moment';
 import { ResourcesService } from '../common/services/resources.service';
 import { ResourceModel } from '../common/models/resource.model';
+import { TECHNOLOGIES } from '@modules/public/resource/common';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { AddSkillAndIntegrationComponent } from '@modules/public/resource/add-skill-and-integration/add-skill-and-integration.component';
 export class Technology {
     constructor(public id: number, public name: string) {}
 }
@@ -65,8 +69,13 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     mode: 'edit' | 'add';
     emailList: any[] = [];
     loadingAllEmails: boolean = false;
+    personalDetailsArrow: boolean = true;
+    technologyArrow: boolean = false;
+    otherSkillsArrow: boolean = false;
+    certificationArrow: boolean = false;
     resourceId: any;
     existingResource: ResourceModel;
+    integrations: any = TECHNOLOGIES?.integrations;
 
     constructor(
         private _formBuilder: FormBuilder,
@@ -76,11 +85,16 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         private _route: ActivatedRoute,
         private snackBar: SnackBar,
         private datePipe: DatePipe,
+        private dialog: MatDialog,
         private resourceService: ResourcesService
     ) {}
 
     get technologies() {
         return this.resourcesForm?.get('technologies') as FormArray;
+    }
+
+    get certificates() {
+        return this.resourcesForm?.get('certificates') as FormArray;
     }
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
@@ -92,6 +106,22 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         this.addRouteSubscription();
         this.initializeForm();
         this.userData = this._authService.getUser();
+    }
+
+    onClickPersonalDetailsArrow(value: boolean) {
+        this.personalDetailsArrow = value;
+    }
+
+    onClickTechnologyArrow(value: boolean) {
+        this.technologyArrow = value;
+    }
+
+    onClickOtherSkillsArrow(value: boolean) {
+        this.otherSkillsArrow = value;
+    }
+
+    onClickCertificationArrow(value: boolean) {
+        this.certificationArrow = value;
     }
 
     getAvtarInit() {
@@ -236,6 +266,17 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         }
     }
 
+    addNewCertificate() {
+        this.certificates.push(this.getSingleControl());
+    }
+
+    remove(index: number) {
+        if (index !== 0) {
+            this.certificates.removeAt(index);
+        }
+    }
+
+
     /**
      * Upload avatar
      *
@@ -246,6 +287,50 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         // Return if canceled
     }
 
+    addSkillAndIntegrations() {
+        const dialogRef = this.dialog.open(AddSkillAndIntegrationComponent, {
+            disableClose: true,
+            width: '98%',
+            maxHeight: '700px',
+            maxWidth: '700px',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                integrations: this.integrations,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                this.integrations.push(...result);
+
+                const integration = (<FormArray>(
+                    this.resourcesForm.get('integrations')
+                )) as FormArray;
+
+                result?.map((item) => {
+                    if (item?.checked) {
+                        integration.push(new FormControl(item));
+                    }
+                });
+            }
+        });
+    }
+
+    onCheckBoxIntergationsChange(selectedOption: MatCheckboxChange) {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        if (selectedOption?.checked) {
+            integration.push(new FormControl(selectedOption.source.value));
+        } else {
+            const i = integration?.controls.findIndex(
+                (x) => x.value === selectedOption.source.value
+            );
+            integration?.removeAt(i);
+        }
+    }
+
     fetchEditData(id: number) {
         let payload = { id: id };
         this.initialLoading = true;
@@ -253,14 +338,19 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             (res: any) => {
                 if (res?.data && !res?.error) {
                     this.existingResource = res?.data;
+                    console.log(
+                        'this.existingResource : ',
+                        this.existingResource
+                    );
                     this.resourcesForm?.addControl(
                         'id',
                         this._formBuilder.control(this.existingResource?.id)
                     );
                     this.resourcesForm?.patchValue(this.existingResource);
                     this.setTechnologiesListForUpdate();
-
                     this.setDateOfJoiningForUpdate();
+                    this.patchIntegrations();
+                    this.patchCertificates();
                 }
                 this.initialLoading = false;
                 if (res.tokenExpire == true) {
@@ -393,6 +483,8 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 technology: [],
                 technologies: this._formBuilder.array([]),
                 pmOrMentorEmail: [''],
+                integrations: this._formBuilder.array([]),
+                certificates: this._formBuilder.array([]),
             },
             {
                 validator: [MonthValdation('month')],
@@ -400,6 +492,56 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         );
         this.dynamicFieldValidation();
         this.pmMentorFilterInitialization();
+    }
+
+    private patchCertificates() {
+        this.existingResource?.certificates?.map((certificate) => {
+            const control = this._formBuilder.group({
+                name: [certificate?.name],
+                link: [certificate?.link],
+            });
+
+            this.certificates?.push(control);
+        });
+    }
+
+    private getSingleControl(): FormGroup {
+        const control = this._formBuilder.group({
+            name: [''],
+            link: [''],
+        });
+
+        return control;
+    }
+
+    private patchIntegrations() {
+        const integration = (<FormArray>(
+            this.resourcesForm.get('integrations')
+        )) as FormArray;
+
+        this.existingResource?.integrations?.map((item) => {
+            integration.push(new FormControl(item));
+        });
+
+        this.integrations?.map((item) => {
+            const skill = this.existingResource?.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+            if (skill > -1) {
+                item.checked = true;
+            }
+        });
+
+        this.existingResource?.integrations?.map((item) => {
+            const id = this.integrations?.findIndex(
+                (obj) => obj.name === item.name
+            );
+
+            if (id === -1) {
+                this.integrations?.push(item);
+                item.checked = true;
+            }
+        });
     }
 
     private dynamicFieldValidation() {
