@@ -30,12 +30,12 @@
                             >
                                 <mat-option
                                     *ngFor="let option of options"
-                                    [value]="option?.email"
+                                    [value]="option?.resource?.email"
                                 >
                                     {{
-                                        option?.firstName +
+                                        option?.resource?.firstName +
                                             " " +
-                                            option?.lastName
+                                            option?.resource?.lastName
                                     }}
                                 </mat-option>
                             </mat-select>
@@ -50,12 +50,9 @@
                             [disabled]="initialLoading"
                         >
                             <mat-option
-                                *ngFor="let year of matSelectYears"
-                                value="{{ year }}"
-                                [disabled]="
-                                    initialLoading || year > currentYear
-                                "
-                                >{{ year }}</mat-option
+                                *ngFor="let year of yearAndMonth"
+                                value="{{ year?.year }}"
+                                >{{ year?.year }}</mat-option
                             >
                         </mat-select>
                     </mat-form-field>
