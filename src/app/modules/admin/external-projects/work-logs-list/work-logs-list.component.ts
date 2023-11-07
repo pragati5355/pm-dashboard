@@ -133,12 +133,15 @@ export class WorkLogsListComponent implements OnInit {
         const resource = this.options.filter(
             (option) => option?.resource?.email === $event?.value
         );
-        this.matTabList = resource[0]?.year[0]?.months;
+        console.log(resource);
+        this.matTabList =
+            resource[0]?.year[resource[0]?.year?.length - 1]?.months;
 
-        this.selectedTabIndex = 0;
+        this.selectedTabIndex = this.matTabList?.length - 1;
 
         this.yearAndMonth = resource[0]?.year;
-        this.selectedYear = resource[0]?.year[0]?.year;
+        this.selectedYear =
+            resource[0]?.year[resource[0]?.year?.length - 1]?.year;
         this.selectedResourceId = resource[0]?.resource?.resourceId;
         this.loadData(
             this.selectedYear,
@@ -160,7 +163,7 @@ export class WorkLogsListComponent implements OnInit {
 
         this.selectedYear = event?.value;
         this.matTabList = this.yearAndMonth[index]?.months;
-        this.selectedTabIndex = 0;
+        this.selectedTabIndex = this.matTabList?.length - 1;
         this.loadData(event?.value, this.matTabList[0]?.value);
     }
 
@@ -261,7 +264,11 @@ export class WorkLogsListComponent implements OnInit {
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
-                this.loadData(this.selectedYear, this.selectedTabIndex);
+                console.log('tab list', this.matTabList);
+                this.loadData(
+                    this.selectedYear,
+                    this.matTabList[this.matTabList?.length - 1]?.value
+                );
             }
         });
     }
@@ -418,13 +425,18 @@ export class WorkLogsListComponent implements OnInit {
                     this.options = res?.data;
                     this.yearAndMonth = res?.data[0]?.year;
 
-                    this.matTabList = this.yearAndMonth[0]?.months;
+                    this.matTabList =
+                        this.yearAndMonth[
+                            this.yearAndMonth?.length - 1
+                        ]?.months;
+                    this.selectedTabIndex = this.matTabList?.length - 1;
 
                     this.defaultResource = res?.data[0]?.resource?.email;
                     this.selectedResourceId =
                         res?.data[0]?.resource?.resourceId;
 
-                    this.selectedYear = this.yearAndMonth[0]?.year;
+                    this.selectedYear =
+                        this.yearAndMonth[this.yearAndMonth?.length - 1]?.year;
                     this.loadData(
                         this.selectedYear,
                         this.yearAndMonth[0]?.months[0]?.value
@@ -438,7 +450,7 @@ export class WorkLogsListComponent implements OnInit {
     }
     private checkPmAddedAsResource() {
         const data = this.options?.filter((item) => {
-            return item.resourceId === this.loggedInUser?.resourceId;
+            return item.resource.resourceId === this.loggedInUser?.resourceId;
         });
         this.isPmAddedAsResource = data?.length > 0 ? true : false;
     }

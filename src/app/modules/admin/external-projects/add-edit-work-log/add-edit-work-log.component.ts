@@ -263,25 +263,25 @@ export class AddEditWorkLogComponent implements OnInit {
             return;
         }
         this.submitInProgress = true;
-        console.log("Payload : ", payload);
-        // this.workLogService.saveWorkLogs(payload)?.subscribe(
-        //     (res: any) => {
-        //         this.submitInProgress = false;
-        //         if (!res?.error) {
-        //             this.snackBar.successSnackBar(res?.message);
-        //             this.matDialogRef.close(true);
-        //         } else {
-        //             this.snackBar.errorSnackBar(res?.message);
-        //         }
-        //         if (res?.tokenExpire) {
-        //             this.authService.updateAndReload(window.location);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.submitInProgress = false;
-        //         this.snackBar.errorSnackBar('Something went wrong');
-        //     }
-        // );
+        // console.log("Payload : ", payload);
+        this.workLogService.saveWorkLogs(payload)?.subscribe(
+            (res: any) => {
+                this.submitInProgress = false;
+                if (!res?.error) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.matDialogRef.close(true);
+                } else {
+                    this.snackBar.errorSnackBar(res?.message);
+                }
+                if (res?.tokenExpire) {
+                    this.authService.updateAndReload(window.location);
+                }
+            },
+            (err) => {
+                this.submitInProgress = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
     private getSaveWorkLogsPayload() {
