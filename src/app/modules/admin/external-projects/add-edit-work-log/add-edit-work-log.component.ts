@@ -263,7 +263,7 @@ export class AddEditWorkLogComponent implements OnInit {
             return;
         }
         this.submitInProgress = true;
-        // console.log("Payload : ", payload);
+        console.log("Payload : ", payload);
         this.workLogService.saveWorkLogs(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
@@ -306,7 +306,7 @@ export class AddEditWorkLogComponent implements OnInit {
                             comment: this.description,
                         },
                         onLeave: this.onLeave,
-                        onHoliday : this.onHoliday,
+                        // onHoliday : this.onHoliday,
                     },
                 ],
             };
@@ -323,28 +323,28 @@ export class AddEditWorkLogComponent implements OnInit {
                             comment: '',
                         },
                         onLeave: this.onLeave,
-                        onHoliday : this.onHoliday,
+                        // onHoliday : this.onHoliday,
                     },
                 ],
             };
         }
-        if (this.onHoliday && this.data?.mode === 'ADD') {
-            return {
-                externalWorklog: [
-                    {
-                        resourceId: this.data?.loggedInUser?.resourceId,
-                        projectId: this.data?.projectId,
-                        workLogDate: workLogDate,
-                        worklogPerTask: {
-                            timeSpent: 0,
-                            comment: '',
-                        },
-                        onLeave: this.onLeave,
-                        onHoliday : this.onHoliday,
-                    },
-                ],
-            };
-        }
+        // if (this.onHoliday && this.data?.mode === 'ADD') {
+        //     return {
+        //         externalWorklog: [
+        //             {
+        //                 resourceId: this.data?.loggedInUser?.resourceId,
+        //                 projectId: this.data?.projectId,
+        //                 workLogDate: workLogDate,
+        //                 worklogPerTask: {
+        //                     timeSpent: 0,
+        //                     comment: '',
+        //                 },
+        //                 onLeave: this.onLeave,
+        //                 onHoliday : this.onHoliday,
+        //             },
+        //         ],
+        //     };
+        // }
         return {
             externalWorklog: tasks,
         };
