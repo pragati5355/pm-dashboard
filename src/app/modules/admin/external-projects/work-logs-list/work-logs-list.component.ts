@@ -61,20 +61,7 @@ export class WorkLogsListComponent implements OnInit {
     selectedResourceEmail: any[];
     checked: boolean = false;
     totalhours: number;
-    yearAndMonth: any[] = [
-        {
-            '2022': [
-                { value: 1, label: 'Jan' },
-                { value: 2, label: 'Feb' },
-                { value: 3, label: 'Mar' },
-                { value: 4, label: 'Apr' },
-            ],
-            '2023': [
-                { value: 2, label: 'Feb' },
-                { value: 3, label: 'Mar' },
-            ],
-        },
-    ];
+    yearAndMonth: any[] = [];
     isPmAddedAsResource: boolean = false;
 
     constructor(
@@ -133,7 +120,6 @@ export class WorkLogsListComponent implements OnInit {
         const resource = this.options.filter(
             (option) => option?.resource?.email === $event?.value
         );
-        console.log(resource);
         this.matTabList =
             resource[0]?.year[resource[0]?.year?.length - 1]?.months;
 
@@ -215,7 +201,6 @@ export class WorkLogsListComponent implements OnInit {
                             }
                         );
                 } else {
-                    console.log('Saying NO', this.checked);
                 }
             });
         } else {
@@ -264,7 +249,6 @@ export class WorkLogsListComponent implements OnInit {
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
-                console.log('tab list', this.matTabList);
                 this.loadData(
                     this.selectedYear,
                     this.matTabList[this.matTabList?.length - 1]?.value
