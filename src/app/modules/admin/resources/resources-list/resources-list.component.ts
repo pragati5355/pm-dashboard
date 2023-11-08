@@ -296,6 +296,10 @@ export class ResourcesListComponent implements OnInit {
 
     showOnlyVendors(event: MatCheckboxChange) {
         this.showVendorsOnly = event?.checked;
+        this.projects?.disable();
+        this.technologyCtrl?.disable();
+        this.isShadowIsBench?.disable();
+        this.exprienceForm?.disable();
         this.count = 1;
         this.pagination = false;
         const payload = this.getDefaultSearchPayload();
