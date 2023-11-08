@@ -3168,21 +3168,7 @@ export class MenteeFormListComponent implements OnInit {
     }
 
     addForm() {
-        const dialogRef = this.dialog.open(AddFormComponent, {
-            disableClose: true,
-            width: '60%',
-            height: '95%',
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                formData: this.addFormData,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result == 'success') {
-                window.location.reload();
-            }
-        });
+        this.router.navigate([`/mentee/form-list/add-from/123`]);
     }
 
     viewForm() {
