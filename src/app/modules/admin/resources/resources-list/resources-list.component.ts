@@ -249,6 +249,7 @@ export class ResourcesListComponent implements OnInit {
     clearFilter() {
         this.isBench = false;
         this.isShadow = false;
+        this.showVendorsOnly = false;
         this.minExprience = '';
         this.maxExprience = '';
         this.exprienceForm.patchValue({
@@ -266,7 +267,6 @@ export class ResourcesListComponent implements OnInit {
         this.selectedProject = false;
         this.selectedTechnologiesForSearch = [];
         this.selectedTechnology = [];
-        // this.showFilterArea = false;
         this.getList();
     }
 
@@ -296,10 +296,11 @@ export class ResourcesListComponent implements OnInit {
 
     showOnlyVendors(event: MatCheckboxChange) {
         this.showVendorsOnly = event?.checked;
-        this.clearFilter();
-        // if (this.showVendorsOnly) {
-        //     this.resourceSearchInput?.disable();
-        // }
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.initialLoading = true;
+        this.loadDataWithFilterPayload(payload);
     }
 
     handleScroll() {

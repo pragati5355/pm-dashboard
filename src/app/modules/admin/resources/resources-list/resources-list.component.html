@@ -54,7 +54,6 @@
                                             #toggleButton
                                             (click)="showFilter()"
                                             mat-stroked-button
-                                            [disabled]="showVendorsOnly"
                                             class="ml-2 rounded-full border py-1 px-4 items-center border-gray-500"
                                             [matTooltip]="'Filter'"
                                         >
@@ -316,6 +315,21 @@
                                                 ></mat-icon>
                                             </mat-form-field>
 
+                                            <div class="mt-2 mb-4 pl-1">
+                                                <section class="w-full">
+                                                    <mat-checkbox
+                                                        (change)="
+                                                            showOnlyVendors($event)
+                                                        "
+                                                        [checked]="showVendorsOnly"
+                                                        [disabled]="selectedProject && isBench && isShadow"
+                                                        [color]="'primary'"
+                                                        class="example-margin"
+                                                        >Show vendors only</mat-checkbox
+                                                    >
+                                                </section>
+                                            </div>
+
                                             <div
                                                 class="w-full flex justify-end"
                                             >
@@ -344,7 +358,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-2">
+                                    <!-- <div class="mt-2">
                                         <section class="w-full">
                                             <mat-checkbox
                                                 (change)="
@@ -355,7 +369,7 @@
                                                 >Show vendors only</mat-checkbox
                                             >
                                         </section>
-                                    </div>
+                                    </div> -->
 
                                     <!-- <div class="">
                                         <button
