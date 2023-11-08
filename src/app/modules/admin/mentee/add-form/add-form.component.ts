@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class AddFormComponent implements OnInit {
     public form!: Object;
+    dummyData: any;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<AddFormComponent>
@@ -15,6 +16,17 @@ export class AddFormComponent implements OnInit {
 
     ngOnInit(): void {
         this.form = this.data?.formData;
+        this.dummyData = {
+            data: {
+                nameOfThePersonWhoFilledTheFormReviewer: 'Joe',
+                emailIdOfPersonForWhomTheFormIsFilled:
+                    'rohan.kadam@mindbowser.com',
+            },
+        };
+    }
+
+    submit(event: any) {
+        console.log('form io-->', event);
     }
 
     close() {
