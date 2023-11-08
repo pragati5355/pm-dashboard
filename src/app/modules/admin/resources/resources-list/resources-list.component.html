@@ -452,11 +452,12 @@
                             >
                                 <div></div>
                                 <div>Name</div>
+                                <div class="hidden lg:block">Mentor</div>
                                 <div class="hidden sm:block">Technology</div>
                                 <div class="hidden lg:block">
                                     Active Projects
                                 </div>
-                                <div class="hidden lg:block">Team</div>
+                                <!-- <div class="hidden lg:block">Team</div> -->
                                 <div class="hidden sm:block">Experience</div>
                                 <div *ngIf="userRole === 'ADMIN'">Action</div>
                             </div>
@@ -527,6 +528,9 @@
                                                     {{ resources?.email }}
                                                 </div>
                                             </div>
+                                            <div class="hidden sm:block">
+                                                {{ resources?.mentor  || "-"}}
+                                            </div>
                                             <div
                                                 class="grid-flow-row sm:flex truncate cursor-pointer"
                                             >
@@ -550,9 +554,9 @@
                                             >
                                                 {{ resources?.projects || "-" }}
                                             </div>
-                                            <div class="hidden sm:block">
+                                            <!-- <div class="hidden sm:block">
                                                 {{ resources?.role }}
-                                            </div>
+                                            </div> -->
 
                                             <div
                                                 class="hidden md:flex items-center"
