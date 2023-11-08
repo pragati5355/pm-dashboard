@@ -26,10 +26,10 @@
     >
         <div class="w-full">
             <div class="w-full p-2 sm:px-8 rounded-lg bg-white">
-                <mat-hint *ngIf="disableUpdate" class="text-red-500"
+                <!-- <mat-hint *ngIf="disableUpdate" class="text-red-500"
                     >This resource has been released from this project, please
                     extend its end date so that it can be updated.</mat-hint
-                >
+                > -->
                 <form
                     *ngIf="addResourceForm"
                     [formGroup]="addResourceForm"
@@ -336,7 +336,7 @@
                             </mat-form-field>
                         </div>
 
-                        <div class="flex w-full mt-3 ml-3 items-center">
+                        <div class="flex flex-col w-full mt-3 ml-6">
                             <!-- <div class="mb-4 mr-8">
                 <mat-checkbox
                     [color]="'primary'"
@@ -346,13 +346,24 @@
                 >
             </div> -->
 
-                            <div class="mb-4">
+                            <div class="mb-2">
                                 <mat-checkbox
                                     [color]="'primary'"
                                     [checked]="markResourceAsShadow"
                                     (change)="shadowResource($event?.checked)"
                                     ><span class="font-semibold"
                                         >Shadow Resource</span
+                                    ></mat-checkbox
+                                >
+                            </div>
+
+                            <div class="mb-2">
+                                <mat-checkbox
+                                    [color]="'primary'"
+                                    [checked]="markResourceAsApplicableForBilling"
+                                    (change)="notApplicableForBilling($event?.checked)"
+                                    ><span class="font-semibold"
+                                        >Do not consider for billing/worklog</span
                                     ></mat-checkbox
                                 >
                             </div>

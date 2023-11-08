@@ -25,10 +25,10 @@
     [formGroup]="addResourceForm"
     class="mt-12 overscroll-contain"
 >
-    <mat-hint *ngIf="disableUpdate" class="text-red-500"
+    <!-- <mat-hint *ngIf="disableUpdate" class="text-red-500"
         >This resource has been released from this project, please extend its
         end date so that it can be updated.</mat-hint
-    >
+    > -->
     <div class="w-full flex flex-1 mt-2">
         <div class="w-full mr-3">
             <mat-form-field [floatLabel]="'always'" class="w-full h-4 mt-2">
@@ -278,15 +278,15 @@
             </mat-form-field>
         </div>
 
-        <div class="flex w-full mt-3 ml-3 items-center">
-            <div class="mb-4 mr-8">
+        <div class="flex w-full mt-3 ml-4 items-center">
+            <!-- <div class="mb-4 mr-8">
                 <mat-checkbox
                     [color]="'primary'"
                     [checked]="markResourceAsBench"
                     (change)="resourceOnBench($event?.checked)"
                     ><span class="font-semibold">On Bench</span></mat-checkbox
                 >
-            </div>
+            </div> -->
 
             <div class="mb-4">
                 <mat-checkbox
