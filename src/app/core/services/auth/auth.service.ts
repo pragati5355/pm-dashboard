@@ -81,4 +81,7 @@ export class AuthService {
             }
         });
     }
+    clearStorage() {
+        this.storage.clear();
+    }
 }
