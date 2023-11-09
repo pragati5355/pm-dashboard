@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 
 @Component({
     selector: 'app-add-form',
@@ -9,9 +10,14 @@ import { Router } from '@angular/router';
 })
 export class AddFormComponent implements OnInit {
     public form!: Object;
-    dummyData: any;
+    preFillFormData: any;
     isLoading: boolean = false;
-    constructor(private router: Router) {}
+    loggedInUser: any;
+    constructor(
+        private router: Router,
+        private loggedInUserService: LoggedInUserService,
+        private snackBar: SnackBar
+    ) {}
 
     ngOnInit(): void {
         this.form = {
@@ -3174,14 +3180,27 @@ export class AddFormComponent implements OnInit {
                 },
             ],
         };
-        this.dummyData = {
-            data: {
-                nameOfThePersonWhoFilledTheFormReviewer: 'Joe',
-                emailIdOfPersonForWhomTheFormIsFilled:
-                    'rohan.kadam@mindbowser.com',
-                projectsWorkedOnDuringThisMonth: ['Metrics', 'TTA', 'TAP', ''],
-            },
-        };
+        this.getUserRole();
+        // this.dummyData = {
+        //     data: {
+        //         nameOfThePersonWhoFilledTheFormReviewer: 'Joe',
+        //         emailIdOfPersonForWhomTheFormIsFilled:
+        //             'rohan.kadam@mindbowser.com',
+        //     },
+        // };
+
+        // this.dummyData = {
+        //     data: {
+        //         ...this.dummyData?.data,
+        //         projectsWorkedOnDuringThisMonth: [
+        //             'Metrics',
+        //             'TTA',
+        //             'TAP',
+        //             'LaborIQ',
+        //             'Test2',
+        //         ],
+        //     },
+        // };
     }
 
     goBack() {
@@ -3190,5 +3209,35 @@ export class AddFormComponent implements OnInit {
 
     submit(event: any) {
         console.log('form io-->', event);
+    }
+
+    private getUserRole() {
+        this.isLoading = true;
+        this.loggedInUserService.getLoggedInUser().subscribe(
+            (res: any) => {
+                this.isLoading = false;
+                if (res?.role) {
+                    this.loggedInUser = res;
+                    this.preFillFormData = {
+                        data: {
+                            ...this.preFillFormData?.data,
+                            nameOfThePersonWhoFilledTheFormReviewer:
+                                this.loggedInUser?.firstName +
+                                ' ' +
+                                this.loggedInUser?.lastName,
+                            emailIdOfPersonWhoFilledTheForm:
+                                this.loggedInUser?.email,
+                            feedbackForTheMonthOf: `${
+                                new Date().getMonth() + 1
+                            }/00/0000`,
+                        },
+                    };
+                }
+            },
+            (err) => {
+                this.isLoading = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 }
