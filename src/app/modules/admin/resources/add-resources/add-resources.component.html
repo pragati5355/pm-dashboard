@@ -28,6 +28,11 @@
                                     <span *ngIf="mode === 'edit'">
                                         Update
                                     </span>
+                                    <mat-progress-spinner
+                                        *ngIf="submitInProcess"
+                                        [diameter]="18"
+                                        [mode]="'indeterminate'"
+                                    ></mat-progress-spinner>
                                 </button>
                             </div>
                         </div>
@@ -828,6 +833,13 @@
                                             formControlName="name"
                                             class="inputlist"
                                         />
+                                        <mat-error
+                                            *ngIf="certificate?.get('name')?.hasError('required')"
+                                    >
+                                        <div class="text-red-500">
+                                            Certificate Name is Mandatory
+                                        </div>
+                                    </mat-error>
                                     </mat-form-field>
         
                                     <mat-form-field
@@ -890,6 +902,11 @@
                                     <span *ngIf="mode === 'edit'">
                                         Update
                                     </span>
+                                    <mat-progress-spinner
+                                        *ngIf="submitInProcess"
+                                        [diameter]="18"
+                                        [mode]="'indeterminate'"
+                                    ></mat-progress-spinner>
                                 </button>
                             </div>
                         </div>

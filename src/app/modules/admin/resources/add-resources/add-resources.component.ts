@@ -404,31 +404,36 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     }
 
     editResource() {
+        console.log("this.resourcesForm?.valid : ", this.resourcesForm?.valid);
+        console.log("this.resourcesForm?.value : ", this.resourcesForm?.value);
         if (this.resourcesForm?.valid) {
+            console.log("ResourcesForm?.value : ", this.resourcesForm?.value);
             const payload = this.resourcesForm?.value;
             this.submitInProcess = true;
-            this.ProjectService.updateDeleteResource(payload).subscribe(
-                (res: any) => {
-                    this.submitInProcess = false;
-                    if (res.error) {
-                        this.snackBar.errorSnackBar(res.message);
-                    } else {
-                        this.snackBar.successSnackBar(res.message);
-                        this.resourcesForm.reset();
-                        this.router.navigate(['/resources']);
-                    }
-                    if (res.tokenExpire == true) {
-                        this.snackBar.errorSnackBar(
-                            ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-                        );
-                        this._authService.updateAndReload(window.location);
-                    }
-                },
-                (error) => {
-                    this.submitInProcess = false;
-                    this.snackBar.errorSnackBar('Server error');
-                }
-            );
+            // this.ProjectService.updateDeleteResource(payload).subscribe(
+            //     (res: any) => {
+            //         this.submitInProcess = false;
+            //         if (res.error) {
+            //             this.snackBar.errorSnackBar(res.message);
+            //         } else {
+            //             this.snackBar.successSnackBar(res.message);
+            //             this.resourcesForm.reset();
+            //             this.router.navigate(['/resources']);
+            //         }
+            //         if (res.tokenExpire == true) {
+            //             this.snackBar.errorSnackBar(
+            //                 ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+            //             );
+            //             this._authService.updateAndReload(window.location);
+            //         }
+            //     },
+            //     (error) => {
+            //         this.submitInProcess = false;
+            //         this.snackBar.errorSnackBar('Server error');
+            //     }
+            // );
+        } else {
+            this.snackBar.errorSnackBar("You have not updated any fields of this resource.");
         }
     }
 
@@ -495,7 +500,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     }
 
     private patchCertificates() {
-        if(this.existingResource?.certificates == null){
+        if(this.existingResource?.certificates === null){
             this.addNewCertificate();
         }else {
             this.existingResource?.certificates?.map((certificate) => {
