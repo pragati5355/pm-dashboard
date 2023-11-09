@@ -57,6 +57,9 @@ export class AuthSignInComponent implements OnInit {
                         this._authService.setRefreshToken(
                             res.data.token.refreshToken
                         );
+                        this._authService.setLastLoggedInAt(
+                            this.getCurrentDate()
+                        );
                         this._authService.setAuthenticated(true);
                         this._authService.setUser(res.data.user);
                         this._authService.setUserPhoto(result.photoUrl);
@@ -87,5 +90,12 @@ export class AuthSignInComponent implements OnInit {
         this.socialAuthService
             .signOut()
             .then(() => this.router.navigate(['login']));
+    }
+    private getCurrentDate(): string {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+        return dd + '/' + mm + '/' + yyyy;
     }
 }
