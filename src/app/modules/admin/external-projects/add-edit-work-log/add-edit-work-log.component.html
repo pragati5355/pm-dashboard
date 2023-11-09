@@ -64,6 +64,12 @@
                                 (change)="checkBox($event?.checked)"
                                 >I was on Leave</mat-checkbox
                             >
+                            <!-- <mat-checkbox
+                                class="ml-6"
+                                [disabled]="disablePreviousWorklog"
+                                [checked]="onHoliday"
+                                (change)="checkBoxHoliday($event?.checked)"
+                                >Holiday</mat-checkbox> -->
                         </div>
                         <div class="w-full">
                             <div class="flex items-center mt-6">
@@ -79,7 +85,7 @@
                                         formControlName="totalHours"
                                         min="0"
                                         [ngClass]="{
-                                            'cursor-not-allowed': onLeave
+                                            'cursor-not-allowed': onLeave || onHoliday
                                         }"
                                     />
                                     <mat-error
@@ -124,7 +130,7 @@
                                 <div class="mt-2">
                                     <quill-editor
                                         [ngClass]="{
-                                            'cursor-not-allowed': onLeave
+                                            'cursor-not-allowed': onLeave || onHoliday
                                         }"
                                         [disabled]="disablePreviousWorklog"
                                         #editor
@@ -144,15 +150,15 @@
                                 *ngIf="data?.mode === 'ADD'"
                             >
                                 <button
-                                    [disabled]="onLeave"
+                                    [disabled]="onLeave || onHoliday"
                                     class="bg-primary-500 text-white font-bold ml-2"
                                     mat-flat-button
                                     type="submit"
                                     (click)="
                                         workLogForm?.valid ? addTask() : null
                                     "
-                                    [ngClass]="{
-                                        'cursor-not-allowed': onLeave
+                                    [ngClass]="{ 
+                                        'cursor-not-allowed': onLeave || onHoliday
                                     }"
                                 >
                                     <mat-icon
