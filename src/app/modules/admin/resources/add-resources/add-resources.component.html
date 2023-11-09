@@ -806,73 +806,69 @@
                             </div>
                         </div>
 
-                        <div *ngIf="certificationArrow" class="pl-11">
-                            <div formArrayName="certificates">
-                                <ng-container
-                                    *ngFor="
-                                        let certificate of certificates?.controls;
-                                        let i = index;
-                                        let last = last
-                                    "
+                        <div *ngIf="certificationArrow" class="pl-11" formArrayName="certificates">
+                            <ng-container *ngFor="
+                                let certificate of certificates?.controls;
+                                let i = index;
+                                let last = last
+                            ">
+                                <form
+                                    class="flex flex-0 flex-wrap sm:flex-nowrap flex-row justify-center items-center mt-4"
+                                    [formGroupName]="i"
                                 >
-                                    <form
-                                        class="flex flex-0 flex-wrap sm:flex-nowrap flex-row justify-center items-center mt-4"
-                                        [formGroupName]="i"
+                                    <mat-form-field
+                                        class="w-full mr-4 userlist"
+                                        id="userlist"
+                                        [floatLabel]="'always'"
                                     >
-                                        <mat-form-field
-                                            class="w-full mr-4 userlist"
-                                            id="userlist"
-                                            [floatLabel]="'always'"
+                                        <mat-label>Name</mat-label>
+                                        <input
+                                            matInput
+                                            placeholder="Certificate Name"
+                                            formControlName="name"
+                                            class="inputlist"
+                                        />
+                                    </mat-form-field>
+        
+                                    <mat-form-field
+                                        class="w-full mr-4 sm:mt-0 userlist"
+                                        id="userlist"
+                                        [floatLabel]="'always'"
+                                    >
+                                        <mat-label
+                                            >Certificate Link(Optional)</mat-label
                                         >
-                                            <mat-label>Name</mat-label>
-                                            <input
-                                                matInput
-                                                placeholder="Certificate Name"
-                                                formControlName="name"
-                                                class="inputlist"
-                                            />
-                                        </mat-form-field>
-            
-                                        <mat-form-field
-                                            class="w-full mr-4 sm:mt-0 userlist"
-                                            id="userlist"
-                                            [floatLabel]="'always'"
-                                        >
-                                            <mat-label
-                                                >Certificate Link(Optional)</mat-label
-                                            >
-                                            <input
-                                                matInput
-                                                placeholder="certificate link"
-                                                formControlName="link"
-                                                class="inputlist"
-                                            />
-                                        </mat-form-field>
-                                        <mat-icon
-                                            *ngIf="last"
-                                            class="cursor-pointer mr-2"
-                                            color="primary"
-                                            matTooltip="Add more certificates"
-                                            (click)="
-                                                certificate?.valid
-                                                    ? addNewCertificate()
-                                                    : certificate?.markAllAsTouched()
-                                            "
-                                            >add</mat-icon
-                                        >
-                                        <mat-icon
-                                            *ngIf="i != 0"
-                                            class="cursor-pointer"
-                                            color="warn"
-                                            matTooltip="Remove"
-                                            (click)="remove(i)"
-                                            >delete</mat-icon
-                                        >
-                                    </form>
-                                </ng-container>
-                            </div>
+                                        <input
+                                            matInput
+                                            placeholder="certificate link"
+                                            formControlName="link"
+                                            class="inputlist"
+                                        />
+                                    </mat-form-field>
+                                    <mat-icon
+                                        *ngIf="last"
+                                        class="cursor-pointer mr-2"
+                                        color="primary"
+                                        matTooltip="Add more certificates"
+                                        (click)="
+                                            certificate?.valid
+                                            ? addNewCertificate()
+                                            : certificate?.markAllAsTouched()
+                                        "
+                                        >add</mat-icon
+                                    >
+                                    <mat-icon
+                                        *ngIf="i != 0"
+                                        class="cursor-pointer"
+                                        color="warn"
+                                        matTooltip="Remove"
+                                        (click)="remove(i)"
+                                        >delete</mat-icon
+                                    >
+                                </form>
+                            </ng-container>
                         </div>
-
+                        
                         <div
                             class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"
                         >

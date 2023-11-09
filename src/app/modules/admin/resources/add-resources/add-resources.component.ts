@@ -495,14 +495,18 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     }
 
     private patchCertificates() {
-        this.existingResource?.certificates?.map((certificate) => {
-            const control = this._formBuilder.group({
-                name: [certificate?.name],
-                link: [certificate?.link],
+        if(this.existingResource?.certificates == null){
+            this.addNewCertificate();
+        }else {
+            this.existingResource?.certificates?.map((certificate) => {
+                const control = this._formBuilder.group({
+                    name: [certificate?.name],
+                    link: [certificate?.link],
+                });
+    
+                this.certificates?.push(control);
             });
-
-            this.certificates?.push(control);
-        });
+        }
     }
 
     private getSingleControl(): FormGroup {
