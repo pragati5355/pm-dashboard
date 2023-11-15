@@ -55,7 +55,12 @@ export class AuthService {
         this.storage.remove('accessToken');
         this.storage.remove('refreshToken');
     }
-
+    setLastLoggedInAt(date: any) {
+        this.storage.set('lastLoggedInAt', date);
+    }
+    getLastLoggedInAt() {
+        return this.storage.get('lastLoggedInAt');
+    }
     getToken(): any {
         return this.storage.get('accessToken');
     }
