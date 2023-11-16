@@ -3189,18 +3189,18 @@ export class AddFormComponent implements OnInit {
         //     },
         // };
 
-        // this.dummyData = {
-        //     data: {
-        //         ...this.dummyData?.data,
-        //         projectsWorkedOnDuringThisMonth: [
-        //             'Metrics',
-        //             'TTA',
-        //             'TAP',
-        //             'LaborIQ',
-        //             'Test2',
-        //         ],
-        //     },
-        // };
+        this.preFillFormData = {
+            data: {
+                ...this.preFillFormData?.data,
+                projectsWorkedOnDuringThisMonth: [
+                    'Metrics',
+                    'TTA',
+                    'TAP',
+                    'LaborIQ',
+                    'Test2',
+                ],
+            },
+        };
     }
 
     goBack() {
