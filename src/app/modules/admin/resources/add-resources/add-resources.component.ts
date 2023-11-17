@@ -63,6 +63,8 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     separatorKeysCodes: number[] = [ENTER, COMMA];
     filteredTechnologies: Observable<any[]> | undefined;
     technologys: any = [];
+    resourcedetails:any;
+    mentorModel : any[] = [];
     alltechnologys: Technology[] = [];
     showHideExperience: boolean = true;
     filteredEmails: Observable<any[]>;
@@ -250,12 +252,15 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 experienceMonth: [0, [Validators.required]],
                 resourceId: [this.userData?.userId || null],
             });
+            console.log("technologyControl : ", technologyControl);
             this.technologies.push(technologyControl);
         }
         this.resourcesForm.get('technology')?.reset();
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
+        console.log("index : ", index);
+        console.log("technologyControlValue : ",technologyControlValue);
         if (technologyControlValue?.id) {
             const control = this.technologies?.at(index);
             control?.get('experienceYear').setErrors(null);
@@ -338,10 +343,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             (res: any) => {
                 if (res?.data && !res?.error) {
                     this.existingResource = res?.data;
-                    console.log(
-                        'this.existingResource : ',
-                        this.existingResource
-                    );
                     this.resourcesForm?.addControl(
                         'id',
                         this._formBuilder.control(this.existingResource?.id)
@@ -403,47 +404,41 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         return true;
     }
 
-    editResource() {
-        console.log("this.resourcesForm?.valid : ", this.resourcesForm?.valid);
-        console.log("this.resourcesForm?.value : ", this.resourcesForm?.value);
+    editResource() { 
         if (this.resourcesForm?.valid) {
-            console.log("ResourcesForm?.value : ", this.resourcesForm?.value);
-            const payload = this.resourcesForm?.value;
-            this.submitInProcess = true;
-            // this.ProjectService.updateDeleteResource(payload).subscribe(
-            //     (res: any) => {
-            //         this.submitInProcess = false;
-            //         if (res.error) {
-            //             this.snackBar.errorSnackBar(res.message);
-            //         } else {
-            //             this.snackBar.successSnackBar(res.message);
-            //             this.resourcesForm.reset();
-            //             this.router.navigate(['/resources']);
-            //         }
-            //         if (res.tokenExpire == true) {
-            //             this.snackBar.errorSnackBar(
-            //                 ErrorMessage.ERROR_SOMETHING_WENT_WRONG
-            //             );
-            //             this._authService.updateAndReload(window.location);
-            //         }
-            //     },
-            //     (error) => {
-            //         this.submitInProcess = false;
-            //         this.snackBar.errorSnackBar('Server error');
-            //     }
-            // );
+            this.mentorModel = [
+                {
+                    email : this.resourcedetails[0]?.email,
+                    menteeResourceId : this.resourcedetails[0]?.id
+                }
+            ];
+            if (
+                this.resourcesForm?.get('team')?.value === 'PM' ||
+                this.resourcesForm?.value?.technologies?.length > 0
+            ) {
+                const resourceForm = this.resourcesForm?.value;
+                const payload = {
+                    ...resourceForm,
+                    menteeModel : this.mentorModel,
+                };
+                this.submitInProcess = true;
+                console.log("Payload : ", payload);
+                this.updateReourceApi(payload);
+            } else {
+                this.submitInProcess = false;
+                this.snackBar.errorSnackBar('Choose technology');
+            }
         } else {
             this.snackBar.errorSnackBar("You have not updated any fields of this resource.");
         }
     }
 
     filterEmails(email: string) {
-        let arr = this.emailList.filter(
+        this.resourcedetails = this.emailList.filter(
             (item) =>
                 item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
         );
-
-        return arr.length ? arr : [{ email: 'No Emails found' }];
+        return this.resourcedetails.length ? this.resourcedetails : [{ email: 'No Emails found' }];
     }
 
     private initializeForm() {
@@ -579,7 +574,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 map((email) =>
                     email ? this.filterEmails(email) : this.emailList.slice()
                 )
-            );
+            );  
     }
 
     private addResourceAPI(payload: any) {
@@ -605,6 +600,31 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 this.snackBar.errorSnackBar('Server error');
             }
         );
+    }
+
+    private updateReourceApi(payload: any){
+          this.ProjectService.updateDeleteResource(payload).subscribe(
+                (res: any) => {
+                    this.submitInProcess = false;
+                    if (res.error) {
+                        this.snackBar.errorSnackBar(res.message);
+                    } else {
+                        this.snackBar.successSnackBar(res.message);
+                        this.resourcesForm.reset();
+                        this.router.navigate(['/resources']);
+                    }
+                    if (res.tokenExpire == true) {
+                        this.snackBar.errorSnackBar(
+                            ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+                        );
+                        this._authService.updateAndReload(window.location);
+                    }
+                },
+                (error) => {
+                    this.submitInProcess = false;
+                    this.snackBar.errorSnackBar('Server error');
+                }
+            );
     }
 
     private addRouteSubscription() {

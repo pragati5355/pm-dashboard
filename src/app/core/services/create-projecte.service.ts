@@ -64,7 +64,7 @@ export class CreateProjecteService {
         return this.http.post(AppConstants['GET_RESOURCE'], obj);
     }
     updateDeleteResource(obj: any) {
-        return this.http.post(AppConstants['UPDATE_DELETE_RESOURCE'], obj);
+        return this.http.post(API_LIST.RESOURCE_SPRING_BOOT_URL + '/update-delete', obj);
     }
 
     getSprintList(obj: any) {
