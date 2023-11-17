@@ -252,15 +252,12 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 experienceMonth: [0, [Validators.required]],
                 resourceId: [this.userData?.userId || null],
             });
-            console.log("technologyControl : ", technologyControl);
             this.technologies.push(technologyControl);
         }
         this.resourcesForm.get('technology')?.reset();
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
-        console.log("index : ", index);
-        console.log("technologyControlValue : ",technologyControlValue);
         if (technologyControlValue?.id) {
             const control = this.technologies?.at(index);
             control?.get('experienceYear').setErrors(null);
