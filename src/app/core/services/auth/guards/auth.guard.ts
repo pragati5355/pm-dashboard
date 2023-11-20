@@ -27,9 +27,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<boolean> | boolean {
-        console.log(
-            this._authService.getLastLoggedInAt() < this.getCurrentDate()
-        );
         if (this._authService.getToken()) {
             if (
                 !this._authService.getLastLoggedInAt() ||

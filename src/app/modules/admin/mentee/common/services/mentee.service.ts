@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConstants } from 'app/core/constacts/constacts';
+import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 
 @Injectable({
     providedIn: 'root',
@@ -10,5 +10,8 @@ export class MenteeService {
 
     getMenteeDetailsById(obj: any) {
         return this.http.post(AppConstants['GET_RESOURCE'], obj);
+    }
+    saveOneToOneForm(obj: any) {
+        return this.http.post(API_LIST.SPRING_BOOT_URL, obj);
     }
 }

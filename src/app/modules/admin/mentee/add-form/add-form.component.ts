@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { SnackBar } from 'app/core/utils/snackBar';
+import { MenteeService } from '../common/services/mentee.service';
 
 @Component({
     selector: 'app-add-form',
@@ -13,10 +14,13 @@ export class AddFormComponent implements OnInit {
     preFillFormData: any;
     isLoading: boolean = false;
     loggedInUser: any;
+    resourceId: number | null = null;
     constructor(
         private router: Router,
         private loggedInUserService: LoggedInUserService,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        private menteeService: MenteeService,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -509,50 +513,40 @@ export class AddFormComponent implements OnInit {
                         {
                             label: 'Projects worked on during this month :',
                             labelPosition: 'top',
-                            widget: 'choicesjs',
                             placeholder: '',
                             description: '',
                             tooltip: '',
+                            prefix: '',
+                            suffix: '',
+                            widget: {
+                                type: 'input',
+                            },
+                            inputMask: '',
+                            displayMask: '',
+                            allowMultipleMasks: false,
                             customClass: '',
                             tabindex: '',
+                            autocomplete: '',
                             hidden: false,
                             hideLabel: false,
-                            uniqueOptions: false,
+                            showWordCount: false,
+                            showCharCount: false,
+                            mask: false,
                             autofocus: false,
+                            spellcheck: true,
                             disabled: false,
                             tableView: true,
                             modalEdit: false,
                             multiple: false,
-                            dataSrc: 'values',
                             defaultValue: '',
-                            data: {
-                                values: [
-                                    {
-                                        label: '',
-                                        value: '',
-                                    },
-                                ],
-                                resource: '',
-                                json: '',
-                                url: '',
-                                custom: '',
-                            },
-                            dataType: '',
-                            idPath: 'id',
-                            valueProperty: '',
-                            template: '<span>{{ item.label }}</span>',
-                            refreshOn: '',
-                            refreshOnBlur: '',
-                            clearOnRefresh: false,
-                            searchEnabled: true,
-                            selectThreshold: 0.3,
-                            readOnlyValue: false,
-                            customOptions: {},
-                            useExactSearch: false,
                             persistent: true,
+                            inputFormat: 'plain',
                             protected: false,
                             dbIndex: false,
+                            case: '',
+                            truncateMultipleSpaces: false,
                             encrypted: false,
+                            redrawOn: '',
                             clearOnHide: true,
                             customDefaultValue: '',
                             calculateValue: '',
@@ -561,11 +555,13 @@ export class AddFormComponent implements OnInit {
                             validateOn: 'change',
                             validate: {
                                 required: true,
-                                onlyAvailableItems: false,
+                                pattern: '',
                                 customMessage: '',
                                 custom: '',
                                 customPrivate: false,
                                 json: '',
+                                minLength: '',
+                                maxLength: '',
                                 strictDateValidation: false,
                                 multiple: false,
                                 unique: false,
@@ -593,33 +589,13 @@ export class AddFormComponent implements OnInit {
                                 width: '',
                                 height: '',
                             },
-                            type: 'select',
-                            indexeddb: {
-                                filter: {},
-                            },
-                            selectFields: '',
-                            searchField: '',
-                            searchDebounce: 0.3,
-                            minSearch: 0,
-                            filter: '',
-                            limit: 100,
-                            redrawOn: '',
+                            type: 'textfield',
                             input: true,
-                            prefix: '',
-                            suffix: '',
+                            refreshOn: '',
                             dataGridLabel: false,
-                            showCharCount: false,
-                            showWordCount: false,
-                            allowMultipleMasks: false,
                             addons: [],
-                            lazyLoad: true,
-                            authenticate: false,
-                            ignoreCache: false,
-                            fuseOptions: {
-                                include: 'score',
-                                threshold: 0.3,
-                            },
-                            id: 'evt4wo7',
+                            inputType: 'text',
+                            id: 'ewfyoi',
                         },
                         {
                             label: 'Team',
@@ -1153,7 +1129,7 @@ export class AddFormComponent implements OnInit {
                             unique: false,
                             errorLabel: '',
                             errors: '',
-                            key: 'NoOfbugsReportedByClient',
+                            key: 'noOfbugsReportedByClient',
                             tags: [],
                             properties: {},
                             conditional: {
@@ -1179,7 +1155,7 @@ export class AddFormComponent implements OnInit {
                             dataGridLabel: false,
                             addons: [],
                             inputType: 'text',
-                            id: 'e3e0rh7',
+                            id: 'e5kn76a',
                         },
                         {
                             label: 'Please write your comments for bugs reported by client.',
@@ -3384,19 +3360,20 @@ export class AddFormComponent implements OnInit {
                 },
             ],
         };
+        this.addRouteSubscription();
         this.getUserRole();
-        this.preFillFormData = {
-            data: {
-                ...this.preFillFormData?.data,
-                projectsWorkedOnDuringThisMonth: [
-                    'Metrics',
-                    'TTA',
-                    'TAP',
-                    'LaborIQ',
-                    'Test2',
-                ],
-            },
-        };
+        // this.preFillFormData = {
+        //     data: {
+        //         ...this.preFillFormData?.data,
+        //         projectsWorkedOnDuringThisMonth: [
+        //             'Metrics',
+        //             'TTA',
+        //             'TAP',
+        //             'LaborIQ',
+        //             'Test2',
+        //         ],
+        //     },
+        // };
     }
 
     goBack() {
@@ -3404,7 +3381,31 @@ export class AddFormComponent implements OnInit {
     }
 
     submit(event: any) {
-        console.log('form io-->', event);
+        this.isLoading = true;
+        const payload = {
+            resourceId: this.resourceId,
+            mentorId: this.loggedInUser?.resourceId,
+            formData: event?.data,
+        };
+        console.log('payload-->', payload);
+        // this.menteeService.saveOneToOneForm(payload).subscribe(
+        //     (res: any) => {
+        //         if (res?.data) {
+        //         }
+        //     },
+        //     (err) => {
+        //         this.snackBar.errorSnackBar('Something went wrong');
+        //     }
+        // );
+    }
+
+    private addRouteSubscription() {
+        this.route.paramMap.subscribe((paramMap) => {
+            const resourceId = paramMap.get('id');
+            if (resourceId) {
+                this.resourceId = Number(resourceId);
+            }
+        });
     }
 
     private getUserRole() {
@@ -3424,7 +3425,37 @@ export class AddFormComponent implements OnInit {
                             reviewerEmail: this.loggedInUser?.email,
                             reviewMonth: `${
                                 new Date().getMonth() + 1
-                            }/00/${new Date().getFullYear()}`,
+                            }/01/${new Date().getFullYear()}`,
+                            employeeName: 'Amaresh joshi',
+                            employeeEmail: 'amaresh@mindbowser.com',
+                            projectsWorkedOnDuringThisMonth: 'TTA',
+                            team: 'QA',
+                            wasTheWorkAssignedDeliveredOnTime: 'yes',
+                            commentsOnDelivery: 'test',
+                            haveTheDeveloperBeenRaisingPRsForTheWorkCommit:
+                                'yes',
+                            commentsOnRaisingPr: '',
+                            whatCanBeDoneBetterInTheCodePrReviewProcess: '',
+                            devUsingJira: 'yes',
+                            pleaseWriteCommentsOnUsingJiraOrOtherProjectManagementTools:
+                                '',
+                            isDevSharingBuild: '',
+                            commentsOnDevNotSharingBuild: '',
+                            whatIsTheStatusOfTheirGoals: 'asda',
+                            additionalCommentsOnGoals: '',
+                            commentsAboutParticipationAndAttendingSaturdayLearning:
+                                '',
+                            overAllRating: {
+                                workTasksTheyCompleted: 'excellent',
+                                proactiveness: 'excellent',
+                                attitudeAndBehavior: 'excellent',
+                                dependability: 'excellent',
+                            },
+                            overAllThoughtsOnImprovement: '',
+                            mentionYourAdditionalComments: '',
+                            considerForAward: 'yes',
+                            considerForAwardComments: '',
+                            statusForLastMonthActionItems: 'test',
                         },
                     };
                 }
