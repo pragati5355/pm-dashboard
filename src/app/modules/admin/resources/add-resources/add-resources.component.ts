@@ -258,14 +258,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     }
 
     removeTechnology(index: number, technologyControlValue: any) {
-        if (technologyControlValue?.id) {
-            const control = this.technologies?.at(index);
-            control?.get('experienceYear').setErrors(null);
-            control?.get('experienceMonth').setErrors(null);
-            control?.get('deleted')?.setValue(true);
-        } else {
-            this.technologies.removeAt(index);
-        }
+        this.technologies.removeAt(index);
     }
 
     addNewCertificate() {
@@ -403,14 +396,20 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
 
     editResource() { 
         if (this.resourcesForm?.valid) {
-            this.mentorModel = [
-                {
-                    email : this.resourcedetails[0]?.email,
-                    menteeResourceId : this.resourcedetails[0]?.id
-                }
-            ];
+            const technologyWithNoExperience = this.resourcesForm
+                ?.get('technologies')
+                ?.value?.filter(
+                    (item) =>
+                     item?.experienceMonth === 0 && item?.experienceYear === 0
+                );
+            
+            if (technologyWithNoExperience?.length > 0) {
+                this.snackBar?.errorSnackBar('Add technology experience');
+                return;
+            }
+
             if (
-                this.resourcesForm?.get('team')?.value === 'PM' ||
+                this.resourcesForm?.get('role')?.value === 'PM' ||
                 this.resourcesForm?.value?.technologies?.length > 0
             ) {
                 const resourceForm = this.resourcesForm?.value;
@@ -435,6 +434,12 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             (item) =>
                 item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
         );
+        this.mentorModel = [
+            {
+                email : this.resourcedetails[0]?.email,
+                menteeResourceId : this.resourcedetails[0]?.id
+            }
+        ];
         return this.resourcedetails.length ? this.resourcedetails : [{ email: 'No Emails found' }];
     }
 
