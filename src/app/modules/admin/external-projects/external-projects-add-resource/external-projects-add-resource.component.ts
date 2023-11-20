@@ -110,7 +110,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             this.externalProjectsService.mapResource(payload).subscribe(
                 (res: any) => {
                     this.submitInProcess = false;
-                    if (res?.error === false) {
+                    if (res?.statusCode === 200) {
                         this.snackBar.successSnackBar(res?.message);
                         this.matDialogRef.close(true);
                     }

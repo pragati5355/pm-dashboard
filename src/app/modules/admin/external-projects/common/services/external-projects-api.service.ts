@@ -7,7 +7,7 @@ import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 })
 export class ExternalProjectsApiService {
     getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
-    mapResourceUrl = AppConstants['PROJECT_API_URL'] + '/map-resource';
+    mapResourceUrl =  API_LIST.PROJECT_SPRING_BOOT_URL + '/resource/map-resource';
     externalProjectsListUrl =
         AppConstants['PROJECT_API_URL'] + '/get-external-project';
 
