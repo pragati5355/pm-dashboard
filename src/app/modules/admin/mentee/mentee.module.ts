@@ -16,6 +16,8 @@ import { ViewFormComponent } from './view-form/view-form.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { AddFormComponent } from './add-form/add-form.component';
 import { FormioModule } from 'angular-formio';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
+
 @NgModule({
     declarations: [
         MenteeHomeComponent,
@@ -36,6 +38,7 @@ import { FormioModule } from 'angular-formio';
         MatTooltipModule,
         FormioModule,
         NgxExtendedPdfViewerModule,
+        SkeletonModule,
     ],
 })
 export class MenteeModule {}

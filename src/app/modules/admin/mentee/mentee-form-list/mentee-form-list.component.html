@@ -50,7 +50,9 @@
                         <div>Date filled</div>
                         <div>Actions</div>
                     </div>
-                    <ng-container *ngIf="menteeFormList?.length > 0">
+                    <ng-container
+                        *ngIf="!initialLoading && menteeFormList?.length > 0"
+                    >
                         <div class="grid">
                             <ng-container *ngFor="let list of menteeFormList">
                                 <div
@@ -89,11 +91,11 @@
                             1 to 1 forms not found
                         </div>
                     </ng-container>
-                    <!-- <ng-container *ngIf="initialLoading">
+                    <ng-container *ngIf="initialLoading">
                         <app-table-skeleton
                             [skeletonData]="requiredSkeletonData"
                         ></app-table-skeleton>
-                    </ng-container> -->
+                    </ng-container>
                 </div>
             </div>
         </div>

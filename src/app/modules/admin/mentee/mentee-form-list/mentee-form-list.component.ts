@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AddFormComponent } from '../add-form/add-form.component';
 import { ViewFormComponent } from '../view-form/view-form.component';
 
@@ -3158,10 +3158,21 @@ export class MenteeFormListComponent implements OnInit {
             date: 'Dec 02 2023',
         },
     ];
-    initialLoading: boolean = false;
-    constructor(private router: Router, private dialog: MatDialog) {}
+    initialLoading: boolean = true;
+    resourceId: number | null = null;
+    requiredSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: false,
+    };
+    constructor(
+        private router: Router,
+        private dialog: MatDialog,
+        private route: ActivatedRoute
+    ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.addRouteSubscription();
+    }
 
     goBack() {
         this.router.navigate([`/mentee`]);
@@ -3185,6 +3196,15 @@ export class MenteeFormListComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
                 window.location.reload();
+            }
+        });
+    }
+
+    private addRouteSubscription() {
+        this.route.paramMap.subscribe((paramMap) => {
+            const resourceId = paramMap.get('id');
+            if (resourceId) {
+                this.resourceId = Number(resourceId);
             }
         });
     }

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { SnackBar } from 'app/core/utils/snackBar';
+import { MenteeService } from '../common/services/mentee.service';
 
 @Component({
     selector: 'app-mentee-list',
@@ -13,6 +15,10 @@ export class MenteeListComponent implements OnInit {
     userRole: string = '';
     loggedInUserId: number;
     initialLoading: boolean = false;
+    requiredSkeletonData = {
+        rowsToDisplay: 10,
+        displayProfilePicture: false,
+    };
     menteeList: any[] = [
         {
             name: 'Rohan kadam',
@@ -43,7 +49,9 @@ export class MenteeListComponent implements OnInit {
     constructor(
         private loggedInUserService: LoggedInUserService,
         private router: Router,
-        private _activatedRoute: ActivatedRoute
+        private _activatedRoute: ActivatedRoute,
+        private menteeService: MenteeService,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
@@ -65,8 +73,21 @@ export class MenteeListComponent implements OnInit {
             if (res?.role) {
                 this.userRole = res?.role;
                 this.loggedInUserId = res?.resourceId;
-                console.log(this.loggedInUserId);
+                // this.getMenteeList(this.loggedInUserId);
             }
         });
+    }
+    private getMenteeList(id: number) {
+        this.initialLoading = true;
+        this.menteeService.getMenteeList(id).subscribe(
+            (res) => {
+                this.initialLoading = false;
+                console.log(res);
+            },
+            (err) => {
+                this.initialLoading = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 }

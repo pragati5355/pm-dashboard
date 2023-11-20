@@ -14,4 +14,7 @@ export class MenteeService {
     saveOneToOneForm(obj: any) {
         return this.http.post(API_LIST.SPRING_BOOT_URL, obj);
     }
+    getMenteeList(id: number) {
+        return this.http.get(API_LIST.SPRING_BOOT_URL + `/mentee/list/${id}`);
+    }
 }
