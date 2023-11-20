@@ -259,14 +259,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
 
     removeTechnology(index: number, technologyControlValue: any) {
         this.technologies.removeAt(index);
-        // if (technologyControlValue?.id) {
-        //     const control = this.technologies?.at(index);
-        //     control?.get('experienceYear').setErrors(null);
-        //     control?.get('experienceMonth').setErrors(null);
-        //     control?.get('deleted')?.setValue(true);
-        // } else {
-        //     this.technologies.removeAt(index);
-        // }
     }
 
     addNewCertificate() {
