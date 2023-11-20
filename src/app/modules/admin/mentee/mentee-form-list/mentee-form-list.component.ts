@@ -3158,7 +3158,7 @@ export class MenteeFormListComponent implements OnInit {
             date: 'Dec 02 2023',
         },
     ];
-    initialLoading: boolean = true;
+    initialLoading: boolean = false;
     resourceId: number | null = null;
     requiredSkeletonData = {
         rowsToDisplay: 10,
