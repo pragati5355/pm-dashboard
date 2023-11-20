@@ -404,14 +404,26 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
 
     editResource() { 
         if (this.resourcesForm?.valid) {
+            const technologyWithNoExperience = this.resourcesForm
+                ?.get('technologies')
+                ?.value?.filter(
+                    (item) =>
+                     item?.experienceMonth === 0 && item?.experienceYear === 0
+                );
             this.mentorModel = [
                 {
                     email : this.resourcedetails[0]?.email,
                     menteeResourceId : this.resourcedetails[0]?.id
                 }
             ];
+            
+            if (technologyWithNoExperience?.length > 0) {
+                this.snackBar?.errorSnackBar('Add technology experience');
+                return;
+            }
+
             if (
-                this.resourcesForm?.get('team')?.value === 'PM' ||
+                this.resourcesForm?.get('role')?.value === 'PM' ||
                 this.resourcesForm?.value?.technologies?.length > 0
             ) {
                 const resourceForm = this.resourcesForm?.value;
@@ -421,7 +433,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 };
                 this.submitInProcess = true;
                 console.log("Payload : ", payload);
-                // this.updateReourceApi(payload);
+                this.updateReourceApi(payload);
             } else {
                 this.submitInProcess = false;
                 this.snackBar.errorSnackBar('Choose technology');
