@@ -54,7 +54,6 @@
                                             #toggleButton
                                             (click)="showFilter()"
                                             mat-stroked-button
-                                            [disabled]="showVendorsOnly"
                                             class="ml-2 rounded-full border py-1 px-4 items-center border-gray-500"
                                             [matTooltip]="'Filter'"
                                         >
@@ -316,6 +315,21 @@
                                                 ></mat-icon>
                                             </mat-form-field>
 
+                                            <div class="mt-2 mb-4 pl-1">
+                                                <section class="w-full">
+                                                    <mat-checkbox
+                                                        (change)="
+                                                            showOnlyVendors($event)
+                                                        "
+                                                        [checked]="showVendorsOnly"
+                                                        [disabled]="selectedProject && isBench && isShadow"
+                                                        [color]="'primary'"
+                                                        class="example-margin"
+                                                        >Show vendors only</mat-checkbox
+                                                    >
+                                                </section>
+                                            </div>
+
                                             <div
                                                 class="w-full flex justify-end"
                                             >
@@ -342,19 +356,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="mt-2">
-                                        <section class="w-full">
-                                            <mat-checkbox
-                                                (change)="
-                                                    showOnlyVendors($event)
-                                                "
-                                                [color]="'primary'"
-                                                class="example-margin"
-                                                >Show vendors only</mat-checkbox
-                                            >
-                                        </section>
                                     </div>
 
                                     <!-- <div class="">
@@ -452,11 +453,12 @@
                             >
                                 <div></div>
                                 <div>Name</div>
+                                <div class="hidden lg:block">Mentor</div>
                                 <div class="hidden sm:block">Technology</div>
                                 <div class="hidden lg:block">
                                     Active Projects
                                 </div>
-                                <div class="hidden lg:block">Team</div>
+                                <!-- <div class="hidden lg:block">Team</div> -->
                                 <div class="hidden sm:block">Experience</div>
                                 <div *ngIf="userRole === 'ADMIN'">Action</div>
                             </div>
@@ -527,6 +529,9 @@
                                                     {{ resources?.email }}
                                                 </div>
                                             </div>
+                                            <div class="hidden sm:block">
+                                                {{ resources?.mentor  || "-"}}
+                                            </div>
                                             <div
                                                 class="grid-flow-row sm:flex truncate cursor-pointer"
                                             >
@@ -550,9 +555,9 @@
                                             >
                                                 {{ resources?.projects || "-" }}
                                             </div>
-                                            <div class="hidden sm:block">
+                                            <!-- <div class="hidden sm:block">
                                                 {{ resources?.role }}
-                                            </div>
+                                            </div> -->
 
                                             <div
                                                 class="hidden md:flex items-center"

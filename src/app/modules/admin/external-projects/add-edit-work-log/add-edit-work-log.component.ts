@@ -263,7 +263,6 @@ export class AddEditWorkLogComponent implements OnInit {
             return;
         }
         this.submitInProgress = true;
-        console.log("Payload : ", payload);
         this.workLogService.saveWorkLogs(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;

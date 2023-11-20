@@ -10,13 +10,33 @@
                         *ngIf="!initialLoading && resourcesForm"
                         class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
                     >
-                        <div class="w-full">
-                            <h2
-                                class="text-3xl font-semibold tracking-tight leading-8"
-                            >
-                                Resource details
-                            </h2>
+                        <div class="flex flex-row">
+                            <div class="w-full">
+                                <h2
+                                    class="text-3xl font-semibold tracking-tight leading-8"
+                                >
+                                    Resource details
+                                </h2>
+                            </div>
+                            <div class="flex items-center ml-auto">
+                                <button
+                                    (click)="submit()"
+                                    [color]="'primary'"
+                                    class="order-first sm:order-last ml-4"
+                                    mat-flat-button
+                                >
+                                    <span *ngIf="mode === 'edit'">
+                                        Update
+                                    </span>
+                                    <mat-progress-spinner
+                                        *ngIf="submitInProcess"
+                                        [diameter]="18"
+                                        [mode]="'indeterminate'"
+                                    ></mat-progress-spinner>
+                                </button>
+                            </div>
                         </div>
+
                         <div class="flex flex-auto items-end mb-6">
                             <div
                                 class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card"
@@ -791,73 +811,76 @@
                             </div>
                         </div>
 
-                        <div *ngIf="certificationArrow" class="pl-11">
-                            <div formArrayName="certificates">
-                                <ng-container
-                                    *ngFor="
-                                        let certificate of certificates?.controls;
-                                        let i = index;
-                                        let last = last
-                                    "
+                        <div *ngIf="certificationArrow" class="pl-11" formArrayName="certificates">
+                            <ng-container *ngFor="
+                                let certificate of certificates?.controls;
+                                let i = index;
+                                let last = last
+                            ">
+                                <form
+                                    class="flex flex-0 flex-wrap sm:flex-nowrap flex-row justify-center items-center mt-4"
+                                    [formGroupName]="i"
                                 >
-                                    <form
-                                        class="flex flex-0 flex-wrap sm:flex-nowrap flex-row justify-center items-center mt-4"
-                                        [formGroupName]="i"
+                                    <mat-form-field
+                                        class="w-full mr-4 userlist"
+                                        id="userlist"
+                                        [floatLabel]="'always'"
                                     >
-                                        <mat-form-field
-                                            class="w-full mr-4 userlist"
-                                            id="userlist"
-                                            [floatLabel]="'always'"
+                                        <mat-label>Name</mat-label>
+                                        <input
+                                            matInput
+                                            placeholder="Certificate Name"
+                                            formControlName="name"
+                                            class="inputlist"
+                                        />
+                                        <mat-error
+                                            *ngIf="certificate?.get('name')?.hasError('required')"
+                                    >
+                                        <div class="text-red-500">
+                                            Certificate Name is Mandatory
+                                        </div>
+                                    </mat-error>
+                                    </mat-form-field>
+        
+                                    <mat-form-field
+                                        class="w-full mr-4 sm:mt-0 userlist"
+                                        id="userlist"
+                                        [floatLabel]="'always'"
+                                    >
+                                        <mat-label
+                                            >Certificate Link(Optional)</mat-label
                                         >
-                                            <mat-label>Name</mat-label>
-                                            <input
-                                                matInput
-                                                placeholder="Certificate Name"
-                                                formControlName="name"
-                                                class="inputlist"
-                                            />
-                                        </mat-form-field>
-            
-                                        <mat-form-field
-                                            class="w-full mr-4 sm:mt-0 userlist"
-                                            id="userlist"
-                                            [floatLabel]="'always'"
-                                        >
-                                            <mat-label
-                                                >Certificate Link(Optional)</mat-label
-                                            >
-                                            <input
-                                                matInput
-                                                placeholder="certificate link"
-                                                formControlName="link"
-                                                class="inputlist"
-                                            />
-                                        </mat-form-field>
-                                        <mat-icon
-                                            *ngIf="last"
-                                            class="cursor-pointer mr-2"
-                                            color="primary"
-                                            matTooltip="Add more certificates"
-                                            (click)="
-                                                certificate?.valid
-                                                    ? addNewCertificate()
-                                                    : certificate?.markAllAsTouched()
-                                            "
-                                            >add</mat-icon
-                                        >
-                                        <mat-icon
-                                            *ngIf="i != 0"
-                                            class="cursor-pointer"
-                                            color="warn"
-                                            matTooltip="Remove"
-                                            (click)="remove(i)"
-                                            >delete</mat-icon
-                                        >
-                                    </form>
-                                </ng-container>
-                            </div>
+                                        <input
+                                            matInput
+                                            placeholder="certificate link"
+                                            formControlName="link"
+                                            class="inputlist"
+                                        />
+                                    </mat-form-field>
+                                    <mat-icon
+                                        *ngIf="last"
+                                        class="cursor-pointer mr-2"
+                                        color="primary"
+                                        matTooltip="Add more certificates"
+                                        (click)="
+                                            certificate?.valid
+                                            ? addNewCertificate()
+                                            : certificate?.markAllAsTouched()
+                                        "
+                                        >add</mat-icon
+                                    >
+                                    <mat-icon
+                                        *ngIf="i != 0"
+                                        class="cursor-pointer"
+                                        color="warn"
+                                        matTooltip="Remove"
+                                        (click)="remove(i)"
+                                        >delete</mat-icon
+                                    >
+                                </form>
+                            </ng-container>
                         </div>
-
+                        
                         <div
                             class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"
                         >
@@ -879,6 +902,11 @@
                                     <span *ngIf="mode === 'edit'">
                                         Update
                                     </span>
+                                    <mat-progress-spinner
+                                        *ngIf="submitInProcess"
+                                        [diameter]="18"
+                                        [mode]="'indeterminate'"
+                                    ></mat-progress-spinner>
                                 </button>
                             </div>
                         </div>
