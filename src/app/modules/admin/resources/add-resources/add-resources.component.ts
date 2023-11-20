@@ -410,12 +410,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                     (item) =>
                      item?.experienceMonth === 0 && item?.experienceYear === 0
                 );
-            this.mentorModel = [
-                {
-                    email : this.resourcedetails[0]?.email,
-                    menteeResourceId : this.resourcedetails[0]?.id
-                }
-            ];
             
             if (technologyWithNoExperience?.length > 0) {
                 this.snackBar?.errorSnackBar('Add technology experience');
@@ -448,6 +442,12 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             (item) =>
                 item?.email.toLowerCase().indexOf(email.toLowerCase()) === 0
         );
+        this.mentorModel = [
+            {
+                email : this.resourcedetails[0]?.email,
+                menteeResourceId : this.resourcedetails[0]?.id
+            }
+        ];
         return this.resourcedetails.length ? this.resourcedetails : [{ email: 'No Emails found' }];
     }
 
