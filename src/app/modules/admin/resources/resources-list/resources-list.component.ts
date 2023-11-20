@@ -247,6 +247,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     clearFilter() {
+        console.log("clear filter");
         this.isBench = false;
         this.isShadow = false;
         this.showVendorsOnly = false;
@@ -259,6 +260,8 @@ export class ResourcesListComponent implements OnInit {
         this.searchValue = '';
         this.count = 1;
         this.totalPerPageData = 10;
+        this.totalPerPageData = 10;
+        this.projects?.enable();
         this.projects?.setValue('');
         this.showTechnologies = [];
         this.technologys.setValue('');
@@ -295,16 +298,28 @@ export class ResourcesListComponent implements OnInit {
     }
 
     showOnlyVendors(event: MatCheckboxChange) {
-        this.showVendorsOnly = event?.checked;
-        this.projects?.disable();
-        this.technologyCtrl?.disable();
-        this.isShadowIsBench?.disable();
-        this.exprienceForm?.disable();
-        this.count = 1;
-        this.pagination = false;
-        const payload = this.getDefaultSearchPayload();
-        this.initialLoading = true;
-        this.loadDataWithFilterPayload(payload);
+        if(event?.checked){
+            this.showVendorsOnly = event?.checked;
+            this.projects?.disable();
+            this.technologyCtrl?.disable();
+            this.isShadowIsBench?.disable();
+            this.exprienceForm?.disable();
+            this.count = 1;
+            this.pagination = false;
+            this.initialLoading = true;
+            this.technologys.disable();
+            const payload = this.getDefaultSearchPayload();
+            this.loadDataWithFilterPayload(payload);
+        } else {
+            this.exprienceForm.enable();
+            this.count = 1;
+            this.totalPerPageData = 10;
+            this.projects?.enable();
+            this.isShadowIsBench.enable();
+            this.pagination = false;
+            this.technologyCtrl?.enable();
+            this.getList();
+        }
     }
 
     handleScroll() {
