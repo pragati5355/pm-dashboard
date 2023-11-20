@@ -247,7 +247,6 @@ export class ResourcesListComponent implements OnInit {
     }
 
     clearFilter() {
-        console.log("clear filter");
         this.isBench = false;
         this.isShadow = false;
         this.showVendorsOnly = false;
