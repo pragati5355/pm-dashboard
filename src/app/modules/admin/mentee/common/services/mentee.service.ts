@@ -17,4 +17,10 @@ export class MenteeService {
     getMenteeList(id: number) {
         return this.http.get(API_LIST.SPRING_BOOT_URL + `/mentee/list/${id}`);
     }
+    getFormByType(obj: any) {
+        return this.http.post(
+            AppConstants['PROJECT_API_URL'] + '/get-form-by-type',
+            obj
+        );
+    }
 }
