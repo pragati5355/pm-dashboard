@@ -16,7 +16,7 @@
                                 class="icon-size-6 text-3xl text-black"
                                 [svgIcon]="'heroicons_outline:chevron-left'"
                             ></mat-icon>
-                            <span class="font-semibold">Rohan kadam</span>
+                            <span class="font-semibold">Back</span>
                         </div>
                     </div>
 
@@ -65,7 +65,7 @@
                                     </div>
 
                                     <div class="hidden md:block truncate">
-                                        {{ list?.date }}
+                                        {{ list?.filledDate | date }}
                                     </div>
 
                                     <div
@@ -75,7 +75,7 @@
                                             class="mr-4"
                                             [matTooltip]="'View filled form'"
                                             svgIcon="heroicons_outline:eye"
-                                            (click)="viewForm()"
+                                            (click)="viewForm(list?.formUrl)"
                                         ></mat-icon>
                                     </div>
                                 </div>

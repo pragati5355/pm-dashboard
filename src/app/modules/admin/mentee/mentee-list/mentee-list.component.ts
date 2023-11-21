@@ -19,33 +19,7 @@ export class MenteeListComponent implements OnInit {
         rowsToDisplay: 10,
         displayProfilePicture: false,
     };
-    menteeList: any[] = [
-        {
-            name: 'Rohan kadam',
-            email: 'rohan@mindbowser.com',
-            team: 'FRONTEND',
-            technologies: ['Angular', 'CSS'],
-        },
-        {
-            name: 'Amaresh joshi',
-            email: 'amaresh@mindbowser.com',
-            team: 'BACKEND',
-            technologies: ['Angular', 'CSS', 'JAVA', 'PYTHON'],
-        },
-        {
-            name: 'Pragati gawade',
-            email: 'pragati@mindbowser.com',
-            team: 'FRONTEND',
-            technologies: [
-                'Angular',
-                'CSS',
-                'Angular',
-                'CSS',
-                'JAVA',
-                'PYTHON',
-            ],
-        },
-    ];
+    menteeList: any[] = [];
     constructor(
         private loggedInUserService: LoggedInUserService,
         private router: Router,
@@ -58,14 +32,14 @@ export class MenteeListComponent implements OnInit {
         this.getUserRole();
     }
 
-    viewMentee() {
-        const rpit = this.router.navigate(['./view/', 78], {
+    viewMentee(id: string | number) {
+        const rpit = this.router.navigate(['./view/', 89], {
             relativeTo: this._activatedRoute,
         });
     }
 
-    viewMenteeFormList() {
-        this.router.navigate([`/mentee/form-list/123`]);
+    viewMenteeFormList(id: string | number) {
+        this.router.navigate([`/mentee/form-list/89`]);
     }
 
     private getUserRole() {
@@ -73,16 +47,27 @@ export class MenteeListComponent implements OnInit {
             if (res?.role) {
                 this.userRole = res?.role;
                 this.loggedInUserId = res?.resourceId;
-                // this.getMenteeList(this.loggedInUserId);
+                this.getMenteeList(this.loggedInUserId);
             }
         });
     }
     private getMenteeList(id: number) {
         this.initialLoading = true;
         this.menteeService.getMenteeList(id).subscribe(
-            (res) => {
+            (res: any) => {
                 this.initialLoading = false;
-                console.log(res);
+                if (res?.data) {
+                    this.menteeList = res?.data;
+                    this.menteeList = [
+                        {
+                            firstName: 'Rohan',
+                            lastName: 'kadam',
+                            email: 'rohan@mindbowser.com',
+                            role: 'FRONTEND',
+                            menteeResourceId: 78,
+                        },
+                    ];
+                }
             },
             (err) => {
                 this.initialLoading = false;

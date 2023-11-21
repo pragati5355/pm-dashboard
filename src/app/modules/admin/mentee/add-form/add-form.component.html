@@ -17,10 +17,14 @@
             </div>
 
             <div class="flex items-center justify-end w-full">
-                <div class="">
+                <div class="" *ngIf="!initialLoading">
                     <span class="text-2xl"
                         >Fill 1 to 1 form:
-                        <span class="font-semibold">Rohan kadam</span></span
+                        <span class="font-semibold">{{
+                            menteeDetails?.firstName +
+                                " " +
+                                menteeDetails?.lastName
+                        }}</span></span
                     >
                 </div>
             </div>

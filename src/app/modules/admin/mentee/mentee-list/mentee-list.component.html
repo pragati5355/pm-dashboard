@@ -39,10 +39,7 @@
                                     !initialLoading && menteeList?.length > 0
                                 "
                             >
-                                <div
-                                    class="grid cursor-pointer"
-                                    (click)="viewMentee()"
-                                >
+                                <div class="grid cursor-pointer">
                                     <ng-container
                                         *ngFor="
                                             let mentee of menteeList;
@@ -54,7 +51,11 @@
                                         >
                                             <div class="cursor-pointer">
                                                 <div class="truncate">
-                                                    {{ mentee?.name }}
+                                                    {{
+                                                        mentee?.firstName +
+                                                            " " +
+                                                            mentee?.lastName
+                                                    }}
                                                 </div>
                                             </div>
 
@@ -67,14 +68,18 @@
                                             <div
                                                 class="hidden md:block truncate"
                                             >
-                                                {{ mentee?.team }}
+                                                {{ mentee?.role }}
                                             </div>
 
                                             <div class="flex">
                                                 <button
                                                     [color]="'primary'"
                                                     mat-flat-button
-                                                    (click)="viewMentee()"
+                                                    (click)="
+                                                        viewMentee(
+                                                            mentee?.menteeResourceId
+                                                        )
+                                                    "
                                                 >
                                                     <span class="ml-2 mr-1"
                                                         >Profile</span
@@ -86,7 +91,9 @@
                                                     class="ml-4"
                                                     mat-flat-button
                                                     (click)="
-                                                        viewMenteeFormList()
+                                                        viewMenteeFormList(
+                                                            mentee?.menteeResourceId
+                                                        )
                                                     "
                                                 >
                                                     <span class="ml-2 mr-1"

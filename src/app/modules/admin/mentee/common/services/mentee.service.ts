@@ -12,7 +12,10 @@ export class MenteeService {
         return this.http.post(AppConstants['GET_RESOURCE'], obj);
     }
     saveOneToOneForm(obj: any) {
-        return this.http.post(API_LIST.SPRING_BOOT_URL, obj);
+        return this.http.post(
+            API_LIST.SPRING_BOOT_URL + '/resource/one-to-one-form',
+            obj
+        );
     }
     getMenteeList(id: number) {
         return this.http.get(API_LIST.SPRING_BOOT_URL + `/mentee/list/${id}`);
@@ -21,6 +24,11 @@ export class MenteeService {
         return this.http.post(
             AppConstants['PROJECT_API_URL'] + '/get-form-by-type',
             obj
+        );
+    }
+    getMenteeFormList(id: number) {
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + `/resource/one-to-one-form/${id}`
         );
     }
 }
