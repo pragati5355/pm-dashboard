@@ -28,14 +28,14 @@ const routes: Routes = [
                 path: 'form-list/:id',
                 component: MenteeFormListComponent,
                 data: {
-                    pageTitle: '1 to 1 Forms',
+                    pageTitle: '1-1 Forms',
                 },
             },
             {
                 path: 'form-list/add-from/:id',
                 component: AddFormComponent,
                 data: {
-                    pageTitle: '1 to 1 Forms',
+                    pageTitle: '1-1 Forms',
                 },
             },
             {

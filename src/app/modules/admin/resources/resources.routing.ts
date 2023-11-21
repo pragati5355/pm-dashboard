@@ -31,7 +31,7 @@ export const resourcesRoutes: Route[] = [
                 path: 'one-to-one-forms/:id',
                 component: OneToOneFormsComponent,
                 data: {
-                    pageTitle: '1 to 1 forms',
+                    pageTitle: '1-1 forms',
                 },
             },
             {
