@@ -244,19 +244,20 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
         const payload = this.getPayload();
         this.isLoading = true;
-        this.externalProjectService.saveSettings(payload).subscribe(
-            (res: any) => {
-                this.isLoading = false;
-                if (res?.statusCode === 200) {
-                    this.snackBar.successSnackBar(res?.message);
-                    this.dialogRef.close(true);
-                }
-            },
-            (err) => {
-                this.isLoading = false;
-                this.snackBar.errorSnackBar(err?.message);
-            }
-        );
+        console.log("Payload : ", payload);
+        // this.externalProjectService.saveSettings(payload).subscribe(
+        //     (res: any) => {
+        //         this.isLoading = false;
+        //         if (res?.statusCode === 200) {
+        //             this.snackBar.successSnackBar(res?.message);
+        //             this.dialogRef.close(true);
+        //         }
+        //     },
+        //     (err) => {
+        //         this.isLoading = false;
+        //         this.snackBar.errorSnackBar(err?.message);
+        //     }
+        // );
     }
 
     clearReminders() {
@@ -537,6 +538,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 ? this.data?.projectSettings?.id
                 : null,
             projectId: this.data?.projectModel?.id,
+            holidaysAllowed : this.getNoOfLeaveHolidayAllowed(),
             sourceType: 'SLACK',
             deleted: false,
             reminderModel: [
@@ -629,5 +631,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     rate: tech?.techRate,
                 };
             });
+    }
+
+    private getNoOfLeaveHolidayAllowed(){
+        return this.paidLeaveHolidayForm?.get('paidLeaves')?.value;
     }
 }
