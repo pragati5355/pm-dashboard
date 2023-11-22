@@ -198,14 +198,19 @@
                                         [innerHTML]="
                                             logs?.onLeave
                                                 ? 'On Leave'
+                                                : 
+                                            logs?.onHoliday
+                                                ? 'On Holiday'
                                                 : (logs?.comment | sanitizeHtml)
                                         "
                                     ></div>
                                     <div class="pb-2">
                                         {{
-                                            logs?.onLeave ? 0 : logs?.timeSpent
+                                            logs?.onLeave || logs?.onHoliday ? 0 : 
+                                            logs?.timeSpent
                                         }}
                                     </div>
+
 
                                     <div
                                         class=""

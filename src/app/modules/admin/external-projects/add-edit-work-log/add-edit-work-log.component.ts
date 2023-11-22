@@ -244,6 +244,14 @@ export class AddEditWorkLogComponent implements OnInit {
             this.showError = false;
             this.onLeave = this.data?.data?.onLeave;
         }
+        if (this.data?.data?.onHoliday) {
+            this.workLogForm?.get('totalHours')?.disable();
+            this.workLogForm?.get('totalHours')?.setValue('');
+            this.description = '';
+            this.tasks = [];
+            this.showError = false;
+            this.onLeave = this.data?.data?.onHoliday;
+        }
     }
 
     private handleSubmitResponse() {
@@ -263,6 +271,7 @@ export class AddEditWorkLogComponent implements OnInit {
             return;
         }
         this.submitInProgress = true;
+        console.log("Payload : ", payload)
         this.workLogService.saveWorkLogs(payload)?.subscribe(
             (res: any) => {
                 this.submitInProgress = false;
@@ -278,7 +287,9 @@ export class AddEditWorkLogComponent implements OnInit {
             },
             (err) => {
                 this.submitInProgress = false;
-                this.snackBar.errorSnackBar('Something went wrong');
+                if(err.status==500){
+                    this.snackBar.errorSnackBar(err?.error?.message);
+                }
             }
         );
     }
@@ -305,7 +316,7 @@ export class AddEditWorkLogComponent implements OnInit {
                             comment: this.description,
                         },
                         onLeave: this.onLeave,
-                        // onHoliday : this.onHoliday,
+                        onHoliday : this.onHoliday,
                     },
                 ],
             };
@@ -322,28 +333,28 @@ export class AddEditWorkLogComponent implements OnInit {
                             comment: '',
                         },
                         onLeave: this.onLeave,
-                        // onHoliday : this.onHoliday,
+                        onHoliday : this.onHoliday,
                     },
                 ],
             };
         }
-        // if (this.onHoliday && this.data?.mode === 'ADD') {
-        //     return {
-        //         externalWorklog: [
-        //             {
-        //                 resourceId: this.data?.loggedInUser?.resourceId,
-        //                 projectId: this.data?.projectId,
-        //                 workLogDate: workLogDate,
-        //                 worklogPerTask: {
-        //                     timeSpent: 0,
-        //                     comment: '',
-        //                 },
-        //                 onLeave: this.onLeave,
-        //                 onHoliday : this.onHoliday,
-        //             },
-        //         ],
-        //     };
-        // }
+        if (this.onHoliday && this.data?.mode === 'ADD') {
+            return {
+                externalWorklog: [
+                    {
+                        resourceId: this.data?.loggedInUser?.resourceId,
+                        projectId: this.data?.projectId,
+                        workLogDate: workLogDate,
+                        worklogPerTask: {
+                            timeSpent: 0,
+                            comment: '',
+                        },
+                        onLeave: this.onLeave,
+                        onHoliday : this.onHoliday,
+                    },
+                ],
+            };
+        }
         return {
             externalWorklog: tasks,
         };
