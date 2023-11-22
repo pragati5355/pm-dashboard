@@ -244,6 +244,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
         const payload = this.getPayload();
         this.isLoading = true;
+        console.log("Payload : ", payload);
         this.externalProjectService.saveSettings(payload).subscribe(
             (res: any) => {
                 this.isLoading = false;
@@ -482,7 +483,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
     private initializeProjectSettingForm(){
         this.paidLeaveHolidayForm = this.fb.group({
-            paidLeaves : [0,[
+            paidLeaves : [this.data?.projectSettings?.holidaysAllowed ? this.data?.projectSettings?.holidaysAllowed : 0,[
                 Validators.required,
                 Validators.max(5),
             ],]
@@ -537,6 +538,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
                 ? this.data?.projectSettings?.id
                 : null,
             projectId: this.data?.projectModel?.id,
+            holidaysAllowed : this.getNoOfLeaveHolidayAllowed(),
             sourceType: 'SLACK',
             deleted: false,
             reminderModel: [
@@ -629,5 +631,9 @@ export class ExternalProjectSettingsComponent implements OnInit {
                     rate: tech?.techRate,
                 };
             });
+    }
+
+    private getNoOfLeaveHolidayAllowed(){
+        return this.paidLeaveHolidayForm?.get('paidLeaves')?.value;
     }
 }
