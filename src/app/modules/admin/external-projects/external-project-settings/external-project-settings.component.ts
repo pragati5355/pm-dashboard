@@ -245,19 +245,19 @@ export class ExternalProjectSettingsComponent implements OnInit {
         const payload = this.getPayload();
         this.isLoading = true;
         console.log("Payload : ", payload);
-        // this.externalProjectService.saveSettings(payload).subscribe(
-        //     (res: any) => {
-        //         this.isLoading = false;
-        //         if (res?.statusCode === 200) {
-        //             this.snackBar.successSnackBar(res?.message);
-        //             this.dialogRef.close(true);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.isLoading = false;
-        //         this.snackBar.errorSnackBar(err?.message);
-        //     }
-        // );
+        this.externalProjectService.saveSettings(payload).subscribe(
+            (res: any) => {
+                this.isLoading = false;
+                if (res?.statusCode === 200) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.dialogRef.close(true);
+                }
+            },
+            (err) => {
+                this.isLoading = false;
+                this.snackBar.errorSnackBar(err?.message);
+            }
+        );
     }
 
     clearReminders() {
@@ -483,7 +483,7 @@ export class ExternalProjectSettingsComponent implements OnInit {
 
     private initializeProjectSettingForm(){
         this.paidLeaveHolidayForm = this.fb.group({
-            paidLeaves : [0,[
+            paidLeaves : [this.data?.projectSettings?.holidaysAllowed ? this.data?.projectSettings?.holidaysAllowed : 0,[
                 Validators.required,
                 Validators.max(5),
             ],]
