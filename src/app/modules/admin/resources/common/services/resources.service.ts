@@ -25,6 +25,12 @@ export class ResourcesService {
         return this.http.get(this.getEmails);
     }
 
+    getMenteeFormList(id: number) {
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + `/resource/one-to-one-form/${id}`
+        );
+    }
+
     csvBulkUpload(obj: any) {
         return this.http.post(this.csvBulkUploadUrl, obj);
     }
@@ -56,7 +62,7 @@ export class ResourcesService {
         );
     }
 
-    inviteResource(obj:any) {
+    inviteResource(obj: any) {
         return this.http.post(this.inviteResourceUrl, obj);
     }
 

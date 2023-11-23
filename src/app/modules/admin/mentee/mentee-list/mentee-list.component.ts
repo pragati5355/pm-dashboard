@@ -33,13 +33,14 @@ export class MenteeListComponent implements OnInit {
     }
 
     viewMentee(id: string | number) {
-        const rpit = this.router.navigate(['./view/', 89], {
+        console.log(id)
+        const rpit = this.router.navigate(['./view/', id], {
             relativeTo: this._activatedRoute,
         });
     }
 
     viewMenteeFormList(id: string | number) {
-        this.router.navigate([`/mentee/form-list/89`]);
+        this.router.navigate([`/mentee/form-list/${id}`]);
     }
 
     private getUserRole() {
@@ -58,15 +59,15 @@ export class MenteeListComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.data) {
                     this.menteeList = res?.data;
-                    this.menteeList = [
-                        {
-                            firstName: 'Rohan',
-                            lastName: 'kadam',
-                            email: 'rohan@mindbowser.com',
-                            role: 'FRONTEND',
-                            menteeResourceId: 78,
-                        },
-                    ];
+                    // this.menteeList = [
+                    //     {
+                    //         firstName: 'Rohan',
+                    //         lastName: 'kadam',
+                    //         email: 'rohan@mindbowser.com',
+                    //         role: 'FRONTEND',
+                    //         menteeResourceId: 78,
+                    //     },
+                    // ];
                 }
             },
             (err) => {

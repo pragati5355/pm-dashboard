@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SnackBar } from 'app/core/utils/snackBar';
+import { ResourcesService } from '../common/services/resources.service';
 import { ViewOneToOneFormComponent } from '../view-one-to-one-form/view-one-to-one-form.component';
 
 @Component({
@@ -9,32 +11,7 @@ import { ViewOneToOneFormComponent } from '../view-one-to-one-form/view-one-to-o
     styleUrls: ['./one-to-one-forms.component.scss'],
 })
 export class OneToOneFormsComponent implements OnInit {
-    menteeFormList: any[] = [
-        {
-            formName: '1 to 1 form',
-            date: 'Jun 02 2023',
-        },
-        {
-            formName: '1 to 1 form',
-            date: 'Aug 03 2023',
-        },
-        {
-            formName: '1 to 1 form',
-            date: 'Sept 04 2023',
-        },
-        {
-            formName: '1 to 1 form',
-            date: 'Oct 02 2023',
-        },
-        {
-            formName: '1 to 1 form',
-            date: 'Nov 02 2023',
-        },
-        {
-            formName: '1 to 1 form',
-            date: 'Dec 02 2023',
-        },
-    ];
+    menteeFormList: any[] = [];
     initialLoading: boolean = false;
     resourceId: number | null = 5;
     requiredSkeletonData = {
@@ -44,7 +21,9 @@ export class OneToOneFormsComponent implements OnInit {
     constructor(
         private router: Router,
         private dialog: MatDialog,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private snackBar: SnackBar,
+        private resourceService: ResourcesService
     ) {}
 
     ngOnInit(): void {
@@ -54,7 +33,7 @@ export class OneToOneFormsComponent implements OnInit {
     goBack() {
         this.router.navigate([`/resources/view/${this.resourceId}`]);
     }
-    viewForm() {
+    viewForm(url: string) {
         const dialogRef = this.dialog.open(ViewOneToOneFormComponent, {
             disableClose: true,
             width: '70%',
@@ -62,7 +41,7 @@ export class OneToOneFormsComponent implements OnInit {
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                link: 'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/weekly-feedback-reports/Metrics PM dashboard /metrics pm dashboard-internal-report-30-06-2023.pdf',
+                link: url,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
@@ -77,7 +56,24 @@ export class OneToOneFormsComponent implements OnInit {
             const resourceId = paramMap.get('id');
             if (resourceId) {
                 this.resourceId = Number(resourceId);
+                this.loadFormList(this.resourceId);
             }
         });
+    }
+
+    private loadFormList(id: number) {
+        this.initialLoading = true;
+        this.resourceService.getMenteeFormList(id).subscribe(
+            (res: any) => {
+                this.initialLoading = false;
+                if (res?.data) {
+                    this.menteeFormList = res?.data;
+                }
+            },
+            (err) => {
+                this.initialLoading = false;
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 }

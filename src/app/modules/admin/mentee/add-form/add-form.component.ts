@@ -36,11 +36,19 @@ export class AddFormComponent implements OnInit {
 
     submit(event: any) {
         this.isLoading = true;
+        const formData = {
+            ...event?.data,
+            reviewMonth: `${event?.data?.reviewMonth?.slice(
+                0,
+                3
+            )}02/${new Date().getFullYear()}`,
+        };
         const payload = {
             resourceId: this.resourceId,
             mentorId: this.loggedInUser?.resourceId,
-            formData: event?.data,
+            formData: formData,
         };
+
         this.menteeService.saveOneToOneForm(payload).subscribe(
             (res: any) => {
                 if (res?.code === 200) {
@@ -102,34 +110,6 @@ export class AddFormComponent implements OnInit {
                             }/02/${new Date().getFullYear()}`,
                             employeeName: 'Amaresh joshi',
                             employeeEmail: 'amaresh@mindbowser.com',
-                            projectsWorkedOnDuringThisMonth: 'TTA',
-                            team: 'QA',
-                            wasTheWorkAssignedDeliveredOnTime: 'yes',
-                            commentsOnDelivery: 'test',
-                            haveTheDeveloperBeenRaisingPRsForTheWorkCommit:
-                                'yes',
-                            commentsOnRaisingPr: '',
-                            whatCanBeDoneBetterInTheCodePrReviewProcess: '',
-                            devUsingJira: 'yes',
-                            pleaseWriteCommentsOnUsingJiraOrOtherProjectManagementTools:
-                                '',
-                            isDevSharingBuild: '',
-                            commentsOnDevNotSharingBuild: '',
-                            whatIsTheStatusOfTheirGoals: 'asda',
-                            additionalCommentsOnGoals: '',
-                            commentsAboutParticipationAndAttendingSaturdayLearning:
-                                '',
-                            overAllRating: {
-                                workTasksTheyCompleted: 'excellent',
-                                proactiveness: 'excellent',
-                                attitudeAndBehavior: 'excellent',
-                                dependability: 'excellent',
-                            },
-                            overAllThoughtsOnImprovement: '',
-                            mentionYourAdditionalComments: '',
-                            considerForAward: 'yes',
-                            considerForAwardComments: '',
-                            statusForLastMonthActionItems: 'test',
                         },
                     };
                     this.loadMenteeData(this.resourceId);

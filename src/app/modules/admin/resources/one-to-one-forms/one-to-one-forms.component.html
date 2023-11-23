@@ -50,7 +50,7 @@
                                     </div>
 
                                     <div class="hidden md:block truncate">
-                                        {{ list?.date }}
+                                        {{ list?.filledDate | date }}
                                     </div>
 
                                     <div
@@ -60,7 +60,7 @@
                                             class="mr-4"
                                             [matTooltip]="'View filled form'"
                                             svgIcon="heroicons_outline:eye"
-                                            (click)="viewForm()"
+                                            (click)="viewForm(list?.formUrl)"
                                         ></mat-icon>
                                     </div>
                                 </div>
