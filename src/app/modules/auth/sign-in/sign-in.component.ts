@@ -69,7 +69,9 @@ export class AuthSignInComponent implements OnInit {
                         this.submitInProcess = false;
                         this.alert = {
                             type: 'error',
-                            message: error?.error?.message,
+                            message:
+                                error?.error?.message ||
+                                'Internal server error',
                         };
                         this.showAlert = true;
                     }

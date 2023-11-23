@@ -26,14 +26,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/resources',
         allowedRoles: ['ADMIN', 'SALES', 'HR'],
     },
-    // {
-    //     id: 'mentee',
-    //     title: 'Mentee',
-    //     type: 'basic',
-    //     icon: 'heroicons_outline:users',
-    //     link: '/mentee',
-    //     // allowedRoles: ['ADMIN', 'SALES', 'HR'],
-    // },
+    {
+        id: 'mentee',
+        title: 'Mentee',
+        type: 'basic',
+        icon: 'heroicons_outline:users',
+        link: '/mentee',
+        // allowedRoles: ['ADMIN', 'SALES', 'HR'],
+    },
     {
         id: 'external-projects',
         title: 'External Projects',

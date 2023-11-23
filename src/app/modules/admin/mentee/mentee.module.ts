@@ -14,6 +14,10 @@ import { DiffDatePipe } from './pipes/diff-date.pipe';
 import { MenteeFormListComponent } from './mentee-form-list/mentee-form-list.component';
 import { ViewFormComponent } from './view-form/view-form.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { AddFormComponent } from './add-form/add-form.component';
+import { FormioModule } from 'angular-formio';
+import { SkeletonModule } from 'app/core/modules/skeleton/skeleton.module';
+
 @NgModule({
     declarations: [
         MenteeHomeComponent,
@@ -22,6 +26,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         DiffDatePipe,
         MenteeFormListComponent,
         ViewFormComponent,
+        AddFormComponent,
     ],
     imports: [
         CommonModule,
@@ -31,7 +36,9 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         MatSidenavModule,
         MatProgressBarModule,
         MatTooltipModule,
+        FormioModule,
         NgxExtendedPdfViewerModule,
+        SkeletonModule,
     ],
 })
 export class MenteeModule {}
