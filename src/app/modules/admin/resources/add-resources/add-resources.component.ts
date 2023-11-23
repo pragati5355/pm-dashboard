@@ -315,14 +315,18 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         const integration = (<FormArray>(
             this.resourcesForm.get('integrations')
         )) as FormArray;
+        console.log("selectedOption?.checked 1: ", selectedOption?.checked);
 
         if (selectedOption?.checked) {
             integration.push(new FormControl(selectedOption.source.value));
-        } else {
+            console.log("integration : ", integration);
+        } 
+        else {
             const i = integration?.controls.findIndex(
-                (x) => x.value === selectedOption.source.value
-            );
+                (x:any) => x.id === selectedOption.source.value
+                );
             integration?.removeAt(i);
+            console.log("integration : ", integration);
         }
     }
 
@@ -419,7 +423,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 };
                 this.submitInProcess = true;
                 console.log("Payload : ", payload);
-                this.updateReourceApi(payload);
+                // this.updateReourceApi(payload);
             } else {
                 this.submitInProcess = false;
                 this.snackBar.errorSnackBar('Choose technology');
