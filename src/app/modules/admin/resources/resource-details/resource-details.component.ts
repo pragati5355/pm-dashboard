@@ -24,28 +24,9 @@ export class ResourceDetailsComponent implements OnInit {
     outOfScore: any = 10;
     mbProjects: string[] = [];
     userRole: string = '';
-    certificates: any[] = [
-        'Full stack we development',
-        'AWS s3 full course',
-        'Data science master',
-    ];
-    skillAndIntegrations: any[] = [
-        {
-            name: 'Firebase',
-        },
-        {
-            name: 'AWS S3',
-        },
-        {
-            name: 'Stripe',
-        },
-        {
-            name: 'FCM',
-        },
-        {
-            name: 'Paypal',
-        },
-    ];
+    certificates: any[] = [];
+    skillAndIntegrations: any[] = [];
+    resourceId: any;
     constructor(
         private _formBuilder: FormBuilder,
         private router: Router,
@@ -64,6 +45,7 @@ export class ResourceDetailsComponent implements OnInit {
         this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
             const resourceId = paramMap.get('id');
             if (resourceId) {
+                this.resourceId = resourceId;
                 this.loadData(resourceId);
                 this.getResourceHappinessScore(resourceId);
             }
@@ -147,6 +129,11 @@ export class ResourceDetailsComponent implements OnInit {
 
     closeDrawer(): Promise<MatDrawerToggleResult> {
         return this._resourcesListComponent.matDrawer.close();
+    }
+    oneToOneFormNavigate() {
+        this.router.navigate([
+            `/resources/one-to-one-forms/${this.resourceId}`,
+        ]);
     }
     private getUserRole() {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {

@@ -2,29 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBar } from 'app/core/utils/snackBar';
-import { AddFormComponent } from '../add-form/add-form.component';
-import { MenteeService } from '../common/services/mentee.service';
-import { ViewFormComponent } from '../view-form/view-form.component';
+import { ResourcesService } from '../common/services/resources.service';
+import { ViewOneToOneFormComponent } from '../view-one-to-one-form/view-one-to-one-form.component';
 
 @Component({
-    selector: 'app-mentee-form-list',
-    templateUrl: './mentee-form-list.component.html',
-    styleUrls: ['./mentee-form-list.component.scss'],
+    selector: 'app-one-to-one-forms',
+    templateUrl: './one-to-one-forms.component.html',
+    styleUrls: ['./one-to-one-forms.component.scss'],
 })
-export class MenteeFormListComponent implements OnInit {
-    menteeFormList: any[] = [
-        // {
-        //     id: 85352,
-        //     resourceId: 1,
-        //     mentorId: 2,
-        //     formUrl:
-        //         'https://metrics-sproutops-bucket.s3.ap-south-1.amazonaws.com/resource-one-to-one-forms/NOVEMBER_1_1700564697469',
-        //     formName: '1:1 November',
-        //     filledDate: '2023-11-21T11:04:57.687+00:00',
-        // },
-    ];
+export class OneToOneFormsComponent implements OnInit {
+    menteeFormList: any[] = [];
     initialLoading: boolean = false;
-    resourceId: number | null = null;
+    resourceId: number | null = 5;
     requiredSkeletonData = {
         rowsToDisplay: 10,
         displayProfilePicture: false,
@@ -33,8 +22,8 @@ export class MenteeFormListComponent implements OnInit {
         private router: Router,
         private dialog: MatDialog,
         private route: ActivatedRoute,
-        private menteeService: MenteeService,
-        private snackBar: SnackBar
+        private snackBar: SnackBar,
+        private resourceService: ResourcesService
     ) {}
 
     ngOnInit(): void {
@@ -42,15 +31,10 @@ export class MenteeFormListComponent implements OnInit {
     }
 
     goBack() {
-        this.router.navigate([`/mentee`]);
+        this.router.navigate([`/resources/view/${this.resourceId}`]);
     }
-
-    addForm() {
-        this.router.navigate([`/mentee/form-list/add-from/${this.resourceId}`]);
-    }
-
     viewForm(url: string) {
-        const dialogRef = this.dialog.open(ViewFormComponent, {
+        const dialogRef = this.dialog.open(ViewOneToOneFormComponent, {
             disableClose: true,
             width: '70%',
             height: '95%',
@@ -76,9 +60,10 @@ export class MenteeFormListComponent implements OnInit {
             }
         });
     }
+
     private loadFormList(id: number) {
         this.initialLoading = true;
-        this.menteeService.getMenteeFormList(id).subscribe(
+        this.resourceService.getMenteeFormList(id).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res?.data) {

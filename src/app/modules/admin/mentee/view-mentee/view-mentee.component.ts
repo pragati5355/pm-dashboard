@@ -26,7 +26,7 @@ export class ViewMenteeComponent implements OnInit {
         this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
             const resourceId = paramMap.get('id');
             if (resourceId) {
-                this.loadMenteeData('89');
+                this.loadMenteeData(resourceId);
             }
         });
     }

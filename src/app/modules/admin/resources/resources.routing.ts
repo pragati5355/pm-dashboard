@@ -4,12 +4,13 @@ import { ResourcesListComponent } from './resources-list/resources-list.componen
 import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { ResourceDetailsComponent } from './resource-details/resource-details.component';
 import { OnboardResourceComponent } from './onboard-resource/onboard-resource.component';
+import { OneToOneFormsComponent } from './one-to-one-forms/one-to-one-forms.component';
 export const resourcesRoutes: Route[] = [
     {
         path: '',
         component: ResourcesHomeComponent,
         data: {
-            allowedRoles: ['ADMIN','SALES', 'HR'],
+            allowedRoles: ['ADMIN', 'SALES', 'HR'],
         },
         children: [
             {
@@ -24,6 +25,13 @@ export const resourcesRoutes: Route[] = [
                 component: AddResourcesComponent,
                 data: {
                     pageTitle: 'Edit Resource',
+                },
+            },
+            {
+                path: 'one-to-one-forms/:id',
+                component: OneToOneFormsComponent,
+                data: {
+                    pageTitle: '1-1 forms',
                 },
             },
             {

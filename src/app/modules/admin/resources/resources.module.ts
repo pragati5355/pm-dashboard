@@ -44,6 +44,9 @@ import { OnboardResourceComponent } from './onboard-resource/onboard-resource.co
 import { OnboardResourceDetailsComponent } from './onboard-resource-details/onboard-resource-details.component';
 import { OnboardVendorDetailsComponent } from './onboard-vendor-details/onboard-vendor-details.component';
 import { ResourceInviteFormComponent } from './resource-invite-form/resource-invite-form.component';
+import { OneToOneFormsComponent } from './one-to-one-forms/one-to-one-forms.component';
+import { ViewOneToOneFormComponent } from './view-one-to-one-form/view-one-to-one-form.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
     declarations: [
@@ -61,6 +64,8 @@ import { ResourceInviteFormComponent } from './resource-invite-form/resource-inv
         OnboardResourceDetailsComponent,
         OnboardVendorDetailsComponent,
         ResourceInviteFormComponent,
+        OneToOneFormsComponent,
+        ViewOneToOneFormComponent,
     ],
     imports: [
         CommonModule,
@@ -92,6 +97,7 @@ import { ResourceInviteFormComponent } from './resource-invite-form/resource-inv
         InfiniteScrollModule,
         SkeletonModule,
         MatCheckboxModule,
+        NgxExtendedPdfViewerModule,
         RouterModule.forChild(resourcesRoutes),
     ],
     providers: [DatePipe],
