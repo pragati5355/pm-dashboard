@@ -124,7 +124,10 @@ export class AddFormComponent implements OnInit {
                         reviewMonth: `${
                             new Date().getMonth() + 1
                         }/02/${new Date().getFullYear()}`,
-                        employeeName: `${this.menteeDetails?.firstName}${this.menteeDetails?.lastName}`,
+                        employeeName:
+                            this.menteeDetails?.firstName +
+                            ' ' +
+                            this.menteeDetails?.lastName,
                         employeeEmail: this.menteeDetails?.email,
                     },
                 };
