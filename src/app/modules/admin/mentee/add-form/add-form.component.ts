@@ -126,33 +126,6 @@ export class AddFormComponent implements OnInit {
                         }/02/${new Date().getFullYear()}`,
                         employeeName: `${this.menteeDetails?.firstName}${this.menteeDetails?.lastName}`,
                         employeeEmail: this.menteeDetails?.email,
-                        projectsWorkedOnDuringThisMonth: 'TTA',
-                        team: 'QA',
-                        wasTheWorkAssignedDeliveredOnTime: 'yes',
-                        commentsOnDelivery: 'test',
-                        haveTheDeveloperBeenRaisingPRsForTheWorkCommit: 'yes',
-                        commentsOnRaisingPr: '',
-                        whatCanBeDoneBetterInTheCodePrReviewProcess: '',
-                        devUsingJira: 'yes',
-                        pleaseWriteCommentsOnUsingJiraOrOtherProjectManagementTools:
-                            '',
-                        isDevSharingBuild: '',
-                        commentsOnDevNotSharingBuild: '',
-                        whatIsTheStatusOfTheirGoals: 'asda',
-                        additionalCommentsOnGoals: '',
-                        commentsAboutParticipationAndAttendingSaturdayLearning:
-                            '',
-                        overAllRating: {
-                            workTasksTheyCompleted: 'excellent',
-                            proactiveness: 'excellent',
-                            attitudeAndBehavior: 'excellent',
-                            dependability: 'excellent',
-                        },
-                        overAllThoughtsOnImprovement: '',
-                        mentionYourAdditionalComments: '',
-                        considerForAward: 'yes',
-                        considerForAwardComments: '',
-                        statusForLastMonthActionItems: 'test',
                     },
                 };
             }
