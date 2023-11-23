@@ -420,7 +420,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 };
                 this.submitInProcess = true;
                 console.log('Payload : ', payload);
-                // this.updateReourceApi(payload);
+                this.updateReourceApi(payload);
             } else {
                 this.submitInProcess = false;
                 this.snackBar.errorSnackBar('Choose technology');
@@ -489,7 +489,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 ],
                 technology: [],
                 technologies: this._formBuilder.array([]),
-                pmOrMentorEmail: [''],
+                pmOrMentorEmail: ['', [Validators.required]],
                 integrations: this._formBuilder.array([]),
                 certificates: this._formBuilder.array([]),
             },
