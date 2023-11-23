@@ -419,7 +419,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                     menteeModel: this.mentorModel,
                 };
                 this.submitInProcess = true;
-                console.log('Payload : ', payload);
                 this.updateReourceApi(payload);
             } else {
                 this.submitInProcess = false;
