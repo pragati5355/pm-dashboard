@@ -97,21 +97,6 @@ export class AddFormComponent implements OnInit {
                 this.isLoading = false;
                 if (res?.role) {
                     this.loggedInUser = res;
-                    this.preFillFormData = {
-                        data: {
-                            ...this.preFillFormData?.data,
-                            reviewerName:
-                                this.loggedInUser?.firstName +
-                                ' ' +
-                                this.loggedInUser?.lastName,
-                            reviewerEmail: this.loggedInUser?.email,
-                            reviewMonth: `${
-                                new Date().getMonth() + 1
-                            }/02/${new Date().getFullYear()}`,
-                            employeeName: 'Amaresh joshi',
-                            employeeEmail: 'amaresh@mindbowser.com',
-                        },
-                    };
                     this.loadMenteeData(this.resourceId);
                 }
             },
@@ -128,6 +113,21 @@ export class AddFormComponent implements OnInit {
         this.menteeService.getFormByType(payload).subscribe((res: any) => {
             if (res?.data) {
                 this.form = res?.data?.formComponent;
+                this.preFillFormData = {
+                    data: {
+                        ...this.preFillFormData?.data,
+                        reviewerName:
+                            this.loggedInUser?.firstName +
+                            ' ' +
+                            this.loggedInUser?.lastName,
+                        reviewerEmail: this.loggedInUser?.email,
+                        reviewMonth: `${
+                            new Date().getMonth() + 1
+                        }/02/${new Date().getFullYear()}`,
+                        employeeName: `${this.menteeDetails?.firstName}${this.menteeDetails?.lastName}`,
+                        employeeEmail: this.menteeDetails?.email,
+                    },
+                };
             }
         });
     }
