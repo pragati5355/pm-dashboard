@@ -242,6 +242,11 @@ export class ExternalProjectSettingsComponent implements OnInit {
             return;
         }
 
+        if(this.getNoOfLeaveHolidayAllowed() > 5){
+            this.snackBar.errorSnackBar('Please enter valid data for paid leave/holiday');
+            return;
+        }
+
         const payload = this.getPayload();
         this.isLoading = true;
         console.log("Payload : ", payload);
