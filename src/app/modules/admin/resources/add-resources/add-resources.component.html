@@ -522,9 +522,10 @@
                                 </div>
                             </div>
                             <div class="w-140">
-                                <mat-label class="mb-2">PM/Mentor</mat-label>
+                                <mat-label class="mb-2">PM/Mentor *</mat-label>
                                 <mat-form-field class="w-full mt-2">
                                     <input
+                                        required
                                         matInput
                                         [placeholder]="'PM/Mentor'"
                                         aria-label="PM/Mentor"
@@ -543,14 +544,14 @@
                                         </mat-option>
                                     </mat-autocomplete>
                                     <mat-error
-                                        *ngIf="
-                                            resourcesForm
-                                                ?.get('pmOrMentorEmail')
-                                                ?.hasError('required')
-                                        "
-                                    >
-                                        <div>PM/mentor is mandatory</div>
-                                    </mat-error>
+                                    *ngIf="
+                                        resourcesForm
+                                            ?.get('pmOrMentorEmail')
+                                            ?.hasError('required')
+                                    "
+                                >
+                                    <div>PM/Mentor is mandatory</div>
+                                </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>

@@ -447,7 +447,7 @@ export class ProjectSettingsComponent implements OnInit {
 
     private initializeProjectSettingForm(){
         this.paidLeaveHolidayForm = this.fb.group({
-            paidLeaves : [0,[
+            paidLeaves : [this.data?.projectSettings?.holidaysAllowed ? this.data?.projectSettings?.holidaysAllowed : 0,[
                 Validators.required,
                 Validators.max(5),
             ],]
@@ -534,6 +534,7 @@ export class ProjectSettingsComponent implements OnInit {
                 ? this.data?.projectSettings?.id
                 : null,
             projectId: this.data?.projectModel?.id,
+            holidaysAllowed : this.getNoOfLeaveHolidayAllowed(),
             sourceType: 'SLACK',
             deleted: false,
             reminderModel: [
@@ -626,5 +627,9 @@ export class ProjectSettingsComponent implements OnInit {
                     rate: tech?.techRate,
                 };
             });
+    }
+
+    private getNoOfLeaveHolidayAllowed(){
+        return this.paidLeaveHolidayForm?.get('paidLeaves')?.value;
     }
 }

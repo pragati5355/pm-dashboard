@@ -530,7 +530,8 @@
                                                 </div>
                                             </div>
                                             <div class="hidden sm:block">
-                                                {{ resources?.mentor  || "-"}}
+                                                {{ resources?.mentorData?.firstName || "-"}}
+                                                {{ resources?.mentorData?.lastName}}
                                             </div>
                                             <div
                                                 class="grid-flow-row sm:flex truncate cursor-pointer"
