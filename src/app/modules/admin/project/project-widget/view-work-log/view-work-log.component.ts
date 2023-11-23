@@ -113,8 +113,9 @@ export class ViewWorkLogComponent implements OnInit {
         this.selectedResourceId = resource[0]?.resource?.resourceId;
         this.loadData(
             this.selectedYear,
-            resource[0]?.year[0]?.months[
-                resource[0]?.year[0]?.months?.length - 1
+            resource[0]?.year[resource[0]?.year?.length - 1]?.months[
+                resource[0]?.year[resource[0]?.year?.length - 1]?.months
+                    ?.length - 1
             ]?.value
         );
     }
