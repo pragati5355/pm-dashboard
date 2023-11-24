@@ -103,11 +103,18 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         return this.resourcesForm.controls;
     }
     ngOnInit(): void {
+        this.initializeIntegrations();
         this.initialLoading = true;
         this.getEmailsList();
         this.addRouteSubscription();
         this.initializeForm();
         this.userData = this._authService.getUser();
+    }
+
+    private initializeIntegrations() {
+        this.integrations?.forEach((element) => {
+            element.checked = false;
+        });
     }
 
     onClickPersonalDetailsArrow(value: boolean) {
@@ -537,7 +544,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             const skill = this.existingResource?.integrations?.findIndex(
                 (obj) => obj.name === item.name
             );
-            if (skill > -1) {
+            if (skill !== -1) {
                 item.checked = true;
             }
         });
