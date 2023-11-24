@@ -111,12 +111,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
         this.userData = this._authService.getUser();
     }
 
-    private initializeIntegrations() {
-        this.integrations?.forEach((element) => {
-            element.checked = false;
-        });
-    }
-
     onClickPersonalDetailsArrow(value: boolean) {
         this.personalDetailsArrow = value;
     }
@@ -359,6 +353,12 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
                 this.initialLoading = false;
             }
         );
+    }
+
+    private initializeIntegrations() {
+        this.integrations?.forEach((element) => {
+            element.checked = false;
+        });
     }
 
     private setDateOfJoiningForUpdate() {
