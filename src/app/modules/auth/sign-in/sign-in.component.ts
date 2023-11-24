@@ -78,13 +78,14 @@ export class AuthSignInComponent implements OnInit {
                 );
             })
             .catch((error) => {
-                this.alert = {
-                    type: 'error',
-                    message: 'Something went wrong',
-                };
+                this.submitInProcess = false;
+                // this.alert = {
+                //     type: 'error',
+                //     message: 'Something went wrong',
+                // };
 
-                // Show the alert
-                this.showAlert = true;
+                // // Show the alert
+                // this.showAlert = true;
             });
     }
 
