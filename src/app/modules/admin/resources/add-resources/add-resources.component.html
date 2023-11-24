@@ -83,19 +83,33 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center">
-                            <div class="flex flex-row" *ngIf="!personalDetailsArrow" (click)="onClickPersonalDetailsArrow(true)">
+
+                        <div
+                            class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center"
+                        >
+                            <div
+                                class="flex flex-row"
+                                *ngIf="!personalDetailsArrow"
+                                (click)="onClickPersonalDetailsArrow(true)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-right"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Personal Details
                                 </div>
                             </div>
-                            <div class="flex flex-row" *ngIf="personalDetailsArrow" (click)="onClickPersonalDetailsArrow(false)">
+                            <div
+                                class="flex flex-row"
+                                *ngIf="personalDetailsArrow"
+                                (click)="onClickPersonalDetailsArrow(false)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-down"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Personal Details
@@ -134,16 +148,18 @@
                                         >
                                             <div
                                                 *ngIf="
-                                                    resourcesValidForm['firstName']
-                                                        .errors['required']
+                                                    resourcesValidForm[
+                                                        'firstName'
+                                                    ].errors['required']
                                                 "
                                             >
                                                 First name is mandatory
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    resourcesValidForm['firstName']
-                                                        .errors['pattern']
+                                                    resourcesValidForm[
+                                                        'firstName'
+                                                    ].errors['pattern']
                                                 "
                                             >
                                                 Enter valid first name
@@ -178,16 +194,18 @@
                                         >
                                             <div
                                                 *ngIf="
-                                                    resourcesValidForm['lastName']
-                                                        .errors['required']
+                                                    resourcesValidForm[
+                                                        'lastName'
+                                                    ].errors['required']
                                                 "
                                             >
                                                 Last name is mandatory
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    resourcesValidForm['lastName']
-                                                        .errors['pattern']
+                                                    resourcesValidForm[
+                                                        'lastName'
+                                                    ].errors['pattern']
                                                 "
                                             >
                                                 Enter valid last name
@@ -310,7 +328,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-    
+
                             <div
                                 class="sm:w-140 flex flex-col sm:flex-row flex-0 col-span-4 sm:col-span-4"
                             >
@@ -330,7 +348,9 @@
                                             [matDatepicker]="
                                                 dateOfJoiningDatepicker
                                             "
-                                            (focus)="dateOfJoiningDatepicker.open()"
+                                            (focus)="
+                                                dateOfJoiningDatepicker.open()
+                                            "
                                             [max]="currentDate"
                                         />
                                         <mat-datepicker-toggle
@@ -350,12 +370,14 @@
                                                     ?.hasError('required')
                                             "
                                         >
-                                            <div>Date of joining is mandatory</div>
+                                            <div>
+                                                Date of joining is mandatory
+                                            </div>
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
-    
+
                             <div class="mb-4">
                                 <mat-checkbox
                                     (change)="onCheckBoxChange($event.checked)"
@@ -411,8 +433,9 @@
                                             >
                                                 <div
                                                     *ngIf="
-                                                        resourcesValidForm['role']
-                                                            .errors['required']
+                                                        resourcesValidForm[
+                                                            'role'
+                                                        ].errors['required']
                                                     "
                                                 >
                                                     Team is mandatory
@@ -420,7 +443,7 @@
                                             </mat-error>
                                         </mat-form-field>
                                     </div>
-    
+
                                     <div
                                         *ngIf="showHideExperience"
                                         class="w-full sm:w-60 mb-2 font-extrabold tracking-tight ng-tns-c274-3859 sm:ml-4"
@@ -453,16 +476,18 @@
                                             >
                                                 <div
                                                     *ngIf="
-                                                        resourcesValidForm['year']
-                                                            .errors['required']
+                                                        resourcesValidForm[
+                                                            'year'
+                                                        ].errors['required']
                                                     "
                                                 >
                                                     Year is mandatory
                                                 </div>
                                                 <div
                                                     *ngIf="
-                                                        resourcesValidForm['year']
-                                                            .errors['pattern']
+                                                        resourcesValidForm[
+                                                            'year'
+                                                        ].errors['pattern']
                                                     "
                                                 >
                                                     Enter valid Year
@@ -500,18 +525,21 @@
                                             >
                                                 <div
                                                     *ngIf="
-                                                        resourcesValidForm['month']
-                                                            .errors['required']
+                                                        resourcesValidForm[
+                                                            'month'
+                                                        ].errors['required']
                                                     "
                                                 >
                                                     Month is mandatory
                                                 </div>
                                                 <div
                                                     *ngIf="
-                                                        resourcesValidForm['month']
-                                                            .errors['pattern'] ||
-                                                        resourcesValidForm['month']
-                                                            .errors
+                                                        resourcesValidForm[
+                                                            'month'
+                                                        ].errors['pattern'] ||
+                                                        resourcesValidForm[
+                                                            'month'
+                                                        ].errors
                                                     "
                                                 >
                                                     Enter valid month
@@ -533,10 +561,13 @@
                                         [matAutocomplete]="selectPm"
                                         formControlName="pmOrMentorEmail"
                                     />
-                                    <mat-autocomplete #selectPm="matAutocomplete">
+                                    <mat-autocomplete
+                                        #selectPm="matAutocomplete"
+                                    >
                                         <mat-option
                                             *ngFor="
-                                                let item of filteredEmails | async
+                                                let item of filteredEmails
+                                                    | async
                                             "
                                             [value]="item?.email"
                                         >
@@ -544,30 +575,44 @@
                                         </mat-option>
                                     </mat-autocomplete>
                                     <mat-error
-                                    *ngIf="
-                                        resourcesForm
-                                            ?.get('pmOrMentorEmail')
-                                            ?.hasError('required')
-                                    "
-                                >
-                                    <div>PM/Mentor is mandatory</div>
-                                </mat-error>
+                                        *ngIf="
+                                            resourcesForm
+                                                ?.get('pmOrMentorEmail')
+                                                ?.hasError('required')
+                                        "
+                                    >
+                                        <div>PM/Mentor is mandatory</div>
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
-        
-                        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center">
-                            <div class="flex flex-row" *ngIf="!technologyArrow" (click)="onClickTechnologyArrow(true)">
+
+                        <div
+                            class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center"
+                        >
+                            <div
+                                class="flex flex-row"
+                                *ngIf="!technologyArrow"
+                                (click)="onClickTechnologyArrow(true)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-right"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Technology/Skills
                                 </div>
                             </div>
-                            <div class="flex flex-row" *ngIf="technologyArrow" (click)="onClickTechnologyArrow(false)">
+                            <div
+                                class="flex flex-row"
+                                *ngIf="technologyArrow"
+                                (click)="onClickTechnologyArrow(false)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-down"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Technology/Skills
@@ -600,8 +645,12 @@
                                                 [matChipInputSeparatorKeyCodes]="
                                                     separatorKeysCodes
                                                 "
-                                                [matChipInputAddOnBlur]="addOnBlur"
-                                                (matChipInputTokenEnd)="add($event)"
+                                                [matChipInputAddOnBlur]="
+                                                    addOnBlur
+                                                "
+                                                (matChipInputTokenEnd)="
+                                                    add($event)
+                                                "
                                                 class="w-full"
                                             />
                                         </mat-chip-list>
@@ -651,7 +700,8 @@
                                             >
                                                 <form
                                                     *ngIf="
-                                                        !technology?.value?.deleted
+                                                        !technology?.value
+                                                            ?.deleted
                                                     "
                                                     class="flex flex-row items-center justify-center gap-4 pt-2 border-b bg-white px-2"
                                                     [formGroupName]="i"
@@ -663,12 +713,15 @@
                                                             class="hidden md:block truncate -mt-5"
                                                         >
                                                             {{
-                                                                technology?.value
+                                                                technology
+                                                                    ?.value
                                                                     ?.name
                                                             }}
                                                         </div>
                                                         <mat-form-field
-                                                            [floatLabel]="'always'"
+                                                            [floatLabel]="
+                                                                'always'
+                                                            "
                                                             class="w-full"
                                                         >
                                                             <input
@@ -695,9 +748,11 @@
                                                                 Enter valid Year
                                                             </mat-error>
                                                         </mat-form-field>
-    
+
                                                         <mat-form-field
-                                                            [floatLabel]="'always'"
+                                                            [floatLabel]="
+                                                                'always'
+                                                            "
                                                             class="w-full"
                                                         >
                                                             <input
@@ -722,10 +777,11 @@
                                                                     )?.invalid
                                                                 "
                                                             >
-                                                                Enter valid Month
+                                                                Enter valid
+                                                                Month
                                                             </mat-error>
                                                         </mat-form-field>
-    
+
                                                         <mat-icon
                                                             class="cursor-pointer -mt-5 ml-6"
                                                             color="warn"
@@ -747,18 +803,32 @@
                             </div>
                         </div>
 
-                        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center">
-                            <div class="flex flex-row" *ngIf="!otherSkillsArrow" (click)="onClickOtherSkillsArrow(true)">
+                        <div
+                            class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center"
+                        >
+                            <div
+                                class="flex flex-row"
+                                *ngIf="!otherSkillsArrow"
+                                (click)="onClickOtherSkillsArrow(true)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-right"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Other Skills/Integrations
                                 </div>
                             </div>
-                            <div class="flex flex-row" *ngIf="otherSkillsArrow" (click)="onClickOtherSkillsArrow(false)">
+                            <div
+                                class="flex flex-row"
+                                *ngIf="otherSkillsArrow"
+                                (click)="onClickOtherSkillsArrow(false)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-down"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Other Skills/Integrations
@@ -767,24 +837,30 @@
                         </div>
 
                         <div *ngIf="otherSkillsArrow" class="pl-11">
-
                             <div
                                 class="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-1 gap-y-3 mt-8 px-1"
                             >
-                                <div *ngFor="let skill of integrations; let i = index">
-                                <mat-checkbox
-                                    class="example-margin"
-                                    [value]="skill"
-                                    (change)="onCheckBoxIntergationsChange($event)"
-                                    [checked]="skill?.checked"
+                                <div
+                                    *ngFor="
+                                        let skill of integrations;
+                                        let i = index
+                                    "
                                 >
-                                    {{ skill?.name }}
-                                </mat-checkbox>
+                                    <mat-checkbox
+                                        class="example-margin"
+                                        [value]="skill"
+                                        (change)="
+                                            onCheckBoxIntergationsChange($event)
+                                        "
+                                        [checked]="skill?.checked"
+                                    >
+                                        {{ skill?.name }}
+                                    </mat-checkbox>
                                 </div>
-                            </div>  
+                            </div>
                             <div class="mt-8 flex px-1">
                                 Did not find the skill/integration?
-            
+
                                 <span
                                     (click)="addSkillAndIntegrations()"
                                     class="text-primary-500 underline ml-2 font-bold cursor-pointer"
@@ -793,18 +869,32 @@
                             </div>
                         </div>
 
-                        <div class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center">
-                            <div class="flex flex-row" *ngIf="!certificationArrow" (click)="onClickCertificationArrow(true)">
+                        <div
+                            class="bg-gray-100 py-2 px-1 shadow rounded mt-4 mb-4 items-center"
+                        >
+                            <div
+                                class="flex flex-row"
+                                *ngIf="!certificationArrow"
+                                (click)="onClickCertificationArrow(true)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-right"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-right"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Certifications
                                 </div>
                             </div>
-                            <div class="flex flex-row" *ngIf="certificationArrow" (click)="onClickCertificationArrow(false)">
+                            <div
+                                class="flex flex-row"
+                                *ngIf="certificationArrow"
+                                (click)="onClickCertificationArrow(false)"
+                            >
                                 <div class="mt-2 pl-2">
-                                    <mat-icon svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                    <mat-icon
+                                        svgIcon="heroicons_outline:chevron-down"
+                                    ></mat-icon>
                                 </div>
                                 <div class="text-lg pl-2 mt-2.5">
                                     Certifications
@@ -812,12 +902,18 @@
                             </div>
                         </div>
 
-                        <div *ngIf="certificationArrow" class="pl-11" formArrayName="certificates">
-                            <ng-container *ngFor="
-                                let certificate of certificates?.controls;
-                                let i = index;
-                                let last = last
-                            ">
+                        <div
+                            *ngIf="certificationArrow"
+                            class="pl-11"
+                            formArrayName="certificates"
+                        >
+                            <ng-container
+                                *ngFor="
+                                    let certificate of certificates?.controls;
+                                    let i = index;
+                                    let last = last
+                                "
+                            >
                                 <form
                                     class="flex flex-0 flex-wrap sm:flex-nowrap flex-row justify-center items-center mt-4"
                                     [formGroupName]="i"
@@ -835,21 +931,26 @@
                                             class="inputlist"
                                         />
                                         <mat-error
-                                            *ngIf="certificate?.get('name')?.hasError('required')"
-                                    >
-                                        <div class="text-red-500">
-                                            Certificate Name is Mandatory
-                                        </div>
-                                    </mat-error>
+                                            *ngIf="
+                                                certificate
+                                                    ?.get('name')
+                                                    ?.hasError('required')
+                                            "
+                                        >
+                                            <div class="text-red-500">
+                                                Certificate Name is Mandatory
+                                            </div>
+                                        </mat-error>
                                     </mat-form-field>
-        
+
                                     <mat-form-field
                                         class="w-full mr-4 sm:mt-0 userlist"
                                         id="userlist"
                                         [floatLabel]="'always'"
                                     >
                                         <mat-label
-                                            >Certificate Link(Optional)</mat-label
+                                            >Certificate
+                                            Link(Optional)</mat-label
                                         >
                                         <input
                                             matInput
@@ -865,8 +966,8 @@
                                         matTooltip="Add more certificates"
                                         (click)="
                                             certificate?.valid
-                                            ? addNewCertificate()
-                                            : certificate?.markAllAsTouched()
+                                                ? addNewCertificate()
+                                                : certificate?.markAllAsTouched()
                                         "
                                         >add</mat-icon
                                     >
@@ -881,7 +982,7 @@
                                 </form>
                             </ng-container>
                         </div>
-                        
+
                         <div
                             class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6"
                         >
@@ -890,6 +991,7 @@
                                     (click)="gotoBack()"
                                     mat-stroked-button
                                     type="button"
+                                    [disabled]="submitInProcess"
                                 >
                                     Cancel
                                 </button>
@@ -898,6 +1000,7 @@
                                     [color]="'primary'"
                                     class="order-first sm:order-last ml-4"
                                     mat-flat-button
+                                    [disabled]="submitInProcess"
                                 >
                                     <span *ngIf="mode === 'add'"> Save </span>
                                     <span *ngIf="mode === 'edit'">
@@ -920,10 +1023,13 @@
 
 <div
     *ngIf="initialLoading"
-    class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    class="absolute inset-0 flex flex-col min-w-0 overflow-hidden"
+>
     <div class="flex flex-col flex-auto w-full overflow-y-auto">
         <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-4">
-            <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent">
+            <div
+                class="grid grid-cols-1 xl:grid-cols-1 gap-8 w-full mt-4 bg-card dark:bg-transparent"
+            >
                 <app-resource-edit-skeleton></app-resource-edit-skeleton>
             </div>
         </div>
