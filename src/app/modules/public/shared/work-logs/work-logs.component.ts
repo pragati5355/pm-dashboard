@@ -68,6 +68,7 @@ export class WorkLogsComponent implements OnInit {
             this.workLogForm?.get('totalHours')?.setValue('');
             this.editor.quillEditor.deleteText(0, 20000);
             this.description = '';
+            this.onHoliday = false;
             this.tasks = [];
             this.showError = false;
         } else {
@@ -82,6 +83,7 @@ export class WorkLogsComponent implements OnInit {
             this.workLogForm?.get('totalHours')?.setValue('');
             this.editor.quillEditor.deleteText(0, 20000);
             this.description = '';
+            this.onLeave = false;
             this.tasks = [];
             this.showError = false;
         } else {
