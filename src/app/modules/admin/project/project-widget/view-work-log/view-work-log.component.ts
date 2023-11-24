@@ -113,8 +113,9 @@ export class ViewWorkLogComponent implements OnInit {
         this.selectedResourceId = resource[0]?.resource?.resourceId;
         this.loadData(
             this.selectedYear,
-            resource[0]?.year[0]?.months[
-                resource[0]?.year[0]?.months?.length - 1
+            resource[0]?.year[resource[0]?.year?.length - 1]?.months[
+                resource[0]?.year[resource[0]?.year?.length - 1]?.months
+                    ?.length - 1
             ]?.value
         );
     }
@@ -160,11 +161,7 @@ export class ViewWorkLogComponent implements OnInit {
                 this.loggedInUser = res;
                 this.userRole = res?.role;
                 this.selectedResourceId = this.loggedInUser?.resourceId;
-                if (this.userRole === 'USER' || this.userRole === 'VENDOR') {
-                    this.loadData(this.selectedYear, this.selectedTabIndex);
-                } else {
-                    this.getProjectResources();
-                }
+                this.getProjectResources();
             }
         });
     }
@@ -244,25 +241,62 @@ export class ViewWorkLogComponent implements OnInit {
             .subscribe((res: any) => {
                 this.initialLoading = false;
                 if (res?.data) {
-                    this.options = res?.data;
-                    this.yearAndMonth = res?.data[0]?.year;
+                    if (
+                        this.userRole === 'USER' ||
+                        this.userRole === 'VENDOR'
+                    ) {
+                        const idx = res?.data?.findIndex(
+                            (item) =>
+                                item.resource.resourceId ===
+                                this.loggedInUser?.resourceId
+                        );
+                        if (idx !== -1) {
+                            this.options = res?.data;
+                            this.yearAndMonth = res?.data[idx]?.year;
 
-                    this.matTabList =
-                        this.yearAndMonth[
-                            this.yearAndMonth?.length - 1
-                        ]?.months;
-                    this.selectedTabIndex = this.matTabList?.length - 1;
+                            this.matTabList =
+                                this.yearAndMonth[
+                                    this.yearAndMonth?.length - 1
+                                ]?.months;
+                            this.selectedTabIndex = this.matTabList?.length - 1;
 
-                    this.defaultResource = res?.data[0]?.resource?.email;
-                    this.selectedResourceId =
-                        res?.data[0]?.resource?.resourceId;
+                            this.defaultResource =
+                                res?.data[idx]?.resource?.email;
+                            this.selectedResourceId =
+                                res?.data[idx]?.resource?.resourceId;
 
-                    this.selectedYear =
-                        this.yearAndMonth[this.yearAndMonth?.length - 1]?.year;
-                    this.loadData(
-                        this.selectedYear,
-                        this.yearAndMonth[0]?.months[0]?.value
-                    );
+                            this.selectedYear =
+                                this.yearAndMonth[
+                                    this.yearAndMonth?.length - 1
+                                ]?.year;
+                            this.loadData(
+                                this.selectedYear,
+                                this.yearAndMonth[0]?.months[0]?.value
+                            );
+                        }
+                    } else {
+                        this.options = res?.data;
+                        this.yearAndMonth = res?.data[0]?.year;
+
+                        this.matTabList =
+                            this.yearAndMonth[
+                                this.yearAndMonth?.length - 1
+                            ]?.months;
+                        this.selectedTabIndex = this.matTabList?.length - 1;
+
+                        this.defaultResource = res?.data[0]?.resource?.email;
+                        this.selectedResourceId =
+                            res?.data[0]?.resource?.resourceId;
+
+                        this.selectedYear =
+                            this.yearAndMonth[
+                                this.yearAndMonth?.length - 1
+                            ]?.year;
+                        this.loadData(
+                            this.selectedYear,
+                            this.yearAndMonth[0]?.months[0]?.value
+                        );
+                    }
                 }
                 if (res?.tokenExpire) {
                     this.authService.updateAndReload(window.location);
