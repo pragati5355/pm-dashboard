@@ -241,19 +241,19 @@ export class AddEditWorkLogComponent implements OnInit {
                 );
             this.workLogForm?.get('workLogDate')?.disable();
             this.currentDate = this.data?.data?.workLogDate;
-            if (this.data?.tabIndex !== new Date().getMonth()) {
-                if (
-                    new Date().getDate() > 5 ||
-                    this.data?.tabIndex < new Date().getMonth() - 1
-                ) {
-                    this.workLogForm?.get('totalHours')?.disable();
-                    this.disablePreviousWorklog = true;
-                } else {
-                    this.disablePreviousWorklog = false;
-                }
-            } else {
-                this.disablePreviousWorklog = false;
-            }
+            // if (this.data?.tabIndex !== new Date().getMonth()) {
+            //     if (
+            //         new Date().getDate() > 5 ||
+            //         this.data?.tabIndex < new Date().getMonth() - 1
+            //     ) {
+            //         this.workLogForm?.get('totalHours')?.disable();
+            //         this.disablePreviousWorklog = true;
+            //     } else {
+            //         this.disablePreviousWorklog = false;
+            //     }
+            // } else {
+            //     this.disablePreviousWorklog = false;
+            // }
         }
         if (this.data?.data?.onLeave) {
             this.workLogForm?.get('totalHours')?.disable();
@@ -269,7 +269,7 @@ export class AddEditWorkLogComponent implements OnInit {
             this.description = '';
             this.tasks = [];
             this.showError = false;
-            this.onLeave = this.data?.data?.onHoliday;
+            this.onHoliday = this.data?.data?.onHoliday;
         }
     }
 
