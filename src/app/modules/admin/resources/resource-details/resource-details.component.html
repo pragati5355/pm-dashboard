@@ -25,6 +25,15 @@
                 ></mat-icon>
             </button> -->
             <button
+                [color]="'primary'"
+                class="mr-2"
+                mat-flat-button
+                (click)="oneToOneFormNavigate()"
+                *ngIf="userRole === 'ADMIN'"
+            >
+                <span>1-1 forms</span>
+            </button>
+            <button
                 class="bg-slate-400"
                 mat-icon-button
                 [matTooltip]="'Edit'"
@@ -38,7 +47,7 @@
                 ></mat-icon>
             </button>
             <button
-                class="bg-slate-400 ml-1"
+                class="bg-slate-400 ml-2"
                 mat-icon-button
                 [matTooltip]="'Close'"
                 [routerLink]="['../']"

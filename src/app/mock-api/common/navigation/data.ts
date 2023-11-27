@@ -16,7 +16,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:table',
         link: '/projects',
-        allowedRoles : ['ADMIN', 'SALES', 'USER', 'PM', 'VENDOR']
+        allowedRoles: ['ADMIN', 'SALES', 'USER', 'PM', 'VENDOR'],
     },
     {
         id: 'resources',
@@ -26,21 +26,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/resources',
         allowedRoles: ['ADMIN', 'SALES', 'HR'],
     },
-    // {
-    //     id: 'mentee',
-    //     title: 'Mentee',
-    //     type: 'basic',
-    //     icon: 'heroicons_outline:users',
-    //     link: '/mentee',
-    //     // allowedRoles: ['ADMIN', 'SALES', 'HR'],
-    // },
+    {
+        id: 'mentee',
+        title: 'Mentee',
+        type: 'basic',
+        icon: 'heroicons_outline:users',
+        link: '/mentee',
+        allowedRoles: ['ADMIN', 'USER', 'PM'],
+    },
     {
         id: 'external-projects',
         title: 'External Projects',
         type: 'basic',
         icon: 'heroicons_outline:view-grid-add',
         link: '/external-projects',
-        allowedRoles:['ADMIN', 'SALES', 'USER', 'PM', 'VENDOR']
+        allowedRoles: ['ADMIN', 'SALES', 'USER', 'PM', 'VENDOR'],
     },
     {
         id: 'profit-loss',

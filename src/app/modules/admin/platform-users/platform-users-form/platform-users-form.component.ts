@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { PlatformUsersService } from '../common/services/platform-users.service';
 import { AuthService } from '@services/auth/auth.service';
+import { USER_ROLE } from '../common/constants';
 
 @Component({
     selector: 'app-platform-users-form',
@@ -17,7 +18,7 @@ export class PlatformUsersFormComponent implements OnInit {
     patchData: [] | null;
     disableEmailField: boolean = false;
 
-    roles: any[] = [{ name: 'ADMIN' }, { name: 'PM' }, { name: 'USER' }, {name: 'SALES'}, {name: 'HR'}, {name: 'VENDOR'}];
+    roles: any[] = USER_ROLE;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,

@@ -199,7 +199,6 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
             if (id['id']) {
                 this.projectId = id['id'];
                 this.getProjectDetails();
-                this.loadProjectDetails();
             }
         });
     }
@@ -228,14 +227,6 @@ export class ProfitLossProjectStatisticComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.statusCode === 200) {
                     this.projectStatDetails = res?.data;
-                    if(res?.data?.projectDetails?.startDate == null && res?.data?.projectDetails?.endDate == null){
-                        this.range.controls['startDate'].patchValue(this.currentMonthFirstDate);
-                        this.range.controls['endDate'].patchValue(this.currentMonthCurrentDate);
-                    }
-                    else{
-                        this.range.controls['startDate'].patchValue(res?.data?.projectDetails?.startDate);
-                        this.range.controls['endDate'].patchValue(res?.data?.projectDetails?.endDate);
-                    }
                     if (this.projectStatDetails?.resourceCost?.length != 0) {
                         this.showFooter = true;
                     }

@@ -146,10 +146,10 @@ export class DashboardComponent implements OnInit {
     }
 
     downloadExcelAvailablityReport() {
-        this.submitInProcess3 = true;
+        this.submitInProcess = true;
         this.dashboardApiService.getAvailabilityExcelReport().subscribe(
             (res: any) => {
-                this.submitInProcess3 = false;
+                this.submitInProcess = false;
                 if (res?.code === 200) {
                     this.downloadAvailabilityFile(res?.data);
                 } else {
@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit {
                 }
             },
             (err) => {
-                this.submitInProcess3 = false;
+                this.submitInProcess = false;
                 this.snackbar.errorSnackBar('Something went wrong');
             }
         );

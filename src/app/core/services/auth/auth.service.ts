@@ -27,6 +27,12 @@ export class AuthService {
     setToken(accessToken: any) {
         this.storage.set('accessToken', accessToken);
     }
+    setLastLoggedInAt(date: any) {
+        this.storage.set('lastLoggedInAt', date);
+    }
+    getLastLoggedInAt() {
+        return this.storage.get('lastLoggedInAt');
+    }
     setUser(user: any) {
         this.storage.set('user', user);
     }
@@ -49,7 +55,12 @@ export class AuthService {
         this.storage.remove('accessToken');
         this.storage.remove('refreshToken');
     }
-
+    // setLastLoggedInAt(date: any) {
+    //     this.storage.set('lastLoggedInAt', date);
+    // }
+    // getLastLoggedInAt() {
+    //     return this.storage.get('lastLoggedInAt');
+    // }
     getToken(): any {
         return this.storage.get('accessToken');
     }

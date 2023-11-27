@@ -69,20 +69,23 @@ export class AuthSignInComponent implements OnInit {
                         this.submitInProcess = false;
                         this.alert = {
                             type: 'error',
-                            message: error?.error?.message,
+                            message:
+                                error?.error?.message ||
+                                'Internal server error',
                         };
                         this.showAlert = true;
                     }
                 );
             })
             .catch((error) => {
-                this.alert = {
-                    type: 'error',
-                    message: 'Something went wrong',
-                };
+                this.submitInProcess = false;
+                // this.alert = {
+                //     type: 'error',
+                //     message: 'Something went wrong',
+                // };
 
-                // Show the alert
-                this.showAlert = true;
+                // // Show the alert
+                // this.showAlert = true;
             });
     }
 
@@ -91,11 +94,13 @@ export class AuthSignInComponent implements OnInit {
             .signOut()
             .then(() => this.router.navigate(['login']));
     }
+
     private getCurrentDate(): string {
         const today = new Date();
         const dd = String(today.getDate()).padStart(2, '0');
         const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         const yyyy = today.getFullYear();
+
         return dd + '/' + mm + '/' + yyyy;
     }
 }

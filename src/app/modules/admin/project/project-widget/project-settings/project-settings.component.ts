@@ -49,6 +49,7 @@ export class ProjectSettingsComponent implements OnInit {
     fixedCostForm: FormGroup;
     fixedCostInput: FormControl;
     timeAndMaterialForm: FormGroup;
+    paidLeaveHolidayForm : FormGroup;
     costTypes: costTypeInterface[] = [
         {
             value: 'FIXED_COST',
@@ -240,6 +241,11 @@ export class ProjectSettingsComponent implements OnInit {
             return;
         }
 
+        if(this.getNoOfLeaveHolidayAllowed() > 5){
+            this.snackBar.errorSnackBar('Please enter valid data for paid leave/holiday');
+            return;
+        }
+
         const payload = this.getPayload();
         this.isLoading = true;
         console.log("payload : ", payload);
@@ -330,6 +336,7 @@ export class ProjectSettingsComponent implements OnInit {
     }
 
     private initializeForm() {
+        this.initializeProjectSettingForm();
         this.initializeFixedCostForm();
         this.initializeTimeAndMaterialForm();
         this.patchResourcesForTandM();
@@ -443,6 +450,15 @@ export class ProjectSettingsComponent implements OnInit {
         }
     }
 
+    private initializeProjectSettingForm(){
+        this.paidLeaveHolidayForm = this.fb.group({
+            paidLeaves : [this.data?.projectSettings?.holidaysAllowed ? this.data?.projectSettings?.holidaysAllowed : 0,[
+                Validators.required,
+                Validators.max(5),
+            ],]
+        })
+    }
+
     private initializeFixedCostForm() {
         this.patchCostType = this.costTypes?.filter(
             (type) =>
@@ -523,6 +539,7 @@ export class ProjectSettingsComponent implements OnInit {
                 ? this.data?.projectSettings?.id
                 : null,
             projectId: this.data?.projectModel?.id,
+            holidaysAllowed : this.getNoOfLeaveHolidayAllowed(),
             sourceType: 'SLACK',
             deleted: false,
             reminderModel: [
@@ -615,5 +632,9 @@ export class ProjectSettingsComponent implements OnInit {
                     rate: tech?.techRate,
                 };
             });
+    }
+
+    private getNoOfLeaveHolidayAllowed(){
+        return this.paidLeaveHolidayForm?.get('paidLeaves')?.value;
     }
 }

@@ -96,6 +96,7 @@ export const API_LIST = {
     DOWNLOAD_WORKLOG_SHEET: springBootUrl + '/worklog/download-sheet-by-key',
     SPRING_BOOT_URL: springBootUrl,
     PROJECT_SPRING_BOOT_URL : springBootUrl + '/project',
+    RESOURCE_SPRING_BOOT_URL : springBootUrl + '/resource',
     DOWNLOAD_WORKLOG_EXTERNAl_SHEET : springBootUrl + '/worklog/download-sheet',
 };
 
