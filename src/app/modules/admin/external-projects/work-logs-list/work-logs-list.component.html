@@ -127,10 +127,11 @@
                             [ngClass]="{
                                 'inventory-grid-list-1':
                                     userRole === 'ADMIN' ||
-                                    userRole === 'PM' ||
                                     userRole === 'SALES',
                                 'inventory-grid-list':
-                                    userRole === 'USER' || userRole === 'VENDOR'
+                                    userRole === 'USER' ||
+                                    userRole === 'VENDOR' ||
+                                    userRole === 'PM'
                             }"
                         >
                             <div class="font-semibold px-2">Date</div>
@@ -139,10 +140,10 @@
                                 [ngClass]="{
                                     'inventory-grid-list-inner-list-admin':
                                         userRole === 'ADMIN' ||
-                                        userRole === 'PM' ||
                                         userRole === 'SALES',
                                     'inventory-grid-list-inner-list-user':
                                         userRole === 'USER' ||
+                                        userRole === 'PM' ||
                                         userRole === 'VENDOR'
                                 }"
                             >
@@ -152,6 +153,7 @@
                                     class="font-semibold"
                                     *ngIf="
                                         userRole === 'USER' ||
+                                        userRole === 'PM' ||
                                         userRole === 'VENDOR'
                                     "
                                 >
@@ -181,10 +183,10 @@
                                     [ngClass]="{
                                         'inventory-grid-list-inner-list-admin':
                                             userRole === 'ADMIN' ||
-                                            userRole === 'PM' ||
                                             userRole === 'SALES',
                                         'inventory-grid-list-inner-list-user':
                                             userRole === 'USER' ||
+                                            userRole === 'PM' ||
                                             userRole === 'VENDOR',
                                         'border-b-0 pb-0': last
                                     }"
@@ -198,24 +200,24 @@
                                         [innerHTML]="
                                             logs?.onLeave
                                                 ? 'On Leave'
-                                                : 
-                                            logs?.onHoliday
-                                                ? 'On Holiday'
+                                                : logs?.onHoliday
+                                                ? 'Holiday'
                                                 : (logs?.comment | sanitizeHtml)
                                         "
                                     ></div>
                                     <div class="pb-2">
                                         {{
-                                            logs?.onLeave || logs?.onHoliday ? 0 : 
-                                            logs?.timeSpent
+                                            logs?.onLeave || logs?.onHoliday
+                                                ? 0
+                                                : logs?.timeSpent
                                         }}
                                     </div>
-
 
                                     <div
                                         class=""
                                         *ngIf="
                                             userRole === 'USER' ||
+                                            userRole === 'PM' ||
                                             userRole === 'VENDOR'
                                         "
                                     >

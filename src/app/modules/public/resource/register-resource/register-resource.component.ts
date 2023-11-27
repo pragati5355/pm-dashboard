@@ -68,7 +68,7 @@ export class RegisterResourceComponent implements OnInit {
     minToDate: Date | null;
     maxToDate: Date;
     token: string = '';
-    isDisableEmail : boolean = false;
+    isDisableEmail: boolean = false;
 
     get resourcesValidForm(): { [key: string]: AbstractControl } {
         return this.resourcesForm.controls;
@@ -99,13 +99,12 @@ export class RegisterResourceComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         // this.getEmails();
-
+        this.initializeIntegrations();
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
         this.patchResourceForm();
-
     }
-    
+
     patchResourceForm() {
         this.activatedRoute.queryParams.subscribe({
             next: (res: any) => {
@@ -115,13 +114,11 @@ export class RegisterResourceComponent implements OnInit {
                 const decodedPayload = jwt_decode(this.token);
                 this.resourcesForm.patchValue(decodedPayload);
                 this.isDisableEmail = true;
-    
             },
             error: (err: any) => {
                 console.log(err);
             },
         });
-
     }
     consultantForm() {
         this.router.navigate([`/resource/consultant`]);
@@ -505,6 +502,12 @@ export class RegisterResourceComponent implements OnInit {
         if (index !== 0) {
             this.certificates.removeAt(index);
         }
+    }
+
+    private initializeIntegrations() {
+        this.integrations?.forEach((element) => {
+            element.checked = false;
+        });
     }
 
     private getEmails() {
