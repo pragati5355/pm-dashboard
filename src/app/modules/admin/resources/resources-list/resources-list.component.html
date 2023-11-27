@@ -111,6 +111,7 @@
                                                 ></mat-icon>
                                             </mat-form-field>
                                             <mat-form-field
+                                                *ngIf="!hideTechnologyField"
                                                 class="example-chip-list fuse-mat-rounded w-full"
                                                 appearance="fill"
                                             >
@@ -118,6 +119,7 @@
                                                     #chipList
                                                     aria-label="Fruit selection"
                                                     class="ml-[0px]"
+                                                    
                                                 >
                                                     <mat-chip
                                                         *ngFor="
@@ -127,7 +129,7 @@
                                                     >
                                                         {{ tech }}
                                                         <button matChipRemove>
-                                                            <mat-icon
+                                                            <mat-icon 
                                                                 >cancel</mat-icon
                                                             >
                                                         </button>
@@ -322,7 +324,7 @@
                                                             showOnlyVendors($event)
                                                         "
                                                         [checked]="showVendorsOnly"
-                                                        [disabled]="selectedProject && isBench && isShadow"
+                                                        [disabled]="selectedProject && isBench && isShadow "
                                                         [color]="'primary'"
                                                         class="example-margin"
                                                         >Show vendors only</mat-checkbox
