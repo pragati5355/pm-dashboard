@@ -100,9 +100,10 @@ export class ResourcesListComponent implements OnInit {
     isBench: boolean = false;
     isShadow: boolean = false;
     showFilterArea: boolean = false;
+    showVendorsOnly: boolean = false;
+    hideTechnologyField : boolean = false;
     selectedTechnologiesForSearch: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
     separatorKeysCodes: number[] = [ENTER, COMMA];
     technologyCtrl = new FormControl();
     filteredTechnology: Observable<any[]>;
@@ -114,7 +115,6 @@ export class ResourcesListComponent implements OnInit {
         'Orange',
         'Strawberry',
     ];
-    showVendorsOnly: boolean = false;
     userRole: string = '';
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
@@ -181,7 +181,6 @@ export class ResourcesListComponent implements OnInit {
         this.selectedTechnology.push(event.option.value.name);
         this.fruitInput.nativeElement.value = '';
         this.technologyCtrl.setValue(null);
-
         this.selectedTechnologiesForSearch?.push(event.option.value.id);
 
         this.count = 1;
@@ -259,7 +258,6 @@ export class ResourcesListComponent implements OnInit {
         this.searchValue = '';
         this.count = 1;
         this.totalPerPageData = 10;
-        this.totalPerPageData = 10;
         this.projects?.enable();
         this.projects?.setValue('');
         this.showTechnologies = [];
@@ -267,6 +265,10 @@ export class ResourcesListComponent implements OnInit {
         this.isShadowIsBench.setValue('');
         this.pagination = false;
         this.selectedProject = false;
+        this.hideTechnologyField = false;
+        this.exprienceForm.enable();
+        this.isShadowIsBench.enable();
+        this.technologyCtrl?.enable();
         this.selectedTechnologiesForSearch = [];
         this.selectedTechnology = [];
         this.getList();
@@ -299,6 +301,7 @@ export class ResourcesListComponent implements OnInit {
     showOnlyVendors(event: MatCheckboxChange) {
         if(event?.checked){
             this.showVendorsOnly = event?.checked;
+            this.hideTechnologyField = true;
             this.projects?.disable();
             this.technologyCtrl?.disable();
             this.isShadowIsBench?.disable();
@@ -307,9 +310,13 @@ export class ResourcesListComponent implements OnInit {
             this.pagination = false;
             this.initialLoading = true;
             this.technologys.disable();
+            this.selectedTechnologiesForSearch = [];
+            this.selectedTechnology = [];
             const payload = this.getDefaultSearchPayload();
             this.loadDataWithFilterPayload(payload);
         } else {
+            this.showVendorsOnly = event?.checked;
+            this.hideTechnologyField = false;
             this.exprienceForm.enable();
             this.count = 1;
             this.totalPerPageData = 10;
@@ -317,6 +324,8 @@ export class ResourcesListComponent implements OnInit {
             this.isShadowIsBench.enable();
             this.pagination = false;
             this.technologyCtrl?.enable();
+            this.selectedTechnologiesForSearch = [];
+            this.selectedTechnology = [];
             this.getList();
         }
     }
