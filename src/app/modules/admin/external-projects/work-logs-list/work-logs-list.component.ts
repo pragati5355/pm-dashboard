@@ -130,6 +130,8 @@ export class WorkLogsListComponent implements OnInit {
         this.selectedYear =
             resource[0]?.year[resource[0]?.year?.length - 1]?.year;
         this.selectedResourceId = resource[0]?.resource?.resourceId;
+        this.selectedResource = resource[0]?.resource?.firstName + " " + resource[0]?.resource?.lastName;
+        this.checked = resource[0]?.resource?.allowEdit;
         this.loadData(
             this.selectedYear,
             resource[0]?.year[resource[0]?.year?.length - 1]?.months[
@@ -412,6 +414,10 @@ export class WorkLogsListComponent implements OnInit {
                         if (idx !== -1) {
                             this.options = res?.data;
                             this.yearAndMonth = res?.data[idx]?.year;
+                            this.defaultResource = res?.data[idx]?.resource?.email;
+                            this.defaultResourceName = res?.data[idx]?.resource?.firstName + " " + res?.data[0]?.resource?.lastName;
+                            this.checked = res?.data[idx]?.resource?.allowEdit;
+                            this.selectedResourceId = res?.data[idx]?.resource?.resourceId;
 
                             this.matTabList =
                                 this.yearAndMonth[
@@ -436,7 +442,10 @@ export class WorkLogsListComponent implements OnInit {
                     } else {
                         this.options = res?.data;
                         this.yearAndMonth = res?.data[0]?.year;
-
+                        this.defaultResource = res?.data[0]?.resource?.email;
+                        this.defaultResourceName = res?.data[0]?.resource?.firstName + " " + res?.data[0]?.resource?.lastName;
+                        this.checked = res?.data[0]?.resource?.allowEdit;
+                        this.selectedResourceId = res?.data[0]?.resource?.resourceId;
                         this.matTabList =
                             this.yearAndMonth[
                                 this.yearAndMonth?.length - 1
