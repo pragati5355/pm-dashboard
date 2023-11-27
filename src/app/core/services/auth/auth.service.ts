@@ -73,6 +73,12 @@ export class AuthService {
     setAuthenticated(isLoggedIn: boolean) {
         this.storage.set('isLoggedIn', isLoggedIn);
     }
+    setLastLoggedInAt(date: any) {
+        this.storage.set('lastLoggedInAt', date);
+    }
+    getLastLoggedInAt() {
+        return this.storage.get('lastLoggedInAt');
+    }
     updateToken() {
         return this.http.get(AppConstants['UPDATE_ACCESS_TOKEN']);
     }
