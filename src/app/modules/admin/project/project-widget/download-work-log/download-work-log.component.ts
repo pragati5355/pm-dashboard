@@ -94,7 +94,7 @@ export class DownloadWorkLogComponent implements OnInit {
         this.worklogService.downloadWorklog(payload).subscribe(
             (res: any) => {
                 this.submitInProcess = false;
-                if (res?.error === false) {
+                if (res?.code === 200) {
                     this.downloadFile(res?.data);
                     this.snackbar.successSnackBar(res?.message);
                     this.close();
