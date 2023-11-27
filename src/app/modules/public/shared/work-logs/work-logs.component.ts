@@ -14,6 +14,7 @@ export class WorkLogsComponent implements OnInit {
     workLogForm: FormGroup;
     submitInProgress: boolean = false;
     onLeave: boolean = false;
+    onHoliday : boolean = false;
     showError: boolean = false;
     description: string = '';
     responseSubmitted: boolean = false;
@@ -48,11 +49,11 @@ export class WorkLogsComponent implements OnInit {
     }
 
     submit(){
-        if(this.onLeave === false){
+        if(this.onLeave === false && this.onHoliday === false){
             this.addTask();
         }
     
-        if (this.tasks?.length === 0 && !this.onLeave) {
+        if (this.tasks?.length === 0 && !this.onLeave && !this.onHoliday) {
             this.snackBar.errorSnackBar('Please add task');
             return;
         } else {
@@ -67,12 +68,29 @@ export class WorkLogsComponent implements OnInit {
             this.workLogForm?.get('totalHours')?.setValue('');
             this.editor.quillEditor.deleteText(0, 20000);
             this.description = '';
+            this.onHoliday = false;
             this.tasks = [];
             this.showError = false;
         } else {
             this.workLogForm?.get('totalHours')?.enable();
         }
     }
+
+    checkBoxHoliday(value: boolean) {
+        this.onHoliday = value;
+        if (value) {
+            this.workLogForm?.get('totalHours')?.disable();
+            this.workLogForm?.get('totalHours')?.setValue('');
+            this.editor.quillEditor.deleteText(0, 20000);
+            this.description = '';
+            this.onLeave = false;
+            this.tasks = [];
+            this.showError = false;
+        } else {
+            this.workLogForm?.get('totalHours')?.enable();
+        }
+    }
+
 
     getDescription($event: any) {
         if ($event?.html !== null) {
@@ -106,11 +124,11 @@ export class WorkLogsComponent implements OnInit {
     }
 
     addTask() {
-        if (!this.description  && !this.currentDescriptionValue && this.onLeave) {
+        if (!this.description  && !this.currentDescriptionValue && this.onLeave && this.onHoliday) {
             this.snackBar.errorSnackBar('Please add description');
             return;
         }
-        if (!this.workLogForm?.get('totalHours')?.value && this.onLeave) {
+        if (!this.workLogForm?.get('totalHours')?.value && this.onLeave && this.onHoliday) {
             this.snackBar.errorSnackBar('Please add Hours');
             return;
         }
@@ -209,6 +227,7 @@ export class WorkLogsComponent implements OnInit {
                 workLogDate: this.resourceData?.workLogDate,
                 worklogPerTasks: tasks,
                 onLeave: this.onLeave,
+                onHoliday : this.onHoliday,
             },
         };
     }

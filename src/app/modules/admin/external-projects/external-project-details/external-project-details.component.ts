@@ -135,7 +135,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
                 this.externalProjectsService.mapResource(payload).subscribe(
                     (res: any) => {
                         this.isLoading = false;
-                        if (res?.error === false) {
+                        if (res?.statusCode === 200) {
                             this.snackBar.successSnackBar(res?.message);
                             this.getProjectDetails();
                             this.loadDeveloperEmails();

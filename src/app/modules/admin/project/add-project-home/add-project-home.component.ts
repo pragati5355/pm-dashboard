@@ -715,43 +715,46 @@ export class AddProjectHomeComponent
                             );
                         }
 
-                        this.ProjectService.getJiraUser(payload).subscribe(
-                            (res: any) => {
-                                this.submitInProcess = false;
-                                if (res?.data?.length > 0) {
-                                    this.jiraUsers = res?.data;
-                                    this.jiraTeamUsers = res?.data;
-                                    if (this.editProject == true) {
-                                        let projectManagerdata =
-                                            this.jiraUsers?.filter(
-                                                (JiraUsers: any) =>
-                                                    JiraUsers.displayName ==
-                                                    this.managerEditTeamLIst[0]
-                                                        ?.jiraUser
-                                            );
-                                        this.projectTeam.patchValue({
-                                            jira_user: projectManagerdata[0]
-                                                ? projectManagerdata[0]
-                                                : null,
-                                        });
-                                    }
-                                } else {
+                        if (this.editProject) {
+                            this.ProjectService.getJiraUser(payload).subscribe(
+                                (res: any) => {
                                     this.submitInProcess = false;
-                                    if (res?.data?.error) {
-                                        this.snackBar.errorSnackBar(
-                                            res?.data?.error
-                                        );
+                                    if (res?.data?.length > 0) {
+                                        this.jiraUsers = res?.data;
+                                        this.jiraTeamUsers = res?.data;
+                                        if (this.editProject == true) {
+                                            let projectManagerdata =
+                                                this.jiraUsers?.filter(
+                                                    (JiraUsers: any) =>
+                                                        JiraUsers.displayName ==
+                                                        this
+                                                            .managerEditTeamLIst[0]
+                                                            ?.jiraUser
+                                                );
+                                            this.projectTeam.patchValue({
+                                                jira_user: projectManagerdata[0]
+                                                    ? projectManagerdata[0]
+                                                    : null,
+                                            });
+                                        }
                                     } else {
-                                        this.snackBar.errorSnackBar(
-                                            'Jira user not found'
-                                        );
+                                        this.submitInProcess = false;
+                                        if (res?.data?.error) {
+                                            this.snackBar.errorSnackBar(
+                                                res?.data?.error
+                                            );
+                                        } else {
+                                            this.snackBar.errorSnackBar(
+                                                'Jira user not found'
+                                            );
+                                        }
                                     }
+                                },
+                                (error) => {
+                                    this.submitInProcess = false;
                                 }
-                            },
-                            (error) => {
-                                this.submitInProcess = false;
-                            }
-                        );
+                            );
+                        }
                     } else {
                         this.submitInProcess = false;
                         if (res?.data?.error) {
@@ -1163,7 +1166,7 @@ export class AddProjectHomeComponent
             id: id,
         };
         this.initialLoading = true;
-        this.ProjectService.getOneProjectDetails(payload).subscribe(
+        this.ProjectService.getProjectById(id).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 this.projectData = res?.data?.project;
@@ -1281,10 +1284,6 @@ export class AddProjectHomeComponent
                             : null,
                 });
 
-                // this.clientData.forEach((item: any) => {
-
-                // });
-                // projectsetting.forEach((item: any) => {
                 this.projectSetting.patchValue({
                     url: projectsetting?.baseUrl
                         ? projectsetting?.baseUrl.slice(8).slice(0, -14)
@@ -1295,40 +1294,9 @@ export class AddProjectHomeComponent
                 });
                 const projectTeam = res?.data?.teamModel;
 
-                // const pm = projectTeam?.filter((item) => item?.role === 'PM');
-
-                // if (pm?.length > 0) {
-                //     this.projectTeam.patchValue({
-                //         project_manager: pm[0]?.id,
-                //         jira_user: '',
-                //         pm_utilization: pm[0]?.utilization,
-                //     });
-                // }
                 this.teamMemberList = _.cloneDeep(projectTeam);
                 this.originalTeamMemberList = _.cloneDeep(projectTeam);
 
-                // this.managerEditTeamLIst = projectTeam.filter(
-                //     (item: any) => item?.role == 'Manager'
-                // );
-                // this.teamMemberList = this.teamMemberList.filter(
-                //     (item: any) => item?.role !== 'Manager'
-                // );
-                // this.editteamMemberList = projectTeam.filter(
-                //     (item: any) => item?.role !== 'Manager'
-                // );
-                // this.teamMemberList.forEach((element: any) => {
-                //     this.selectedJiraUser = [
-                //         ...this.selectedJiraUser,
-                //         element?.jiraUser,
-                //     ];
-                // });
-                // this.teamMemberList.forEach((element: any) => {
-                //     this.selectedTeamMember = [
-                //         ...this.selectedTeamMember,
-                //         element?.teamMemberId,
-                //     ];
-                // });
-                // this.getTeamMember();
                 this.send();
             },
             (error) => {

@@ -61,20 +61,7 @@ export class WorkLogsListComponent implements OnInit {
     selectedResourceEmail: any[];
     checked: boolean = false;
     totalhours: number;
-    yearAndMonth: any[] = [
-        {
-            '2022': [
-                { value: 1, label: 'Jan' },
-                { value: 2, label: 'Feb' },
-                { value: 3, label: 'Mar' },
-                { value: 4, label: 'Apr' },
-            ],
-            '2023': [
-                { value: 2, label: 'Feb' },
-                { value: 3, label: 'Mar' },
-            ],
-        },
-    ];
+    yearAndMonth: any[] = [];
     isPmAddedAsResource: boolean = false;
 
     constructor(
@@ -91,7 +78,7 @@ export class WorkLogsListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.getCurrentMonthAndYear();
+        // this.getCurrentMonthAndYear();
         this.routeSubscription();
         this.userState = this.authService.getUser();
         this.initializeConfigForm();
@@ -110,7 +97,13 @@ export class WorkLogsListComponent implements OnInit {
 
     onTabChanged(event: any) {
         this.selectedTabIndex = event?.index;
-        this.loadData(this.selectedYear, this.selectedTabIndex);
+        const index = this.yearAndMonth?.findIndex((year) => {
+            return year?.year === this.selectedYear;
+        });
+        this.loadData(
+            this.selectedYear,
+            this.yearAndMonth[index]?.months[this.selectedTabIndex]?.value
+        );
 
         if (!(this.selectedTabIndex === new Date().getMonth())) {
             if (new Date().getDate() > 5) {
@@ -124,14 +117,28 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     onEmailSelected($event: any) {
-        const resource = this.options.filter((option) =>
-            option?.email?.toLowerCase().includes($event.value)
+        const resource = this.options.filter(
+            (option) => option?.resource?.email === $event?.value
         );
-        this.selectedResource =
-            resource[0]?.firstName + ' ' + resource[0]?.lastName;
-        this.selectedResourceId = resource[0]?.resourceId;
-        this.checked = resource[0]?.allowEdit;
-        this.loadData(this.selectedYear, this.selectedTabIndex);
+
+        this.matTabList =
+            resource[0]?.year[resource[0]?.year?.length - 1]?.months;
+
+        this.selectedTabIndex = this.matTabList?.length - 1;
+
+        this.yearAndMonth = resource[0]?.year;
+        this.selectedYear =
+            resource[0]?.year[resource[0]?.year?.length - 1]?.year;
+        this.selectedResourceId = resource[0]?.resource?.resourceId;
+        this.selectedResource = resource[0]?.resource?.firstName + " " + resource[0]?.resource?.lastName;
+        this.checked = resource[0]?.resource?.allowEdit;
+        this.loadData(
+            this.selectedYear,
+            resource[0]?.year[resource[0]?.year?.length - 1]?.months[
+                resource[0]?.year[resource[0]?.year?.length - 1]?.months
+                    ?.length - 1
+            ]?.value
+        );
     }
 
     clearSelectedEmail() {
@@ -142,7 +149,14 @@ export class WorkLogsListComponent implements OnInit {
     }
 
     onYearChange(event: any) {
-        this.loadData(event?.value, this.selectedTabIndex);
+        const index = this.yearAndMonth?.findIndex((year) => {
+            return year?.year === event?.value;
+        });
+
+        this.selectedYear = event?.value;
+        this.matTabList = this.yearAndMonth[index]?.months;
+        this.selectedTabIndex = this.matTabList?.length - 1;
+        this.loadData(event?.value, this.matTabList[0]?.value);
     }
 
     onResourceIdChange(event: any) {
@@ -193,7 +207,6 @@ export class WorkLogsListComponent implements OnInit {
                             }
                         );
                 } else {
-                    console.log('Saying NO', this.checked);
                 }
             });
         } else {
@@ -242,7 +255,7 @@ export class WorkLogsListComponent implements OnInit {
         });
         workLogdialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
-                this.loadData(this.selectedYear, this.selectedTabIndex);
+                window.location.reload();
             }
         });
     }
@@ -269,10 +282,7 @@ export class WorkLogsListComponent implements OnInit {
                         this.initialLoading = false;
                         if (!res?.error) {
                             this.snackBar.successSnackBar(res?.message);
-                            this.loadData(
-                                this.selectedYear,
-                                this.selectedTabIndex
-                            );
+                            window.location.reload();
                         }
                     });
             }
@@ -312,11 +322,7 @@ export class WorkLogsListComponent implements OnInit {
                 this.loggedInUser = res;
                 this.userRole = res?.role;
                 this.selectedResourceId = this.loggedInUser?.resourceId;
-                if (this.userRole === 'USER' || this.userRole === 'VENDOR') {
-                    this.loadData(this.selectedYear, this.selectedTabIndex);
-                } else {
-                    this.getProjectResources();
-                }
+                this.getProjectResources();
             }
         });
     }
@@ -351,7 +357,7 @@ export class WorkLogsListComponent implements OnInit {
         const payload = {
             resourceId: this.selectedResourceId,
             projectId: this.projectId,
-            month: ++month,
+            month: month,
             year: year,
         };
         this.workLogService.getWorkLogs(payload).subscribe((res: any) => {
@@ -396,13 +402,69 @@ export class WorkLogsListComponent implements OnInit {
             .subscribe((res: any) => {
                 this.initialLoading = false;
                 if (res?.data) {
-                    this.options = res?.data;
-                    this.defaultResource = res?.data[0]?.email;
-                    this.defaultResourceName =
-                        res?.data[0]?.firstName + ' ' + res?.data[0]?.lastName;
-                    this.checked = res?.data[0]?.allowEdit;
-                    this.selectedResourceId = res?.data[0]?.resourceId;
-                    this.loadData(this.selectedYear, this.selectedTabIndex);
+                    if (
+                        this.userRole === 'USER' ||
+                        this.userRole === 'VENDOR'
+                    ) {
+                        const idx = res?.data?.findIndex(
+                            (item) =>
+                                item.resource.resourceId ===
+                                this.loggedInUser?.resourceId
+                        );
+                        if (idx !== -1) {
+                            this.options = res?.data;
+                            this.yearAndMonth = res?.data[idx]?.year;
+                            this.defaultResource = res?.data[idx]?.resource?.email;
+                            this.defaultResourceName = res?.data[idx]?.resource?.firstName + " " + res?.data[0]?.resource?.lastName;
+                            this.checked = res?.data[idx]?.resource?.allowEdit;
+                            this.selectedResourceId = res?.data[idx]?.resource?.resourceId;
+
+                            this.matTabList =
+                                this.yearAndMonth[
+                                    this.yearAndMonth?.length - 1
+                                ]?.months;
+                            this.selectedTabIndex = this.matTabList?.length - 1;
+
+                            this.defaultResource =
+                                res?.data[idx]?.resource?.email;
+                            this.selectedResourceId =
+                                res?.data[idx]?.resource?.resourceId;
+
+                            this.selectedYear =
+                                this.yearAndMonth[
+                                    this.yearAndMonth?.length - 1
+                                ]?.year;
+                            this.loadData(
+                                this.selectedYear,
+                                this.yearAndMonth[0]?.months[0]?.value
+                            );
+                        }
+                    } else {
+                        this.options = res?.data;
+                        this.yearAndMonth = res?.data[0]?.year;
+                        this.defaultResource = res?.data[0]?.resource?.email;
+                        this.defaultResourceName = res?.data[0]?.resource?.firstName + " " + res?.data[0]?.resource?.lastName;
+                        this.checked = res?.data[0]?.resource?.allowEdit;
+                        this.selectedResourceId = res?.data[0]?.resource?.resourceId;
+                        this.matTabList =
+                            this.yearAndMonth[
+                                this.yearAndMonth?.length - 1
+                            ]?.months;
+                        this.selectedTabIndex = this.matTabList?.length - 1;
+
+                        this.defaultResource = res?.data[0]?.resource?.email;
+                        this.selectedResourceId =
+                            res?.data[0]?.resource?.resourceId;
+
+                        this.selectedYear =
+                            this.yearAndMonth[
+                                this.yearAndMonth?.length - 1
+                            ]?.year;
+                        this.loadData(
+                            this.selectedYear,
+                            this.yearAndMonth[0]?.months[0]?.value
+                        );
+                    }
                     this.checkPmAddedAsResource();
                 }
                 if (res?.tokenExpire) {
@@ -412,7 +474,7 @@ export class WorkLogsListComponent implements OnInit {
     }
     private checkPmAddedAsResource() {
         const data = this.options?.filter((item) => {
-            return item.resourceId === this.loggedInUser?.resourceId;
+            return item.resource.resourceId === this.loggedInUser?.resourceId;
         });
         this.isPmAddedAsResource = data?.length > 0 ? true : false;
     }
