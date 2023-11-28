@@ -35,7 +35,7 @@ export class InterceptorService implements HttpInterceptor {
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
         const isApiUrl = request.url.endsWith('signin');
-        const isUpdateUrl = request.url.endsWith('get-access-token');
+        const isUpdateUrl = request.url.endsWith('access-token');
         if (!request.headers.get('skipToken')) {
             if (isUpdateUrl) {
                 request = request.clone({
@@ -124,16 +124,17 @@ export class InterceptorService implements HttpInterceptor {
             }),
             catchError((error: HttpErrorResponse) => {
                 if (error?.status === 401) {
-                    this.sessionService.clearStorage();
-                    this.snackBarConfig.panelClass = ['red-snackbar'];
-                    this._snackBar.open(
-                        'Session expired, Please log back in again.',
-                        'x',
-                        this.snackBarConfig
-                    );
-                    this.router.navigate(['/sign-in']);
+                    // this.sessionService.clearStorage();
+                    // this.snackBarConfig.panelClass = ['red-snackbar'];
+                    // this._snackBar.open(
+                    //     'Session expired, Please log back in again.',
+                    //     'x',
+                    //     this.snackBarConfig
+                    // );
+                    // this.router.navigate(['/sign-in']);
+                    this.authService.updateAndReload();
                 }
-                return throwError(error);
+                return throwError(null);
             })
         );
     }

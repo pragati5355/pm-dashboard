@@ -33,7 +33,6 @@ export class MenteeListComponent implements OnInit {
     }
 
     viewMentee(id: string | number) {
-        console.log(id)
         const rpit = this.router.navigate(['./view/', id], {
             relativeTo: this._activatedRoute,
         });
