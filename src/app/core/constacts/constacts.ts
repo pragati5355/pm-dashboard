@@ -13,7 +13,7 @@ export const AppConstants = {
     REPO_API_URL: springBootUrl,
     S3_BUCKET_NAME: environment.bucketName,
     AUTH_USER_API: `${springBootUrl}/user/sign-in`,
-    UPDATE_ACCESS_TOKEN: `${baseUrl}/get-access-token`,
+    UPDATE_ACCESS_TOKEN: `${springBootUrl}/user/access-token`,
     CONNECT_PROJECT: `${jiraBaseUrl}/jira-project`,
     CREATE_PROJECT: `${jiraBaseUrl}/connect-jira`,
     GET_JIRA_USER: `${jiraBaseUrl}/jira-user`,
@@ -59,7 +59,7 @@ export const AppConstants = {
     GET_STATISTICS_COUNT: `${projectBaseUrl}/dashboard-stats`,
     CREATE_PLATFORM_USER: `${projectBaseUrl}/`,
     GET_PLATFORM_USERs: `${projectBaseUrl}/`,
-    GET_STAT_RESOURCE_LIST : `${springBootUrl}/project`,
+    GET_STAT_RESOURCE_LIST: `${springBootUrl}/project`,
 };
 export const ValidationConstants = {
     EMAIL_VALIDATION:
@@ -95,9 +95,9 @@ export const API_LIST = {
     GET_RESOURCE_WORKLOG_PUBLIC: springBootUrl + '/worklog/list-by-key',
     DOWNLOAD_WORKLOG_SHEET: springBootUrl + '/worklog/download-sheet-by-key',
     SPRING_BOOT_URL: springBootUrl,
-    PROJECT_SPRING_BOOT_URL : springBootUrl + '/project',
-    RESOURCE_SPRING_BOOT_URL : springBootUrl + '/resource',
-    DOWNLOAD_WORKLOG_EXTERNAl_SHEET : springBootUrl + '/worklog/download-sheet',
+    PROJECT_SPRING_BOOT_URL: springBootUrl + '/project',
+    RESOURCE_SPRING_BOOT_URL: springBootUrl + '/resource',
+    DOWNLOAD_WORKLOG_EXTERNAl_SHEET: springBootUrl + '/worklog/download-sheet',
 };
 
 export const UTILIZATION_VALUES = [0.25, 0.5, 1];

@@ -76,10 +76,11 @@ export class AuthService {
     updateToken() {
         return this.http.get(AppConstants['UPDATE_ACCESS_TOKEN']);
     }
-    updateAndReload(pageUrl: any) {
+    updateAndReload(pageUrl?: any) {
         this.updateToken().subscribe((res: any) => {
             if (res) {
-                this.setToken(res.data.accessToken);
+                this.setToken(res?.data?.accessToken);
+                this.setRefreshToken(res?.data?.refreshToken);
                 window.location.reload();
             } else {
                 this.router.navigate(['/sign-in']);
