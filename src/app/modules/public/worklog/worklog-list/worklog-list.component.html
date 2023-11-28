@@ -57,9 +57,7 @@
                 <div>
                     <button
                         [color]="'primary'"
-                        [matTooltip]="
-                                'Download Worklog Report'
-                            "
+                        [matTooltip]="'Download Worklog Report'"
                         class="ml-4 bg-primary-500 text-white font-semibold rounded-full"
                         mat-flat-button
                         [disabled]="submitInProcess || initialLoading"
@@ -151,23 +149,17 @@
                                     class="grid gap-2 inventory-grid-list-inner-list-admin"
                                 >
                                     <div class="font-semibold"></div>
-                                    <div class="font-semibold">{{ (totalHours | number:'1.2-2') || '0'}} h</div>
+                                    <div class="font-semibold">
+                                        {{
+                                            (totalHours | number : "1.2-2") ||
+                                                "0"
+                                        }}
+                                        h
+                                    </div>
                                 </div>
                             </div>
-
                         </ng-container>
 
-                        <ng-container
-                            *ngIf="
-                                !initialLoading && workLogsList?.length === 0
-                            "
-                        >
-                            <div
-                                class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
-                            >
-                                Work logs not found
-                            </div>
-                        </ng-container>
                         <ng-container *ngIf="initialLoading">
                             <app-table-skeleton
                                 [skeletonData]="requiredSprintSkeletonData"
@@ -175,6 +167,16 @@
                         </ng-container>
                     </mat-tab>
                 </mat-tab-group>
+
+                <ng-container
+                    *ngIf="!initialLoading && workLogsList?.length === 0"
+                >
+                    <div
+                        class="p-8 sm:p-16 border-t text-3xl font-semibold tracking-tight text-center"
+                    >
+                        Work logs not found
+                    </div>
+                </ng-container>
             </div>
         </div>
     </div>
