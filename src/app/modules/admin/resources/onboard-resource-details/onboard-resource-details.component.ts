@@ -89,6 +89,8 @@ export class OnboardResourceDetailsComponent implements OnInit {
         this.initializeForm();
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
+
+        console.log(this.data);
     }
 
     add(event: MatChipInputEvent): void {
@@ -438,6 +440,7 @@ export class OnboardResourceDetailsComponent implements OnInit {
                 resourceUrl: this.patchData?.details?.resourceUrl,
             },
             confirmed: false,
+            id: this.data?.editData?.id,
         };
         payload.details.role = this.currentRole;
         return payload;

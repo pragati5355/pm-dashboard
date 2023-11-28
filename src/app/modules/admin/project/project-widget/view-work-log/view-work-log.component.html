@@ -179,16 +179,6 @@
                             </div>
                         </div>
                     </ng-container>
-
-                    <ng-container
-                        *ngIf="!initialLoading && workLogsList?.length === 0"
-                    >
-                        <div
-                            class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
-                        >
-                            Work logs not found
-                        </div>
-                    </ng-container>
                     <ng-container *ngIf="initialLoading">
                         <app-table-skeleton
                             [skeletonData]="requiredSprintSkeletonData"
@@ -196,6 +186,14 @@
                     </ng-container>
                 </mat-tab>
             </mat-tab-group>
+
+            <ng-container *ngIf="!initialLoading && workLogsList?.length === 0">
+                <div
+                    class="p-8 sm:p-16 border-t text-3xl font-semibold tracking-tight text-center"
+                >
+                    Work logs not found
+                </div>
+            </ng-container>
         </div>
     </div>
 </div>

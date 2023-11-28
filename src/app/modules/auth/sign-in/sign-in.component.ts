@@ -48,6 +48,7 @@ export class AuthSignInComponent implements OnInit {
                 const payload = {
                     email: result?.email,
                     providerId: result?.id,
+                    provider: result?.provider,
                 };
                 this._authService.login(payload).subscribe(
                     (res: any) => {

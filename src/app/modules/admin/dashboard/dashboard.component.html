@@ -76,7 +76,7 @@
                             "
                             class="ml-4"
                             mat-flat-button
-                            [disabled]="submitInProcess"
+                            [disabled]="submitInProcess1"
                             (click)="downloadExcelAvailablityReport()"
                         >
                             <mat-icon
@@ -86,7 +86,7 @@
                             ></mat-icon>
                             <span class="ml-2 mr-1">Download</span>
                             <mat-progress-spinner
-                                *ngIf="submitInProcess"
+                                *ngIf="submitInProcess1"
                                 [diameter]="18"
                                 [mode]="'indeterminate'"
                             ></mat-progress-spinner>

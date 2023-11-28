@@ -114,6 +114,8 @@ export class OnboardVendorDetailsComponent implements OnInit {
         this.minFromDate = new Date(2012, 3, 24);
         this.maxToDate = new Date();
 
+        console.log(this.data);
+
         this.mode = this.data?.mode;
         this.patchData = this.data?.editData;
     }
@@ -551,6 +553,7 @@ export class OnboardVendorDetailsComponent implements OnInit {
             },
             confirmed: false,
             vendor: true,
+            id: this.data?.editData?.id,
         };
     }
 
