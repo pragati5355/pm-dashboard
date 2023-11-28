@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
     noOfRepos: Number = 0;
     isLoading = true;
     submitInProcess: boolean = false;
+    submitInProcess1: boolean = false;
     submitInProcess2: boolean = false;
     submitInProcess3: boolean = false;
 
@@ -149,10 +150,10 @@ export class DashboardComponent implements OnInit {
     }
 
     downloadExcelAvailablityReport() {
-        this.submitInProcess = true;
+        this.submitInProcess1 = true;
         this.dashboardApiService.getAvailabilityExcelReport().subscribe(
             (res: any) => {
-                this.submitInProcess = false;
+                this.submitInProcess1 = false;
                 if (res?.code === 200) {
                     this.downloadAvailabilityFile(res?.data);
                 } else {
@@ -160,7 +161,7 @@ export class DashboardComponent implements OnInit {
                 }
             },
             (err) => {
-                this.submitInProcess = false;
+                this.submitInProcess1 = false;
                 this.snackbar.errorSnackBar('Something went wrong');
             }
         );
