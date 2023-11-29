@@ -344,15 +344,18 @@ export class AddFormComponent implements OnInit {
     getTeamMemberList(payload: any) {
         this.ProjectService.getTeamMemberList(payload).subscribe(
             (res: any) => {
-                let teamMember = res.data;
+                let teamMember = res?.data;
 
                 this.teammemberQuestion = [];
                 teamMember.forEach((item: any) => {
                     this.teammemberQuestion = [
                         ...this.teammemberQuestion,
                         {
-                            label: item.name,
-                            value: item.teamMemberId,
+                            label:
+                                item?.resource?.firstName +
+                                ' ' +
+                                item?.resource?.lastName,
+                            value: item?.resource?.resourceId,
                             tooltip: '',
                         },
                     ];
