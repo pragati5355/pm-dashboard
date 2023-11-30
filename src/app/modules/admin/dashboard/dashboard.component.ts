@@ -10,6 +10,10 @@ import moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { NominateFormComponent } from './nominate-form/nominate-form.component';
 import { LoggedInUserService } from '../common/services/logged-in-user.service';
+import {
+    MAT_SELECT_YEARS,
+    MAT_TAB_MONTHS,
+} from '../project/project-widget/common/constants';
 
 @Component({
     selector: 'app-dashboard',
@@ -30,6 +34,13 @@ export class DashboardComponent implements OnInit {
     isLoadingDeveloperEmails: boolean = false;
     developerEmailList: any[];
     loggedInUser: any;
+    matTabList: any[] = MAT_TAB_MONTHS;
+    matSelectYears: string[] = MAT_SELECT_YEARS;
+    selectedTabIndex: number = 7;
+    currentMonth: number;
+    currentYear: string = '';
+    selectedYear: string = '2020';
+    initialLoading: boolean = false;
 
     constructor(
         private _authService: AuthService,
@@ -47,6 +58,7 @@ export class DashboardComponent implements OnInit {
         this.getDashboardStatsCounts();
         this.loadResourcesEmailList();
         this.getUserRole();
+        this.getCurrentMonthAndYear();
     }
     loadUserData() {
         const user = this._authService.getUser();
@@ -61,6 +73,12 @@ export class DashboardComponent implements OnInit {
     }
     goToResources() {
         this.router.navigate(['/resources']);
+    }
+    onMonthChanged(event: any) {
+        this.selectedTabIndex = event?.value;
+    }
+    onYearChange(event: any) {
+        this.selectedYear = event?.value;
     }
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
@@ -217,5 +235,11 @@ export class DashboardComponent implements OnInit {
                 this.loggedInUser = res;
             }
         });
+    }
+    private getCurrentMonthAndYear() {
+        this.selectedYear = String(new Date().getFullYear());
+        this.currentYear = String(new Date().getFullYear());
+        this.selectedTabIndex = new Date().getMonth();
+        this.currentMonth = new Date().getMonth();
     }
 }
