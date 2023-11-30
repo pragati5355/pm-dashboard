@@ -52,50 +52,31 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-4 gap-4 mt-6">
+            <div class="mt-6">
                 <div
-                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
+                    *ngIf="isLoading"
+                    class="grid grid-cols-4 gap-4"
+                    [ngClass]="isLoading ? 'skeleton-loader-devs' : ''"
                 >
                     <div
-                        class="text-5xl font-semibold leading-none tracking-tight"
-                    >
-                        87
-                    </div>
-                    <div class="mt-1 text-md font-medium text-center">
-                        Developer
-                    </div>
+                        *ngFor="let i of [1, 2, 3, 4]"
+                        class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
+                    ></div>
                 </div>
-                <div
-                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
-                >
+                <div *ngIf="!isLoading" class="grid grid-cols-4 gap-4">
                     <div
-                        class="text-5xl font-semibold leading-none tracking-tight"
+                        *ngFor="let i of [1, 2, 3, 4]"
+                        class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
                     >
-                        23
+                        <div
+                            class="text-5xl font-semibold leading-none tracking-tight"
+                        >
+                            87
+                        </div>
+                        <div class="mt-1 text-md font-medium text-center">
+                            Developer
+                        </div>
                     </div>
-                    <div class="mt-1 text-md font-medium text-center">QA</div>
-                </div>
-                <div
-                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
-                >
-                    <div
-                        class="text-5xl font-semibold leading-none tracking-tight"
-                    >
-                        43
-                    </div>
-                    <div class="mt-1 text-md font-medium text-center">
-                        Designer
-                    </div>
-                </div>
-                <div
-                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
-                >
-                    <div
-                        class="text-5xl font-semibold leading-none tracking-tight"
-                    >
-                        23
-                    </div>
-                    <div class="mt-1 text-md font-medium text-center">PM</div>
                 </div>
             </div>
         </div>
