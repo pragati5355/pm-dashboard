@@ -9,6 +9,7 @@ import { DatePipe, formatDate } from '@angular/common';
 import moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { NominateFormComponent } from './nominate-form/nominate-form.component';
+import { LoggedInUserService } from '../common/services/logged-in-user.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
     submitInProcess3: boolean = false;
     isLoadingDeveloperEmails: boolean = false;
     developerEmailList: any[];
+    loggedInUser: any;
 
     constructor(
         private _authService: AuthService,
@@ -36,13 +38,15 @@ export class DashboardComponent implements OnInit {
         private dashboardApiService: DashboardApiService,
         private snackbar: SnackBar,
         public datePipe: DatePipe,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
         this.loadUserData();
         this.getDashboardStatsCounts();
         this.loadResourcesEmailList();
+        this.getUserRole();
     }
     loadUserData() {
         const user = this._authService.getUser();
@@ -177,11 +181,12 @@ export class DashboardComponent implements OnInit {
     openDialog() {
         const dialogRef = this.dialog.open(NominateFormComponent, {
             disableClose: true,
-            width: '40%',
+            width: '50%',
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
                 emails: this.developerEmailList,
+                loggedInUser: this.loggedInUser,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {
@@ -204,5 +209,13 @@ export class DashboardComponent implements OnInit {
                 this.isLoadingDeveloperEmails = false;
             }
         );
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.loggedInUser = res;
+            }
+        });
     }
 }

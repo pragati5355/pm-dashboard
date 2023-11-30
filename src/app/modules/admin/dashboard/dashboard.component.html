@@ -158,7 +158,14 @@
         <div class="w-full bg-white p-6 rounded-xl shadow">
             <div class="flex justify-between items-center">
                 <div class="text-xl font-semibold">BPC Nomination's</div>
-                <div>
+                <div
+                    *ngIf="
+                        loggedInUser?.role === 'SALES' ||
+                        loggedInUser?.role === 'PM' ||
+                        loggedInUser?.role === 'HR' ||
+                        loggedInUser?.role === 'ADMIN'
+                    "
+                >
                     <button
                         [color]="'primary'"
                         class="ml-4"

@@ -29,6 +29,7 @@ export class NominateFormComponent implements OnInit {
             label: 'Super star',
         },
     ];
+    submitInProcess: boolean = false;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
@@ -55,6 +56,12 @@ export class NominateFormComponent implements OnInit {
         return arr.length ? arr : [{ email: '' }];
     }
 
+    submit() {
+        if (this.nominateForm?.valid) {
+            console.log(this.nominatePayload());
+        }
+    }
+
     private initializeForm() {
         this.nominateForm = this.formBuilder.group({
             nominee: ['', [Validators.required]],
@@ -73,5 +80,14 @@ export class NominateFormComponent implements OnInit {
                     email ? this.filterEmails(email) : this.emailList.slice()
                 )
             );
+    }
+
+    private nominatePayload() {
+        return {
+            nominatedBy: this.data?.loggedInUser?.email,
+            nominee: this.nominateForm?.get('nominee')?.value,
+            award: this.nominateForm?.get('award')?.value,
+            reason: this.nominateForm?.get('reason')?.value,
+        };
     }
 }
