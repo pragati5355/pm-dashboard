@@ -7,6 +7,9 @@ import saveAs from 'save-as';
 import { DashboardApiService } from './common/services/dashboard-api.service';
 import { DatePipe, formatDate } from '@angular/common';
 import moment from 'moment';
+import { MatDialog } from '@angular/material/dialog';
+import { NominateFormComponent } from './nominate-form/nominate-form.component';
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -23,6 +26,8 @@ export class DashboardComponent implements OnInit {
     submitInProcess1: boolean = false;
     submitInProcess2: boolean = false;
     submitInProcess3: boolean = false;
+    isLoadingDeveloperEmails: boolean = false;
+    developerEmailList: any[];
 
     constructor(
         private _authService: AuthService,
@@ -30,12 +35,14 @@ export class DashboardComponent implements OnInit {
         private dashboardService: DashboardService,
         private dashboardApiService: DashboardApiService,
         private snackbar: SnackBar,
-        public datePipe: DatePipe
+        public datePipe: DatePipe,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
         this.loadUserData();
         this.getDashboardStatsCounts();
+        this.loadResourcesEmailList();
     }
     loadUserData() {
         const user = this._authService.getUser();
@@ -163,6 +170,38 @@ export class DashboardComponent implements OnInit {
             (err) => {
                 this.submitInProcess1 = false;
                 this.snackbar.errorSnackBar('Something went wrong');
+            }
+        );
+    }
+
+    openDialog() {
+        const dialogRef = this.dialog.open(NominateFormComponent, {
+            disableClose: true,
+            width: '40%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                emails: this.developerEmailList,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                window.location.reload();
+            }
+        });
+    }
+
+    loadResourcesEmailList() {
+        this.isLoadingDeveloperEmails = true;
+        this.dashboardService.findAllDeveloperEmails().subscribe(
+            (res: any) => {
+                this.isLoadingDeveloperEmails = false;
+                if (res?.data) {
+                    this.developerEmailList = res?.data;
+                }
+            },
+            (err) => {
+                this.isLoadingDeveloperEmails = false;
             }
         );
     }

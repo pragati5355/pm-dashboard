@@ -153,4 +153,24 @@
             </div>
         </div>
     </div>
+
+    <div class="mt-8">
+        <div class="w-full bg-white p-6 rounded-xl shadow">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-semibold">BPC Nomination's</div>
+                <div>
+                    <button
+                        [color]="'primary'"
+                        class="ml-4"
+                        mat-flat-button
+                        [disabled]="isLoadingDeveloperEmails"
+                        (click)="openDialog()"
+                    >
+                        <mat-icon class="mr-2">stars</mat-icon>
+                        <span>Nominate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
