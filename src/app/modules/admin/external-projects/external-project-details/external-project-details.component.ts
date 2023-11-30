@@ -69,6 +69,10 @@ export class ExternalProjectDetailsComponent implements OnInit {
             });
     }
 
+    showWeeklyForms(){
+        this.router.navigate([`/external-projects/${this.projectId}/feedback/list`]);
+    }
+
     edit() {
         this.dialog
             .open(CreateExternalProjectComponent, {

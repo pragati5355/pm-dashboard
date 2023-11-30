@@ -1,0 +1,137 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex-auto">
+        <div
+            class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
+        >
+            <div
+                class="relative flex flex-col sm:flex-row md:flex-col justify-between p-6 border-b bg-card dark:bg-transparent"
+            >
+                <div class="flex items-center">
+                    <div class="flex items-center ml-2">
+                        <div
+                            class="tracking-tight leading-8 flex items-center ml-1 cursor-pointer"
+                            (click)="goBack()"
+                        >
+                            <mat-icon
+                                class="icon-size-6 text-3xl text-black"
+                                [svgIcon]="'heroicons_outline:chevron-left'"
+                            ></mat-icon>
+                            Back
+                        </div>
+                    </div>
+                    <div class="ml-auto">
+                        <button
+                            class="mr-2 inline-flex items-center"
+                            [disabled]="loadingWeeklyFormData"
+                            mat-flat-button
+                            [color]="'primary'"
+                            (click)="weeklyFeedbackDialog()"
+                        >
+                            <mat-icon
+                                [svgIcon]="'heroicons_outline:plus'"
+                            ></mat-icon>
+                            <span class="ml-2 mr-1">Weekly Feedback</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center sm:mt-0">
+                    <div class="flex-auto d-none">
+                        <mat-form-field
+                            class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50"
+                        >
+                            <mat-icon
+                                [svgIcon]="'heroicons_solid:search'"
+                                class="icon-size-5"
+                                matPrefix
+                            ></mat-icon>
+                            <input
+                                [autocomplete]="'off'"
+                                [placeholder]="'Search for repository'"
+                                matInput
+                            />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-auto overflow-hidden">
+                <div
+                    class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto overflow-x-auto"
+                >
+                    <div
+                        class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-10 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        matSortDisableClear
+                    >
+                        <div></div>
+                        <div>Submitted By</div>
+                        <div>Week End Date</div>
+                        <div>Submit Date</div>
+                        <div>Actions</div>
+                    </div>
+                    <ng-container *ngIf="!initialLoading">
+                        <div class="grid">
+                            <ng-container *ngFor="let list of weeklyFormList">
+                                <div
+                                    class="cursor-pointer inventory-grid grid items-center gap-4 py-3 px-6 md:px-10 border-b"
+                                >
+                                    <div class="flex items-center">
+                                        <div
+                                            class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                        >
+                                            {{
+                                                list?.firstName.charAt(
+                                                    0
+                                                )
+                                            }}
+                                        </div>
+                                    </div>
+                                    <!-- Submitted By -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.firstName }}
+                                        {{ list?.lastName }} ({{
+                                            list?.role
+                                        }})
+                                    </div>
+
+                                    <!-- Week End Date -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.createdAt | date }}
+                                    </div>
+
+                                    <!-- Submit Date -->
+                                    <div class="hidden md:block truncate">
+                                        {{ list?.lastModifiedAt | date }}
+                                    </div>
+                                    <!-- Action -->
+                                    <div
+                                        class="sm:block flex flex-row px-4 items-center w-full cursor-pointer"
+                                    >
+                                        <mat-icon
+                                            [matTooltip]="'View'"
+                                            class="text-gray-400 icon-size-5 cursor-pointer"
+                                            svgIcon="heroicons_outline:eye"
+                                        ></mat-icon>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+
+                    <ng-container
+                        *ngIf="weeklyFormList?.length == 0 && !initialLoading"
+                    >
+                        <div
+                            class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
+                        >
+                            Looks like there is no weekly feedback submitted
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="initialLoading">
+                        <app-table-skeleton
+                            [skeletonData]="requiredReposSkeletonData"
+                        ></app-table-skeleton>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
