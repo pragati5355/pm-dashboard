@@ -1,34 +1,110 @@
-<div class="flex flex-col flex-auto min-w-0">
-    <div class="bg-card">
-        <div class="flex flex-col px-6 sm:px-8">
+<div class="flex flex-col flex-auto min-w-0 p-8">
+    <div class="flex w-full gap-4">
+        <div class="w-full bg-white p-6 rounded-xl shadow">
+            <div class="text-xl font-semibold">Statistics</div>
             <div
-                class="flex flex-col sm:flex-row w-full flex-auto sm:items-center py-6"
+                class="flex-auto grid grid-cols-6 gap-4 mt-6"
+                [ngClass]="isLoading ? 'skeleton-loader' : ''"
             >
-                <div class="flex flex-auto items-center min-w-0">
-                    <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
-                        <img
-                            [src]="userImageUrl"
-                            class="w-full h-full object-cover"
-                        />
+                <div *ngIf="isLoading" class="col-span-2 rounded-2xl"></div>
+                <div *ngIf="isLoading" class="col-span-2 rounded-2xl"></div>
+                <div *ngIf="isLoading" class="col-span-2 rounded-2xl"></div>
+            </div>
+            <div *ngIf="!isLoading" class="flex-auto grid grid-cols-6 gap-4">
+                <div
+                    class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400 cursor-pointer"
+                    (click)="goToProjects()"
+                >
+                    <div
+                        class="text-5xl sm:text-5xl font-semibold leading-none tracking-tight"
+                    >
+                        {{ noOfProjects }}
                     </div>
-                    <div class="flex flex-col min-w-0 ml-4">
-                        <div
-                            class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate ng-star-inserted"
-                        >
-                            Welcome {{ userName }} !
-                        </div>
+                    <div class="mt-1 text-sm sm:text-lg font-medium">
+                        No Of Projects
+                    </div>
+                </div>
+                <div
+                    class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-amber-800 dark:bg-white dark:bg-opacity-5 dark:text-amber-400 cursor-pointer"
+                    (click)="goToResources()"
+                >
+                    <div
+                        class="text-5xl sm:text-5xl font-semibold leading-none tracking-tight"
+                    >
+                        {{ noOfResources }}
+                    </div>
+                    <div class="mt-1 text-sm sm:text-lg font-medium">
+                        No Of Resources
+                    </div>
+                </div>
+                <div
+                    class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-400 cursor-pointer"
+                    (click)="goToProjects()"
+                >
+                    <div
+                        class="text-5xl sm:text-5xl font-semibold leading-none tracking-tight"
+                    >
+                        {{ noOfRepos }}
+                    </div>
+                    <div class="mt-1 text-sm sm:text-lg font-medium">
+                        No Of Repos
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="flex p-6">
-        <div class="flex flex-col w-full bg-white p-6 rounded-xl shadow">
-            <div class="text-3xl font-semibold">Reports</div>
-            <div class="flex-auto grid gap-4 mt-5">
+            <div class="grid grid-cols-4 gap-4 mt-6">
                 <div
-                    class="flex items-center py-2 px-4 justify-between rounded-2xl bg-indigo-50 text-black dark:bg-white dark:bg-opacity-5 dark:text-black cursor-pointer"
+                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
+                >
+                    <div
+                        class="text-5xl font-semibold leading-none tracking-tight"
+                    >
+                        87
+                    </div>
+                    <div class="mt-1 text-md font-medium text-center">
+                        Developer
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
+                >
+                    <div
+                        class="text-5xl font-semibold leading-none tracking-tight"
+                    >
+                        23
+                    </div>
+                    <div class="mt-1 text-md font-medium text-center">QA</div>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
+                >
+                    <div
+                        class="text-5xl font-semibold leading-none tracking-tight"
+                    >
+                        43
+                    </div>
+                    <div class="mt-1 text-md font-medium text-center">
+                        Designer
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
+                >
+                    <div
+                        class="text-5xl font-semibold leading-none tracking-tight"
+                    >
+                        23
+                    </div>
+                    <div class="mt-1 text-md font-medium text-center">PM</div>
+                </div>
+            </div>
+        </div>
+        <div class="w-2/3 bg-white p-6 rounded-xl shadow">
+            <div class="text-xl font-semibold">Reports</div>
+
+            <div class="w-full flex-auto grid gap-4 mt-5">
+                <div
+                    class="w-full flex items-center py-2 px-4 justify-between rounded-2xl bg-indigo-50 text-black dark:bg-white dark:bg-opacity-5 dark:text-black cursor-pointer"
                 >
                     <div class="mt-1 text-md sm:text-lg font-medium">
                         Resource Utilization
@@ -51,7 +127,7 @@
                                     'heroicons_outline:arrow-circle-down'
                                 "
                             ></mat-icon>
-                            <span class="ml-2 mr-1">Download</span>
+
                             <mat-progress-spinner
                                 *ngIf="submitInProcess"
                                 [diameter]="18"
@@ -84,101 +160,13 @@
                                     'heroicons_outline:arrow-circle-down'
                                 "
                             ></mat-icon>
-                            <span class="ml-2 mr-1">Download</span>
+
                             <mat-progress-spinner
                                 *ngIf="submitInProcess1"
                                 [diameter]="18"
                                 [mode]="'indeterminate'"
                             ></mat-progress-spinner>
                         </button>
-                    </div>
-                </div>
-                <!-- <div
-                    class="flex items-center py-2 px-4 justify-between rounded-2xl bg-indigo-50 text-black dark:bg-white dark:bg-opacity-5 dark:text-black cursor-pointer"
-                >
-                    <div class="mt-1 text-md sm:text-lg font-medium">
-                        Resource Availablity Report
-                    </div>
-                    <div
-                        class="flex items-center pl-5 mt-6 sm:mt-0 sm:ml-2 space-x-3"
-                    >
-                        <button
-                            [color]="'primary'"
-                            [matTooltip]="
-                                'Download Resource Availablity report'
-                            "
-                            class="ml-4"
-                            mat-flat-button
-                            [disabled]="submitInProcess3"
-                            (click)="downloadExcelAvailablityReport()"
-                        >
-                            <mat-icon
-                                [svgIcon]="
-                                    'heroicons_outline:arrow-circle-down'
-                                "
-                            ></mat-icon>
-                            <span class="ml-2 mr-1">Download</span>
-                            <mat-progress-spinner
-                                *ngIf="submitInProcess3"
-                                [diameter]="18"
-                                [mode]="'indeterminate'"
-                            ></mat-progress-spinner>
-                        </button>
-                    </div>
-                </div> -->
-            </div>
-        </div>
-    </div>
-
-    <div class="flex p-6">
-        <div class="flex flex-col w-full bg-white p-6 rounded-xl shadow">
-            <div class="text-3xl font-semibold">Statistics</div>
-            <div
-                class="flex-auto grid grid-cols-6 gap-4 mt-6"
-                [ngClass]="isLoading ? 'skeleton-loader' : ''"
-            >
-                <div *ngIf="isLoading" class="col-span-2 rounded-2xl"></div>
-                <div *ngIf="isLoading" class="col-span-2 rounded-2xl"></div>
-                <div *ngIf="isLoading" class="col-span-2 rounded-2xl"></div>
-            </div>
-            <div *ngIf="!isLoading" class="flex-auto grid grid-cols-6 gap-4">
-                <div
-                    class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400 cursor-pointer"
-                    (click)="goToProjects()"
-                >
-                    <div
-                        class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight"
-                    >
-                        {{ noOfProjects }}
-                    </div>
-                    <div class="mt-1 text-sm sm:text-lg font-medium">
-                        No Of Projects
-                    </div>
-                </div>
-                <div
-                    class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-amber-800 dark:bg-white dark:bg-opacity-5 dark:text-amber-400 cursor-pointer"
-                    (click)="goToResources()"
-                >
-                    <div
-                        class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight"
-                    >
-                        {{ noOfResources }}
-                    </div>
-                    <div class="mt-1 text-sm sm:text-lg font-medium">
-                        No Of Resources
-                    </div>
-                </div>
-                <div
-                    class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-400 cursor-pointer"
-                    (click)="goToProjects()"
-                >
-                    <div
-                        class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight"
-                    >
-                        {{ noOfRepos }}
-                    </div>
-                    <div class="mt-1 text-sm sm:text-lg font-medium">
-                        No Of Repos
                     </div>
                 </div>
             </div>
