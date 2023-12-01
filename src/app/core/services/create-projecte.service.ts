@@ -64,14 +64,19 @@ export class CreateProjecteService {
         return this.http.post(AppConstants['GET_RESOURCE'], obj);
     }
     updateDeleteResource(obj: any) {
-        return this.http.post(API_LIST.RESOURCE_SPRING_BOOT_URL + '/update-delete', obj);
+        return this.http.post(
+            API_LIST.RESOURCE_SPRING_BOOT_URL + '/update-delete',
+            obj
+        );
     }
 
     getSprintList(obj: any) {
         return this.http.post(AppConstants['GET_SPRINT_LIST'], obj);
     }
     getTeamMemberList(obj: any) {
-        return this.http.post(AppConstants['GET_PROJECT_TEAM_LIST'], obj);
+        return this.http.get(
+            `${API_LIST.SPRING_BOOT_URL}/project/resource/id/${obj?.id}`
+        );
     }
     updateProject(obj: any) {
         return this.http.post(AppConstants['UPDATE_PROJECT'], obj);
