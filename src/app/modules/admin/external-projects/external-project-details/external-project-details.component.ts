@@ -76,8 +76,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             panelClass: 'warn-dialog-content',
             autoFocus: false,
             data: {
-                // id: this.sprintId,
-                // sprintName: this.sprint?.name,
+                projectHistory : this.projectHistory,
             },
         });
         dialogRef.afterClosed().subscribe((result: any) => {

@@ -28,7 +28,7 @@ export class SendFeedbackFormComponent implements OnInit {
   emailInvalid = false;
   notempty = true;
   project_id = 0;
-  sprint_id: any;
+  projectHistory: any;
   @ViewChild('emailInput') emailInput: ElementRef<HTMLInputElement> | any;
 
   constructor(
@@ -39,11 +39,12 @@ export class SendFeedbackFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.projectHistory = this.data?.projectHistory;
     this.initializeForm();
   }
 
   save(){
-    
+
   }
 
   close() {
@@ -88,7 +89,7 @@ export class SendFeedbackFormComponent implements OnInit {
   private initializeForm(){
     this.feedbackFrom = this._formBuilder.group({
       emails: ['', [Validators.required, Validators.email]],
-      subject: ['', [Validators.required]],
+      subject: [this.projectHistory?.name + ' | Project Feedback Form', [Validators.required]],
       formName: ['', [Validators.required]],
       message: ['',
         [
