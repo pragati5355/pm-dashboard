@@ -53,8 +53,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ExternalProjectSettingsComponent } from './external-project-settings/external-project-settings.component';
 import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.component';
 import { FuseAlertModule } from '@fuse/components/alert';
-import { WeeklyFeedbackListComponent } from './weekly-feedback-list/weekly-feedback-list.component';
-import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedback-form.component';
+import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
+
 @NgModule({
     declarations: [
         ExternalProjectsHomeComponent,
@@ -72,8 +72,7 @@ import { WeeklyFeedbackFormComponent } from './weekly-feedback-form/weekly-feedb
         WorkLogShareComponent,
         ExternalProjectSettingsComponent,
         CostTypeSettingComponent,
-        WeeklyFeedbackListComponent,
-        WeeklyFeedbackFormComponent,
+        SendFeedbackFormComponent,
     ],
     imports: [
         CommonModule,

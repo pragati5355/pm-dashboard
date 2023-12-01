@@ -14,6 +14,7 @@ import { SendRemindersComponent } from '../send-reminders/send-reminders.compone
 import { Clipboard } from '@angular/cdk/clipboard';
 import { WorkLogsDownloadComponent } from '../work-logs-download/work-logs-download.component';
 import { ExternalProjectSettingsComponent } from '../external-project-settings/external-project-settings.component';
+import { SendFeedbackFormComponent } from '../send-feedback-form/send-feedback-form.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -70,7 +71,19 @@ export class ExternalProjectDetailsComponent implements OnInit {
     }
 
     showWeeklyForms(){
-        this.router.navigate([`/external-projects/${this.projectId}/feedback/list`]);
+        const dialogRef = this.dialog.open(SendFeedbackFormComponent, {
+            disableClose: true,
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                // id: this.sprintId,
+                // sprintName: this.sprint?.name,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result?.result == 'success') {
+            }
+        });
     }
 
     edit() {

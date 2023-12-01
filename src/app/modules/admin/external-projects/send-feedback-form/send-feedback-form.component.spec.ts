@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WeeklyFeedbackFormComponent } from './weekly-feedback-form.component';
+import { SendFeedbackFormComponent } from './send-feedback-form.component';
 
-describe('WeeklyFeedbackFormComponent', () => {
-  let component: WeeklyFeedbackFormComponent;
-  let fixture: ComponentFixture<WeeklyFeedbackFormComponent>;
+describe('SendFeedbackFormComponent', () => {
+  let component: SendFeedbackFormComponent;
+  let fixture: ComponentFixture<SendFeedbackFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WeeklyFeedbackFormComponent ]
+      declarations: [ SendFeedbackFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WeeklyFeedbackFormComponent);
+    fixture = TestBed.createComponent(SendFeedbackFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
