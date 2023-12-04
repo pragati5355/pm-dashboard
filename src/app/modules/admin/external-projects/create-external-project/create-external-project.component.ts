@@ -14,6 +14,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 import { ExternalProjectService } from '../common/services/external-project.service';
+import { AddFormService } from '@services/add-form.service';
 
 @Component({
     selector: 'app-create-external-project',
@@ -38,6 +39,7 @@ export class CreateExternalProjectComponent implements OnInit {
     technologys: any = this.data?.projectModel?.technology || [];
     filteredTechnologies: Observable<any[]> | undefined;
     alltechnologys: any[] = this.data?.technologies;
+    selectFomList: any = [];
 
     get clients() {
         return this.projectForm?.get('clients') as FormArray;
@@ -49,15 +51,15 @@ export class CreateExternalProjectComponent implements OnInit {
         private fb: FormBuilder,
         private snackBarService: SnackBar,
         private authService: AuthService,
-        private externalProjectService: ExternalProjectService
+        private externalProjectService: ExternalProjectService,
+        private formService: AddFormService,
     ) {}
 
     ngOnInit(): void {
         this.loggedInUser = this.authService.getUser();
         this.setMode();
         this.initializeForm();
-
-        console.log(this.data?.projectModel?.technology);
+        this.getFormList();
     }
 
     setMode() {
@@ -96,6 +98,17 @@ export class CreateExternalProjectComponent implements OnInit {
         this.projectForm.get('technology')?.setValue('');
     }
 
+
+    getFormList() {
+        this.isLoading = true;
+        this.formService
+            .getFormListWithoutPagination()
+            .subscribe((res: any) => {
+                this.selectFomList = res?.data;
+                this.isLoading = false;
+            });
+    }
+
     initializeForm() {
         this.projectForm = this.fb.group({
             id: this.fb.control(this.projectModel?.id || null),
@@ -108,6 +121,7 @@ export class CreateExternalProjectComponent implements OnInit {
                 this.projectModel?.description || null
             ),
             technology: [''],
+            feedback_form: [''],
             clients: this.getClientsControl(),
             addedBy: this.loggedInUser?.userId,
         });

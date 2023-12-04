@@ -139,7 +139,7 @@
         </div>
 
         <mat-form-field
-            class="w-full userlist mt-4"
+            class="w-full userlist mt-4 mb-2"
             id="userlist"
             [floatLabel]="'always'"
         >
@@ -150,6 +150,19 @@
                 formControlName="description"
                 class="inputlist"
             ></textarea>
+        </mat-form-field>
+        
+        <mat-form-field class="w-full mt-6 mb-1  sm:mt-0 select-form"
+            [floatLabel]="'always'">
+            <mat-label>Choose feedback form </mat-label>
+            <mat-select panelClass="select-form-option" formControlName="feedback_form" type="text"
+                placeholder="Choose feedback form" [disableOptionCentering]="true"
+                >
+                <mat-option *ngFor="let form of selectFomList" [value]="form.id">
+                    {{ form.formName }}
+                </mat-option>
+            </mat-select>
+                                
         </mat-form-field>
 
         <h3 class="font-bold mb-2">Client Details:</h3>

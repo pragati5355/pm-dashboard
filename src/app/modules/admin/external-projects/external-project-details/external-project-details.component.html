@@ -105,16 +105,15 @@
                 <span class="ml-2 mr-1">Work logs</span>
             </button>
             <button
-                [matMenuTriggerFor]="menu"
                 class="ml-4"
-                *ngIf="userRole === 'ADMIN' || userRole === 'PM' || userRole === 'SALES'"
+                *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                 mat-flat-button
                 [color]="'primary'"
                 [disabled]="isLoadingTechnologies"
                 (click)="showWeeklyForms()"
                 [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
             >
-                <span class="ml-2 mr-1">Feedback Forms</span>
+                <span class="ml-2 mr-1">Feedback Form</span>
             </button>
             <button
                 *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
