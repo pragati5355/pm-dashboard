@@ -6,7 +6,6 @@ import { SnackBar } from 'app/core/utils/snackBar';
 import saveAs from 'save-as';
 import { DashboardApiService } from './common/services/dashboard-api.service';
 import { DatePipe, formatDate } from '@angular/common';
-import moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { NominateFormComponent } from './nominate-form/nominate-form.component';
 import { LoggedInUserService } from '../common/services/logged-in-user.service';
@@ -14,6 +13,10 @@ import {
     MAT_SELECT_YEARS,
     MAT_TAB_MONTHS,
 } from '../project/project-widget/common/constants';
+import {
+    NomineeList,
+    UserInterface,
+} from './nominee-list/nominee-list.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -33,7 +36,7 @@ export class DashboardComponent implements OnInit {
     submitInProcess3: boolean = false;
     isLoadingDeveloperEmails: boolean = false;
     developerEmailList: any[];
-    loggedInUser: any;
+    loggedInUser: UserInterface;
     matTabList: any[] = MAT_TAB_MONTHS;
     matSelectYears: string[] = MAT_SELECT_YEARS;
     selectedTabIndex: number = 7;
@@ -41,6 +44,26 @@ export class DashboardComponent implements OnInit {
     currentYear: string = '';
     selectedYear: string = '2020';
     initialLoading: boolean = false;
+    nomineeList: NomineeList[] = [
+        {
+            nominatedBy: 'rohan.kadam@mindbowser.com',
+            nomineeName: 'Amaresh Joshi',
+            nominatedByName: 'Rohan kadam',
+            nominee: 'amaresh.joshi@mindbowser.com',
+            nomineeResId: 2,
+            reason: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium saepe eveniet molestiae, laboriosam quidem cumque animi quas esse, vero voluptas iusto, delectus excepturi similique explicabo corrupti ex. Inventore, sapiente laudantium!',
+            award: 'SUPER_STAR',
+        },
+        {
+            nominatedBy: 'pranita.jadhav@mindbowser.com',
+            nomineeName: 'Pragati Gawade',
+            nominatedByName: 'Pranita Jadhav',
+            nominee: 'pragati.gawade@mindbowser.com',
+            nomineeResId: 19,
+            reason: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium saepe eveniet molestiae, similique explicabo corrupti ex. Inventore, sapiente laudantium!',
+            award: 'SUPER_STAR',
+        },
+    ];
 
     constructor(
         private _authService: AuthService,

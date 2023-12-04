@@ -15,6 +15,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { NomineeListComponent } from './nominee-list/nominee-list.component';
 const dashboardRoutes: Route[] = [
     {
         path: '',
@@ -27,7 +28,7 @@ const dashboardRoutes: Route[] = [
 ];
 
 @NgModule({
-    declarations: [DashboardComponent, NominateFormComponent],
+    declarations: [DashboardComponent, NominateFormComponent, NomineeListComponent],
     imports: [
         CommonModule,
         MatIconModule,
