@@ -27,6 +27,7 @@ export class CreateExternalProjectComponent implements OnInit {
 
     technologies: string[] = this.data?.projectModel?.technology || [];
     isLoading = false;
+    submitInProcess : boolean = false;
     mode: 'create' | 'update' = 'create';
     loggedInUser: any;
     projectModel = this.data?.projectModel;
@@ -121,7 +122,9 @@ export class CreateExternalProjectComponent implements OnInit {
                 this.projectModel?.description || null
             ),
             technology: [''],
-            feedback_form: [''],
+            formId: this.fb.control(
+                this.projectModel?.formId ? this.projectModel?.formId : ''
+            ),
             clients: this.getClientsControl(),
             addedBy: this.loggedInUser?.userId,
         });
@@ -210,6 +213,7 @@ export class CreateExternalProjectComponent implements OnInit {
             if (this.mode === 'create') {
                 delete formValue.id;
             }
+            console.log("formValue : ", formValue);
             this.callCreateUpdateApi(formValue);
         } else {
             this.projectForm.markAllAsTouched();
@@ -217,9 +221,9 @@ export class CreateExternalProjectComponent implements OnInit {
     }
 
     private callCreateUpdateApi(requestBody: any) {
-        this.isLoading = true;
+        this.submitInProcess = true;
         this.externalProjectService.create(requestBody).subscribe((result) => {
-            this.isLoading = false;
+            this.submitInProcess = false;
             this.snackBarService.successSnackBar(result?.message);
             if (!result?.error) {
                 this.dialogRef.close(result);

@@ -155,7 +155,7 @@
         <mat-form-field class="w-full mt-6 mb-1  sm:mt-0 select-form"
             [floatLabel]="'always'">
             <mat-label>Choose feedback form </mat-label>
-            <mat-select panelClass="select-form-option" formControlName="feedback_form" type="text"
+            <mat-select panelClass="select-form-option" formControlName="formId" type="text"
                 placeholder="Choose feedback form" [disableOptionCentering]="true"
                 >
                 <mat-option *ngFor="let form of selectFomList" [value]="form.id">
@@ -280,12 +280,12 @@
     <button
         mat-flat-button
         color="primary"
-        [disabled]="isLoading"
+        [disabled]="submitInProcess"
         (click)="add()"
     >
-        <mat-icon *ngIf="!isLoading" class="mr-2">add</mat-icon>
+        <mat-icon *ngIf="!submitInProcess" class="mr-2">add</mat-icon>
         <mat-progress-spinner
-            *ngIf="isLoading"
+            *ngIf="submitInProcess"
             class="mr-2"
             mode="indeterminate"
             diameter="24"
