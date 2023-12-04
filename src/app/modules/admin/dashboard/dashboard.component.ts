@@ -99,9 +99,11 @@ export class DashboardComponent implements OnInit {
     }
     onMonthChanged(event: any) {
         this.selectedTabIndex = event?.value;
+        console.log('month-->', this.selectedTabIndex);
     }
     onYearChange(event: any) {
         this.selectedYear = event?.value;
+        console.log('year-->', this.selectedYear);
     }
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
@@ -260,8 +262,21 @@ export class DashboardComponent implements OnInit {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
             if (res?.role) {
                 this.loggedInUser = res;
+                // this.getNomineeList(this.loggedInUser?.resourceId);
             }
         });
+    }
+    private getNomineeList(id: number | string) {
+        const payload = {
+            resourceId: id,
+        };
+        this.dashboardApiService
+            .getNomineeList(payload)
+            .subscribe((res: any) => {
+                if (res?.statusCode === 200) {
+                    this.nomineeList = res?.data;
+                }
+            });
     }
     private getCurrentMonthAndYear() {
         this.selectedYear = String(new Date().getFullYear());

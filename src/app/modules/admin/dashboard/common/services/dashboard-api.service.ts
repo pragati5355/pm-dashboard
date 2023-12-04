@@ -36,4 +36,8 @@ export class DashboardApiService {
     saveNominee(obj: NominateModel) {
         return this.http.post(API_LIST.SPRING_BOOT_URL + '/nominee/save', obj);
     }
+
+    getNomineeList(obj: any) {
+        return this.http.post(API_LIST.SPRING_BOOT_URL + '/nominee/list', obj);
+    }
 }
