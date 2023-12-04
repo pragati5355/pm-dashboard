@@ -209,6 +209,25 @@ export class AddProjectHomeComponent
                 'dd-MM-yyyy'
             );
 
+            if (newDate <= this.getTodayDate()) {
+                console.log('today-->', this.getTodayDate());
+                const idx = this.teamMemberList?.findIndex(
+                    (item) => item?.id === this.currentResourceIdInEditMode
+                );
+                this.projectTeam
+                    ?.get('endDate')
+                    ?.setValue(
+                        this.datePipe.transform(
+                            this.teamMemberList[idx]?.endDate,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                        )
+                    );
+                this.snackBar.errorSnackBar(
+                    'Please select end date greater than today'
+                );
+                return;
+            }
+
             if (newDate !== this.resourcePrevDate) {
                 const idx = this.teamMemberList?.findIndex(
                     (item) => item?.id === this.currentResourceIdInEditMode
@@ -262,8 +281,8 @@ export class AddProjectHomeComponent
                 this.disableUpdate = false;
                 this.projectTeam?.get('tm_utilization')?.enable();
             } else {
-                this.disableUpdate = true;
-                this.projectTeam?.get('tm_utilization')?.disable();
+                // this.disableUpdate = true;
+                // this.projectTeam?.get('tm_utilization')?.disable();
                 this.getAvailableCapacity(
                     this.currentResourceInEditMode?.email
                 );
@@ -275,6 +294,14 @@ export class AddProjectHomeComponent
                 });
             }
         }
+    }
+
+    getTodayDate(): string {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        return dd + '-' + mm + '-' + yyyy;
     }
 
     editMember(index: number, teamMember: any) {
@@ -327,7 +354,7 @@ export class AddProjectHomeComponent
                     (currentResource[0]?.utilization || 0);
             } else if (teamMember?.status === 'COMPLETED') {
                 if (this.currentCapacity >= 0) {
-                    this.disableUpdate = true;
+                    // this.disableUpdate = true;
                     this.projectTeam?.get('tm_utilization')?.disable();
                 }
                 this.projectTeam.patchValue({
