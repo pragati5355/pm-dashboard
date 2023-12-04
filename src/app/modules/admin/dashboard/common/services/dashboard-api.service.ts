@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
+import { NominateModel } from '../../nominate-form/nominate-form.component';
 @Injectable({
     providedIn: 'root',
 })
@@ -30,5 +31,9 @@ export class DashboardApiService {
         return this.http.get(
             API_LIST.SPRING_BOOT_URL + '/resource/availability-report'
         );
+    }
+
+    saveNominee(obj: NominateModel) {
+        return this.http.post(API_LIST.SPRING_BOOT_URL + '/nominee/save', obj);
     }
 }

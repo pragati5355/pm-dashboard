@@ -209,7 +209,11 @@ export class DashboardComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result == 'success') {
-                window.location.reload();
+                this.loadUserData();
+                this.getDashboardStatsCounts();
+                this.loadResourcesEmailList();
+                this.getUserRole();
+                this.getCurrentMonthAndYear();
             }
         });
     }

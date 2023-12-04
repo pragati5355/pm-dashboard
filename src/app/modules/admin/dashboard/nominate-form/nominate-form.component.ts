@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
+import { DashboardApiService } from '../common/services/dashboard-api.service';
 
-interface NominateModel {
+export interface NominateModel {
     nominatedBy: string;
     nominee: string;
     reason: string;
@@ -33,7 +35,9 @@ export class NominateFormComponent implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
-        private matDialogRef: MatDialogRef<NominateFormComponent>
+        private matDialogRef: MatDialogRef<NominateFormComponent>,
+        private dashboardService: DashboardApiService,
+        private snackBar: SnackBar
     ) {}
 
     ngOnInit(): void {
@@ -58,7 +62,20 @@ export class NominateFormComponent implements OnInit {
 
     submit() {
         if (this.nominateForm?.valid) {
-            console.log(this.nominatePayload());
+            this.submitInProcess = true;
+            const payload = this.nominatePayload();
+            this.dashboardService.saveNominee(payload).subscribe(
+                (res: any) => {
+                    this.submitInProcess = false;
+                    if (res?.statusCode === 200) {
+                        this.snackBar.successSnackBar(res?.message);
+                        this.matDialogRef.close('success');
+                    }
+                },
+                (err) => {
+                    this.submitInProcess = false;
+                }
+            );
         }
     }
 
