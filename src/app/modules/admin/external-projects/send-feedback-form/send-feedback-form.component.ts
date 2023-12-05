@@ -40,6 +40,7 @@ export class SendFeedbackFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectHistory = this.data?.projectHistory;
+    console.log("this.projectHistory : ", this.projectHistory);
     this.initializeForm();
   }
 
@@ -90,7 +91,7 @@ export class SendFeedbackFormComponent implements OnInit {
     this.feedbackFrom = this._formBuilder.group({
       emails: ['', [Validators.required, Validators.email]],
       subject: [this.projectHistory?.name + ' | Project Feedback Form', [Validators.required]],
-      formName: ['', [Validators.required]],
+      formName: [this.projectHistory?.form?.formName ? this.projectHistory?.form?.formName : '', [Validators.required]],
       message: ['',
         [
           Validators.required,

@@ -70,7 +70,7 @@ export class ExternalProjectDetailsComponent implements OnInit {
             });
     }
 
-    showWeeklyForms(){
+    showFeedbackForms(){
         const dialogRef = this.dialog.open(SendFeedbackFormComponent, {
             disableClose: true,
             panelClass: 'warn-dialog-content',
