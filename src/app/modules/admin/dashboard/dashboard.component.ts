@@ -100,10 +100,12 @@ export class DashboardComponent implements OnInit {
     onMonthChanged(event: any) {
         this.selectedTabIndex = event?.value;
         console.log('month-->', this.selectedTabIndex);
+        this.getNomineeList(this.selectedTabIndex, this.currentYear);
     }
     onYearChange(event: any) {
         this.selectedYear = event?.value;
         console.log('year-->', this.selectedYear);
+        this.getNomineeList(this.selectedTabIndex, this.selectedYear);
     }
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
@@ -262,13 +264,13 @@ export class DashboardComponent implements OnInit {
         this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
             if (res?.role) {
                 this.loggedInUser = res;
-                // this.getNomineeList(this.loggedInUser?.resourceId);
             }
         });
     }
-    private getNomineeList(id: number | string) {
+    private getNomineeList(month: number, year: number | string) {
         const payload = {
-            resourceId: id,
+            month: ++month,
+            year: year,
         };
         this.dashboardApiService
             .getNomineeList(payload)
@@ -283,5 +285,6 @@ export class DashboardComponent implements OnInit {
         this.currentYear = String(new Date().getFullYear());
         this.selectedTabIndex = new Date().getMonth();
         this.currentMonth = new Date().getMonth();
+        this.getNomineeList(this.currentMonth, this.currentYear);
     }
 }
