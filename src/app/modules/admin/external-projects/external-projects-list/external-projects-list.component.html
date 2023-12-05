@@ -164,57 +164,28 @@
                                             </div>
                                             <div
                                                 class="flex px-8 cursor-pointer"
-                                                (click)="
-                                                    goToExternalProjectDetails(
-                                                        project?.id
-                                                    )
-                                                "
+                                                (click)="goToExternalProjectDetails(project?.id)"
                                             >
-                                                <div class="flex flex-col">
-                                                    <span>Team</span>
-                                                    <div class="flex">
-                                                        <ng-container
-                                                            *ngIf="
-                                                                project?.team
-                                                                    ?.length > 0
-                                                            "
-                                                        >
-                                                            <ng-container
-                                                                *ngFor="
-                                                                    let teamMember of project?.team;
-                                                                    index as i
-                                                                "
-                                                            >
-                                                                <ng-container
-                                                                    *ngIf="
-                                                                        teamMember !==
-                                                                        null
-                                                                    "
-                                                                >
-                                                                    <div
-                                                                        class="cursor-pointer w-8 h-8 m-0.5 rounded-full items-center justify-center text-card ring-2 ring-bg-card bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
-                                                                        [ngClass]="{
-                                                                            '-ml-3':
-                                                                                i !==
-                                                                                0
-                                                                        }"
-                                                                        [matTooltip]="
-                                                                            teamMember?.firstName +
-                                                                            ' ' +
-                                                                            teamMember?.lastName
-                                                                        "
-                                                                    >
-                                                                        <div
-                                                                            class="rounded-full text-center uppercase text-1xl mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                                                        >
-                                                                            {{
-                                                                                teamMember?.firstName?.charAt(
-                                                                                    0
-                                                                                )
-                                                                            }}
-                                                                        </div>
+                                                <div class="flex flex-col mt-4 sm:mt-0">
+                                                    <span class="text-sm text-secondary leading-none">Team</span>
+                                                    <div class="flex" *ngIf="project?.team?.length > 0">
+                                                        <ng-container *ngFor="let teamMember of project?.team;index as i">
+                                                            <ng-container  *ngIf="teamMember !== null">
+                                                                <div *ngIf=" i<15"
+                                                                    class="cursor-pointer w-8 h-8 m-0.5 rounded-full items-center justify-center text-card ring-2 ring-bg-card bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+                                                                    [ngClass]="{'-ml-3': i !== 0}">
+                                                                    <img class="rounded-full" *ngIf="teamMember?.image"
+                                                                        [src]="teamMember.image" alt="Card cover image">
+                                                                    <div class="rounded-full text-center uppercase text-1xl  mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                                                        *ngIf="!teamMember?.image && teamMember?.firstName && i<14"
+                                                                        [matTooltip]="teamMember?.firstName + ' ' + teamMember?.lastName">
+                                                                        {{teamMember?.firstName.charAt(0)}}
                                                                     </div>
-                                                                </ng-container>
+                                                                    <div *ngIf="i == 14 "
+                                                                        class="rounded-full text-center uppercase text-1xl  mt-2.5 font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                                        +{{project?.team?.length - 14}}
+                                                                    </div>
+                                                                </div>
                                                             </ng-container>
                                                         </ng-container>
                                                     </div>
