@@ -28,6 +28,7 @@ export class SendFeedbackFormComponent implements OnInit {
   emailInvalid = false;
   notempty = true;
   project_id = 0;
+  checkFormId : boolean = false;
   projectHistory: any;
   @ViewChild('emailInput') emailInput: ElementRef<HTMLInputElement> | any;
 
@@ -98,5 +99,10 @@ export class SendFeedbackFormComponent implements OnInit {
           TextRegexValidator(RegexConstants.Text_Area),
         ],],
     });
+
+    if(this.projectHistory?.formId === 0){
+      this.checkFormId = true;
+      this.feedbackFrom.get('formName').disable();
+    }
   }
 }
