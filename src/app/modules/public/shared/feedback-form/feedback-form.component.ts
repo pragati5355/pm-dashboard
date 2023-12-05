@@ -19,7 +19,10 @@ export class FeedbackFormComponent implements OnInit {
     private snackBar: SnackBar,
     private formService: AddFormService,
     private _route: ActivatedRoute,
-    private router: Router, ) { }
+    private router: Router, 
+    ) 
+  { }
+
   ngOnInit(): void {
     this.routeSubscribe = this._route.queryParams.subscribe(params => {
       this.email = params['email']

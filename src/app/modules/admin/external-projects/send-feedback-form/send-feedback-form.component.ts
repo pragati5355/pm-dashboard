@@ -45,9 +45,33 @@ export class SendFeedbackFormComponent implements OnInit {
     this.initializeForm();
   }
 
-  save(){
-
-  }
+  save() {
+    if (this.emails.length !== 0) {
+        if (!this.feedbackFrom.invalid) {
+            let payload = {
+                content: this.feedbackFrom.value.message,
+                emails: this.emails,
+                subject: this.feedbackFrom.value.subject,
+                projectId: this.project_id,
+            };
+            console.log("Payload : ", payload);
+            // this.formService.feedbackFrom(payload).subscribe((res: any) => {
+            //     if (res.data) {
+            //         this.snackBar.successSnackBar(res.data);
+            //     } else {
+            //         this.snackBar.errorSnackBar(
+            //             ErrorMessage.ERROR_SOMETHING_WENT_WRONG
+            //         );
+            //     }
+            // });
+            // this.matDialogRef.close({
+            //     result: 'success',
+            // });
+        }
+    } else {
+        this.emailInvalid = true;
+    }
+}
 
   close() {
     this.matDialogRef.close();
