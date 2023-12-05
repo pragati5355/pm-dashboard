@@ -44,26 +44,7 @@ export class DashboardComponent implements OnInit {
     currentYear: string = '';
     selectedYear: string = '2020';
     initialLoading: boolean = false;
-    nomineeList: NomineeList[] = [
-        {
-            nominatedBy: 'rohan.kadam@mindbowser.com',
-            nomineeName: 'Amaresh Joshi',
-            nominatedByName: 'Rohan kadam',
-            nominee: 'amaresh.joshi@mindbowser.com',
-            nomineeResId: 2,
-            reason: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium saepe eveniet molestiae, laboriosam quidem cumque animi quas esse, vero voluptas iusto, delectus excepturi similique explicabo corrupti ex. Inventore, sapiente laudantium!',
-            award: 'SUPER_STAR',
-        },
-        {
-            nominatedBy: 'pranita.jadhav@mindbowser.com',
-            nomineeName: 'Pragati Gawade',
-            nominatedByName: 'Pranita Jadhav',
-            nominee: 'pragati.gawade@mindbowser.com',
-            nomineeResId: 19,
-            reason: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium saepe eveniet molestiae, similique explicabo corrupti ex. Inventore, sapiente laudantium!',
-            award: 'SUPER_STAR',
-        },
-    ];
+    nomineeList: NomineeList[] = [];
 
     constructor(
         private _authService: AuthService,
@@ -99,12 +80,10 @@ export class DashboardComponent implements OnInit {
     }
     onMonthChanged(event: any) {
         this.selectedTabIndex = event?.value;
-        console.log('month-->', this.selectedTabIndex);
-        this.getNomineeList(this.selectedTabIndex, this.currentYear);
+        this.getNomineeList(this.selectedTabIndex, this.selectedYear);
     }
     onYearChange(event: any) {
         this.selectedYear = event?.value;
-        console.log('year-->', this.selectedYear);
         this.getNomineeList(this.selectedTabIndex, this.selectedYear);
     }
     getDashboardStatsCounts() {
