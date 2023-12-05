@@ -192,6 +192,26 @@ export class AddCrResourceDialogComponent implements OnInit {
     resourceEndDate(event: any) {
         const newDate = new Date(event?.target?.value).getTime();
         const prevDate = new Date(this.data?.editData?.endDate)?.getTime();
+        const selectedDate = this.datePipe.transform(
+            event?.target?.value,
+            'dd-MM-yyyy'
+        );
+
+        if (selectedDate <= this.getTodayDate()) {
+            this.addResourceForm
+                ?.get('endDate')
+                ?.setValue(
+                    this.datePipe.transform(
+                        prevDate,
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                    )
+                );
+            this.snackBar.errorSnackBar(
+                'Please select end date greater than today'
+            );
+            return;
+        }
+
         if (newDate > prevDate && this.data?.editData?.status === 'ACTIVE') {
             this.disableUpdate = false;
             this.addResourceForm.get('utilization')?.enable();
@@ -201,8 +221,8 @@ export class AddCrResourceDialogComponent implements OnInit {
                 this.getCurrentResourceFromEmailsApi(this.data?.editData?.email)
                     ?.capacity === 0
             ) {
-                this.disableUpdate = true;
-                this.addResourceForm.get('utilization')?.disable();
+                // this.disableUpdate = true;
+                // this.addResourceForm.get('utilization')?.disable();
                 this.addResourceForm?.patchValue({
                     utilization:
                         this.getCurrentResourceCapacity(
@@ -232,6 +252,14 @@ export class AddCrResourceDialogComponent implements OnInit {
                 this.disableUpdate = true;
             }
         }
+    }
+
+    getTodayDate(): string {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        return dd + '-' + mm + '-' + yyyy;
     }
 
     private getCurrentResourceFromEmailsApi(email: string) {
