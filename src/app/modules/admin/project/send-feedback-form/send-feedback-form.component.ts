@@ -62,7 +62,6 @@ export class SendFeedbackFormComponent implements OnInit {
         this.sprintName = this.data.sprintName;
         this.sprint_id = this.data.id;
         let projectData = this._authService.getProjectDetails();
-        console.log("projectData : ", projectData);
         this.form_name = projectData.form.formName;
         this.project_name = projectData.name;
         this.project_id = projectData.id;
