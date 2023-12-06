@@ -110,10 +110,10 @@
                 mat-flat-button
                 [color]="'primary'"
                 [disabled]="isLoadingTechnologies"
-                (click)="showFeedbackForms()"
+                (click)="getfeedbackforms()"
                 [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
             >
-                <span class="ml-2 mr-1">Feedback Form</span>
+                <span class="ml-2 mr-1">Feedback Forms</span>
             </button>
             <button
                 *ngIf="userRole === 'ADMIN' || userRole === 'PM'"

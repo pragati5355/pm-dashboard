@@ -70,19 +70,8 @@ export class ExternalProjectDetailsComponent implements OnInit {
             });
     }
 
-    showFeedbackForms(){
-        const dialogRef = this.dialog.open(SendFeedbackFormComponent, {
-            disableClose: true,
-            panelClass: 'warn-dialog-content',
-            autoFocus: false,
-            data: {
-                projectHistory : this.projectHistory,
-            },
-        });
-        dialogRef.afterClosed().subscribe((result: any) => {
-            if (result?.result == 'success') {
-            }
-        });
+    getfeedbackforms(){
+        this.router.navigate([`/external-projects/${this.projectId}/feedback-list`]);
     }
 
     edit() {

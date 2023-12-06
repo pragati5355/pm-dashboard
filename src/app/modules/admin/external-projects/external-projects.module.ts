@@ -54,6 +54,8 @@ import { ExternalProjectSettingsComponent } from './external-project-settings/ex
 import { CostTypeSettingComponent } from './cost-type-setting/cost-type-setting.component';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
+import { FeedbackFormListComponent } from './feedback-form-list/feedback-form-list.component';
+import { FeedbackFormViewComponent } from './feedback-form-view/feedback-form-view.component';
 
 @NgModule({
     declarations: [
@@ -73,6 +75,8 @@ import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-fo
         ExternalProjectSettingsComponent,
         CostTypeSettingComponent,
         SendFeedbackFormComponent,
+        FeedbackFormListComponent,
+        FeedbackFormViewComponent,
     ],
     imports: [
         CommonModule,
