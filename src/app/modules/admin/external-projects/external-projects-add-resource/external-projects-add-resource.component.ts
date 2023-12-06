@@ -54,10 +54,10 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     alreadyAssignedProjects: any[];
     isResourceOnBench: boolean = false;
     isShadowResource: boolean = false;
-    isapplicableForBilling : boolean = false;
+    isapplicableForBilling: boolean = false;
     markResourceAsBench: boolean = false;
     markResourceAsShadow: boolean = false;
-    markResourceAsApplicableForBilling : boolean = false;
+    markResourceAsApplicableForBilling: boolean = false;
     selectable = true;
     removable = true;
     addOnBlur = false;
@@ -160,7 +160,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isShadowResource = value ? true : false;
     }
 
-    notApplicableForBilling(value : boolean){
+    notApplicableForBilling(value: boolean) {
         this.isapplicableForBilling = value ? true : false;
     }
 
@@ -222,6 +222,25 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     resourceEndDate(event: any) {
         const newDate = new Date(event?.target?.value).getTime();
         const prevDate = new Date(this.data?.editData?.endDate)?.getTime();
+        const selectedDate = this.datePipe.transform(
+            event?.target?.value,
+            'dd-MM-yyyy'
+        );
+
+        if (selectedDate <= this.getTodayDate()) {
+            this.addResourceForm
+                ?.get('endDate')
+                ?.setValue(
+                    this.datePipe.transform(
+                        prevDate,
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+                    )
+                );
+            this.snackBar.errorSnackBar(
+                'Please select end date greater than today'
+            );
+            return;
+        }
         if (newDate > prevDate && this.data?.editData?.status === 'ACTIVE') {
             this.disableUpdate = false;
             this.addResourceForm.get('utilization')?.enable();
@@ -262,6 +281,14 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 this.disableUpdate = true;
             }
         }
+    }
+
+    getTodayDate(): string {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        return dd + '-' + mm + '-' + yyyy;
     }
 
     private loadData() {
@@ -320,8 +347,8 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isShadowResource = this.data?.editData?.shadow || false;
         this.markResourceAsBench = this.data?.editData?.bench || false;
         this.markResourceAsShadow = this.data?.editData?.shadow || false;
-        this.markResourceAsApplicableForBilling = this.data?.editData?.billing || false;
-        
+        this.markResourceAsApplicableForBilling =
+            this.data?.editData?.billing || false;
     }
 
     private getAlreadyAssignedProjectsData(email: string) {
@@ -349,7 +376,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
             bench: this.isResourceOnBench,
             shadow: this.isShadowResource,
             technologies: this.technologys,
-            billing : this.isapplicableForBilling,
+            billing: this.isapplicableForBilling,
         };
         if (this.mode === 'EDIT') {
             return {
@@ -365,7 +392,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
                 bench: this.isResourceOnBench,
                 shadow: this.isShadowResource,
                 technologies: this.technologys,
-                billing : this.isapplicableForBilling,
+                billing: this.isapplicableForBilling,
             };
         }
         return payload;

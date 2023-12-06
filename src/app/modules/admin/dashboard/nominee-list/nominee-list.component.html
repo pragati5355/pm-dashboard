@@ -1,0 +1,57 @@
+<!-- Main -->
+<div class="flex flex-auto overflow-hidden">
+    <div class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto">
+        <div
+            *ngIf="!initialLoading && nomineeList?.length > 0"
+            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+            matSortDisableClear
+        >
+            <div class="primary-900 font-semibold">Nominee name</div>
+            <div class="hidden sm:block font-semibold">Nominated by</div>
+            <div class="hidden sm:block font-semibold">Award</div>
+            <div class="hidden sm:block font-semibold">Reason</div>
+        </div>
+        <ng-container *ngIf="!initialLoading && nomineeList?.length > 0">
+            <div class="grid">
+                <!-- Header -->
+
+                <!-- Rows -->
+                <ng-container *ngFor="let nominee of nomineeList">
+                    <div
+                        class="inventory-grid grid items-center gap-4 py-4 px-6 md:px-8 border-b h-67"
+                    >
+                        <div class="truncate text-black">
+                            <div class="truncate cursor-pointer">
+                                {{ nominee?.nomineeName }}
+                            </div>
+                        </div>
+
+                        <div class="hidden md:block truncate">
+                            {{ nominee?.nominatedByName }}
+                        </div>
+
+                        <div class="hidden sm:block">
+                            {{ nominee?.award }}
+                        </div>
+
+                        <div class="hidden sm:block">
+                            {{ nominee?.reason }}
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!initialLoading && nomineeList?.length === 0">
+            <div
+                class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center"
+            >
+                Nomination's not found
+            </div>
+        </ng-container>
+        <!-- <ng-container *ngIf="initialLoading">
+            <app-table-skeleton
+                [skeletonData]="requiredSprintSkeletonData"
+            ></app-table-skeleton>
+        </ng-container> -->
+    </div>
+</div>
