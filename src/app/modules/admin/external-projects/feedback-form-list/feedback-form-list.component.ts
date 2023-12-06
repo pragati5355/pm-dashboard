@@ -3,6 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateProjecteService } from '@services/create-projecte.service';
 import { SendFeedbackFormComponent } from '../send-feedback-form/send-feedback-form.component';
+import { FeedbackFormViewComponent } from '../feedback-form-view/feedback-form-view.component';
+import { T } from '@angular/cdk/keycodes';
+import { AddFormService } from '@services/add-form.service';
 
 @Component({
   selector: 'app-feedback-form-list',
@@ -18,6 +21,7 @@ export class FeedbackFormListComponent implements OnInit {
   initialLoading : boolean = false;
   projectId : any;
   projectHistory : any;
+  formId : any
   requiredReposSkeletonData = {
     rowsToDisplay: 10,
     displayProfilePicture: false,
@@ -54,10 +58,11 @@ export class FeedbackFormListComponent implements OnInit {
     private route : ActivatedRoute,
     private dialog : MatDialog,
     private router : Router,
+    private formService : AddFormService,
   ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe((projectId)=>{
+    this.routeSubscribe = this.route.params.subscribe((projectId)=>{
       if(projectId['id']){
         this.projectId = projectId['id'];
       }
@@ -84,7 +89,6 @@ export class FeedbackFormListComponent implements OnInit {
     });
   }
 
-
   getProjectDetails() {
     this.initialLoading = true;
     this.projectService
@@ -93,6 +97,34 @@ export class FeedbackFormListComponent implements OnInit {
             this.projectHistory = res?.data?.project;
             this.initialLoading = false;
     });
+  }
+
+  getFeedbackFormList(){
+    this.initialLoading = true;
+    this.formService.getProjectFeedbackFormList(this.formId).subscribe(
+      (res:any)=> {
+        this.initialLoading = false;
+      },
+      (err:any) => {
+
+      }
+    );
+  }
+
+  viewFeedbackForm(){
+    const dialogRef = this.dialog.open(FeedbackFormViewComponent, {
+      disableClose: true,
+      panelClass : 'warn-dialog-content',
+      autoFocus : false,
+      data : {
+
+      },
+    })
+    dialogRef.afterClosed().subscribe((result : any)=> {
+      if(result?.result === 'success'){
+        this.getFeedbackFormList();
+      }
+    })
   }
 }  
 
