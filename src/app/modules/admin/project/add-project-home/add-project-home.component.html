@@ -493,8 +493,13 @@
                                             <mat-error *ngIf="projectTeam?.get('email')?.hasError('required')">
                                                 <div>Email is mandatory</div>
                                             </mat-error>
-                                            
                                         </mat-form-field>
+                                        <mat-error *ngIf="currentCapacity === 0">
+                                            <div class="text-sm font-medium">
+                                                Resource is fully utilized on other
+                                                projects.
+                                            </div>
+                                        </mat-error>  
                                     </div>
                                     <div class="w-full font-extrabold tracking-tight ng-tns-c274-3859  sm:ml-4">
                                         <mat-form-field [floatLabel]="'always'" class="w-full">

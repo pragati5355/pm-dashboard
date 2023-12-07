@@ -11,10 +11,10 @@ import { SnackBar } from 'app/core/utils/snackBar';
 export class ProjectFeedbackFormComponent implements OnInit {
 
   public form!: Object;
+  formData :any = [];
   routeSubscribe: any;
   initialLoading= false
   projectName = ""
-  sprintName=""
   projectId: any
   sprintId: any
   email: any
@@ -27,13 +27,39 @@ export class ProjectFeedbackFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.routeSubscribe = this._route.queryParams.subscribe(
+      (params)=>{
+        this.email = params['email']
+    })
+    this.routeSubscribe = this._route.params.subscribe(
+      (res:any)=> {
+        if(res){
+          this.projectId = res['projectId']
+          console.log("projectId : ", this.projectId);
+          this.getFormDetails(this.projectId);
+        }
+      });
   }
 
-  getFormDetails(payload : any){
-
+  getFormDetails(id : any){
+    this.initialLoading = true;
+    // this.formService.getProjectFeedbackFormDetails(id).subscribe(
+    //   (res:any)=> {
+    //     this.initialLoading = false;
+    //     if(!res?.error){
+    //       this.formData = res?.data;
+    //       this.projectName = 'Metrics';
+    //       console.log("this.formData : ", this.formData);
+    //     }
+    //   },
+    //   (err:any)=> {
+    //     this.router.navigate([`/client-portal/empty-feedback-form`]);
+    //   }
+    // )
   }
 
-  submit(event : any){
+  submit(eventData : any){
+
 
   }
 

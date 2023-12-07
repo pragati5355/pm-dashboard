@@ -56,4 +56,8 @@ export class AddFormService {
   getProjectFeedbackFormList(obj : any){
     return this.http.post(API_LIST.SPRING_BOOT_URL + '' , obj);
   }
+
+  getProjectFeedbackFormDetails(id : any){
+    return this.http.get(API_LIST.PROJECT_SPRING_BOOT_URL + '/external/feedback-form-resource/' + id);
+  }
 }
