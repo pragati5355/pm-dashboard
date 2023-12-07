@@ -21,14 +21,18 @@ const dashboardRoutes: Route[] = [
         path: '',
         data: {
             pageTitle: 'Dashboard',
-            allowedRoles: ['ADMIN', 'SALES'],
+            allowedRoles: ['ADMIN', 'SALES', 'PM', 'HR'],
         },
         component: DashboardComponent,
     },
 ];
 
 @NgModule({
-    declarations: [DashboardComponent, NominateFormComponent, NomineeListComponent],
+    declarations: [
+        DashboardComponent,
+        NominateFormComponent,
+        NomineeListComponent,
+    ],
     imports: [
         CommonModule,
         MatIconModule,
