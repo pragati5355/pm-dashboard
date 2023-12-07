@@ -26,6 +26,7 @@ export interface StatInterface {
     pmCount: number;
     designerCount: number;
     developerCount: number;
+    vendorCount: number;
 }
 
 @Component({
