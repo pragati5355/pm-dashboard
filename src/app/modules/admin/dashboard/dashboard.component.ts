@@ -18,6 +18,16 @@ import {
     UserInterface,
 } from './nominee-list/nominee-list.component';
 
+export interface StatInterface {
+    projectCount: number;
+    resourceCount: number;
+    repoCount: number;
+    qaCount: number;
+    pmCount: number;
+    designerCount: number;
+    developerCount: number;
+}
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -26,10 +36,8 @@ import {
 export class DashboardComponent implements OnInit {
     userName: string;
     userImageUrl: string;
-    noOfProjects: Number = 0;
-    noOfResources: Number = 0;
-    noOfRepos: Number = 0;
     isLoading = true;
+    statCount: StatInterface;
     submitInProcess: boolean = false;
     submitInProcess1: boolean = false;
     submitInProcess2: boolean = false;
@@ -90,9 +98,7 @@ export class DashboardComponent implements OnInit {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
             if (res?.data) {
                 this.isLoading = false;
-                this.noOfProjects = res?.data?.projectCount;
-                this.noOfResources = res?.data?.resourceCount;
-                this.noOfRepos = res?.data?.repoCount;
+                this.statCount = res?.data;
             }
             if (res?.tokenExpire) {
                 this._authService.updateAndReload();
