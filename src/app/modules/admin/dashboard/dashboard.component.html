@@ -18,7 +18,7 @@
                     <div
                         class="text-5xl sm:text-5xl font-semibold leading-none tracking-tight"
                     >
-                        {{ noOfResources }}
+                        {{ statCount?.resourceCount }}
                     </div>
                     <div class="mt-1 text-sm sm:text-lg font-medium">
                         Resources
@@ -31,7 +31,7 @@
                     <div
                         class="text-5xl sm:text-5xl font-semibold leading-none tracking-tight"
                     >
-                        {{ noOfProjects }}
+                        {{ statCount?.projectCount }}
                     </div>
                     <div class="mt-1 text-sm sm:text-lg font-medium">
                         Projects
@@ -44,7 +44,7 @@
                     <div
                         class="text-5xl sm:text-5xl font-semibold leading-none tracking-tight"
                     >
-                        {{ noOfRepos }}
+                        {{ statCount?.repoCount }}
                     </div>
                     <div class="mt-1 text-sm sm:text-lg font-medium">Repos</div>
                 </div>
@@ -61,25 +61,65 @@
                         class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
                     ></div>
                 </div>
-                <div *ngIf="!isLoading" class="grid grid-cols-4 gap-4">
+                <div *ngIf="!isLoading" class="flex justify-between gap-4">
                     <div
-                        *ngFor="
-                            let i of [
-                                { lable: 'Developer', value: 86 },
-                                { lable: 'QA', value: 36 },
-                                { lable: 'Designer', value: 36 },
-                                { lable: 'PM', value: 26 }
-                            ]
-                        "
-                        class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
+                        class="w-full flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
                     >
                         <div class="text-3xl font-semibold text-center">
-                            {{ i?.value }}
+                            {{ statCount?.developerCount }}
                         </div>
                         <div
                             class="mt-2 font-semibold leading-none tracking-tight"
                         >
-                            {{ i?.lable }}
+                            Developer
+                        </div>
+                    </div>
+                    <div
+                        class="w-full flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
+                    >
+                        <div class="text-3xl font-semibold text-center">
+                            {{ statCount?.qaCount }}
+                        </div>
+                        <div
+                            class="mt-2 font-semibold leading-none tracking-tight"
+                        >
+                            QA
+                        </div>
+                    </div>
+                    <div
+                        class="w-full flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
+                    >
+                        <div class="text-3xl font-semibold text-center">
+                            {{ statCount?.designerCount }}
+                        </div>
+                        <div
+                            class="mt-2 font-semibold leading-none tracking-tight"
+                        >
+                            Designer
+                        </div>
+                    </div>
+                    <div
+                        class="w-full flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
+                    >
+                        <div class="text-3xl font-semibold text-center">
+                            {{ statCount?.pmCount }}
+                        </div>
+                        <div
+                            class="mt-2 font-semibold leading-none tracking-tight"
+                        >
+                            PM
+                        </div>
+                    </div>
+                    <div
+                        class="w-full flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
+                    >
+                        <div class="text-3xl font-semibold text-center">
+                            {{ statCount?.vendorCount }}
+                        </div>
+                        <div
+                            class="mt-2 font-semibold leading-none tracking-tight"
+                        >
+                            Vendor
                         </div>
                     </div>
                 </div>
@@ -262,7 +302,7 @@
                                     !initialLoading && nomineeList?.length > 0
                                 "
                             >
-                                <div class="grid">
+                                <div class="grid custom-max-height">
                                     <!-- Header -->
 
                                     <!-- Rows -->
