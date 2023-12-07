@@ -74,11 +74,12 @@ export class SendFeedbackFormComponent implements OnInit {
                     subject: this.feedbackFrom.value.subject,
                     projectId: this.project_id,
                 };
-                console.log('Payload : ', payload);
                 this.formService.sendProjectFeedbackForm(payload).subscribe(
                     (res: any) => {
-                        if (res?.data) {
-                            this.snackBar.successSnackBar(res.data);
+                        if (res?.code === 200) {
+                            this.snackBar.successSnackBar(res?.message);
+                        }else if(res?.code === 500){
+                            this.snackBar.errorSnackBar('Internal server error');
                         }
                     },
                     (err: any) => {
