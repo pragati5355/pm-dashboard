@@ -61,17 +61,18 @@
                         class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 h-24"
                     ></div>
                 </div>
-                <div *ngIf="!isLoading" class="grid grid-cols-4 gap-4">
+                <div *ngIf="!isLoading" class="flex justify-between gap-4">
                     <div
                         *ngFor="
                             let i of [
                                 { lable: 'Developer', value: 86 },
                                 { lable: 'QA', value: 36 },
                                 { lable: 'Designer', value: 36 },
-                                { lable: 'PM', value: 26 }
+                                { lable: 'PM', value: 26 },
+                                { lable: 'Vendors', value: 26 }
                             ]
                         "
-                        class="flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
+                        class="w-full flex flex-col items-center justify-center py-4 px-1 rounded-2xl bg-gray-100 text-amber-800 dark:bg-white dark:bg-opacity-5 h-24"
                     >
                         <div class="text-3xl font-semibold text-center">
                             {{ i?.value }}
