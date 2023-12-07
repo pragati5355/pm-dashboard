@@ -4,6 +4,7 @@ import { ExternalProjectDetailsComponent } from './external-project-details/exte
 import { ExternalProjectsHomeComponent } from './external-projects-home/external-projects-home.component';
 import { ExternalProjectsListComponent } from './external-projects-list/external-projects-list.component';
 import { WorkLogsListComponent } from './work-logs-list/work-logs-list.component';
+import { FeedbackFormListComponent } from './feedback-form-list/feedback-form-list.component';
 
 const routes: Routes = [
     {
@@ -29,6 +30,13 @@ const routes: Routes = [
                 component: WorkLogsListComponent,
                 data: {
                     pageTitle: 'Work Logs',
+                },
+            },
+            {
+                path: ':id/feedback-list',
+                component : FeedbackFormListComponent,
+                data : {
+                    pageTitle : 'Feedback Forms'
                 },
             },
             {

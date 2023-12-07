@@ -21,6 +21,7 @@ import { WrongUrlComponent } from './wrong-url/wrong-url.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { WorkLogsSuccessComponent } from './work-logs-success/work-logs-success.component';
 import { MatSelectModule } from '@angular/material/select';
+import { ProjectFeedbackFormComponent } from './project-feedback-form/project-feedback-form.component';
 
 const routes: Routes = [
     {
@@ -33,6 +34,10 @@ const routes: Routes = [
             },
             { path: 'empty-feedback-form', component: EmptyHomeComponent },
             { path: 'feedback-submitted', component: FeedbackHomeComponent },
+            {
+                path : 'project/feedback/:projectId',
+                component : ProjectFeedbackFormComponent
+            },
             {
                 path: '',
                 redirectTo: 'empty-feedback-form',
@@ -55,6 +60,7 @@ const routes: Routes = [
         WorkLogsComponent,
         WrongUrlComponent,
         WorkLogsSuccessComponent,
+        ProjectFeedbackFormComponent,
     ],
     imports: [
         CommonModule,

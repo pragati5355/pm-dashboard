@@ -105,6 +105,17 @@
                 <span class="ml-2 mr-1">Work logs</span>
             </button>
             <button
+                class="ml-4"
+                *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                mat-flat-button
+                [color]="'primary'"
+                [disabled]="isLoadingTechnologies"
+                (click)="getfeedbackforms()"
+                [style]="'box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.2)'"
+            >
+                <span class="ml-2 mr-1">Feedback Forms</span>
+            </button>
+            <button
                 *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
                 class="ml-2"
                 mat-mini-fab
@@ -126,6 +137,7 @@
             >
                 <mat-icon>settings</mat-icon>
             </button>
+            
         </div>
     </div>
     <div class="w-full bg-white shadow rounded p-8">
