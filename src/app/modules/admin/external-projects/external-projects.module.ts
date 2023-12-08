@@ -56,6 +56,7 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-form.component';
 import { FeedbackFormListComponent } from './feedback-form-list/feedback-form-list.component';
 import { FeedbackFormViewComponent } from './feedback-form-view/feedback-form-view.component';
+import { FormioModule } from 'angular-formio';
 
 @NgModule({
     declarations: [
@@ -117,6 +118,7 @@ import { FeedbackFormViewComponent } from './feedback-form-view/feedback-form-vi
         MatSlideToggleModule,
         _MatSlideToggleRequiredValidatorModule,
         FuseAlertModule,
+        FormioModule,
     ],
     providers: [DatePipe],
 })

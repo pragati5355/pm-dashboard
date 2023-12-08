@@ -6,6 +6,7 @@ import { SendFeedbackFormComponent } from '../send-feedback-form/send-feedback-f
 import { FeedbackFormViewComponent } from '../feedback-form-view/feedback-form-view.component';
 import { T } from '@angular/cdk/keycodes';
 import { AddFormService } from '@services/add-form.service';
+import { SnackBar } from 'app/core/utils/snackBar';
 
 @Component({
   selector: 'app-feedback-form-list',
@@ -15,7 +16,6 @@ import { AddFormService } from '@services/add-form.service';
 export class FeedbackFormListComponent implements OnInit {
 
   routeSubscribe: any;
-  loadingWeeklyFormData: boolean = false;
   public form!: any;
   userRole: string;
   initialLoading : boolean = false;
@@ -26,32 +26,7 @@ export class FeedbackFormListComponent implements OnInit {
     rowsToDisplay: 10,
     displayProfilePicture: false,
   };
-  feedbackFormList : any = [
-    {
-      email : 'pragati.gawade@mindbowser.com',
-      firstName : 'Pragati',
-      lastName: 'Gawade',
-      role: 'ADMIN',
-      createdAt: '2023-08-31T18:30:00.000+00:00',
-      lastModifiedAt: '2024-02-28T18:30:00.000+00:00',
-    },
-    {
-      email : 'prafull.patil@mindbowser.com',
-      firstName : 'Prafull',
-      lastName: 'Patil',
-      role: 'PM',
-      createdAt: '2024-02-28T18:30:00.000+00:00',
-      lastModifiedAt: '2023-11-27T06:04:59.922+00:00',
-    },
-    {
-      email : 'rohan.kadam@mindbowser.com',
-      firstName : 'Rohan',
-      lastName: 'Kadam',
-      role: 'SALES',
-      createdAt: '2023-08-31T18:30:00.000+00:00',
-      lastModifiedAt: '2023-11-27T06:04:59.922+00:00',
-    }
-  ];
+  feedbackFormList : any = [];
 
   constructor(
     private projectService: CreateProjecteService,
@@ -59,6 +34,7 @@ export class FeedbackFormListComponent implements OnInit {
     private dialog : MatDialog,
     private router : Router,
     private formService : AddFormService,
+    private snackBar : SnackBar
   ) { }
 
   ngOnInit(): void {
@@ -68,6 +44,7 @@ export class FeedbackFormListComponent implements OnInit {
       }
     });
     this.getProjectDetails();
+    this.getFeedbackFormList();
   }
 
   goBack() {
@@ -85,6 +62,7 @@ export class FeedbackFormListComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: any) => {
         if (result?.result == 'success') {
+          this.getFeedbackFormList();
         }
     });
   }
@@ -101,23 +79,28 @@ export class FeedbackFormListComponent implements OnInit {
 
   getFeedbackFormList(){
     this.initialLoading = true;
-    this.formService.getProjectFeedbackFormList(this.formId).subscribe(
+    this.formService.getProjectFeedbackFormList(this.projectId).subscribe(
       (res:any)=> {
         this.initialLoading = false;
+        if(res?.code === 200){
+          this.feedbackFormList = res?.data
+        }
       },
       (err:any) => {
-
+        this.snackBar.errorSnackBar('Internal Server Error');
       }
     );
   }
 
-  viewFeedbackForm(){
+  viewFeedbackForm(id : number){
     const dialogRef = this.dialog.open(FeedbackFormViewComponent, {
       disableClose: true,
+      width: '70%',
+      height: '95%',
       panelClass : 'warn-dialog-content',
       autoFocus : false,
       data : {
-
+        formId : id,
       },
     })
     dialogRef.afterClosed().subscribe((result : any)=> {
