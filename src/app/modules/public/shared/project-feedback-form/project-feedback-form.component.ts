@@ -63,14 +63,26 @@ export class ProjectFeedbackFormComponent implements OnInit {
     }
 
     submit(event: any) {
-      let formResponse = event.data;
-      let payload = {
-        formResponse: formResponse,
-        formComponent : this.form,
-        projectId: this.projectId,
-        emailId: this.email
-      }
-      console.log("Payload : ", payload);
-
+        let formResponse = event.data;
+        let payload = {
+            formResponse: formResponse,
+            formComponent : this.form,
+            projectId: this.projectId,
+            emailId: this.email
+        }
+        this.initialLoading = true;
+        this.formService.submitProjectFeedbackForm(payload).subscribe(
+            (res:any)=> {
+            if(res.error){
+                this.initialLoading = false;
+                this.snackBar.errorSnackBar(res.message)
+            }else{
+               this.initialLoading = false;
+               this.router.navigate(
+                 [`/client-portal/feedback-submitted`]
+               );
+                this.snackBar.successSnackBar("Successfully submitted!")
+            }
+        });
     }
 }
