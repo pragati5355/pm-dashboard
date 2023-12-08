@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import {
     GoogleLoginProvider,
     SocialAuthService,
@@ -9,6 +8,8 @@ import {
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
+import { loadFull } from 'tsparticles';
+import { Container, Engine } from 'tsparticles-engine';
 @Component({
     selector: 'auth-sign-in',
     templateUrl: './sign-in.component.html',
@@ -17,6 +18,7 @@ import { FuseAlertType } from '@fuse/components/alert';
     animations: fuseAnimations,
 })
 export class AuthSignInComponent implements OnInit {
+    id = 'tsparticles';
     alert: { type: FuseAlertType; message: string } = {
         type: 'success',
         message: '',
@@ -25,6 +27,88 @@ export class AuthSignInComponent implements OnInit {
     showAlert: boolean = false;
     socialUser!: SocialUser;
     isLoggedin?: boolean;
+
+    particlesOptions = {
+        fps_limit: 60,
+        interactivity: {
+            InteractivityDetect: 'canvas',
+            events: {
+                onclick: { enable: true, mode: 'push' },
+                onhover: {
+                    enable: true,
+                    mode: 'attract',
+                    parallax: { enable: false, force: 60, smooth: 10 },
+                },
+                resize: true,
+            },
+            modes: {
+                push: { quantity: 4 },
+                attract: { distance: 200, duration: 0.4, factor: 5 },
+            },
+        },
+        particles: {
+            color: { value: '#ffffff' },
+            line_linked: {
+                color: '#ffffff',
+                distance: 150,
+                enable: true,
+                opacity: 0.2,
+                width: 1,
+            },
+            move: {
+                attract: { enable: false, rotateX: 600, rotateY: 1200 },
+                bounce: false,
+                MoveDirection: 'none',
+                enable: true,
+                OutMode: 'out',
+                random: false,
+                speed: 2,
+                straight: false,
+            },
+            number: { density: { enable: true, value_area: 800 }, value: 80 },
+            opacity: {
+                anim: {
+                    enable: false,
+                    opacity_min: 0.1,
+                    speed: 1,
+                    sync: false,
+                },
+                random: false,
+                value: 0.5,
+            },
+            shape: {
+                character: {
+                    fill: false,
+                    font: 'Verdana',
+                    style: '',
+                    value: '*',
+                    weight: '400',
+                },
+                image: {
+                    height: 100,
+                    replace_color: true,
+                    src: 'images/github.svg',
+                    width: 100,
+                },
+                polygon: { nb_sides: 5 },
+                stroke: { color: '#000000', width: 0 },
+                type: 'circle',
+            },
+            size: {
+                anim: { enable: false, size_min: 0.1, speed: 40, sync: false },
+                random: true,
+                value: 5,
+            },
+        },
+        polygon: {
+            draw: { enable: false, lineColor: '#ffffff', lineWidth: 0.5 },
+            move: { radius: 10 },
+            scale: 1,
+            type: 'none',
+            url: '',
+        },
+        retina_detect: true,
+    };
 
     constructor(
         private _authService: AuthService,
@@ -39,6 +123,21 @@ export class AuthSignInComponent implements OnInit {
             this.isLoggedin = user != null;
         });
     }
+
+    particlesLoaded(container: Container): void {
+        console.log(container);
+    }
+
+    async particlesInit(engine: Engine): Promise<void> {
+        console.log(engine);
+
+        // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
+        // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+        // starting from v2 you can add only the features you need reducing the bundle size
+        await loadFull(engine);
+        // await loadSlim(engine);
+    }
+
     loginWithGoogle(): void {
         this.submitInProcess = true;
         this.socialAuthService
