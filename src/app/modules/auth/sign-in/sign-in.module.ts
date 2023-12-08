@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Route, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,18 +11,17 @@ import { FuseCardModule } from '@fuse/components/card';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { SharedModule } from 'app/core/shared.module';
 import { AuthSignInComponent } from 'app/modules/auth/sign-in/sign-in.component';
+import { NgParticlesModule } from 'ng-particles';
 // import { authSignInRoutes } from 'app/modules/auth/sign-in/sign-in.routing';
-export const authSignInRoutes: Routes= [
+export const authSignInRoutes: Routes = [
     {
-        path     : '',
-        component: AuthSignInComponent
-    }
+        path: '',
+        component: AuthSignInComponent,
+    },
 ];
 @NgModule({
-    declarations: [
-        AuthSignInComponent
-    ],
-    imports     : [
+    declarations: [AuthSignInComponent],
+    imports: [
         RouterModule.forChild(authSignInRoutes),
         MatButtonModule,
         MatCheckboxModule,
@@ -32,9 +31,8 @@ export const authSignInRoutes: Routes= [
         MatProgressSpinnerModule,
         FuseCardModule,
         FuseAlertModule,
-        SharedModule
-    ]
+        NgParticlesModule,
+        SharedModule,
+    ],
 })
-export class AuthSignInModule
-{
-}
+export class AuthSignInModule {}
