@@ -76,13 +76,24 @@ export class ProjectFeedbackFormComponent implements OnInit {
             if(res.error){
                 this.initialLoading = false;
                 this.snackBar.errorSnackBar(res.message)
-            }else{
+            }else if(res?.status === 404){
+                this.snackBar.errorSnackBar(res.message)
+            }
+            else{
                this.initialLoading = false;
                this.router.navigate(
                  [`/client-portal/feedback-submitted`]
                );
                 this.snackBar.successSnackBar("Successfully submitted!")
             }
-        });
+            },
+            (err:any)=>{
+                console.log("err : ", err);
+                if(err?.status === 404){
+                    this.snackBar.errorSnackBar(err.message)
+                }
+                this.router.navigate([`/client-portal/invalid-email-invite`]);
+            }
+        );
     }
 }

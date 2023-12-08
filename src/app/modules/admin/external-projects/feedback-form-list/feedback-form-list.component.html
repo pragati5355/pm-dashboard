@@ -22,7 +22,7 @@
                     <div class="ml-auto">
                         <button
                             class="mr-2 inline-flex items-center"
-                            [disabled]="loadingWeeklyFormData"
+                            [disabled]="initialLoading"
                             mat-flat-button
                             [color]="'primary'"
                             (click)="sendFeedbackForm()"
@@ -89,7 +89,7 @@
                                             [matTooltip]="'View'"
                                             class="text-gray-400 icon-size-5 cursor-pointer"
                                             svgIcon="heroicons_outline:eye"
-                                            (click)="viewFeedbackForm()"
+                                            (click)="viewFeedbackForm(list?.id)"
                                         ></mat-icon>
                                     </div>
                                 </div>
