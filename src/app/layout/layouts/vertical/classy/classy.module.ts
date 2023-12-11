@@ -11,6 +11,7 @@ import { FuseFullscreenModule } from '@fuse/components/fullscreen/fullscreen.mod
 import { UserModule } from 'app/layout/common/user/user.module';
 import { SharedModule } from 'app/core/shared.module'; 
 import { ClassyLayoutComponent } from 'app/layout/layouts/vertical/classy/classy.component';
+import { NgParticlesModule } from 'ng-particles';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { ClassyLayoutComponent } from 'app/layout/layouts/vertical/classy/classy
         FuseLoadingBarModule,
         FuseNavigationModule,
         UserModule,
-        SharedModule
+        SharedModule,
+        NgParticlesModule,
     ],
     exports     : [
         ClassyLayoutComponent
