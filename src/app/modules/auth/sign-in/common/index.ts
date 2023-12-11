@@ -86,7 +86,7 @@ export const particleObject = {
 export const snowOptions = {
     particles: {
         number: {
-            value: 100,
+            value: 150,
         },
         move: {
             direction: MoveDirection.bottom,
@@ -95,10 +95,10 @@ export const snowOptions = {
             straight: false,
         },
         opacity: {
-            value: { min: 0.1, max: 0.5 },
+            value: { min: 0.2, max: 0.6 },
         },
         size: {
-            value: { min: 1, max: 5 },
+            value: { min: 1, max: 4 },
         },
         wobble: {
             distance: 20,
