@@ -7,10 +7,11 @@ import {SnackBar} from '../../../../core/utils/snackBar'
   templateUrl: './feedback-form.component.html'
 })
 export class FeedbackFormComponent implements OnInit {
-  public form!: Object;
+  public form!: any;
   routeSubscribe: any;
   initialLoading= false
   projectName = ""
+  projectResources : any = [];
   sprintName=""
   projectId: any
   sprintId: any
@@ -31,50 +32,78 @@ export class FeedbackFormComponent implements OnInit {
       if (res) {
         this.projectId =res['projectId']
         this.sprintId= res['sprintId']
-        let payload = {
-          projectId:  this.projectId,
-          sprintId:  this.sprintId
-        }
-        this.getFormDetails(payload)
+        this.getFormDetails(this.projectId)
       }
     })
   }
-   getFormDetails(payload: any){
+
+  getFormDetails(id: any) {
     this.initialLoading = true;
-     this.formService.getFeedbackForm(payload).subscribe((res: any) =>{
-      this.initialLoading = false;
-      if(!res.error){
-        let formdata: any = []
-      formdata.push(res.data)
-      formdata.forEach((item: any) => {
-        this.projectName = item.projectName
-        this.sprintName = item.sprintName
-        this.form = item.form.formComponent
-      });
-      }else{
-        this.router.navigate(
-          [`/client-portal/empty-feedback-form`]
-        );
-      }
-     })
-   }
-   submit(event: any) {
-     let formComponent = event.data
-     let payload = {
-      formResponse: formComponent,
-      projectId: this.projectId,
-      sprintId: this.sprintId,
-      emailId: this.email
-     }
-     this.formService.saveFeedbackForm(payload).subscribe((res: any) =>{
-       if(res.error){
-         this.snackBar.errorSnackBar(res.message)
-       }else{
-        this.router.navigate(
-          [`/client-portal/feedback-submitted`]
-        );
-         this.snackBar.successSnackBar("Successfully submitted!")
-       }
-     })
+    this.formService.getProjectFeedbackFormDetails(id).subscribe(
+        (res: any) => {
+            this.initialLoading = false;
+            if (!res?.error) {
+                this.projectName = res?.data?.projectName;
+                this.projectResources = res?.data?.resource;
+                this.form = res?.data?.form?.formComponent;
+                this.assignResourcesDynamically();
+            }
+        },
+        (err: any) => {
+            this.router.navigate([`/client-portal/empty-feedback-form`]);
+        }
+    );
+  }
+
+  assignResourcesDynamically() {
+    if(this.projectResources.length === 0){
+        this.form?.components.forEach((item) => {
+            if (item?.label === 'Survey') {
+                item.hidden = true;
+            }
+        });
+    }else {
+        this.form?.components.forEach((item) => {
+            if (item?.label === 'Survey') {
+                item.hidden = false;
+                item.questions =  this.projectResources;
+            }
+        });
+    }
+  }
+
+  submit(event: any) {
+    let formResponse = event.data;
+    let payload = {
+        formResponse: formResponse,
+        formComponent : this.form,
+        sprintId: this.sprintId,
+        projectId: this.projectId,
+        emailId: this.email
+    }
+    this.initialLoading = true;
+    this.formService.submitProjectFeedbackForm(payload).subscribe(
+        (res:any)=> {
+        if(res.error){
+            this.initialLoading = false;
+            this.snackBar.errorSnackBar(res.message)
+        }else if(res?.status === 404){
+            this.snackBar.errorSnackBar(res.message)
+        }
+        else{
+           this.initialLoading = false;
+           this.router.navigate(
+             [`/client-portal/feedback-submitted`]
+           );
+            this.snackBar.successSnackBar("Successfully submitted!")
+        }
+        },
+        (err:any)=>{
+            if(err?.status === 404){
+                this.snackBar.errorSnackBar(err.message)
+            }
+            this.router.navigate([`/client-portal/invalid-email-invite`]);
+        }
+    );
   }
 }
