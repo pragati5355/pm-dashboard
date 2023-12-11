@@ -73,37 +73,35 @@ export class FeedbackFormComponent implements OnInit {
   }
 
   submit(event: any) {
-    let formResponse = event.data;
+    let formComponent = event.data
     let payload = {
-        formResponse: formResponse,
-        formComponent : this.form,
-        sprintId: this.sprintId,
-        projectId: this.projectId,
-        emailId: this.email
+     formResponse: formComponent,
+     projectId: this.projectId,
+     formComponent : this.form,
+     sprintId: this.sprintId,
+     emailId: this.email
     }
-    this.initialLoading = true;
-    this.formService.submitProjectFeedbackForm(payload).subscribe(
-        (res:any)=> {
-        if(res.error){
-            this.initialLoading = false;
-            this.snackBar.errorSnackBar(res.message)
-        }else if(res?.status === 404){
-            this.snackBar.errorSnackBar(res.message)
+    this.formService.saveFeedbackForm(payload).subscribe((res: any) =>{
+      if(res.error){
+        this.initialLoading = false;
+        this.snackBar.errorSnackBar(res.message)
+    }else if(res?.status === 404){
+        this.snackBar.errorSnackBar(res.message)
+    }
+    else{
+       this.initialLoading = false;
+       this.router.navigate(
+         [`/client-portal/feedback-submitted`]
+       );
+        this.snackBar.successSnackBar("Successfully submitted!")
+    }
+    },
+    (err:any)=>{
+        if(err?.status === 404){
+            this.snackBar.errorSnackBar(err.message)
         }
-        else{
-           this.initialLoading = false;
-           this.router.navigate(
-             [`/client-portal/feedback-submitted`]
-           );
-            this.snackBar.successSnackBar("Successfully submitted!")
-        }
-        },
-        (err:any)=>{
-            if(err?.status === 404){
-                this.snackBar.errorSnackBar(err.message)
-            }
-            this.router.navigate([`/client-portal/invalid-email-invite`]);
-        }
+        this.router.navigate([`/client-portal/invalid-email-invite`]);
+    }
     );
   }
 }
