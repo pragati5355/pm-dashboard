@@ -683,7 +683,7 @@
                                                                     {{teamMember?.endDate | date}}
                                                                 </div>
                                                                 <div class="hidden lg:block">
-                                                                    <ng-container>
+                                                                    <ng-container *ngIf="!submitInProcess">
                                                                         <mat-icon
                                                                             class="text-gray-400 icon-size-5 cursor-pointer mr-2"
                                                                             matTooltip="Edit"

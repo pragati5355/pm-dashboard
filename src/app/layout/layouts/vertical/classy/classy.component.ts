@@ -20,6 +20,7 @@ import { snowOptions } from '@modules/auth/sign-in/common';
 @Component({
     selector: 'classy-layout',
     templateUrl: './classy.component.html',
+    styleUrls: ['./classy.component.scss'],
     encapsulation: ViewEncapsulation.None,
 })
 export class ClassyLayoutComponent implements OnInit, OnDestroy {
