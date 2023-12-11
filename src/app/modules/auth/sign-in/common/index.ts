@@ -1,3 +1,5 @@
+import { MoveDirection } from "tsparticles-engine";
+
 export const particleObject = {
     fps_limit: 60,
     interactivity: {
@@ -78,4 +80,33 @@ export const particleObject = {
         url: '',
     },
     retina_detect: true,
+};
+
+
+export const snowOptions = {
+    particles: {
+        number: {
+            value: 100,
+        },
+        move: {
+            direction: MoveDirection.bottom,
+            enable: true,
+            random: false,
+            straight: false,
+        },
+        opacity: {
+            value: { min: 0.1, max: 0.5 },
+        },
+        size: {
+            value: { min: 1, max: 5 },
+        },
+        wobble: {
+            distance: 20,
+            enable: true,
+            speed: {
+                min: -5,
+                max: 5,
+            },
+        },
+    },
 };

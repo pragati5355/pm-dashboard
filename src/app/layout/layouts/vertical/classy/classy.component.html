@@ -4,8 +4,15 @@
 <!-- Navigation -->
 <fuse-vertical-navigation class="dark bg-gray-900 print:hidden" [mode]="isScreenSmall ? 'side' : 'over'"
     [name]="'mainNavigation'" [navigation]="navigation?.default" [opened]="isScreenSmall">
+   
     <!-- Navigation header hook -->
     <ng-container fuseVerticalNavigationContentHeader>
+        <ng-particles
+        [id]="id"
+        [options]="snowConfig"
+        [particlesInit]="particlesInit"
+        (particlesLoaded)="particlesLoaded($event)"
+        ></ng-particles>
         <div class="flex items-center w-full p-4 pl-6">
             <!-- Logo -->
             <div class="flex items-center justify-center">
