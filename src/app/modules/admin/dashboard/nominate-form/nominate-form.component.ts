@@ -70,6 +70,8 @@ export class NominateFormComponent implements OnInit {
                     if (res?.statusCode === 200) {
                         this.snackBar.successSnackBar(res?.message);
                         this.matDialogRef.close('success');
+                    } else {
+                        this.snackBar.errorSnackBar(res?.message);
                     }
                 },
                 (err) => {
