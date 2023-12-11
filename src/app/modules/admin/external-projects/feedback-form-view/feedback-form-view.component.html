@@ -14,7 +14,7 @@
     <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
         <div *ngIf="!initialLoading">
             <div class="formio-render">
-                <!-- <formio [form]="form" [readOnly]="true"></formio> -->
+                <formio [form]="form"  [submission]="formData"  [readOnly]="true"></formio>
             </div>
         </div>
         <ng-container *ngIf="initialLoading">
