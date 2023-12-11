@@ -55,11 +55,20 @@ export class ProjectFeedbackFormComponent implements OnInit {
     }
 
     assignResourcesDynamically() {
-      this.form?.components.forEach((item) => {
-        if (item?.label === 'Survey') {
-          item.questions =  this.projectResources;
+        if(this.projectResources.length === 0){
+            this.form?.components.forEach((item) => {
+                if (item?.label === 'Survey') {
+                    item.hidden = true;
+                }
+            });
+        }else {
+            this.form?.components.forEach((item) => {
+                if (item?.label === 'Survey') {
+                    item.hidden = false;
+                    item.questions =  this.projectResources;
+                }
+            });
         }
-      });
     }
 
     submit(event: any) {
@@ -88,7 +97,6 @@ export class ProjectFeedbackFormComponent implements OnInit {
             }
             },
             (err:any)=>{
-                console.log("err : ", err);
                 if(err?.status === 404){
                     this.snackBar.errorSnackBar(err.message)
                 }
