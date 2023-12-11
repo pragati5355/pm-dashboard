@@ -95,7 +95,7 @@ export const snowOptions = {
             straight: false,
         },
         opacity: {
-            value: { min: 0.2, max: 0.6 },
+            value: { min: 0.1, max: 0.5 },
         },
         size: {
             value: { min: 1, max: 4 },
