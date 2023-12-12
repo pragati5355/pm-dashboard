@@ -119,15 +119,18 @@
                        <ng-container matColumnDef="costdifference" mat-column-costdifference>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header 
                         title="(Cost as per Project Plan - Actual Cost on Project)" class="cursor-pointer"> Cost Difference </th>
-                        <td mat-cell *matCellDef="let row"
-                            ng-If="row?.costAsPerProjectPlan > row?.actualCostOnProject"
-                            style="color : rgb(74 222 128) !important;"
-                            > {{ (row?.costDiff | currency) || "0"}} </td>
-    
-                        <td mat-cell *matCellDef="let row"
-                            ng-If="row?.costAsPerProjectPlan < row?.actualCostOnProject"
-                            style="color: rgb(220 38 38) !important;"
-                            > {{ (row?.costDiff | currency) || "0"}} </td>
+                    
+                        <td mat-cell *matCellDef="let row"> 
+                            <div *ngIf="row?.costAsPerProjectPlan > row?.actualCostOnProject"
+                                  style="color : rgb(74 222 128) !important;">
+                                  {{ (row?.costDiff | currency) || "0"}}
+                            </div>
+                            <div *ngIf="row?.costAsPerProjectPlan < row?.actualCostOnProject"
+                                style="color: rgb(220 38 38) !important;">
+                                {{ (row?.costDiff | currency) || "0"}}
+                            </div>
+                         </td>
+
                         <td mat-footer-cell *matFooterCellDef> {{ (getTotalDifference() | currency) || "0"}} </td>
                       </ng-container>
                 
