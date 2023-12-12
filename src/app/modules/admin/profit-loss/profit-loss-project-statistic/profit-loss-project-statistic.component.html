@@ -129,6 +129,10 @@
                                 style="color: rgb(220 38 38) !important;">
                                 {{ (row?.costDiff | currency) || "0"}}
                             </div>
+                            <div *ngIf="row?.costAsPerProjectPlan === row?.actualCostOnProject"
+                                style="color : rgb(74 222 128) !important;">
+                                {{ (row?.costDiff | currency) || "0"}}
+                            </div>
                          </td>
 
                         <td mat-footer-cell *matFooterCellDef> {{ (getTotalDifference() | currency) || "0"}} </td>
