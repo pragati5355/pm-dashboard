@@ -114,7 +114,8 @@
     position: absolute;
     top: 40px;
     min-width: calc(100% + 30px) !important;
-    max-height: 120px !important;
+    max-height: 220px !important;
+    border: 0.5px solid !important;
 }
 .multiple-select-style {
     left: 20px;
@@ -292,9 +293,9 @@
 .mat-menu-panel .mat-menu-content .mat-menu-item {
     background-color: white !important;
 }
-.mat-select-panel {
-    border: 0.5px solid !important;
-}
+// .mat-select-panel {
+//     border: 0.5px solid !important;
+// }
 .formio_submit_btn {
     display: inline;
     float: right;
