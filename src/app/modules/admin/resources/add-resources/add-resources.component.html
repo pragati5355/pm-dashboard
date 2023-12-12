@@ -550,13 +550,13 @@
                                 </div>
                             </div>
                             <div class="w-140">
-                                <mat-label class="mb-2">PM/Mentor *</mat-label>
+                                <mat-label class="mb-2">Reporting Manager *</mat-label>
                                 <mat-form-field class="w-full mt-2">
                                     <input
                                         required
                                         matInput
                                         [placeholder]="'PM/Mentor'"
-                                        aria-label="PM/Mentor"
+                                        aria-label="Reporting Manager"
                                         #emailInput
                                         [matAutocomplete]="selectPm"
                                         formControlName="pmOrMentorEmail"
@@ -581,7 +581,7 @@
                                                 ?.hasError('required')
                                         "
                                     >
-                                        <div>PM/Mentor is mandatory</div>
+                                        <div>Reporting Manager is mandatory</div>
                                     </mat-error>
                                 </mat-form-field>
                             </div>
