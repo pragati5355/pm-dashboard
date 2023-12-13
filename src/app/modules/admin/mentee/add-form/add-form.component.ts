@@ -54,6 +54,7 @@ export class AddFormComponent implements OnInit {
                 awardType: formData?.awardType,
                 considerForAwardComments: formData?.considerForAwardComments,
             },
+            reviewMonth: formData?.['basicDetailsHalfTable-reviewMonth'],
         };
 
         console.log(payload);
@@ -137,18 +138,18 @@ export class AddFormComponent implements OnInit {
     }
     private getCurrentMonthName(): string {
         var monthNames = [
-            'january',
-            'february',
-            'march',
-            'april',
-            'may',
-            'june',
-            'july',
-            'august',
-            'september',
-            'october',
-            'november',
-            'december',
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
         ];
 
         var d = new Date();
@@ -163,22 +164,22 @@ export class AddFormComponent implements OnInit {
                 this.form = res?.data?.formComponent;
                 this.preFillFormData = {
                     data: {
-                        'basicDetails-reviewerNameHalfTable':
+                        'basicDetailsHalfTable-reviewerName':
                             this.loggedInUser?.firstName +
                             ' ' +
                             this.loggedInUser?.lastName,
                         reviewerEmail: this.loggedInUser?.email,
-                        'basicDetails-employeeNameHalfTable':
+                        'basicDetailsHalfTable-employeeName':
                             this.menteeDetails?.firstName +
                             ' ' +
                             this.menteeDetails?.lastName,
                         employeeEmail: this.menteeDetails?.email,
-                        'basicDetails-currentDateHalfTable': `${new Date().getDate()}/${
+                        'basicDetailsHalfTable-currentDate': `${new Date().getDate()}/${
                             new Date().getMonth() + 1
                         }/${new Date().getFullYear()}`,
-                        'basicDetails-reviewMonthHalfTable':
+                        'basicDetailsHalfTable-reviewMonth':
                             this.getCurrentMonthName(),
-                        'basicDetails-projectsWorkedOnDuringThisMonthHalfTable':
+                        'basicDetailsHalfTable-projectsWorkedOnDuringThisMonth':
                             'metrics',
                         team: 'FRONTEND',
                         'quality_code-reviewer': 'Rahul ',
@@ -223,7 +224,7 @@ export class AddFormComponent implements OnInit {
                         statusForLastMonthActionItems:
                             'Provide status of last months action items and list out action Items for next month. Provide status of last months actions items and plan action items for next month to achieve, whether it terms of learning new framework/writing blog et',
                         submit: true,
-                        awardType: 'RISING_STAR',
+                        awardType: 'Living by values',
                         considerForAwardComments: 'good performance novvv222',
                     },
                 };
