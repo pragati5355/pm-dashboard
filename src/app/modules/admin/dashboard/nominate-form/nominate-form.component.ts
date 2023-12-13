@@ -9,7 +9,12 @@ export interface NominateModel {
     nominatedBy: string;
     nominee: string;
     reason: string;
-    award: 'RISING_STAR' | 'SUPER_STAR';
+    award:
+        | 'LIVING_BY_VALUES'
+        | 'COACHING_CHAMPION'
+        | 'TEAM_PLAYER'
+        | 'ALWAYS_GROWING'
+        | 'GOING_ABOVE_AND_BEYOND';
 }
 
 @Component({
@@ -23,12 +28,24 @@ export class NominateFormComponent implements OnInit {
     emailList: any[] = [];
     awardOptions: any[] = [
         {
-            value: 'RISING_STAR',
-            label: 'Rising star',
+            value: 'LIVING_BY_VALUES',
+            label: 'Living by values',
         },
         {
-            value: 'SUPER_STAR',
-            label: 'Super star',
+            value: 'COACHING_CHAMPION',
+            label: 'Coaching champion',
+        },
+        {
+            value: 'TEAM_PLAYER',
+            label: 'Team player',
+        },
+        {
+            value: 'ALWAYS_GROWING',
+            label: 'Always growing',
+        },
+        {
+            value: 'GOING_ABOVE_AND_BEYOND',
+            label: 'Going above and beyond',
         },
     ];
     submitInProcess: boolean = false;
