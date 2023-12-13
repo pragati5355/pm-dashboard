@@ -209,7 +209,7 @@ export class AddProjectHomeComponent
                 'dd-MM-yyyy'
             );
 
-            if (newDate <= this.getTodayDate()) {
+            if (event?.target?.value <= new Date()) {
                 console.log('today-->', this.getTodayDate());
                 const idx = this.teamMemberList?.findIndex(
                     (item) => item?.id === this.currentResourceIdInEditMode

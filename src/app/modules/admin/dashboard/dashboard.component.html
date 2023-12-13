@@ -327,12 +327,7 @@
                                             </div>
 
                                             <div class="hidden sm:block">
-                                                {{
-                                                    nominee?.award ==
-                                                    "RISING_STAR"
-                                                        ? "Rising star"
-                                                        : "Super star"
-                                                }}
+                                                {{ nominee?.award | award }}
                                             </div>
 
                                             <div class="hidden sm:block">

@@ -192,12 +192,8 @@ export class AddCrResourceDialogComponent implements OnInit {
     resourceEndDate(event: any) {
         const newDate = new Date(event?.target?.value).getTime();
         const prevDate = new Date(this.data?.editData?.endDate)?.getTime();
-        const selectedDate = this.datePipe.transform(
-            event?.target?.value,
-            'dd-MM-yyyy'
-        );
 
-        if (selectedDate <= this.getTodayDate()) {
+        if (event?.target?.value <= new Date()) {
             this.addResourceForm
                 ?.get('endDate')
                 ?.setValue(
