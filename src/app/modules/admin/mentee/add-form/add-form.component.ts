@@ -224,7 +224,7 @@ export class AddFormComponent implements OnInit {
                         statusForLastMonthActionItems:
                             'Provide status of last months action items and list out action Items for next month. Provide status of last months actions items and plan action items for next month to achieve, whether it terms of learning new framework/writing blog et',
                         submit: true,
-                        awardType: 'Living by values',
+                        awardType: 'LIVING_BY_VALUES',
                         considerForAwardComments: 'good performance novvv222',
                     },
                 };
