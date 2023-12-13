@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NomineeListComponent } from './nominee-list/nominee-list.component';
+import { AwardPipe } from './common/pipes/award.pipe';
 const dashboardRoutes: Route[] = [
     {
         path: '',
@@ -32,6 +33,7 @@ const dashboardRoutes: Route[] = [
         DashboardComponent,
         NominateFormComponent,
         NomineeListComponent,
+        AwardPipe,
     ],
     imports: [
         CommonModule,
