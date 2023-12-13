@@ -39,7 +39,6 @@ export class AddFormComponent implements OnInit {
         const formData = {
             ...event?.data,
         };
-        console.log('form data-->', formData);
         const payload = {
             resourceId: this.resourceId,
             mentorId: this.loggedInUser?.resourceId,
@@ -57,21 +56,19 @@ export class AddFormComponent implements OnInit {
             reviewMonth: formData?.['basicDetailsHalfTable-reviewMonth'],
         };
 
-        console.log(payload);
-
-        // this.menteeService.saveOneToOneForm(payload).subscribe(
-        //     (res: any) => {
-        //         if (res?.code === 200) {
-        //             this.snackBar.successSnackBar(res?.message);
-        //             this.router.navigate([
-        //                 `/mentee/form-list/${this.resourceId}`,
-        //             ]);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.snackBar.errorSnackBar('Something went wrong');
-        //     }
-        // );
+        this.menteeService.saveOneToOneForm(payload).subscribe(
+            (res: any) => {
+                if (res?.code === 200) {
+                    this.snackBar.successSnackBar(res?.message);
+                    this.router.navigate([
+                        `/mentee/form-list/${this.resourceId}`,
+                    ]);
+                }
+            },
+            (err) => {
+                this.snackBar.errorSnackBar('Something went wrong');
+            }
+        );
     }
 
     loadMenteeData(id: string | number) {
@@ -174,58 +171,11 @@ export class AddFormComponent implements OnInit {
                             ' ' +
                             this.menteeDetails?.lastName,
                         employeeEmail: this.menteeDetails?.email,
-                        'basicDetailsHalfTable-currentDate': `${new Date().getDate()}/${
+                        'basicDetailsHalfTable-date': `${new Date().getDate()}/${
                             new Date().getMonth() + 1
                         }/${new Date().getFullYear()}`,
                         'basicDetailsHalfTable-reviewMonth':
                             this.getCurrentMonthName(),
-                        'basicDetailsHalfTable-projectsWorkedOnDuringThisMonth':
-                            'metrics',
-                        team: 'FRONTEND',
-                        'quality_code-reviewer': 'Rahul ',
-                        'quality_code-CGRating': '4',
-                        'quality_code-comments': 'goood',
-                        'quality_delivery-timelyDelivery': 'yes',
-                        'quality_delivery-deliveryComments':
-                            'Please write your comments for delivery, what went well, what went wrong as well as write the planned and actual delivery dates ',
-                        'quality_delivery-bugsReportedByClient':
-                            'How many bugs were reported',
-                        'quality_delivery-commentsOnBugs':
-                            'Please write your comments for bugs reported by client.',
-                        'process_gitAndPr-prAreRaised': 'yes',
-                        'process_gitAndPr-commentsOnRaisingPrAndManualReview':
-                            'Please write your comments for raising a PR and manual code/PR review process.',
-                        'process_gitAndPr-whatCanBeDoneBetterInPrManualReview':
-                            'What can be done better in the C',
-                        'process_jiraOrOtherPmTools-hasJiraOrSimilarPmToolIsUsed':
-                            'yes',
-                        'process_jiraOrOtherPmTools-commentsOnUsingJiraOrSimilarTool':
-                            'Has the dev been using JIRA (or other project management tools) for daily task status and work logs? ',
-                        'process_ciCd-hasAllBuildsSharedByCiCd': 'yes',
-                        'process_ciCd-commentsOnNotUsingCiCd':
-                            'If builds are not shared via CI/CD, please mention the detailed reason for it.',
-                        'goalsAndLearnings_goals-statusOfGoals':
-                            'What is the status of their goal',
-                        'goalsAndLearnings_goals-commentsOnGoals':
-                            'Additional comments about what can be done to complete the goals in time.',
-                        'goalsAndLearnings_saturdayLearnings-commentsOnParticipationAndAttendance':
-                            'Comments about participation and attending Saturday Learning',
-                        'overAllRating-tableTrueRatings': {
-                            workTasksTheyCompleted: 'average',
-                            proactiveness: 'good',
-                            attitudeAndBehavior: 'excellent',
-                            dependability: 'excellent',
-                        },
-                        'overAllRating-comments':
-                            'Provide your overall thoughts on areas that you see the dev can improve and ideas explaining how?',
-                        mentionYourAdditionalComments:
-                            'Mention your additional comments',
-                        considerForAward: 'yes',
-                        statusForLastMonthActionItems:
-                            'Provide status of last months action items and list out action Items for next month. Provide status of last months actions items and plan action items for next month to achieve, whether it terms of learning new framework/writing blog et',
-                        submit: true,
-                        awardType: 'LIVING_BY_VALUES',
-                        considerForAwardComments: 'good performance novvv222',
                     },
                 };
             }
