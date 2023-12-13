@@ -9,12 +9,14 @@ import {
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
 import { ExternalProjectService } from '../common/services/external-project.service';
 import { AddFormService } from '@services/add-form.service';
+import { DatePipe } from '@angular/common';
+import { ExtendEndDateReasonDialogComponent } from '../extend-end-date-reason-dialog/extend-end-date-reason-dialog.component';
 
 @Component({
     selector: 'app-create-external-project',
@@ -37,6 +39,9 @@ export class CreateExternalProjectComponent implements OnInit {
     addOnBlur = false;
     selectable = true;
     removable = true;
+    editProjectEndDateReason: string = '';
+    prevDate: any;
+    newDate: any;
     technologys: any = this.data?.projectModel?.technology || [];
     filteredTechnologies: Observable<any[]> | undefined;
     alltechnologys: any[] = this.data?.technologies;
@@ -54,6 +59,8 @@ export class CreateExternalProjectComponent implements OnInit {
         private authService: AuthService,
         private externalProjectService: ExternalProjectService,
         private formService: AddFormService,
+        private datePipe: DatePipe,
+        private dialog: MatDialog,
     ) {}
 
     ngOnInit(): void {
@@ -110,6 +117,72 @@ export class CreateExternalProjectComponent implements OnInit {
             });
     }
 
+
+    getTodayDate(): string {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        return dd + '-' + mm + '-' + yyyy;
+    }
+
+    addReasonForProjectEndDate(event :any){
+        this.newDate = this.datePipe.transform(
+            event?.target?.value,
+            'dd-MM-yyyy'
+        );
+        if (this.prevDate === this.newDate) {
+            this.editProjectEndDateReason = '';
+        }
+        else if(this.newDate !== this.prevDate){
+            const dialogRef = this.dialog.open(
+                ExtendEndDateReasonDialogComponent,
+                {
+                    disableClose: true,
+                    width: '40%',
+                    panelClass: 'warn-dialog-content',
+                    autoFocus: false,
+                    data: {
+                        prevEndDate: this.prevDate,
+                        newEndDate: this.newDate,
+                        prefiledReason: this.editProjectEndDateReason,
+                    },
+                }
+            );
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result) {
+                    this.editProjectEndDateReason = result?.reason;
+                }
+            });
+        }
+    }
+
+    updateReasonForProjectEndDate(){
+        if (this.prevDate === this.newDate) {
+            this.editProjectEndDateReason = '';
+        }else if(this.newDate !== this.prevDate){
+            const dialogRef = this.dialog.open(
+                ExtendEndDateReasonDialogComponent,
+                {
+                    disableClose: true,
+                    width: '40%',
+                    panelClass: 'warn-dialog-content',
+                    autoFocus: false,
+                    data: {
+                        prevEndDate: this.prevDate,
+                        newEndDate: this.newDate,
+                        prefiledReason: this.editProjectEndDateReason,
+                    },
+                }
+            );
+            dialogRef.afterClosed().subscribe((result: any) => {
+                if (result) {
+                    this.editProjectEndDateReason = result?.reason;
+                }
+            });
+        }
+    }
+
     initializeForm() {
         this.projectForm = this.fb.group({
             id: this.fb.control(this.projectModel?.id || null),
@@ -128,6 +201,11 @@ export class CreateExternalProjectComponent implements OnInit {
             clients: this.getClientsControl(),
             addedBy: this.loggedInUser?.userId,
         });
+
+        this.prevDate =this.datePipe.transform(
+            this.projectModel?.endDate,
+            'dd-MM-yyyy'
+        );
 
         this.filteredTechnologies = this.projectForm
             .get('technology')
@@ -209,6 +287,7 @@ export class CreateExternalProjectComponent implements OnInit {
     add() {
         const formValue = this.projectForm?.value;
         formValue.technology = this.technologys;
+        formValue.extendedReason = this.editProjectEndDateReason;
         if (this.projectForm?.valid) {
             if (this.mode === 'create') {
                 delete formValue.id;

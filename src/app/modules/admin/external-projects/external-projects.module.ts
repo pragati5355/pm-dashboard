@@ -57,6 +57,7 @@ import { SendFeedbackFormComponent } from './send-feedback-form/send-feedback-fo
 import { FeedbackFormListComponent } from './feedback-form-list/feedback-form-list.component';
 import { FeedbackFormViewComponent } from './feedback-form-view/feedback-form-view.component';
 import { FormioModule } from 'angular-formio';
+import { ExtendEndDateReasonDialogComponent } from './extend-end-date-reason-dialog/extend-end-date-reason-dialog.component';
 
 @NgModule({
     declarations: [
@@ -78,6 +79,7 @@ import { FormioModule } from 'angular-formio';
         SendFeedbackFormComponent,
         FeedbackFormListComponent,
         FeedbackFormViewComponent,
+        ExtendEndDateReasonDialogComponent,
     ],
     imports: [
         CommonModule,

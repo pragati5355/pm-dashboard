@@ -2,11 +2,11 @@
   <div class="p-2 border-b">
     <div class="flex items-start justify-between ">
       <div class="text-lg font-medium tracking-tight leading-6 truncate"> Customer Happiness Score </div>
-      <div class="ml-2"  *ngIf="isShow == true">
+      <div class="ml-1 mt-1 mr-1"  *ngIf="!isShow">
         <mat-icon
-       
         class=" text-gray-400 icon-size-5 cursor-pointer"
         svgIcon="heroicons_outline:eye"
+        [matTooltip]="'View form'"
         (click)="feedbackForm()"
       ></mat-icon>
     </div>
