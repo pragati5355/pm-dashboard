@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import {
     GoogleLoginProvider,
     SocialAuthService,
@@ -9,6 +8,9 @@ import {
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
+import { loadFull } from 'tsparticles';
+import { Container, Engine } from 'tsparticles-engine';
+import { particleObject } from './common';
 @Component({
     selector: 'auth-sign-in',
     templateUrl: './sign-in.component.html',
@@ -17,6 +19,7 @@ import { FuseAlertType } from '@fuse/components/alert';
     animations: fuseAnimations,
 })
 export class AuthSignInComponent implements OnInit {
+    id = 'tsparticles';
     alert: { type: FuseAlertType; message: string } = {
         type: 'success',
         message: '',
@@ -25,6 +28,8 @@ export class AuthSignInComponent implements OnInit {
     showAlert: boolean = false;
     socialUser!: SocialUser;
     isLoggedin?: boolean;
+
+    particlesOptions = particleObject;
 
     constructor(
         private _authService: AuthService,
@@ -39,6 +44,21 @@ export class AuthSignInComponent implements OnInit {
             this.isLoggedin = user != null;
         });
     }
+
+    particlesLoaded(container: Container): void {
+        console.log(container);
+    }
+
+    async particlesInit(engine: Engine): Promise<void> {
+        console.log(engine);
+
+        // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
+        // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+        // starting from v2 you can add only the features you need reducing the bundle size
+        await loadFull(engine);
+        // await loadSlim(engine);
+    }
+
     loginWithGoogle(): void {
         this.submitInProcess = true;
         this.socialAuthService

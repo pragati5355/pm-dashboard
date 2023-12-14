@@ -38,15 +38,22 @@ export class AddFormComponent implements OnInit {
         this.isLoading = true;
         const formData = {
             ...event?.data,
-            reviewMonth: `${event?.data?.reviewMonth?.slice(
-                0,
-                3
-            )}02/${new Date().getFullYear()}`,
         };
         const payload = {
             resourceId: this.resourceId,
             mentorId: this.loggedInUser?.resourceId,
-            formData: formData,
+            formData: this.getSectionWiseObjects(formData),
+            team: formData?.['team'],
+            reviewerEmail: formData?.['reviewerEmail'],
+            employeeEmail: formData?.['employeeEmail'],
+            awardDescription: {
+                mentionYourAdditionalComments:
+                    formData?.mentionYourAdditionalComments,
+                considerForAward: formData?.considerForAward,
+                awardType: formData?.awardType,
+                considerForAwardComments: formData?.considerForAwardComments,
+            },
+            reviewMonth: formData?.['basicDetailsHalfTable-reviewMonth'],
         };
 
         this.menteeService.saveOneToOneForm(payload).subscribe(
@@ -106,6 +113,45 @@ export class AddFormComponent implements OnInit {
             }
         );
     }
+    private getSectionWiseObjects(formData: any) {
+        const json = formData;
+        // console.log(json);
+        let data = {};
+
+        Object.keys(json)?.map((item, idx) => {
+            let keyValue = item.split('-');
+            let key = keyValue[0];
+            let value = keyValue[1];
+            if (!(key in data)) {
+                data[key] = [];
+                if (value) {
+                    data[key].push({ [value]: json[item] });
+                }
+            } else {
+                data[key].push({ [value]: json[item] });
+            }
+        });
+        return data;
+    }
+    private getCurrentMonthName(): string {
+        var monthNames = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        ];
+
+        var d = new Date();
+        return monthNames[d.getMonth()];
+    }
     private getOneToOneForm() {
         const payload = {
             formType: 'ONE_TO_ONE',
@@ -115,20 +161,21 @@ export class AddFormComponent implements OnInit {
                 this.form = res?.data?.formComponent;
                 this.preFillFormData = {
                     data: {
-                        ...this.preFillFormData?.data,
-                        reviewerName:
+                        'basicDetailsHalfTable-reviewerName':
                             this.loggedInUser?.firstName +
                             ' ' +
                             this.loggedInUser?.lastName,
                         reviewerEmail: this.loggedInUser?.email,
-                        reviewMonth: `${
-                            new Date().getMonth() + 1
-                        }/02/${new Date().getFullYear()}`,
-                        employeeName:
+                        'basicDetailsHalfTable-employeeName':
                             this.menteeDetails?.firstName +
                             ' ' +
                             this.menteeDetails?.lastName,
                         employeeEmail: this.menteeDetails?.email,
+                        'basicDetailsHalfTable-date': `${new Date().getDate()}/${
+                            new Date().getMonth() + 1
+                        }/${new Date().getFullYear()}`,
+                        'basicDetailsHalfTable-reviewMonth':
+                            this.getCurrentMonthName(),
                     },
                 };
             }

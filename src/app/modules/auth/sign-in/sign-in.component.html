@@ -1,97 +1,150 @@
-<div class="main-container flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
-    <div class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l">
+<div
+    class="main-container flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0"
+>
+    <div
+        class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l"
+    >
         <!-- Background - @formatter:off -->
         <!-- Rings -->
-        <svg class="absolute inset-0 pointer-events-none"
-             viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+        <ng-particles
+            [id]="id"
+            [options]="particlesOptions"
+            [particlesInit]="particlesInit"
+            (particlesLoaded)="particlesLoaded($event)"
+        ></ng-particles>
+        <svg
+            class="absolute inset-0 pointer-events-none"
+            viewBox="0 0 960 540"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMax slice"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <g
+                class="text-gray-700 opacity-25"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="100"
+            >
                 <circle r="234" cx="196" cy="23"></circle>
                 <circle r="234" cx="790" cy="491"></circle>
             </g>
         </svg>
         <!-- Dots -->
-        <svg class="absolute -top-16 -right-16 text-gray-700"
-             viewBox="0 0 220 192" width="220" height="192" fill="none">
+        <svg
+            class="absolute -top-16 -right-16 text-gray-700"
+            viewBox="0 0 220 192"
+            width="220"
+            height="192"
+            fill="none"
+        >
             <defs>
-                <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <rect x="0" y="0" width="4" height="4" fill="currentColor"></rect>
+                <pattern
+                    id="837c3e70-6c3a-44e6-8854-cc48c737b659"
+                    x="0"
+                    y="0"
+                    width="20"
+                    height="20"
+                    patternUnits="userSpaceOnUse"
+                >
+                    <rect
+                        x="0"
+                        y="0"
+                        width="4"
+                        height="4"
+                        fill="currentColor"
+                    ></rect>
                 </pattern>
             </defs>
-            <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"></rect>
+            <rect
+                width="220"
+                height="192"
+                fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"
+            ></rect>
         </svg>
         <!-- @formatter:on -->
         <!-- Content -->
         <div class="z-10 relative w-full max-w-2xl">
             <div class="text-7xl font-bold leading-none text-gray-100">
                 <div>Welcome to</div>
-                <div class="font-size-34 mt-4 ">Mindbowser Project Management Dashboard</div>
+                <div class="font-size-34 mt-4">
+                    Mindbowser Project Management Dashboard
+                </div>
             </div>
             <div class="mt-8 text-lg tracking-tight leading-6 text-gray-400">
-                PM Dashboard simplifies project data visualisation at the project manager and company level
+                PM Dashboard simplifies project data visualisation at the
+                project manager and company level
             </div>
         </div>
     </div>
-    <div class="md:flex md:items-center md:justify-center w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+    <div
+        class="md:flex md:items-center md:justify-center w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card"
+    >
         <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
-                  <!-- Alert -->
-             <div class="">
+            <!-- Alert -->
+            <div class="">
                 <fuse-alert
-                class="mt-8 -mb-4 v-hidden"
-                *ngIf="!showAlert"
-                [appearance]="'outline'"
-                [showIcon]="false"
-                [type]="alert.type"
-                [@shake]="alert.type === 'error'">
-                error message
-            </fuse-alert>
-                <fuse-alert
-                class="mt-8 -mb-4 "
-                *ngIf="showAlert"
-                [appearance]="'outline'"
-                [showIcon]="false"
-                [type]="alert.type"
+                    class="mt-8 -mb-4 v-hidden"
+                    *ngIf="!showAlert"
+                    [appearance]="'outline'"
+                    [showIcon]="false"
+                    [type]="alert.type"
+                    [@shake]="alert.type === 'error'"
                 >
-                {{alert.message}}
-            </fuse-alert>
-             </div>
+                    error message
+                </fuse-alert>
+                <fuse-alert
+                    class="mt-8 -mb-4"
+                    *ngIf="showAlert"
+                    [appearance]="'outline'"
+                    [showIcon]="false"
+                    [type]="alert.type"
+                >
+                    {{ alert.message }}
+                </fuse-alert>
+            </div>
             <!-- Logo -->
-            <div class="w-40 ml--4 mt-8 ">
-                <img class="img-logo" src="/assets/images/logo/logo.svg">
+            <div class="w-40 ml--4 mt-8">
+                <img class="img-logo" src="/assets/images/logo/logo-with-cap.svg" />
             </div>
 
             <!-- Title -->
-            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Sign in</div>
-            <div class="mt-0.5 flex items-baseline  font-medium">
+            <div
+                class="mt-8 text-4xl font-extrabold tracking-tight leading-tight"
+            >
+                Sign in
+            </div>
+            <div class="mt-0.5 flex items-baseline font-medium">
                 <div>to your visualisation portal</div>
             </div>
 
-      
-                 
             <!-- Sign in form -->
-            <div
-            class="mt-8">
+            <div class="mt-8">
+                <!-- Email field -->
 
-            <!-- Email field -->
-         
-
-            <!-- Submit button -->
-            <button
-                class="fuse-mat-button-large w-full mt-6"
-                mat-flat-button
-                [color]="'primary'"
-                (click)="loginWithGoogle()">
-                <img  *ngIf="!submitInProcess" class="img-width" src="/assets/mbicons/google.png" alt="">
-                <span class="white-color"  *ngIf="!submitInProcess">
-                    Signin with Google
-                </span>
-                <mat-progress-spinner
-                *ngIf="submitInProcess"
-                [diameter]="24"
-                [mode]="'indeterminate'"></mat-progress-spinner>
-
-            </button>
-        </div>
+                <!-- Submit button -->
+                <button
+                    class="fuse-mat-button-large w-full mt-6"
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="loginWithGoogle()"
+                >
+                    <img
+                        *ngIf="!submitInProcess"
+                        class="img-width"
+                        src="/assets/mbicons/google.png"
+                        alt=""
+                    />
+                    <span class="white-color" *ngIf="!submitInProcess">
+                        Signin with Google
+                    </span>
+                    <mat-progress-spinner
+                        *ngIf="submitInProcess"
+                        [diameter]="24"
+                        [mode]="'indeterminate'"
+                    ></mat-progress-spinner>
+                </button>
+            </div>
         </div>
     </div>
-   
 </div>

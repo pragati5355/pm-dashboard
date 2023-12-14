@@ -14,6 +14,7 @@ import { SendRemindersComponent } from '../send-reminders/send-reminders.compone
 import { Clipboard } from '@angular/cdk/clipboard';
 import { WorkLogsDownloadComponent } from '../work-logs-download/work-logs-download.component';
 import { ExternalProjectSettingsComponent } from '../external-project-settings/external-project-settings.component';
+import { SendFeedbackFormComponent } from '../send-feedback-form/send-feedback-form.component';
 
 @Component({
     selector: 'app-external-project-details',
@@ -64,9 +65,14 @@ export class ExternalProjectDetailsComponent implements OnInit {
             .subscribe((res: any) => {
                 this.projectDetails = res?.data;
                 this.projectHistory = res?.data?.project;
+                console.log("this.projectHistory : ", this.projectHistory);
                 this.projectSetting = res?.data?.projectSettings;
                 this.isLoading = false;
             });
+    }
+
+    getfeedbackforms(){
+        this.router.navigate([`/external-projects/${this.projectId}/feedback-list`]);
     }
 
     edit() {

@@ -8,19 +8,33 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NominateFormComponent } from './nominate-form/nominate-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { NomineeListComponent } from './nominee-list/nominee-list.component';
+import { AwardPipe } from './common/pipes/award.pipe';
 const dashboardRoutes: Route[] = [
     {
         path: '',
         data: {
             pageTitle: 'Dashboard',
-            allowedRoles: ['ADMIN', 'SALES'],
+            allowedRoles: ['ADMIN', 'SALES', 'PM', 'HR'],
         },
         component: DashboardComponent,
     },
 ];
 
 @NgModule({
-    declarations: [DashboardComponent],
+    declarations: [
+        DashboardComponent,
+        NominateFormComponent,
+        NomineeListComponent,
+        AwardPipe,
+    ],
     imports: [
         CommonModule,
         MatIconModule,
@@ -29,6 +43,14 @@ const dashboardRoutes: Route[] = [
         MatButtonModule,
         MatProgressBarModule,
         MatProgressSpinnerModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        MatDialogModule,
+        MatMenuModule,
+        MatInputModule,
+        MatSelectModule,
         RouterModule.forChild(dashboardRoutes),
     ],
     providers: [DatePipe],

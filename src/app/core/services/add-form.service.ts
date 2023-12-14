@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from "angular-web-storage";
-import { AppConstants } from '../constacts/constacts';
+import { API_LIST, AppConstants } from '../constacts/constacts';
 @Injectable({
   providedIn: 'root'
 })
@@ -47,5 +47,27 @@ export class AddFormService {
   }
   getFeedbackFormByEmail(obj: any) {
     return this.http.post(AppConstants['GET_FEEDBACK_FORM_BY_EMAIL'], obj);
+  }
+
+  /* External Project Feedback Form Api's */
+
+  sendProjectFeedbackForm(obj : any){
+    return this.http.post(API_LIST.PROJECT_SPRING_BOOT_URL + '/external/send-feedback-form', obj);
+  }
+
+  getProjectFeedbackFormDetails(id : any){
+    return this.http.get(API_LIST.PROJECT_SPRING_BOOT_URL + '/external/feedback-form-resource/' + id);
+  }
+
+  getProjectFeedbackFormList(id : any){
+    return this.http.get(API_LIST.PROJECT_SPRING_BOOT_URL + '/external/'+ id + '/feedback-form');
+  }
+
+  getProjectFormById(id : any){
+    return this.http.get(API_LIST.PROJECT_SPRING_BOOT_URL + '/external/feedback-form/' + id);
+  }
+
+  submitProjectFeedbackForm(obj : any){
+    return this.http.post(API_LIST.PROJECT_SPRING_BOOT_URL + '/external/feedback-form', obj);
   }
 }

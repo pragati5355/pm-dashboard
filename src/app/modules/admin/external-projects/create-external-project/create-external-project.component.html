@@ -49,9 +49,11 @@
             <mat-form-field [floatLabel]="'always'" class="w-1/3 userlist">
                 <mat-label>End Date</mat-label>
                 <input matInput #inputJoining [placeholder]="'End Date'"
-                    formControlName="endDate" [matDatepicker]="dateOfJoiningDatepicker1"
+                    formControlName="endDate" 
+                    [matDatepicker]="dateOfJoiningDatepicker1"
                     (focus)="dateOfJoiningDatepicker1.open()"
-                    [min]="projectForm?.get('startDate')?.value" />
+                    [min]="projectForm?.get('startDate')?.value"
+                    (dateChange)="addReasonForProjectEndDate($event)" />
                 <mat-datepicker-toggle matSuffix [for]="dateOfJoiningDatepicker1">
                 </mat-datepicker-toggle>
                 <mat-datepicker #dateOfJoiningDatepicker1 (closed)="inputJoining.blur()">
@@ -139,7 +141,7 @@
         </div>
 
         <mat-form-field
-            class="w-full userlist mt-4"
+            class="w-full userlist mt-4 mb-2"
             id="userlist"
             [floatLabel]="'always'"
         >
@@ -150,6 +152,19 @@
                 formControlName="description"
                 class="inputlist"
             ></textarea>
+        </mat-form-field>
+        
+        <mat-form-field class="w-full mt-6 mb-1  sm:mt-0 select-form"
+            [floatLabel]="'always'">
+            <mat-label>Choose feedback form </mat-label>
+            <mat-select panelClass="select-form-option" formControlName="formId" type="text"
+                placeholder="Choose feedback form" [disableOptionCentering]="true"
+                >
+                <mat-option *ngFor="let form of selectFomList" [value]="form.id">
+                    {{ form.formName }}
+                </mat-option>
+            </mat-select>
+                                
         </mat-form-field>
 
         <h3 class="font-bold mb-2">Client Details:</h3>
@@ -257,6 +272,29 @@
                 </form>
             </ng-container>
         </div>
+
+        <div class="w-full flex flex-col" *ngIf="editProjectEndDateReason !== ''">
+            <div class="flex items-center">
+                <mat-label class="font-semibold mr-4">Reason for date change</mat-label>
+                <mat-icon [matTooltip]="
+                    'Edit Reason'
+                " class="text-gray-400 icon-size-4.5 cursor-pointer"
+                    svgIcon="heroicons_outline:pencil" (click)="
+                    updateReasonForProjectEndDate()
+                ">
+                </mat-icon>
+            </div>
+            <div class="w-full">
+                <div>
+                    <p>Date changed from {{this.prevDate}} to {{this.newDate}}</p>
+                </div>
+                <div class="w-full mt-3">
+                    <textarea class="w-full" trim="blur" rows="4" style="resize: none"
+                        [value]="this.editProjectEndDateReason" [readOnly]="true">
+                    </textarea>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <div mat-dialog-actions class="flex flex-row justify-end">
@@ -267,12 +305,12 @@
     <button
         mat-flat-button
         color="primary"
-        [disabled]="isLoading"
+        [disabled]="submitInProcess"
         (click)="add()"
     >
-        <mat-icon *ngIf="!isLoading" class="mr-2">add</mat-icon>
+        <mat-icon *ngIf="!submitInProcess" class="mr-2">add</mat-icon>
         <mat-progress-spinner
-            *ngIf="isLoading"
+            *ngIf="submitInProcess"
             class="mr-2"
             mode="indeterminate"
             diameter="24"

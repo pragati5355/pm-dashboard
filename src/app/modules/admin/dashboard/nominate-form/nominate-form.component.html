@@ -1,0 +1,111 @@
+<div
+    class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 bg-primary text-on-primary -m-6"
+>
+    <div class="text-lg font-medium">Nomination For BPC</div>
+</div>
+
+<div class="mt-12">
+    <form [formGroup]="nominateForm">
+        <div>
+            <mat-form-field [floatLabel]="'always'" class="w-full h-4">
+                <mat-label class="">Who do you want to nominate?</mat-label>
+                <input
+                    matInput
+                    [placeholder]="'Enter email'"
+                    aria-label="email"
+                    #emailInput
+                    [matAutocomplete]="auto1"
+                    formControlName="nominee"
+                />
+                <mat-autocomplete
+                    #auto1="matAutocomplete"
+                    (optionSelected)="getSelectedEmail($event.option.value)"
+                >
+                    <mat-option
+                        *ngFor="let item of filteredEmails | async"
+                        [value]="item?.email"
+                    >
+                        <span>{{ item?.email }}</span>
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error
+                    *ngIf="nominateForm?.get('nominee')?.hasError('required')"
+                >
+                    <div>Email is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="mt-4">
+            <mat-form-field class="w-full">
+                <mat-label>For which award do you want to nominate?</mat-label>
+                <mat-select
+                    formControlName="award"
+                    [placeholder]="'Select award'"
+                >
+                    <mat-option
+                        *ngFor="let award of awardOptions"
+                        [value]="award?.value"
+                    >
+                        {{ award?.label }}
+                    </mat-option>
+                </mat-select>
+                <mat-error
+                    *ngIf="nominateForm?.get('award')?.hasError('required')"
+                >
+                    <div>Award is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="">
+            <mat-form-field
+                class="fuse-mat-textarea w-full"
+                [floatLabel]="'always'"
+            >
+                <mat-label>Reason for nomination</mat-label>
+                <textarea
+                    matInput
+                    required
+                    maxlength="1000"
+                    trim="blur"
+                    rows="4"
+                    style="resize: none"
+                    formControlName="reason"
+                    [placeholder]="'Enter reason here...'"
+                ></textarea>
+                <mat-error
+                    *ngIf="nominateForm?.get('reason')?.hasError('required')"
+                >
+                    <div>Reason is mandatory</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="flex justify-end mt-3">
+            <button
+                mat-stroked-button
+                type="button"
+                class="px-6 mr-2"
+                (click)="cancel()"
+                [disabled]="submitInProcess"
+            >
+                Cancel
+            </button>
+            <button
+                class="ml-3"
+                mat-flat-button
+                [color]="'primary'"
+                [disabled]="submitInProcess"
+                (click)="submit()"
+            >
+                <span class="mx-2">Submit</span>
+                <mat-progress-spinner
+                    *ngIf="submitInProcess"
+                    [diameter]="18"
+                    [mode]="'indeterminate'"
+                ></mat-progress-spinner>
+            </button>
+        </div>
+    </form>
+</div>

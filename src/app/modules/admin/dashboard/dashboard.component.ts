@@ -6,7 +6,29 @@ import { SnackBar } from 'app/core/utils/snackBar';
 import saveAs from 'save-as';
 import { DashboardApiService } from './common/services/dashboard-api.service';
 import { DatePipe, formatDate } from '@angular/common';
-import moment from 'moment';
+import { MatDialog } from '@angular/material/dialog';
+import { NominateFormComponent } from './nominate-form/nominate-form.component';
+import { LoggedInUserService } from '../common/services/logged-in-user.service';
+import {
+    MAT_SELECT_YEARS,
+    MAT_TAB_MONTHS,
+} from '../project/project-widget/common/constants';
+import {
+    NomineeList,
+    UserInterface,
+} from './nominee-list/nominee-list.component';
+
+export interface StatInterface {
+    projectCount: number;
+    resourceCount: number;
+    repoCount: number;
+    qaCount: number;
+    pmCount: number;
+    designerCount: number;
+    developerCount: number;
+    vendorCount: number;
+}
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -15,14 +37,23 @@ import moment from 'moment';
 export class DashboardComponent implements OnInit {
     userName: string;
     userImageUrl: string;
-    noOfProjects: Number = 0;
-    noOfResources: Number = 0;
-    noOfRepos: Number = 0;
     isLoading = true;
+    statCount: StatInterface;
     submitInProcess: boolean = false;
     submitInProcess1: boolean = false;
     submitInProcess2: boolean = false;
     submitInProcess3: boolean = false;
+    isLoadingDeveloperEmails: boolean = false;
+    developerEmailList: any[];
+    loggedInUser: UserInterface;
+    matTabList: any[] = MAT_TAB_MONTHS;
+    matSelectYears: string[] = MAT_SELECT_YEARS;
+    selectedTabIndex: number = 7;
+    currentMonth: number;
+    currentYear: string = '';
+    selectedYear: string = '2020';
+    initialLoading: boolean = false;
+    nomineeList: NomineeList[] = [];
 
     constructor(
         private _authService: AuthService,
@@ -30,12 +61,17 @@ export class DashboardComponent implements OnInit {
         private dashboardService: DashboardService,
         private dashboardApiService: DashboardApiService,
         private snackbar: SnackBar,
-        public datePipe: DatePipe
+        public datePipe: DatePipe,
+        private dialog: MatDialog,
+        private loggedInUserService: LoggedInUserService
     ) {}
 
     ngOnInit(): void {
         this.loadUserData();
         this.getDashboardStatsCounts();
+        this.loadResourcesEmailList();
+        this.getUserRole();
+        this.getCurrentMonthAndYear();
     }
     loadUserData() {
         const user = this._authService.getUser();
@@ -51,13 +87,19 @@ export class DashboardComponent implements OnInit {
     goToResources() {
         this.router.navigate(['/resources']);
     }
+    onMonthChanged(event: any) {
+        this.selectedTabIndex = event?.value;
+        this.getNomineeList(this.selectedTabIndex, this.selectedYear);
+    }
+    onYearChange(event: any) {
+        this.selectedYear = event?.value;
+        this.getNomineeList(this.selectedTabIndex, this.selectedYear);
+    }
     getDashboardStatsCounts() {
         this.dashboardService.getDashboardStatsCount().subscribe((res: any) => {
             if (res?.data) {
                 this.isLoading = false;
-                this.noOfProjects = res?.data?.projectCount;
-                this.noOfResources = res?.data?.resourceCount;
-                this.noOfRepos = res?.data?.repoCount;
+                this.statCount = res?.data;
             }
             if (res?.tokenExpire) {
                 this._authService.updateAndReload();
@@ -165,5 +207,70 @@ export class DashboardComponent implements OnInit {
                 this.snackbar.errorSnackBar('Something went wrong');
             }
         );
+    }
+
+    openDialog() {
+        const dialogRef = this.dialog.open(NominateFormComponent, {
+            disableClose: true,
+            width: '50%',
+            panelClass: 'warn-dialog-content',
+            autoFocus: false,
+            data: {
+                emails: this.developerEmailList,
+                loggedInUser: this.loggedInUser,
+            },
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result == 'success') {
+                this.loadUserData();
+                this.getDashboardStatsCounts();
+                this.loadResourcesEmailList();
+                this.getUserRole();
+                this.getCurrentMonthAndYear();
+            }
+        });
+    }
+
+    loadResourcesEmailList() {
+        this.isLoadingDeveloperEmails = true;
+        this.dashboardService.findAllDeveloperEmails().subscribe(
+            (res: any) => {
+                this.isLoadingDeveloperEmails = false;
+                if (res?.data) {
+                    this.developerEmailList = res?.data;
+                }
+            },
+            (err) => {
+                this.isLoadingDeveloperEmails = false;
+            }
+        );
+    }
+
+    private getUserRole() {
+        this.loggedInUserService.getLoggedInUser().subscribe((res: any) => {
+            if (res?.role) {
+                this.loggedInUser = res;
+            }
+        });
+    }
+    private getNomineeList(month: number, year: number | string) {
+        const payload = {
+            month: ++month,
+            year: year,
+        };
+        this.dashboardApiService
+            .getNomineeList(payload)
+            .subscribe((res: any) => {
+                if (res?.statusCode === 200) {
+                    this.nomineeList = res?.data;
+                }
+            });
+    }
+    private getCurrentMonthAndYear() {
+        this.selectedYear = String(new Date().getFullYear());
+        this.currentYear = String(new Date().getFullYear());
+        this.selectedTabIndex = new Date().getMonth();
+        this.currentMonth = new Date().getMonth();
+        this.getNomineeList(this.currentMonth, this.currentYear);
     }
 }

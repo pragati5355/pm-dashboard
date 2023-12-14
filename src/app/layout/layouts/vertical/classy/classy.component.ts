@@ -13,12 +13,18 @@ import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import packageJson from '../../../../../../package.json';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
+import { Container, Engine } from 'tsparticles-engine';
+import { loadFull } from 'tsparticles';
+import { snowOptions } from '@modules/auth/sign-in/common';
+
 @Component({
     selector: 'classy-layout',
     templateUrl: './classy.component.html',
+    styleUrls: ['./classy.component.scss'],
     encapsulation: ViewEncapsulation.None,
 })
 export class ClassyLayoutComponent implements OnInit, OnDestroy {
+    id = 'tsparticles';
     appVersion = packageJson?.version;
     isScreenSmall: boolean | undefined;
     navigation!: Navigation;
@@ -27,6 +33,10 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
     pageTitle: string;
     userPhoto: any = '';
     userState: any;
+
+    snowConfig = snowOptions;
+      
+    
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     /**
      * Constructor
@@ -101,6 +111,21 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
         }
     }
 
+    particlesLoaded(container: Container): void {
+        console.log(container);
+    }
+
+    async particlesInit(engine: Engine): Promise<void> {
+        console.log(engine);
+
+        // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
+        // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+        // starting from v2 you can add only the features you need reducing the bundle size
+        await loadFull(engine);
+        // await loadSlim(engine);
+    }
+
+
     private getUserState() {
         this.loggedInUserService.getLoggedInUser().subscribe((res) => {
             if (res) {
@@ -149,3 +174,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
         this.pageTitle = activatedRoute?.snapshot?.data['pageTitle'];
     }
 }
+function loadSnowPreset(engine: Engine) {
+    throw new Error('Function not implemented.');
+}
+
