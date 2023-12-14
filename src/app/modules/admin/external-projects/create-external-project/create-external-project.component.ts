@@ -9,7 +9,11 @@ import {
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import {
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+    MatDialog,
+} from '@angular/material/dialog';
 import { AuthService } from '@services/auth/auth.service';
 import { SnackBar } from 'app/core/utils/snackBar';
 import { map, Observable, startWith } from 'rxjs';
@@ -29,7 +33,7 @@ export class CreateExternalProjectComponent implements OnInit {
 
     technologies: string[] = this.data?.projectModel?.technology || [];
     isLoading = false;
-    submitInProcess : boolean = false;
+    submitInProcess: boolean = false;
     mode: 'create' | 'update' = 'create';
     loggedInUser: any;
     projectModel = this.data?.projectModel;
@@ -60,7 +64,7 @@ export class CreateExternalProjectComponent implements OnInit {
         private externalProjectService: ExternalProjectService,
         private formService: AddFormService,
         private datePipe: DatePipe,
-        private dialog: MatDialog,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -106,7 +110,6 @@ export class CreateExternalProjectComponent implements OnInit {
         this.projectForm.get('technology')?.setValue('');
     }
 
-
     getFormList() {
         this.isLoading = true;
         this.formService
@@ -117,7 +120,6 @@ export class CreateExternalProjectComponent implements OnInit {
             });
     }
 
-
     getTodayDate(): string {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -126,15 +128,14 @@ export class CreateExternalProjectComponent implements OnInit {
         return dd + '-' + mm + '-' + yyyy;
     }
 
-    addReasonForProjectEndDate(event :any){
+    addReasonForProjectEndDate(event: any) {
         this.newDate = this.datePipe.transform(
             event?.target?.value,
             'dd-MM-yyyy'
         );
         if (this.prevDate === this.newDate) {
             this.editProjectEndDateReason = '';
-        }
-        else if(this.newDate !== this.prevDate){
+        } else if (this.newDate !== this.prevDate) {
             const dialogRef = this.dialog.open(
                 ExtendEndDateReasonDialogComponent,
                 {
@@ -157,10 +158,10 @@ export class CreateExternalProjectComponent implements OnInit {
         }
     }
 
-    updateReasonForProjectEndDate(){
+    updateReasonForProjectEndDate() {
         if (this.prevDate === this.newDate) {
             this.editProjectEndDateReason = '';
-        }else if(this.newDate !== this.prevDate){
+        } else if (this.newDate !== this.prevDate) {
             const dialogRef = this.dialog.open(
                 ExtendEndDateReasonDialogComponent,
                 {
@@ -189,8 +190,12 @@ export class CreateExternalProjectComponent implements OnInit {
             name: this.fb.control(this.projectModel?.name || null, [
                 Validators.required,
             ]),
-            startDate : this.fb.control(this.projectModel?.startDate || null, [Validators.required]),
-            endDate : this.fb.control(this.projectModel?.endDate || null,[Validators.required]),
+            startDate: this.fb.control(this.projectModel?.startDate || null, [
+                Validators.required,
+            ]),
+            endDate: this.fb.control(this.projectModel?.endDate || null, [
+                Validators.required,
+            ]),
             description: this.fb.control(
                 this.projectModel?.description || null
             ),
@@ -202,7 +207,7 @@ export class CreateExternalProjectComponent implements OnInit {
             addedBy: this.loggedInUser?.userId,
         });
 
-        this.prevDate =this.datePipe.transform(
+        this.prevDate = this.datePipe.transform(
             this.projectModel?.endDate,
             'dd-MM-yyyy'
         );
@@ -292,7 +297,6 @@ export class CreateExternalProjectComponent implements OnInit {
             if (this.mode === 'create') {
                 delete formValue.id;
             }
-            console.log("formValue : ", formValue);
             this.callCreateUpdateApi(formValue);
         } else {
             this.projectForm.markAllAsTouched();
@@ -301,6 +305,12 @@ export class CreateExternalProjectComponent implements OnInit {
 
     private callCreateUpdateApi(requestBody: any) {
         this.submitInProcess = true;
+
+        const endDateRemovedTime = new Date(requestBody?.endDate);
+        endDateRemovedTime.setHours(5);
+        endDateRemovedTime.setMinutes(30);
+        requestBody.endDate = endDateRemovedTime;
+
         this.externalProjectService.create(requestBody).subscribe((result) => {
             this.submitInProcess = false;
             this.snackBarService.successSnackBar(result?.message);
