@@ -57,14 +57,14 @@ export const resourcesRoutes: Route[] = [
                 },
             },
             {
-                path: 'resource/availablity',
+                path: 'availablity',
                 component: ResourceAvailablityComponent,
                 data: {
                     pageTitle: 'Resource Availablity',
                 },
             },
             {
-                path: 'resource/utilization',
+                path: 'utilization',
                 component: ResourceUtilizationComponent,
                 data: {
                     pageTitle: 'Resource Utilization',
