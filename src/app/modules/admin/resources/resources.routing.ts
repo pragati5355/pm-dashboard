@@ -5,6 +5,8 @@ import { AddResourcesComponent } from './add-resources/add-resources.component';
 import { ResourceDetailsComponent } from './resource-details/resource-details.component';
 import { OnboardResourceComponent } from './onboard-resource/onboard-resource.component';
 import { OneToOneFormsComponent } from './one-to-one-forms/one-to-one-forms.component';
+import { UtilizationTableComponent } from './utilization-table/utilization-table.component';
+import { AvailabilityTableComponent } from './availability-table/availability-table.component';
 export const resourcesRoutes: Route[] = [
     {
         path: '',
@@ -32,6 +34,20 @@ export const resourcesRoutes: Route[] = [
                 component: OneToOneFormsComponent,
                 data: {
                     pageTitle: '1-1 forms',
+                },
+            },
+            {
+                path: 'utilization/:id',
+                component: UtilizationTableComponent,
+                data: {
+                    pageTitle: 'Resource utilization',
+                },
+            },
+            {
+                path: 'availability/:id',
+                component: AvailabilityTableComponent,
+                data: {
+                    pageTitle: 'Resource availability',
                 },
             },
             {
