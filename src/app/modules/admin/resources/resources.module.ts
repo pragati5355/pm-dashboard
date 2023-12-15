@@ -49,6 +49,7 @@ import { ViewOneToOneFormComponent } from './view-one-to-one-form/view-one-to-on
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { UtilizationTableComponent } from './utilization-table/utilization-table.component';
 import { AvailabilityTableComponent } from './availability-table/availability-table.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
     declarations: [
@@ -102,6 +103,7 @@ import { AvailabilityTableComponent } from './availability-table/availability-ta
         SkeletonModule,
         MatCheckboxModule,
         NgxExtendedPdfViewerModule,
+        MatSortModule,
         RouterModule.forChild(resourcesRoutes),
     ],
     providers: [DatePipe],
