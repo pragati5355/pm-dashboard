@@ -3,6 +3,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Router } from '@angular/router';
+import { ResourcesService } from '../common/services/resources.service';
 
 export interface TableElement {
     resource: string;
@@ -13,33 +14,6 @@ export interface TableElement {
     shadow: string;
 }
 
-const ELEMENT_DATA: TableElement[] = [
-    {
-        resource: 'Rohan kadam',
-        project: 'Metrics',
-        utilization: 0.5,
-        start: '12/12/2023',
-        end: '12/12/2024',
-        shadow: 'Yes',
-    },
-
-    {
-        resource: 'Pranita jadhav',
-        project: 'Core',
-        utilization: 0.75,
-        start: '11/06/2023',
-        end: '01/09/2023',
-        shadow: 'Yes',
-    },
-    {
-        resource: 'Suhail Chand',
-        project: 'Courtyardly',
-        utilization: 1.0,
-        start: '2023-08-27T18:30:00.000+00:00',
-        end: '2023-11-26T18:30:00.000+00:00',
-        shadow: 'No',
-    },
-];
 @Component({
     selector: 'app-utilization-table',
     templateUrl: './utilization-table.component.html',
@@ -55,15 +29,18 @@ export class UtilizationTableComponent implements OnInit, AfterViewInit {
         'end',
         'shadow',
     ];
-    dataSource = new MatTableDataSource(ELEMENT_DATA);
+    dataSource = new MatTableDataSource();
     @ViewChild(MatSort) sort: MatSort;
 
     constructor(
         private _liveAnnouncer: LiveAnnouncer,
-        private router: Router
+        private router: Router,
+        private resourceService: ResourcesService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.loadTableData();
+    }
 
     ngAfterViewInit() {
         this.dataSource.sort = this.sort;
@@ -88,5 +65,13 @@ export class UtilizationTableComponent implements OnInit, AfterViewInit {
 
     goBack() {
         this.router.navigate(['/resources']);
+    }
+    private loadTableData() {
+        this.resourceService.getUtilizationData().subscribe((res: any) => {
+            if (res?.data) {
+                this.dataSource = new MatTableDataSource(res?.data);
+                this.dataSource.sort = this.sort;
+            }
+        });
     }
 }
