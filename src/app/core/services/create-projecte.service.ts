@@ -46,7 +46,7 @@ export class CreateProjecteService {
         );
     }
     getResourceMember(obj: any) {
-        return this.http.post(AppConstants['GET_RESOURCE_LIST'], obj);
+        return this.http.post(API_LIST.RESOURCE_SPRING_BOOT_URL + '/resource-list', obj);
     }
     addresources(obj: any) {
         return this.http.post(AppConstants['ADD_RESOURCE_LIST'], obj);
