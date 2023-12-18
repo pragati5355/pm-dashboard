@@ -37,14 +37,14 @@ export const resourcesRoutes: Route[] = [
                 },
             },
             {
-                path: 'utilization/:id',
+                path: 'utilization',
                 component: UtilizationTableComponent,
                 data: {
                     pageTitle: 'Resource utilization',
                 },
             },
             {
-                path: 'availability/:id',
+                path: 'availability',
                 component: AvailabilityTableComponent,
                 data: {
                     pageTitle: 'Resource availability',
