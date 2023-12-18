@@ -69,4 +69,15 @@ export class ResourcesService {
     getResourcesList() {
         return this.http.get(this.invitedResourceListUrl);
     }
+
+    getAvailabilityData() {
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/resource/availability'
+        );
+    }
+    getUtilizationData() {
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/resource/utilization'
+        );
+    }
 }

@@ -47,6 +47,10 @@ import { ResourceInviteFormComponent } from './resource-invite-form/resource-inv
 import { OneToOneFormsComponent } from './one-to-one-forms/one-to-one-forms.component';
 import { ViewOneToOneFormComponent } from './view-one-to-one-form/view-one-to-one-form.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { UtilizationTableComponent } from './utilization-table/utilization-table.component';
+import { AvailabilityTableComponent } from './availability-table/availability-table.component';
+import { MatSortModule } from '@angular/material/sort';
+
 @NgModule({
     declarations: [
         ResourcesHomeComponent,
@@ -65,6 +69,8 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         ResourceInviteFormComponent,
         OneToOneFormsComponent,
         ViewOneToOneFormComponent,
+        UtilizationTableComponent,
+        AvailabilityTableComponent,
     ],
     imports: [
         CommonModule,
@@ -97,6 +103,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         SkeletonModule,
         MatCheckboxModule,
         NgxExtendedPdfViewerModule,
+        MatSortModule,
         RouterModule.forChild(resourcesRoutes),
     ],
     providers: [DatePipe],
