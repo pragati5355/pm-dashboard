@@ -50,12 +50,12 @@
             <td mat-cell *matCellDef="let element">{{ element?.name }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="skills">
+        <ng-container matColumnDef="technicalSkill">
             <th
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                sortActionDescription="Sort by skills"
+                sortActionDescription="Sort by technicalSkill"
                 class="truncate max-w-[300px]"
             >
                 Technical Skills
@@ -64,9 +64,9 @@
                 mat-cell
                 *matCellDef="let element"
                 class="truncate max-w-[300px] pr-4"
-                [matTooltip]="element?.skills"
+                [matTooltip]="element?.technicalSkill"
             >
-                {{ element?.skills }}
+                {{ element?.technicalSkill }}
             </td>
         </ng-container>
 
@@ -82,17 +82,17 @@
             <td mat-cell *matCellDef="let element">{{ element?.capacity }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="available">
+        <ng-container matColumnDef="availableFromString">
             <th
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                sortActionDescription="Sort by available"
+                sortActionDescription="Sort by availableFromString"
             >
                 Available From
             </th>
             <td mat-cell *matCellDef="let element">
-                {{ element?.available }}
+                {{ element?.availableFromString }}
             </td>
         </ng-container>
 
@@ -110,12 +110,12 @@
             </td>
         </ng-container>
 
-        <ng-container matColumnDef="profile">
+        <ng-container matColumnDef="profileUrl">
             <th
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                sortActionDescription="Sort by profile"
+                sortActionDescription="Sort by profileUrl"
             >
                 Profile Link
             </th>
@@ -124,7 +124,7 @@
                     [color]="'primary'"
                     class="my-2"
                     mat-flat-button
-                    (click)="viewResourceProfile(element?.profile)"
+                    (click)="viewResourceProfile(element?.resourceId)"
                 >
                     <span>View profile</span>
                 </button>
