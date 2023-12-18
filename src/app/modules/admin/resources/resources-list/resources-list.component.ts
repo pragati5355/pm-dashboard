@@ -101,7 +101,7 @@ export class ResourcesListComponent implements OnInit {
     isShadow: boolean = false;
     showFilterArea: boolean = false;
     showVendorsOnly: boolean = false;
-    hideTechnologyField : boolean = false;
+    hideTechnologyField: boolean = false;
     selectedTechnologiesForSearch: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -116,6 +116,8 @@ export class ResourcesListComponent implements OnInit {
         'Strawberry',
     ];
     userRole: string = '';
+    searchControl = new FormControl();
+    filterSearchResource : any = [];
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
@@ -210,6 +212,7 @@ export class ResourcesListComponent implements OnInit {
         this.initializeForms();
         this.addRequiredSubscriptions();
         this.getUserRole();
+        this.addSearchListener() 
     }
 
     get exprienceValidForm(): { [key: string]: AbstractControl } {
@@ -239,14 +242,31 @@ export class ResourcesListComponent implements OnInit {
         this.initialLoading = true;
         this.projectService.getResourceMember(searchPayload).subscribe(
             (res: any) => {
-                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+                this.resources = res?.data;
+                this.filterSearchResource = res?.data;
+                // this.handleGetResourceMemberResponse(res);
                 this.checkForLargerScreen();
             },
             (error) => {
-                this.totalRecored = 0;
                 this.initialLoading = false;
             }
         );
+    }
+
+    addSearchListener() {
+        this.searchControl?.valueChanges.subscribe((searchKey: string) => {
+            searchKey = searchKey?.trim()?.toLowerCase();
+            if (searchKey) {
+                this.resources = this.resources.filter((resource) =>
+                    resource?.firstName?.toLowerCase()?.includes(searchKey) +
+                    resource?.lastName?.toLowerCase()?.includes(searchKey)
+                );
+            } else {
+                this.resources = [];
+                this.getList();
+            }
+        });
     }
 
     showFilter() {
@@ -295,11 +315,10 @@ export class ResourcesListComponent implements OnInit {
     handleGetResourceMemberResponse(res: any) {
         if (res.data) {
             this.totalRecored = res?.data?.totalRecored;
-            this.resources = res?.data?.teamMember;
+            this.resources = res?.data;
             this.initialLoading = false;
-            this.checkForLargerScreen();
+            // this.checkForLargerScreen();
         } else if (res?.data == null) {
-            this.totalRecored = 0;
             this.initialLoading = false;
         } else if (res.tokenExpire == true) {
             this.handleTokenExpiry();
@@ -307,7 +326,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     showOnlyVendors(event: MatCheckboxChange) {
-        if(event?.checked){
+        if (event?.checked) {
             this.showVendorsOnly = event?.checked;
             this.hideTechnologyField = true;
             this.projects?.disable();
@@ -339,25 +358,26 @@ export class ResourcesListComponent implements OnInit {
     }
 
     handleScroll() {
+        const totalcount = this.count * this.totalPerPageData;
         if (!this.pagination && this.resources.length < this.totalRecored) {
             this.count = this.count + this.totalPerPageData;
             const expriencePayload = this.getExperiencePayload();
-            const payload = this.getDefaultSearchPayload(this.count);
+            const payload = this.getDefaultSearchPayload();
             this.pagination = true;
-            this.projectService.getResourceMember(payload).subscribe(
-                (res: any) => {
+            this.projectService.getResourceMember(payload).subscribe({
+                next: (res:any)=> {
                     this.pagination = false;
-                    if (res?.data) {
-                        this.resources = [
-                            ...this.resources,
-                            ...res?.data?.teamMember,
+                    if (res) {
+                        this.filterSearchResource = [
+                            ...this.filterSearchResource,
+                            ...res.data,
                         ];
                     }
                 },
-                (err: any) => {
+                error : (err : any)=> {
                     this.pagination = false;
                 }
-            );
+            });
         }
     }
 
@@ -583,7 +603,7 @@ export class ResourcesListComponent implements OnInit {
             (res: any) => {
                 this.handleGetResourceMemberResponse(res);
                 this.initialLoading = false;
-                this.checkForLargerScreen();
+                // this.checkForLargerScreen();
             },
             (error) => {
                 this.initialLoading = false;
@@ -607,19 +627,16 @@ export class ResourcesListComponent implements OnInit {
     private getDefaultSearchPayload(count?: any) {
         const expriencePayload = this.getExperiencePayload();
         return {
-            technology:
+            project: this.projects?.value ? [this.projects.value] : null,
+            technolgy:
                 this.selectedTechnologiesForSearch?.length > 0
                     ? this.selectedTechnologiesForSearch
-                    : [],
+                    : null,
+            shadow: this.isShadow,
+            bench: this.isBench,
+            vendors: this.showVendorsOnly,
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,
-            projects: this.projects?.value ? [this.projects.value] : [],
-            perPageData: this.count,
-            totalPerPageData: this.totalPerPageData,
-            name: this.searchValue,
-            bench: this.isBench,
-            shadow: this.isShadow,
-            vendor: this.showVendorsOnly,
         };
     }
 
@@ -731,7 +748,7 @@ export class ResourcesListComponent implements OnInit {
             (res: any) => {
                 this.snackBar.successSnackBar(res?.message);
                 const payload = this.getDefaultSearchPayload();
-                payload.perPageData = 1;
+                // payload.perPageData = 1;
                 this.resources = [];
                 this.count = 1;
                 this.getList(payload);

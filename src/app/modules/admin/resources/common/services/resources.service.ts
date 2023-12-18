@@ -7,7 +7,7 @@ import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 })
 export class ResourcesService {
     csvDownloadTempletUrl = AppConstants['CSV_TEMPLATE_URL'];
-    getEmails = AppConstants['PROJECT_API_URL'] + '/emails';
+    getEmails = API_LIST.RESOURCE_SPRING_BOOT_URL + '/emails';
     uploadCsvUrl = AppConstants['PROJECT_API_URL'];
     csvPreSignedUrl = AppConstants['PROJECT_API_URL'] + '/upload-resources-csv';
     csvBulkUploadUrl =

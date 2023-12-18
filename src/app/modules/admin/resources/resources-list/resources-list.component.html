@@ -26,23 +26,23 @@
                                     class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
                                 >
                                     <mat-icon
-                                        [svgIcon]="'heroicons_solid:search'"
                                         class="icon-size-5"
                                         matPrefix
+                                        [svgIcon]="'heroicons_solid:search'"
                                     ></mat-icon>
                                     <input
-                                        [autocomplete]="'off'"
-                                        [placeholder]="'Search by name'"
                                         matInput
-                                        [formControl]="resourceSearchInput"
+                                        [autocomplete]="'off'"
+                                        #searchInputField
+                                        [formControl]="searchControl"
+                                        [placeholder]="'Search by project name'"
                                     />
-
                                     <mat-icon
-                                        *ngIf="resourceSearchInput.value"
+                                        *ngIf="searchControl?.value"
                                         class="icon-size-5 cursor-pointer"
                                         matSuffix
                                         [svgIcon]="'heroicons_solid:x'"
-                                        (click)="clearSearch()"
+                                        (click)="searchControl?.reset()"
                                     ></mat-icon>
                                 </mat-form-field>
                             </div>
@@ -119,7 +119,6 @@
                                                     #chipList
                                                     aria-label="Fruit selection"
                                                     class="ml-[0px]"
-                                                    
                                                 >
                                                     <mat-chip
                                                         *ngFor="
@@ -129,7 +128,7 @@
                                                     >
                                                         {{ tech }}
                                                         <button matChipRemove>
-                                                            <mat-icon 
+                                                            <mat-icon
                                                                 >cancel</mat-icon
                                                             >
                                                         </button>
@@ -321,13 +320,22 @@
                                                 <section class="w-full">
                                                     <mat-checkbox
                                                         (change)="
-                                                            showOnlyVendors($event)
+                                                            showOnlyVendors(
+                                                                $event
+                                                            )
                                                         "
-                                                        [checked]="showVendorsOnly"
-                                                        [disabled]="selectedProject && isBench && isShadow "
+                                                        [checked]="
+                                                            showVendorsOnly
+                                                        "
+                                                        [disabled]="
+                                                            selectedProject &&
+                                                            isBench &&
+                                                            isShadow
+                                                        "
                                                         [color]="'primary'"
                                                         class="example-margin"
-                                                        >Show vendors only</mat-checkbox
+                                                        >Show vendors
+                                                        only</mat-checkbox
                                                     >
                                                 </section>
                                             </div>
@@ -402,14 +410,19 @@
                                             class="ml-2"
                                             mat-flat-button
                                             (click)="openDialog('ADD', null)"
-                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
+                                            *ngIf="
+                                                userRole === 'ADMIN' ||
+                                                userRole === 'HR'
+                                            "
                                         >
                                             <mat-icon
-                                            [svgIcon]="'heroicons_outline:plus'"
+                                                [svgIcon]="
+                                                    'heroicons_outline:plus'
+                                                "
                                             ></mat-icon>
-                                                <span class="ml-2 mr-1"
-                                                    >Invite</span
-                                                >
+                                            <span class="ml-2 mr-1"
+                                                >Invite</span
+                                            >
                                         </button>
                                     </div>
 
@@ -418,9 +431,12 @@
                                             [color]="'primary'"
                                             [matTooltip]="'Onboard Resource'"
                                             class="ml-2"
-                                            mat-stroked-button 
+                                            mat-stroked-button
                                             (click)="gotoOnboardResource()"
-                                            *ngIf="userRole === 'ADMIN' || userRole === 'HR'"
+                                            *ngIf="
+                                                userRole === 'ADMIN' ||
+                                                userRole === 'HR'
+                                            "
                                         >
                                             <span class="ml-2 mr-1"
                                                 >Requests</span
@@ -464,14 +480,7 @@
                     <!-- Main -->
                     <div class="flex flex-auto overflow-hidden">
                         <!-- Resources list -->
-                        <div
-                            infiniteScroll
-                            [infiniteScrollDistance]="2"
-                            [infiniteScrollThrottle]="50"
-                            [scrollWindow]="false"
-                            (scrolled)="handleScroll()"
-                            class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
-                            infiniteScroll
+                        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
                         >
                             <div
                                 class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
@@ -479,7 +488,9 @@
                             >
                                 <div></div>
                                 <div>Name</div>
-                                <div class="hidden lg:block">Reporting Manager</div>
+                                <div class="hidden lg:block">
+                                    Reporting Manager
+                                </div>
                                 <div class="hidden sm:block">Technology</div>
                                 <div class="hidden lg:block">
                                     Active Projects
@@ -488,12 +499,10 @@
                                 <div class="hidden sm:block">Experience</div>
                                 <div *ngIf="userRole === 'ADMIN'">Action</div>
                             </div>
-                            <ng-container
-                                *ngIf="!initialLoading && totalRecored > 0"
-                            >
-                                <div *ngIf="totalRecored > 0" class="grid">
+                            <ng-container>
+                                <div *ngIf="resources?.length > 0" class="grid">
                                     <ng-container
-                                        *ngFor="let resources of resources"
+                                        *ngFor="let resource of resources"
                                     >
                                         <div
                                             class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
@@ -501,28 +510,28 @@
                                             <div
                                                 class="flex items-center cursor-pointer"
                                                 (click)="
-                                                    viewResource(resources?.id)
+                                                    viewResource(resource?.id)
                                                 "
                                             >
                                                 <ng-container
-                                                    *ngIf="resources['image']"
+                                                    *ngIf="resource['image']"
                                                 >
                                                     <img
                                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border object-cover"
                                                         [src]="
-                                                            resources['image']
+                                                            resource['image']
                                                         "
                                                         alt="Contact avatar"
                                                     />
                                                 </ng-container>
                                                 <ng-container
-                                                    *ngIf="!resources['image']"
+                                                    *ngIf="!resource['image']"
                                                 >
                                                     <div
                                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded-full overflow-hidden border text-lg uppercase bg-gray-200 text-gray-600"
                                                     >
                                                         {{
-                                                            resources?.firstname?.charAt(
+                                                            resource?.firstName?.charAt(
                                                                 0
                                                             )
                                                         }}
@@ -532,7 +541,7 @@
                                             <div
                                                 class="cursor-pointer"
                                                 (click)="
-                                                    viewResource(resources.id)
+                                                    viewResource(resource.id)
                                                 "
                                             >
                                                 <div
@@ -541,34 +550,40 @@
                                                         'hover:text-primary-900 font-medium dark:hover:bg-hover':
                                                             !selectedContact ||
                                                             selectedContact.id !==
-                                                                resources.id,
+                                                                resource.id,
                                                         'bg-primary-50 dark:bg-hover':
                                                             selectedContact &&
                                                             selectedContact?.id ===
-                                                                resources?.id
+                                                                resource?.id
                                                     }"
                                                 >
-                                                    {{ resources?.firstname }}
-                                                    {{ resources?.lastname }}
+                                                    {{ resource?.firstName }}
+                                                    {{ resource?.lastName }}
                                                 </div>
                                                 <div class="truncate">
-                                                    {{ resources?.email }}
+                                                    {{ resource?.email }}
                                                 </div>
                                             </div>
                                             <div class="hidden sm:block">
-                                                {{ resources?.mentorData?.firstName || "-"}}
-                                                {{ resources?.mentorData?.lastName}}
+                                                {{
+                                                    resource?.mentor
+                                                        ?.firstName || "-"
+                                                }}
+                                                {{
+                                                    resource?.mentor
+                                                        ?.lastName
+                                                }}
                                             </div>
                                             <div
                                                 class="grid-flow-row sm:flex truncate cursor-pointer"
                                             >
                                                 <div
                                                     [matTooltip]="
-                                                        resources?.technologies
+                                                        resource?.technologies
                                                     "
                                                 >
                                                     {{
-                                                        resources?.technologies ||
+                                                        resource?.technologies ||
                                                             "-"
                                                     }}
                                                 </div>
@@ -577,35 +592,38 @@
                                             <div
                                                 class="hidden lg:block truncate"
                                                 [matTooltip]="
-                                                    resources?.projects
+                                                    resource?.projects
                                                 "
                                             >
-                                                {{ resources?.projects || "-" }}
+                                                {{
+                                                    resource?.mbProjects || "-"
+                                                }}
                                             </div>
                                             <!-- <div class="hidden sm:block">
-                                                {{ resources?.role }}
+                                                {{ resource?.role }}
                                             </div> -->
 
                                             <div
                                                 class="hidden md:flex items-center"
                                             >
                                                 {{
-                                                    resources?.careerstartdate
+                                                    resource?.careerStartDate
                                                         | diffDate
                                                 }}
                                             </div>
 
-                                            <div class="md:block" *ngIf="userRole === 'ADMIN'">
+                                            <div
+                                                class="md:block"
+                                                *ngIf="userRole === 'ADMIN'"
+                                            >
                                                 <mat-icon
-                                                    *ngIf="!resources?.vendor"
+                                                    *ngIf="!resource?.vendor"
                                                     [matTooltip]="
                                                         'Edit Resource'
                                                     "
                                                     class="text-gray-400 icon-size-5 cursor-pointer mr-4"
                                                     svgIcon="heroicons_outline:pencil"
-                                                    (click)="
-                                                        edit(resources?.id)
-                                                    "
+                                                    (click)="edit(resource?.id)"
                                                 ></mat-icon>
                                                 <mat-icon
                                                     [matTooltip]="
@@ -615,10 +633,8 @@
                                                     svgIcon="heroicons_outline:trash"
                                                     (click)="
                                                         deleteResource(
-                                                            resources?.id,
-                                                            resources[
-                                                                'projects'
-                                                            ]
+                                                            resource?.id,
+                                                            resource['projects']
                                                         )
                                                     "
                                                 ></mat-icon>
@@ -628,7 +644,9 @@
                                 </div>
                             </ng-container>
                             <ng-container
-                                *ngIf="!initialLoading && totalRecored == 0"
+                                *ngIf="
+                                    !initialLoading && resources?.length === 0
+                                "
                             >
                                 <div
                                     class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
