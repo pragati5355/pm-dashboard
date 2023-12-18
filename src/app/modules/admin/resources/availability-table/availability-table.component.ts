@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { ResourcesService } from '../common/services/resources.service';
 
 export interface TableElement {
     name: string;
@@ -13,30 +14,47 @@ export interface TableElement {
     profile: string;
 }
 
-const ELEMENT_DATA: TableElement[] = [
+export interface TableInterface {
+    name?: string;
+    technicalSkill?: string;
+    capacity?: number;
+    availableFrom?: string;
+    availableFromString?: string;
+    experience?: string;
+    profileUrl?: string;
+    resourceId?: number;
+    style?: string;
+    cellData?: any;
+    careerStartDate?: string;
+}
+
+const ELEMENT_DATA: TableInterface[] = [
     {
-        name: 'Rohan kadam',
-        skills: 'iOS (Swift),Javascript,Typescript,React Native',
+        name: 'rohan kadam',
+        technicalSkill: 'HTML,css',
         capacity: 0.25,
-        available: '01/12/2023 05:49:30',
-        experience: '5 years 9 months',
-        profile: 'https://dashboard.dev.mindbowser.com/resources/view/3',
+        availableFromString: '18-12-2023',
+        experience: '1 years 10 months',
+        profileUrl: 'https://dashboard.dev.mindbowser.com/resources/view/21',
+        resourceId: 1,
     },
     {
-        name: 'Shaikh Mohammad Affan Shamim Haider',
-        skills: 'Javascript,Typescript,Material UI,HTML,CSS/SCSS,Python/Django,GraphQL,MySQL,Postgresql,ReactJS',
+        name: 'Anish Patil',
+        technicalSkill: 'Android (Java),Android (Kotlin),React Native',
         capacity: 0.5,
-        available: '18/12/2023 05:49:30',
-        experience: '5 years 9 months',
-        profile: 'https://dashboard.dev.mindbowser.com/resources/view/3',
+        availableFromString: '18-08-2023',
+        experience: '2 years 10 months',
+        profileUrl: 'https://dashboard.dev.mindbowser.com/resources/view/21',
+        resourceId: 2,
     },
     {
-        name: 'Rohan Shrivastava',
-        skills: 'Springboot,Java,Postgresql,MySQL,GraphQL,Redis,JUnit,ReactJS',
-        capacity: 1,
-        available: '18/09/2023 05:49:30',
-        experience: '1 years 9 months',
-        profile: 'https://dashboard.dev.mindbowser.com/resources/view/3',
+        name: 'Ketulkumar Thakor',
+        technicalSkill: 'Kubernates,Shell Script,AWS,Docker,Jenkins,Terraform',
+        capacity: 0.1,
+        availableFromString: '01-03-2023',
+        experience: '5 years 10 months',
+        profileUrl: 'https://dashboard.dev.mindbowser.com/resources/view/21',
+        resourceId: 3,
     },
 ];
 
@@ -49,21 +67,28 @@ export class AvailabilityTableComponent implements OnInit {
     resourceId: string | number;
     displayedColumns: string[] = [
         'name',
-        'skills',
+        'technicalSkill',
         'capacity',
-        'available',
+        'availableFromString',
         'experience',
-        'profile',
+        'profileUrl',
     ];
     dataSource = new MatTableDataSource(ELEMENT_DATA);
     @ViewChild(MatSort) sort: MatSort;
 
     constructor(
         private _liveAnnouncer: LiveAnnouncer,
-        private router: Router
+        private router: Router,
+        private resourceService: ResourcesService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        // this.resourceService.getAvailabilityData().subscribe((res: any) => {
+        //     if (res?.data) {
+        //         this.dataSource = new MatTableDataSource(res?.data);
+        //     }
+        // });
+    }
 
     ngAfterViewInit() {
         this.dataSource.sort = this.sort;
@@ -89,9 +114,9 @@ export class AvailabilityTableComponent implements OnInit {
     goBack() {
         this.router.navigate(['/resources']);
     }
-    viewResourceProfile(url: string) {
-        if (url) {
-            this.router.navigate(['http://localhost:8080/resources/view/1']);
+    viewResourceProfile(resourceId: string) {
+        if (resourceId) {
+            this.router.navigate([`/resources/view/${resourceId}`]);
         }
     }
 }
