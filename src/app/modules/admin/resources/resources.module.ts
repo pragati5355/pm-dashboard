@@ -47,9 +47,6 @@ import { ResourceInviteFormComponent } from './resource-invite-form/resource-inv
 import { OneToOneFormsComponent } from './one-to-one-forms/one-to-one-forms.component';
 import { ViewOneToOneFormComponent } from './view-one-to-one-form/view-one-to-one-form.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
-import { ResourceUtilizationComponent } from './resource-utilization/resource-utilization.component';
-import { ResourceAvailablityComponent } from './resource-availablity/resource-availablity.component';
-
 @NgModule({
     declarations: [
         ResourcesHomeComponent,
@@ -68,8 +65,6 @@ import { ResourceAvailablityComponent } from './resource-availablity/resource-av
         ResourceInviteFormComponent,
         OneToOneFormsComponent,
         ViewOneToOneFormComponent,
-        ResourceUtilizationComponent,
-        ResourceAvailablityComponent,
     ],
     imports: [
         CommonModule,
