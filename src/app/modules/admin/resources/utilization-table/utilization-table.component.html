@@ -1,13 +1,36 @@
 <div class="px-10 w-full">
-    <mat-form-field appearance="standard">
-        <mat-label>Search</mat-label>
-        <input
-            matInput
-            (keyup)="applyFilter($event)"
-            placeholder="Enter resource name"
-            #input
-        />
-    </mat-form-field>
+    <div class="flex items-center w-full my-5">
+        <div class="flex items-center -ml-2 w-full">
+            <div
+                class="flex items-center justify-between text-3xl font-semibold cursor-pointer"
+                (click)="goBack()"
+            >
+                <mat-icon
+                    class="icon-size-6 text-sm text-black"
+                    [svgIcon]="'heroicons_outline:chevron-left'"
+                ></mat-icon>
+            </div>
+
+            <div class="flex w-full items-center ml-2">
+                <mat-form-field
+                    class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
+                >
+                    <mat-icon
+                        class="icon-size-5"
+                        matPrefix
+                        [svgIcon]="'heroicons_solid:search'"
+                    ></mat-icon>
+                    <input
+                        matInput
+                        (keyup)="applyFilter($event)"
+                        placeholder="Search resource"
+                        #input
+                    />
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
     <table
         mat-table
         [dataSource]="dataSource"

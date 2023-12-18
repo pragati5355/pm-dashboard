@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { Router } from '@angular/router';
 
 export interface TableElement {
     resource: string;
@@ -72,7 +73,10 @@ export class UtilizationTableComponent implements OnInit, AfterViewInit {
     dataSource = new MatTableDataSource(ELEMENT_DATA);
     @ViewChild(MatSort) sort: MatSort;
 
-    constructor(private _liveAnnouncer: LiveAnnouncer) {}
+    constructor(
+        private _liveAnnouncer: LiveAnnouncer,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {}
 
@@ -95,5 +99,9 @@ export class UtilizationTableComponent implements OnInit, AfterViewInit {
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
+    }
+
+    goBack() {
+        this.router.navigate(['/resources']);
     }
 }
