@@ -22,30 +22,7 @@ const ELEMENT_DATA: TableElement[] = [
         end: '12/12/2024',
         shadow: 'Yes',
     },
-    {
-        resource: 'Amaresh joshi',
-        project: 'Healthlink',
-        utilization: 1,
-        start: '21/08/2023',
-        end: '12/07/2024',
-        shadow: 'NO',
-    },
-    {
-        resource: 'Rohan kadam',
-        project: 'Healthlink',
-        utilization: 0.5,
-        start: '21/09/2023',
-        end: '15/09/2024',
-        shadow: 'NO',
-    },
-    {
-        resource: 'Pragati gawade',
-        project: 'TTA',
-        utilization: 0.2,
-        start: '21/04/2023',
-        end: '15/09/2023',
-        shadow: 'NO',
-    },
+
     {
         resource: 'Pranita jadhav',
         project: 'Core',
@@ -53,6 +30,14 @@ const ELEMENT_DATA: TableElement[] = [
         start: '11/06/2023',
         end: '01/09/2023',
         shadow: 'Yes',
+    },
+    {
+        resource: 'Suhail Chand',
+        project: 'Courtyardly',
+        utilization: 1.0,
+        start: '2023-08-27T18:30:00.000+00:00',
+        end: '2023-11-26T18:30:00.000+00:00',
+        shadow: 'No',
     },
 ];
 @Component({

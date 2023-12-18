@@ -75,4 +75,9 @@ export class ResourcesService {
             API_LIST.SPRING_BOOT_URL + '/resource/availability'
         );
     }
+    getUtilizationData() {
+        return this.http.get(
+            API_LIST.SPRING_BOOT_URL + '/resource/utilization'
+        );
+    }
 }
