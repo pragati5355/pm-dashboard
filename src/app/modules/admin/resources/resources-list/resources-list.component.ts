@@ -227,6 +227,14 @@ export class ResourcesListComponent implements OnInit {
         this.router.navigate(['/resources/onboard']);
     }
 
+    gotoResourceUtilization(){
+        this.router.navigate(['/resources/utilization']);
+    }
+
+    gotoResourceAvailablity(){
+        this.router.navigate(['/resources/availability']);
+    }
+
     getList(searchPayload?: any) {
         if (!searchPayload) {
             searchPayload = this.getDefaultSearchPayload();

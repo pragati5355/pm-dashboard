@@ -426,7 +426,7 @@
                                         </button>
                                     </div>
 
-                                    <div class="">
+                                    <!-- <div class="">
                                         <button
                                             [color]="'primary'"
                                             [matTooltip]="'Onboard Resource'"
@@ -442,6 +442,30 @@
                                                 >Requests</span
                                             >
                                         </button>
+                                    </div>     -->
+                                    
+                                    <div
+                                        class="inline-block"
+                                        *ngIf="userRole === 'ADMIN' || userRole === 'PM'"
+                                    >
+                                        <button
+                                            mat-icon-button
+                                            [matMenuTriggerFor]="menu"
+                                            aria-label="Example icon-button with a menu"
+                                        >
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item  (click)="gotoOnboardResource()">
+                                                <span>Requests</span>
+                                            </button>
+                                        <button mat-menu-item (click)="gotoResourceUtilization()">
+                                                <span>Resource Utilization</span>
+                                        </button>
+                                        <button mat-menu-item (click)="gotoResourceAvailablity()">
+                                                <span>Resource Availablity</span>
+                                        </button>
+                                        </mat-menu>
                                     </div>
                                 </div>
                             </div>
