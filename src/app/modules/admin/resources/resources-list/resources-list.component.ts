@@ -116,6 +116,8 @@ export class ResourcesListComponent implements OnInit {
         'Strawberry',
     ];
     userRole: string = '';
+    searchControl = new FormControl();
+    filterSearchResource : any = [];
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
@@ -210,6 +212,7 @@ export class ResourcesListComponent implements OnInit {
         this.initializeForms();
         this.addRequiredSubscriptions();
         this.getUserRole();
+        this.addSearchListener() 
     }
 
     get exprienceValidForm(): { [key: string]: AbstractControl } {
@@ -231,16 +234,31 @@ export class ResourcesListComponent implements OnInit {
         this.initialLoading = true;
         this.projectService.getResourceMember(searchPayload).subscribe(
             (res: any) => {
+                this.initialLoading = false;
                 this.resources = res?.data;
-                console.log('resources: ', this.resources);
+                this.filterSearchResource = res?.data;
                 // this.handleGetResourceMemberResponse(res);
-                // this.checkForLargerScreen();
+                this.checkForLargerScreen();
             },
             (error) => {
-                this.totalRecored = 0;
                 this.initialLoading = false;
             }
         );
+    }
+
+    addSearchListener() {
+        this.searchControl?.valueChanges.subscribe((searchKey: string) => {
+            searchKey = searchKey?.trim()?.toLowerCase();
+            if (searchKey) {
+                this.resources = this.resources.filter((resource) =>
+                    resource?.firstName?.toLowerCase()?.includes(searchKey) +
+                    resource?.lastName?.toLowerCase()?.includes(searchKey)
+                );
+            } else {
+                this.resources = [];
+                this.getList();
+            }
+        });
     }
 
     showFilter() {
@@ -331,28 +349,29 @@ export class ResourcesListComponent implements OnInit {
         }
     }
 
-    // handleScroll() {
-    //     if (!this.pagination && this.resources.length < this.totalRecored) {
-    //         this.count = this.count + this.totalPerPageData;
-    //         const expriencePayload = this.getExperiencePayload();
-    //         const payload = this.getDefaultSearchPayload(this.count);
-    //         this.pagination = true;
-    //         this.projectService.getResourceMember(payload).subscribe(
-    //             (res: any) => {
-    //                 this.pagination = false;
-    //                 if (res?.data) {
-    //                     this.resources = [
-    //                         ...this.resources,
-    //                         ...res?.data?.teamMember,
-    //                     ];
-    //                 }
-    //             },
-    //             (err: any) => {
-    //                 this.pagination = false;
-    //             }
-    //         );
-    //     }
-    // }
+    handleScroll() {
+        const totalcount = this.count * this.totalPerPageData;
+        if (!this.pagination && this.resources.length < this.totalRecored) {
+            this.count = this.count + this.totalPerPageData;
+            const expriencePayload = this.getExperiencePayload();
+            const payload = this.getDefaultSearchPayload();
+            this.pagination = true;
+            this.projectService.getResourceMember(payload).subscribe({
+                next: (res:any)=> {
+                    this.pagination = false;
+                    if (res) {
+                        this.filterSearchResource = [
+                            ...this.filterSearchResource,
+                            ...res.data,
+                        ];
+                    }
+                },
+                error : (err : any)=> {
+                    this.pagination = false;
+                }
+            });
+        }
+    }
 
     selectChange() {
         this.count = 1;
@@ -610,7 +629,6 @@ export class ResourcesListComponent implements OnInit {
             vendors: this.showVendorsOnly,
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,
-            name: this.searchValue,
         };
     }
 
@@ -739,7 +757,7 @@ export class ResourcesListComponent implements OnInit {
             .pipe(take(1))
             .subscribe((state: BreakpointState) => {
                 if (state.matches) {
-                    // this.handleScroll();
+                    this.handleScroll();
                 }
             });
     }

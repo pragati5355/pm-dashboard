@@ -26,23 +26,23 @@
                                     class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
                                 >
                                     <mat-icon
-                                        [svgIcon]="'heroicons_solid:search'"
                                         class="icon-size-5"
                                         matPrefix
+                                        [svgIcon]="'heroicons_solid:search'"
                                     ></mat-icon>
                                     <input
-                                        [autocomplete]="'off'"
-                                        [placeholder]="'Search by name'"
                                         matInput
-                                        [formControl]="resourceSearchInput"
+                                        [autocomplete]="'off'"
+                                        #searchInputField
+                                        [formControl]="searchControl"
+                                        [placeholder]="'Search by project name'"
                                     />
-
                                     <mat-icon
-                                        *ngIf="resourceSearchInput.value"
+                                        *ngIf="searchControl?.value"
                                         class="icon-size-5 cursor-pointer"
                                         matSuffix
                                         [svgIcon]="'heroicons_solid:x'"
-                                        (click)="clearSearch()"
+                                        (click)="searchControl?.reset()"
                                     ></mat-icon>
                                 </mat-form-field>
                             </div>
@@ -456,8 +456,7 @@
                     <!-- Main -->
                     <div class="flex flex-auto overflow-hidden">
                         <!-- Resources list -->
-                        <div
-                            class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
+                        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
                         >
                             <div
                                 class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
