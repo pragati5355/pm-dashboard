@@ -94,9 +94,7 @@ export class CreateProjecteService {
         );
     }
     getProjectListWithoutPagination() {
-        return this.http.get(
-            AppConstants['GET_PROJECTS_LIST_WITHOUTPAGINATION']
-        );
+        return this.http.get(API_LIST.RESOURCE_SPRING_BOOT_URL +'/project-list');
     }
     getSprintProgress(obj: any) {
         return this.http.post(AppConstants['SPRINT_PROGRESS'], obj);
