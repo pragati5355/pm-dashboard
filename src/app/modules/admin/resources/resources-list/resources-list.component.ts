@@ -229,7 +229,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     gotoResourceAvailablity(){
-        this.router.navigate(['/resources/availablity']);
+        this.router.navigate(['/resources/availability']);
     }
 
     getList(searchPayload?: any) {
