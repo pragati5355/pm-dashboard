@@ -608,19 +608,9 @@ export class ResourcesListComponent implements OnInit {
             shadow: this.isShadow,
             bench: this.isBench,
             vendors: this.showVendorsOnly,
-            // technology:
-            //     this.selectedTechnologiesForSearch?.length > 0
-            //         ? this.selectedTechnologiesForSearch
-            //         : [],
-            // minExp: expriencePayload?.minExp,
-            // maxExp: expriencePayload?.maxExp,
-            // projects: this.projects?.value ? [this.projects.value] : [],
-            // perPageData: this.count,
-            // totalPerPageData: this.totalPerPageData,
-            // name: this.searchValue,
-            // bench: this.isBench,
-            // shadow: this.isShadow,
-            // vendor: this.showVendorsOnly,
+            minExp: expriencePayload?.minExp,
+            maxExp: expriencePayload?.maxExp,
+            name: this.searchValue,
         };
     }
 
