@@ -154,16 +154,18 @@ export class ResourcesListComponent implements OnInit {
 
     add(event: MatChipInputEvent): void {
         const value = (event.value || '').trim();
-
+        console.log("value : ", value);
         // Add our fruit
         if (value) {
             this.selectedTechnology.push(value);
         }
 
+        console.log("event.chipInput : ", event.chipInput);
         // Clear the input value
         event.chipInput!.clear();
-
+        console.log("event.chipInput clear: ",  event.chipInput!.clear());
         this.technologyCtrl.setValue(null);
+        console.log("this.technologyCtrl : ", this.technologyCtrl);
     }
 
     remove(fruit: string): void {
@@ -190,8 +192,10 @@ export class ResourcesListComponent implements OnInit {
 
     selected(event: MatAutocompleteSelectedEvent): void {
         this.selectedTechnology.push(event.option.value.name);
+        console.log("this.selectedTechnology : ", this.selectedTechnology);
         this.fruitInput.nativeElement.value = '';
         this.technologyCtrl.setValue(null);
+        console.log("this.technologyCtrl : ", this.technologyCtrl);
         this.selectedTechnologiesForSearch?.push(event.option.value.id);
 
         this.count = 1;
@@ -367,6 +371,7 @@ export class ResourcesListComponent implements OnInit {
         this.isShadowIsBench.enable();
         this.technologyCtrl?.enable();
         this.selectedTechnologiesForSearch = [];
+        this.selectedReportingManagerForSearch = [];
         this.selectedTechnology = [];
         this.getList();
     }
@@ -409,6 +414,7 @@ export class ResourcesListComponent implements OnInit {
             this.initialLoading = true;
             this.technologys.disable();
             this.selectedTechnologiesForSearch = [];
+            this.selectedReportingManagerForSearch = [];
             this.selectedTechnology = [];
             const payload = this.getDefaultSearchPayload();
             this.loadDataWithFilterPayload(payload);
@@ -425,6 +431,7 @@ export class ResourcesListComponent implements OnInit {
             this.pagination = false;
             this.technologyCtrl?.enable();
             this.selectedTechnologiesForSearch = [];
+            this.selectedReportingManagerForSearch = [];
             this.selectedTechnology = [];
             this.getList();
         }
@@ -742,7 +749,7 @@ export class ResourcesListComponent implements OnInit {
             vendors: this.showVendorsOnly,
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,
-            mentor : this.reportingManager?.value ? [this.reportingManager.value] : null,
+            mentor : this.selectedReportingManagerForSearch?.length > 0 ? [this.selectedReportingManagerForSearch] : null,
         };
     }
 
