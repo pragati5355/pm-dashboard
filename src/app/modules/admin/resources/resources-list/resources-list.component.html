@@ -567,11 +567,7 @@
                                             <div class="hidden sm:block">
                                                 {{
                                                     resource?.mentor
-                                                        ?.firstName || "-"
-                                                }}
-                                                {{
-                                                    resource?.mentor
-                                                        ?.lastName
+                                                        ?.name || "-"
                                                 }}
                                             </div>
                                             <div
@@ -579,11 +575,11 @@
                                             >
                                                 <div
                                                     [matTooltip]="
-                                                        resource?.technologies
+                                                        resource?.techSkills
                                                     "
                                                 >
                                                     {{
-                                                        resource?.technologies ||
+                                                        resource?.techSkills ||
                                                             "-"
                                                     }}
                                                 </div>
