@@ -51,6 +51,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LoggedInUserService } from '@modules/admin/common/services/logged-in-user.service';
 import { ResourceInviteFormComponent } from '../resource-invite-form/resource-invite-form.component';
+import { ResourcesService } from '../common/services/resources.service';
 @Component({
     selector: 'app-resources-list',
     templateUrl: './resources-list.component.html',
@@ -72,6 +73,7 @@ export class ResourcesListComponent implements OnInit {
     configFormAssignedProject!: FormGroup;
     technologys = new FormControl('');
     projects = new FormControl('');
+    reportingManager = new FormControl('');
     isShadowIsBench = new FormControl('');
     techName: any = null;
     technologyList: any = [];
@@ -97,17 +99,22 @@ export class ResourcesListComponent implements OnInit {
     };
     showTechnologies: any[];
     selectedProject: boolean = false;
+    selectedReportingManager : boolean = false;
     isBench: boolean = false;
     isShadow: boolean = false;
     showFilterArea: boolean = false;
     showVendorsOnly: boolean = false;
     hideTechnologyField: boolean = false;
+    hideReportingManagerField : boolean = false;
     selectedTechnologiesForSearch: any[] = [];
+    selectedReportingManagerForSearch : any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     separatorKeysCodes: number[] = [ENTER, COMMA];
     technologyCtrl = new FormControl();
     filteredTechnology: Observable<any[]>;
+    filteredReportingManager : Observable<any[]>;
     selectedTechnology: any[] = [];
+    selectedManager : any[] = [];
     allTechnologyList: any[] = [
         'Apple',
         'Lemon',
@@ -118,6 +125,7 @@ export class ResourcesListComponent implements OnInit {
     userRole: string = '';
     searchControl = new FormControl();
     filterSearchResource : any = [];
+    emailList : any = [];
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
@@ -133,7 +141,8 @@ export class ResourcesListComponent implements OnInit {
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         public breakpointObserver: BreakpointObserver,
         private matDialog: MatDialog,
-        private loggedInUserService: LoggedInUserService
+        private loggedInUserService: LoggedInUserService,
+        private resourceService: ResourcesService
     ) {
         this.filteredTechnology = this.technologyCtrl.valueChanges.pipe(
             startWith(null),
@@ -199,6 +208,61 @@ export class ResourcesListComponent implements OnInit {
         );
     }
 
+    addManager(event: MatChipInputEvent): void {
+        const value = (event.value || '').trim();
+
+        // Add our fruit
+        if (value) {
+            this.selectedManager.push(value);
+        }
+        // Clear the input value
+        event.chipInput!.clear();
+
+        this.reportingManager.setValue(null);
+    }
+
+    selectManager(event: MatAutocompleteSelectedEvent): void {
+        this.selectedManager.push(event.option.value.firstName + ' ' + event.option.value.lastName);
+        this.fruitInput.nativeElement.value = '';
+        this.reportingManager.setValue(null);
+        this.selectedReportingManagerForSearch?.push(event.option.value.id);
+
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
+    removeManager(fruit: string): void {
+        const index = this.selectedManager.indexOf(fruit);
+
+        if (index >= 0) {
+            this.selectedManager.splice(index, 1);
+            this.selectedReportingManagerForSearch.splice(index, 1);
+        }
+
+        this.count = 1;
+        this.pagination = false;
+        const payload = this.getDefaultSearchPayload();
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
     private _filter(value: string): string[] {
         const filterValue = value;
 
@@ -240,6 +304,7 @@ export class ResourcesListComponent implements OnInit {
             searchPayload = this.getDefaultSearchPayload();
         }
         this.initialLoading = true;
+        console.log("searchPayload : ", searchPayload);
         this.projectService.getResourceMember(searchPayload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
@@ -288,12 +353,16 @@ export class ResourcesListComponent implements OnInit {
         this.totalPerPageData = 10;
         this.projects?.enable();
         this.projects?.setValue('');
+        this.reportingManager?.enable();
+        this.reportingManager?.setValue('');
         this.showTechnologies = [];
         this.technologys.setValue('');
         this.isShadowIsBench.setValue('');
         this.pagination = false;
         this.selectedProject = false;
+        this.selectedReportingManager = false;
         this.hideTechnologyField = false;
+        this.hideReportingManagerField = false;
         this.exprienceForm.enable();
         this.isShadowIsBench.enable();
         this.technologyCtrl?.enable();
@@ -329,7 +398,9 @@ export class ResourcesListComponent implements OnInit {
         if (event?.checked) {
             this.showVendorsOnly = event?.checked;
             this.hideTechnologyField = true;
+            this.hideReportingManagerField = true;
             this.projects?.disable();
+            this.reportingManager?.disable();
             this.technologyCtrl?.disable();
             this.isShadowIsBench?.disable();
             this.exprienceForm?.disable();
@@ -344,10 +415,12 @@ export class ResourcesListComponent implements OnInit {
         } else {
             this.showVendorsOnly = event?.checked;
             this.hideTechnologyField = false;
+            this.hideReportingManagerField = false;
             this.exprienceForm.enable();
             this.count = 1;
             this.totalPerPageData = 10;
             this.projects?.enable();
+            this.reportingManager?.enable();
             this.isShadowIsBench.enable();
             this.pagination = false;
             this.technologyCtrl?.enable();
@@ -473,7 +546,7 @@ export class ResourcesListComponent implements OnInit {
         if (!this.exprienceForm.invalid) {
             this.minExprience = this.exprienceForm.value.minExprience;
             this.maxExprience = this.exprienceForm.value.maxExprience;
-            let payload = this.getDefaultSearchPayload(this.count);
+            let payload = this.getDefaultSearchPayload();
             this.projectService.getResourceMember(payload).subscribe(
                 (res: any) => {
                     this.handleGetResourceMemberResponse(res);
@@ -500,6 +573,16 @@ export class ResourcesListComponent implements OnInit {
             });
     }
 
+    getReportingManager(){
+        this.initialLoading = true;
+        this.resourceService.findAllDeveloperEmails().subscribe((res: any) => {
+            if (res?.data) {
+                this.initialLoading = false;
+                this.emailList = res?.data;
+            }
+        });
+    }
+
     uploadCsvDialog() {
         this.matDialog
             .open(ResourceUploadCsvComponent, {
@@ -520,7 +603,7 @@ export class ResourcesListComponent implements OnInit {
     selectChangeProject(event: any) {
         this.count = 1;
         this.pagination = false;
-        let payload = this.getDefaultSearchPayload(this.count);
+        let payload = this.getDefaultSearchPayload();
         this.selectedProject = true;
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
@@ -532,6 +615,21 @@ export class ResourcesListComponent implements OnInit {
             }
         );
     }
+
+    selectChangeReportingManager(event : any){
+        let payload = this.getDefaultSearchPayload();
+        this.selectedReportingManager = true;
+        this.projectService.getResourceMember(payload).subscribe(
+            (res: any) => {
+                this.handleGetResourceMemberResponse(res);
+                this.initialLoading = false;
+            },
+            (error) => {
+                this.initialLoading = false;
+            }
+        );
+    }
+
     resourceBenchShadow() {
         this.isBench = this.isShadowIsBench?.value?.includes(0);
         this.isShadow = this.isShadowIsBench?.value?.includes(1);
@@ -553,8 +651,15 @@ export class ResourcesListComponent implements OnInit {
     clearProjectSearch() {
         this.projects.setValue('');
         this.count = 1;
-        let payload = this.getDefaultSearchPayload(this.count);
+        let payload = this.getDefaultSearchPayload();
         this.selectedProject = false;
+        this.loadDataWithFilterPayload(payload);
+    }
+    clearReportingManagerSearch(){
+        this.reportingManager.setValue('');
+        this.count = 1;
+        let payload = this.getDefaultSearchPayload();
+        this.selectedReportingManager = false;
         this.loadDataWithFilterPayload(payload);
     }
     clearTechnologySearch() {
@@ -562,7 +667,7 @@ export class ResourcesListComponent implements OnInit {
         this.showTechnologies = [];
         this.technologys.setValue('');
         this.count = 1;
-        let payload = this.getDefaultSearchPayload(this.count);
+        let payload = this.getDefaultSearchPayload();
         this.loadDataWithFilterPayload(payload);
     }
 
@@ -637,6 +742,7 @@ export class ResourcesListComponent implements OnInit {
             vendors: this.showVendorsOnly,
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,
+            mentor : this.reportingManager?.value ? [this.reportingManager.value] : null,
         };
     }
 
@@ -662,6 +768,7 @@ export class ResourcesListComponent implements OnInit {
         this.getList();
         this.getTechnologies();
         this.getProjectList();
+        this.getReportingManager();
     }
 
     private addSearchValueChangeSubscription() {
