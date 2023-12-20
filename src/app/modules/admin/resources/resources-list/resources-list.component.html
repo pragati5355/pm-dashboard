@@ -664,26 +664,22 @@
                                             <div class="hidden sm:block">
                                                 {{
                                                     resource?.mentor
-                                                        ?.name || "-"
+                                                        ?.firstName || "-"
                                                 }}
+                                                {{ resource?.mentor?.lastName}}
                                             </div>
                                             <div
                                                 class="grid-flow-row sm:flex truncate cursor-pointer"
                                             >
-                                                <div
-                                                    [matTooltip]="
-                                                        resource?.techSkills
-                                                    "
+                                                <div  *ngFor="let technology of resource?.techSkills"
+                                                    [matTooltip]="technology"
                                                 >
-                                                    {{
-                                                        resource?.techSkills ||
-                                                            "-"
-                                                    }}
+                                                    {{technology ||"-"}}
                                                 </div>
                                             </div>
 
                                             <div
-                                                class="hidden lg:block truncate"
+                                                class="hidden lg:block truncate cursor-pointer"
                                                 [matTooltip]="
                                                     resource?.mbProjects
                                                 "
