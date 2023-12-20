@@ -212,6 +212,91 @@
                             </mat-form-field>
                         </div>
                     </div>
+
+                    <div class="flex flex-1 items-center">
+                        <div class="w-full flex flex-row">
+                            <!-- <label class="font-semibold mt-1"
+                                >Utilization *</label
+                            >
+                            <mat-radio-group
+                                aria-labelledby="example-radio-group-label"
+                                class="example-radio-group"
+                                formControlName="utilization"
+                            >
+                                <mat-radio-button
+                                    class="ml-4 example-radio-button"
+                                    [color]="'primary'"
+                                    *ngFor="let value of utilizationValues"
+                                    [disabled]="value > currentCapacity"
+                                    [value]="value"
+                                >
+                                    {{ value }}
+                                </mat-radio-button>
+                            </mat-radio-group> -->
+
+                            <mat-form-field class="w-full">
+                                <mat-label>Utilization</mat-label>
+                                <mat-select
+                                    formControlName="utilization"
+                                    name="food"
+                                >
+                                    <div class="">
+                                        <mat-option
+                                            *ngFor="
+                                                let utilization of newUtilizationValues
+                                            "
+                                            [value]="utilization?.value"
+                                            [disabled]="
+                                                utilization?.value >
+                                                currentCapacity
+                                            "
+                                        >
+                                            {{ utilization?.label }}
+                                        </mat-option>
+                                    </div>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="flex flex-col w-full mt-3 ml-6">
+                            <!-- <div class="mb-4 mr-8">
+                <mat-checkbox
+                    [color]="'primary'"
+                    [checked]="markResourceAsBench"
+                    (change)="resourceOnBench($event?.checked)"
+                    ><span class="font-semibold">On Bench</span></mat-checkbox
+                >
+            </div> -->
+
+                            <div class="mb-2">
+                                <mat-checkbox
+                                    [color]="'primary'"
+                                    [checked]="markResourceAsShadow"
+                                    (change)="shadowResource($event?.checked)"
+                                    ><span class="font-semibold"
+                                        >Shadow Resource</span
+                                    ></mat-checkbox
+                                >
+                            </div>
+
+                            <div class="mb-2">
+                                <mat-checkbox
+                                    [color]="'primary'"
+                                    [checked]="
+                                        markResourceAsApplicableForBilling
+                                    "
+                                    (change)="
+                                        notApplicableForBilling($event?.checked)
+                                    "
+                                    ><span class="font-semibold"
+                                        >Do not consider for
+                                        billing/worklog</span
+                                    ></mat-checkbox
+                                >
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="w-full flex mt-2">
                         <div class="w-full">
                             <mat-form-field
@@ -291,82 +376,6 @@
                                     </mat-chip-list>
                                 </div>
                             </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-1 items-center">
-                        <div class="w-full flex flex-row">
-                            <!-- <label class="font-semibold mt-1"
-                                >Utilization *</label
-                            >
-                            <mat-radio-group
-                                aria-labelledby="example-radio-group-label"
-                                class="example-radio-group"
-                                formControlName="utilization"
-                            >
-                                <mat-radio-button
-                                    class="ml-4 example-radio-button"
-                                    [color]="'primary'"
-                                    *ngFor="let value of utilizationValues"
-                                    [disabled]="value > currentCapacity"
-                                    [value]="value"
-                                >
-                                    {{ value }}
-                                </mat-radio-button>
-                            </mat-radio-group> -->
-
-                            <mat-form-field class="w-full">
-                                <mat-label>Utilization</mat-label>
-                                <mat-select
-                                    formControlName="utilization"
-                                    name="food"
-                                >
-                                    <mat-option
-                                        *ngFor="
-                                            let utilization of newUtilizationValues
-                                        "
-                                        [value]="utilization?.value"
-                                        [disabled]="
-                                            utilization?.value > currentCapacity
-                                        "
-                                    >
-                                        {{ utilization?.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="flex flex-col w-full mt-3 ml-6">
-                            <!-- <div class="mb-4 mr-8">
-                <mat-checkbox
-                    [color]="'primary'"
-                    [checked]="markResourceAsBench"
-                    (change)="resourceOnBench($event?.checked)"
-                    ><span class="font-semibold">On Bench</span></mat-checkbox
-                >
-            </div> -->
-
-                            <div class="mb-2">
-                                <mat-checkbox
-                                    [color]="'primary'"
-                                    [checked]="markResourceAsShadow"
-                                    (change)="shadowResource($event?.checked)"
-                                    ><span class="font-semibold"
-                                        >Shadow Resource</span
-                                    ></mat-checkbox
-                                >
-                            </div>
-
-                            <div class="mb-2">
-                                <mat-checkbox
-                                    [color]="'primary'"
-                                    [checked]="markResourceAsApplicableForBilling"
-                                    (change)="notApplicableForBilling($event?.checked)"
-                                    ><span class="font-semibold"
-                                        >Do not consider for billing/worklog</span
-                                    ></mat-checkbox
-                                >
-                            </div>
                         </div>
                     </div>
 
