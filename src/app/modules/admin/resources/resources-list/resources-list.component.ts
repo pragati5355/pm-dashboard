@@ -749,7 +749,7 @@ export class ResourcesListComponent implements OnInit {
             vendors: this.showVendorsOnly,
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,
-            mentor : this.selectedReportingManagerForSearch?.length > 0 ? [this.selectedReportingManagerForSearch] : null,
+            mentorId : this.selectedReportingManagerForSearch?.length > 0 ? [this.selectedReportingManagerForSearch] : null,
         };
     }
 
