@@ -31,90 +31,94 @@
         </div>
     </div>
 
-    <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-        (matSortChange)="announceSortChange($event)"
-        class="mat-elevation-z1"
-    >
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Resource name</th>
-            <td
-                mat-cell
-                *matCellDef="let element"
-                class="truncate max-w-[150px] pr-4"
-                [matTooltip]="element?.name"
-            >
-                {{ element?.name }}
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="technicalSkill">
-            <th
-                mat-header-cell
-                *matHeaderCellDef
-                class="truncate max-w-[200px]"
-            >
-                Technical Skills
-            </th>
-            <td
-                mat-cell
-                *matCellDef="let element"
-                class="truncate max-w-[200px] pr-4"
-                [matTooltip]="element?.technicalSkill"
-            >
-                {{ element?.technicalSkill }}
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="capacity">
-            <th
-                mat-header-cell
-                *matHeaderCellDef
-                mat-sort-header
-                sortActionDescription="Sort by capacity"
-            >
-                Capacity
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element?.capacity }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="availableFromString">
-            <th mat-header-cell *matHeaderCellDef>Available From</th>
-            <td mat-cell *matCellDef="let element">
-                {{ element?.availableFromString }}
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="experience">
-            <th mat-header-cell *matHeaderCellDef>Experience</th>
-            <td mat-cell *matCellDef="let element">
-                {{ element?.experience }}
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="profileUrl">
-            <th
-                mat-header-cell
-                *matHeaderCellDef
-                sortActionDescription="Sort by profileUrl"
-            >
-                Profile Link
-            </th>
-            <td mat-cell *matCellDef="let element">
-                <button
-                    [color]="'primary'"
-                    class="my-2"
-                    mat-flat-button
-                    (click)="viewResourceProfile(element?.resourceId)"
+    <div class="table-wrapper">
+        <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            (matSortChange)="announceSortChange($event)"
+            class="mat-elevation-z1"
+        >
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Resource name</th>
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    class="truncate max-w-[150px] pr-4"
+                    [matTooltip]="element?.name"
                 >
-                    <span>View profile</span>
-                </button>
-            </td>
-        </ng-container>
+                    {{ element?.name }}
+                </td>
+            </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+            <ng-container matColumnDef="technicalSkill">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    class="truncate max-w-[200px]"
+                >
+                    Technical Skills
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    class="truncate max-w-[200px] pr-4"
+                    [matTooltip]="element?.technicalSkill"
+                >
+                    {{ element?.technicalSkill }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="capacity">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by capacity"
+                >
+                    Capacity
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.capacity }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="availableFromString">
+                <th mat-header-cell *matHeaderCellDef>Available From</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.availableFromString }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="experience">
+                <th mat-header-cell *matHeaderCellDef>Experience</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.experience }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="profileUrl">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    sortActionDescription="Sort by profileUrl"
+                >
+                    Profile Link
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <button
+                        [color]="'primary'"
+                        class="my-2"
+                        mat-flat-button
+                        (click)="viewResourceProfile(element?.resourceId)"
+                    >
+                        <span>View profile</span>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+    </div>
 </div>

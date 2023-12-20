@@ -5,3 +5,7 @@ table {
 th.mat-sort-header-sorted {
     color: black;
 }
+.table-wrapper {
+    max-height: 76vh !important;
+    overflow-y: auto;
+}

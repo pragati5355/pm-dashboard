@@ -65,7 +65,6 @@ export class ExternalProjectDetailsComponent implements OnInit {
             .subscribe((res: any) => {
                 this.projectDetails = res?.data;
                 this.projectHistory = res?.data?.project;
-                console.log("this.projectHistory : ", this.projectHistory);
                 this.projectSetting = res?.data?.projectSettings;
                 this.isLoading = false;
             });
