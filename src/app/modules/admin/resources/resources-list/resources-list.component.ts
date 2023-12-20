@@ -302,7 +302,6 @@ export class ResourcesListComponent implements OnInit {
             searchPayload = this.getDefaultSearchPayload();
         }
         this.initialLoading = true;
-        console.log("searchPayload : ", searchPayload);
         this.projectService.getResourceMember(searchPayload).subscribe(
             (res: any) => {
                 this.initialLoading = false;
