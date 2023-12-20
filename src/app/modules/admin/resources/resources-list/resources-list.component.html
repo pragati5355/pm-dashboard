@@ -671,10 +671,10 @@
                                             <div
                                                 class="grid-flow-row sm:flex truncate cursor-pointer"
                                             >
-                                                <div  *ngFor="let technology of resource?.techSkills"
-                                                    [matTooltip]="technology"
+                                                <div 
+                                                    [matTooltip]="resource?.techSkills"
                                                 >
-                                                    {{technology ||"-"}}
+                                                    {{resource?.techSkills ||"-"}}
                                                 </div>
                                             </div>
 
