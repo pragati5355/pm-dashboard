@@ -187,6 +187,7 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
         this.isEmailSelected = false;
         this.addResourceForm.get('utilization').setValue(null);
         this.addResourceForm.get('email').setValue('');
+        this.alreadyAssignedProjects = [];
     }
 
     getResourceCapacity(email: string) {
@@ -222,7 +223,13 @@ export class ExternalProjectsAddResourceComponent implements OnInit {
     resourceEndDate(event: any) {
         const newDate = new Date(event?.target?.value).getTime();
         const prevDate = new Date(this.data?.editData?.endDate)?.getTime();
-        if (event?.target?.value <= new Date()) {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+
+        const currentSelectedDate = new Date(event?.target?.value);
+        currentSelectedDate.setHours(0, 0, 0, 0);
+
+        if (currentSelectedDate < currentDate) {
             this.addResourceForm
                 ?.get('endDate')
                 ?.setValue(

@@ -204,13 +204,18 @@ export class AddProjectHomeComponent
 
     resourceEndDate(event: any) {
         if (this.editProject && this.editMemberMode) {
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+
+            const currentSelectedDate = new Date(event?.target?.value);
+            currentSelectedDate.setHours(0, 0, 0, 0);
+
             const newDate = this.datePipe.transform(
                 event?.target?.value,
                 'dd-MM-yyyy'
             );
 
-            if (event?.target?.value <= new Date()) {
-                console.log('today-->', this.getTodayDate());
+            if (currentSelectedDate < currentDate) {
                 const idx = this.teamMemberList?.findIndex(
                     (item) => item?.id === this.currentResourceIdInEditMode
                 );
