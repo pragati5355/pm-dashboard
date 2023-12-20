@@ -79,3 +79,6 @@
 //     top: -100px !important;
 // }
 
+body.light .mat-select-panel:not([class*="mat-elevation-z"]) {
+    height: 80px;
+}
