@@ -723,8 +723,8 @@ export class ResourcesListComponent implements OnInit {
 
     private getExperiencePayload() {
         const exp = {
-            minExp: parseInt(this.exprienceForm?.value?.minExprience),
-            maxExp: parseInt(this.exprienceForm?.value?.maxExprience),
+            minExp: parseInt(this.exprienceForm?.value?.minExprience) ?  parseInt(this.exprienceForm?.value?.minExprience) : 0,
+            maxExp: parseInt(this.exprienceForm?.value?.maxExprience) ? parseInt(this.exprienceForm?.value?.maxExprience) : 0,
         };
 
         return exp;
