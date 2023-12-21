@@ -35,7 +35,7 @@
                                         [autocomplete]="'off'"
                                         #searchInputField
                                         [formControl]="searchControl"
-                                        [placeholder]="'Search by project name'"
+                                        [placeholder]="'Search by resource name'"
                                     />
                                     <mat-icon
                                         *ngIf="searchControl?.value"
@@ -118,7 +118,7 @@
                                                 <mat-chip-list
                                                     #chipList
                                                     aria-label="Fruit selection"
-                                                    class="ml-[0px]"
+                                                    class="ml-[0px] mt-2 mb-2"
                                                 >
                                                     <mat-chip
                                                         *ngFor="
@@ -128,7 +128,7 @@
                                                     >
                                                         {{ tech }}
                                                         <button matChipRemove>
-                                                            <mat-icon
+                                                            <mat-icon class="pb-1 pr-1.5"
                                                                 >cancel</mat-icon
                                                             >
                                                         </button>
@@ -315,6 +315,103 @@
                                                     "
                                                 ></mat-icon>
                                             </mat-form-field>
+
+                                            <mat-form-field
+                                                *ngIf="!hideReportingManagerField"
+                                                class="example-chip-list fuse-mat-rounded w-full"
+                                                appearance="fill"
+                                            >
+                                                <mat-chip-list
+                                                    #chipList
+                                                    aria-label="Fruit selection"
+                                                    class="ml-[0px] mt-2 mb-2"
+                                                >
+                                                    <mat-chip
+                                                        *ngFor="
+                                                            let managerName of selectedManager
+                                                        "
+                                                        (removed)="removeManager(managerName)"
+                                                    >
+                                                        {{ managerName }}
+                                                        <button matChipRemove>
+                                                            <mat-icon class="pb-1 pr-1.5"
+                                                                >cancel</mat-icon
+                                                            >
+                                                        </button>
+                                                    </mat-chip>
+                                                    <input
+                                                        placeholder ="Choose reporting manager"
+                                                        #fruitInput
+                                                        [formControl]="
+                                                            reportingManager
+                                                        "
+                                                        [matAutocomplete]="auto"
+                                                        [matChipInputFor]="
+                                                            chipList
+                                                        "
+                                                        [matChipInputSeparatorKeyCodes]="
+                                                            separatorKeysCodes
+                                                        "
+                                                        (matChipInputTokenEnd)="
+                                                            addManager($event)
+                                                        "
+                                                    />
+                                                </mat-chip-list>
+                                                <mat-autocomplete
+                                                    #auto="matAutocomplete"
+                                                    (optionSelected)="
+                                                        selectManager($event)
+                                                    "
+                                                >
+                                                    <mat-option
+                                                        *ngFor="let email of emailList"
+                                                        [value]="email"
+                                                    >
+                                                        {{email?.firstName}} {{email?.lastName}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+
+                                            <!-- <mat-form-field
+                                                class="mb-4 fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full"
+                                            >
+                                                <mat-select
+                                                    [placeholder]="
+                                                        'Choose reporting manager'
+                                                    "
+                                                    [disableOptionCentering]="
+                                                        true
+                                                    "
+                                                    (selectionChange)="
+                                                        selectChangeReportingManager(
+                                                            $event
+                                                        )
+                                                    "
+                                                    [formControl]="reportingManager"
+                                                >
+                                                    <mat-option
+                                                        >None</mat-option
+                                                    >
+                                                    <mat-option
+                                                        *ngFor="
+                                                            let email of emailList
+                                                        "
+                                                        [value]="email?.id"
+                                                        >{{email?.firstName}} {{email?.lastName}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-icon
+                                                    *ngIf="selectedReportingManager"
+                                                    class="icon-size-5 cursor-pointer"
+                                                    matSuffix
+                                                    [svgIcon]="
+                                                        'heroicons_solid:x'
+                                                    "
+                                                    (click)="
+                                                        clearReportingManagerSearch()
+                                                    "
+                                                ></mat-icon>
+                                            </mat-form-field> -->
 
                                             <div class="mt-2 mb-4 pl-1">
                                                 <section class="w-full">
@@ -569,30 +666,22 @@
                                                     resource?.mentor
                                                         ?.firstName || "-"
                                                 }}
-                                                {{
-                                                    resource?.mentor
-                                                        ?.lastName
-                                                }}
+                                                {{ resource?.mentor?.lastName}}
                                             </div>
                                             <div
                                                 class="grid-flow-row sm:flex truncate cursor-pointer"
                                             >
-                                                <div
-                                                    [matTooltip]="
-                                                        resource?.technologies
-                                                    "
+                                                <div 
+                                                    [matTooltip]="resource?.techSkills"
                                                 >
-                                                    {{
-                                                        resource?.technologies ||
-                                                            "-"
-                                                    }}
+                                                    {{resource?.techSkills ||"-"}}
                                                 </div>
                                             </div>
 
                                             <div
-                                                class="hidden lg:block truncate"
+                                                class="hidden lg:block truncate cursor-pointer"
                                                 [matTooltip]="
-                                                    resource?.projects
+                                                    resource?.mbProjects
                                                 "
                                             >
                                                 {{

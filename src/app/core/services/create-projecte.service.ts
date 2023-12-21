@@ -60,8 +60,8 @@ export class CreateProjecteService {
     getTechnology() {
         return this.http.get(API_LIST.RESOURCE_SPRING_BOOT_URL + '/technology-list');
     }
-    getresource(obj: any) {
-        return this.http.post(AppConstants['GET_RESOURCE'], obj);
+    getresource(id: any) {
+        return this.http.get(API_LIST.RESOURCE_SPRING_BOOT_URL + '?resourceId=' + id);
     }
     updateDeleteResource(obj: any) {
         return this.http.post(
