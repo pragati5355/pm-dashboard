@@ -328,9 +328,8 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
     }
 
     fetchEditData(id: number) {
-        let payload = { id: id };
         this.initialLoading = true;
-        this.ProjectService.getresource(payload).subscribe(
+        this.ProjectService.getresource(id).subscribe(
             (res: any) => {
                 if (res?.data && !res?.error) {
                     this.existingResource = res?.data;
@@ -645,6 +644,7 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             const resourceId = paramMap.get('id');
             if (resourceId) {
                 this.resourceId = resourceId;
+                console.log(";this.resourceId : ", this.resourceId)
                 this.mode = 'edit';
                 this.fetchEditData(this.resourceId);
                 this.pageTitle = 'Edit Resource';
