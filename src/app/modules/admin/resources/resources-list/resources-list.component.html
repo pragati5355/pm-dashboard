@@ -197,6 +197,9 @@
                                             <div class="w-full">
                                                 <button
                                                     class="justify-between text-gray-400 w-full mb-4"
+                                                    *ngIf="
+                                                        maxExprience?.length == 0
+                                                    "
                                                     mat-stroked-button
                                                     [matMenuTriggerFor]="
                                                         beforeMenu
