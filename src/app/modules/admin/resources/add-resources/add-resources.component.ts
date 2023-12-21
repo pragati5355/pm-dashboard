@@ -644,7 +644,6 @@ export class AddResourcesComponent implements OnInit, IDeactivateComponent {
             const resourceId = paramMap.get('id');
             if (resourceId) {
                 this.resourceId = resourceId;
-                console.log(";this.resourceId : ", this.resourceId)
                 this.mode = 'edit';
                 this.fetchEditData(this.resourceId);
                 this.pageTitle = 'Edit Resource';
