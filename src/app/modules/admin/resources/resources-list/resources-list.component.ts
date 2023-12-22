@@ -28,6 +28,7 @@ import {
     debounceTime,
     distinctUntilChanged,
     map,
+    of,
     startWith,
     Subject,
     takeUntil,
@@ -99,22 +100,22 @@ export class ResourcesListComponent implements OnInit {
     };
     showTechnologies: any[];
     selectedProject: boolean = false;
-    selectedReportingManager : boolean = false;
+    selectedReportingManager: boolean = false;
     isBench: boolean = false;
     isShadow: boolean = false;
     showFilterArea: boolean = false;
     showVendorsOnly: boolean = false;
     hideTechnologyField: boolean = false;
-    hideReportingManagerField : boolean = false;
+    hideReportingManagerField: boolean = false;
     selectedTechnologiesForSearch: any[] = [];
-    selectedReportingManagerForSearch : any[] = [];
+    selectedReportingManagerForSearch: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     separatorKeysCodes: number[] = [ENTER, COMMA];
     technologyCtrl = new FormControl();
     filteredTechnology: Observable<any[]>;
-    filteredReportingManager : Observable<any[]>;
+    filteredManagerList: Observable<any[]>;
     selectedTechnology: any[] = [];
-    selectedManager : any[] = [];
+    selectedManager: any[] = [];
     allTechnologyList: any[] = [
         'Apple',
         'Lemon',
@@ -124,8 +125,9 @@ export class ResourcesListComponent implements OnInit {
     ];
     userRole: string = '';
     searchControl = new FormControl();
-    filterSearchResource : any = [];
-    emailList : any = [];
+    filterSearchResource: any = [];
+    emailList: any = [];
+    allManagerEmailList: any = [];
 
     @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
@@ -150,6 +152,15 @@ export class ResourcesListComponent implements OnInit {
                 tech ? this._filter(tech) : this.allTechnologyList.slice()
             )
         );
+
+        this.filteredManagerList = this.reportingManager.valueChanges.pipe(
+            startWith(null),
+            map((name: string | null) =>
+                name
+                    ? this._filterManagerName(name)
+                    : this.allManagerEmailList.slice()
+            )
+        );
     }
 
     add(event: MatChipInputEvent): void {
@@ -171,7 +182,7 @@ export class ResourcesListComponent implements OnInit {
             this.selectedTechnology.splice(index, 1);
             this.selectedTechnologiesForSearch.splice(index, 1);
         }
-
+        this.initialLoading = true;
         this.count = 1;
         this.pagination = false;
         const payload = this.getDefaultSearchPayload();
@@ -194,6 +205,7 @@ export class ResourcesListComponent implements OnInit {
 
         this.count = 1;
         this.pagination = false;
+        this.initialLoading = true;
         const payload = this.getDefaultSearchPayload();
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
@@ -215,18 +227,20 @@ export class ResourcesListComponent implements OnInit {
         }
         // Clear the input value
         event.chipInput!.clear();
-
         this.reportingManager.setValue(null);
     }
 
     selectManager(event: MatAutocompleteSelectedEvent): void {
-        this.selectedManager.push(event.option.value.firstName + ' ' + event.option.value.lastName);
+        this.selectedManager.push(
+            event.option.value.firstName + ' ' + event.option.value.lastName
+        );
         this.fruitInput.nativeElement.value = '';
-        this.reportingManager.setValue(null);
+        this.reportingManager.setValue('');
         this.selectedReportingManagerForSearch?.push(event.option.value.id);
 
         this.count = 1;
         this.pagination = false;
+        this.initialLoading = true;
         const payload = this.getDefaultSearchPayload();
         this.projectService.getResourceMember(payload).subscribe(
             (res: any) => {
@@ -246,7 +260,7 @@ export class ResourcesListComponent implements OnInit {
             this.selectedManager.splice(index, 1);
             this.selectedReportingManagerForSearch.splice(index, 1);
         }
-
+        this.initialLoading = true;
         this.count = 1;
         this.pagination = false;
         const payload = this.getDefaultSearchPayload();
@@ -269,12 +283,20 @@ export class ResourcesListComponent implements OnInit {
         );
     }
 
+    private _filterManagerName(value: string): string[] {
+        const filterValue = value;
+
+        return this.allManagerEmailList.filter((name) =>
+            name?.firstName?.toLowerCase().includes(filterValue)
+        );
+    }
+
     ngOnInit(): void {
         this.loadData();
         this.initializeForms();
         this.addRequiredSubscriptions();
         this.getUserRole();
-        this.addSearchListener() 
+        this.addSearchListener();
     }
 
     get exprienceValidForm(): { [key: string]: AbstractControl } {
@@ -289,11 +311,11 @@ export class ResourcesListComponent implements OnInit {
         this.router.navigate(['/resources/onboard']);
     }
 
-    gotoResourceUtilization(){
+    gotoResourceUtilization() {
         this.router.navigate(['/resources/utilization']);
     }
 
-    gotoResourceAvailablity(){
+    gotoResourceAvailablity() {
         this.router.navigate(['/resources/availability']);
     }
 
@@ -320,9 +342,12 @@ export class ResourcesListComponent implements OnInit {
         this.searchControl?.valueChanges.subscribe((searchKey: string) => {
             searchKey = searchKey?.trim()?.toLowerCase();
             if (searchKey) {
-                this.resources = this.resources.filter((resource) =>
-                    resource?.firstName?.toLowerCase()?.includes(searchKey) +
-                    resource?.lastName?.toLowerCase()?.includes(searchKey)
+                this.resources = this.resources.filter(
+                    (resource) =>
+                        resource?.firstName
+                            ?.toLowerCase()
+                            ?.includes(searchKey) +
+                        resource?.lastName?.toLowerCase()?.includes(searchKey)
                 );
             } else {
                 this.resources = [];
@@ -351,7 +376,6 @@ export class ResourcesListComponent implements OnInit {
         this.projects?.enable();
         this.projects?.setValue('');
         this.reportingManager?.enable();
-        this.reportingManager?.setValue('');
         this.showTechnologies = [];
         this.technologys.setValue('');
         this.isShadowIsBench.setValue('');
@@ -364,6 +388,7 @@ export class ResourcesListComponent implements OnInit {
         this.isShadowIsBench.enable();
         this.technologyCtrl?.enable();
         this.selectedTechnologiesForSearch = [];
+        this.emailList = [];
         this.selectedReportingManagerForSearch = [];
         this.selectedTechnology = [];
         this.selectedManager = [];
@@ -371,8 +396,10 @@ export class ResourcesListComponent implements OnInit {
     }
 
     getTechnologies() {
+        this.initialLoading = true;
         this.projectService.getTechnology().subscribe(
             (res: any) => {
+                this.initialLoading = false;
                 this.technologyList = res?.data;
                 this.allTechnologyList = res?.data;
             },
@@ -381,6 +408,7 @@ export class ResourcesListComponent implements OnInit {
     }
 
     handleGetResourceMemberResponse(res: any) {
+        this.initialLoading = true;
         if (res.data) {
             this.totalRecored = res?.data?.totalRecored;
             this.resources = res?.data;
@@ -439,7 +467,7 @@ export class ResourcesListComponent implements OnInit {
             const payload = this.getDefaultSearchPayload();
             this.pagination = true;
             this.projectService.getResourceMember(payload).subscribe({
-                next: (res:any)=> {
+                next: (res: any) => {
                     this.pagination = false;
                     if (res) {
                         this.filterSearchResource = [
@@ -448,9 +476,9 @@ export class ResourcesListComponent implements OnInit {
                         ];
                     }
                 },
-                error : (err : any)=> {
+                error: (err: any) => {
                     this.pagination = false;
-                }
+                },
             });
         }
     }
@@ -544,6 +572,7 @@ export class ResourcesListComponent implements OnInit {
                 maxExprience: '',
             });
         }
+        this.initialLoading = true;
         if (!this.exprienceForm.invalid) {
             this.minExprience = this.exprienceForm.value.minExprience;
             this.maxExprience = this.exprienceForm.value.maxExprience;
@@ -574,12 +603,13 @@ export class ResourcesListComponent implements OnInit {
             });
     }
 
-    getReportingManager(){
+    getReportingManager() {
         this.initialLoading = true;
         this.resourceService.findAllDeveloperEmails().subscribe((res: any) => {
             if (res?.data) {
                 this.initialLoading = false;
                 this.emailList = res?.data;
+                this.allManagerEmailList = res?.data;
             }
         });
     }
@@ -617,20 +647,6 @@ export class ResourcesListComponent implements OnInit {
         );
     }
 
-    selectChangeReportingManager(event : any){
-        let payload = this.getDefaultSearchPayload();
-        this.selectedReportingManager = true;
-        this.projectService.getResourceMember(payload).subscribe(
-            (res: any) => {
-                this.handleGetResourceMemberResponse(res);
-                this.initialLoading = false;
-            },
-            (error) => {
-                this.initialLoading = false;
-            }
-        );
-    }
-
     resourceBenchShadow() {
         this.isBench = this.isShadowIsBench?.value?.includes(0);
         this.isShadow = this.isShadowIsBench?.value?.includes(1);
@@ -645,6 +661,7 @@ export class ResourcesListComponent implements OnInit {
         this.isShadow = false;
         this.isShadowIsBench.setValue('');
         this.count = 1;
+        this.initialLoading = true;
         this.pagination = false;
         const payload = this.getDefaultSearchPayload();
         this.loadDataWithFilterPayload(payload);
@@ -656,13 +673,7 @@ export class ResourcesListComponent implements OnInit {
         this.selectedProject = false;
         this.loadDataWithFilterPayload(payload);
     }
-    clearReportingManagerSearch(){
-        this.reportingManager.setValue('');
-        this.count = 1;
-        let payload = this.getDefaultSearchPayload();
-        this.selectedReportingManager = false;
-        this.loadDataWithFilterPayload(payload);
-    }
+
     clearTechnologySearch() {
         this.pagination = false;
         this.showTechnologies = [];
@@ -723,8 +734,12 @@ export class ResourcesListComponent implements OnInit {
 
     private getExperiencePayload() {
         const exp = {
-            minExp: parseInt(this.exprienceForm?.value?.minExprience) ?  parseInt(this.exprienceForm?.value?.minExprience) : 0,
-            maxExp: parseInt(this.exprienceForm?.value?.maxExprience) ? parseInt(this.exprienceForm?.value?.maxExprience) : 0,
+            minExp: parseInt(this.exprienceForm?.value?.minExprience)
+                ? parseInt(this.exprienceForm?.value?.minExprience)
+                : 0,
+            maxExp: parseInt(this.exprienceForm?.value?.maxExprience)
+                ? parseInt(this.exprienceForm?.value?.maxExprience)
+                : 0,
         };
 
         return exp;
@@ -743,7 +758,10 @@ export class ResourcesListComponent implements OnInit {
             vendors: this.showVendorsOnly,
             minExp: expriencePayload?.minExp,
             maxExp: expriencePayload?.maxExp,
-            mentorId : this.selectedReportingManagerForSearch?.length > 0 ? this.selectedReportingManagerForSearch : null,
+            mentorId:
+                this.selectedReportingManagerForSearch?.length > 0
+                    ? this.selectedReportingManagerForSearch
+                    : null,
         };
     }
 
