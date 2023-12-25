@@ -58,15 +58,6 @@ export class MenteeListComponent implements OnInit {
                 this.initialLoading = false;
                 if (res?.data) {
                     this.menteeList = res?.data;
-                    // this.menteeList = [
-                    //     {
-                    //         firstName: 'Rohan',
-                    //         lastName: 'kadam',
-                    //         email: 'rohan@mindbowser.com',
-                    //         role: 'FRONTEND',
-                    //         menteeResourceId: 78,
-                    //     },
-                    // ];
                 }
             },
             (err) => {

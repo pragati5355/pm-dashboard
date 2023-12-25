@@ -72,9 +72,8 @@ export class AddFormComponent implements OnInit {
     }
 
     loadMenteeData(id: string | number) {
-        const payload = { id };
         this.initialLoading = true;
-        this.menteeService.getMenteeDetailsById(payload).subscribe(
+        this.menteeService.getMenteeDetailsById(id).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res.data) {

@@ -32,9 +32,8 @@ export class ViewMenteeComponent implements OnInit {
     }
 
     loadMenteeData(id: string) {
-        const payload = { id };
         this.initialLoading = true;
-        this.menteeService.getMenteeDetailsById(payload).subscribe(
+        this.menteeService.getMenteeDetailsById(id).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res.data) {
