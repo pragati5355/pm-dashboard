@@ -83,7 +83,6 @@ export class AddCrResourceDialogComponent implements OnInit {
     }
 
     submitResourceData() {
-        console.log('utilization-->', this.addResourceForm?.value?.utilization);
         if (this.addResourceForm?.value?.utilization === null) {
             this.snackBar.errorSnackBar('Choose Utilization');
             return;
@@ -193,7 +192,13 @@ export class AddCrResourceDialogComponent implements OnInit {
         const newDate = new Date(event?.target?.value).getTime();
         const prevDate = new Date(this.data?.editData?.endDate)?.getTime();
 
-        if (event?.target?.value <= new Date()) {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+
+        const currentSelectedDate = new Date(event?.target?.value);
+        currentSelectedDate.setHours(0, 0, 0, 0);
+
+        if (currentSelectedDate < currentDate) {
             this.addResourceForm
                 ?.get('endDate')
                 ?.setValue(
@@ -290,10 +295,6 @@ export class AddCrResourceDialogComponent implements OnInit {
                     this.disableUpdate = true;
                     this.addResourceForm.get('utilization')?.disable();
                 }
-                console.log(
-                    'capacity-->',
-                    this.getCurrentResourceCapacity(this.data?.editData?.email)
-                );
                 this.addResourceForm?.patchValue({
                     utilization:
                         this.getCurrentResourceCapacity(
