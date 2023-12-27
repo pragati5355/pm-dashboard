@@ -102,6 +102,7 @@ export class ExternalProjectsListComponent implements OnInit {
                 disableClose: true,
                 width: '50%',
                 panelClass: 'warn-dialog-content',
+                maxHeight: '85vh',
                 autoFocus: false,
                 data: {
                     developerEmails: filteredEmailList,

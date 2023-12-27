@@ -54,13 +54,13 @@ export class ResourceDetailsComponent implements OnInit {
     }
 
     loadData(id: any) {
-        const payload = { id };
         this.initialLoading = true;
-        this.ProjectService.getresource(payload).subscribe(
+        this.ProjectService.getresource(id).subscribe(
             (res: any) => {
                 this.initialLoading = false;
                 if (res.data) {
                     this.resourceDetails = res?.data;
+                    console.log("this.resourceDetails : ", this.resourceDetails);
                     this.mbProjects =
                         this.resourceDetails?.mbProjects?.split(',');
                 }
