@@ -360,7 +360,7 @@ export class AddProjectHomeComponent
             } else if (teamMember?.status === 'COMPLETED') {
                 if (this.currentCapacity >= 0) {
                     // this.disableUpdate = true;
-                    this.projectTeam?.get('tm_utilization')?.disable();
+                    // this.projectTeam?.get('tm_utilization')?.disable();
                 }
                 this.projectTeam.patchValue({
                     tm_utilization:
