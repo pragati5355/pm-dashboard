@@ -8,8 +8,10 @@ import { API_LIST, AppConstants } from 'app/core/constacts/constacts';
 export class MenteeService {
     constructor(private http: HttpClient) {}
 
-    getMenteeDetailsById(obj: any) {
-        return this.http.post(AppConstants['GET_RESOURCE'], obj);
+    getMenteeDetailsById(id: string | number) {
+        return this.http.get(
+            API_LIST.RESOURCE_SPRING_BOOT_URL + '?resourceId=' + id
+        );
     }
     saveOneToOneForm(obj: any) {
         return this.http.post(
